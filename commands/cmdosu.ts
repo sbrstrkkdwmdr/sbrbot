@@ -8677,10 +8677,6 @@ Could not find beatmap data
         hitlength,
         mapmods
     );
-    let modissue = '';
-    if (mapmods.includes('TD')) {
-        modissue = '\ncalculations aren\'t supported for TD';
-    }
     let mapimg = emojis.gamemodes.standard;
 
     switch (mapdata.mode) {
@@ -8856,7 +8852,7 @@ Using default json file
                     `**99**: ${curattr[1].pp?.toFixed(2)} | Aim: ${curattr[1].ppAim?.toFixed(2)} | Speed: ${curattr[1].ppSpeed?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} \n ` +
                     `**97**: ${curattr[3].pp?.toFixed(2)} | Aim: ${curattr[3].ppAim?.toFixed(2)} | Speed: ${curattr[3].ppSpeed?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} \n ` +
                     `**95**: ${curattr[5].pp?.toFixed(2)} | Aim: ${curattr[5].ppAim?.toFixed(2)} | Speed: ${curattr[5].ppSpeed?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} \n ` +
-                    `${modissue}\n${ppissue}`;
+                    `${ppissue}`;
             }
                 break;
             case 'taiko': {
@@ -8865,7 +8861,7 @@ Using default json file
                     `**99**: ${curattr[1].pp?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
                     `**97**: ${curattr[3].pp?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
                     `**95**: ${curattr[5].pp?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
-                    `${modissue}\n${ppissue}`;
+                    `${ppissue}`;
             }
                 break;
             case 'fruits': {
@@ -8874,7 +8870,7 @@ Using default json file
                     `**99**: ${curattr[1].pp?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
                     `**97**: ${curattr[3].pp?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
                     `**95**: ${curattr[5].pp?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
-                    `${modissue}\n${ppissue}`;
+                    `${ppissue}`;
             }
                 break;
             case 'mania': {
@@ -8885,7 +8881,7 @@ Using default json file
                     `**97**: ${curattr[3].pp?.toFixed(2)} \n ` +
                     `**96**: ${curattr[4].pp?.toFixed(2)} \n ` +
                     `**95**: ${curattr[5].pp?.toFixed(2)} \n ` +
-                    `${modissue}\n${ppissue}`;
+                    `${ppissue}`;
             }
                 break;
 
@@ -8934,7 +8930,7 @@ Using default json file
                         `97: ${ppComputed[3].pp?.toFixed(2)} \n ` +
                         `96: ${ppComputed[4].pp?.toFixed(2)} \n ` +
                         `95: ${ppComputed[5].pp?.toFixed(2)} \n ` +
-                        `${modissue}\n${ppissue}` :
+                        `${ppissue}` :
                         detailedmapdata
                 ,
                 inline: true
@@ -9091,6 +9087,938 @@ ID: ${input.absoluteID}
 
 }
 
+/**
+ * returns all pp values for a given map
+ */
+export async function ppCalc(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+
+    let mapid;
+    let mapmods;
+    let maptitleq: string = null;
+    let searchRestrict = 'any';
+    let overrideSpeed = 1;
+    let overrideBpm: number = null;
+
+    const useComponents = [];
+    let overwriteModal = null;
+
+    let customCS: 'current' | number = 'current';
+    let customAR: 'current' | number = 'current';
+    let customOD: 'current' | number = 'current';
+    let customHP: 'current' | number = 'current';
+
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+
+            commanduser = input.obj.author;
+
+            if (input.args.includes('-bpm')) {
+                const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
+                overrideBpm = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-speed')) {
+                const temp = func.parseArg(input.args, '-speed', 'number', overrideSpeed);
+                overrideSpeed = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.includes('-cs')) {
+                const temp = func.parseArg(input.args, '-cs', 'number', customCS);
+                customCS = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-ar')) {
+                const temp = func.parseArg(input.args, '-ar', 'number', customAR);
+                customAR = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-od')) {
+                const temp = func.parseArg(input.args, '-od', 'number', customOD);
+                customOD = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-accuracy')) {
+                const temp = func.parseArg(input.args, '-accuracy', 'number', customOD);
+                customOD = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-hp')) {
+                const temp = func.parseArg(input.args, '-hp', 'number', customHP);
+                customHP = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-drain')) {
+                const temp = func.parseArg(input.args, '-drain', 'number', customHP);
+                customHP = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.includes('-?')) {
+                const temp = func.parseArg(input.args, '-?', 'string', maptitleq, true);
+                maptitleq = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.join(' ').includes('"')) {
+                maptitleq = input.args.join(' ').substring(
+                    input.args.join(' ').indexOf('"') + 1,
+                    input.args.join(' ').lastIndexOf('"')
+                );
+                input.args = input.args.join(' ').replace(maptitleq, '').split(' ');
+            }
+            if (input.args.join(' ').includes('+')) {
+                mapmods = input.args.join(' ').split('+')[1];
+                mapmods.includes(' ') ? mapmods = mapmods.split(' ')[0] : null;
+                input.args = input.args.join(' ').replace('+', '').replace(mapmods, '').split(' ');
+            }
+            input.args = cleanArgs(input.args);
+
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map;
+        }
+            break;
+
+        //==============================================================================================================================================================================================
+
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+
+            mapid = input.obj.options.getInteger('id');
+            mapmods = input.obj.options.getString('mods');
+            maptitleq = input.obj.options.getString('query');
+            input.obj.options.getNumber('bpm') ? overrideBpm = input.obj.options.getNumber('bpm') : null;
+            input.obj.options.getNumber('speed') ? overrideSpeed = input.obj.options.getNumber('speed') : null;
+        }
+
+            //==============================================================================================================================================================================================
+
+            break;
+
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+
+            commanduser = input.obj.author;
+
+            const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
+            mapmods =
+                input.obj.content.includes('+') ?
+                    messagenohttp.split('+')[1] : 'NM';
+            if (input.args[0] && input.args[0].startsWith('query')) {
+                maptitleq = input.args[1];
+            } else if (
+                (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmapsets/') && messagenohttp.includes('#'))) ||
+                (!messagenohttp.includes('/s/') && (messagenohttp.includes('/b/'))) ||
+                (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmaps/')))
+            ) {
+                let idfirst;
+                try {
+                    if (messagenohttp.includes('beatmapsets')) {
+
+                        idfirst = messagenohttp.split('#')[1].split('/')[1];
+                    } else if (messagenohttp.includes('?')) {
+                        idfirst = messagenohttp.split('beatmaps/')[1].split('?')[0];
+                    }
+                    else {
+                        idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1];
+                    }
+                    if (isNaN(+idfirst)) {
+                        mapid = parseInt(idfirst.split(' ')[0]);
+                    } else {
+                        mapid = parseInt(idfirst);
+                    }
+                } catch (error) {
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                        content: 'Please enter a valid beatmap link.',
+                        allowedMentions: { repliedUser: false }
+                    })
+                        .catch(error => { });
+                    return;
+                }
+            } else if (messagenohttp.includes('q=')) {
+                maptitleq =
+                    messagenohttp.includes('&') ?
+                        messagenohttp.split('q=')[1].split('&')[0] :
+                        messagenohttp.split('q=')[1];
+            } else {
+                let setid = 910392;
+                if (!messagenohttp.includes('/beatmapsets/')) {
+                    setid = +messagenohttp.split('/s/')[1];
+
+                    if (isNaN(setid)) {
+                        setid = +messagenohttp.split('/s/')[1].split(' ')[0];
+                    }
+                } else if (!messagenohttp.includes('/s/')) {
+                    setid = +messagenohttp.split('/beatmapsets/')[1];
+
+                    if (isNaN(setid)) {
+                        setid = +messagenohttp.split('/s/')[1].split(' ')[0];
+                    }
+                }
+                let bmsdataReq: osufunc.apiReturn;
+                if (func.findFile(setid, `bmsdata`) &&
+                    !('error' in func.findFile(setid, `bmsdata`)) &&
+                    input.button != 'Refresh') {
+                    bmsdataReq = func.findFile(setid, `bmsdata`);
+                } else {
+                    bmsdataReq = await osufunc.apiget({
+                        type: 'mapset_get',
+                        params: {
+                            id: setid
+                        }
+                    });
+                    // bmsdataReq = await osufunc.apiget('mapset_get', `${setid}`)
+                }
+
+                const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
+                if (bmsdata?.error) {
+                    log.logFile('command',
+                        `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find beatmapset data
+----------------------------------------------------
+\n\n`,
+                        { guildId: `${input.obj.guildId}` }
+                    );
+                    return;
+                }
+                try {
+                    mapid = bmsdata.beatmaps[0].id;
+                } catch (error) {
+                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                        content: 'Please enter a valid beatmap link.',
+                        allowedMentions: {
+                            repliedUser: false
+                        }
+                    })
+                        .catch(error => { });
+                    return;
+                }
+            }
+            if (input.args.includes('-bpm')) {
+                const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
+                overrideBpm = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-speed')) {
+                const temp = func.parseArg(input.args, '-speed', 'number', overrideSpeed);
+                overrideSpeed = temp.value;
+                input.args = temp.newArgs;
+            }
+        }
+            break;
+    }
+    if (input.overrides != null) {
+        if (input.overrides?.overwriteModal != null) {
+            overwriteModal = input?.overrides?.overwriteModal ?? overwriteModal;
+        }
+        if (input.overrides?.id != null) {
+            mapid = input?.overrides?.id ?? mapid;
+        }
+        if (input.overrides?.commanduser != null) {
+            commanduser = input.overrides.commanduser;
+        }
+        if (input.overrides?.commandAs != null) {
+            input.commandType = input.overrides.commandAs;
+        }
+    }
+
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'ppcalc',
+        options: [
+            {
+                name: 'Map ID',
+                value: mapid
+            },
+            {
+                name: 'Map Mods',
+                value: mapmods
+            },
+            {
+                name: 'Map Title Query',
+                value: maptitleq
+            },
+            {
+                name: 'BPM',
+                value: overrideBpm
+            },
+            {
+                name: 'Speed',
+                value: overrideSpeed
+            },
+            {
+                name: 'cs',
+                value: customCS
+            },
+            {
+                name: 'ar',
+                value: customAR
+            },
+            {
+                name: 'od',
+                value: customOD
+            },
+            {
+                name: 'hp',
+                value: customHP
+            },
+        ]
+    });
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+
+    if (!mapid || isNaN(mapid)) {
+        mapid = osufunc.getPreviousId('map', input.obj.guildId);
+    }
+    let mapdataReq: osufunc.apiReturn;
+    let mapdata: osuApiTypes.Beatmap;
+    let bmsdataReq: osufunc.apiReturn;
+    let bmsdata: osuApiTypes.Beatmapset;
+
+    const inputModal = new Discord.SelectMenuBuilder()
+        .setCustomId(`${mainconst.version}-Select-map-${commanduser.id}-${input.absoluteID}`)
+        .setPlaceholder('Select a map');
+
+    //fetch map data and mapset data from id
+    if (maptitleq == null) {
+        if (func.findFile(mapid, 'mapdata') &&
+            !('error' in func.findFile(mapid, 'mapdata')) &&
+            input.button != 'Refresh') {
+            mapdataReq = func.findFile(mapid, 'mapdata');
+        } else {
+            mapdataReq = await osufunc.apiget({
+                type: 'map_get',
+                params: {
+                    id: mapid
+                }
+            });
+        }
+
+        mapdata = mapdataReq.apiData;
+
+
+        osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
+
+        if (mapdata?.error || !mapdata.id) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).catch();
+            }
+            log.logFile('command',
+                `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find beatmap data
+----------------------------------------------------
+\n\n`,
+                { guildId: `${input.obj.guildId}` }
+            );
+            return;
+        }
+
+        func.storeFile(mapdataReq, mapid, 'mapdata');
+
+        if (func.findFile(mapdata.beatmapset_id, `bmsdata`) &&
+            !('error' in func.findFile(mapdata.beatmapset_id, `bmsdata`)) &&
+            input.button != 'Refresh') {
+            bmsdataReq = func.findFile(mapdata.beatmapset_id, `bmsdata`);
+        } else {
+            bmsdataReq = await osufunc.apiget(
+                {
+                    type: 'mapset_get',
+                    params: {
+                        id: mapdata.beatmapset_id
+                    }
+                });
+        }
+        bmsdata = bmsdataReq.apiData;
+
+        osufunc.debug(bmsdataReq, 'command', 'map', input.obj.guildId, 'bmsData');
+
+        if (bmsdata?.error) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).catch();
+            }
+            log.logFile('command',
+                `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find beatmap data
+----------------------------------------------------
+\n\n`,
+                { guildId: `${input.obj.guildId}` }
+            );
+            return;
+        }
+
+        func.storeFile(bmsdataReq, mapdata.beatmapset_id, `bmsdata`);
+
+        //options thing to switch to other maps in the mapset
+        if (typeof bmsdata?.beatmaps == 'undefined' || bmsdata?.beatmaps?.length < 2) {
+            inputModal.addOptions(
+                new Discord.SelectMenuOptionBuilder()
+                    .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
+                        mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
+                            mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
+                                mapdata.mode_int == 3 ? emojis.gamemodes.mania :
+                                    emojis.gamemodes.standard
+                        }`)
+                    .setLabel(`#${1}`)
+                    .setDescription(`${mapdata.version} ${mapdata.difficulty_rating}⭐`)
+                    .setValue(`${mapdata.id}`)
+            );
+        } else {
+            for (let i = 0; i < bmsdata.beatmaps.length && i < 25; i++) {
+                const curmap = bmsdata.beatmaps.slice().sort((a, b) => b.difficulty_rating - a.difficulty_rating)[i];
+                if (!curmap) break;
+                inputModal.addOptions(
+                    new Discord.SelectMenuOptionBuilder()
+                        .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
+                            mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
+                                mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
+                                    mapdata.mode_int == 3 ? emojis.gamemodes.mania :
+                                        emojis.gamemodes.standard
+                            }`)
+                        .setLabel(`#${i + 1} | ${bmsdata.title}`)
+                        .setDescription(`${curmap.version} ${curmap.difficulty_rating}⭐`)
+                        .setValue(`${curmap.id}`)
+                );
+            }
+        }
+    }
+
+    //fetch mapdata and mapset data from title query
+    if (maptitleq != null) {
+        const mapidtestReq = await osufunc.apiget({
+            type: 'mapset_search',
+            params: {
+                searchString: maptitleq,
+                opts: [`s=${searchRestrict}`]
+            }
+        });
+        const mapidtest = mapidtestReq.apiData;
+        osufunc.debug(mapidtestReq, 'command', 'map', input.obj.guildId, 'mapIdTestData');
+
+        if (mapidtest?.error) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    content: 'Error - could not fetch beatmap search data.',
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).catch();
+            }
+            log.logFile('command',
+                `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find beatmap data
+----------------------------------------------------
+\n\n`,
+                { guildId: `${input.obj.guildId}` }
+            );
+            return;
+        }
+
+        let mapidtest2;
+
+        if (mapidtest.length == 0) {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                .catch();
+
+            return;
+        }
+        try {
+            mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
+        } catch (error) {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+                .catch();
+            return;
+        }
+        const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset; }[] = [];
+
+        //get maps to add to options menu
+        for (let i = 0; i < mapidtest.beatmapsets.length; i++) {
+            if (!mapidtest.beatmapsets[i]) break;
+
+            for (let j = 0; j < mapidtest.beatmapsets[i].beatmaps.length; j++) {
+                if (!mapidtest.beatmapsets[i].beatmaps[j]) break;
+                allmaps.push({
+                    mode_int: mapidtest.beatmapsets[i].beatmaps[j].mode_int,
+                    map: mapidtest.beatmapsets[i].beatmaps[j],
+                    mapset: mapidtest.beatmapsets[i]
+                });
+            }
+        }
+
+        if (func.findFile(mapidtest2[0].id, 'mapdata') &&
+            input.commandType == 'button' &&
+            !('error' in func.findFile(mapidtest2[0].id, 'mapdata')) &&
+            input.button != 'Refresh') {
+            mapdataReq = func.findFile(mapidtest2[0].id, 'mapdata');
+        } else {
+            mapdataReq = await osufunc.apiget({
+                type: 'map_get',
+                params: {
+                    id: mapidtest2[0].id
+                }
+            });
+            // mapdataReq = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
+        }
+
+        mapdata = mapdataReq.apiData;
+
+        osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
+        if (mapdata?.error || !mapdata.id) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                });
+            }
+            log.logFile('command',
+                `
+----------------------------------------------------
+Command Failed
+ID: ${input.absoluteID}
+Could not find beatmap data
+----------------------------------------------------
+\n\n`,
+                { guildId: `${input.obj.guildId}` }
+            );
+            return;
+        }
+
+        func.storeFile(mapdataReq, mapidtest2[0].id, 'mapdata');
+
+        //options menu to switch to other maps
+        for (let i = 0; i < allmaps.length && i < 25; i++) {
+            const curmap = allmaps[i];
+            if (!curmap.map) break;
+            inputModal.addOptions(
+                new Discord.SelectMenuOptionBuilder()
+                    .setEmoji(`${curmap.mode_int == 0 ? emojis.gamemodes.standard :
+                        curmap.mode_int == 1 ? emojis.gamemodes.taiko :
+                            curmap.mode_int == 2 ? emojis.gamemodes.fruits :
+                                curmap.mode_int == 3 ? emojis.gamemodes.mania :
+                                    emojis.gamemodes.standard
+                        }`)
+                    .setLabel(`#${i + 1} | ${curmap.mapset?.title} // ${curmap.mapset?.creator}`)
+                    .setDescription(`[${curmap.map.version}] ${curmap.map.difficulty_rating}⭐`)
+                    .setValue(`${curmap.map.id}`)
+            );
+        }
+    }
+
+
+    //parsing maps
+    if (mapmods == null || mapmods == '') {
+        mapmods = 'NM';
+    }
+    else {
+        mapmods = osumodcalc.OrderMods(mapmods.toUpperCase());
+    }
+    if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+            content: "Loading...",
+            allowedMentions: { repliedUser: false }
+        })
+            .catch();
+
+    }
+
+    if (customCS == 'current' || isNaN(+customCS)) {
+        customCS = mapdata.cs;
+    }
+    if (customAR == 'current' || isNaN(+customAR)) {
+        customAR = mapdata.ar;
+    }
+    if (customOD == 'current' || isNaN(+customOD)) {
+        customOD = mapdata.accuracy;
+    }
+    if (customHP == 'current' || isNaN(+customHP)) {
+        customHP = mapdata.drain;
+    }
+
+    let hitlength = mapdata.hit_length;
+
+    if (overrideBpm != null && isNaN(overrideBpm) == false && (overrideSpeed == null || isNaN(overrideSpeed) == true) && overrideBpm != mapdata.bpm) {
+        overrideSpeed = overrideBpm / mapdata.bpm;
+    }
+    if (overrideSpeed != null && isNaN(overrideSpeed) == false && (overrideBpm == null || isNaN(overrideBpm) == true) && overrideSpeed != 1) {
+        overrideBpm = mapdata.bpm * overrideSpeed;
+    }
+    if (mapmods.includes('DT') || mapmods.includes('NC')) {
+        overrideSpeed *= 1.5;
+        overrideBpm *= 1.5;
+    }
+    if (mapmods.includes('HT')) {
+        overrideSpeed *= 0.75;
+        overrideBpm *= 0.75;
+    }
+    if (overrideSpeed) {
+        hitlength /= overrideSpeed;
+    }
+
+    const allvals = osumodcalc.calcValues(
+        +customCS,
+        +customAR,
+        +customOD,
+        +customHP,
+        overrideBpm ?? mapdata.bpm,
+        hitlength,
+        mapmods
+    );
+    let mapimg = emojis.gamemodes.standard;
+
+    switch (mapdata.mode) {
+        case 'taiko':
+            mapimg = emojis.gamemodes.taiko;
+            break;
+        case 'fruits':
+            mapimg = emojis.gamemodes.fruits;
+            break;
+        case 'mania':
+            mapimg = emojis.gamemodes.mania;
+            break;
+    }
+    let ppComputed: PerformanceAttributes[];
+    let ppissue: string;
+    let totaldiff: string | number = mapdata.difficulty_rating;
+
+    try {
+        ppComputed = await osufunc.mapcalc({
+            mods: mapmods,
+            gamemode: mapdata.mode,
+            mapid: mapdata.id,
+            calctype: 0,
+            clockRate: overrideSpeed ?? 1,
+            customCS,
+            customAR,
+            customOD,
+            customHP,
+            maxLimit: 21
+        });
+        ppissue = '';
+        try {
+            totaldiff = ppComputed[0].difficulty.stars?.toFixed(2);
+        } catch (error) {
+            totaldiff = mapdata.difficulty_rating;
+        }
+        osufunc.debug(ppComputed, 'command', 'map', input.obj.guildId, 'ppCalc');
+
+    } catch (error) {
+        ppissue = 'Error - pp could not be calculated';
+        const tstmods = mapmods.toUpperCase();
+
+        if (tstmods.includes('EZ') || tstmods.includes('HR')) {
+            ppissue += '\nInvalid mod combinations: EZ + HR';
+        }
+        if ((tstmods.includes('DT') || tstmods.includes('NC')) && tstmods.includes('HT')) {
+            ppissue += '\nInvalid mod combinations: DT/NC + HT';
+        }
+        const ppComputedTemp: PerformanceAttributes = {
+            mode: mapdata.mode_int,
+            pp: 0,
+            difficulty: {
+                mode: mapdata.mode_int,
+                stars: mapdata.difficulty_rating,
+                maxCombo: mapdata.max_combo,
+                aim: 0,
+                speed: 0,
+                flashlight: 0,
+                sliderFactor: 0,
+                speedNoteCount: 0,
+                ar: mapdata.ar,
+                od: mapdata.accuracy,
+                nCircles: mapdata.count_circles,
+                nSliders: mapdata.count_sliders,
+                nSpinners: mapdata.count_spinners,
+                stamina: 0,
+                rhythm: 0,
+                color: 0,
+                hitWindow: 0,
+                nFruits: mapdata.count_circles,
+                nDroplets: mapdata.count_sliders,
+                nTinyDroplets: mapdata.count_spinners,
+            },
+            ppAcc: 0,
+            ppAim: 0,
+            ppDifficulty: 0,
+            ppFlashlight: 0,
+            ppSpeed: 0,
+            effectiveMissCount: 0,
+
+        };
+        ppComputed = [];
+        for (let i = 0; i < 21; i++) {
+            ppComputed.push(ppComputedTemp);
+        }
+    }
+    const baseCS = allvals.cs != mapdata.cs ? `${mapdata.cs}=>${allvals.cs}` : allvals.cs;
+    const baseAR = allvals.ar != mapdata.ar ? `${mapdata.ar}=>${allvals.ar}` : allvals.ar;
+    const baseOD = allvals.od != mapdata.accuracy ? `${mapdata.accuracy}=>${allvals.od}` : allvals.od;
+    const baseHP = allvals.hp != mapdata.drain ? `${mapdata.drain}=>${allvals.hp}` : allvals.hp;
+    const baseBPM = mapdata.bpm * (overrideSpeed ?? 1) != mapdata.bpm ? `${mapdata.bpm}=>${mapdata.bpm * (overrideSpeed ?? 1)}` : mapdata.bpm;
+
+    const mapname = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
+    const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
+    const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`;
+
+    let extras = '';
+
+    switch (mapdata.mode) {
+        case 'osu': {
+            const curattr = ppComputed as OsuPerformanceAttributes[];
+
+            extras = `
+---===SS===---  
+- Aim: ${curattr[0].ppAim}
+- Speed: ${curattr[0].ppSpeed}
+- Acc: ${curattr[0].ppAcc}
+- Flashlight: ${curattr[0].ppFlashlight}
+- Total: ${curattr[0].pp} 
+---===97%===---
+- Aim: ${curattr[3].ppAim}
+- Speed: ${curattr[3].ppSpeed}
+- Acc: ${curattr[3].ppAcc}
+- Flashlight: ${curattr[3].ppFlashlight}
+- Total: ${curattr[3].pp} 
+---===95%===---
+- Aim: ${curattr[5].ppAim}
+- Speed: ${curattr[5].ppSpeed}
+- Acc: ${curattr[5].ppAcc}
+- Flashlight: ${curattr[5].ppFlashlight}
+- Total: ${curattr[5].pp} 
+---===93%===---
+- Aim: ${curattr[7].ppAim}
+- Speed: ${curattr[7].ppSpeed}
+- Acc: ${curattr[7].ppAcc}
+- Flashlight: ${curattr[7].ppFlashlight}
+- Total: ${curattr[7].pp} 
+---===90%===---
+- Aim: ${curattr[10].ppAim}
+- Speed: ${curattr[10].ppSpeed}
+- Acc: ${curattr[10].ppAcc}
+- Flashlight: ${curattr[10].ppFlashlight}
+- Total: ${curattr[10].pp}                 
+`;
+        }
+            break;
+        case 'taiko': {
+            const curattr = ppComputed as TaikoPerformanceAttributes[];
+            extras = `
+---===SS===---  
+- Strain: ${curattr[0].ppDifficulty}
+- Acc: ${curattr[0].ppAcc}
+- Total: ${curattr[0].pp} 
+---===97%===---
+- Strain: ${curattr[3].ppDifficulty}
+- Acc: ${curattr[3].ppAcc}
+- Total: ${curattr[3].pp} 
+---===95%===---
+- Strain: ${curattr[5].ppDifficulty}
+- Acc: ${curattr[5].ppAcc}
+- Total: ${curattr[5].pp} 
+---===93%===---
+- Strain: ${curattr[7].ppDifficulty}
+- Acc: ${curattr[7].ppAcc}
+- Total: ${curattr[7].pp} 
+---===90%===---
+- Strain: ${curattr[10].ppDifficulty}
+- Acc: ${curattr[10].ppAcc}
+- Total: ${curattr[10].pp}                 
+`;
+        }
+            break;
+        case 'fruits': {
+            const curattr = ppComputed as CatchPerformanceAttributes[];
+            extras = `
+---===SS===---  
+- Strain: ${curattr[0].ppDifficulty}
+- Total: ${curattr[0].pp} 
+---===97%===---
+- Strain: ${curattr[3].ppDifficulty}
+- Total: ${curattr[3].pp} 
+---===95%===---
+- Strain: ${curattr[5].ppDifficulty}
+- Total: ${curattr[5].pp} 
+---===93%===---
+- Strain: ${curattr[7].ppDifficulty}
+- Total: ${curattr[7].pp} 
+---===90%===---
+- Strain: ${curattr[10].ppDifficulty}
+- Total: ${curattr[10].pp}                 
+`;
+        }
+            break;
+        case 'mania': {
+            const curattr = ppComputed as ManiaPerformanceAttributes[];
+            extras = `
+---===SS===---  
+- Total: ${curattr[0].pp} 
+---===97%===---
+- Total: ${curattr[3].pp} 
+---===95%===---
+- Total: ${curattr[5].pp} 
+---===93%===---
+- Total: ${curattr[7].pp} 
+---===90%===---
+- Total: ${curattr[10].pp}                 
+`;
+        }
+            break;
+    }
+
+    const Embed = new Discord.EmbedBuilder()
+        .setColor(0x91ff9a)
+        .setTitle(maptitle)
+        .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
+        .setThumbnail(osufunc.getMapImages(mapdata.beatmapset_id).list2x)
+        .addFields([
+            {
+                name: 'MAP VALUES',
+                value:
+                    `CS${baseCS} AR${baseAR} OD${baseOD} HP${baseHP} ${totaldiff}⭐\n` +
+                    `${emojis.mapobjs.bpm}${baseBPM} | ` +
+                    `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull} | ` +
+                    `${mapdata.max_combo}x combo\n ` +
+                    `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n`,
+                inline: false
+            },
+            {
+                name: 'PP',
+                value:
+                    `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
+                    `99%: ${ppComputed[1].pp?.toFixed(2)} \n ` +
+                    `98%: ${ppComputed[2].pp?.toFixed(2)} \n ` +
+                    `97%: ${ppComputed[3].pp?.toFixed(2)} \n ` +
+                    `96%: ${ppComputed[4].pp?.toFixed(2)} \n ` +
+                    `95%: ${ppComputed[5].pp?.toFixed(2)} \n ` +
+                    `94%: ${ppComputed[6].pp?.toFixed(2)} \n ` +
+                    `93%: ${ppComputed[7].pp?.toFixed(2)} \n ` +
+                    `92%: ${ppComputed[8].pp?.toFixed(2)} \n ` +
+                    `91%: ${ppComputed[9].pp?.toFixed(2)} \n ` +
+                    `90%: ${ppComputed[10].pp?.toFixed(2)} \n ` +
+                    `89%: ${ppComputed[11].pp?.toFixed(2)} \n ` +
+                    `88%: ${ppComputed[12].pp?.toFixed(2)} \n ` +
+                    `87%: ${ppComputed[13].pp?.toFixed(2)} \n ` +
+                    `86%: ${ppComputed[14].pp?.toFixed(2)} \n ` +
+                    `85%: ${ppComputed[15].pp?.toFixed(2)} \n ` +
+                    `84%: ${ppComputed[16].pp?.toFixed(2)} \n ` +
+                    `83%: ${ppComputed[17].pp?.toFixed(2)} \n ` +
+                    `82%: ${ppComputed[18].pp?.toFixed(2)} \n ` +
+                    `81%: ${ppComputed[19].pp?.toFixed(2)} \n ` +
+                    `80%: ${ppComputed[20].pp?.toFixed(2)} \n ` +
+                    `\n${ppissue}`
+                ,
+                inline: true
+            },
+            {
+                name: 'Full',
+                value: extras,
+                inline: true
+            }
+        ]);
+
+    switch (true) {
+        case parseFloat(totaldiff.toString()) >= 8:
+            Embed.setColor(colours.diffcolour[7].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 7:
+            Embed.setColor(colours.diffcolour[6].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 6:
+            Embed.setColor(colours.diffcolour[5].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 4.5:
+            Embed.setColor(colours.diffcolour[4].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 3.25:
+            Embed.setColor(colours.diffcolour[3].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 2.5:
+            Embed.setColor(colours.diffcolour[2].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 2:
+            Embed.setColor(colours.diffcolour[1].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 1.5:
+            Embed.setColor(colours.diffcolour[0].dec);
+            break;
+        default:
+            Embed.setColor(colours.diffcolour[0].dec);
+            break;
+    }
+    const embeds = [Embed];
+
+    osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+
+
+    let frmod = inputModal;
+    if (overwriteModal != null) {
+        frmod = overwriteModal;
+    }
+
+    const selectrow = new Discord.ActionRowBuilder()
+        .addComponents(frmod);
+
+    if (!(inputModal.options.length < 1)) {
+        useComponents.push(selectrow);
+    }
+
+    osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+
+    msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: embeds,
+            edit: true
+        }
+    });
+
+    log.logFile('command',
+        `
+----------------------------------------------------
+success
+ID: ${input.absoluteID}
+----------------------------------------------------
+\n\n`,
+        { guildId: `${input.obj.guildId}` }
+    );
+
+
+}
+
+/**
+ * returns a random map
+ */
 export async function randomMap(input: extypes.commandInput) {
 
     type thingyFr = 'Ranked' | 'Loved' | 'Approved' | 'Qualified' | 'Pending' | 'WIP' | 'Graveyard';

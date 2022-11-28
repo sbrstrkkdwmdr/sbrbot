@@ -476,6 +476,13 @@ module.exports = (userdata, client: Discord.Client, config: extypes.config, onco
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
                 break;
+            case 'ppcalc': case 'mapcalc': case 'mapperf': case 'maperf': case 'mappp':
+                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    osucmds.ppCalc({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot');
+                }
+                break;
             case 'pp':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     const overrides = {

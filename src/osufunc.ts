@@ -56,10 +56,15 @@ export async function mapcalc(
         customAR?: number,
         customOD?: number,
         customHP?: number,
+        maxLimit?:number,
     },
     mapIsRank?: string
 ) {
     let ppl: rosu.PerformanceAttributes[];
+
+    if(!obj.maxLimit || isNaN(obj.maxLimit) || obj.maxLimit < 1){
+        obj.maxLimit = 10
+    }
 
     switch (obj.calctype) {
         case 0: default: {
@@ -93,7 +98,7 @@ export async function mapcalc(
 
             ppl = [];
 
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < obj.maxLimit; i++) {
                 ppl.push((
                     new rosu.Calculator({
                         mode: osumodcalc.ModeNameToInt(obj.gamemode),

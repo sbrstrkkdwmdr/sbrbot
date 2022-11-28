@@ -677,7 +677,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'map',
         description: 'Shows information about a beatmap',
-        usage: 'map "query" [id] +[mods] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
+        usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
         slashusage: 'map [query] [id] [mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp]',
         examples: [
             {
@@ -1486,6 +1486,119 @@ const osucmds: commandInfo[] = [
                 examples: [''],
                 commandTypes: ['button']
             }
+        ]
+    },
+    {
+        name: 'ppcalc',
+        description: 'Gives the full performance calculations for a map',
+        usage: 'ppcalc [-? "(query)"] [id] +[mods] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
+        slashusage: 'ppcalc [query] [id] [mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp]',
+        examples: [
+            {
+                text: 'ppcalc +EZHTFL',
+                descriptor: 'Calculates the performance for the previous map with easy, halftime and flashlight'
+            },
+            {
+                text: 'ppcalc 4204 -speed 2 -cs 10',
+                descriptor: 'Calculates beatmap 4204 at 2x speed and circle size 10'
+            },
+            {
+                text: 'ppcalc -bpm 220 -ar 11 -od 11 -cs 5.2',
+                descriptor: 'Calculates the previous beatmap at 220bpm, AR11 OD11 and CS5.2'
+            }
+        ],
+        aliases: ['mapcalc', 'mapperf', 'maperf', 'mappp'],
+        options: [
+            {
+                name: 'query',
+                type: 'string',
+                required: false,
+                description: 'The map to search for',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['"kimi no shiranai monogatari"', 'query:big black blue dragon'],
+                commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'id',
+                type: 'integer',
+                required: false,
+                description: 'The map ID to search for',
+                options: ['N/A'],
+                defaultValue: 'the most recent map in the guild',
+                examples: ['4204', 'id:4204'],
+                commandTypes: ['message', 'interaction', 'link', 'button']
+            },
+            {
+                name: 'mods',
+                type: 'string',
+                required: false,
+                description: 'The mods to calculate the map with',
+                options: mods,
+                defaultValue: 'none',
+                examples: ['+HDHR', 'mods:HDDTHR'],
+                commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'bpm',
+                type: 'float',
+                required: false,
+                description: 'The BPM to calculate the map with. This value is still affected by mods',
+                options: ['1-1000'],
+                defaultValue: 'the map\'s BPM',
+                examples: ['-bpm 200', 'bpm:200'],
+                commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'speed',
+                type: 'float',
+                required: false,
+                description: 'The speed multiplier to calculate the map with. Overrides BPM. This value is still affected by mods',
+                options: ['0.1-10'],
+                defaultValue: '1',
+                examples: ['-speed 1.5', 'speed:1.5'],
+                commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'cs',
+                type: 'float',
+                required: false,
+                description: 'The circle size to calculate the map with. This value is still affected by mods',
+                options: ['0-11'],
+                defaultValue: 'The current map\'s value',
+                examples: ['-cs 5.2', 'cs:10'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'ar',
+                type: 'float',
+                required: false,
+                description: 'The approach rate to calculate the map with. This value is still affected by mods',
+                options: ['0-11'],
+                defaultValue: 'The current map\'s value',
+                examples: ['-ar 11', 'ar:10'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'od',
+                type: 'float',
+                required: false,
+                description: 'The overall difficulty to calculate the map with. This value is still affected by mods',
+                options: ['0-11'],
+                defaultValue: 'The current map\'s value',
+                examples: ['-od 11', 'od:9'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'hp',
+                type: 'float',
+                required: false,
+                description: 'The drain rate to calculate the map with. This value is still affected by mods',
+                options: ['0-11'],
+                defaultValue: 'The current map\'s value',
+                examples: ['-hp 3', 'hp:5'],
+                commandTypes: ['message', 'interaction']
+            },
         ]
     },
     {
