@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import fetch from 'node-fetch';
+import config from '../config/config.json';
 import Discord = require('discord.js');
-const config = require('../config/config.json');
 /**
  * 
  * @param {number} userid 
@@ -248,19 +248,6 @@ function checkisaudio(filename: Discord.Attachment) {
 }
 /**
  * 
- * @param {int} userid 
- * @returns check if user is banned from sending videos
- */
-function checkisfileblocked(userid: number) {
-    for (let i = 0; i < config.fileblockedusers.length; i++) {
-        if (config.fileblockedusers[i] == userid) {
-            return true;
-        }
-    }
-    return false;
-}
-/**
- * 
  * @param {string} str string to check for
  * @param {string} pat part of string to check for
  * @param {number} n the nth time to check for as in 2 = second time it appears
@@ -378,7 +365,6 @@ export function isNotNull(property: string) {
 } */
 export {
     audiofiletype,
-    checkisfileblocked,
     checkisaudio,
     checkisimage,
     checkisvideo,

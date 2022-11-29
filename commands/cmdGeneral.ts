@@ -1,21 +1,23 @@
-import cmdchecks = require('../src/checks');
-import fs = require('fs');
-import calc = require('../src/calc');
-import emojis = require('../src/consts/emojis');
-import colours = require('../src/consts/colours');
-import colourfunc = require('../src/colourcalc');
-import osufunc = require('../src/osufunc');
-import osumodcalc = require('../src/osumodcalc');
-import osuApiTypes = require('../src/types/osuApiTypes');
-import Discord = require('discord.js');
-import log = require('../src/log');
-import func = require('../src/tools');
-import def = require('../src/consts/defaults');
-import buttonsthing = require('../src/consts/buttons');
-import extypes = require('../src/types/extraTypes');
-import helpinfo = require('../src/consts/helpinfo');
-import msgfunc = require('./msgfunc');
-import mainconst = require('../src/consts/main');
+import * as Discord from 'discord.js';
+import * as fs from 'fs';
+import * as replayparser from 'osureplayparser';
+import * as calc from '../src/calc.js';
+import * as cmdchecks from '../src/checks.js';
+import * as colourfunc from '../src/colourcalc.js';
+import * as buttonsthing from '../src/consts/buttons.js';
+import * as colours from '../src/consts/colours.js';
+import * as def from '../src/consts/defaults.js';
+import * as emojis from '../src/consts/emojis.js';
+import * as helpinfo from '../src/consts/helpinfo.js';
+import * as mainconst from '../src/consts/main.js';
+import * as embedStuff from '../src/embed.js';
+import * as log from '../src/log.js';
+import * as osufunc from '../src/osufunc.js';
+import * as osumodcalc from '../src/osumodcalc.js';
+import * as func from '../src/tools.js';
+import * as extypes from '../src/types/extraTypes.js';
+import * as osuApiTypes from '../src/types/osuApiTypes.js';
+import * as msgfunc from './msgfunc.js';
 
 /**
  * convert a value

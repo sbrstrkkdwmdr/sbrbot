@@ -1,28 +1,28 @@
-import cmdchecks = require('../src/checks');
-import fs = require('fs');
-import calc = require('../src/calc');
-import emojis = require('../src/consts/emojis');
-import colours = require('../src/consts/colours');
-import colourfunc = require('../src/colourcalc');
-import osufunc = require('../src/osufunc');
-import osumodcalc = require('../src/osumodcalc');
-import osuApiTypes = require('../src/types/osuApiTypes');
-import Discord = require('discord.js');
-import log = require('../src/log');
-import func = require('../src/tools');
-import def = require('../src/consts/defaults');
-import buttonsthing = require('../src/consts/buttons');
-import extypes = require('../src/types/extraTypes');
-import helpinfo = require('../src/consts/helpinfo');
-import msgfunc = require('./msgfunc');
-import embedStuff = require('../src/embed');
-import replayparser = require('osureplayparser');
-import trackfunc = require('../src/trackfunc');
+import * as Discord from 'discord.js';
+import * as fs from 'fs';
+import * as replayparser from 'osureplayparser';
 import {
     CatchPerformanceAttributes,
     ManiaPerformanceAttributes, OsuPerformanceAttributes, PerformanceAttributes, TaikoPerformanceAttributes
 } from 'rosu-pp';
-import mainconst = require('../src/consts/main');
+import * as calc from '../src/calc.js';
+import * as cmdchecks from '../src/checks.js';
+import * as colourfunc from '../src/colourcalc.js';
+import * as buttonsthing from '../src/consts/buttons.js';
+import * as colours from '../src/consts/colours.js';
+import * as def from '../src/consts/defaults.js';
+import * as emojis from '../src/consts/emojis.js';
+import * as helpinfo from '../src/consts/helpinfo.js';
+import * as mainconst from '../src/consts/main.js';
+import * as embedStuff from '../src/embed.js';
+import * as log from '../src/log.js';
+import * as osufunc from '../src/osufunc.js';
+import * as osumodcalc from '../src/osumodcalc.js';
+import * as func from '../src/tools.js';
+import * as trackfunc from '../src/trackfunc.js';
+import * as extypes from '../src/types/extraTypes.js';
+import * as osuApiTypes from '../src/types/osuApiTypes.js';
+import * as msgfunc from './msgfunc.js';
 
 
 export async function name(input: extypes.commandInput) {
@@ -38,6 +38,7 @@ export async function bws(input: extypes.commandInput) {
     let commanduser: Discord.User;
     let user;
     let searchid;
+    let embedStyle: extypes.osuCmdStyle = 'A';
 
     switch (input.commandType) {
         case 'message': {
@@ -167,6 +168,9 @@ Could not find user
     }
 
     const embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setAuthor({
             name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
@@ -398,6 +402,7 @@ ID: ${input.absoluteID}
 export async function lb(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
+    let embedStyle: extypes.osuCmdStyle = 'L';
 
     let page = 0;
     let mode = 'osu';
@@ -513,7 +518,9 @@ export async function lb(input: extypes.commandInput) {
     page--;
 
     const serverlb = new Discord.EmbedBuilder()
-        .setColor(colours.embedColour.userlist.dec)
+        .setFooter({
+            text: `${embedStyle}`
+        }).setColor(colours.embedColour.userlist.dec)
         .setTitle(`server leaderboard for ${guild.name}`);
     const userids = await input.userdata.findAll();
     const useridsarraylen = await input.userdata.count();
@@ -738,6 +745,8 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
     let type: osuApiTypes.RankingType = 'performance';
     let page = 0;
     let spotlight;
+
+    let embedStyle: extypes.osuCmdStyle = 'L';
 
     switch (input.commandType) {
         case 'message': {
@@ -1035,7 +1044,9 @@ Could not fetch ranking data
     }
 
     const embed = new Discord.EmbedBuilder()
-        .setTitle(country != 'ALL' ?
+        .setFooter({
+            text: `${embedStyle}`
+        }).setTitle(country != 'ALL' ?
             `${mode == 'osu' ? 'osu!' : calc.toCapital(mode)} ${calc.toCapital(type)} Rankings for ${country}` :
             `Global ${mode == 'osu' ? 'osu!' : calc.toCapital(mode)} ${calc.toCapital(type)} Ranking`)
         .setColor(colours.embedColour.userlist.dec)
@@ -1118,6 +1129,10 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
     let type: string = 'rank';
     let value;
     let mode: osuApiTypes.GameMode = 'osu';
+
+    let embedStyle: extypes.osuCmdStyle = 'A';
+
+
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
@@ -1215,7 +1230,9 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const Embed = new Discord.EmbedBuilder()
-        .setTitle('null')
+        .setFooter({
+            text: `${embedStyle}`
+        }).setTitle('null')
         .setDescription('null');
 
     let returnval: string | number;
@@ -1284,6 +1301,8 @@ export async function osu(input: extypes.commandInput) {
     let graphonly = false;
     let detailed;
     let searchid;
+
+    let embedStyle: extypes.osuCmdStyle = 'P';
 
     switch (input.commandType) {
         case 'message': {
@@ -1642,6 +1661,9 @@ Could not find user
         '---';
 
     const osuEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.user.dec)
         .setTitle(`${osudata.username}'s ${mode ?? 'osu!'} profile`)
         .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
@@ -1656,11 +1678,17 @@ Could not find user
         const chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
 
         const ChartsEmbedRank = new Discord.EmbedBuilder()
+            .setFooter({
+                text: `${embedStyle}`
+            })
             .setTitle(`${osudata.username}`)
             .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
             .setImage(`${chartrank}`);
 
         const ChartsEmbedPlay = new Discord.EmbedBuilder()
+            .setFooter({
+                text: `${embedStyle}`
+            })
             .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
             .setImage(`${chartplay}`);
 
@@ -1668,6 +1696,9 @@ Could not find user
     } else {
         if (detailed == true) {
             const loading = new Discord.EmbedBuilder()
+                .setFooter({
+                    text: `${embedStyle}`
+                })
                 .setColor(colours.embedColour.user.dec)
                 .setTitle(`${osudata.username}'s ${mode ?? 'osu!'} profile`)
                 .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
@@ -1693,11 +1724,17 @@ Could not find user
             const chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
 
             const ChartsEmbedRank = new Discord.EmbedBuilder()
+                .setFooter({
+                    text: `${embedStyle}`
+                })
                 .setDescription('Click on the image to see the full chart')
                 .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
                 .setImage(`${chartrank}`);
 
             const ChartsEmbedPlay = new Discord.EmbedBuilder()
+                .setFooter({
+                    text: `${embedStyle}`
+                })
                 .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
                 .setImage(`${chartplay}`);
 
@@ -1931,6 +1968,8 @@ export async function firsts(input: extypes.commandInput) {
     let parseId = null;
 
     let reachedMaxCount = false;
+    let embedStyle: extypes.osuCmdStyle = 'L';
+
 
     switch (input.commandType) {
         case 'message': {
@@ -2474,6 +2513,9 @@ Could not find requested score
     }
 
     const firstsEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`#1 scores for ${osudata.username}`)
         .setURL(`https://osu.ppy.sh/users/${osudata.id}/${firstscoresdata?.[0]?.mode ?? osufunc.modeValidator(mode)}`)
@@ -2575,6 +2617,8 @@ export async function maplb(input: extypes.commandInput) {
     let page;
     let parseId = null;
     let parseScore = false;
+    let embedStyle: extypes.osuCmdStyle = 'L';
+
 
     switch (input.commandType) {
         case 'message': {
@@ -2810,7 +2854,10 @@ Could not fetch beatmap data for ${mapid}
     if (mapmods) {
         mods = osumodcalc.OrderMods(mapmods) + '';
     }
-    const lbEmbed = new Discord.EmbedBuilder();
+    const lbEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        });
 
     let lbdataReq: osufunc.apiReturn;
     if (mods == null) {
@@ -3190,6 +3237,8 @@ export async function osutop(input: extypes.commandInput) {
 
     let parseScore = false;
     let parseId = null;
+
+    let embedStyle: extypes.osuCmdStyle = 'L';
 
     switch (input.commandType) {
         case 'message': {
@@ -3805,6 +3854,9 @@ Could not find requested score
     }
 
     const topEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`${commandButtonName == 'osutop' ? 'Top' : 'Top no choke'} plays of ${osudata.username}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
@@ -3957,6 +4009,7 @@ export async function pinned(input: extypes.commandInput) {
     let parseId = null;
 
     let reachedMaxCount = false;
+    let embedStyle: extypes.osuCmdStyle = 'L';
 
     switch (input.commandType) {
         case 'message': {
@@ -4525,6 +4578,9 @@ Could not find requested score
     }
 
     const pinnedEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`Pinned scores for ${osudata.username}`)
         .setURL(`https://osu.ppy.sh/users/${osudata.id}/${pinnedscoresdata?.[0]?.mode ?? osufunc.modeValidator(mode)}`)
@@ -4627,6 +4683,8 @@ export async function recent(input: extypes.commandInput) {
 
     let isFirstPage = false;
     let isLastPage = false;
+
+    let embedStyle: extypes.osuCmdStyle = 'S';
 
     switch (input.commandType) {
         case 'message': {
@@ -5075,6 +5133,9 @@ Could not find user's recent scores
     }
 
     const rsEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
@@ -5543,6 +5604,8 @@ export async function replayparse(input: extypes.commandInput) {
     let commanduser: Discord.User;
     let replay;
 
+    let embedStyle: extypes.osuCmdStyle = 'S';
+
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
@@ -5760,6 +5823,9 @@ export async function replayparse(input: extypes.commandInput) {
 
     const chart = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay'));
     const Embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.score.dec)
         .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
         .setTitle(`${fulltitle} ${ifmods}`)
@@ -5810,6 +5876,7 @@ export async function scoreparse(input: extypes.commandInput) {
     let scoremode: string;
     let scoreid: number | string;
 
+    let embedStyle: extypes.osuCmdStyle = 'S';
 
     switch (input.commandType) {
         case 'message': {
@@ -6215,6 +6282,9 @@ Could not find user
     func.storeFile(osudataReq, scoredata.user.username, 'osudata', osufunc.modeValidator(mode));
 
     const scoreembed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.score.dec)
         .setAuthor({
             name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
@@ -6543,6 +6613,8 @@ export async function scores(input: extypes.commandInput) {
 
     let parseScore = false;
     let parseId = null;
+
+    let embedStyle: extypes.osuCmdStyle = 'L';
 
     switch (input.commandType) {
         case 'message': {
@@ -7045,6 +7117,9 @@ Could not find beatmap data
 
 
     const scoresEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`${artist} - ${title} [${mapdata.version}]`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
@@ -7146,6 +7221,8 @@ export async function scorestats(input: extypes.commandInput) {
     let mode: osuApiTypes.GameMode;
 
     let reachedMaxCount = false;
+
+    let embedStyle: extypes.osuCmdStyle = 'A';
 
     switch (input.commandType) {
         case 'message': {
@@ -7462,6 +7539,9 @@ Could not find user's ${scoreTypes} scores
     let useFiles: string[] = [];
 
     const Embed: Discord.EmbedBuilder = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setTitle(`Statistics for ${osudata.username}'s ${scoreTypes} scores`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
@@ -7606,6 +7686,8 @@ export async function simulate(input: extypes.commandInput) {
     let nMiss = null;
     let overrideSpeed = 1;
     let overrideBpm: number = null;
+
+    let embedStyle: extypes.osuCmdStyle = 'S';
 
     switch (input.commandType) {
         case 'message': {
@@ -7917,6 +7999,9 @@ Could not find beatmap data
         'unknown map';
 
     const scoreEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setTitle(`Simulated play on ${title}`)
         .setURL(`https://osu.ppy.sh/b/${mapid}`)
         .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg` || `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
@@ -8017,6 +8102,7 @@ export async function map(input: extypes.commandInput) {
     let customOD: 'current' | number = 'current';
     let customHP: 'current' | number = 'current';
 
+    let embedStyle: extypes.osuCmdStyle = 'M';
 
     switch (input.commandType) {
         case 'message': {
@@ -8900,6 +8986,9 @@ Using default json file
         `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`;
 
     const Embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(0x91ff9a)
         .setTitle(maptitle)
         .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
@@ -9038,6 +9127,9 @@ Using default json file
 
         const passurl = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits'));
         const passEmbed = new Discord.EmbedBuilder()
+            .setFooter({
+                text: `${embedStyle}`
+            })
             .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
             .setImage(`${passurl}`);
         await embeds.push(passEmbed);
@@ -9108,6 +9200,7 @@ export async function ppCalc(input: extypes.commandInput) {
     let customOD: 'current' | number = 'current';
     let customHP: 'current' | number = 'current';
 
+    let embedStyle: extypes.osuCmdStyle = 'M';
 
     switch (input.commandType) {
         case 'message': {
@@ -9893,6 +9986,9 @@ Could not find beatmap data
     }
 
     const Embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(0x91ff9a)
         .setTitle(maptitle)
         .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
@@ -10196,6 +10292,8 @@ export async function maplocal(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
 
+    let embedStyle: extypes.osuCmdStyle = 'M';
+
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
@@ -10455,6 +10553,9 @@ export async function maplocal(input: extypes.commandInput) {
     let osuEmbed;
     try {
         osuEmbed = new Discord.EmbedBuilder()
+            .setFooter({
+                text: `${embedStyle}`
+            })
             .setTitle(`${ftstr}`)
             .addFields([
                 {
@@ -10533,6 +10634,8 @@ export async function userBeatmaps(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
     let reachedMaxCount = false;
+
+    let embedStyle: extypes.osuCmdStyle = 'M';
 
     switch (input.commandType) {
         case 'message': {
@@ -10988,6 +11091,9 @@ Could not find map
     }
 
     const mapList = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setTitle(`${osudata.username}'s ${calc.toCapital(filter)} Maps`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
@@ -11540,9 +11646,8 @@ ID: ${input.absoluteID}
  * list of users being tracked
  */
 export async function tracklist(input: extypes.commandInput) {
-
-
     let commanduser: Discord.User;
+    let embedStyle: extypes.osuCmdStyle = 'L';
 
 
     switch (input.commandType) {
@@ -11637,6 +11742,9 @@ export async function tracklist(input: extypes.commandInput) {
         }
     }
     const userListEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setTitle(`All tracked users in ${input.obj.guild.name}`)
         .setColor(colours.embedColour.userlist.dec)
         .setDescription(`There are ${userList.length} users being tracked in this server\n\n` +
@@ -11678,6 +11786,8 @@ export async function compare(input: extypes.commandInput) {
     let secondsearchid = null;
     let mode = 'osu';
     let page = 0;
+
+    let embedStyle: extypes.osuCmdStyle = 'P';
 
     switch (input.commandType) {
         case 'message': {
@@ -12144,6 +12254,9 @@ ${error}
     }
 
     const embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setTitle(embedTitle)
         .addFields(usefields);
     if (embedescription) embed.setDescription(embedescription);
@@ -12433,6 +12546,8 @@ export async function saved(input: extypes.commandInput) {
     };
     let overrideTitle;
 
+    let embedStyle: extypes.osuCmdStyle = 'A';
+
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
@@ -12522,6 +12637,9 @@ export async function saved(input: extypes.commandInput) {
     }
 
     const Embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setTitle(`${user != null ? user : fr}'s ${overrideTitle ?? 'saved settings'}`);
 
     if (user == null) {
@@ -12587,6 +12705,8 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
     let pp;
     let searchid;
     let mode;
+
+    let embedStyle: extypes.osuCmdStyle = 'A';
 
     switch (input.commandType) {
         case 'message': {
@@ -12858,6 +12978,9 @@ Could not fetch user\'s top scores
     const guessrank = await osufunc.getRankPerformance('pp->rank', (total + bonus), input.userdata, `${osufunc.modeValidator(mode)}`, input.statsCache);
 
     const embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setTitle(`What if ${osudata.username} gained ${pp}pp?`)
         .setColor(colours.embedColour.query.dec)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)

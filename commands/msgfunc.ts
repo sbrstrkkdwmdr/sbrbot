@@ -1,6 +1,6 @@
-import extypes = require('../src/types/extraTypes');
+import * as log from '../src/log.js';
+import * as extypes from '../src/types/extraTypes.js';
 import Discord = require('discord.js');
-import log = require('../src/log');
 import fs = require('fs');
 
 export async function sendMessage(input: {

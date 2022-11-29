@@ -10,7 +10,7 @@
 
 //PREFIXMSG gets replaced later
 
-import extypes = require('../types/extratypes');
+import * as extypes from '../types/extratypes.js';
 
 export type commandInfo = {
     name: string,

@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "moduleResolution": "node",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "lib": [
             "ES2021"
         ],
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "sourceMap": true,
+        "outDir": "dist"
     },
     "include": [
         "commands/**/*",
@@ -16,6 +18,7 @@
     ],
     "exclude": [
         "setup.ts",
-        "node_modules"
+        "node_modules",
+        "test"
     ]
 }

@@ -1,16 +1,16 @@
-import Discord = require("discord.js");
-import fs = require('fs');
+import Discord from "discord.js";
+import fs from 'fs';
 
-import commands = require('./commands/cmdGeneral');
-import osucmds = require('./commands/cmdosu');
-import admincmds = require('./commands/cmdAdmin');
-import misccmds = require('./commands/cmdMisc');
-import checkcmds = require('./commands/cmdChecks');
-import extypes = require('./src/types/extratypes');
-import embedStuff = require('./src/embed');
-import mainconst = require('./src/consts/main');
+import * as admincmds from './commands/cmdAdmin.js';
+import * as checkcmds from './commands/cmdChecks.js';
+import * as commands from './commands/cmdGeneral.js';
+import * as misccmds from './commands/cmdMisc.js';
+import * as osucmds from './commands/cmdosu.js';
+import * as mainconst from './src/consts/main.js';
+import * as embedStuff from './src/embed.js';
+import * as extypes from './src/types/extratypes.js';
 
-module.exports = (userdata, client: Discord.Client, config: extypes.config, oncooldown, statsCache) => {
+export default function (userdata, client: Discord.Client, config: extypes.config, oncooldown, statsCache)  {
     const graphChannel = client.channels.cache.get(config.graphChannelId) as Discord.TextChannel;
 
     client.on('interactionCreate', interaction => {

@@ -1,8 +1,8 @@
-import fs = require('fs');
-import Discord = require('discord.js');
-import extypes = require('./types/extratypes');
-import config = require('../config/config.json');
-import { path } from '../path';
+import Discord from 'discord.js';
+import fs from 'fs';
+import config from '../config/config.json';
+import { path } from '../path.js';
+import * as extypes from './types/extratypes.js';
 
 function commandLog(commandname: string, baseCommandType: string, absoluteID: number | string, commanduser) {
     const currentDate = new Date();

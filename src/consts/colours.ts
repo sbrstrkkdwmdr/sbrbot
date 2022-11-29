@@ -1,4 +1,4 @@
-import colourcalc = require('../colourcalc');
+import * as colourcalc from '../colourcalc.js';
 const diffcolour = [
     {
         dec: 5554943,

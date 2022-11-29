@@ -1,22 +1,20 @@
 console.log('Loading...');
 const initdate = new Date();
 
-import Discord = require('discord.js');
-const { Client, GatewayIntentBits, Partials } = require('discord.js');
-import fs = require('fs');
-import Sequelize = require('sequelize');
+import Discord, { Client, GatewayIntentBits, Partials } from 'discord.js';
+import fs from 'fs';
 import fetch from 'node-fetch';
-import extypes = require('./src/types/extratypes');
+import Sequelize from 'sequelize';
+import * as extypes from './src/types/extratypes.js';
 
-const commandHandler = require('./commandHandler');
-const linkHandler = require('./linkHandler.ts');
-const buttonHandler = require('./buttonHandler');
-const commandInit = require('./commandInit');
-const exEvents = require('./exEvents');
-const osutrack = require('./src/osutrack');
+import * as buttonHandler from './buttonHandler.js';
+import * as commandHandler from './commandHandler.js';
+import * as commandInit from './commandInit.js';
+import * as exEvents from './exEvents.js';
+import * as linkHandler from './linkHandler.js';
+import * as osutrack from './src/osutrack.js';
 
-const config: extypes.config = require('./config/config.json');
-
+import config from './config/config.json';
 
 const client = new Client({
     intents: [
@@ -173,12 +171,12 @@ Current Client ID:        ${client.user.id}
 
     const oncooldown = new Set();
 
-    commandHandler(userdata, client, config, oncooldown, guildSettings, trackDb, statsCache);
-    linkHandler(userdata, client, config, oncooldown, guildSettings);
-    buttonHandler(userdata, client, config, oncooldown, statsCache);
-    commandInit(userdata, client, config, oncooldown);
-    exEvents(userdata, client, config, oncooldown, guildSettings, statsCache);
-    osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);
+    commandHandler.default(userdata, client, config, oncooldown, guildSettings, trackDb, statsCache);
+    linkHandler.default(userdata, client, config, oncooldown, guildSettings);
+    buttonHandler.default(userdata, client, config, oncooldown, statsCache);
+    commandInit.default(userdata, client, config, oncooldown);
+    exEvents.default(userdata, client, config, oncooldown, guildSettings, statsCache);
+    osutrack.default(userdata, client, config, oncooldown, trackDb, guildSettings);
 
     if (!fs.existsSync(`./id.txt`)) {
         console.log(`Creating ./id.txt`);

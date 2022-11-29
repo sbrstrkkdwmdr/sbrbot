@@ -1,13 +1,13 @@
-import osufunc = require('./osufunc');
-import osuApiTypes = require('./types/osuApiTypes');
-import Sequelize = require('sequelize');
-import fs = require('fs');
-import Discord = require('discord.js');
-import func = require('./tools');
-import embedstuff = require('./embed');
-import log = require('./log');
-import def = require('./consts/defaults');
-import rosu = require('rosu-pp');
+import Discord from 'discord.js';
+import fs from 'fs';
+import rosu from 'rosu-pp';
+import Sequelize from 'sequelize';
+import * as def from './consts/defaults.js';
+import * as embedstuff from './embed.js';
+import * as log from './log.js';
+import * as osufunc from './osufunc.js';
+import * as func from './tools.js';
+import * as osuApiTypes from './types/osuApiTypes.js';
 export async function editTrackUser(fr: {
     database: Sequelize.ModelStatic<any>,
     userid: string | number,

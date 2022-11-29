@@ -1,19 +1,19 @@
-import cmdchecks = require('../../src/checks');
-import fs = require('fs');
-import calc = require('../../src/calc');
-import emojis = require('../../src/consts/emojis');
-import colours = require('../../src/consts/colours');
-import colourfunc = require('../../src/colourcalc');
-import osufunc = require('../../src/osufunc');
-import osumodcalc = require('../osumodcalc');
-import osuApiTypes = require('../../src/types/osuApiTypes');
-import Discord = require('discord.js');
-import log = require('../../src/log');
-import func = require('../tools');
-import def = require('../../src/consts/defaults');
-import buttonsthing = require('../../src/consts/buttons');
-import extypes = require('../../src/types/extraTypes');
-import msgfunc = require('../../commands/msgfunc');
+import Discord from 'discord.js';
+import fs from 'fs';
+import * as msgfunc from '../../commands/msgfunc.js';
+import * as calc from '../../src/calc.js';
+import * as cmdchecks from '../../src/checks.js';
+import * as colourfunc from '../../src/colourcalc.js';
+import * as buttonsthing from '../../src/consts/buttons.js';
+import * as colours from '../../src/consts/colours.js';
+import * as def from '../../src/consts/defaults.js';
+import * as emojis from '../../src/consts/emojis.js';
+import * as log from '../../src/log.js';
+import * as osufunc from '../../src/osufunc.js';
+import * as extypes from '../../src/types/extraTypes.js';
+import * as osuApiTypes from '../../src/types/osuApiTypes.js';
+import * as osumodcalc from '../osumodcalc.js';
+import * as func from '../tools.js';
 
 
 module.exports = {

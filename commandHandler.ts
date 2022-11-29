@@ -1,19 +1,20 @@
-import fs = require('fs');
-import checks = require('./src/checks');
-import extypes = require('./src/types/extratypes');
-import defaults = require('./src/consts/defaults');
-import Discord = require('discord.js');
-import cd = require('./src/consts/cooldown');
-import func = require('./src/tools');
+import Discord from 'discord.js';
+import fs from 'fs';
+import * as checks from './src/checks.js';
+import * as cd from './src/consts/cooldown.js';
+import * as defaults from './src/consts/defaults.js';
+import * as func from './src/tools.js';
 
-import commands = require('./commands/cmdGeneral');
-import osucmds = require('./commands/cmdosu');
-import admincmds = require('./commands/cmdAdmin');
-import misccmds = require('./commands/cmdMisc');
-import checkcmds = require('./commands/cmdChecks');
-import mainconst = require('./src/consts/main');
+import * as admincmds from './commands/cmdAdmin.js';
+import * as checkcmds from './commands/cmdChecks.js';
+import * as commands from './commands/cmdGeneral.js';
+import * as misccmds from './commands/cmdMisc.js';
+import * as osucmds from './commands/cmdosu.js';
+import * as mainconst from './src/consts/main.js';
+import * as embedStuff from './src/embed.js';
+import * as extypes from './src/types/extratypes.js';
 
-module.exports = (userdata, client: Discord.Client, config: extypes.config, oncooldown, guildSettings, trackDb, statsCache) => {
+export default function (userdata, client: Discord.Client, config: extypes.config, oncooldown, guildSettings, trackDb, statsCache) {
     let timeouttime;
     const graphChannel = client.channels.cache.get(config.graphChannelId) as Discord.TextChannel;
 

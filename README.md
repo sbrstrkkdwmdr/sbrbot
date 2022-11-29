@@ -32,8 +32,11 @@ create a `./config/` folder and put `config.json` inside it
 }
 ```
 
-to run the bot just use `ts-node main.ts`</br>
-to run the bot without checking for errors (or for other debugging purposes) use `ts-node-transpile-only main.ts`
+to compile the bot the bot run `tsc` or `npm run build`
+to run the compiled code run `npm run run` 
+
+to run the bot without checking for errors (or for other debugging purposes) use `npm run test`
+
 
 ## image search setup
 

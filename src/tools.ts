@@ -1,10 +1,10 @@
 import fs = require('fs');
 // import truepath = require('../path').path
-import { path } from '../path';
+import { path } from '../path.js';
+import * as osuApiTypes from '../src/types/osuApiTypes.js';
+import * as calc from './calc.js';
+import * as osufunc from './osufunc.js';
 const truepath = `${path}`;
-import osuApiTypes = require('../src/types/osuApiTypes');
-import calc = require('./calc');
-import osufunc = require('./osufunc');
 // truepath.path
 
 export function generateId() {

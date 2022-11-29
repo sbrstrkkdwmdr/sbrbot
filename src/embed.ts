@@ -1,12 +1,12 @@
-import osuapitypes = require('./types/osuApiTypes');
-import osumodcalc = require('./osumodcalc');
-import emojis = require('./consts/emojis');
-import osufunc = require('./osufunc');
-import fs = require('fs');
-import func = require('./tools');
-import calc = require('./calc');
-import Discord = require('discord.js');
-import cmdchecks = require('./checks');
+import Discord from 'discord.js';
+import fs from 'fs';
+import * as calc from './calc.js';
+import * as cmdchecks from './checks.js';
+import * as emojis from './consts/emojis.js';
+import * as osufunc from './osufunc.js';
+import * as osumodcalc from './osumodcalc.js';
+import * as func from './tools.js';
+import * as osuapitypes from './types/osuApiTypes.js';
 
 export async function scoreList(
     asObj: {

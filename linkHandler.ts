@@ -1,18 +1,23 @@
-import fs = require('fs');
-const https = require('https');
-import tesseract = require('tesseract.js');
-import extypes = require('./src/types/extratypes');
-import defaults = require('./src/consts/defaults');
-import Discord = require('discord.js');
-import func = require('./src/tools');
+import https from 'https';
+import tesseract from 'tesseract.js';
 
-import commands = require('./commands/cmdGeneral');
-import osucmds = require('./commands/cmdosu');
-import admincmds = require('./commands/cmdAdmin');
-import misccmds = require('./commands/cmdMisc');
-import checkcmds = require('./commands/cmdChecks');
+import Discord from 'discord.js';
+import fs from 'fs';
+import * as checks from './src/checks.js';
+import * as cd from './src/consts/cooldown.js';
+import * as defaults from './src/consts/defaults.js';
+import * as func from './src/tools.js';
 
-module.exports = (userdata, client: Discord.Client, config: extypes.config, oncooldown, guildSettings) => {
+import * as admincmds from './commands/cmdAdmin.js';
+import * as checkcmds from './commands/cmdChecks.js';
+import * as commands from './commands/cmdGeneral.js';
+import * as misccmds from './commands/cmdMisc.js';
+import * as osucmds from './commands/cmdosu.js';
+import * as mainconst from './src/consts/main.js';
+import * as embedStuff from './src/embed.js';
+import * as extypes from './src/types/extratypes.js';
+
+export default function(userdata, client: Discord.Client, config: extypes.config, oncooldown, guildSettings){
     let imgParseCooldown = false;
     const graphChannel = client.channels.cache.get(config.graphChannelId) as Discord.TextChannel;
 
@@ -91,10 +96,10 @@ progress: ${m.progress ? m.progress : 'none'}
                         });
                         imgParseCooldown = true;
                         await (async () => {
-                            await worker.load();
-                            await worker.loadLanguage('eng');
-                            await worker.initialize('eng');
-                            const { data: { text } } = await worker.recognize(message.attachments.first().url);
+                            (await worker).load();
+                            (await worker).loadLanguage('eng');
+                            (await worker).initialize('eng');
+                            const { data: { text } } = await (await worker).recognize(message.attachments.first().url);
                             if (text.includes('Beatmap by')) {
                                 const txttitle = text.split('\n')[0];
                                 const txtcreator = text.split('Beatmap by ')[1].split('\n')[0];

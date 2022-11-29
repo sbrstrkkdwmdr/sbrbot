@@ -1,16 +1,16 @@
-import rosu = require('rosu-pp');
-import osumodcalc = require('./osumodcalc');
-import fs = require('fs');
-import charttoimg = require('chartjs-to-image');
+import charttoimg from 'chartjs-to-image';
+import fs from 'fs';
 import fetch from 'node-fetch';
-import perf = require('perf_hooks');
-import osuApiTypes = require('./types/osuApiTypes');
-import config = require('../config/config.json');
-import cmdchecks = require('./checks');
-import extypes = require('./types/extratypes');
-import Sequelize = require('sequelize');
-import msgfunc = require('../commands/msgfunc');
-import emojis = require('./consts/emojis');
+import perf from 'perf_hooks';
+import rosu from 'rosu-pp';
+import Sequelize from 'sequelize';
+import * as msgfunc from '../commands/msgfunc.js';
+import config from '../config/config.json';
+import * as cmdchecks from './checks.js';
+import * as emojis from './consts/emojis.js';
+import * as osumodcalc from './osumodcalc.js';
+import * as extypes from './types/extratypes.js';
+import * as osuApiTypes from './types/osuApiTypes.js';
 
 /* module.exports = {
     modemods, modemappers

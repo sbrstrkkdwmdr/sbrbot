@@ -1,14 +1,14 @@
-import rosu = require('rosu-pp');
-import osumodcalc = require('./osumodcalc');
-import fs = require('fs');
-import charttoimg = require('chartjs-to-image');
+import charttoimg from 'chartjs-to-image';
+import fs from 'fs';
 import fetch from 'node-fetch';
-import perf = require('perf_hooks');
-import osuApiTypes = require('./types/osuApiTypes');
-import config = require('../config/config.json');
-import cmdchecks = require('./checks');
-import extypes = require('./types/extratypes');
-import Sequelize = require('sequelize');
+import perf from 'perf_hooks';
+import rosu from 'rosu-pp';
+import Sequelize from 'sequelize';
+import config from '../config/config.json';
+import * as cmdchecks from './checks.js';
+import * as osumodcalc from './osumodcalc.js';
+import * as extypes from './types/extratypes.js';
+import * as osuApiTypes from './types/osuApiTypes.js';
 
 async function mapToObject(path: string) {
     let mapString = fs.readFileSync(path, 'utf8');

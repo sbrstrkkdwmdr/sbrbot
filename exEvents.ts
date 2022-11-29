@@ -1,15 +1,14 @@
-import fs = require('fs');
-import osumodcalc = require('./src/osumodcalc');
+import Discord from 'discord.js';
+import fs from 'fs';
 import fetch from 'node-fetch';
-import osuapitypes = require('./src/types/osuApiTypes');
-import extypes = require('./src/types/extraTypes');
-import Discord = require('discord.js');
-import track = require('./src/trackfunc');
-import Sequelize = require('sequelize');
-import osufunc = require('./src/osufunc');
-import osuApiTypes = require('./src/types/osuApiTypes');
-
-module.exports = (userdata, client, config: extypes.config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, trackDb, statsCache) => {
+import Sequelize from 'sequelize';
+import * as osufunc from './src/osufunc.js';
+import * as osumodcalc from './src/osumodcalc.js';
+import * as track from './src/trackfunc.js';
+import * as extypes from './src/types/extratypes.js';
+import * as osuapitypes from './src/types/osuApiTypes.js';
+import * as osuApiTypes from './src/types/osuApiTypes.js';
+export default function (userdata, client, config: extypes.config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, statsCache)  {
 
     setInterval(() => {
         clearMapFiles();

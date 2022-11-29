@@ -1,15 +1,15 @@
-import osufunc = require('./osufunc');
-import osuApiTypes = require('./types/osuApiTypes');
-import Sequelize = require('sequelize');
-import fs = require('fs');
-import Discord = require('discord.js');
-import func = require('./tools');
-import embedstuff = require('./embed');
-import log = require('./log');
-import def = require('./consts/defaults');
-import trackfunc = require('./trackfunc');
+import Discord from 'discord.js';
+import fs from 'fs';
+import Sequelize from 'sequelize';
+import * as def from './consts/defaults.js';
+import * as embedstuff from './embed.js';
+import * as log from './log.js';
+import * as osufunc from './osufunc.js';
+import * as func from './tools.js';
+import * as trackfunc from './trackfunc.js';
+import * as osuApiTypes from './types/osuApiTypes.js';
 
-module.exports = (userdata, client, config, oncooldown, trackDb: Sequelize.ModelStatic<any>, guildSettings: Sequelize.ModelStatic<any>) => {
+export default function (userdata, client, config, oncooldown, trackDb: Sequelize.ModelStatic<any>, guildSettings: Sequelize.ModelStatic<any>) {
     // trackUsers(trackDb)
     let enableTrack = config.enableTracking;
 

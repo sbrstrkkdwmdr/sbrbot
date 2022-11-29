@@ -1,6 +1,7 @@
-import Discord = require('discord.js');
-import Sequelize = require('sequelize');
-import embedStuff = require('../embed');
+import Discord from 'discord.js';
+import Sequelize from 'sequelize';
+import * as embedStuff from '../embed.js';
+
 export type config = {
     token: string,
     prefix: string,
@@ -10,14 +11,14 @@ export type config = {
     ownerusers: string[],
     google: {
         apiKey: string,
-        engineId: string
+        engineId: string;
     },
     useScreenshotParse: boolean,
     LogApiCalls: boolean,
     LogApiCallsToFile: boolean,
     enableTracking: boolean,
     graphChannelId: string,
-}
+};
 
 export type guildSettings = {
     guildid: number | string,
@@ -26,13 +27,13 @@ export type guildSettings = {
     osuParseLinks: boolean,
     osuParseScreenshots: boolean,
     osuParseReplays: boolean,
-}
+};
 
 export type imagesearches = {
     kind: string,
     url: {
         type: string,
-        template: string
+        template: string;
     },
     queries: {
         request: {
@@ -44,7 +45,7 @@ export type imagesearches = {
             inputEncoding: string,
             outputEncoding: string,
             safe: string,
-            cx: string
+            cx: string;
             searchType: string,
         }[],
         nextPage: {
@@ -56,21 +57,21 @@ export type imagesearches = {
             inputEncoding: string,
             outputEncoding: string,
             safe: string,
-            cx: string
+            cx: string;
             searchType: string,
-        }[]
+        }[];
     },
     context: {
-        title: string
+        title: string;
     },
     searchInformation: {
         searchTime: number,
         formattedSearchTime: string,
         totalResults: string,
-        formattedTotalResults: string
+        formattedTotalResults: string;
     },
-    items: googleSearchItem[]
-}
+    items: googleSearchItem[];
+};
 
 export type googleSearchItem = {
     kind: string,
@@ -89,9 +90,9 @@ export type googleSearchItem = {
         byteSize: number,
         thumbnailLink: string,
         thumbnailHeight: number,
-        thumbnailWidth: number
-    }
-}
+        thumbnailWidth: number;
+    };
+};
 
 export type ytSearch = {
     all?: ytSearchItem[],
@@ -101,9 +102,9 @@ export type ytSearch = {
     lists?: ytSearchList[],
     channels?: ytSearchChannel[],
     accounts?: ytSearchAccount[],
-}
+};
 
-export type ytSearchItem = ytSearchVideo | ytSearchChannel
+export type ytSearchItem = ytSearchVideo | ytSearchChannel;
 export type ytSearchVideo = {
     type: string,
     videoId: string,
@@ -116,19 +117,19 @@ export type ytSearchVideo = {
     timestamp: string,
     duration: {
         seconds: number,
-        timestamp: string
+        timestamp: string;
     },
     ago: string,
     views: number,
     author: {
         name: string,
         url: string,
-    }
-}
+    };
+};
 
 export type ytSearchPlaylist = {
     type: string,
-}
+};
 
 export type ytSearchChannel = {
     type: string,
@@ -141,13 +142,13 @@ export type ytSearchChannel = {
     videoCountLabel: string,
     subCount: number,
     subCountLabel: string,
-}
+};
 
-export type ytSearchLive = any//{}
+export type ytSearchLive = any;//{}
 
-export type ytSearchAccount = any
+export type ytSearchAccount = any;
 
-export type ytSearchList = any//{}
+export type ytSearchList = any;//{}
 
 
 export type dbUser = {
@@ -167,12 +168,12 @@ export type dbUser = {
     maniaacc: number,
     maniapp: number,
     maniarank: number,
-}
+};
 
-export type commandType = 'message' | 'interaction' | 'button' | 'link' | 'other'
+export type commandType = 'message' | 'interaction' | 'button' | 'link' | 'other';
 
 // type commandObject = any//Discord.Message | Discord.CommandInteraction | Discord.ButtonInteraction
-export type commandObject = Discord.Message<any> | Discord.ChatInputCommandInteraction<any> | Discord.ButtonInteraction<any>
+export type commandObject = Discord.Message<any> | Discord.ChatInputCommandInteraction<any> | Discord.ButtonInteraction<any>;
 
 export type overrides = {
     user?: any,
@@ -187,10 +188,11 @@ export type overrides = {
     commanduser?: Discord.User,
     commandAs?: commandType,
     filterMapper?: string,
-    filterMods?: string
-} | null
+    filterMods?: string,
+    miss?: true,
+} | null;
 
-export type data = Sequelize.ModelStatic<any>
+export type data = Sequelize.ModelStatic<any>;
 
 export type commandInput = {
     commandType: commandType,
@@ -205,14 +207,14 @@ export type commandInput = {
     userdata?: data,
     trackDb?: data,
     guildSettings?: data,
-    graphChannel: Discord.TextChannel
-}
+    graphChannel: Discord.TextChannel;
+};
 
 export type commandButtonTypes =
     'BigLeftArrow' | 'LeftArrow' | 'Search' | 'RightArrow' | 'BigRightArrow' |
     'Refresh' | 'Select' | 'Random' |
     'DetailEnable' | 'DetailDisable' | 'Detailed' | 'Details' |
-    'SearchMenu' | 'Sort' | 'SortMenu'
+    'SearchMenu' | 'Sort' | 'SortMenu';
 
 export type osustatscache = {
     osuid: string,
@@ -233,5 +235,23 @@ export type osustatscache = {
     maniapp: string,
     maniarank: string,
     maniaacc: string,
-}
+};
+
+export type osuCmdStyle =
+    'A' | //default
+    'C' | //compressed    
+    'E' | //expanded
+    'L' | //default list    
+    'LE' | //expanded list   
+    'LC' | //compressed list
+    'S' | //score    
+    'SC' | //score compressed
+    'SE' | //score expanded
+    'M' | //map
+    'MC' | //map compressed
+    'ME' |//map expanded
+    'P' | // profile
+    'PE' | // profile expanded
+    'PC' | // profile compressed
+    'G'; // graph
 

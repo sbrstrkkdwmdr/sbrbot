@@ -1,5 +1,4 @@
-import { ApplicationCommandOptionType } from 'discord.js';
-const Discord = require('discord.js');
+import Discord, { ApplicationCommandOptionType } from 'discord.js';
 /**
  * @info Gamemode options
  */

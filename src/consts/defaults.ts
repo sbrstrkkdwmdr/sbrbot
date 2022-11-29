@@ -1,4 +1,4 @@
-import extypes = require('../types/extratypes');
+import * as extypes from '../types/extratypes.js';
 
 const defaultClientConfig: extypes.config = {
     token: '',
