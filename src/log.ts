@@ -104,7 +104,8 @@ ${optstring}
         }
 ====================================================`;
     if (config.storeCommandLogs) {
-        fs.appendFileSync(`${path}/logs/${input?.object?.guildId ? 'cmd/' + input?.object?.guildId + '.log' : 'commands.log'}`, output, 'utf-8');
+        console.log(`${path}/logs/${input?.object?.guildId ? 'cmd/' + input?.object?.guildId + '.log' : 'commands.log'}`)
+        //fs.appendFileSync(`${path}/logs/${input?.object?.guildId ? 'cmd/' + input?.object?.guildId + '.log' : 'commands.log'}`, output, 'utf-8');
     }
 }
 // commandLog,

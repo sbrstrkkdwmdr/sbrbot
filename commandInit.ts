@@ -1,6 +1,6 @@
 import Discord from 'discord.js';
 import * as cmdconfig from './src/consts/commandopts.js';
-export default function (userdata, client/* :Discord.Client */, config, oncooldown) {
+export default (userdata, client/* :Discord.Client */, config, oncooldown) => {
     /*
             const guildID = config.testGuildID;
         const guild = client.guilds.cache.get(guildID);

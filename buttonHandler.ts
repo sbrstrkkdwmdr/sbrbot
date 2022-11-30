@@ -10,7 +10,7 @@ import * as mainconst from './src/consts/main.js';
 import * as embedStuff from './src/embed.js';
 import * as extypes from './src/types/extratypes.js';
 
-export default function (userdata, client: Discord.Client, config: extypes.config, oncooldown, statsCache)  {
+export default (userdata, client: Discord.Client, config: extypes.config, oncooldown, statsCache) => {
     const graphChannel = client.channels.cache.get(config.graphChannelId) as Discord.TextChannel;
 
     client.on('interactionCreate', interaction => {

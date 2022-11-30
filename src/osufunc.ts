@@ -5,12 +5,13 @@ import perf from 'perf_hooks';
 import rosu from 'rosu-pp';
 import Sequelize from 'sequelize';
 import * as msgfunc from '../commands/msgfunc.js';
-import config from '../config/config.json';
 import * as cmdchecks from './checks.js';
 import * as emojis from './consts/emojis.js';
 import * as osumodcalc from './osumodcalc.js';
 import * as extypes from './types/extratypes.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
+//const config = JSON.parse(fs.readFileSync('../config/config.json', 'utf-8'));
+import config from '../config/config.json';
 
 /* module.exports = {
     modemods, modemappers

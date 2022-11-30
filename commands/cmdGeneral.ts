@@ -1505,7 +1505,7 @@ ID: ${input.absoluteID}
  */
 export function ping(input: extypes.commandInput) {
     let commanduser;
-
+    console.log('real')
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
@@ -1533,26 +1533,6 @@ export function ping(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-BigLeftArrow-ping-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('⬅'),
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-LeftArrow-ping-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('◀'),
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-RightArrow-ping-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('▶'),
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-BigRightArrow-ping-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('➡'),
-        );
-
     log.logCommand({
         event: 'Command',
         commandType: input.commandType,
@@ -1566,6 +1546,7 @@ export function ping(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const trueping = `${calc.toCapital(input.commandType)} latency: ${Math.abs(input.obj.createdAt.getTime() - new Date().getTime())}ms`;
+    console.log('frfr')
 
     const pingEmbed = new Discord.EmbedBuilder()
         .setTitle('Pong!')

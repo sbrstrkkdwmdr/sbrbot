@@ -7,12 +7,29 @@ import fetch from 'node-fetch';
 import Sequelize from 'sequelize';
 import * as extypes from './src/types/extratypes.js';
 
-import * as buttonHandler from './buttonHandler.js';
-import * as commandHandler from './commandHandler.js';
-import * as commandInit from './commandInit.js';
-import * as exEvents from './exEvents.js';
-import * as linkHandler from './linkHandler.js';
-import * as osutrack from './src/osutrack.js';
+import buttonHandler from './buttonHandler.js';
+import commandHandler from './commandHandler.js';
+import commandInit from './commandInit.js';
+import exEvents from './exEvents.js';
+import linkHandler from './linkHandler.js';
+import osutrack from './src/osutrack.js';
+
+import * as admincmds from './commands/cmdAdmin.js';
+import * as checkcmds from './commands/cmdChecks.js';
+import * as commands from './commands/cmdGeneral.js';
+import * as misccmds from './commands/cmdMisc.js';
+import * as osucmds from './commands/cmdosu.js';
+
+import https from 'https';
+import tesseract from 'tesseract.js';
+import * as checks from './src/checks.js';
+import * as cmdconfig from './src/consts/commandopts.js';
+import * as cd from './src/consts/cooldown.js';
+import * as mainconst from './src/consts/main.js';
+import * as embedStuff from './src/embed.js';
+import * as osufunc from './src/osufunc.js';
+import * as func from './src/tools.js';
+import * as trackfunc from './src/trackfunc.js';
 
 import config from './config/config.json';
 
@@ -171,12 +188,6 @@ Current Client ID:        ${client.user.id}
 
     const oncooldown = new Set();
 
-    commandHandler.default(userdata, client, config, oncooldown, guildSettings, trackDb, statsCache);
-    linkHandler.default(userdata, client, config, oncooldown, guildSettings);
-    buttonHandler.default(userdata, client, config, oncooldown, statsCache);
-    commandInit.default(userdata, client, config, oncooldown);
-    exEvents.default(userdata, client, config, oncooldown, guildSettings, statsCache);
-    osutrack.default(userdata, client, config, oncooldown, trackDb, guildSettings);
 
     if (!fs.existsSync(`./id.txt`)) {
         console.log(`Creating ./id.txt`);
@@ -231,17 +242,13 @@ Current Client ID:        ${client.user.id}
         fs.mkdirSync(`./cache/graphs`);
     }
 
-    (async () => {
-        await client.guilds.cache.forEach(guild => {
-            if (!fs.existsSync(`./logs/moderator/${guild.id}.log`)) {
-                console.log(`Creating moderator log for ${guild.name}`);
-                fs.writeFileSync(`./logs/moderator/${guild.id}.log`, ''
-                );
-            }
-
-        }
-        );
-    })();
+    //commandHandler(blahblahblah) //loop
+    commandHandler(userdata, client, config, oncooldown, guildSettings, trackDb, statsCache); //instead of running once, the function should always be active
+    linkHandler(userdata, client, config, oncooldown, guildSettings);
+    buttonHandler(userdata, client, config, oncooldown, statsCache);
+    commandInit(userdata, client, config, oncooldown);
+    exEvents(userdata, client, config, oncooldown, guildSettings, statsCache);
+    osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);
 
     fs.appendFileSync('logs/general.log', `\n\n\n${initlog}\n\n\n`, 'utf-8');
 
@@ -283,6 +290,7 @@ node-fetch error: ${error}
             return;
         });
 });
+
 client.on('debug', (info) => {
     const rn = new Date();
     const text = `

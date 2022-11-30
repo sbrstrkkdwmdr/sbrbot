@@ -2,7 +2,7 @@ import Discord, { ApplicationCommandOptionType } from 'discord.js';
 /**
  * @info Gamemode options
  */
-const modeopts = [
+const modeopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     { name: 'osu', value: 'osu' },
     { name: 'taiko', value: 'taiko' },
     { name: 'catch', value: 'fruits' },
@@ -11,7 +11,7 @@ const modeopts = [
 /**
  * @info what to sort plays by
  */
-const playsortopts = [
+const playsortopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     { name: 'Performance points', value: 'pp' },
     { name: 'Score', value: 'score' },
     { name: 'Most recent', value: 'recent' },
@@ -20,7 +20,7 @@ const playsortopts = [
     { name: 'Misses', value: 'miss' },
     { name: 'Rank', value: 'rank' },
 ];
-const skincmdopts = [
+const skincmdopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     { name: 'SaberStrikeCustom', value: '1' },
     { name: 'SaberStrikeCustom[v2]', value: '2' },
     { name: '『SaberStrike [Type X]』', value: '3' },
@@ -41,7 +41,7 @@ const skincmdopts = [
     { name: 'sbr『-hANOJI』', value: 'b7' }
 ];
 
-const mathcmdopts = [
+const mathcmdopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     //{ name: 'Help', value: 'help' },
     { name: 'Square root', value: 'sqrt' },
     { name: 'Square', value: 'square' },
@@ -64,7 +64,7 @@ const mathcmdopts = [
 
 ];
 
-const conversionopts = [
+const conversionopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     //https://www.ewh.ieee.org/soc/ias/pub-dept/abbreviation.pdf
 
     //help
@@ -113,7 +113,7 @@ const conversionopts = [
 
 ];
 
-const gifopts = [
+const gifopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     { name: 'cry about it', value: 'cry about it' },
     { name: 'speaking', value: 'speech bubble' },
     { name: 'chad speaking', value: 'chad speak' },
@@ -132,7 +132,7 @@ const gifopts = [
 ];
 
 
-const timezoneopts = [
+const timezoneopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     { name: 'Abidjan (Africa, Côte d’Ivoire/Ivory Coast)', value: 'Africa/Abidjan' },
     { name: 'Accra (Africa, Ghana)', value: 'Africa/Accra' },
     { name: 'Algiers (Africa, Algeria)', value: 'Africa/Algiers' },
@@ -512,7 +512,7 @@ const timezoneopts = [
 
 //
 
-const osutopOpts = [
+const osutopOpts: Discord.ApplicationCommandOptionData[] = [
 
     {
         name: 'user',
@@ -525,7 +525,6 @@ const osutopOpts = [
         description: 'The mode to display the plays of',
         type: Discord.ApplicationCommandOptionType.String,
         required: false,
-        default: 'osu',
         choices: modeopts
     },
     {
@@ -546,7 +545,6 @@ const osutopOpts = [
         description: 'The page to display',
         type: Discord.ApplicationCommandOptionType.Integer,
         required: false,
-        default: 1,
         minValue: 1,
         maxValue: 20
     },
@@ -567,7 +565,6 @@ const osutopOpts = [
         description: 'Show all details',
         type: Discord.ApplicationCommandOptionType.Boolean,
         required: false,
-        default: false
     },
     {
         name: 'parse',
@@ -584,7 +581,7 @@ const osutopOpts = [
 
 ];
 
-const playArrayOpts = [
+const playArrayOpts: Discord.ApplicationCommandOptionData[] = [
     {
         name: 'user',
         description: 'The user to display the plays of',
@@ -596,7 +593,6 @@ const playArrayOpts = [
         description: 'The mode to display the plays of',
         type: Discord.ApplicationCommandOptionType.String,
         required: false,
-        default: 'osu',
         choices: modeopts
     },
     {
@@ -617,7 +613,6 @@ const playArrayOpts = [
         description: 'The page to display',
         type: Discord.ApplicationCommandOptionType.Integer,
         required: false,
-        default: 1,
         minValue: 1,
         maxValue: 20
     },
@@ -647,7 +642,7 @@ const playArrayOpts = [
     }
 ];
 
-const useridsortopts = [
+const useridsortopts: Discord.ApplicationCommandOptionData[] = [
     {
         name: 'user',
         description: 'The user to display the top plays of',
@@ -678,7 +673,6 @@ const useridsortopts = [
         description: 'The page to display the top plays of',
         type: Discord.ApplicationCommandOptionType.Integer,
         required: false,
-        default: 1,
         minValue: 1,
         maxValue: 20
     },
@@ -690,7 +684,7 @@ const useridsortopts = [
     },
 ];
 
-const useroffsetmodeopts = [
+const useroffsetmodeopts: Discord.ApplicationCommandOptionData[] = [
     {
         name: 'user',
         description: 'the username or id',
@@ -702,7 +696,6 @@ const useroffsetmodeopts = [
         description: 'the page to show',
         required: false,
         type: ApplicationCommandOptionType.Number,
-        default: 1
     },
     {
         name: 'mode',
@@ -712,7 +705,7 @@ const useroffsetmodeopts = [
         choices: modeopts
     }
 ];
-const rsopts = [
+const rsopts :Discord.ApplicationCommandOptionData[]= [
     {
         name: 'user',
         description: 'the username or id',
@@ -724,7 +717,6 @@ const rsopts = [
         description: 'the page to show',
         required: false,
         type: ApplicationCommandOptionType.Number,
-        default: 1
     },
     {
         name: 'mode',
@@ -738,7 +730,6 @@ const rsopts = [
         description: 'Enables list mode',
         required: false,
         type: ApplicationCommandOptionType.Boolean,
-        default: false
     },
     {
         name: 'filter',

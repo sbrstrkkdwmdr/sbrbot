@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import fetch from 'node-fetch';
+// const config = JSON.parse(fs.readFileSync('../config/config.json', 'utf-8'));
 import config from '../config/config.json';
 import Discord = require('discord.js');
 /**

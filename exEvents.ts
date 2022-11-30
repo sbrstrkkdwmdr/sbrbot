@@ -8,7 +8,7 @@ import * as track from './src/trackfunc.js';
 import * as extypes from './src/types/extratypes.js';
 import * as osuapitypes from './src/types/osuApiTypes.js';
 import * as osuApiTypes from './src/types/osuApiTypes.js';
-export default function (userdata, client, config: extypes.config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, statsCache)  {
+export default (userdata, client, config: extypes.config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, statsCache) => {
 
     setInterval(() => {
         clearMapFiles();

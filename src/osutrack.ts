@@ -9,7 +9,7 @@ import * as func from './tools.js';
 import * as trackfunc from './trackfunc.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 
-export default function (userdata, client, config, oncooldown, trackDb: Sequelize.ModelStatic<any>, guildSettings: Sequelize.ModelStatic<any>) {
+export default (userdata, client, config, oncooldown, trackDb: Sequelize.ModelStatic<any>, guildSettings: Sequelize.ModelStatic<any>) => {
     // trackUsers(trackDb)
     let enableTrack = config.enableTracking;
 
