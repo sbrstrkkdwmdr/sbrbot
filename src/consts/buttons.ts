@@ -21,6 +21,8 @@ export const label = {
     main: {
         refresh: '<:refresh:1025233415383031918>',
         detailed: '📝',
+        detailDefault: '',
+        detailLess: '',
         random: '🎲'
     },
     page_old: {

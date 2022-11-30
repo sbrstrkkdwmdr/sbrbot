@@ -228,7 +228,8 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     // commandStruct.commands.get('info').execute({commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata})
                     commands.info({
-                        commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel
+                        commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel,
+                        guildSettings
                     });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');

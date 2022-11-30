@@ -5,6 +5,7 @@ import {
     CatchPerformanceAttributes,
     ManiaPerformanceAttributes, OsuPerformanceAttributes, PerformanceAttributes, TaikoPerformanceAttributes
 } from 'rosu-pp';
+import { filespath, path } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
 import * as colourfunc from '../src/colourcalc.js';
@@ -4812,7 +4813,7 @@ export async function recent(input: extypes.commandInput) {
                 page = 1;
                 isFirstPage = true;
             }
-            if (input.obj.message.embeds[0].title.includes('plays') || input.obj.message.embeds[0].title.includes('passes')) {
+            if (input.obj.message.embeds[0].footer.text.includes('L')) {
                 switch (input.button) {
                     case 'LeftArrow':
                         page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1;
@@ -5142,6 +5143,7 @@ Could not find user's recent scores
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
     if (list != true) {
+        embedStyle ='S'
         rsEmbed.setColor(colours.embedColour.score.dec);
 
         page = rsdata[page] ? page : 0;
@@ -5486,6 +5488,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
 
     } else if (list == true) {
+        embedStyle = 'L'
         pgbuttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
@@ -5652,7 +5655,7 @@ export async function replayparse(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     try {
-        replay = replayparser.parseReplay('./files/replay.osr');
+        replay = replayparser.parseReplay(`${filespath}/replay.osr`);
     } catch (err) {
         return;
     }
@@ -8212,9 +8215,10 @@ export async function map(input: extypes.commandInput) {
             const curid = urlnohttp.split('/')[3];
             mapid = curid;
 
-            if (input.obj.message.embeds[0].fields[1].value.includes('aim') || input.obj.message.embeds[0].fields[0].value.includes('ms')) {
-                detailed = true;
+            if(input.obj.message.embeds[0].footer.text.includes('ME')){
+                detailed = true
             }
+
             mapmods = input.obj.message.embeds[0].title.split('+')[1];
             if (input.button == 'DetailEnable') {
                 detailed = true;
@@ -8893,7 +8897,7 @@ HP${baseHP}`;
     osufunc.debug(mapperdataReq, 'command', 'map', input.obj.guildId, 'mapperData');
 
     if (mapperdata?.error) {
-        mapperdata = JSON.parse(fs.readFileSync('./files/defaults/mapper.json', 'utf8'));
+        mapperdata = JSON.parse(fs.readFileSync(`${filespath}/defaults/mapper.json`, 'utf8'));
         // if (commandType != 'button' && commandType != 'link') {
         //     (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
         //         content: 'Error - could not find mapper',
@@ -9066,7 +9070,7 @@ Using default json file
         osufunc.debug(gdReq, 'command', 'map', input.obj.guildId, 'guestData');
 
         if (gdData?.error) {
-            gdData = JSON.parse(fs.readFileSync('./files/defaults/mapper.json', 'utf8'));
+            gdData = JSON.parse(fs.readFileSync(`${filespath}/defaults/mapper.json`, 'utf8'));
             log.logFile('command',
                 `
 ----------------------------------------------------
@@ -10338,12 +10342,12 @@ export async function maplocal(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let map: string = '';
-    if (fs.existsSync('./files/tempdiff.osu')) {
-        map = fs.readFileSync('./files/tempdiff.osu', 'utf-8');
+    if (fs.existsSync(`${filespath}/tempdiff.osu`)) {
+        map = fs.readFileSync(`${filespath}/tempdiff.osu`, 'utf-8');
     } else {
         return;
     }
-    const errmap = fs.readFileSync('./files/errmap.osu', 'utf-8');
+    const errmap = fs.readFileSync(`${filespath}/errmap.osu`, 'utf-8');
     let errtxt = '';
     let mods = 'NM';
 
@@ -10367,7 +10371,7 @@ export async function maplocal(input: extypes.commandInput) {
     try {
         ppcalcing = await osufunc.mapcalclocal(mods, 'osu', null, 0);
     } catch (error) {
-        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', './files/errmap.osu', 0);
+        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', `${filespath}/errmap.osu`, 0);
         errtxt += '\nError - pp calculations failed';
     }
 
@@ -10536,7 +10540,7 @@ export async function maplocal(input: extypes.commandInput) {
             value: [0, 0]
         };
 
-        strains = await osufunc.straincalclocal('./files/errmap.osu', mods, 0, osumodcalc.ModeIntToName(parseInt(gm)));
+        strains = await osufunc.straincalclocal(`${filespath}/errmap.osu`, mods, 0, osumodcalc.ModeIntToName(parseInt(gm)));
 
     }
 
@@ -12087,6 +12091,7 @@ export async function compare(input: extypes.commandInput) {
 
 
             case 'top': {
+                embedStyle = 'LC'
                 page;
                 let firsttopdataReq: osufunc.apiReturn;
                 if (func.findFile(input.absoluteID, 'firsttopdata') &&

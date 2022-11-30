@@ -65,16 +65,15 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                 guildname: message?.guild?.name ?? 'Unknown',
                 prefix: 'sbr-',
                 osuParseLinks: true,
-                osuParseScreenshots: true,
+                osuParseScreenshots: false,
                 osuParseReplays: true,
             };
         }
         if (config.useScreenshotParse == true && settings.osuParseScreenshots == true) {
             //warning: uses a lot of memory
-
+            return;
             //if message attachments size > 0
             if (imgParseCooldown == false) {
-
                 if (message.attachments.size > 0) {
                     if (message.attachments.first().url.includes('.png') || message.attachments.first().url.includes('.jpg')) {
                         const worker = tesseract.createWorker({

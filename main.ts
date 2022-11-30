@@ -264,9 +264,9 @@ Current Client ID:        ${client.user.id}
     exEvents(userdata, client, config, oncooldown, guildSettings, statsCache);
     osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);
 
-    fs.appendFileSync('logs\\general.log', `\n\n\n${initlog}\n\n\n`, 'utf-8');
+    fs.appendFileSync(`${path}\\logs\\general.log`, `\n\n\n${initlog}\n\n\n`, 'utf-8');
 
-    fs.writeFileSync('debug/starttime.txt', currentDate.toString());
+    fs.writeFileSync(`${path}\\debug\\starttime.txt`, currentDate.toString());
     fetch('https://osu.ppy.sh/oauth/token', {
         method: 'POST',
         headers: {
@@ -282,14 +282,14 @@ Current Client ID:        ${client.user.id}
 
     }).then(res => res.json())
         .then(res => {
-            fs.writeFileSync('config/osuauth.json', JSON.stringify(res));
-            fs.appendFileSync('logs\\updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
+            fs.writeFileSync(`${path}\\config/osuauth.json`, JSON.stringify(res));
+            fs.appendFileSync(`${path}\\logs\\updates.log`, '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
 
         }
         )
         .catch(error => {
             const rn = new Date();
-            fs.appendFileSync(`logs\\updates.log`,
+            fs.appendFileSync(`${path}\\logs\\updates.log`,
                 `
 ====================================================
 ERROR

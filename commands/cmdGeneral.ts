@@ -1,6 +1,8 @@
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
 import * as replayparser from 'osureplayparser';
+import pkgjson from '../package.json' assert { type: 'json' };
+import { path } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
 import * as colourfunc from '../src/colourcalc.js';
@@ -18,7 +20,6 @@ import * as func from '../src/tools.js';
 import * as extypes from '../src/types/extraTypes.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
 import * as msgfunc from './msgfunc.js';
-
 /**
  * convert a value
  */
@@ -1220,7 +1221,7 @@ ID: ${input.absoluteID}
 /**
  * bot info
  */
-export function info(input: extypes.commandInput) {
+export async function info(input: extypes.commandInput) {
 
     let commanduser;
 
@@ -1271,16 +1272,42 @@ export function info(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+    const curGuildSettings = await input.guildSettings.findOne({ where: { guildid: input.obj.guildId } });
+    let serverpfx = curGuildSettings.dataValues.prefix;
+
+    // const starttime = new Date((fs.readFileSync(`${path}\\debug\\starttime.txt`)).toString());
+
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
-        .setTitle('Important links and information')
+        .setTitle('Bot Information')
+        .setFields([
+            {
+                name: 'Dependencies',
+                value:
+                    `
+Typescript: [${pkgjson.dependencies['typescript'].replace('^', '')}](https://www.typescriptlang.org/)
+Discord.js: [${pkgjson.dependencies['discord.js'].replace('^', '')}](https://discord.js.org/#/docs)
+PP: [${pkgjson.dependencies['rosu-pp'].replace('^', '')}](https://github.com/MaxOhn/rosu-pp-js)
+`,
+                inline: true
+            },
+            {
+                name: 'Statistics',
+                value:
+                    `
+Uptime: ${calc.secondsToTime(input.client.uptime / 1000)}
+Shards: ${input?.client?.shard?.count ?? 1}
+Guilds: ${input.client.guilds.cache.size}
+Users: ${input.client.users.cache.size}`,
+                inline: true
+            }
+        ])
         .setDescription(`
-Prefix: ${input.config.prefix}
-Coded in: TypeScript
-[Github repo](https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts)
-[Creator](https://sbrstrkkdwmdr.github.io/sbr-web/)
+[Created by SaberStrike](https://sbrstrkkdwmdr.github.io/sbr-web/)
 [Commands](https://sbrstrkkdwmdr.github.io/sbrbot/commands)
-PP version: 2022-10-24 (rosu-pp v0.9.1)
+Prefix: ${input.config.prefix}
+Server prefix: ${serverpfx}
+Bot Version: ${pkgjson.version}
 `);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -1815,7 +1842,7 @@ export function stats(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString());
+    const starttime = new Date((fs.readFileSync(`${path}debug/starttime.txt`)).toString());
     const trueping = input.obj.createdAt.getTime() - new Date().getTime() + 'ms';
 
     const uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
@@ -1827,7 +1854,7 @@ export function stats(input: extypes.commandInput) {
     const totalusers: number = input.client.users.cache.size;
     // let totalusersnobots: Discord.Collection<any, Discord.User>;
     const totalguilds: number = input.client.guilds.cache.size;
-    const commandssent: number = fs.existsSync('logs/totalcommands.txt') ? fs.readFileSync('logs/totalcommands.txt').length : 0;
+    const commandssent: number = fs.existsSync(`${path}/logs/totalcommands.txt`) ? fs.readFileSync(`${path}/logs/totalcommands.txt`).length : 0;
 
     const Embed = new Discord.EmbedBuilder()
         .setTitle(`${input.client.user.username} stats`)
@@ -1840,6 +1867,8 @@ Users: ${totalusers}
 Commands sent: ${commandssent}
 Prefix: \`${input.config.prefix}\`
 Commands: https://sbrstrkkdwmdr.github.io/sbrbot/commands
+Shards:
+Current Shard:
 `
         );
 
@@ -1932,7 +1961,7 @@ export function time(input: extypes.commandInput) {
     const month = calc.tomonthname(rn.getUTCMonth());//tomonthname(rn.getUTCMonth())
     const year = rn.getUTCFullYear();
     const datenow12h = `${day}, ${date} ${month} ${year} ${datenow12hhours}`;
-    const lasttime = fs.existsSync('debug/timesince.txt') ? (fs.readFileSync('debug/timesince.txt')).toString() :
+    const lasttime = fs.existsSync(`${path}/debug/timesince.txt`) ? (fs.readFileSync(`${path}/debug/timesince.txt`)).toString() :
         (new Date()).toString();
 
 
@@ -1958,7 +1987,7 @@ export function time(input: extypes.commandInput) {
     }
 
 
-    fs.writeFileSync('debug/timesince.txt', rn.toString());
+    fs.writeFileSync(`${path}/debug/timesince.txt`, rn.toString());
 
     let monthnum: number | string = rn.getUTCMonth();
     let daynum: number | string = rn.getUTCDate();

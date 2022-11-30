@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
+import { filespath, path } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
 import * as colourfunc from '../src/colourcalc.js';
@@ -525,11 +526,11 @@ export async function debug(input: extypes.commandInput) {
         case 'commandfile': {
             let cmdidcur = '0';
             if (!inputstr || isNaN(+inputstr)) {
-                cmdidcur = fs.readFileSync('id.txt', 'utf-8');
+                cmdidcur = fs.readFileSync(`${path}/id.txt`, 'utf-8');
             } else {
                 cmdidcur = inputstr;
             }
-            const files = fs.readdirSync('cache/commandData/');
+            const files = fs.readdirSync(`${path}/cache/commandData/`);
             if (files.length < 1) {
                 usemsgArgs = {
                     content: 'Cache folder is currently empty'
@@ -543,7 +544,7 @@ export async function debug(input: extypes.commandInput) {
                 } else {
                     usemsgArgs = {
                         content: `Files found matching ${cmdidcur}: `,
-                        files: searchfiles.map(x => './cache/commandData/' + x)
+                        files: searchfiles.map(x => `${path}/cache/commandData/` + x)
                     };
                 }
             }
@@ -564,11 +565,11 @@ Owner ID: ${guild.ownerId}
                 )))
                     .join('\n');
                 console.log(servers);
-                fs.writeFileSync('files/servers.txt', servers, 'utf-8');
+                fs.writeFileSync(`${filespath}/servers.txt`, servers, 'utf-8');
             }
             usemsgArgs = {
                 content: 'All servers connected to the client',
-                files: ['files/servers.txt']
+                files: [`${filespath}/servers.txt`]
             };
 
         }
@@ -599,11 +600,11 @@ Created:   ${channel.createdAt}
 ----------------------------------------------------
 `
                 ).join('\n');
-                fs.writeFileSync(`files/channels${serverId}.txt`, channels, 'utf-8');
+                fs.writeFileSync(`${filespath}/channels${serverId}.txt`, channels, 'utf-8');
 
                 usemsgArgs = {
                     content: `Channels in guild ${serverId}`,
-                    files: [`files/channels${serverId}.txt`]
+                    files: [`${filespath}/channels${serverId}.txt`]
                 };
             }
 
@@ -639,11 +640,11 @@ Joined(EPOCH):  ${member.joinedTimestamp}
 ----------------------------------------------------
 `
                 ).join('\n');
-                fs.writeFileSync(`files/users${serverId}.txt`, users, 'utf-8');
+                fs.writeFileSync(`${filespath}/users${serverId}.txt`, users, 'utf-8');
 
                 usemsgArgs = {
                     content: `Users in guild ${serverId}`,
-                    files: [`files/users${serverId}.txt`]
+                    files: [`${filespath}/users${serverId}.txt`]
                 };
             }
         }
@@ -658,7 +659,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             break;
         //get id of current cmd
         case 'curcmdid': {
-            const cmdidcur = fs.readFileSync('id.txt', 'utf-8');
+            const cmdidcur = fs.readFileSync(`${path}/id.txt`, 'utf-8');
             usemsgArgs = {
                 content: 'Last command\'s ID is ' + cmdidcur
             };
@@ -672,7 +673,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             } else {
                 serverId = inputstr;
             }
-            const curServer = fs.existsSync(`logs/cmd/commands${serverId}.log`);
+            const curServer = fs.existsSync(`${path}/logs/cmd/commands${serverId}.log`);
             if (!curServer) {
                 usemsgArgs = {
                     content: `Server ${serverId} not found - does not exist or bot is not in the guild`
@@ -1237,9 +1238,9 @@ export function servers(input: extypes.commandInput) {
         embeds: [embed],
     };
     if (servers.length > 2000) {
-        fs.writeFileSync('debug/guilds.txt', servers, 'utf-8');
+        fs.writeFileSync(`${path}/debug/guilds.txt`, servers, 'utf-8');
         rw = {
-            files: ['./debug/guilds.txt'],
+            files: [`${path}/debug/guilds.txt`],
         };
     }
 
@@ -1251,7 +1252,7 @@ export function servers(input: extypes.commandInput) {
         args: rw
     });
 
-    fs.appendFileSync(`logs/cmd/commands${input.obj.guildId}.log`,
+    fs.appendFileSync(`${path}/logs/cmd/commands${input.obj.guildId}.log`,
         `
 ----------------------------------------------------
 success
