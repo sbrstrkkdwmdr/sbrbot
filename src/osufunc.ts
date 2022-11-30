@@ -11,7 +11,7 @@ import * as osumodcalc from './osumodcalc.js';
 import * as extypes from './types/extratypes.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 //const config = JSON.parse(fs.readFileSync('../config/config.json', 'utf-8'));
-import config from '../config/config.json';
+import config from '../config/config.json' assert { type: 'json' };
 
 /* module.exports = {
     modemods, modemappers

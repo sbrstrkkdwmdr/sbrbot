@@ -31,7 +31,7 @@ import * as osufunc from './src/osufunc.js';
 import * as func from './src/tools.js';
 import * as trackfunc from './src/trackfunc.js';
 
-import config from './config/config.json';
+import config from './config/config.json' assert { type: 'json' };
 import { path } from './path.js';
 
 const client = new Client({
