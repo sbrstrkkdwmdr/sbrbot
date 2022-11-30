@@ -58,7 +58,7 @@ function logFile(type: string, text: string, opts?: {
             fs.appendFileSync('logs/log.txt', text);
             break;
         case 'command':
-            fs.appendFileSync(`logs/cmd/commands${opts?.guildId ?? null}.log`, text, 'utf-8');
+            fs.appendFileSync(`${path}\\logs\\cmd\\commands${opts?.guildId ?? null}.log`, text, 'utf-8');
     }
 }
 
@@ -104,8 +104,7 @@ ${optstring}
         }
 ====================================================`;
     if (config.storeCommandLogs) {
-        console.log(`${path}/logs/${input?.object?.guildId ? 'cmd/' + input?.object?.guildId + '.log' : 'commands.log'}`)
-        //fs.appendFileSync(`${path}/logs/${input?.object?.guildId ? 'cmd/' + input?.object?.guildId + '.log' : 'commands.log'}`, output, 'utf-8');
+        fs.appendFileSync(`${path}/logs/${input?.object?.guildId ? 'cmd/' + input?.object?.guildId + '.log' : 'commands.log'}`, output, 'utf-8');
     }
 }
 // commandLog,

@@ -1505,7 +1505,6 @@ ID: ${input.absoluteID}
  */
 export function ping(input: extypes.commandInput) {
     let commanduser;
-    console.log('real')
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
@@ -1546,7 +1545,6 @@ export function ping(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const trueping = `${calc.toCapital(input.commandType)} latency: ${Math.abs(input.obj.createdAt.getTime() - new Date().getTime())}ms`;
-    console.log('frfr')
 
     const pingEmbed = new Discord.EmbedBuilder()
         .setTitle('Pong!')

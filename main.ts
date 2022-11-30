@@ -32,6 +32,7 @@ import * as func from './src/tools.js';
 import * as trackfunc from './src/trackfunc.js';
 
 import config from './config/config.json';
+import { path } from './path.js';
 
 const client = new Client({
     intents: [
@@ -189,57 +190,70 @@ Current Client ID:        ${client.user.id}
     const oncooldown = new Set();
 
 
-    if (!fs.existsSync(`./id.txt`)) {
-        console.log(`Creating ./id.txt`);
-        fs.writeFileSync(`./id.txt`, '0', 'utf-8');
+    if (!fs.existsSync(`${path}\\id.txt`)) {
+        console.log(`Creating ${path}\\id.txt`);
+        fs.writeFileSync(`${path}\\id.txt`, '0', 'utf-8');
     }
-    if (!fs.existsSync(`./debug`)) {
-        console.log(`Creating ./debug folder`);
-        fs.mkdirSync(`./debug`);
+    if (!fs.existsSync(`${path}\\debug`)) {
+        console.log(`Creating ${path}\\debug folder`);
+        fs.mkdirSync(`${path}\\debug`);
     }
-    if (!fs.existsSync(`./logs`)) {
-        console.log(`Creating ./logs folder`);
-        fs.mkdirSync(`./logs`);
+    if (!fs.existsSync(`${path}\\logs`)) {
+        console.log(`Creating ${path}\\logs folder`);
+        fs.mkdirSync(`${path}\\logs`);
     }
-    if (!fs.existsSync(`./logs/gen`)) {
-        console.log(`Creating ./logs/gen folder`);
-        fs.mkdirSync(`./logs/gen`);
+    if (!fs.existsSync(`${path}\\logs\\gen`)) {
+        console.log(`Creating ${path}\\logs\\gen folder`);
+        fs.mkdirSync(`${path}\\logs\\gen`);
     }
-    if (!fs.existsSync(`./logs/cmd`)) {
-        console.log(`Creating ./logs/cmd folder`);
-        fs.mkdirSync(`./logs/cmd`);
+    if (!fs.existsSync(`${path}\\logs\\cmd`)) {
+        console.log(`Creating ${path}\\logs\\cmd folder`);
+        fs.mkdirSync(`${path}\\logs\\cmd`);
     }
-    if (!fs.existsSync(`./logs/moderator`)) {
-        console.log(`Creating ./logs/moderator folder`);
-        fs.mkdirSync(`./logs/moderator`);
+    if (!fs.existsSync(`${path}\\logs\\moderator`)) {
+        console.log(`Creating ${path}\\logs\\moderator folder`);
+        fs.mkdirSync(`${path}\\logs\\moderator`);
     }
-    if (!fs.existsSync(`./trackingFiles`)) {
-        console.log(`Creating ./trackingFiles folder`);
-        fs.mkdirSync(`./trackingFiles`);
+    if (!fs.existsSync(`${path}\\trackingFiles`)) {
+        console.log(`Creating ${path}\\trackingFiles folder`);
+        fs.mkdirSync(`${path}\\trackingFiles`);
     }
-    if (!fs.existsSync(`./cache`)) {
-        console.log('Creating ./cache folder');
-        fs.mkdirSync('./cache');
+    if (!fs.existsSync(`${path}\\cache`)) {
+        console.log('Creating ${path}\\cache folder');
+        fs.mkdirSync(`${path}\\cache`);
     }
-    if (!fs.existsSync(`./cache/commandData`)) {
-        console.log('Creating ./cache/commandData folder');
-        fs.mkdirSync('./cache/commandData');
+    if (!fs.existsSync(`${path}\\cache\\commandData`)) {
+        console.log('Creating ${path}\\cache\\commandData folder');
+        fs.mkdirSync(`${path}\\cache\\commandData`);
     }
-    if (!fs.existsSync(`./cache/debug`)) {
-        console.log(`Creating ./cache/debug folder`);
-        fs.mkdirSync(`./cache/debug`);
+    if (!fs.existsSync(`${path}\\cache\\debug`)) {
+        console.log(`Creating ${path}\\cache\\debug folder`);
+        fs.mkdirSync(`${path}\\cache\\debug`);
     }
-    if (!fs.existsSync(`./cache/debug/command`)) {
-        console.log(`Creating ./cache/debug/command folder`);
-        fs.mkdirSync(`./cache/debug/command`);
+    if (!fs.existsSync(`${path}\\cache\\debug\\command`)) {
+        console.log(`Creating ${path}\\cache\\debug/command folder`);
+        fs.mkdirSync(`${path}\\cache\\debug/command`);
     }
-    if (!fs.existsSync(`./cache/previous`)) {
-        console.log(`Creating previous IDs folder (./previous)`);
-        fs.mkdirSync(`./cache/previous`);
+    if (!fs.existsSync(`${path}\\cache\\previous`)) {
+        console.log(`Creating previous IDs folder (${path}\\previous)`);
+        fs.mkdirSync(`${path}\\cache\\previous`);
     }
-    if (!fs.existsSync(`./cache/graphs`)) {
-        console.log(`Creating ./cache/graphs/ folder`);
-        fs.mkdirSync(`./cache/graphs`);
+    if (!fs.existsSync(`${path}\\cache\\graphs`)) {
+        console.log(`Creating ${path}\\cache\\graphs\\ folder`);
+        fs.mkdirSync(`${path}\\cache\\graphs`);
+    }
+
+    if (!fs.existsSync(`${path}\\logs\\debug.log`)) {
+        fs.writeFileSync(`${path}\\logs\\debug.log`, '');
+    }
+    if (!fs.existsSync(`${path}\\logs\\updates.log`)) {
+        fs.writeFileSync(`${path}\\logs\\updates.log`, '');
+    }
+    if (!fs.existsSync(`${path}\\logs\\err.log`)) {
+        fs.writeFileSync(`${path}\\logs\\err.log`, '');
+    }
+    if (!fs.existsSync(`${path}\\logs\\warn.log`)) {
+        fs.writeFileSync(`${path}\\logs\\warn.log`, '');
     }
 
     //commandHandler(blahblahblah) //loop
@@ -250,7 +264,7 @@ Current Client ID:        ${client.user.id}
     exEvents(userdata, client, config, oncooldown, guildSettings, statsCache);
     osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);
 
-    fs.appendFileSync('logs/general.log', `\n\n\n${initlog}\n\n\n`, 'utf-8');
+    fs.appendFileSync('logs\\general.log', `\n\n\n${initlog}\n\n\n`, 'utf-8');
 
     fs.writeFileSync('debug/starttime.txt', currentDate.toString());
     fetch('https://osu.ppy.sh/oauth/token', {
@@ -269,13 +283,13 @@ Current Client ID:        ${client.user.id}
     }).then(res => res.json())
         .then(res => {
             fs.writeFileSync('config/osuauth.json', JSON.stringify(res));
-            fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
+            fs.appendFileSync('logs\\updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
 
         }
         )
         .catch(error => {
             const rn = new Date();
-            fs.appendFileSync(`logs/updates.log`,
+            fs.appendFileSync(`logs\\updates.log`,
                 `
 ====================================================
 ERROR
@@ -304,9 +318,13 @@ Date (epoch, ms): ${rn.getTime()}
 ${info}
 ====================================================
 `;
-
-
-    fs.appendFileSync(`./logs/debug.log`, text + '\n', 'utf-8');
+    if (fs.existsSync(`${path}\\logs`)) {
+        if (fs.existsSync(`${path}\\logs\\debug.log`)) {
+            fs.appendFileSync(`${path}\\logs\\debug.log`, text + '\n', 'utf-8');
+        } else {
+            fs.writeFileSync(`${path}\\logs\\debug.log`, text + '\n', 'utf-8');
+        }
+    }
 });
 client.on('warn', (info) => {
     const rn = new Date();
@@ -321,7 +339,13 @@ Date (epoch, ms): ${rn.getTime()}
 ${info}
 ====================================================
 `;
-    fs.appendFileSync(`./logs/warn.log`, text + '\n', 'utf-8');
+    if (fs.existsSync(`${path}\\logs`)) {
+        if (fs.existsSync(`${path}\\logs\\warn.log`)) {
+            fs.appendFileSync(`${path}\\logs\\warn.log`, text + '\n', 'utf-8');
+        } else {
+            fs.writeFileSync(`${path}\\logs\\warn.log`, text + '\n', 'utf-8');
+        }
+    }
 });
 client.on('error', (error) => {
     const rn = new Date();
@@ -336,7 +360,13 @@ Date (epoch, ms): ${rn.getTime()}
 ${error}
 ====================================================
 `;
-    fs.appendFileSync(`./logs/err.log`, text + '\n', 'utf-8');
+    if (fs.existsSync(`${path}\\logs`)) {
+        if (fs.existsSync(`${path}\\logs\\err.log`)) {
+            fs.appendFileSync(`${path}\\logs\\err.log`, text + '\n', 'utf-8');
+        } else {
+            fs.writeFileSync(`${path}\\logs\\err.log`, text + '\n', 'utf-8');
+        }
+    }
 });
 
 
