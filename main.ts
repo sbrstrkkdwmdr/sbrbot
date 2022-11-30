@@ -14,7 +14,7 @@ import * as exEvents from './exEvents.js';
 import * as linkHandler from './linkHandler.js';
 import * as osutrack from './src/osutrack.js';
 
-import config from './config/config.json' assert { type: "json" };
+import config from './config/config.json';
 
 const client = new Client({
     intents: [

@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import fetch from 'node-fetch';
-import config from '../config/config.json' assert { type: "json" };
+import config from '../config/config.json';
 import Discord = require('discord.js');
 /**
  * 
