@@ -1,6 +1,6 @@
 import Discord from 'discord.js';
 import fs from 'fs';
-import config from '../config/config.json';
+import config from '../config/config.json' assert { type: "json" };
 import { path } from '../path.js';
 import * as extypes from './types/extratypes.js';
 

@@ -5,7 +5,7 @@ import perf from 'perf_hooks';
 import rosu from 'rosu-pp';
 import Sequelize from 'sequelize';
 import * as msgfunc from '../commands/msgfunc.js';
-import config from '../config/config.json';
+import config from '../config/config.json' assert { type: "json" };
 import * as cmdchecks from './checks.js';
 import * as emojis from './consts/emojis.js';
 import * as osumodcalc from './osumodcalc.js';
