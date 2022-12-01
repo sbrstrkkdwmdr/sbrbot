@@ -4274,24 +4274,19 @@ export async function pinned(input: extypes.commandInput) {
             searchid = commanduser.id;
 
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
-
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
             page = 0;
 
             if (input.obj.message.embeds[0].description) {
-
                 if (input.obj.message.embeds[0].description.includes('mapper')) {
-
                     filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
                 }
 
                 if (input.obj.message.embeds[0].description.includes('mods')) {
-
                     filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
                 }
 
                 if (input.obj.message.embeds[0].description.includes('map')) {
-
                     filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
                 }
 
@@ -4321,8 +4316,6 @@ export async function pinned(input: extypes.commandInput) {
                         break;
 
                 }
-
-
 
                 const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
@@ -6856,6 +6849,8 @@ export async function scores(input: extypes.commandInput) {
             searchid = commanduser.id;
             page = 0;
             user = input.obj.message.embeds[0].author.name.split(' (#')[0];
+            user = input.obj.message.embeds[0].author.url.split('users/')[1].split('/')[0];
+            mode = input.obj.message.embeds[0].author.url.split('users/')[1].split('/')[1];
             mapid = input.obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1];
             if (input.obj.message.embeds[0].description) {
                 if (input.obj.message.embeds[0].description.includes('mapper')) {
@@ -6915,7 +6910,6 @@ export async function scores(input: extypes.commandInput) {
                         page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]);
                         break;
                 }
-                mode = input.obj.message.embeds[0].description.split('mode: ')[1].split('\n')[0];
             }
             const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
             page = 0;
@@ -7354,7 +7348,7 @@ Could not find beatmap data
         .setImage(`${mapdata.beatmapset.covers['cover@2x']}`)
         .setAuthor({
             name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            url: `https://osu.ppy.sh/users/${osudata.id}/${osufunc.modeValidator(mode)}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
         .setURL(`https://osu.ppy.sh/b/${mapid}`);
