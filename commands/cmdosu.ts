@@ -1300,7 +1300,7 @@ export async function osu(input: extypes.commandInput) {
     let user = null;
     let mode = null;
     let graphonly = false;
-    let detailed;
+    let detailed: number = 0;
     let searchid;
 
     let embedStyle: extypes.osuCmdStyle = 'P';
@@ -1311,19 +1311,19 @@ export async function osu(input: extypes.commandInput) {
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-details')) {
-                detailed = true;
+                detailed = 1;
                 input.args.splice(input.args.indexOf('-details'), 1);
             }
             if (input.args.includes('-detailed')) {
-                detailed = true;
+                detailed = 1;
                 input.args.splice(input.args.indexOf('-detailed'), 1);
             }
             if (input.args.includes('-detail')) {
-                detailed = true;
+                detailed = 1;
                 input.args.splice(input.args.indexOf('-detail'), 1);
             }
             if (input.args.includes('-d')) {
-                detailed = true;
+                detailed = 1;
                 input.args.splice(input.args.indexOf('-d'), 1);
             }
             if (input.args.includes('-graph')) {
@@ -1393,7 +1393,7 @@ export async function osu(input: extypes.commandInput) {
             searchid = input.obj.member.user.id;
 
             user = input.obj.options.getString('user');
-            detailed = input.obj.options.getBoolean('detailed');
+            detailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
             mode = input.obj.options.getString('mode');
         }
 
@@ -1408,23 +1408,23 @@ export async function osu(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
 
-            if (input.obj.message.embeds[0].fields[0]) {
-                detailed = true;
+            if (input.obj.message.embeds[0].footer.text.includes('PE')) {
+                detailed = 1;
             }
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
 
             if (input.button == 'DetailEnable') {
-                detailed = true;
+                detailed = 1;
             }
             if (input.button == 'DetailDisable') {
-                detailed = false;
+                detailed = 0;
             }
             if (input.button == 'Refresh') {
                 if (input.obj.message.embeds[0].fields[0]) {
-                    detailed = true;
+                    detailed = 1;
                 } else {
-                    detailed = false;
+                    detailed = 0;
                 }
             }
 
@@ -1498,19 +1498,19 @@ export async function osu(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    if (detailed == true) {
+    if (detailed == 1) {
         buttons.addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-DetailDisable-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailed)
+                .setEmoji(buttonsthing.label.main.detailLess)
         );
     } else {
         buttons.addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-DetailEnable-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailed)
+                .setEmoji(buttonsthing.label.main.detailMore)
         );
     }
 
@@ -1695,7 +1695,7 @@ Could not find user
 
         useEmbeds.push(ChartsEmbedRank, ChartsEmbedPlay);
     } else {
-        if (detailed == true) {
+        if (detailed == 1) {
             const loading = new Discord.EmbedBuilder()
                 .setFooter({
                     text: `${embedStyle}`
@@ -1956,7 +1956,7 @@ export async function firsts(input: extypes.commandInput) {
     let searchid;
     let page = 0;
 
-    let scoredetailed = false;
+    let scoredetailed:number = 0;
     let sort: embedStuff.scoreSort = 'recent';
     let reverse = false;
     let mode = 'osu';
@@ -2100,7 +2100,7 @@ export async function firsts(input: extypes.commandInput) {
 
             user = input.obj.options.getString('user');
             page = input.obj.options.getInteger('page');
-            scoredetailed = input.obj.options.getBoolean('detailed');
+            scoredetailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
             sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
             reverse = input.obj.options.getBoolean('reverse');
             mode = input.obj.options.getString('mode') ?? 'osu';
@@ -2984,7 +2984,7 @@ Could not find requested score
 
         const scoresarg = await embedStuff.scoreList({
             scores: lbdata,
-            detailed: false,
+            detailed: 0,
             showWeights: false,
             page: page,
             showMapTitle: false,
@@ -3238,6 +3238,8 @@ export async function osutop(input: extypes.commandInput) {
 
     let parseScore = false;
     let parseId = null;
+
+    let detailed = 0;
 
     let embedStyle: extypes.osuCmdStyle = 'L';
 
@@ -3870,7 +3872,7 @@ Could not find requested score
     const scoresarg = await embedStuff.scoreList(
         {
             scores: osutopdata,
-            detailed: false,
+            detailed,
             showWeights: true,
             page: page,
             showMapTitle: true,
@@ -3899,52 +3901,6 @@ Could not find requested score
             topEmbed.addFields(scoresarg.fields[i]);
         }
     }
-
-
-    // if (detailed == true) {
-    //     const highestcombo = func.separateNum((osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo);
-    //     const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2);
-    //     const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2);
-    //     let totalpp = 0;
-    //     for (let i2 = 0; i2 < osutopdata.length; i2++) {
-    //         totalpp += osutopdata[i2].pp;
-    //     }
-    //     const avgpp = (totalpp / osutopdata.length).toFixed(2);
-    //     let hittype: string;
-    //     if (mode == 'osu') {
-    //         hittype = `hit300/hit100/hit50/miss`;
-    //     }
-    //     if (mode == 'taiko') {
-    //         hittype = `Great(300)/Good(100)/miss`;
-    //     }
-    //     if (mode == 'fruits' || mode == 'catch') {
-    //         hittype = `Fruit(300)/Drops(100)/Droplets(50)/miss`;
-    //     }
-    //     if (mode == 'mania') {
-    //         hittype = `300+(geki)/300/200(katu)/100/50/miss`;
-    //     }
-    //     topEmbed.addFields([{
-    //         name: '-',
-    //         value: `
-    //     **Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
-    //     **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
-    //     **Gamemode:** ${mode}
-    //     **Hits:** ${hittype}
-    //     **Highest combo:** ${highestcombo}
-    // `,
-    //         inline: true
-    //     },
-    //     {
-    //         name: '-',
-    //         value: `
-    //     **Highest pp:** ${maxpp}
-    //     **Lowest pp:** ${minpp}
-    //     **Average pp:** ${avgpp}
-    //     **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
-    //     **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
-    // `, inline: true
-    //     }]);
-    // }
 
     osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
 
@@ -3998,7 +3954,7 @@ export async function pinned(input: extypes.commandInput) {
     let searchid;
     let page = 0;
 
-    let scoredetailed = false;
+    let scoredetailed = 0;
     let sort: embedStuff.scoreSort = 'recent';
     let reverse = false;
     let mode = 'osu';
@@ -4145,7 +4101,7 @@ export async function pinned(input: extypes.commandInput) {
 
             page = input.obj.options.getInteger('page');
 
-            scoredetailed = input.obj.options.getBoolean('detailed');
+            scoredetailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
             sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
 
             reverse = input.obj.options.getBoolean('reverse');
@@ -4686,6 +4642,8 @@ export async function recent(input: extypes.commandInput) {
     let isLastPage = false;
 
     let embedStyle: extypes.osuCmdStyle = 'S';
+
+    let detailed = 0;
 
     switch (input.commandType) {
         case 'message': {
@@ -5524,7 +5482,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         const scoresarg = await embedStuff.scoreList(
             {
                 scores: rsdata,
-                detailed: false,
+                detailed,
                 showWeights: false,
                 page: page,
                 showMapTitle: true,
@@ -6607,7 +6565,7 @@ export async function scores(input: extypes.commandInput) {
     let mapid;
     let page = 1;
 
-    const scoredetailed = false;
+    let scoredetailed = 0;
     let sort: embedStuff.scoreSort = 'recent';
     let reverse = false;
     let mode = 'osu';
@@ -8092,7 +8050,7 @@ export async function map(input: extypes.commandInput) {
     let mapid;
     let mapmods;
     let maptitleq: string = null;
-    let detailed = false;
+    let detailed: number = 0;
     let searchRestrict = 'any';
     let overrideSpeed = 1;
     let overrideBpm: number = null;
@@ -8114,11 +8072,11 @@ export async function map(input: extypes.commandInput) {
             commanduser = input.obj.author;
 
             if (input.args.includes('-detailed')) {
-                detailed = true;
+                detailed = 1;
                 input.args.splice(input.args.indexOf('-detailed'), 1);
             }
             if (input.args.includes('-d')) {
-                detailed = true;
+                detailed = 1;
                 input.args.splice(input.args.indexOf('-d'), 1);
             }
             if (input.args.includes('-bpm')) {
@@ -8195,7 +8153,7 @@ export async function map(input: extypes.commandInput) {
 
             mapid = input.obj.options.getInteger('id');
             mapmods = input.obj.options.getString('mods');
-            detailed = input.obj.options.getBoolean('detailed');
+            detailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
             maptitleq = input.obj.options.getString('query');
             input.obj.options.getNumber('bpm') ? overrideBpm = input.obj.options.getNumber('bpm') : null;
             input.obj.options.getNumber('speed') ? overrideSpeed = input.obj.options.getNumber('speed') : null;
@@ -8216,19 +8174,18 @@ export async function map(input: extypes.commandInput) {
             mapid = curid;
 
             if (input.obj.message.embeds[0].footer.text.includes('ME')) {
-                detailed = true;
+                detailed = 1;
             }
 
             mapmods = input.obj.message.embeds[0].title.split('+')[1];
             if (input.button == 'DetailEnable') {
-                detailed = true;
+                detailed = 1;
             }
             if (input.button == 'DetailDisable') {
-                detailed = false;
+                detailed = 0;
             }
             if (input.button == 'Refresh') {
                 mapid = curid;
-                detailed = input.obj.message.embeds[0].fields[1].value.includes('aim') || input.obj.message.embeds[0].fields[0].value.includes('ms');
             }
             if (input.obj.message.embeds[0].fields[0].value.includes('=>')) {
                 overrideBpm = parseFloat(input.obj.message.embeds[0].fields[0].value.split('=>')[1].split('\n')[0]);
@@ -8431,19 +8388,19 @@ Could not find beatmapset data
     if (!mapid || isNaN(mapid)) {
         mapid = osufunc.getPreviousId('map', input.obj.guildId);
     }
-    if (detailed == true) {
+    if (detailed == 1) {
         buttons.addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-DetailDisable-map-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailed)
+                .setEmoji(buttonsthing.label.main.detailLess)
         );
     } else {
         buttons.addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-DetailEnable-map-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailed)
+                .setEmoji(buttonsthing.label.main.detailMore)
         );
     }
     let mapdataReq: osufunc.apiReturn;
@@ -8863,7 +8820,7 @@ Could not find beatmap data
     const baseBPM = mapdata.bpm * (overrideSpeed ?? 1) != mapdata.bpm ? `${mapdata.bpm}=>${mapdata.bpm * (overrideSpeed ?? 1)}` : mapdata.bpm;
 
     let basicvals = `CS${baseCS}\n AR${baseAR}\n OD${baseOD}\n HP${baseHP}\n`;
-    if (detailed == true) {
+    if (detailed == 1) {
         basicvals =
             `CS${baseCS} (${allvals.details.csRadius?.toFixed(2)}r)
 AR${baseAR}  (${allvals.details.arMs?.toFixed(2)}ms)
@@ -8934,7 +8891,7 @@ Using default json file
         mapgraph = null;
     }
     let detailedmapdata = '-';
-    if (detailed == true) {
+    if (detailed == 1) {
         switch (mapdata.mode) {
             case 'osu': {
                 const curattr = ppComputed as OsuPerformanceAttributes[];
@@ -9016,7 +8973,7 @@ Using default json file
             {
                 name: 'PP',
                 value:
-                    detailed != true ?
+                    detailed != 1 ?
                         `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
                         `99: ${ppComputed[1].pp?.toFixed(2)} \n ` +
                         `98: ${ppComputed[2].pp?.toFixed(2)} \n ` +
@@ -9038,7 +8995,7 @@ Using default json file
             {
                 name: 'MAP DETAILS',
                 value: `${statusimg} | ${mapimg} \n ` +
-                    `${detailed == true ?
+                    `${detailed == 1 ?
                         exMapDetails
                         : ''}`
 
@@ -9121,7 +9078,7 @@ Using default json file
     }
     const embeds = [Embed];
 
-    if (detailed == true) {
+    if (detailed == 1) {
         const failval = mapdata.failtimes.fail;
         const exitval = mapdata.failtimes.exit;
         const numofval = [];

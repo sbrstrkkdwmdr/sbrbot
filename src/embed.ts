@@ -11,7 +11,7 @@ import * as osuapitypes from './types/osuApiTypes.js';
 export async function scoreList(
     asObj: {
         scores: osuapitypes.Score[],
-        detailed: boolean,
+        detailed: number,
         showWeights: boolean,
         page: number,
         showMapTitle: boolean,
@@ -253,22 +253,26 @@ export async function scoreList(
             weighted = '';
         }
 
-        scoresAsFields.push({
-            name: `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
-            value: `
-**${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
-${pptxt} ${weighted}`,
-            inline: false
-        });
-        scoresAsArrStr.push(
-            `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
-**${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
-${pptxt} ${weighted}
+        switch (asObj.detailed) {
+            default:
+                scoresAsFields.push({
+                    name: `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
+                    value: `
+                **${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+                \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+                ${pptxt} ${weighted}`,
+                    inline: false
+                });
+                scoresAsArrStr.push(
+                    `#${i + 1 + (asObj.page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
+                **${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+                \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+                ${pptxt} ${weighted}
 `
-        );
+                );
+                break;
 
+        }
     }
 
     return {
