@@ -3,8 +3,8 @@ ranked/loved/approved maps are permanently stored. the rest is deleted after an 
 
 
 ### detailed level
--1 = less info
-0 = default 
-1 = more info
-2 = more more info
+0 = less info
+1 = default 
+2 = more info
+3 = more more info
 etc.

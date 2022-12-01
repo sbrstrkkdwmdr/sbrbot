@@ -1300,7 +1300,7 @@ export async function osu(input: extypes.commandInput) {
     let user = null;
     let mode = null;
     let graphonly = false;
-    let detailed: number = 0;
+    let detailed: number = 1;
     let searchid;
 
     let embedStyle: extypes.osuCmdStyle = 'P';
@@ -1311,19 +1311,19 @@ export async function osu(input: extypes.commandInput) {
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-details')) {
-                detailed = 1;
+                detailed = 2;
                 input.args.splice(input.args.indexOf('-details'), 1);
             }
             if (input.args.includes('-detailed')) {
-                detailed = 1;
+                detailed = 2;
                 input.args.splice(input.args.indexOf('-detailed'), 1);
             }
             if (input.args.includes('-detail')) {
-                detailed = 1;
+                detailed = 2;
                 input.args.splice(input.args.indexOf('-detail'), 1);
             }
             if (input.args.includes('-d')) {
-                detailed = 1;
+                detailed = 2;
                 input.args.splice(input.args.indexOf('-d'), 1);
             }
             if (input.args.includes('-graph')) {
@@ -1393,7 +1393,7 @@ export async function osu(input: extypes.commandInput) {
             searchid = input.obj.member.user.id;
 
             user = input.obj.options.getString('user');
-            detailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
+            detailed = input.obj.options.getBoolean('detailed') ? 2 : 1;
             mode = input.obj.options.getString('mode');
         }
 
@@ -1409,22 +1409,22 @@ export async function osu(input: extypes.commandInput) {
             searchid = commanduser.id;
 
             if (input.obj.message.embeds[0].footer.text.includes('PE')) {
-                detailed = 1;
+                detailed = 2;
             }
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
 
             if (input.button == 'DetailEnable') {
-                detailed = 1;
+                detailed = 2;
             }
             if (input.button == 'DetailDisable') {
-                detailed = 0;
+                detailed = 1;
             }
             if (input.button == 'Refresh') {
                 if (input.obj.message.embeds[0].fields[0]) {
-                    detailed = 1;
+                    detailed = 2;
                 } else {
-                    detailed = 0;
+                    detailed = 1;
                 }
             }
 
@@ -1956,7 +1956,7 @@ export async function firsts(input: extypes.commandInput) {
     let searchid;
     let page = 0;
 
-    let scoredetailed:number = 0;
+    let scoredetailed: number = 1;
     let sort: embedStuff.scoreSort = 'recent';
     let reverse = false;
     let mode = 'osu';
@@ -2184,8 +2184,26 @@ export async function firsts(input: extypes.commandInput) {
                     case 'BigRightArrow':
                         page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
                         break;
+                }
+                switch (input.button) {
+                    case 'Detail0':
+                        scoredetailed = 0;
+                        break;
+                    case 'Detail1':
+                        scoredetailed = 1;
+
+                        break;
+                    case 'Detail2':
+                        scoredetailed = 2;
+                        break;
                     default:
                         page = pageParsed;
+                        if (input.obj.message.embeds[0].footer.text.includes('LE')) {
+                            scoredetailed = 2;
+                        }
+                        if (input.obj.message.embeds[0].footer.text.includes('LC')) {
+                            scoredetailed = 0;
+                        }
                         break;
                 }
             }
@@ -2292,6 +2310,43 @@ export async function firsts(input: extypes.commandInput) {
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.main.refresh),
     );
+
+    switch (scoredetailed) {
+        case 0: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-firsts-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = 'LC';
+        }
+            break;
+        case 1: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail0-firsts-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail2-firsts-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = 'L';
+        }
+            break;
+        case 2: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-firsts-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+            );
+            embedStyle = 'LE';
+        }
+            break;
+    }
 
     //if user is null, use searchid
     if (user == null) {
@@ -2559,8 +2614,22 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
-        for (let i = 0; i < scoresarg.fields.length; i++) {
-            firstsEmbed.addFields([scoresarg.fields[i]]);
+        switch (scoredetailed) {
+            case 0:
+                let temptxt = '\n';
+                for (let i = 0; i < scoresarg.string.length; i++) {
+                    temptxt += scoresarg.string[i];
+                }
+                firstsEmbed.setDescription(
+                    `${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
+                    + temptxt
+                );
+                break;
+            case 1: default:
+                for (let i = 0; i < scoresarg.fields.length; i++) {
+                    firstsEmbed.addFields([scoresarg.fields[i]]);
+                }
+                break;
         }
     }
 
@@ -2619,6 +2688,7 @@ export async function maplb(input: extypes.commandInput) {
     let parseId = null;
     let parseScore = false;
     let embedStyle: extypes.osuCmdStyle = 'L';
+    let scoredetailed: number = 1;
 
 
     switch (input.commandType) {
@@ -2984,7 +3054,7 @@ Could not find requested score
 
         const scoresarg = await embedStuff.scoreList({
             scores: lbdata,
-            detailed: 0,
+            detailed: 1,
             showWeights: false,
             page: page,
             showMapTitle: false,
@@ -3239,7 +3309,7 @@ export async function osutop(input: extypes.commandInput) {
     let parseScore = false;
     let parseId = null;
 
-    let detailed = 0;
+    let scoredetailed: number = 1;
 
     let embedStyle: extypes.osuCmdStyle = 'L';
 
@@ -3485,6 +3555,25 @@ export async function osutop(input: extypes.commandInput) {
                         page = pageParsed;
                         break;
                 }
+                switch (input.button) {
+                    case 'Detail0':
+                        scoredetailed = 0;
+                        break;
+                    case 'Detail1':
+                        scoredetailed = 1;
+                        break;
+                    case 'Detail2':
+                        scoredetailed = 2;
+                        break;
+                    default:
+                        if (input.obj.message.embeds[0].footer.text.includes('LE')) {
+                            scoredetailed = 2;
+                        }
+                        if (input.obj.message.embeds[0].footer.text.includes('LC')) {
+                            scoredetailed = 0;
+                        }
+                        break;
+                }
             }
         }
             break;
@@ -3588,6 +3677,43 @@ export async function osutop(input: extypes.commandInput) {
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
+
+    switch (scoredetailed) {
+        case 0: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = 'LC';
+        }
+            break;
+        case 1: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail0-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail2-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = 'L';
+        }
+            break;
+        case 2: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+            );
+            embedStyle = 'LE';
+        }
+            break;
+    }
 
     //if user is null, use searchid
     if (user == null) {
@@ -3872,7 +3998,7 @@ Could not find requested score
     const scoresarg = await embedStuff.scoreList(
         {
             scores: osutopdata,
-            detailed,
+            detailed: scoredetailed,
             showWeights: true,
             page: page,
             showMapTitle: true,
@@ -3897,8 +4023,22 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
-        for (let i = 0; scoresarg.fields.length > i; i++) {
-            topEmbed.addFields(scoresarg.fields[i]);
+        switch (scoredetailed) {
+            case 0:
+                let temptxt = '\n';
+                for (let i = 0; i < scoresarg.string.length; i++) {
+                    temptxt += scoresarg.string[i];
+                }
+                topEmbed.setDescription(
+                    `${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}`
+                    + temptxt
+                );
+                break;
+            case 1: default:
+                for (let i = 0; i < scoresarg.fields.length; i++) {
+                    topEmbed.addFields([scoresarg.fields[i]]);
+                }
+                break;
         }
     }
 
@@ -3954,7 +4094,8 @@ export async function pinned(input: extypes.commandInput) {
     let searchid;
     let page = 0;
 
-    let scoredetailed = 0;
+    let scoredetailed: number = 1;
+
     let sort: embedStuff.scoreSort = 'recent';
     let reverse = false;
     let mode = 'osu';
@@ -4210,6 +4351,25 @@ export async function pinned(input: extypes.commandInput) {
                         page = pageParsed;
                         break;
                 }
+                switch (input.button) {
+                    case 'Detail0':
+                        scoredetailed = 0;
+                        break;
+                    case 'Detail1':
+                        scoredetailed = 1;
+                        break;
+                    case 'Detail2':
+                        scoredetailed = 2;
+                        break;
+                    default:
+                        if (input.obj.message.embeds[0].footer.text.includes('LE')) {
+                            scoredetailed = 2;
+                        }
+                        if (input.obj.message.embeds[0].footer.text.includes('LC')) {
+                            scoredetailed = 0;
+                        }
+                        break;
+                }
             }
         }
             break;
@@ -4229,6 +4389,43 @@ export async function pinned(input: extypes.commandInput) {
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
+
+    switch (scoredetailed) {
+        case 0: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-pinned-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = 'LC';
+        }
+            break;
+        case 1: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail0-pinned-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail2-pinned-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = 'L';
+        }
+            break;
+        case 2: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-pinned-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+            );
+            embedStyle = 'LE';
+        }
+            break;
+    }
 
     log.logCommand({
         event: 'Command',
@@ -4576,8 +4773,22 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
-        for (let i = 0; i < scoresarg.fields.length; i++) {
-            pinnedEmbed.addFields([scoresarg.fields[i]]);
+        switch (scoredetailed) {
+            case 0:
+                let temptxt = '\n';
+                for (let i = 0; i < scoresarg.string.length; i++) {
+                    temptxt += scoresarg.string[i];
+                }
+                pinnedEmbed.setDescription(
+                    `${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
+                    + temptxt
+                );
+                break;
+            case 1: default:
+                for (let i = 0; i < scoresarg.fields.length; i++) {
+                    pinnedEmbed.addFields([scoresarg.fields[i]]);
+                }
+                break;
         }
     }
     if (scoresarg.isFirstPage) {
@@ -4643,7 +4854,7 @@ export async function recent(input: extypes.commandInput) {
 
     let embedStyle: extypes.osuCmdStyle = 'S';
 
-    let detailed = 0;
+    let detailed = 1;
 
     switch (input.commandType) {
         case 'message': {
@@ -6564,8 +6775,8 @@ export async function scores(input: extypes.commandInput) {
     let searchid;
     let mapid;
     let page = 1;
+    let scoredetailed: number = 1;
 
-    let scoredetailed = 0;
     let sort: embedStuff.scoreSort = 'recent';
     let reverse = false;
     let mode = 'osu';
@@ -6726,6 +6937,25 @@ export async function scores(input: extypes.commandInput) {
                     page = pageParsed;
                     break;
             }
+            switch (input.button) {
+                case 'Detail0':
+                    scoredetailed = 0;
+                    break;
+                case 'Detail1':
+                    scoredetailed = 1;
+                    break;
+                case 'Detail2':
+                    scoredetailed = 2;
+                    break;
+                default:
+                    if (input.obj.message.embeds[0].footer.text.includes('LE')) {
+                        scoredetailed = 2;
+                    }
+                    if (input.obj.message.embeds[0].footer.text.includes('LC')) {
+                        scoredetailed = 0;
+                    }
+                    break;
+            }
         }
             break;
     }
@@ -6750,6 +6980,43 @@ export async function scores(input: extypes.commandInput) {
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
+
+    switch (scoredetailed) {
+        case 0: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-scores-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = 'LC';
+        }
+            break;
+        case 1: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail0-scores-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail2-scores-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = 'L';
+        }
+            break;
+        case 2: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-scores-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+            );
+            embedStyle = 'LE';
+        }
+            break;
+    }
 
     log.logCommand({
         event: 'Command',
@@ -7127,8 +7394,22 @@ Could not find beatmap data
         (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
-        for (let i = 0; i < scoresarg.fields.length && i < 5; i++) {
-            scoresEmbed.addFields([scoresarg.fields[i]]);
+        switch (scoredetailed) {
+            case 0:
+                let temptxt = '\n';
+                for (let i = 0; i < scoresarg.string.length; i++) {
+                    temptxt += scoresarg.string[i];
+                }
+                scoresEmbed.setDescription(
+                    `${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}`
+                    + temptxt
+                );
+                break;
+            case 1: default:
+                for (let i = 0; i < scoresarg.fields.length; i++) {
+                    scoresEmbed.addFields([scoresarg.fields[i]]);
+                }
+                break;
         }
     }
 
@@ -8050,7 +8331,7 @@ export async function map(input: extypes.commandInput) {
     let mapid;
     let mapmods;
     let maptitleq: string = null;
-    let detailed: number = 0;
+    let detailed: number = 1;
     let searchRestrict = 'any';
     let overrideSpeed = 1;
     let overrideBpm: number = null;
@@ -8072,11 +8353,11 @@ export async function map(input: extypes.commandInput) {
             commanduser = input.obj.author;
 
             if (input.args.includes('-detailed')) {
-                detailed = 1;
+                detailed = 2;
                 input.args.splice(input.args.indexOf('-detailed'), 1);
             }
             if (input.args.includes('-d')) {
-                detailed = 1;
+                detailed = 2;
                 input.args.splice(input.args.indexOf('-d'), 1);
             }
             if (input.args.includes('-bpm')) {
@@ -8153,7 +8434,7 @@ export async function map(input: extypes.commandInput) {
 
             mapid = input.obj.options.getInteger('id');
             mapmods = input.obj.options.getString('mods');
-            detailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
+            detailed = input.obj.options.getBoolean('detailed') ? 2 : 1;
             maptitleq = input.obj.options.getString('query');
             input.obj.options.getNumber('bpm') ? overrideBpm = input.obj.options.getNumber('bpm') : null;
             input.obj.options.getNumber('speed') ? overrideSpeed = input.obj.options.getNumber('speed') : null;
@@ -8174,15 +8455,15 @@ export async function map(input: extypes.commandInput) {
             mapid = curid;
 
             if (input.obj.message.embeds[0].footer.text.includes('ME')) {
-                detailed = 1;
+                detailed = 2;
             }
 
             mapmods = input.obj.message.embeds[0].title.split('+')[1];
             if (input.button == 'DetailEnable') {
-                detailed = 1;
+                detailed = 2;
             }
             if (input.button == 'DetailDisable') {
-                detailed = 0;
+                detailed = 1;
             }
             if (input.button == 'Refresh') {
                 mapid = curid;
@@ -8891,7 +9172,7 @@ Using default json file
         mapgraph = null;
     }
     let detailedmapdata = '-';
-    if (detailed == 1) {
+    if (detailed == 2) {
         switch (mapdata.mode) {
             case 'osu': {
                 const curattr = ppComputed as OsuPerformanceAttributes[];
@@ -8973,7 +9254,7 @@ Using default json file
             {
                 name: 'PP',
                 value:
-                    detailed != 1 ?
+                    detailed != 2 ?
                         `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
                         `99: ${ppComputed[1].pp?.toFixed(2)} \n ` +
                         `98: ${ppComputed[2].pp?.toFixed(2)} \n ` +

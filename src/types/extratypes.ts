@@ -214,6 +214,9 @@ export type commandButtonTypes =
     'BigLeftArrow' | 'LeftArrow' | 'Search' | 'RightArrow' | 'BigRightArrow' |
     'Refresh' | 'Select' | 'Random' |
     'DetailEnable' | 'DetailDisable' | 'Detailed' | 'Details' |
+    'DetailDefault' | 'DetailMore' | 'DetailLess' | 
+    'Detail0' | 'Detail1' | 'Detail2' | 'Detail3' |
+    'DetailN1' |
     'SearchMenu' | 'Sort' | 'SortMenu';
 
 export type osustatscache = {
