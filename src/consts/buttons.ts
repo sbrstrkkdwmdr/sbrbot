@@ -22,7 +22,8 @@ export const label = {
         refresh: '<:refresh:1025233415383031918>',
         detailed: '📝',
         detailDefault: '',
-        detailLess: '',
+        detailMore: '<:details_more:1047767495693565973>',
+        detailLess: '<:details_less:1047767494011662416>',
         random: '🎲'
     },
     page_old: {
