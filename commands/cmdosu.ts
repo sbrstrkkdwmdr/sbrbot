@@ -5143,7 +5143,7 @@ Could not find user's recent scores
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
     if (list != true) {
-        embedStyle ='S'
+        embedStyle = 'S';
         rsEmbed.setColor(colours.embedColour.score.dec);
 
         page = rsdata[page] ? page : 0;
@@ -5488,7 +5488,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
 
     } else if (list == true) {
-        embedStyle = 'L'
+        embedStyle = 'L';
         pgbuttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
@@ -8215,8 +8215,8 @@ export async function map(input: extypes.commandInput) {
             const curid = urlnohttp.split('/')[3];
             mapid = curid;
 
-            if(input.obj.message.embeds[0].footer.text.includes('ME')){
-                detailed = true
+            if (input.obj.message.embeds[0].footer.text.includes('ME')) {
+                detailed = true;
             }
 
             mapmods = input.obj.message.embeds[0].title.split('+')[1];
@@ -12091,7 +12091,7 @@ export async function compare(input: extypes.commandInput) {
 
 
             case 'top': {
-                embedStyle = 'LC'
+                embedStyle = 'LC';
                 page;
                 let firsttopdataReq: osufunc.apiReturn;
                 if (func.findFile(input.absoluteID, 'firsttopdata') &&
