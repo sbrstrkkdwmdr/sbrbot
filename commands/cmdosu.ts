@@ -744,7 +744,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
                 input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
                 page = temp.value;
                 input.args = temp.newArgs;
             }
@@ -1947,7 +1947,7 @@ export async function firsts(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
                 page = temp.value;
                 input.args = temp.newArgs;
             }
@@ -1957,6 +1957,23 @@ export async function firsts(input: extypes.commandInput) {
                 const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
                 parseId = temp.value;
                 input.args = temp.newArgs;
+            }
+
+            if(input.args.includes('-detailed')){
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if(input.args.includes('-d')){
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if(input.args.includes('-compress')){
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if(input.args.includes('-c')){
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
             }
 
             if (input.args.includes('-osu')) {
@@ -2656,7 +2673,7 @@ export async function maplb(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
                 page = temp.value;
                 input.args = temp.newArgs;
             }
@@ -3273,9 +3290,25 @@ export async function osutop(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
                 page = temp.value;
                 input.args = temp.newArgs;
+            }
+            if(input.args.includes('-detailed')){
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if(input.args.includes('-d')){
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if(input.args.includes('-compress')){
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if(input.args.includes('-c')){
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
             }
 
             if (input.args.includes('-mods')) {
@@ -4057,9 +4090,26 @@ export async function pinned(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
                 page = temp.value;
                 input.args = temp.newArgs;
+            }
+
+            if(input.args.includes('-detailed')){
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if(input.args.includes('-d')){
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if(input.args.includes('-compress')){
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if(input.args.includes('-c')){
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
             }
 
             if (input.args.includes('-osu')) {
@@ -4787,10 +4837,27 @@ export async function recent(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
                 page = temp.value;
                 input.args = temp.newArgs;
             }
+
+            // if(input.args.includes('-detailed')){
+            //     scoredetailed = 2;
+            //     input.args.splice(input.args.indexOf('-detailed'), 1);
+            // }
+            // if(input.args.includes('-d')){
+            //     scoredetailed = 2;
+            //     input.args.splice(input.args.indexOf('-d'), 1);
+            // }
+            // if(input.args.includes('-compress')){
+            //     scoredetailed = 0;
+            //     input.args.splice(input.args.indexOf('-compress'), 1);
+            // }
+            // if(input.args.includes('-c')){
+            //     scoredetailed = 0;
+            //     input.args.splice(input.args.indexOf('-c'), 1);
+            // }
 
             if (input.args.includes('-mode')) {
                 mode = (input.args[input.args.indexOf('-mode') + 1]);
@@ -6680,9 +6747,26 @@ export async function scores(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
                 page = temp.value;
                 input.args = temp.newArgs;
+            }
+
+            if(input.args.includes('-detailed')){
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if(input.args.includes('-d')){
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if(input.args.includes('-compress')){
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if(input.args.includes('-c')){
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
             }
 
             input.args = cleanArgs(input.args);
@@ -10689,9 +10773,26 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
                 page = temp.value;
                 input.args = temp.newArgs;
+            }
+
+            if(input.args.includes('-detailed')){
+                mapDetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if(input.args.includes('-d')){
+                mapDetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if(input.args.includes('-compress')){
+                mapDetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if(input.args.includes('-c')){
+                mapDetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
             }
 
             if (input.args.includes('-ranked')) {
