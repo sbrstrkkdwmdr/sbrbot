@@ -82,15 +82,12 @@ export function _8ball(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -384,15 +381,12 @@ export function gif(input: extypes.commandInput) {
     input.obj.channel.send(thelink)
         .catch(error => { });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -682,15 +676,12 @@ export function poll(input: extypes.commandInput) {
 
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -778,15 +769,12 @@ export function roll(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -897,15 +885,12 @@ export function say(input: extypes.commandInput) {
 
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -1031,14 +1016,11 @@ Description: \`${curItem.description}\`
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }

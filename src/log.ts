@@ -64,16 +64,18 @@ function logFile(type: string, text: string, opts?: {
 
 
 export function logCommand(input: {
-    event: 'Command',
+    event: 'Command' | 'Error' | 'Update' | 'Success',
     commandType: string,
     commandId: string | number,
-    commanduser: Discord.User,
-    object: extypes.commandObject,
+    commanduser?: Discord.User,
+    object?: extypes.commandObject,
+    button?: string,
     commandName: string;
     options?: {
         name: string,
         value: string | number | boolean;
     }[];
+    customString?: string;
 }) {
     let optstring;
     if (input.options && input.options.length > 0) {
@@ -85,24 +87,70 @@ export function logCommand(input: {
         }
     }
 
-    const output = `
+    let output: string;
+    switch (input.event) {
+        case 'Command':
+            output = `
 ====================================================
 ${input.event}
 ----------------------------------------------------
 Command name: ${input.commandName}
 Command Type: ${input.commandType}
-Date:         ${(new Date).toISOString}
+Date:         ${(new Date).toISOString()}
 Date (epoch): ${(new Date).getTime()}
 ID:           ${input.commandId}
 Requested by: ${input?.commanduser?.username} (${input?.commanduser?.id})
 Guild ID:     ${input?.object?.guildId}
 Channel ID:   ${input?.object?.channelId}
+${input.button ?
+                    `----------------------------------------------------
+Button: ${input.button}
+`
+                    : ''}
 ${optstring ?
-            `----------------------------------------------------
+                    `----------------------------------------------------
 ${optstring}
 ` : ''
-        }
+                }
 ====================================================`;
+            break;
+        case 'Error':
+            output = `
+====================================================
+${input.event}
+----------------------------------------------------
+Command name: ${input.commandName}
+Date:         ${(new Date).toISOString()}
+Date (epoch): ${(new Date).getTime()}
+ID:           ${input.commandId}
+----------------------------------------------------
+${input.customString}
+====================================================`;
+            break;
+        case 'Update':
+            output = `
+====================================================
+${input.event}
+----------------------------------------------------
+Command name: ${input.commandName}
+Date:         ${(new Date).toISOString()}
+Date (epoch): ${(new Date).getTime()}
+ID:           ${input.commandId}
+----------------------------------------------------
+${input.customString}
+====================================================`;
+            break;
+        case 'Success':
+            output = `
+====================================================
+${input.event}
+----------------------------------------------------
+Command name: ${input.commandName}
+Date:         ${(new Date).toISOString()}
+Date (epoch): ${(new Date).getTime()}
+ID:           ${input.commandId}
+====================================================`;
+    }
     if (config.storeCommandLogs) {
         fs.appendFileSync(`${path}/logs/${input?.object?.guildId ? 'cmd/' + input?.object?.guildId + '.log' : 'commands.log'}`, output, 'utf-8');
     }

@@ -144,16 +144,13 @@ export async function bws(input: extypes.commandInput) {
                 });
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: 'bws',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: 'Could not find user'
+        });
         return;
     }
 
@@ -208,15 +205,12 @@ Could not find user
             embeds: [embed]
         }
     });
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 }
 
 /**
@@ -340,16 +334,13 @@ export async function globals(input: extypes.commandInput) {
             allowedMentions: { repliedUser: false },
             failIfNotExists: false,
         }).catch();
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: 'globals',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: 'Could not find user'
+        });
         return;
     }
 
@@ -385,15 +376,12 @@ Could not find user
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -723,15 +711,12 @@ export async function lb(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -1004,16 +989,13 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
                 }).catch();
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not fetch ranking data
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: 'ranking',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: 'Could not fetch ranking data'
+        });
         return;
     }
 
@@ -1108,15 +1090,12 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -1278,15 +1257,12 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -1578,16 +1554,13 @@ export async function osu(input: extypes.commandInput) {
                 });
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: 'osu',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: 'Could not find user'
+        });
         return;
     }
 
@@ -1778,16 +1751,13 @@ Could not find user
                         }).catch();
                     }
                 }
-                log.logFile('command',
-                    `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not fetch user\'s top scores
-----------------------------------------------------
-\n\n`,
-                    { guildId: `${input.obj.guildId}` }
-                );
+                log.logCommand({
+                    event: 'Error',
+                    commandName: 'osu',
+                    commandType: input.commandType,
+                    commandId: input.absoluteID,
+                    customString: 'Could not find user\'s top scores'
+                });
                 return;
             }
 
@@ -1819,16 +1789,13 @@ Could not fetch user\'s top scores
                         }).catch();
                     }
                 }
-                log.logFile('command',
-                    `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not fetch user\'s most played beatmaps
-----------------------------------------------------
-\n\n`,
-                    { guildId: `${input.obj.guildId}` }
-                );
+                log.logCommand({
+                    event: 'Error',
+                    commandName: 'osu',
+                    commandType: input.commandType,
+                    commandId: input.absoluteID,
+                    customString: 'Could not find user\'s most played'
+                });
                 return;
             }
             const secperplay = osudata?.statistics.play_time / parseFloat(playcount.replaceAll(',', ''));
@@ -1931,15 +1898,12 @@ ${onlinestatus}
     });
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -2415,16 +2379,13 @@ export async function firsts(input: extypes.commandInput) {
                 });
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: 'firsts',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: 'Could not find user'
+        });
         return;
     }
 
@@ -2465,16 +2426,13 @@ Could not find user
                     }).catch();
                 }
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user\'s #1 scores offset by ${cinitnum}
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: 'firsts',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find user\'s #1 scores offset by ${cinitnum}`
+            });
             return;
         }
         for (let i = 0; i < fd.length; i++) {
@@ -2553,16 +2511,13 @@ Could not find user\'s #1 scores offset by ${cinitnum}
                     }).catch();
                 }
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find requested score
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: 'firsts',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find requested score`
+            });
             return;
         }
         input.commandType = 'other';
@@ -2665,15 +2620,12 @@ Could not find requested score
 
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -2895,16 +2847,13 @@ export async function maplb(input: extypes.commandInput) {
                 }).catch();
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not fetch beatmap data for ${mapid}
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: 'maplb',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find beatmap data for ${mapid}`
+        });
         return;
     }
 
@@ -2969,16 +2918,13 @@ Could not fetch beatmap data for ${mapid}
                     }).catch();
                 }
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not fetch leaderboards for ${mapid} (API V2)
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: 'maplb',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find leaderboards for ${mapid} (API V2)`
+            });
             return;
         }
         func.storeFile(lbdataReq, input.absoluteID, 'lbdata');
@@ -3016,16 +2962,13 @@ Could not fetch leaderboards for ${mapid} (API V2)
                         }).catch();
                     }
                 }
-                log.logFile('command',
-                    `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find requested score
-----------------------------------------------------
-\n\n`,
-                    { guildId: `${input.obj.guildId}` }
-                );
+                log.logCommand({
+                    event: 'Error',
+                    commandName: 'maplb',
+                    commandType: input.commandType,
+                    commandId: input.absoluteID,
+                    customString: `Could not find the requested score`
+                });
                 return;
             }
             input.commandType = 'other';
@@ -3141,16 +3084,13 @@ Could not find requested score
                     }).catch();
                 }
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not fetch leaderboards for ${mapid} (API v1)
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find leaderboards for ${mapid} (API v1)`
+            });
             return;
         }
 
@@ -3187,16 +3127,13 @@ Could not fetch leaderboards for ${mapid} (API v1)
                         }).catch();
                     }
                 }
-                log.logFile('command',
-                    `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find requested score
-----------------------------------------------------
-\n\n`,
-                    { guildId: `${input.obj.guildId}` }
-                );
+                log.logCommand({
+                    event: 'Error',
+                    commandName: '',
+                    commandType: input.commandType,
+                    commandId: input.absoluteID,
+                    customString: `Could not find requested score`
+                });
                 return;
             }
             input.commandType = 'other';
@@ -3277,15 +3214,12 @@ Could not find requested score
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -3807,16 +3741,13 @@ export async function osutop(input: extypes.commandInput) {
                 });
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find user`
+        });
         return;
     }
 
@@ -3862,16 +3793,13 @@ Could not find user
                 });
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user\'s top scores
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find users top scores`
+        });
         return;
     }
 
@@ -3970,16 +3898,13 @@ Could not find user\'s top scores
                     }).catch();
                 }
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find requested score
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find requested score`
+            });
             return;
         }
         input.commandType = 'other';
@@ -4077,15 +4002,12 @@ Could not find requested score
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -4572,16 +4494,13 @@ export async function pinned(input: extypes.commandInput) {
                 failIfNotExists: true
             });
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find user`
+        });
         return;
     }
 
@@ -4620,16 +4539,13 @@ Could not find user
                     }).catch();
                 }
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user's pinned scores offset by ${cinitnum}
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find user's pinned scores offset by ${cinitnum}`
+            });
             return;
         }
         for (let i = 0; i < fd.length; i++) {
@@ -4713,16 +4629,13 @@ Could not find user's pinned scores offset by ${cinitnum}
                     }).catch();
                 }
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find requested score
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find requested score`
+            });
             return;
         }
         input.commandType = 'other';
@@ -4820,15 +4733,12 @@ Could not find requested score
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -5188,16 +5098,13 @@ export async function recent(input: extypes.commandInput) {
                 failIfNotExists: true
             }).catch();
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find user`
+        });
         return;
     }
 
@@ -5262,16 +5169,13 @@ Could not find user
             }
 
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user's recent scores
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find user's recent scores`
+        });
         return;
     }
 
@@ -5384,16 +5288,13 @@ Could not find user's recent scores
                     }).catch();
                 }
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap data for ${curbm.id}
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find beatmap data for ${curbm.id}`
+            });
             return;
         }
 
@@ -5755,15 +5656,12 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -6024,15 +5922,12 @@ ${isfail}
     });
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -6163,32 +6058,26 @@ export async function scoreparse(input: extypes.commandInput) {
             }).catch();
 
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not fetch score data for ${scoreid}
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find score data for ${scoreid} in ${scoremode}`
+        });
         return;
     }
     try {
         if (typeof scoredata?.error != 'undefined') {
             (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
                 .catch();
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Invalid score
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Invalid score`
+            });
             return;
         }
     } catch (error) {
@@ -6242,16 +6131,13 @@ Invalid score
                 }).catch();
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap data
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find beatmap data`
+        });
         return;
     }
 
@@ -6436,16 +6322,13 @@ Could not find beatmap data
                 failIfNotExists: true
             });
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find user`
+        });
         return;
     }
 
@@ -6487,15 +6370,12 @@ ${pptxt}\n${ppissue}
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -6688,16 +6568,13 @@ export async function scorepost(input: extypes.commandInput) {
                 }).catch();
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not fetch beatmap data for ${scoredata.beatmap.id}
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find beatmap data for ${scoredata.beatmap.id}`
+        });
         return;
     }
 
@@ -6751,15 +6628,12 @@ Could not fetch beatmap data for ${scoredata.beatmap.id}
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -7161,16 +7035,13 @@ export async function scores(input: extypes.commandInput) {
                 failIfNotExists: true
             });
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find user`
+        });
         return;
 
     }
@@ -7216,16 +7087,13 @@ Could not find user
                 }).catch();
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap scores
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find beatmap scores`
+        });
         return;
     }
 
@@ -7278,16 +7146,13 @@ Could not find beatmap scores
                     }).catch();
                 }
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find requested score
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find requested score`
+            });
             return;
         }
         input.commandType = 'other';
@@ -7329,16 +7194,13 @@ Could not find requested score
                 }).catch();
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap data
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find beatmap data`
+        });
         return;
     }
 
@@ -7440,15 +7302,12 @@ Could not find beatmap data
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -7692,16 +7551,13 @@ export async function scorestats(input: extypes.commandInput) {
                 failIfNotExists: true
             }).catch();
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find user`
+        });
         return;
     }
 
@@ -7749,16 +7605,13 @@ Could not find user
                     }).catch();
                 }
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user's ${scoreTypes} scores
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find user's ${scoreTypes} scores`
+            });
             return;
         }
         for (let i = 0; i < fd.length; i++) {
@@ -7901,15 +7754,12 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
         });
     }
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -8162,16 +8012,13 @@ export async function simulate(input: extypes.commandInput) {
             }).catch();
 
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap data
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find beatmap data`
+        });
         return;
     }
     func.storeFile(mapdataReq, mapid, 'mapdata');
@@ -8309,15 +8156,12 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -8553,16 +8397,13 @@ export async function map(input: extypes.commandInput) {
 
                 const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
                 if (bmsdata?.error) {
-                    log.logFile('command',
-                        `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmapset data
-----------------------------------------------------
-\n\n`,
-                        { guildId: `${input.obj.guildId}` }
-                    );
+                    log.logCommand({
+                        event: 'Error',
+                        commandName: '',
+                        commandType: input.commandType,
+                        commandId: input.absoluteID,
+                        customString: `Could not find beatmapset data`
+                    });
                     return;
                 }
                 try {
@@ -8723,16 +8564,13 @@ Could not find beatmapset data
                     failIfNotExists: true
                 }).catch();
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap data
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find beatmap data`
+            });
             return;
         }
 
@@ -8763,16 +8601,13 @@ Could not find beatmap data
                     failIfNotExists: true
                 }).catch();
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap data
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find beatmap data`
+            });
             return;
         }
 
@@ -8832,16 +8667,13 @@ Could not find beatmap data
                     failIfNotExists: true
                 }).catch();
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap data
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find beatmap data`
+            });
             return;
         }
 
@@ -8902,16 +8734,13 @@ Could not find beatmap data
                     failIfNotExists: true
                 });
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap data
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find beatmap data`
+            });
             return;
         }
 
@@ -9146,17 +8975,13 @@ HP${baseHP}`;
         //     })
         // }
         // return;
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Error
-ID: ${input.absoluteID}
-Could not find mapper data
-Using default json file
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find mapper data.\nUsing default json file`
+        });
     }
     func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
 
@@ -9311,17 +9136,13 @@ Using default json file
 
         if (gdData?.error) {
             gdData = JSON.parse(fs.readFileSync(`${filespath}/defaults/mapper.json`, 'utf8'));
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Error
-ID: ${input.absoluteID}
-Could not find gd data
-Using default json file
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find guest mapper's data.\nUsing default json file.`
+            });
         }
         func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
         Embed.setDescription(`Guest difficulty by [${gdData?.username}](https://osu.ppy.sh/u/${mapdata.user_id})`);
@@ -9411,15 +9232,12 @@ Using default json file
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -9612,16 +9430,13 @@ export async function ppCalc(input: extypes.commandInput) {
 
                 const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
                 if (bmsdata?.error) {
-                    log.logFile('command',
-                        `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmapset data
-----------------------------------------------------
-\n\n`,
-                        { guildId: `${input.obj.guildId}` }
-                    );
+                    log.logCommand({
+                        event: 'Error',
+                        commandName: '',
+                        commandType: input.commandType,
+                        commandId: input.absoluteID,
+                        customString: `Could not find beatmapset data`
+                    });
                     return;
                 }
                 try {
@@ -9756,16 +9571,13 @@ Could not find beatmapset data
                     failIfNotExists: true
                 }).catch();
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap data
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find beatmap data`
+            });
             return;
         }
 
@@ -9796,16 +9608,13 @@ Could not find beatmap data
                     failIfNotExists: true
                 }).catch();
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap data
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find beatmap data`
+            });
             return;
         }
 
@@ -9865,16 +9674,13 @@ Could not find beatmap data
                     failIfNotExists: true
                 }).catch();
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap data
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find beatmap data`
+            });
             return;
         }
 
@@ -9935,16 +9741,13 @@ Could not find beatmap data
                     failIfNotExists: true
                 });
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find beatmap data
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: 'ppcalc',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: 'Could not find beatmap data'
+            });
             return;
         }
 
@@ -10343,15 +10146,12 @@ Could not find beatmap data
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 
 }
@@ -10517,15 +10317,12 @@ export async function randomMap(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -10846,15 +10643,12 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 }
 
 /**
@@ -11241,16 +11035,13 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 failIfNotExists: true
             });
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find user`
+        });
         return;
     }
 
@@ -11292,16 +11083,13 @@ Could not find user
                     }).catch();
                 }
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user's ${calc.toCapital(filter)} maps
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find user's ${calc.toCapital(filter)} maps`
+            });
             return;
         }
         for (let i = 0; i < fd.length; i++) {
@@ -11380,16 +11168,13 @@ Could not find user's ${calc.toCapital(filter)} maps
                     }).catch();
                 }
             }
-            log.logFile('command',
-                `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find map
-----------------------------------------------------
-\n\n`,
-                { guildId: `${input.obj.guildId}` }
-            );
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                customString: `Could not find requested beatmap`
+            });
             return;
         }
         input.commandType = 'other';
@@ -11481,15 +11266,12 @@ Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${fil
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 
 }
@@ -11628,16 +11410,13 @@ export async function trackadd(input: extypes.commandInput) {
 
     if (osudata?.error || !osudata.id) {
         replymsg = `Error - could not find user \`${user}\``;
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find user`
+        });
     } else {
 
         replymsg = `Added \`${osudata.username}\` to the tracking list\nGamemode: \`${mode}\``;
@@ -11664,15 +11443,12 @@ Could not find user
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -11804,16 +11580,13 @@ export async function trackremove(input: extypes.commandInput) {
 
     if (osudata?.error || !osudata.id) {
         replymsg = `Error - could not find user \`${user}\``;
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find user`
+        });
     } else {
 
         replymsg = `Removed \`${osudata.username}\` from the tracking list`;
@@ -11841,15 +11614,12 @@ Could not find user
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -11958,15 +11728,12 @@ export async function trackchannel(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -12088,15 +11855,12 @@ export async function tracklist(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 }
 
 //other
@@ -12570,16 +12334,13 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
             value: `${error}`,
             inline: false
         });
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-${error}
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `${error}`
+        });
     }
 
     const embed = new Discord.EmbedBuilder()
@@ -12600,15 +12361,12 @@ ${error}
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -12849,15 +12607,12 @@ export async function osuset(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -13013,15 +12768,12 @@ export async function saved(input: extypes.commandInput) {
             embeds: [Embed],
         }
     });
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 }
 
 /**
@@ -13216,16 +12968,13 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
                 });
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not find user
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find user`
+        });
         return;
     }
 
@@ -13268,16 +13017,13 @@ Could not find user
                 }).catch();
             }
         }
-        log.logFile('command',
-            `
-----------------------------------------------------
-Command Failed
-ID: ${input.absoluteID}
-Could not fetch user\'s top scores
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Could not find user's top scores`
+        });
         return;
     }
 
@@ -13335,15 +13081,12 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
     });
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 

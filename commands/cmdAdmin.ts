@@ -127,15 +127,12 @@ export function checkperms(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -325,15 +322,12 @@ export function getUser(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -425,15 +419,12 @@ export function getUserAv(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -700,15 +691,12 @@ Joined(EPOCH):  ${member.joinedTimestamp}
         args: usemsgArgs
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 }
 
 /**
@@ -983,15 +971,12 @@ export function find(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -1073,15 +1058,12 @@ export function leaveguild(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -1166,15 +1148,12 @@ export async function prefix(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 

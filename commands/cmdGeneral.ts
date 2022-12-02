@@ -789,15 +789,12 @@ ${num ? '' : '[number]'}`;
         }
     );
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -1206,15 +1203,12 @@ export function help(input: extypes.commandInput) {
         }
     );
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -1324,15 +1318,12 @@ Bot Version: ${pkgjson.version}
     );
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -1515,15 +1506,12 @@ export function math(input: extypes.commandInput) {
     );
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -1620,15 +1608,12 @@ ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
 
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 }
 
 /**
@@ -1784,15 +1769,12 @@ export function remind(input: extypes.commandInput) {
 
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -1881,15 +1863,12 @@ Current Shard:
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
 
@@ -2114,14 +2093,11 @@ export function time(input: extypes.commandInput) {
         }
     });
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    log.logCommand({
+        event: 'Success',
+        commandName: '',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+    })
 
 }
