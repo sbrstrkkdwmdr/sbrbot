@@ -2615,7 +2615,7 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (scoredetailed) {
-            case 0:
+            case 0:case 2:
                 let temptxt = '\n';
                 for (let i = 0; i < scoresarg.string.length; i++) {
                     temptxt += scoresarg.string[i];
@@ -4024,7 +4024,7 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (scoredetailed) {
-            case 0:
+            case 0:case 2:
                 let temptxt = '\n';
                 for (let i = 0; i < scoresarg.string.length; i++) {
                     temptxt += scoresarg.string[i];
@@ -4767,7 +4767,7 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (scoredetailed) {
-            case 0:
+            case 0:case 2:
                 let temptxt = '\n';
                 for (let i = 0; i < scoresarg.string.length; i++) {
                     temptxt += scoresarg.string[i];
@@ -7353,8 +7353,6 @@ Could not find beatmap data
         })
         .setURL(`https://osu.ppy.sh/b/${mapid}`);
 
-    scoresEmbed.setFooter({ text: `Page ${page + 1}/${Math.ceil(scoredata.length / 5)}` });
-
     if (page >= Math.ceil(scoredata.length / 5)) {
         page = Math.ceil(scoredata.length / 5) - 1;
     }
@@ -7389,7 +7387,7 @@ Could not find beatmap data
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (scoredetailed) {
-            case 0:
+            case 0:case 2:
                 let temptxt = '\n';
                 for (let i = 0; i < scoresarg.string.length; i++) {
                     temptxt += scoresarg.string[i];
