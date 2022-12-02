@@ -271,8 +271,8 @@ export async function scoreList(
         switch (asObj.detailed) {
             case 0: case 2: {
                 let useTitle = `**#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}** | ${showtitle ? '**' + showtitle + '**' : ''}`;
-                if(showtitle.includes('Score #')){
-                    useTitle = `**${showtitle}**`
+                if (showtitle.includes('Score #')) {
+                    useTitle = `**${showtitle}**`;
                 }
                 scoresAsFields.push({
                     name: `#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
@@ -419,13 +419,25 @@ export async function mapList(
         page: number,
         sort: mapSort,
         reverse: boolean,
+        detailed: number,
     }
 ) {
     let filterinfo: string = '';
     let newData = [];
     const mapsArr: Discord.EmbedField[] = [];
+    const mapsArrStr: string[] = [];
     let page = data.page;
     let sortinfo = '';
+
+    let usePage = 5;
+
+    switch (data.detailed) {
+        case 0:
+            break;
+        case 2:
+            usePage = 10;
+            break;
+    }
 
     switch (data.type) {
         case 'mapset': {
@@ -505,9 +517,10 @@ export async function mapList(
                 maps.reverse();
                 sortinfo += ' (reversed)';
             }
+
             filterinfo += sortinfo;
-            if (page >= Math.ceil(maps.length / 5)) {
-                page = Math.ceil(maps.length / 5) - 1;
+            if (page >= Math.ceil(maps.length / usePage)) {
+                page = Math.ceil(maps.length / usePage) - 1;
             }
             if (page < 0) {
                 page = 0;
@@ -515,8 +528,8 @@ export async function mapList(
 
             newData = maps;
 
-            for (let i = 0; i < 5 && i < maps.length; i++) {
-                const offset = page * 5 + i;
+            for (let i = 0; i < usePage && i < maps.length; i++) {
+                const offset = page * usePage + i;
                 const curmapset = maps[offset];
                 if (!curmapset) {
                     break;
@@ -532,24 +545,55 @@ export async function mapList(
                  * favourite count
                  */
                 const topmap = curmapset.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0];
-                mapsArr.push({
-                    name: `${offset + 1}`,
-                    value:
-                        `
+
+                switch (data.detailed) {
+                    case 0:case 2:
+                        mapsArr.push({
+                            name: '',
+                            value: '',
+                            inline: false,
+                        })
+                        mapsArrStr.push(
+`
+**#${offset + 1} | [${curmapset.artist} - ${curmapset.title}](https://osu.ppy.sh/s/${curmapset.id})**
+${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bpm} | ${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bpm}`
+                        )
+                        break;
+                    case 1: default:
+                        mapsArr.push({
+                            name: `${offset + 1}`,
+                            value:
+                                `
 [**${curmapset.artist} - ${curmapset.title}**](https://osu.ppy.sh/s/${curmapset.id})
 ${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
 ${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bpm}
 ${func.separateNum(curmapset.play_count)} plays | ${func.separateNum(topmap.passcount)} passes | ${func.separateNum(curmapset.favourite_count)} favourites
 Submitted <t:${new Date(curmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(curmapset.last_updated).getTime() / 1000}:R>
 ${topmap.status == 'ranked' ?
-                            `Ranked <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
-                        }${topmap.status == 'approved' || topmap.status == 'qualified' ?
-                            `Approved/Qualified <t: ${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
-                        }${topmap.status == 'loved' ?
-                            `Loved <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
-                        }`,
-                    inline: false
-                });
+                                    `Ranked <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                                }${topmap.status == 'approved' || topmap.status == 'qualified' ?
+                                    `Approved/Qualified <t: ${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                                }${topmap.status == 'loved' ?
+                                    `Loved <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                                }`,
+                            inline: false
+                        });
+                        mapsArrStr.push(
+`**#${offset + 1} | [${curmapset.artist} - ${curmapset.title}](https://osu.ppy.sh/s/${curmapset.id})**
+${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
+${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bpm}
+${func.separateNum(curmapset.play_count)} plays | ${func.separateNum(topmap.passcount)} passes | ${func.separateNum(curmapset.favourite_count)} favourites
+Submitted <t:${new Date(curmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(curmapset.last_updated).getTime() / 1000}:R>
+${topmap.status == 'ranked' ?
+`Ranked <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+}${topmap.status == 'approved' || topmap.status == 'qualified' ?
+`Approved/Qualified <t: ${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+}${topmap.status == 'loved' ?
+`Loved <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+}`
+                        )
+                        break;
+                }
             }
         }
             break;
@@ -561,10 +605,11 @@ ${topmap.status == 'ranked' ?
 
     return {
         fields: mapsArr,
+        string: mapsArrStr,
         filter: filterinfo,
-        maxPages: Math.ceil(newData.length / 5),
+        maxPages: Math.ceil(newData.length / usePage),
         isFirstPage: page == 0,
-        isLastPage: page >= Math.ceil(newData.length / 5) - 1
+        isLastPage: page >= Math.ceil(newData.length / usePage) - 1
     };
 }
 

@@ -2184,6 +2184,9 @@ export async function firsts(input: extypes.commandInput) {
                     case 'BigRightArrow':
                         page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
                         break;
+                    default:
+                        page = pageParsed;
+                        break;
                 }
                 switch (input.button) {
                     case 'Detail0':
@@ -2197,7 +2200,6 @@ export async function firsts(input: extypes.commandInput) {
                         scoredetailed = 2;
                         break;
                     default:
-                        page = pageParsed;
                         if (input.obj.message.embeds[0].footer.text.includes('LE')) {
                             scoredetailed = 2;
                         }
@@ -2615,7 +2617,7 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (scoredetailed) {
-            case 0:case 2:
+            case 0: case 2:
                 let temptxt = '\n';
                 for (let i = 0; i < scoresarg.string.length; i++) {
                     temptxt += scoresarg.string[i];
@@ -3645,6 +3647,10 @@ export async function osutop(input: extypes.commandInput) {
                 value: mods
             },
             {
+                name: 'Detailed',
+                value: scoredetailed
+            },
+            {
                 name: 'Parse',
                 value: `${parseId}`
             },
@@ -4024,7 +4030,7 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (scoredetailed) {
-            case 0:case 2:
+            case 0: case 2:
                 let temptxt = '\n';
                 for (let i = 0; i < scoresarg.string.length; i++) {
                     temptxt += scoresarg.string[i];
@@ -4767,7 +4773,7 @@ Could not find requested score
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (scoredetailed) {
-            case 0:case 2:
+            case 0: case 2:
                 let temptxt = '\n';
                 for (let i = 0; i < scoresarg.string.length; i++) {
                     temptxt += scoresarg.string[i];
@@ -7049,6 +7055,10 @@ export async function scores(input: extypes.commandInput) {
                 value: mode
             },
             {
+                name: 'Detailed',
+                value: scoredetailed
+            },
+            {
                 name: 'Parse',
                 value: `${parseId}`
             }
@@ -7387,7 +7397,7 @@ Could not find beatmap data
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (scoredetailed) {
-            case 0:case 2:
+            case 0: case 2:
                 let temptxt = '\n';
                 for (let i = 0; i < scoresarg.string.length; i++) {
                     temptxt += scoresarg.string[i];
@@ -10869,7 +10879,9 @@ export async function userBeatmaps(input: extypes.commandInput) {
     let commanduser: Discord.User;
     let reachedMaxCount = false;
 
-    let embedStyle: extypes.osuCmdStyle = 'M';
+    let embedStyle: extypes.osuCmdStyle = 'L';
+
+    let mapDetailed: number = 1;
 
     switch (input.commandType) {
         case 'message': {
@@ -10977,9 +10989,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
             filter = input.obj.options.getString('type') ?? 'favourite';
             //@ts-expect-error string not assignable blah blah
             sort = input.obj.options.getString('sort') ?? 'dateadded';
-
             reverse = input.obj.options.getBoolean('reverse') ?? false;
-
             filterTitle = input.obj.options.getString('filter');
 
             parseId = input.obj.options.getInteger('parse');
@@ -11027,6 +11037,25 @@ export async function userBeatmaps(input: extypes.commandInput) {
                     break;
                 default:
                     page = curpage;
+                    break;
+            }
+            switch (input.button) {
+                case 'Detail0':
+                    mapDetailed = 0;
+                    break;
+                case 'Detail1':
+                    mapDetailed = 1;
+                    break;
+                case 'Detail2':
+                    mapDetailed = 2;
+                    break;
+                default:
+                    if (input.obj.message.embeds[0].footer.text.includes('LE')) {
+                        mapDetailed = 2;
+                    }
+                    if (input.obj.message.embeds[0].footer.text.includes('LC')) {
+                        mapDetailed = 0;
+                    }
                     break;
             }
         }
@@ -11098,11 +11127,59 @@ export async function userBeatmaps(input: extypes.commandInput) {
             {
                 name: 'Filter',
                 value: filterTitle
+            },
+            {
+                name: 'Detailed',
+                value: mapDetailed
             }
         ]
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    const buttons = new Discord.ActionRowBuilder().addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-Refresh-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.main.refresh),
+    );
+
+    switch (mapDetailed) {
+        case 0: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = 'LC';
+        }
+            break;
+        case 1: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail0-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail2-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = 'L';
+        }
+            break;
+        case 2: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+            );
+            embedStyle = 'LE';
+        }
+            break;
+    }
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
@@ -11324,6 +11401,15 @@ Could not find map
         page = Math.ceil(maplistdata.length / 5) - 1;
     }
 
+    const mapsarg = await embedStuff.mapList({
+        type: 'mapset',
+        maps: maplistdata,
+        page: page,
+        sort,
+        reverse,
+        detailed: mapDetailed
+    });
+
     const mapList = new Discord.EmbedBuilder()
         .setFooter({
             text: `${embedStyle}`
@@ -11335,15 +11421,13 @@ Could not find map
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
-        .setColor(colours.embedColour.userlist.dec);
-
-    const mapsarg = await embedStuff.mapList({
-        type: 'mapset',
-        maps: maplistdata,
-        page: page,
-        sort,
-        reverse,
-    });
+        .setColor(colours.embedColour.userlist.dec)
+        .setDescription(`
+        ${mapsarg.filter}
+        Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}
+        ${filterTitle ? `Filter: ${filterTitle}` : ''}
+        ${reachedMaxCount ? 'Only the first 500 mapsets are shown' : ''}
+        `);
 
     if (mapsarg.fields.length == 0) {
         mapList.addFields([{
@@ -11357,8 +11441,24 @@ Could not find map
         (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
-        for (let i = 0; i < mapsarg.fields.length; i++) {
-            mapList.addFields([mapsarg.fields[i]]);
+        switch (mapDetailed) {
+            case 0: case 2:
+                let temptxt = '\n';
+                for (let i = 0; i < mapsarg.string.length; i++) {
+                    temptxt += mapsarg.string[i];
+                }
+                mapList.setDescription(
+                    `
+${mapsarg.filter}
+Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${filterTitle}` : ''}${reachedMaxCount ? '\nOnly the first 500 mapsets are shown' : ''}`
+                    + temptxt
+                );
+                break;
+            case 1: default:
+                for (let i = 0; i < mapsarg.fields.length; i++) {
+                    mapList.addFields([mapsarg.fields[i]]);
+                }
+                break;
         }
     }
     if (mapsarg.isFirstPage) {
@@ -11369,12 +11469,6 @@ Could not find map
         (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
-    mapList.setDescription(`
-${mapsarg.filter}
-Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}
-${filterTitle ? `Filter: ${filterTitle}` : ''}
-${reachedMaxCount ? 'Only the first 500 mapsets are shown' : ''}
-`);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     msgfunc.sendMessage({
@@ -11383,7 +11477,7 @@ ${reachedMaxCount ? 'Only the first 500 mapsets are shown' : ''}
         args: {
             edit: true,
             embeds: [mapList],
-            components: [pgbuttons]
+            components: [pgbuttons, buttons]
         }
     });
 
