@@ -482,7 +482,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'firsts',
         description: 'Shows the #1 global scores of a user',
-        usage: 'firsts [user] [-page/-p] [-(mode)] [-parse] [-?]',
+        usage: 'firsts [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)]',
         slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter]',
         examples: [
             {
@@ -582,13 +582,14 @@ const osucmds: commandInfo[] = [
             },
             {
                 name: 'detailed',
-                type: 'boolean',
+                type: 'number',
                 required: false,
-                description: 'Whether to show detailed information about the scores',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: ['detailed:true', '-detailed'],
-                commandTypes: ['message', 'interaction']
+                description: 'How much information to show about the scores. 0 = less details, 2 = more details',
+                options: ['c/0', '/1', 'd/2'],
+                aliases: ['-d', '-compress', '-c'],
+                defaultValue: '1',
+                examples: ['detailed:true', '-detailed', '-compress'],
+                commandTypes: ['message', 'interaction', 'button']
             },
             {
                 name: 'parse',
@@ -910,7 +911,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'nochokes',
         description: 'Shows the user\'s top plays without misses',
-        usage: 'nochokes [user] [-page/-p] [-(mode)] [-parse] [-?]',
+        usage: 'nochokes [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)]',
         slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter]',
         examples: [
             {
@@ -1009,13 +1010,14 @@ const osucmds: commandInfo[] = [
             },
             {
                 name: 'detailed',
-                type: 'boolean',
+                type: 'number',
                 required: false,
-                description: 'Whether to show detailed information about the scores',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: ['detailed:true', '-detailed'],
-                commandTypes: ['message', 'interaction']
+                description: 'How much information to show about the scores. 0 = less details, 2 = more details',
+                options: ['c/0', '/1', 'd/2'],
+                aliases: ['-d', '-compress', '-c'],
+                defaultValue: '1',
+                examples: ['detailed:true', '-detailed', '-compress'],
+                commandTypes: ['message', 'interaction', 'button']
             },
             {
                 name: 'parse',
@@ -1191,7 +1193,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'osutop',
         description: 'Shows the top scores of a user',
-        usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-reverse] [-(sort)] [-parse] [-?]',
+        usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)]',
         slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter]',
         examples: [
             {
@@ -1307,12 +1309,13 @@ const osucmds: commandInfo[] = [
             },
             {
                 name: 'detailed',
-                type: 'boolean',
+                type: 'number',
                 required: false,
-                description: 'Whether to show detailed information about the scores',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: ['detailed:true', '-detailed'],
+                description: 'How much information to show about the scores. 0 = less details, 2 = more details',
+                options: ['c/0', '/1', 'd/2'],
+                aliases: ['-d', '-compress', '-c'],
+                defaultValue: '1',
+                examples: ['detailed:true', '-detailed', '-compress'],
                 commandTypes: ['message', 'interaction', 'button']
             },
             {
@@ -1351,7 +1354,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'pinned',
         description: 'Shows the pinned scores of a user',
-        usage: 'pinned [user] [-page/-p] [-(mode)] [-parse] [-?]',
+        usage: 'pinned [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)]',
         slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter]',
         examples: [
             {
@@ -1447,13 +1450,14 @@ const osucmds: commandInfo[] = [
             },
             {
                 name: 'detailed',
-                type: 'boolean',
+                type: 'number',
                 required: false,
-                description: 'Whether to show detailed information about the scores',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: ['detailed:true', '-detailed'],
-                commandTypes: ['message', 'interaction']
+                description: 'How much information to show about the scores. 0 = less details, 2 = more details',
+                options: ['c/0', '/1', 'd/2'],
+                aliases: ['-d', '-compress', '-c'],
+                defaultValue: '1',
+                examples: ['detailed:true', '-detailed', '-compress'],
+                commandTypes: ['message', 'interaction', 'button']
             },
             {
                 name: 'parse',
@@ -1868,6 +1872,17 @@ const osucmds: commandInfo[] = [
                 commandTypes: ['message', 'interaction']
             },
             {
+                name: 'detailed',
+                type: 'number',
+                required: false,
+                description: 'How much information to show about the score(s). 0 = less details, 2 = more details',
+                options: ['c/0', '/1', 'd/2'],
+                aliases: ['-d', '-compress', '-c'],
+                defaultValue: '1',
+                examples: ['detailed:true', '-detailed', '-compress'],
+                commandTypes: ['message', 'interaction', 'button']
+            },
+            {
                 name: 'Refresh',
                 type: 'boolean',
                 required: false,
@@ -2089,6 +2104,17 @@ const osucmds: commandInfo[] = [
                 defaultValue: '1',
                 aliases: ['p'],
                 examples: ['page:6', '-p 4'],
+                commandTypes: ['message', 'interaction', 'button']
+            },
+            {
+                name: 'detailed',
+                type: 'number',
+                required: false,
+                description: 'How much information to show about the scores. 0 = less details, 2 = more details',
+                options: ['c/0', '/1', 'd/2'],
+                aliases: ['-d', '-compress', '-c'],
+                defaultValue: '1',
+                examples: ['detailed:true', '-detailed', '-compress'],
                 commandTypes: ['message', 'interaction', 'button']
             },
             {
