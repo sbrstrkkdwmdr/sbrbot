@@ -210,7 +210,7 @@ export async function bws(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 }
 
 /**
@@ -381,7 +381,7 @@ export async function globals(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -716,7 +716,7 @@ export async function lb(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -1095,7 +1095,7 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -1262,7 +1262,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -1903,7 +1903,7 @@ ${onlinestatus}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -2625,7 +2625,7 @@ export async function firsts(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -3219,7 +3219,7 @@ export async function maplb(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -4007,7 +4007,7 @@ export async function osutop(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -4738,7 +4738,7 @@ export async function pinned(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -5661,7 +5661,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -5927,7 +5927,7 @@ ${isfail}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -6375,7 +6375,7 @@ ${pptxt}\n${ppissue}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -6633,7 +6633,7 @@ export async function scorepost(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -7307,7 +7307,7 @@ export async function scores(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -7759,7 +7759,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -8161,7 +8161,7 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -9237,7 +9237,7 @@ HP${baseHP}`;
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -10151,7 +10151,7 @@ export async function ppCalc(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 
 }
@@ -10322,7 +10322,7 @@ export async function randomMap(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -10648,7 +10648,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 }
 
 /**
@@ -11271,7 +11271,7 @@ Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${fil
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 
 }
@@ -11448,7 +11448,7 @@ export async function trackadd(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -11619,7 +11619,7 @@ export async function trackremove(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -11733,7 +11733,7 @@ export async function trackchannel(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -11860,7 +11860,7 @@ export async function tracklist(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 }
 
 //other
@@ -12366,7 +12366,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -12612,7 +12612,7 @@ export async function osuset(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -12773,7 +12773,7 @@ export async function saved(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 }
 
 /**
@@ -13086,7 +13086,7 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 

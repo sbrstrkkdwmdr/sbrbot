@@ -794,7 +794,7 @@ ${num ? '' : '[number]'}`;
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -1208,7 +1208,7 @@ export function help(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -1323,7 +1323,7 @@ Bot Version: ${pkgjson.version}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -1511,7 +1511,7 @@ export function math(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -1613,7 +1613,7 @@ ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 }
 
 /**
@@ -1774,7 +1774,7 @@ export function remind(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -1868,7 +1868,7 @@ Current Shard:
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -2098,6 +2098,6 @@ export function time(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }

@@ -132,7 +132,7 @@ export function checkperms(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -327,7 +327,7 @@ export function getUser(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -424,7 +424,7 @@ export function getUserAv(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -696,7 +696,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 }
 
 /**
@@ -976,7 +976,7 @@ export function find(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -1063,7 +1063,7 @@ export function leaveguild(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -1153,7 +1153,7 @@ export async function prefix(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 

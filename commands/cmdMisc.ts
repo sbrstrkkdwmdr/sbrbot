@@ -87,7 +87,7 @@ export function _8ball(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -386,7 +386,7 @@ export function gif(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -681,7 +681,7 @@ export function poll(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -774,7 +774,7 @@ export function roll(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -890,7 +890,7 @@ export function say(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
 
@@ -930,29 +930,6 @@ export async function ytsearch(input: extypes.commandInput) {
 
 
     //==============================================================================================================================================================================================
-
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-BigLeftArrow-ytsearch-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('⬅')
-            /* .setLabel('Start') */,
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-LeftArrow-ytsearch-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('◀'),
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-RightArrow-ytsearch-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('▶')
-            /* .setLabel('Next') */,
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-BigRightArrow-ytsearch-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('➡')
-            /* .setLabel('End') */,
-        );
 
     log.logCommand({
         event: 'Command',
@@ -1021,6 +998,6 @@ Description: \`${curItem.description}\`
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
-    })
+    });
 
 }
