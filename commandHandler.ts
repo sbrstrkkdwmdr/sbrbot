@@ -636,11 +636,12 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                 }
                 break;
             case 'simplay': case 'simulate': case 'sim':
-                if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.simulate({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot');
-                }
+                checkcmds.disabled(commandType, obj, 'command');
+                // if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                //     osucmds.simulate({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                // } else {
+                //     checkcmds.noperms(commandType, obj, 'bot');
+                // }
                 break;
             case 'skin':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {

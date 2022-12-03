@@ -97,3 +97,29 @@ export function outdated(commandType, obj, type: 'command') {
             break;
     }
 }
+
+export function disabled(commandType, obj, type: 'command'){
+    switch (type) {
+        case 'command': {
+            switch (commandType) {
+                case 'message':case 'link':
+                    obj.reply({
+                        content: 'This command is disabled and cannot be used.',
+                        allowedMentions: { repliedUser: false },
+                        failIfNotExists: true
+                    })
+                        .catch();
+                        break;
+                case 'button':case 'interaction':
+                    obj.reply({
+                        content: 'This command is disabled and cannot be used.',
+                        ephemeral: true,
+                        allowedMentions: { repliedUser: false },
+                    })
+                        .catch();
+                    break;
+            }
+        }
+            break;
+    }
+}
