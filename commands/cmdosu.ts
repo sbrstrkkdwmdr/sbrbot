@@ -1959,19 +1959,19 @@ export async function firsts(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
 
-            if(input.args.includes('-detailed')){
+            if (input.args.includes('-detailed')) {
                 scoredetailed = 2;
                 input.args.splice(input.args.indexOf('-detailed'), 1);
             }
-            if(input.args.includes('-d')){
+            if (input.args.includes('-d')) {
                 scoredetailed = 2;
                 input.args.splice(input.args.indexOf('-d'), 1);
             }
-            if(input.args.includes('-compress')){
+            if (input.args.includes('-compress')) {
                 scoredetailed = 0;
                 input.args.splice(input.args.indexOf('-compress'), 1);
             }
-            if(input.args.includes('-c')){
+            if (input.args.includes('-c')) {
                 scoredetailed = 0;
                 input.args.splice(input.args.indexOf('-c'), 1);
             }
@@ -3294,19 +3294,19 @@ export async function osutop(input: extypes.commandInput) {
                 page = temp.value;
                 input.args = temp.newArgs;
             }
-            if(input.args.includes('-detailed')){
+            if (input.args.includes('-detailed')) {
                 scoredetailed = 2;
                 input.args.splice(input.args.indexOf('-detailed'), 1);
             }
-            if(input.args.includes('-d')){
+            if (input.args.includes('-d')) {
                 scoredetailed = 2;
                 input.args.splice(input.args.indexOf('-d'), 1);
             }
-            if(input.args.includes('-compress')){
+            if (input.args.includes('-compress')) {
                 scoredetailed = 0;
                 input.args.splice(input.args.indexOf('-compress'), 1);
             }
-            if(input.args.includes('-c')){
+            if (input.args.includes('-c')) {
                 scoredetailed = 0;
                 input.args.splice(input.args.indexOf('-c'), 1);
             }
@@ -4095,19 +4095,19 @@ export async function pinned(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
 
-            if(input.args.includes('-detailed')){
+            if (input.args.includes('-detailed')) {
                 scoredetailed = 2;
                 input.args.splice(input.args.indexOf('-detailed'), 1);
             }
-            if(input.args.includes('-d')){
+            if (input.args.includes('-d')) {
                 scoredetailed = 2;
                 input.args.splice(input.args.indexOf('-d'), 1);
             }
-            if(input.args.includes('-compress')){
+            if (input.args.includes('-compress')) {
                 scoredetailed = 0;
                 input.args.splice(input.args.indexOf('-compress'), 1);
             }
-            if(input.args.includes('-c')){
+            if (input.args.includes('-c')) {
                 scoredetailed = 0;
                 input.args.splice(input.args.indexOf('-c'), 1);
             }
@@ -4813,7 +4813,7 @@ export async function recent(input: extypes.commandInput) {
 
     let embedStyle: extypes.osuCmdStyle = 'S';
 
-    let detailed = 1;
+    let scoredetailed = 1;
 
     switch (input.commandType) {
         case 'message': {
@@ -4842,22 +4842,22 @@ export async function recent(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
 
-            // if(input.args.includes('-detailed')){
-            //     scoredetailed = 2;
-            //     input.args.splice(input.args.indexOf('-detailed'), 1);
-            // }
-            // if(input.args.includes('-d')){
-            //     scoredetailed = 2;
-            //     input.args.splice(input.args.indexOf('-d'), 1);
-            // }
-            // if(input.args.includes('-compress')){
-            //     scoredetailed = 0;
-            //     input.args.splice(input.args.indexOf('-compress'), 1);
-            // }
-            // if(input.args.includes('-c')){
-            //     scoredetailed = 0;
-            //     input.args.splice(input.args.indexOf('-c'), 1);
-            // }
+            if (input.args.includes('-detailed')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if (input.args.includes('-d')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if (input.args.includes('-compress')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if (input.args.includes('-c')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
+            }
 
             if (input.args.includes('-mode')) {
                 mode = (input.args[input.args.indexOf('-mode') + 1]);
@@ -4999,6 +4999,26 @@ export async function recent(input: extypes.commandInput) {
                     page == 1;
                 }
             }
+            switch (input.button) {
+                case 'Detail0':
+                    scoredetailed = 0;
+                    break;
+                case 'Detail1':
+                    scoredetailed = 1;
+
+                    break;
+                case 'Detail2':
+                    scoredetailed = 2;
+                    break;
+                default:
+                    if (input.obj.message.embeds[0].footer.text.includes('E')) {
+                        scoredetailed = 2;
+                    }
+                    if (input.obj.message.embeds[0].footer.text.includes('C')) {
+                        scoredetailed = 0;
+                    }
+                    break;
+            }
 
             if (input.obj.message.embeds[0].title.includes('passes')) {
                 showFails = 0;
@@ -5083,6 +5103,10 @@ export async function recent(input: extypes.commandInput) {
             {
                 name: 'Filter',
                 value: filterTitle
+            },
+            {
+                name: 'Detailed',
+                value: scoredetailed
             }
 
         ]
@@ -5112,7 +5136,55 @@ export async function recent(input: extypes.commandInput) {
         page = 1;
     }
     page--;
-    let pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+
+    switch (scoredetailed) {
+        case 0: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-recent-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle =
+                list == true ?
+                    'LC' :
+                    'SC'
+                ;
+        }
+            break;
+        case 1: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail0-recent-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail2-recent-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle =
+                list == true ?
+                    'L' :
+                    'S';
+        }
+            break;
+        case 2: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-recent-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+            );
+            embedStyle =
+                list == true ?
+                    'LE' :
+                    'SE';
+        }
+            break;
+    }
+
+    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-BigLeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
@@ -5124,6 +5196,11 @@ export async function recent(input: extypes.commandInput) {
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.page.previous)
                 .setDisabled(isFirstPage),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Search-recent-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.search)
+                .setDisabled(false),
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-RightArrow-recent-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
@@ -5282,7 +5359,6 @@ export async function recent(input: extypes.commandInput) {
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
     if (list != true) {
-        embedStyle = 'S';
         rsEmbed.setColor(colours.embedColour.score.dec);
 
         page = rsdata[page] ? page : 0;
@@ -5463,7 +5539,7 @@ export async function recent(input: extypes.commandInput) {
         let rsgrade;
         switch (curscore.rank.toUpperCase()) {
             case 'F':
-                rspassinfo = `\n${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.hit_length)})`;
+                rspassinfo = `${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.hit_length)})`;
                 rsgrade = emojis.grades.F;
                 break;
             case 'D':
@@ -5493,20 +5569,43 @@ export async function recent(input: extypes.commandInput) {
         }
         let totaldiff: string;
         let hitlist: string;
-        switch (curscore.mode) {
-            case 'osu': default:
-                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+        switch (scoredetailed) {
+            case 0: {
+                switch (curscore.mode) {
+                    case 'osu': default:
+                        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
+                        break;
+                    case 'taiko':
+                        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_miss}`;
+                        break;
+                    case 'fruits':
+                        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
+                        break;
+                    case 'mania':
+                        hitlist = `${gamehits.count_geki}/${gamehits.count_300}/${gamehits.count_katu}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
+                        break;
+                }
+            }
                 break;
-            case 'taiko':
-                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`;
-                break;
-            case 'fruits':
-                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
-                break;
-            case 'mania':
-                hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+            default: {
+                switch (curscore.mode) {
+                    case 'osu': default:
+                        hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+                        break;
+                    case 'taiko':
+                        hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`;
+                        break;
+                    case 'fruits':
+                        hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+                        break;
+                    case 'mania':
+                        hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+                        break;
+                }
+            }
                 break;
         }
+
         let rspp: string | number = 0;
         let ppissue: string = '';
         let ppcalcing: PerformanceAttributes[];
@@ -5579,26 +5678,122 @@ export async function recent(input: extypes.commandInput) {
                 url: `https://osu.ppy.sh/u/${osudata.id}`,
                 iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
             })
-            .setThumbnail(`${curbms.covers.list}`)
-            .setDescription(`
+            .setThumbnail(`${curbms.covers.list}`);
+        switch (scoredetailed) {
+            case 0: {
+                rsEmbed
+                    .setDescription(`
+[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
+${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
+${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
+${filterTitle ? `Filter: ${filterTitle}` : ''}
+${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+${rspassinfo}\n\`${hitlist}\` | ${curscore.max_combo}x/**${mapdata.max_combo}x** combo
+**${rspp}**pp ${fcflag}\n${ppissue}
+`);
+            }
+                break;
+            case 1: default: {
+                rsEmbed
+                    .setDescription(`
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
 ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
 ${filterTitle ? `Filter: ${filterTitle}` : ''}
 `)
-            .addFields([
-                {
-                    name: 'SCORE DETAILS',
-                    value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}` +
-                        `${rspassinfo}\n${hitlist}\n${curscore.max_combo}x/**${mapdata.max_combo}x** combo`,
-                    inline: true
-                },
-                {
-                    name: 'PP',
-                    value: `**${rspp}**pp ${fcflag}\n${ppissue}`,
-                    inline: true
-                }
-            ]);
+                    .addFields([
+                        {
+                            name: 'SCORE DETAILS',
+                            value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
+                                `${rspassinfo}\n${hitlist}\n${curscore.max_combo}x/**${mapdata.max_combo}x** combo`,
+                            inline: true
+                        },
+                        {
+                            name: 'PP',
+                            value: `**${rspp}**pp ${fcflag}\n${ppissue}`,
+                            inline: true
+                        }
+                    ]);
+            }
+                break;
+            case 2: {
+                const newValues = osumodcalc.calcValues(
+                    mapdata.cs, mapdata.ar, mapdata.accuracy, mapdata.drain,
+                    mapdata.bpm, mapdata.hit_length,
+                    curscore.mods.join('')
+                );
+                const csStr = mapdata.cs == newValues.cs ?
+                    `CS${mapdata.cs}` :
+                    `CS${mapdata.cs}=>${newValues.cs}`;
+                const arStr = mapdata.ar == newValues.ar ?
+                    `AR${mapdata.ar}` :
+                    `AR${mapdata.ar}=>${newValues.ar}`;
+                const odStr = mapdata.accuracy == newValues.od ?
+                    `OD${mapdata.accuracy}` :
+                    `OD${mapdata.accuracy}=>${newValues.od}`;
+                const hpStr = mapdata.drain == newValues.hp ?
+                    `HP${mapdata.drain}` :
+                    `HP${mapdata.drain}=>${newValues.hp}`;
+                const bpmStr = mapdata.bpm == newValues.bpm ?
+                    `${emojis.mapobjs.bpm}${mapdata.bpm}` :
+                    `${emojis.mapobjs.bpm}${mapdata.bpm}=>${newValues.bpm}`;
+                const lenStr = mapdata.hit_length == newValues.length ?
+                    `${emojis.mapobjs.total_length}${calc.secondsToTime(mapdata.hit_length)}` :
+                    `${emojis.mapobjs.total_length}${calc.secondsToTime(mapdata.hit_length)}=>${calc.secondsToTime(newValues.length)}`;
+                const srStr = mapdata.difficulty_rating.toFixed(2) == (ppcalcing[0]?.difficulty?.stars.toFixed(2) ?? mapdata.difficulty_rating.toFixed(2)) ?
+                    `${mapdata.difficulty_rating.toFixed(2)}⭐` :
+                    `⭐${mapdata.difficulty_rating.toFixed(2)}=>${ppcalcing[0]?.difficulty?.stars?.toFixed(2)}`;
+
+
+                rsEmbed
+                    .setDescription(`
+[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
+${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
+${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
+${filterTitle ? `Filter: ${filterTitle}` : ''}
+`)
+                    .addFields([
+                        {
+                            name: 'SCORE DETAILS',
+                            value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
+                                `${rspassinfo}\n${hitlist}\n${curscore.max_combo}x/**${mapdata.max_combo}x** combo`,
+                            inline: true
+                        },
+                        {
+                            name: 'PP',
+                            value: `**${rspp}**pp ${fcflag}\n${ppissue}`,
+                            inline: true
+                        },
+                        {
+                            name: '-',
+                            value: '-',
+                            inline: true
+                        },
+                        {
+                            name: 'Map details',
+                            value: //CS AR OD HP SR
+                                `
+${csStr} 
+${arStr} 
+${odStr} 
+${hpStr}
+`,
+                            inline: true
+                        },
+                        {
+                            name: '-',
+                            value: //CS AR OD HP SR
+                                `
+${bpmStr}
+${lenStr} 
+${srStr}
+`,
+                            inline: true
+                        }
+                    ]);
+            }
+                break;
+        }
 
         //if first page, disable previous button
         if (page == 0) {
@@ -5609,13 +5804,15 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
             (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(false);
         }
 
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+
         //if last page, disable next button
         if (page >= rsdata.length - 1) {
-            (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
             (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         } else {
-            (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(false);
             (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(false);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(false);
         }
 
 
@@ -5624,30 +5821,6 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
 
     } else if (list == true) {
-        embedStyle = 'L';
-        pgbuttons = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`${mainconst.version}-BigLeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
-                    .setStyle(buttonsthing.type.current)
-                    .setEmoji(buttonsthing.label.page.first),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`${mainconst.version}-LeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
-                    .setStyle(buttonsthing.type.current)
-                    .setEmoji(buttonsthing.label.page.previous),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`${mainconst.version}-Search-recent-${commanduser.id}-${input.absoluteID}`)
-                    .setStyle(buttonsthing.type.current)
-                    .setEmoji(buttonsthing.label.page.search),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`${mainconst.version}-RightArrow-recent-${commanduser.id}-${input.absoluteID}`)
-                    .setStyle(buttonsthing.type.current)
-                    .setEmoji(buttonsthing.label.page.next),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`${mainconst.version}-BigRightArrow-recent-${commanduser.id}-${input.absoluteID}`)
-                    .setStyle(buttonsthing.type.current)
-                    .setEmoji(buttonsthing.label.page.last),
-            );
         rsEmbed
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`Recent ${showFails == 1 ? 'plays' : 'passes'} for ${osudata.username}`)
@@ -5660,7 +5833,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         const scoresarg = await embedStuff.scoreList(
             {
                 scores: rsdata,
-                detailed,
+                detailed: scoredetailed,
                 showWeights: false,
                 page: page,
                 showMapTitle: true,
@@ -5692,7 +5865,6 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
 ${emojis.gamemodes[mode]}
 ${filterTitle ? `Filter: ${filterTitle}` : ''}
 `);
-        rsEmbed.setFooter({ text: `-` });
         if (scoresarg.isFirstPage) {
             (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
             (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
@@ -5711,6 +5883,9 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
             osufunc.logCall(error);
         }
     }
+
+    rsEmbed.setFooter({ text: `${embedStyle}` });
+
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
     msgfunc.sendMessage({
@@ -6010,12 +6185,31 @@ export async function scoreparse(input: extypes.commandInput) {
     let scoreid: number | string;
 
     let embedStyle: extypes.osuCmdStyle = 'S';
+    let scoredetailed: number = 1;
 
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
 
             commanduser = input.obj.author;
+
+            if (input.args.includes('-detailed')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if (input.args.includes('-d')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if (input.args.includes('-compress')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if (input.args.includes('-c')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
+            }
+
             scorelink = null;
             scoremode = input.args[1] ?? 'osu';
             scoreid = input.args[0];
@@ -6035,10 +6229,51 @@ export async function scoreparse(input: extypes.commandInput) {
         case 'button': {
             input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
+
+            //osu.ppy.sh/scores/<mode>/<id>
+            scoremode = input.obj.message.embeds[0].url.split('scores')[1].split('/')[1];
+            scoreid = input.obj.message.embeds[0].url.split('scores')[1].split('/')[2];
+
+            switch (input.button) {
+                case 'Detail0':
+                    scoredetailed = 0;
+                    break;
+                case 'Detail1':
+                    scoredetailed = 1;
+                    break;
+                case 'Detail2':
+                    scoredetailed = 2;
+                    break;
+                default:
+                    if (input.obj.message.embeds[0].footer.text.includes('LE')) {
+                        scoredetailed = 2;
+                    }
+                    if (input.obj.message.embeds[0].footer.text.includes('LC')) {
+                        scoredetailed = 0;
+                    }
+                    break;
+            }
         }
             break;
         case 'link': {
             input.obj = (input.obj as Discord.Message<any>);
+
+            if (input.args.includes('-detailed')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if (input.args.includes('-d')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if (input.args.includes('-compress')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if (input.args.includes('-c')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
+            }
 
             commanduser = input.obj.author;
             const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
@@ -6046,6 +6281,8 @@ export async function scoreparse(input: extypes.commandInput) {
                 scorelink = messagenohttp.split('/scores/')[1];
                 scoremode = scorelink.split('/')[0];
                 scoreid = scorelink.split('/')[1];
+                scoreid.includes(' ') ?
+                    scoreid = scoreid.split(' ')[0] : null;
             } catch (error) {
                 return;
             }
@@ -6094,6 +6331,51 @@ export async function scoreparse(input: extypes.commandInput) {
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+    const buttons = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Refresh-scoreparse-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.refresh),
+        );
+
+    switch (scoredetailed) {
+        case 0: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-scoreparse-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = 'LC';
+        }
+            break;
+        case 1: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail0-scoreparse-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail2-scoreparse-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = 'L';
+        }
+            break;
+        case 2: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-scoreparse-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+            );
+            embedStyle = 'LE';
+        }
+            break;
+    }
+
     let scoredataReq: osufunc.apiReturn;
     let scoredata: osuApiTypes.Score;
 
@@ -6136,8 +6418,10 @@ export async function scoreparse(input: extypes.commandInput) {
     }
     try {
         if (typeof scoredata?.error != 'undefined') {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
-                .catch();
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
+                    .catch();
+            }
             log.logCommand({
                 event: 'Error',
                 commandName: '',
@@ -6161,8 +6445,17 @@ export async function scoreparse(input: extypes.commandInput) {
     try {
         scoredata.rank.toUpperCase();
     } catch (error) {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
-            .catch();
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
+                .catch();
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            customString: `Invalid score`
+        });
         return;
     }
     let mapdataReq: osufunc.apiReturn;
@@ -6382,7 +6675,7 @@ export async function scoreparse(input: extypes.commandInput) {
                     allowedMentions: { repliedUser: false },
                 });
             }, 1000);
-        } else {
+        } else if (input.commandType == 'message') {
             (input.obj as Discord.Message<any>).reply({
                 content: `Error - could not find user \`${scoredata?.user?.username}\``,
                 allowedMentions: { repliedUser: false },
@@ -6413,15 +6706,133 @@ export async function scoreparse(input: extypes.commandInput) {
             iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
         })
         .setTitle(`${artist} - ${title}`)
-        .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.id}`)
-        .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`)
-        .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
+        .setURL(`https://osu.ppy.sh/scores/${mode}/${scoreid}`)
+        .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`);
+    switch (scoredetailed) {
+        case 0: {
+            embedStyle = 'LC';
+            scoreembed
+                .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
 ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
 ${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
+\`${hitlist}\`
+${scoredata?.pp?.toFixed(2) ?? 'null '}pp
+`);
+        }
+            break;
+        case 1: default: {
+            embedStyle = 'L';
+            scoreembed
+                .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
+${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
+[Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
 \`${hitlist}\`
 ${scoredata.max_combo}x/**${mapdata.max_combo}x**
 ${pptxt}\n${ppissue}
 `);
+        }
+            break;
+        case 2: {
+            embedStyle = 'LE';
+            switch (scoredata.mode) {
+                case 'osu': default:
+                    hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+                    break;
+                case 'taiko':
+                    hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`;
+                    break;
+                case 'fruits':
+                    hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+                    break;
+                case 'mania':
+                    hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+                    break;
+            }
+
+            const newValues = osumodcalc.calcValues(
+                mapdata.cs, mapdata.ar, mapdata.accuracy, mapdata.drain,
+                mapdata.bpm, mapdata.hit_length,
+                scoredata.mods.join('')
+            );
+            const csStr = mapdata.cs == newValues.cs ?
+                `CS${mapdata.cs}` :
+                `CS${mapdata.cs}=>${newValues.cs}`;
+            const arStr = mapdata.ar == newValues.ar ?
+                `AR${mapdata.ar}` :
+                `AR${mapdata.ar}=>${newValues.ar}`;
+            const odStr = mapdata.accuracy == newValues.od ?
+                `OD${mapdata.accuracy}` :
+                `OD${mapdata.accuracy}=>${newValues.od}`;
+            const hpStr = mapdata.drain == newValues.hp ?
+                `HP${mapdata.drain}` :
+                `HP${mapdata.drain}=>${newValues.hp}`;
+            const bpmStr = mapdata.bpm == newValues.bpm ?
+                `${emojis.mapobjs.bpm}${mapdata.bpm}` :
+                `${emojis.mapobjs.bpm}${mapdata.bpm}=>${newValues.bpm}`;
+            const lenStr = mapdata.hit_length == newValues.length ?
+                `${emojis.mapobjs.total_length}${calc.secondsToTime(mapdata.hit_length)}` :
+                `${emojis.mapobjs.total_length}${calc.secondsToTime(mapdata.hit_length)}=>${calc.secondsToTime(newValues.length)}`;
+            const srStr = mapdata.difficulty_rating.toFixed(2) == (ppcalcing[0]?.difficulty?.stars.toFixed(2) ?? mapdata.difficulty_rating.toFixed(2)) ?
+                `${mapdata.difficulty_rating.toFixed(2)}⭐` :
+                `⭐${mapdata.difficulty_rating.toFixed(2)}=>${ppcalcing[0]?.difficulty?.stars?.toFixed(2)}`;
+
+            scoreembed
+                .setDescription(`
+${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
+${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
+`)
+                .addFields([
+                    {
+                        name: 'Score details',
+                        value:
+                            `
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
+${hitlist}
+${scoredata.max_combo}x/**${mapdata.max_combo}x**
+`                        ,
+                        inline: true
+                    },
+                    {
+                        name: 'PP',
+                        value:
+                            `**${(scoredata?.pp ?? ppcalcing[0]?.pp ?? NaN).toFixed(2)}**pp
+**${(ppcalcing[1]?.pp ?? NaN).toFixed(2)}**pp if FC
+**${(ppcalcing[2]?.pp ?? NaN).toFixed(2)}**pp if SS
+`,
+                        inline: true
+                    },
+                    {
+                        name: '-',
+                        value: '-',
+                        inline: true
+                    },
+                    {
+                        name: 'Map details',
+                        value: //CS AR OD HP SR
+                            `
+${csStr} 
+${arStr} 
+${odStr} 
+${hpStr}
+                        `,
+                        inline: true
+                    },
+                    {
+                        name: '-',
+                        value: //CS AR OD HP SR
+                            `
+${bpmStr}
+${lenStr} 
+${srStr}
+[Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
+                        `,
+                        inline: true
+                    }
+                ]);
+        }
+            break;
+    }
 
     osufunc.writePreviousId('score', input.obj.guildId, JSON.stringify(scoredata, null, 2));
     osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
@@ -6433,6 +6844,7 @@ ${pptxt}\n${ppissue}
         obj: input.obj,
         args: {
             embeds: [scoreembed],
+            components: [buttons],
             edit: true
         }
     });
@@ -6752,19 +7164,19 @@ export async function scores(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
 
-            if(input.args.includes('-detailed')){
+            if (input.args.includes('-detailed')) {
                 scoredetailed = 2;
                 input.args.splice(input.args.indexOf('-detailed'), 1);
             }
-            if(input.args.includes('-d')){
+            if (input.args.includes('-d')) {
                 scoredetailed = 2;
                 input.args.splice(input.args.indexOf('-d'), 1);
             }
-            if(input.args.includes('-compress')){
+            if (input.args.includes('-compress')) {
                 scoredetailed = 0;
                 input.args.splice(input.args.indexOf('-compress'), 1);
             }
-            if(input.args.includes('-c')){
+            if (input.args.includes('-c')) {
                 scoredetailed = 0;
                 input.args.splice(input.args.indexOf('-c'), 1);
             }
@@ -6812,7 +7224,6 @@ export async function scores(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
             page = 0;
-            user = input.obj.message.embeds[0].author.name.split(' (#')[0];
             user = input.obj.message.embeds[0].author.url.split('users/')[1].split('/')[0];
             mode = input.obj.message.embeds[0].author.url.split('users/')[1].split('/')[1];
             mapid = input.obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1];
@@ -10778,19 +11189,19 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
 
-            if(input.args.includes('-detailed')){
+            if (input.args.includes('-detailed')) {
                 mapDetailed = 2;
                 input.args.splice(input.args.indexOf('-detailed'), 1);
             }
-            if(input.args.includes('-d')){
+            if (input.args.includes('-d')) {
                 mapDetailed = 2;
                 input.args.splice(input.args.indexOf('-d'), 1);
             }
-            if(input.args.includes('-compress')){
+            if (input.args.includes('-compress')) {
                 mapDetailed = 0;
                 input.args.splice(input.args.indexOf('-compress'), 1);
             }
-            if(input.args.includes('-c')){
+            if (input.args.includes('-c')) {
                 mapDetailed = 0;
                 input.args.splice(input.args.indexOf('-c'), 1);
             }

@@ -6,7 +6,11 @@ const mapobjs = {
     slider: '<:count_sliders:1007196069794431036>',
     spinner: '<:count_spinners:1007196071388262400>',
     bpm: '<:bpm:1007196066220871723>',
-    total_length: '<:total_length:1007196072956940348>'
+    total_length: '<:total_length:1007196072956940348>',
+    cs: '⭕',
+    ar: '🏃‍♀️',
+    od: '🎯',
+    hp: '♥',
 };
 
 const gamemodes = {

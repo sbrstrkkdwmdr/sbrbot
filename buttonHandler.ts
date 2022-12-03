@@ -174,6 +174,11 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
+            case 'scoreparse':
+                osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
             case 'scores':
                 osucmds.scores({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
                 interaction.deferUpdate()
