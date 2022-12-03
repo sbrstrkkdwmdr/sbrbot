@@ -5,7 +5,7 @@ import {
     CatchPerformanceAttributes,
     ManiaPerformanceAttributes, OsuPerformanceAttributes, PerformanceAttributes, TaikoPerformanceAttributes
 } from 'rosu-pp';
-import { filespath, path } from '../path.js';
+import { filespath, path, precomppath } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
 import * as colourfunc from '../src/colourcalc.js';
@@ -6038,6 +6038,7 @@ export async function replayparse(input: extypes.commandInput) {
                 customString: 'Could not parse replay\n' + err
             }
         )
+        return;
     }
     osufunc.debug(replay, 'fileparse', 'replay', input.obj.guildId, 'replayData');
 
@@ -10985,7 +10986,7 @@ export async function maplocal(input: extypes.commandInput) {
     } else {
         return;
     }
-    const errmap = fs.readFileSync(`${filespath}/errmap.osu`, 'utf-8');
+    const errmap = fs.readFileSync(`${precomppath}/files/errmap.osu`, 'utf-8');
     let errtxt = '';
     let mods = 'NM';
 
@@ -11233,6 +11234,16 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
         });
+        console.log(error)
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: error
+        });
+        return;
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================

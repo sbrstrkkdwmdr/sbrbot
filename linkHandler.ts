@@ -3,6 +3,7 @@ import tesseract from 'tesseract.js';
 
 import Discord from 'discord.js';
 import fs from 'fs';
+import { filespath, path } from './path.js';
 import * as checks from './src/checks.js';
 import * as cd from './src/consts/cooldown.js';
 import * as defaults from './src/consts/defaults.js';
@@ -70,9 +71,9 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
             };
         }
         //disabled for now
-        if (config.useScreenshotParse == true && settings.osuParseScreenshots == true && false) {
+        if (false && config.useScreenshotParse == true && settings.osuParseScreenshots == true) {
             //warning: uses a lot of memory
-            
+
             //if message attachments size > 0
             if (imgParseCooldown == false) {
                 if (message.attachments.size > 0) {
@@ -152,7 +153,7 @@ progress: ${m.progress ? m.progress : 'none'}
                 absoluteID = func.generateId();
             }
             const attachosr = message.attachments.first().url;
-            const osrdlfile = fs.createWriteStream('./files/replay.osr');
+            const osrdlfile = fs.createWriteStream(`${filespath}/replay.osr`);
             https.get(`${attachosr}`, function (response) {
                 response.pipe(osrdlfile);
             });//
@@ -163,13 +164,13 @@ progress: ${m.progress ? m.progress : 'none'}
         if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
             osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
         }
-        if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osu'))) {
-            return;
+        if (false && message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osu'))) {
+            // return;
             if (absoluteID == null) {
                 absoluteID = func.generateId();
             }
             const attachosu = message.attachments.first().url;
-            const osudlfile = fs.createWriteStream('./files/tempdiff.osu');
+            const osudlfile = fs.createWriteStream(`${filespath}/tempdiff.osu`);
             https.get(`${attachosu}`, function (response) {
                 response.pipe(osudlfile);
             });
