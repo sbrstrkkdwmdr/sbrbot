@@ -8380,57 +8380,70 @@ export async function simulate(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
             if (ctn.includes('-acc')) {
-                acc = parseFloat(input.args[input.args.indexOf('-acc') + 1]);
-                input.args.splice(input.args.indexOf('-acc'), 2);
-                acc = parseFloat(ctn.split('acc=')[1].split(' ')[0]);
+                const temp = func.parseArg(input.args, '-acc', 'number', acc);
+                acc = temp.value;
+                input.args = temp.newArgs;
+
             }
             if (ctn.includes('-accuracy')) {
-                acc = parseFloat(input.args[input.args.indexOf('-accuracy') + 1]);
-                input.args.splice(input.args.indexOf('-accuracy'), 2);
+                const temp = func.parseArg(input.args, '-accuracy', 'number', acc);
+                acc = temp.value;
+                input.args = temp.newArgs;
             }
             if (ctn.includes('-combo')) {
-                combo = parseInt(input.args[input.args.indexOf('-combo') + 1]);
-                input.args.splice(input.args.indexOf('-combo'), 2);
+                const temp = func.parseArg(input.args, '-combo', 'number', combo);
+                combo = temp.value;
+                input.args = temp.newArgs;
             }
             if (ctn.includes('-n300')) {
-                n300 = parseInt(input.args[input.args.indexOf('-n300') + 1]);
-                input.args.splice(input.args.indexOf('-n300'), 2);
+                const temp = func.parseArg(input.args, '-n300', 'number', n300);
+                n300 = temp.value;
+                input.args = temp.newArgs;
             }
             if (ctn.includes('-300s')) {
-                n300 = parseInt(input.args[input.args.indexOf('-300s') + 1]);
-                input.args.splice(input.args.indexOf('-300s'), 2);
+                const temp = func.parseArg(input.args, '-300s', 'number', n300);
+                n300 = temp.value;
+                input.args = temp.newArgs;
             }
             if (ctn.includes('-n100')) {
-                n100 = parseInt(input.args[input.args.indexOf('-n100') + 1]);
-                input.args.splice(input.args.indexOf('-n100'), 2);
+                const temp = func.parseArg(input.args, '-n100', 'number', n100);
+                n100 = temp.value;
+                input.args = temp.newArgs;
             }
             if (ctn.includes('-100s')) {
-                n100 = parseInt(input.args[input.args.indexOf('-100s') + 1]);
-                input.args.splice(input.args.indexOf('-100s'), 2);
+                const temp = func.parseArg(input.args, '-100s', 'number', n100);
+                n100 = temp.value;
+                input.args = temp.newArgs;
             }
             if (ctn.includes('-n50')) {
-                n50 = parseInt(input.args[input.args.indexOf('-n50') + 1]);
-                input.args.splice(input.args.indexOf('-n50'), 2);
+                const temp = func.parseArg(input.args, '-n50', 'number', n50);
+                n50 = temp.value;
+                input.args = temp.newArgs;
             }
             if (ctn.includes('-50s')) {
-                n50 = parseInt(input.args[input.args.indexOf('-50s') + 1]);
-                input.args.splice(input.args.indexOf('-50s'), 2);
+                const temp = func.parseArg(input.args, '-50s', 'number', n50);
+                n50 = temp.value;
+                input.args = temp.newArgs;
             }
             if (ctn.includes('-miss')) {
-                nMiss = parseInt(input.args[input.args.indexOf('-miss') + 1]);
-                input.args.splice(input.args.indexOf('-miss'), 2);
+                const temp = func.parseArg(input.args, '-miss', 'number', nMiss);
+                nMiss = temp.value;
+                input.args = temp.newArgs;
             }
             if (ctn.includes('-misses')) {
-                nMiss = parseInt(input.args[input.args.indexOf('-misses') + 1]);
-                input.args.splice(input.args.indexOf('-misses'), 2);
+                const temp = func.parseArg(input.args, '-misses', 'number', nMiss);
+                nMiss = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-bpm')) {
-                overrideBpm = parseFloat(input.args[input.args.indexOf('-bpm') + 1]);
-                input.args.splice(input.args.indexOf('-bpm'), 2);
+                const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
+                overrideBpm = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-speed')) {
-                overrideSpeed = parseFloat(input.args[input.args.indexOf('-speed') + 1]);
-                input.args.splice(input.args.indexOf('-speed'), 2);
+                const temp = func.parseArg(input.args, '-speed', 'number', overrideSpeed);
+                overrideSpeed = temp.value;
+                input.args = temp.newArgs;
             }
             if (ctn.includes('mods=')) {
                 mods = ctn.split('mods=')[1].split(' ')[0];
