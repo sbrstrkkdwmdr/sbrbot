@@ -6037,7 +6037,7 @@ export async function replayparse(input: extypes.commandInput) {
                 object: input.obj,
                 customString: 'Could not parse replay\n' + err
             }
-        )
+        );
         return;
     }
     osufunc.debug(replay, 'fileparse', 'replay', input.obj.guildId, 'replayData');
@@ -8758,7 +8758,6 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
  * parse map and return map data
  */
 export async function map(input: extypes.commandInput) {
-
     let commanduser: Discord.User;
 
     let mapid;
@@ -9100,7 +9099,7 @@ export async function map(input: extypes.commandInput) {
     if (!mapid || isNaN(mapid)) {
         mapid = osufunc.getPreviousId('map', input.obj.guildId);
     }
-    if (detailed == 1) {
+    if (detailed == 2) {
         buttons.addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-DetailDisable-map-${commanduser.id}-${input.absoluteID}`)
@@ -9357,6 +9356,17 @@ export async function map(input: extypes.commandInput) {
         }
     }
 
+    switch (detailed) {
+        case 0:
+            embedStyle = 'MC'
+            break;
+        case 1:default:
+            embedStyle = 'M'
+            break;
+        case 2:
+            embedStyle = 'ME'
+            break;
+    }
 
     //parsing maps
     if (mapmods == null || mapmods == '') {
@@ -9524,7 +9534,7 @@ export async function map(input: extypes.commandInput) {
     const baseBPM = mapdata.bpm * (overrideSpeed ?? 1) != mapdata.bpm ? `${mapdata.bpm}=>${mapdata.bpm * (overrideSpeed ?? 1)}` : mapdata.bpm;
 
     let basicvals = `CS${baseCS}\n AR${baseAR}\n OD${baseOD}\n HP${baseHP}\n`;
-    if (detailed == 1) {
+    if (detailed == 2) {
         basicvals =
             `CS${baseCS} (${allvals.details.csRadius?.toFixed(2)}r)
 AR${baseAR}  (${allvals.details.arMs?.toFixed(2)}ms)
@@ -9696,7 +9706,7 @@ HP${baseHP}`;
             {
                 name: 'MAP DETAILS',
                 value: `${statusimg} | ${mapimg} \n ` +
-                    `${detailed == 1 ?
+                    `${detailed == 2 ?
                         exMapDetails
                         : ''}`
 
@@ -9776,7 +9786,7 @@ HP${baseHP}`;
     }
     const embeds = [Embed];
 
-    if (detailed == 1) {
+    if (detailed == 2) {
         const failval = mapdata.failtimes.fail;
         const exitval = mapdata.failtimes.exit;
         const numofval = [];
@@ -11234,7 +11244,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
         });
-        console.log(error)
+        console.log(error);
         log.logCommand({
             event: 'Error',
             commandName: '',
