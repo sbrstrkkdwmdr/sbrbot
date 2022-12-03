@@ -63,7 +63,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
         if (button == 'Search' && PageOnlyCommands.includes(command)) {
             const menu = new Discord.ModalBuilder()
                 .setTitle('Page')
-                .setCustomId(`SearchMenu-${command}-${interaction.user.id}-${absoluteID}`)
+                .setCustomId(`${mainconst.version}-SearchMenu-${command}-${interaction.user.id}-${absoluteID}`)
                 .addComponents(
                     //@ts-expect-error - TextInputBuilder not assignable to AnyInputBuilder
                     new Discord.ActionRowBuilder()
