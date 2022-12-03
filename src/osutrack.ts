@@ -17,7 +17,7 @@ export default (userdata, client, config, oncooldown, trackDb: Sequelize.ModelSt
         a();
         setInterval(() => {
             a();
-        }, 60 * 1000 * 15); //requests every 15 min
+        }, 60 * 1000 * 60); //requests every 60 min
     }
     function a() {
         try {

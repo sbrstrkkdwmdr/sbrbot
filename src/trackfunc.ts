@@ -189,8 +189,6 @@ export async function getEmbed(
 }
 
 export async function trackUsers(db, client, guildSettings) {
-
-
     if (!db || !client || !guildSettings) {
         osufunc.logCall(`Missing object`, 'Error');
         osufunc.logCall(`${db != null}`, 'Database exists');
@@ -200,7 +198,7 @@ export async function trackUsers(db, client, guildSettings) {
     }
 
     const allUsers = await db.findAll();
-    const WaitTime = 1000 * 60 * 30;
+    const WaitTime = 1000 * 60 * 60;
     for (let i = 0; i < allUsers.length; i++) {
         const user = allUsers[i];
 
