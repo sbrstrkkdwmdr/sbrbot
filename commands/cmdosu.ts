@@ -9119,7 +9119,7 @@ export async function map(input: extypes.commandInput) {
     let bmsdataReq: osufunc.apiReturn;
     let bmsdata: osuApiTypes.Beatmapset;
 
-    const inputModal = new Discord.SelectMenuBuilder()
+    const inputModal = new Discord.StringSelectMenuBuilder()
         .setCustomId(`${mainconst.version}-Select-map-${commanduser.id}-${input.absoluteID}`)
         .setPlaceholder('Select a map');
 
@@ -9205,13 +9205,13 @@ export async function map(input: extypes.commandInput) {
         //options thing to switch to other maps in the mapset
         if (typeof bmsdata?.beatmaps == 'undefined' || bmsdata?.beatmaps?.length < 2) {
             inputModal.addOptions(
-                new Discord.SelectMenuOptionBuilder()
+                new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
                         mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
                             mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
                                 mapdata.mode_int == 3 ? emojis.gamemodes.mania :
                                     emojis.gamemodes.standard
-                        }`)
+                        }` as Discord.APIMessageComponentEmoji)
                     .setLabel(`#${1}`)
                     .setDescription(`${mapdata.version} ${mapdata.difficulty_rating}⭐`)
                     .setValue(`${mapdata.id}`)
@@ -9221,13 +9221,13 @@ export async function map(input: extypes.commandInput) {
                 const curmap = bmsdata.beatmaps.slice().sort((a, b) => b.difficulty_rating - a.difficulty_rating)[i];
                 if (!curmap) break;
                 inputModal.addOptions(
-                    new Discord.SelectMenuOptionBuilder()
+                    new Discord.StringSelectMenuOptionBuilder()
                         .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
                             mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
                                 mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
                                     mapdata.mode_int == 3 ? emojis.gamemodes.mania :
                                         emojis.gamemodes.standard
-                            }`)
+                            }` as Discord.APIMessageComponentEmoji)
                         .setLabel(`#${i + 1} | ${bmsdata.title}`)
                         .setDescription(`${curmap.version} ${curmap.difficulty_rating}⭐`)
                         .setValue(`${curmap.id}`)
@@ -9342,13 +9342,13 @@ export async function map(input: extypes.commandInput) {
             const curmap = allmaps[i];
             if (!curmap.map) break;
             inputModal.addOptions(
-                new Discord.SelectMenuOptionBuilder()
+                new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(`${curmap.mode_int == 0 ? emojis.gamemodes.standard :
                         curmap.mode_int == 1 ? emojis.gamemodes.taiko :
                             curmap.mode_int == 2 ? emojis.gamemodes.fruits :
                                 curmap.mode_int == 3 ? emojis.gamemodes.mania :
                                     emojis.gamemodes.standard
-                        }`)
+                        }` as Discord.APIMessageComponentEmoji)
                     .setLabel(`#${i + 1} | ${curmap.mapset?.title} // ${curmap.mapset?.creator}`)
                     .setDescription(`[${curmap.map.version}] ${curmap.map.difficulty_rating}⭐`)
                     .setValue(`${curmap.map.id}`)
@@ -9358,13 +9358,13 @@ export async function map(input: extypes.commandInput) {
 
     switch (detailed) {
         case 0:
-            embedStyle = 'MC'
+            embedStyle = 'MC';
             break;
-        case 1:default:
-            embedStyle = 'M'
+        case 1: default:
+            embedStyle = 'M';
             break;
         case 2:
-            embedStyle = 'ME'
+            embedStyle = 'ME';
             break;
     }
 
@@ -10145,7 +10145,7 @@ export async function ppCalc(input: extypes.commandInput) {
     let bmsdataReq: osufunc.apiReturn;
     let bmsdata: osuApiTypes.Beatmapset;
 
-    const inputModal = new Discord.SelectMenuBuilder()
+    const inputModal = new Discord.StringSelectMenuBuilder()
         .setCustomId(`${mainconst.version}-Select-map-${commanduser.id}-${input.absoluteID}`)
         .setPlaceholder('Select a map');
 
@@ -10231,13 +10231,13 @@ export async function ppCalc(input: extypes.commandInput) {
         //options thing to switch to other maps in the mapset
         if (typeof bmsdata?.beatmaps == 'undefined' || bmsdata?.beatmaps?.length < 2) {
             inputModal.addOptions(
-                new Discord.SelectMenuOptionBuilder()
+                new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
                         mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
                             mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
                                 mapdata.mode_int == 3 ? emojis.gamemodes.mania :
                                     emojis.gamemodes.standard
-                        }`)
+                        }` as Discord.APIMessageComponentEmoji)
                     .setLabel(`#${1}`)
                     .setDescription(`${mapdata.version} ${mapdata.difficulty_rating}⭐`)
                     .setValue(`${mapdata.id}`)
@@ -10247,13 +10247,13 @@ export async function ppCalc(input: extypes.commandInput) {
                 const curmap = bmsdata.beatmaps.slice().sort((a, b) => b.difficulty_rating - a.difficulty_rating)[i];
                 if (!curmap) break;
                 inputModal.addOptions(
-                    new Discord.SelectMenuOptionBuilder()
+                    new Discord.StringSelectMenuOptionBuilder()
                         .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
                             mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
                                 mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
                                     mapdata.mode_int == 3 ? emojis.gamemodes.mania :
                                         emojis.gamemodes.standard
-                            }`)
+                            }` as Discord.APIMessageComponentEmoji)
                         .setLabel(`#${i + 1} | ${bmsdata.title}`)
                         .setDescription(`${curmap.version} ${curmap.difficulty_rating}⭐`)
                         .setValue(`${curmap.id}`)
@@ -10368,13 +10368,13 @@ export async function ppCalc(input: extypes.commandInput) {
             const curmap = allmaps[i];
             if (!curmap.map) break;
             inputModal.addOptions(
-                new Discord.SelectMenuOptionBuilder()
+                new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(`${curmap.mode_int == 0 ? emojis.gamemodes.standard :
                         curmap.mode_int == 1 ? emojis.gamemodes.taiko :
                             curmap.mode_int == 2 ? emojis.gamemodes.fruits :
                                 curmap.mode_int == 3 ? emojis.gamemodes.mania :
                                     emojis.gamemodes.standard
-                        }`)
+                        }` as Discord.APIMessageComponentEmoji)
                     .setLabel(`#${i + 1} | ${curmap.mapset?.title} // ${curmap.mapset?.creator}`)
                     .setDescription(`[${curmap.map.version}] ${curmap.map.difficulty_rating}⭐`)
                     .setValue(`${curmap.map.id}`)
