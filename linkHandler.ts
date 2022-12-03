@@ -69,9 +69,10 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                 osuParseReplays: true,
             };
         }
-        if (config.useScreenshotParse == true && settings.osuParseScreenshots == true) {
+        //disabled for now
+        if (config.useScreenshotParse == true && settings.osuParseScreenshots == true && false) {
             //warning: uses a lot of memory
-            return;
+            
             //if message attachments size > 0
             if (imgParseCooldown == false) {
                 if (message.attachments.size > 0) {
