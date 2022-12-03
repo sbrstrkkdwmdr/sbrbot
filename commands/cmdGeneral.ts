@@ -794,6 +794,7 @@ ${num ? '' : '[number]'}`;
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -1208,6 +1209,7 @@ export function help(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -1323,6 +1325,7 @@ Bot Version: ${pkgjson.version}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -1511,6 +1514,7 @@ export function math(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -1613,6 +1617,7 @@ ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 }
 
@@ -1774,6 +1779,7 @@ export function remind(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -1868,6 +1874,7 @@ Current Shard:
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -2098,6 +2105,7 @@ export function time(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }

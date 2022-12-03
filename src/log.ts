@@ -68,7 +68,7 @@ export function logCommand(input: {
     commandType: string,
     commandId: string | number,
     commanduser?: Discord.User,
-    object?: extypes.commandObject,
+    object: extypes.commandObject,
     button?: string,
     commandName: string;
     options?: {

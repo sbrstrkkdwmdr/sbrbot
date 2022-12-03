@@ -132,6 +132,7 @@ export function checkperms(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -327,6 +328,7 @@ export function getUser(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -424,6 +426,7 @@ export function getUserAv(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -696,6 +699,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 }
 
@@ -976,6 +980,7 @@ export function find(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -1063,6 +1068,7 @@ export function leaveguild(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -1153,6 +1159,7 @@ export async function prefix(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }

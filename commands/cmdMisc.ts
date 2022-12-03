@@ -87,6 +87,7 @@ export function _8ball(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -386,6 +387,7 @@ export function gif(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -681,6 +683,7 @@ export function poll(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -774,6 +777,7 @@ export function roll(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -890,6 +894,7 @@ export function say(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -998,6 +1003,7 @@ Description: \`${curItem.description}\`
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }

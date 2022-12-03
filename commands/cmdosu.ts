@@ -149,6 +149,7 @@ export async function bws(input: extypes.commandInput) {
             commandName: 'bws',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: 'Could not find user'
         });
         return;
@@ -210,6 +211,7 @@ export async function bws(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 }
 
@@ -339,6 +341,7 @@ export async function globals(input: extypes.commandInput) {
             commandName: 'globals',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: 'Could not find user'
         });
         return;
@@ -381,6 +384,7 @@ export async function globals(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -716,6 +720,7 @@ export async function lb(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -994,6 +999,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
             commandName: 'ranking',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: 'Could not fetch ranking data'
         });
         return;
@@ -1095,6 +1101,7 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -1262,6 +1269,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -1588,6 +1596,7 @@ export async function osu(input: extypes.commandInput) {
             commandName: 'osu',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: 'Could not find user'
         });
         return;
@@ -1785,6 +1794,7 @@ export async function osu(input: extypes.commandInput) {
                     commandName: 'osu',
                     commandType: input.commandType,
                     commandId: input.absoluteID,
+                    object: input.obj,
                     customString: 'Could not find user\'s top scores'
                 });
                 return;
@@ -1823,6 +1833,7 @@ export async function osu(input: extypes.commandInput) {
                     commandName: 'osu',
                     commandType: input.commandType,
                     commandId: input.absoluteID,
+                    object: input.obj,
                     customString: 'Could not find user\'s most played'
                 });
                 return;
@@ -1932,6 +1943,7 @@ ${onlinestatus}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -2430,6 +2442,7 @@ export async function firsts(input: extypes.commandInput) {
             commandName: 'firsts',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: 'Could not find user'
         });
         return;
@@ -2477,6 +2490,7 @@ export async function firsts(input: extypes.commandInput) {
                 commandName: 'firsts',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find user\'s #1 scores offset by ${cinitnum}`
             });
             return;
@@ -2562,6 +2576,7 @@ export async function firsts(input: extypes.commandInput) {
                 commandName: 'firsts',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find requested score`
             });
             return;
@@ -2671,6 +2686,7 @@ export async function firsts(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -2898,6 +2914,7 @@ export async function maplb(input: extypes.commandInput) {
             commandName: 'maplb',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find beatmap data for ${mapid}`
         });
         return;
@@ -2969,6 +2986,7 @@ export async function maplb(input: extypes.commandInput) {
                 commandName: 'maplb',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find leaderboards for ${mapid} (API V2)`
             });
             return;
@@ -3013,6 +3031,7 @@ export async function maplb(input: extypes.commandInput) {
                     commandName: 'maplb',
                     commandType: input.commandType,
                     commandId: input.absoluteID,
+                    object: input.obj,
                     customString: `Could not find the requested score`
                 });
                 return;
@@ -3135,6 +3154,7 @@ export async function maplb(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find leaderboards for ${mapid} (API v1)`
             });
             return;
@@ -3178,6 +3198,7 @@ export async function maplb(input: extypes.commandInput) {
                     commandName: '',
                     commandType: input.commandType,
                     commandId: input.absoluteID,
+                    object: input.obj,
                     customString: `Could not find requested score`
                 });
                 return;
@@ -3265,6 +3286,7 @@ export async function maplb(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -3808,6 +3830,7 @@ export async function osutop(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find user`
         });
         return;
@@ -3860,6 +3883,7 @@ export async function osutop(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find users top scores`
         });
         return;
@@ -3965,6 +3989,7 @@ export async function osutop(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find requested score`
             });
             return;
@@ -4069,6 +4094,7 @@ export async function osutop(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -4578,6 +4604,7 @@ export async function pinned(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find user`
         });
         return;
@@ -4623,6 +4650,7 @@ export async function pinned(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find user's pinned scores offset by ${cinitnum}`
             });
             return;
@@ -4713,6 +4741,7 @@ export async function pinned(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find requested score`
             });
             return;
@@ -4817,6 +4846,7 @@ export async function pinned(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -5276,6 +5306,7 @@ export async function recent(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find user`
         });
         return;
@@ -5347,6 +5378,7 @@ export async function recent(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find user's recent scores`
         });
         return;
@@ -5465,6 +5497,7 @@ export async function recent(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find beatmap data for ${curbm.id}`
             });
             return;
@@ -5932,6 +5965,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -5994,7 +6028,16 @@ export async function replayparse(input: extypes.commandInput) {
     try {
         replay = replayparser.parseReplay(`${filespath}/replay.osr`);
     } catch (err) {
-        return;
+        log.logCommand(
+            {
+                commandName: 'replayparse',
+                event: 'Error',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: 'Could not parse replay\n' + err
+            }
+        )
     }
     osufunc.debug(replay, 'fileparse', 'replay', input.obj.guildId, 'replayData');
 
@@ -6198,6 +6241,7 @@ ${isfail}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -6441,6 +6485,7 @@ export async function scoreparse(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find score data for ${scoreid} in ${scoremode}`
         });
         return;
@@ -6456,6 +6501,7 @@ export async function scoreparse(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Invalid score`
             });
             return;
@@ -6483,6 +6529,7 @@ export async function scoreparse(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Invalid score`
         });
         return;
@@ -6525,6 +6572,7 @@ export async function scoreparse(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find beatmap data`
         });
         return;
@@ -6716,6 +6764,7 @@ export async function scoreparse(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find user`
         });
         return;
@@ -6883,6 +6932,7 @@ ${srStr}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -7081,6 +7131,7 @@ export async function scorepost(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find beatmap data for ${scoredata.beatmap.id}`
         });
         return;
@@ -7141,6 +7192,7 @@ export async function scorepost(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -7564,6 +7616,7 @@ export async function scores(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find user`
         });
         return;
@@ -7616,6 +7669,7 @@ export async function scores(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find beatmap scores`
         });
         return;
@@ -7675,6 +7729,7 @@ export async function scores(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find requested score`
             });
             return;
@@ -7723,6 +7778,7 @@ export async function scores(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find beatmap data`
         });
         return;
@@ -7831,6 +7887,7 @@ export async function scores(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -8080,6 +8137,7 @@ export async function scorestats(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find user`
         });
         return;
@@ -8134,6 +8192,7 @@ export async function scorestats(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find user's ${scoreTypes} scores`
             });
             return;
@@ -8283,6 +8342,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -8541,6 +8601,7 @@ export async function simulate(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find beatmap data`
         });
         return;
@@ -8685,6 +8746,7 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -8926,6 +8988,7 @@ export async function map(input: extypes.commandInput) {
                         commandName: '',
                         commandType: input.commandType,
                         commandId: input.absoluteID,
+                        object: input.obj,
                         customString: `Could not find beatmapset data`
                     });
                     return;
@@ -9093,6 +9156,7 @@ export async function map(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find beatmap data`
             });
             return;
@@ -9130,6 +9194,7 @@ export async function map(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find beatmap data`
             });
             return;
@@ -9196,6 +9261,7 @@ export async function map(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find beatmap data`
             });
             return;
@@ -9263,6 +9329,7 @@ export async function map(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find beatmap data`
             });
             return;
@@ -9504,6 +9571,7 @@ HP${baseHP}`;
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find mapper data.\nUsing default json file`
         });
     }
@@ -9665,6 +9733,7 @@ HP${baseHP}`;
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find guest mapper's data.\nUsing default json file.`
             });
         }
@@ -9761,6 +9830,7 @@ HP${baseHP}`;
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -9959,6 +10029,7 @@ export async function ppCalc(input: extypes.commandInput) {
                         commandName: '',
                         commandType: input.commandType,
                         commandId: input.absoluteID,
+                        object: input.obj,
                         customString: `Could not find beatmapset data`
                     });
                     return;
@@ -10100,6 +10171,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find beatmap data`
             });
             return;
@@ -10137,6 +10209,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find beatmap data`
             });
             return;
@@ -10203,6 +10276,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find beatmap data`
             });
             return;
@@ -10270,6 +10344,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandName: 'ppcalc',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: 'Could not find beatmap data'
             });
             return;
@@ -10675,6 +10750,7 @@ export async function ppCalc(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 
@@ -10846,6 +10922,7 @@ export async function randomMap(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -11172,6 +11249,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 }
 
@@ -11581,6 +11659,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find user`
         });
         return;
@@ -11629,6 +11708,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find user's ${calc.toCapital(filter)} maps`
             });
             return;
@@ -11714,6 +11794,7 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 commandName: '',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
+                object: input.obj,
                 customString: `Could not find requested beatmap`
             });
             return;
@@ -11812,6 +11893,7 @@ Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${fil
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 
@@ -11956,6 +12038,7 @@ export async function trackadd(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find user`
         });
     } else {
@@ -11989,6 +12072,7 @@ export async function trackadd(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -12126,6 +12210,7 @@ export async function trackremove(input: extypes.commandInput) {
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find user`
         });
     } else {
@@ -12160,6 +12245,7 @@ export async function trackremove(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -12274,6 +12360,7 @@ export async function trackchannel(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -12401,6 +12488,7 @@ export async function tracklist(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 }
 
@@ -12880,6 +12968,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `${error}`
         });
     }
@@ -12907,6 +12996,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -13153,6 +13243,7 @@ export async function osuset(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
@@ -13314,6 +13405,7 @@ export async function saved(input: extypes.commandInput) {
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 }
 
@@ -13514,6 +13606,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find user`
         });
         return;
@@ -13563,6 +13656,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
             commandName: '',
             commandType: input.commandType,
             commandId: input.absoluteID,
+            object: input.obj,
             customString: `Could not find user's top scores`
         });
         return;
@@ -13627,6 +13721,7 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
         commandName: '',
         commandType: input.commandType,
         commandId: input.absoluteID,
+        object: input.obj,
     });
 
 }
