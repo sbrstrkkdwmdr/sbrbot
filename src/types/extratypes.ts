@@ -217,6 +217,7 @@ export type commandButtonTypes =
     'DetailDefault' | 'DetailMore' | 'DetailLess' | 
     'Detail0' | 'Detail1' | 'Detail2' | 'Detail3' |
     'DetailN1' |
+    'Graph' | 
     'SearchMenu' | 'Sort' | 'SortMenu';
 
 export type osustatscache = {

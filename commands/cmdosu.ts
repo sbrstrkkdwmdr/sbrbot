@@ -1390,10 +1390,29 @@ export async function osu(input: extypes.commandInput) {
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
             mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
 
-            if (input.button == 'DetailEnable') {
+            switch (input.button) {
+                case 'Detail1':
+                    detailed = 1;
+                    break;
+                case 'Detail2':
+                    detailed = 2;
+                    break;
+                case 'Graph':
+                    graphonly = true;
+                    break;
+                default:
+                    if (input.obj.message.embeds[0].footer.text.includes('E')) {
+                        detailed = 2;
+                    } else {
+                        detailed = 1;
+                    }
+                    break;
+            }
+
+            if (input.button == 'Detail2') {
                 detailed = 2;
             }
-            if (input.button == 'DetailDisable') {
+            if (input.button == 'Detail1') {
                 detailed = 1;
             }
             if (input.button == 'Refresh') {
@@ -1427,16 +1446,6 @@ export async function osu(input: extypes.commandInput) {
             //u
         }
     }
-
-    //==============================================================================================================================================================================================
-
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-Refresh-osu-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.refresh),
-        );
 
     //OPTIONS==============================================================================================================================================================================================
 
@@ -1474,20 +1483,40 @@ export async function osu(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    if (detailed == 1) {
-        buttons.addComponents(
+    const buttons = new Discord.ActionRowBuilder()
+        .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-DetailDisable-osu-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailLess)
-        );
-    } else {
-        buttons.addComponents(
+                .setEmoji(buttonsthing.label.main.refresh),
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-DetailEnable-osu-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Graph-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailMore)
+                .setEmoji(buttonsthing.label.main.graph),
         );
+    if (graphonly != true) {
+        switch (detailed) {
+            case 1: {
+                buttons.addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`${mainconst.version}-Detail2-osu-${commanduser.id}-${input.absoluteID}`)
+                        .setStyle(buttonsthing.type.current)
+                        .setEmoji(buttonsthing.label.main.detailMore),
+                );
+                embedStyle = 'P';
+            }
+                break;
+            case 2: {
+                buttons.addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`${mainconst.version}-Detail1-osu-${commanduser.id}-${input.absoluteID}`)
+                        .setStyle(buttonsthing.type.current)
+                        .setEmoji(buttonsthing.label.main.detailLess),
+                );
+                embedStyle = 'PE';
+            }
+                break;
+        }
     }
 
     //if user is null, use searchid
@@ -1668,7 +1697,7 @@ export async function osu(input: extypes.commandInput) {
 
         useEmbeds.push(ChartsEmbedRank, ChartsEmbedPlay);
     } else {
-        if (detailed == 1) {
+        if (detailed == 2) {
             const loading = new Discord.EmbedBuilder()
                 .setFooter({
                     text: `${embedStyle}`
