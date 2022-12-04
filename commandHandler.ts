@@ -285,7 +285,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
 
             case 'bws': case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.bws({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.bws({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -309,17 +309,17 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                 break;
             case 'firsts': case 'firstplaceranks': case 'fpr': case 'fp': case '#1s': case 'first': case '#1': case '1s':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.firsts({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.firsts({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
                 break;
             case 'globals':
-                osucmds.globals({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.globals({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 break;
             case 'leaderboard': case 'maplb': case 'mapleaderboard':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.maplb({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.maplb({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -347,7 +347,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                 break;
             case 'osu': case 'profile': case 'o':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -384,14 +384,14 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                     overrides = {
                         miss: true
                     };
-                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
                 break;
             case 'osutop': case 'top': case 't': case 'ot': case 'toposu': case 'topo':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -401,7 +401,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                     overrides = {
                         mode: 'taiko'
                     };
-                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -411,7 +411,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                     overrides = {
                         mode: 'fruits'
                     };
-                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -421,7 +421,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                     overrides = {
                         mode: 'mania'
                     };
-                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -431,7 +431,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                     overrides = {
                         filterMapper: 'Sotarks'
                     };
-                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -442,7 +442,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                         filterMapper: 'Sotarks',
                         mode: 'taiko'
                     };
-                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -454,7 +454,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                         filterMapper: 'Sotarks',
                         mode: 'fruits'
                     };
-                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -465,7 +465,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                         filterMapper: 'Sotarks',
                         mode: 'mania'
                     };
-                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -473,7 +473,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
 
             case 'pinned':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.pinned({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.pinned({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -516,7 +516,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                 break;
             case 'rs': case 'recent': case 'r':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -528,7 +528,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                         type: 'list',
                         sort: 'pp'
                     };
-                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -538,7 +538,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                     overrides = {
                         type: 'list'
                     };
-                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -549,7 +549,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                         type: 'list',
                         mode: 'taiko'
                     };
-                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -560,7 +560,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                         type: 'list',
                         mode: 'fruits'
                     };
-                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -571,7 +571,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                         type: 'list',
                         mode: 'mania'
                     };
-                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -581,7 +581,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                     overrides = {
                         mode: 'taiko'
                     };
-                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -591,7 +591,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                     overrides = {
                         mode: 'fruits'
                     };
-                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -601,7 +601,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                     overrides = {
                         mode: 'mania'
                     };
-                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -616,14 +616,14 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
 
             case 'scoreparse': case 'score': case 'sp':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
                 break;
             case 'scores': case 'c':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.scores({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.scores({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
@@ -675,7 +675,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                 break;
             case 'userbeatmaps': case 'ub': case 'userb': case 'ubm': case 'um': case 'usermaps':
                 if ((checks.botHasPerms(obj, client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.userBeatmaps({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                    osucmds.userBeatmaps({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }

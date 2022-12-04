@@ -18,7 +18,7 @@ import * as mainconst from './src/consts/main.js';
 import * as embedStuff from './src/embed.js';
 import * as extypes from './src/types/extratypes.js';
 
-export default (userdata, client: Discord.Client, config: extypes.config, oncooldown, guildSettings) => {
+export default (userdata, client: Discord.Client, config: extypes.config, oncooldown, guildSettings, statsCache) => {
     let imgParseCooldown = false;
     const graphChannel = client.channels.cache.get(config.graphChannelId) as Discord.TextChannel;
 
@@ -142,7 +142,7 @@ progress: ${m.progress ? m.progress : 'none'}
             if (absoluteID == null) {
                 absoluteID = func.generateId();
             }
-            osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+            osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
         }
 
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osr'))) {
@@ -162,7 +162,7 @@ progress: ${m.progress ? m.progress : 'none'}
             }, 1500);
         }
         if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
-            osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+            osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
         }
         if (false && message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osu'))) {
             // return;

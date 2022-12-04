@@ -124,7 +124,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                     .catch(error => { });
                 break;
             case 'firsts':
-                osucmds.firsts({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.firsts({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
@@ -139,28 +139,28 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                     .catch(error => { });
                 break;
             case 'maplb':
-                osucmds.maplb({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.maplb({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'nochokes':
                 overrides.miss = true;
-                osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'osu':
-                osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'osutop':
-                osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'pinned':
-                osucmds.pinned({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.pinned({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
@@ -170,17 +170,17 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                     .catch(error => { });
                 break;
             case 'recent':
-                osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'scoreparse':
-                osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'scores':
-                osucmds.scores({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.scores({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
@@ -189,7 +189,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
                 break;
 
             case 'userbeatmaps':
-                osucmds.userBeatmaps({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.userBeatmaps({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;

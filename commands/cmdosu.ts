@@ -34,7 +34,7 @@ export async function name(input: extypes.commandInput) {
 /**
  * badge weight seed
  */
-export async function bws(input: extypes.commandInput) {
+export async function bws(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
     let user;
@@ -155,6 +155,8 @@ export async function bws(input: extypes.commandInput) {
         return;
     }
 
+    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+
     let badgecount = 0;
     for (const badge of osudata.badges) {
         badgecount++;
@@ -218,7 +220,7 @@ export async function bws(input: extypes.commandInput) {
 /**
  * number of #1 scores
  */
-export async function globals(input: extypes.commandInput) {
+export async function globals(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -352,6 +354,8 @@ export async function globals(input: extypes.commandInput) {
             .catch();
 
     }
+
+    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
 
     if (input.commandType == 'interaction') {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
@@ -1277,7 +1281,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
 /**
  * return osu! profile
  */
-export async function osu(input: extypes.commandInput) {
+export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -1630,6 +1634,7 @@ export async function osu(input: extypes.commandInput) {
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
+            osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
         } catch (error) {
             osufunc.logCall(error);
         }
@@ -1953,7 +1958,7 @@ ${onlinestatus}
 /**
  * list of #1 scores
  */
-export async function firsts(input: extypes.commandInput) {
+export async function firsts(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -2448,6 +2453,8 @@ export async function firsts(input: extypes.commandInput) {
         return;
     }
 
+    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
@@ -2694,7 +2701,7 @@ export async function firsts(input: extypes.commandInput) {
 /**
  * leaderboard of a map
  */
-export async function maplb(input: extypes.commandInput) {
+export async function maplb(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -3294,7 +3301,7 @@ export async function maplb(input: extypes.commandInput) {
 /**
  * list of top plays
  */
-export async function osutop(input: extypes.commandInput) {
+export async function osutop(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -3836,6 +3843,8 @@ export async function osutop(input: extypes.commandInput) {
         return;
     }
 
+    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
@@ -4102,7 +4111,7 @@ export async function osutop(input: extypes.commandInput) {
 /**
  * list of pinned scores
  */
-export async function pinned(input: extypes.commandInput) {
+export async function pinned(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -4610,6 +4619,8 @@ export async function pinned(input: extypes.commandInput) {
         return;
     }
 
+    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
@@ -4854,7 +4865,7 @@ export async function pinned(input: extypes.commandInput) {
 /**
  * most recent score or list of recent scores
  */
-export async function recent(input: extypes.commandInput) {
+export async function recent(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -5293,7 +5304,7 @@ export async function recent(input: extypes.commandInput) {
 
     osufunc.debug(osudataReq, 'command', 'recent', input.obj.guildId, 'osuData');
 
-    if (osudata?.error) {
+    if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                 content: `Error - could not fetch user \`${user}\``,
@@ -5312,16 +5323,7 @@ export async function recent(input: extypes.commandInput) {
         return;
     }
 
-    if (!osudata.id) {
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
-                content: `Error - could not fetch user \`${user}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch();
-        }
-        return;
-    }
+    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -5686,7 +5688,7 @@ export async function recent(input: extypes.commandInput) {
                 passedObj: embedStuff.getTotalHits(curscore.mode, curscore),
             });
 
-            totaldiff = ppcalcing[0].difficulty.stars.toFixed(2);
+            totaldiff = ppcalcing[1].difficulty.stars.toFixed(2);
 
             rspp =
                 curscore.pp ?
@@ -6250,7 +6252,7 @@ ${isfail}
 /**
  * parse score and return data
  */
-export async function scoreparse(input: extypes.commandInput) {
+export async function scoreparse(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -6771,6 +6773,8 @@ export async function scoreparse(input: extypes.commandInput) {
         return;
     }
 
+    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, scoredata.user.username, 'osudata', osufunc.modeValidator(mode));
 
@@ -7201,7 +7205,7 @@ export async function scorepost(input: extypes.commandInput) {
 /**
  * list of user's scores on a map
  */
-export async function scores(input: extypes.commandInput) {
+export async function scores(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -7623,6 +7627,8 @@ export async function scores(input: extypes.commandInput) {
         return;
 
     }
+
+    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -8125,7 +8131,7 @@ export async function scorestats(input: extypes.commandInput) {
 
     osufunc.debug(osudataReq, 'command', 'scorestats', input.obj.guildId, 'osuData');
 
-    if (osudata?.error) {
+    if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
                 content: `Error - could not fetch user \`${user}\``,
@@ -8141,17 +8147,6 @@ export async function scorestats(input: extypes.commandInput) {
             object: input.obj,
             customString: `Could not find user ${user}`
         });
-        return;
-    }
-
-    if (!osudata.id) {
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
-                content: `Error - could not fetch user \`${user}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch();
-        }
         return;
     }
 
@@ -11298,7 +11293,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
 /**
  * list of user's maps
  */
-export async function userBeatmaps(input: extypes.commandInput) {
+export async function userBeatmaps(input: extypes.commandInput & { statsCache: any; }) {
     let filter: 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' | 'nominated' | 'guest' = 'favourite';
     let sort:
         'title' | 'artist' |
@@ -11706,6 +11701,8 @@ export async function userBeatmaps(input: extypes.commandInput) {
         });
         return;
     }
+
+    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator('osu'));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator('osu'));
@@ -13653,6 +13650,8 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         });
         return;
     }
+
+    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
