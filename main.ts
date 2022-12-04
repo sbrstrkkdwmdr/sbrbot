@@ -261,12 +261,12 @@ Current Client ID:        ${client.user.id}
     }
 
     //commandHandler(blahblahblah) //loop
-    commandHandler(userdata, client, config, oncooldown, guildSettings, trackDb, statsCache); //instead of running once, the function should always be active
-    linkHandler(userdata, client, config, oncooldown, guildSettings, statsCache);
-    buttonHandler(userdata, client, config, oncooldown, statsCache);
-    commandInit(userdata, client, config, oncooldown);
-    exEvents(userdata, client, config, oncooldown, guildSettings, statsCache);
-    osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);
+    commandHandler({userdata, client, config, oncooldown, guildSettings, trackDb, statsCache}); //instead of running once, the function should always be active
+    linkHandler({userdata, client, config, oncooldown, guildSettings, statsCache}); //{}
+    buttonHandler({userdata, client, config, oncooldown, statsCache});
+    commandInit({userdata, client, config, oncooldown});
+    exEvents({userdata, client, config, oncooldown, guildSettings, statsCache});
+    osutrack({userdata, client, config, oncooldown, trackDb, guildSettings});
 
     fs.appendFileSync(`${path}\\logs\\general.log`, `\n\n\n${initlog}\n\n\n`, 'utf-8');
 

@@ -8,7 +8,14 @@ import * as track from './src/trackfunc.js';
 import * as extypes from './src/types/extratypes.js';
 import * as osuapitypes from './src/types/osuApiTypes.js';
 import * as osuApiTypes from './src/types/osuApiTypes.js';
-export default (userdata, client, config: extypes.config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, statsCache) => {
+export default (input: {
+    userdata,
+    client,
+    config: extypes.config,
+    oncooldown,
+    guildSettings: Sequelize.ModelStatic<any>,
+    statsCache;
+}) => {
 
     setInterval(() => {
         clearMapFiles();
@@ -45,70 +52,70 @@ export default (userdata, client, config: extypes.config, oncooldown, guildSetti
 
     const activities = [
         {
-            name: `240BPM | ${config.prefix}help`,
+            name: `240BPM | ${input.config.prefix}help`,
             type: 1,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: songsarr[Math.floor(Math.random() * songsarr.length)] + ` | ${config.prefix}help`,
+            name: songsarr[Math.floor(Math.random() * songsarr.length)] + ` | ${input.config.prefix}help`,
             type: 2,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: `dt farm maps | ${config.prefix}help`,
+            name: `dt farm maps | ${input.config.prefix}help`,
             type: 0,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: `nothing in particular | ${config.prefix}help`,
+            name: `nothing in particular | ${input.config.prefix}help`,
             type: 3,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: `games | ${config.prefix}help`,
+            name: `games | ${input.config.prefix}help`,
             type: 0,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: `hr | ${config.prefix}help`,
+            name: `hr | ${input.config.prefix}help`,
             type: 0,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: songsarr[Math.floor(Math.random() * songsarr.length)] + ` | ${config.prefix}help`,
+            name: songsarr[Math.floor(Math.random() * songsarr.length)] + ` | ${input.config.prefix}help`,
             type: 0,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         },
         {
-            name: `you | ${config.prefix}help`,
+            name: `you | ${input.config.prefix}help`,
             type: 3,
             url: 'https://twitch.tv/sbrstrkkdwmdr',
         }
     ];
     const activityChristmas = [{
-        name: `Merry Christmas! | ${config.prefix}help`,
+        name: `Merry Christmas! | ${input.config.prefix}help`,
         type: 0,
         url: 'https://twitch.tv/sbrstrkkdwmdr',
     }];
     const activityHalloween = [{
-        name: `Happy Halloween! | ${config.prefix}help`,
+        name: `Happy Halloween! | ${input.config.prefix}help`,
         type: 0,
         url: 'https://twitch.tv/sbrstrkkdwmdr',
     },
     {
-        name: `🎃 | ${config.prefix}help`,
+        name: `🎃 | ${input.config.prefix}help`,
         type: 0,
         url: 'https://twitch.tv/sbrstrkkdwmdr',
     }
 
     ];
     const activityNewYear = [{
-        name: `Happy New Year! | ${config.prefix}help`,
+        name: `Happy New Year! | ${input.config.prefix}help`,
         type: 0,
         url: 'https://twitch.tv/sbrstrkkdwmdr',
     }];
 
-    client.user.setPresence({
+    input.client.user.setPresence({
         activities: [activities[0]],
         status: 'dnd',
         afk: false
@@ -150,44 +157,44 @@ export default (userdata, client, config: extypes.config, oncooldown, guildSetti
                 activityarr = activities;
             }
         }
-        client.user.setPresence({
+        input.client.user.setPresence({
             activities: [activityarr[Math.floor(Math.random() * activityarr.length)]],
             status: 'dnd',
             afk: false
         });
     }
 
-    client.on('messageCreate', async (message) => {
+    input.client.on('messageCreate', async (message) => {
 
         const currentGuildId = message.guildId;
         let settings: extypes.guildSettings;
-        let prefix: string = config.prefix;
+        let prefix: string = input.config.prefix;
 
         if (
             typeof prefix === 'undefined' ||
             prefix === null ||
             prefix === ''
         ) {
-            prefix = config.prefix;
+            prefix = input.config.prefix;
         }
 
         //if message mentions bot and no other args given, return prefix
         if (message.mentions.users.size > 0) {
-            if (message.mentions.users.first().id == client.user.id && message.content.replaceAll(' ', '').length == (`<@${client.user.id}>`).length) {
+            if (message.mentions.users.first().id == input.client.user.id && message.content.replaceAll(' ', '').length == (`<@${input.client.user.id}>`).length) {
                 let serverPrefix = 'null';
                 try {
-                    const curGuildSettings = await guildSettings.findOne({ where: { guildid: message.guildId } });
+                    const curGuildSettings = await input.guildSettings.findOne({ where: { guildid: message.guildId } });
                     settings = curGuildSettings.dataValues;
                     serverPrefix = settings.prefix;
                 } catch (error) {
-                    serverPrefix = config.prefix;
+                    serverPrefix = input.config.prefix;
                 }
                 return message.reply({ content: `Global prefix is \`${prefix}\`\nServer prefix is \`${serverPrefix}\``, allowedMentions: { repliedUser: false } });
             }
         }
 
         //if message is a cooldown message, delete it after 3 seconds
-        if (message.content.startsWith('You\'re on cooldown') && message.author.id == client.user.id) {
+        if (message.content.startsWith('You\'re on cooldown') && message.author.id == input.client.user.id) {
             setTimeout(() => {
                 message.delete()
                     .catch(err => {
@@ -198,7 +205,7 @@ export default (userdata, client, config: extypes.config, oncooldown, guildSetti
 
 
     //create settings for new guilds
-    client.on('guildCreate', async (guild) => {
+    input.client.on('guildCreate', async (guild) => {
         createGuildSettings(guild);
     });
     setInterval(() => {
@@ -209,10 +216,10 @@ export default (userdata, client, config: extypes.config, oncooldown, guildSetti
 
     async function createGuildSettings(guild: Discord.Guild) {
         try {
-            await guildSettings.create({
+            await input.guildSettings.create({
                 guildid: guild.id ?? null,
                 guildname: guild.name ?? null,
-                prefix: config.prefix,
+                prefix: input.config.prefix,
             });
         } catch (error) {
             console.log(error);
@@ -221,7 +228,7 @@ export default (userdata, client, config: extypes.config, oncooldown, guildSetti
 
     function clearUnused() {
         (async () => {
-            await guildSettings.destroy({
+            await input.guildSettings.destroy({
                 where: { guildid: null, guildname: null }
             });
         })();

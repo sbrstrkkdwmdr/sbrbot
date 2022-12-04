@@ -10,12 +10,18 @@ import * as mainconst from './src/consts/main.js';
 import * as embedStuff from './src/embed.js';
 import * as extypes from './src/types/extratypes.js';
 
-export default (userdata, client: Discord.Client, config: extypes.config, oncooldown, statsCache) => {
-    const graphChannel = client.channels.cache.get(config.graphChannelId) as Discord.TextChannel;
+export default (input: {
+    userdata,
+    client: Discord.Client,
+    config: extypes.config,
+    oncooldown,
+    statsCache;
+}) => {
+    const graphChannel = input.client.channels.cache.get(input.config.graphChannelId) as Discord.TextChannel;
 
-    client.on('interactionCreate', interaction => {
+    input.client.on('interactionCreate', interaction => {
         if (!(interaction.type == Discord.InteractionType.MessageComponent || interaction.type == Discord.InteractionType.ModalSubmit)) return;
-        if (interaction.applicationId != client.application.id) return;
+        if (interaction.applicationId != input.client.application.id) return;
 
         interaction = interaction as Discord.ButtonInteraction; //| Discord.SelectMenuInteraction
 
@@ -119,83 +125,83 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
 
         switch (command) {
             case 'compare':
-                osucmds.compare({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.compare({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'firsts':
-                osucmds.firsts({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
+                osucmds.firsts({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'lb':
-                osucmds.lb({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.lb({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'map':
-                osucmds.map({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.map({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'maplb':
-                osucmds.maplb({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
+                osucmds.maplb({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'nochokes':
                 overrides.miss = true;
-                osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
+                osucmds.osutop({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'osu':
-                osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
+                osucmds.osu({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'osutop':
-                osucmds.osutop({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
+                osucmds.osutop({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'pinned':
-                osucmds.pinned({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
+                osucmds.pinned({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'ranking':
-                osucmds.ranking({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, statsCache, graphChannel });
+                osucmds.ranking({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache, graphChannel });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'recent':
-                osucmds.recent({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
+                osucmds.recent({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'scoreparse':
-                osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
+                osucmds.scoreparse({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'scores':
-                osucmds.scores({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
+                osucmds.scores({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
             case 'scorestats':
-                osucmds.scorestats({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.scorestats({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
 
             case 'userbeatmaps':
-                osucmds.userBeatmaps({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
+                osucmds.userBeatmaps({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;
 
             case 'help':
-                commands.help({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                commands.help({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;

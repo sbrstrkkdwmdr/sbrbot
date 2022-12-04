@@ -18,11 +18,18 @@ import * as mainconst from './src/consts/main.js';
 import * as embedStuff from './src/embed.js';
 import * as extypes from './src/types/extratypes.js';
 
-export default (userdata, client: Discord.Client, config: extypes.config, oncooldown, guildSettings, statsCache) => {
+export default (input: {
+    userdata,
+    client: Discord.Client,
+    config: extypes.config,
+    oncooldown,
+    guildSettings,
+    statsCache;
+}) => {
     let imgParseCooldown = false;
-    const graphChannel = client.channels.cache.get(config.graphChannelId) as Discord.TextChannel;
+    const graphChannel = input.client.channels.cache.get(input.config.graphChannelId) as Discord.TextChannel;
 
-    client.on('messageCreate', async (message) => {
+    input.client.on('messageCreate', async (message) => {
         const currentDate = new Date();
         const interaction = null;
         const button = null;
@@ -46,11 +53,11 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
 
         let settings: extypes.guildSettings;
         try {
-            const curGuildSettings = await guildSettings.findOne({ where: { guildid: message.guildId } });
+            const curGuildSettings = await input.guildSettings.findOne({ where: { guildid: message.guildId } });
             settings = curGuildSettings.dataValues;
         } catch (error) {
             try {
-                await guildSettings.create({
+                await input.guildSettings.create({
                     guildid: message.guildId,
                     guildname: message?.guild?.name ?? 'Unknown',
                     prefix: 'sbr-',
@@ -71,7 +78,7 @@ export default (userdata, client: Discord.Client, config: extypes.config, oncool
             };
         }
         //disabled for now
-        if (false && config.useScreenshotParse == true && settings.osuParseScreenshots == true) {
+        if (false && input.config.useScreenshotParse == true && settings.osuParseScreenshots == true) {
             //warning: uses a lot of memory
 
             //if message attachments size > 0
@@ -136,13 +143,13 @@ progress: ${m.progress ? m.progress : 'none'}
             if (absoluteID == null) {
                 absoluteID = func.generateId();
             }
-            osucmds.map({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+            osucmds.map({ commandType, obj, args, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
         }
         if (messagenohttp.startsWith('osu.ppy.sh/u/') || messagenohttp.startsWith('osu.ppy.sh/users/')) {
             if (absoluteID == null) {
                 absoluteID = func.generateId();
             }
-            osucmds.osu({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
+            osucmds.osu({ commandType, obj, args, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
         }
 
         if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osr'))) {
@@ -158,11 +165,11 @@ progress: ${m.progress ? m.progress : 'none'}
                 response.pipe(osrdlfile);
             });//
             setTimeout(() => {
-                osucmds.replayparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.replayparse({ commandType, obj, args, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
             }, 1500);
         }
         if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
-            osucmds.scoreparse({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel, statsCache });
+            osucmds.scoreparse({ commandType, obj, args, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
         }
         if (false && message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osu'))) {
             // return;
@@ -175,7 +182,7 @@ progress: ${m.progress ? m.progress : 'none'}
                 response.pipe(osudlfile);
             });
             setTimeout(() => {
-                osucmds.maplocal({ commandType, obj, args, button, config, client, absoluteID, currentDate, overrides, userdata, graphChannel });
+                osucmds.maplocal({ commandType, obj, args, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
             }, 1500);
         }
 

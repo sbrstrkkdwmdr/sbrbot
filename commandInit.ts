@@ -1,6 +1,11 @@
 import Discord from 'discord.js';
 import * as cmdconfig from './src/consts/commandopts.js';
-export default (userdata, client/* :Discord.Client */, config, oncooldown) => {
+export default (input: {
+    userdata,
+    client/* :Discord.Client */,
+    config,
+    oncooldown;
+}) => {
     /*
             const guildID = config.testGuildID;
         const guild = client.guilds.cache.get(guildID);
@@ -9,7 +14,7 @@ export default (userdata, client/* :Discord.Client */, config, oncooldown) => {
             if (settoguild == 1 && guild) {
                 commands = guild.commands
             } else { */
-    const commands = client.application?.commands;
+    const commands = input.client.application?.commands;
 
     commands?.set([
         {

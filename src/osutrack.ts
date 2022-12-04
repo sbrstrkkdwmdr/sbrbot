@@ -9,9 +9,16 @@ import * as func from './tools.js';
 import * as trackfunc from './trackfunc.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 
-export default (userdata, client, config, oncooldown, trackDb: Sequelize.ModelStatic<any>, guildSettings: Sequelize.ModelStatic<any>) => {
+export default (input: {
+    userdata,
+    client,
+    config,
+    oncooldown,
+    trackDb: Sequelize.ModelStatic<any>,
+    guildSettings: Sequelize.ModelStatic<any>;
+}) => {
     // trackUsers(trackDb)
-    let enableTrack = config.enableTracking;
+    let enableTrack = input.config.enableTracking;
 
     if (enableTrack == true) {
         a();
@@ -21,7 +28,7 @@ export default (userdata, client, config, oncooldown, trackDb: Sequelize.ModelSt
     }
     function a() {
         try {
-            trackfunc.trackUsers(trackDb, client, guildSettings);
+            trackfunc.trackUsers(input.trackDb, input.client, input.guildSettings);
         } catch (err) {
             console.log(err);
             console.log('temporarily disabling tracking for an hour');
