@@ -57,14 +57,14 @@ export async function mapcalc(
         customAR?: number,
         customOD?: number,
         customHP?: number,
-        maxLimit?:number,
+        maxLimit?: number,
     },
     mapIsRank?: string
 ) {
     let ppl: rosu.PerformanceAttributes[];
 
-    if(!obj.maxLimit || isNaN(obj.maxLimit) || obj.maxLimit < 1){
-        obj.maxLimit = 10
+    if (!obj.maxLimit || isNaN(obj.maxLimit) || obj.maxLimit < 1) {
+        obj.maxLimit = 10;
     }
 
     switch (obj.calctype) {
@@ -1252,11 +1252,9 @@ export function rawToWeighted(pp: number, index: number) {
     return pp * (findWeight(index));
 }
 
-export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: number, userdata: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode,
+export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: number, mode: osuApiTypes.GameMode,
     statsCache: Sequelize.ModelStatic<any>) {
-    const users = await userdata.findAll();
-    const cacheUsers = await statsCache.findAll();
-    users.push(...cacheUsers);
+    const users = await statsCache.findAll();
     const pprankarr: { pp: string, rank: string; }[] = [];
 
     for (let i = 0; i < users.length; i++) {
@@ -1461,104 +1459,92 @@ export function modeValidatorAlt(mode: string | number) {
     };
 }
 
-export async function userStatsCache(user: osuApiTypes.UserStatistics[], database: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode) {
+export async function userStatsCache(user: osuApiTypes.UserStatistics[] | osuApiTypes.User[], database: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode, type: 'Stat' | 'User') {
     await (async () => {
-        for (let i = 0; i < user.length; i++) {
-            const curuser = user[i];
-            let findname = await database.findOne({
-                where: {
-                    osuid: curuser.user.id
-                }
-            });
-            if (findname == Promise<{ pending; }>) {
-                findname = null;
-            }
-            switch (mode) {
-                case 'osu': default: {
+        switch (type) {
+            case 'Stat': {
+                user = user as osuApiTypes.UserStatistics[];
+                for (let i = 0; i < user.length; i++) {
+                    const curuser = user[i];
+                    let findname = await database.findOne({
+                        where: {
+                            osuid: curuser.user.id
+                        }
+                    });
+                    if (findname == Promise<{ pending; }>) {
+                        findname = null;
+                    }
                     if (typeof findname == 'undefined' || !findname) {
                         await database.create({
                             osuid: curuser.user.id,
                             country: curuser.user.country_code,
-                            osupp: curuser.pp,
-                            osurank: curuser.global_rank,
-                            osuacc: curuser.hit_accuracy
+                            [mode + 'pp']: curuser.pp,
+                            [mode + 'rank']: curuser.global_rank,
+                            [mode + 'acc']: curuser.hit_accuracy
                         });
                     } else {
                         await database.update({
-                            osupp: curuser.pp,
-                            osurank: curuser.global_rank,
-                            osuacc: curuser.hit_accuracy
+                            [mode + 'pp']: curuser.pp,
+                            [mode + 'rank']: curuser.global_rank,
+                            [mode + 'acc']: curuser.hit_accuracy
                         },
                             {
                                 where: { osuid: curuser.user.id }
                             });
                     }
                 }
-                    break;
-                case 'taiko': {
+            } break;
+            case 'User': {
+                user = user as osuApiTypes.User[];
+                for (let i = 0; i < user.length; i++) {
+                    const curuser = user[i];
+                    let findname = await database.findOne({
+                        where: {
+                            osuid: curuser.id
+                        }
+                    });
+                    if (findname == Promise<{ pending; }>) {
+                        findname = null;
+                    }
+
                     if (typeof findname == 'undefined' || !findname) {
                         await database.create({
-                            osuid: curuser.user.id,
-                            country: curuser.user.country_code,
-                            taikopp: curuser.pp,
-                            taikorank: curuser.global_rank,
-                            taikoacc: curuser.hit_accuracy
+                            osuid: curuser.id,
+                            country: curuser.country_code,
+                            [mode + 'pp']: curuser.statistics.pp,
+                            [mode + 'rank']: curuser.statistics.global_rank,
+                            [mode + 'acc']: curuser.statistics.hit_accuracy
+                        }).then(x => {
+                            console.log(x);
+                            console.log({
+                                osuid: curuser.id,
+                                country: curuser.country_code,
+                                [mode + 'pp']: curuser.statistics.pp,
+                                [mode + 'rank']: curuser.statistics.global_rank,
+                                [mode + 'acc']: curuser.statistics.hit_accuracy
+                            });
                         });
                     } else {
                         await database.update({
-                            taikopp: curuser.pp,
-                            taikorank: curuser.global_rank,
-                            taikoacc: curuser.hit_accuracy
+                            [mode + 'pp']: curuser.statistics.pp,
+                            [mode + 'rank']: curuser.statistics.global_rank,
+                            [mode + 'acc']: curuser.statistics.hit_accuracy
                         },
                             {
-                                where: { osuid: curuser.user.id }
+                                where: { osuid: curuser.id }
+                            }).then(x => {
+                                console.log(x);
+                                console.log({
+                                    osuid: curuser.id,
+                                    country: curuser.country_code,
+                                    [mode + 'pp']: curuser.statistics.pp,
+                                    [mode + 'rank']: curuser.statistics.global_rank,
+                                    [mode + 'acc']: curuser.statistics.hit_accuracy
+                                });
                             });
                     }
                 }
-                    break;
-                case 'fruits': {
-                    if (typeof findname == 'undefined' || !findname) {
-                        await database.create({
-                            osuid: curuser.user.id,
-                            country: curuser.user.country_code,
-                            fruitspp: curuser.pp,
-                            fruitsrank: curuser.global_rank,
-                            fruitsacc: curuser.hit_accuracy
-                        });
-                    } else {
-                        await database.update({
-                            fruitspp: curuser.pp,
-                            fruitsrank: curuser.global_rank,
-                            fruitsacc: curuser.hit_accuracy
-                        },
-                            {
-                                where: { osuid: curuser.user.id }
-                            });
-                    }
-                }
-                    break;
-                case 'mania': {
-                    if (typeof findname == 'undefined' || !findname) {
-                        await database.create({
-                            osuid: curuser.user.id,
-                            country: curuser.user.country_code,
-                            maniapp: curuser.pp,
-                            maniarank: curuser.global_rank,
-                            maniaacc: curuser.hit_accuracy
-                        });
-                    } else {
-                        await database.update({
-                            maniapp: curuser.pp,
-                            maniarank: curuser.global_rank,
-                            maniaacc: curuser.hit_accuracy
-                        },
-                            {
-                                where: { osuid: curuser.user.id }
-                            });
-                    }
-                }
-                    break;
-            }
+            } break;
         }
     })();
     try {

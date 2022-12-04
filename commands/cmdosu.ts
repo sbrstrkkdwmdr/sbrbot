@@ -155,7 +155,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
         return;
     }
 
-    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
 
     let badgecount = 0;
     for (const badge of osudata.badges) {
@@ -355,7 +355,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
 
     }
 
-    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
 
     if (input.commandType == 'interaction') {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
@@ -1033,7 +1033,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
     }
 
     if (country == 'ALL' && input.button == null) {
-        osufunc.userStatsCache(rankingdata.ranking, input.statsCache, osufunc.modeValidator(mode));
+        osufunc.userStatsCache(rankingdata.ranking, input.statsCache, osufunc.modeValidator(mode), 'Stat');
     }
 
     const embed = new Discord.EmbedBuilder()
@@ -1230,7 +1230,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
 
     switch (type) {
         case 'pp': {
-            returnval = await osufunc.getRankPerformance('pp->rank', value, input.userdata, mode, input.statsCache);
+            returnval = await osufunc.getRankPerformance('pp->rank', value, mode, input.statsCache);
             if (typeof returnval == 'number') {
                 returnval = 'approx. rank #' + func.separateNum(Math.ceil(returnval));
             } else {
@@ -1242,7 +1242,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
             break;
         case 'rank': {
 
-            returnval = await osufunc.getRankPerformance('rank->pp', value, input.userdata, mode, input.statsCache);
+            returnval = await osufunc.getRankPerformance('rank->pp', value, mode, input.statsCache);
 
             if (typeof returnval == 'number') {
                 returnval = 'approx. ' + func.separateNum(returnval) + 'pp';
@@ -1634,7 +1634,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
-            osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+            osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
         } catch (error) {
             osufunc.logCall(error);
         }
@@ -2453,7 +2453,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
-    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -3843,7 +3843,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
-    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -4619,7 +4619,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
-    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -5323,7 +5323,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
-    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -6773,7 +6773,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         return;
     }
 
-    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, scoredata.user.username, 'osudata', osufunc.modeValidator(mode));
@@ -7628,7 +7628,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
     }
 
-    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -11702,7 +11702,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         return;
     }
 
-    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator('osu'));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator('osu'));
@@ -13651,7 +13651,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
-    osufunc.userStatsCache([osudata.statistics], input.statsCache, osufunc.modeValidator(osudata.playmode));
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -13726,7 +13726,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
 
     const bonus = osudata.statistics.pp - newBonus.reduce((a, b) => a + b, 0);
 
-    const guessrank = await osufunc.getRankPerformance('pp->rank', (total + bonus), input.userdata, `${osufunc.modeValidator(mode)}`, input.statsCache);
+    const guessrank = await osufunc.getRankPerformance('pp->rank', (total + bonus), `${osufunc.modeValidator(mode)}`, input.statsCache);
 
     const embed = new Discord.EmbedBuilder()
         .setFooter({
