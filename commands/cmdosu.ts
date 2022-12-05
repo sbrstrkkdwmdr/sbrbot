@@ -7360,23 +7360,6 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                     reverse = false;
                 }
                 page = 0;
-                switch (input.button) {
-                    case 'BigLeftArrow':
-                        page = 1;
-                        break;
-                    case 'LeftArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1;
-                        break;
-                    case 'RightArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1;
-                        break;
-                    case 'BigRightArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('/')[1].split('\n')[0]);
-                        break;
-                    case 'Refresh':
-                        page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]);
-                        break;
-                }
             }
             const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
             page = 0;
