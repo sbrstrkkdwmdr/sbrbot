@@ -187,6 +187,22 @@ export default (input: {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
                 break;
+            case 'info':
+                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    // commandStruct.commands.get('info').execute({commandType, obj, args, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata})
+                    commands.info({
+                        commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel,
+                        guildSettings: input.guildSettings
+                    });
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot');
+                }
+                break;
+            case 'invite':
+                commands.invite({
+                    commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel
+                });
+                break;
             case 'math':
                 commands.math({
                     commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel
@@ -227,17 +243,6 @@ export default (input: {
                     // commandStruct.commands.get('time').execute({commandType, obj, args, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata})
                     commands.time({
                         commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel
-                    });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot');
-                }
-                break;
-            case 'info':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    // commandStruct.commands.get('info').execute({commandType, obj, args, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata})
-                    commands.info({
-                        commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel,
-                        guildSettings: input.guildSettings
                     });
                 } else {
                     checkcmds.noperms(commandType, obj, 'bot');
@@ -353,7 +358,7 @@ export default (input: {
                     checkcmds.noperms(commandType, obj, 'bot');
                 }
                 break;
-            case 'osu': case 'profile': case 'o':case 'user':
+            case 'osu': case 'profile': case 'o': case 'user':
                 if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.osu({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 } else {
