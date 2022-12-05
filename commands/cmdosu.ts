@@ -9491,7 +9491,9 @@ export async function map(input: extypes.commandInput) {
         });
         ppissue = '';
         try {
-            totaldiff = ppComputed[0].difficulty.stars?.toFixed(2);
+            totaldiff = mapdata.difficulty_rating != ppComputed[0].difficulty.stars?.toFixed(2) ?
+            `${mapdata.difficulty_rating}=>${ppComputed[0].difficulty.stars?.toFixed(2)}` : 
+            `${mapdata.difficulty_rating}`
         } catch (error) {
             totaldiff = mapdata.difficulty_rating;
         }
@@ -9696,7 +9698,7 @@ HP${baseHP}`;
             {
                 name: 'MAP VALUES',
                 value:
-                    `${basicvals} ${totaldiff}⭐\n` +
+                    `${basicvals} ⭐${totaldiff}\n` +
                     `${emojis.mapobjs.bpm}${baseBPM}\n` +
                     `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
                     `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull}\n` +
