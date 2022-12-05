@@ -1057,7 +1057,7 @@ const osucmds: commandInfo[] = [
         description: 'Shows information about a user\'s osu! profile',
         usage: 'osu [user] [-graph/-g] [-detailed/-d] [-(mode)]',
         slashusage: 'osu [user] [detailed] [mode]',
-        aliases: ['o', 'profile'],
+        aliases: ['o', 'profile', 'user', 'taiko', 'drums', 'fruits', 'ctb', 'catch', 'mania'],
         examples: [
             {
                 text: 'PREFIXMSGosu SaberStrike',

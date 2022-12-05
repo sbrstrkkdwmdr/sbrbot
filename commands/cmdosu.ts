@@ -1459,6 +1459,12 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         }
     }
 
+    if(input.overrides != null){
+        if (input.overrides.mode){
+            mode = input.overrides.mode
+        }
+    }
+
     //OPTIONS==============================================================================================================================================================================================
 
     log.logCommand({

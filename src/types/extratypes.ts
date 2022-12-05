@@ -1,6 +1,7 @@
 import Discord from 'discord.js';
 import Sequelize from 'sequelize';
 import * as embedStuff from '../embed.js';
+import * as osuapitypes from '../types/osuApiTypes.js';
 
 export type config = {
     token: string,
@@ -178,7 +179,7 @@ export type commandObject = Discord.Message<any> | Discord.ChatInputCommandInter
 export type overrides = {
     user?: any,
     page?: number,
-    mode?: string,
+    mode?: osuapitypes.GameMode,
     sort?: embedStuff.scoreSort,
     reverse?: boolean,
     ex?: string | number,
