@@ -31,7 +31,6 @@ export default (input: {
 
     input.client.on('messageCreate', async (message) => {
         const currentDate = new Date();
-        const interaction = null;
         const button = null;
         const args = [];
         const obj = message;

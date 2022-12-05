@@ -91,9 +91,7 @@ export default (input: {
         }
 
         const absoluteID = func.generateId();
-        const interaction = null;
         const button = null;
-        const obj = message;
         const overrides = null;
         execCommand(command, 'message', message, overrides, button, absoluteID, currentDate, message.author.id, args);
     });
@@ -103,13 +101,10 @@ export default (input: {
         interaction = interaction as Discord.ChatInputCommandInteraction;
 
         const currentDate = new Date();
-        const currentDateISO = new Date().toISOString();
         const absoluteID = func.generateId();
 
-        const message = null;
         const args = null;
         const button = null;
-        const obj = interaction;
 
         if (!input.oncooldown.has(interaction.member.user.id) && cd.cooldownCommands.includes(interaction.commandName)) {
             timeouttime = new Date().getTime() + 3000;
