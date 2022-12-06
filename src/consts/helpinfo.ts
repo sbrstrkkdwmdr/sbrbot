@@ -12,6 +12,8 @@
 
 import * as extypes from '../types/extratypes.js';
 
+import * as buttonsObjs from './buttons.js';
+
 export type commandInfo = {
     name: string,
     description: string,
@@ -22,6 +24,7 @@ export type commandInfo = {
         descriptor: string;
     }[],
     aliases?: string[];
+    buttons?: string[];
     options: {
         name: string,
         type: string,
@@ -147,6 +150,7 @@ const cmds: commandInfo[] = [
             }
         ],
         aliases: [],
+        buttons: [buttonsObjs.label.main.random, buttonsObjs.label.main.detailed],
         options: [
             {
                 name: 'command',
@@ -158,36 +162,6 @@ const cmds: commandInfo[] = [
                 examples: ['recent', 'command:osutop'],
                 commandTypes: ['message', 'interaction', 'button']
             },
-            {
-                name: 'category',
-                type: 'string',
-                required: false,
-                description: 'Shows a list of commands in a category',
-                options: ['General', 'osu', 'Admin', 'Misc'],
-                defaultValue: 'N/A',
-                examples: ['osu', 'category:osu'],
-                commandTypes: ['button']
-            },
-            {
-                name: 'Menu',
-                type: 'boolean',
-                required: false,
-                description: 'Shows a list of all commands. True if command is not specified',
-                options: ['N/A'],
-                defaultValue: 'N/A',
-                examples: [],
-                commandTypes: ['button']
-            },
-            {
-                name: 'Random',
-                type: 'boolean',
-                required: false,
-                description: 'Shows a random command',
-                options: ['N/A'],
-                defaultValue: 'N/A',
-                examples: [],
-                commandTypes: ['button']
-            }
         ]
     },
     {
@@ -434,6 +408,7 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: ['common'],
+        buttons: [buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last],
         options: [
             {
                 name: 'type',
@@ -508,6 +483,7 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: ['firstplaceranks', 'first', 'fpr', 'fp', '#1s', '1s', '#1'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'user',
@@ -612,16 +588,6 @@ const osucmds: commandInfo[] = [
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
             },
-            {
-                name: 'Refresh',
-                type: 'boolean',
-                required: false,
-                description: 'Refreshes the scores',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: [''],
-                commandTypes: ['button']
-            }
         ]
     },
     {
@@ -651,6 +617,7 @@ const osucmds: commandInfo[] = [
         slashusage: 'lb [mode]',
         examples: [],
         aliases: [],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last],
         options: [
             {
                 name: 'mode',
@@ -699,6 +666,7 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: ['m'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'query',
@@ -800,16 +768,6 @@ const osucmds: commandInfo[] = [
                 examples: ['-hp 3', 'hp:5'],
                 commandTypes: ['message', 'interaction']
             },
-            {
-                name: 'Refresh',
-                type: 'boolean',
-                required: false,
-                description: 'Recalculates the map',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: [''],
-                commandTypes: ['button']
-            }
         ]
     },
     {
@@ -828,6 +786,7 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: ['leaderboard', 'mapleaderboard'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last,],
         options: [
             {
                 name: 'id',
@@ -869,16 +828,6 @@ const osucmds: commandInfo[] = [
                 examples: ['-parse 5', 'parse:5'],
                 commandTypes: ['message', 'interaction']
             },
-            {
-                name: 'Refresh',
-                type: 'boolean',
-                required: false,
-                description: 'Refreshes the scores',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: [''],
-                commandTypes: ['button']
-            }
         ]
     },
     {
@@ -936,6 +885,7 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: ['nc'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'user',
@@ -1040,16 +990,6 @@ const osucmds: commandInfo[] = [
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
             },
-            {
-                name: 'Refresh',
-                type: 'boolean',
-                required: false,
-                description: 'Refreshes the scores',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: [''],
-                commandTypes: ['button']
-            }
         ]
     },
     {
@@ -1117,16 +1057,6 @@ const osucmds: commandInfo[] = [
                 examples: ['-g', '-graph'],
                 commandTypes: ['message']
             },
-            {
-                name: 'Refresh',
-                type: 'boolean',
-                required: false,
-                description: 'Recalculates the user\'s statistics',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: [''],
-                commandTypes: ['button']
-            }
         ]
     },
     {
@@ -1235,6 +1165,7 @@ const osucmds: commandInfo[] = [
             'sotaksfruits', 'fruitssotarks', 'fruitsotarks', 'sotarksfruit', 'sotarkscatch', 'catchsotarks', 'sotarksctb', 'ctbsotarks', 'sotarksf', 'sotarksc',
             'sotarksmania', 'maniasotarks', 'sotarksm', 'msotarks'
         ],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'user',
@@ -1339,16 +1270,6 @@ const osucmds: commandInfo[] = [
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
             },
-            {
-                name: 'Refresh',
-                type: 'boolean',
-                required: false,
-                description: 'Refreshes the scores',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: [''],
-                commandTypes: ['button']
-            }
         ]
     },
     {
@@ -1376,6 +1297,7 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: [],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'user',
@@ -1480,16 +1402,6 @@ const osucmds: commandInfo[] = [
                 aliases: ['?'],
                 commandTypes: ['message', 'interaction']
             },
-            {
-                name: 'Refresh',
-                type: 'boolean',
-                required: false,
-                description: 'Refreshes the scores',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: [''],
-                commandTypes: ['button']
-            }
         ]
     },
     {
@@ -1754,16 +1666,6 @@ const osucmds: commandInfo[] = [
             examples: ['spotlight:227'],
             commandTypes: ['message', 'interaction']
         },
-        {
-            name: 'Refresh',
-            type: 'boolean',
-            required: false,
-            description: 'Refreshes the leaderboard',
-            options: ['true', 'false'],
-            defaultValue: 'false',
-            examples: [''],
-            commandTypes: ['button']
-        }
         ]
     },
     {
@@ -1806,6 +1708,7 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: ['rs', 'r', 'rt', 'rf', 'rm', 'rctb', 'rl', 'rlt', 'rlf', 'rlm', 'rlctb'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'user',
@@ -1882,16 +1785,6 @@ const osucmds: commandInfo[] = [
                 examples: ['detailed:true', '-detailed', '-compress'],
                 commandTypes: ['message', 'interaction', 'button']
             },
-            {
-                name: 'Refresh',
-                type: 'boolean',
-                required: false,
-                description: 'Refreshes the score(s)',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: [''],
-                commandTypes: ['button']
-            }
         ]
     },
     {
@@ -2007,6 +1900,7 @@ const osucmds: commandInfo[] = [
             },
         ],
         aliases: ['score', 'sp'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'id',
@@ -2127,16 +2021,6 @@ const osucmds: commandInfo[] = [
                 examples: ['-parse 5', 'parse:5'],
                 commandTypes: ['message', 'interaction']
             },
-            {
-                name: 'Refresh',
-                type: 'boolean',
-                required: false,
-                description: 'Refreshes the scores',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: [''],
-                commandTypes: ['button']
-            }
         ]
     },
     {
@@ -2155,6 +2039,7 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: ['ss'],
+        buttons: [buttonsObjs.label.main.detailed],
         options: [
             {
                 name: 'user',
@@ -2372,6 +2257,16 @@ const osucmds: commandInfo[] = [
         ]
     },
     {
+        name: 'tracklist',
+        description: 'Displays a list of the currently tracked users in the server',
+        usage: 'tracklist',
+        slashusage: 'tracklist',
+        examples: [],
+        aliases: ['tl'],
+        buttons: [buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last,],
+        options: []
+    },
+    {
         name: 'trackremove',
         description: 'Removes a user from the tracklist',
         usage: 'trackremove [user]',
@@ -2416,6 +2311,7 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: ['ub', 'userb', 'ubm', 'um', 'usermaps'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [{
             name: 'user',
             type: 'string/integer/user mention',
@@ -2486,16 +2382,6 @@ const osucmds: commandInfo[] = [
             examples: ['filter:hard', '-? "blue dragon"'],
             commandTypes: ['message', 'interaction']
         },
-        {
-            name: 'Refresh',
-            type: 'boolean',
-            required: false,
-            description: 'Refreshes the scores',
-            options: ['true', 'false'],
-            defaultValue: 'false',
-            examples: [''],
-            commandTypes: ['button']
-        }
         ]
     },
     {
@@ -2899,5 +2785,53 @@ const admincmds: commandInfo[] = [
     }
 ];
 
-export { cmds, othercmds, osucmds, admincmds };
+const buttons: {
+    name: string,
+    description: string,
+    emoji: string;
+}[] = [
+        {
+            name: 'Refresh',
+            description: 'Refreshes the current embed',
+            emoji: buttonsObjs.label.main.refresh,
+        }, {
+            name: 'BigLeftArrow',
+            description: 'Switches to the first page',
+            emoji: buttonsObjs.label.page.first,
+        }, {
+            name: 'LeftArrow',
+            description: 'Switches to the previous page',
+            emoji: buttonsObjs.label.page.previous,
+        }, {
+            name: 'Search',
+            description: 'Switches to the chosen page',
+            emoji: buttonsObjs.label.page.search,
+        }, {
+            name: 'RightArrow',
+            description: 'Switches to the next page',
+            emoji: buttonsObjs.label.page.next,
+        }, {
+            name: 'BigRightArrow',
+            description: 'Switches to the last page',
+            emoji: buttonsObjs.label.page.last,
+        }, {
+            name: 'detailMore',
+            description: 'Expands the current embed',
+            emoji: buttonsObjs.label.main.detailMore,
+        }, {
+            name: 'detailLess',
+            description: 'Collapses the current embed',
+            emoji: buttonsObjs.label.main.detailLess,
+        }, {
+            name: 'Detailed',
+            description: 'Toggles the amount of content on the current embed',
+            emoji: buttonsObjs.label.main.detailed,
+        }, {
+            name: 'Random',
+            description: 'Picks a random command to display',
+            emoji: buttonsObjs.label.main.random,
+        },
+    ];
+
+export { cmds, othercmds, osucmds, admincmds, buttons };
 

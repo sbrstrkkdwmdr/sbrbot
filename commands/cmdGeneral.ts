@@ -957,7 +957,7 @@ export function help(input: extypes.commandInput) {
         let opttxt = '';
         for (let i = 0; i < opts.length; i++) {
             const reqtxt = opts[i].required ? 'required' : 'optional';
-            opttxt += `\n\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options &&
+            opttxt += `\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options &&
                 !opts[i].options.includes('N/A') && !opts[i].options.includes('null') && !opts[i].options.includes('true') && !opts[i].options.includes('false')
                 ? `(${opts[i].options.map(x => `\`${x}\``).join('/')})` : ''}\n`;
         }
@@ -967,7 +967,9 @@ export function help(input: extypes.commandInput) {
 
         const commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none';
         // let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
-        const commandexamples = command.examples && command.examples.length > 0 ? command.examples.map(x => x.text).join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none';
+        const commandexamples = command.examples && command.examples.length > 0 ? command.examples.slice(0, 5).map(x => x.text).join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none';
+
+        const commandbuttons = command.buttons && command.buttons.length > 0 ? command.buttons.map(x => `[${x}]`).join('') : 'none';
 
         embed.setTitle("Command info for: " + command.name)
             .setDescription(desc)
@@ -986,6 +988,10 @@ export function help(input: extypes.commandInput) {
                     name: 'Examples',
                     value: commandexamples,
                     inline: false
+                },
+                {
+                    name: 'Buttons',
+                    value: commandbuttons
                 }
             ]);
     }
@@ -994,7 +1000,20 @@ export function help(input: extypes.commandInput) {
             const fetchcmd = command.toString();
             const commandInfo = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.info.dec);
-            if (helpinfo.cmds.find(obj => obj.name == fetchcmd)) {
+            if (command.includes('button')) {
+                commandfound = false;
+                commandCategory = 'default';
+                let desc = 'List of all buttons available';
+                let buttonstxt = '\n';
+                for (let i = 0; i < helpinfo.buttons.length; i++) {
+                    const curbtn = helpinfo.buttons[i];
+                    buttonstxt += `${curbtn.emoji}\`${curbtn.name}\`: ${curbtn.description}\n`;
+                }
+                desc += buttonstxt;
+                commandInfo.setTitle('Buttons')
+                    .setDescription(desc);
+
+            } else if (helpinfo.cmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'gen';
                 const res = helpinfo.cmds.find(obj => obj.name == fetchcmd);
@@ -1120,28 +1139,28 @@ export function help(input: extypes.commandInput) {
 
     getemb();
 
-    const inputMenu = new Discord.SelectMenuBuilder()
+    const inputMenu = new Discord.StringSelectMenuBuilder()
         .setCustomId(`${mainconst.version}-SelectMenu1-help-${commanduser.id}-${input.absoluteID}`)
         .setPlaceholder('Select a command');
 
-    const selectCategoryMenu = new Discord.SelectMenuBuilder()
+    const selectCategoryMenu = new Discord.StringSelectMenuBuilder()
         .setCustomId(`${mainconst.version}-SelectMenu2-help-${commanduser.id}-${input.absoluteID}`)
         .setPlaceholder('Select a command category')
         .setOptions(
-            new Discord.SelectMenuOptionBuilder()
-                .setEmoji('📜')
+            new Discord.StringSelectMenuOptionBuilder()
+                .setEmoji('📜' as Discord.APIMessageComponentEmoji)
                 .setLabel('General')
                 .setValue('CategoryMenu-gen'),
-            new Discord.SelectMenuOptionBuilder()
-                .setEmoji(emojis.gamemodes.standard)
+            new Discord.StringSelectMenuOptionBuilder()
+                .setEmoji(emojis.gamemodes.standard as Discord.APIMessageComponentEmoji)
                 .setLabel('osu!')
                 .setValue('CategoryMenu-osu'),
-            new Discord.SelectMenuOptionBuilder()
-                .setEmoji('🤖')
+            new Discord.StringSelectMenuOptionBuilder()
+                .setEmoji('🤖' as Discord.APIMessageComponentEmoji)
                 .setLabel('Admin')
                 .setValue('CategoryMenu-admin'),
-            new Discord.SelectMenuOptionBuilder()
-                .setEmoji('❓')
+            new Discord.StringSelectMenuOptionBuilder()
+                .setEmoji('❓' as Discord.APIMessageComponentEmoji)
                 .setLabel('Misc')
                 .setValue('CategoryMenu-misc'),
         )
@@ -1173,14 +1192,14 @@ export function help(input: extypes.commandInput) {
     if (commandfound == true) {
         for (let i = 0; i < curpick.length && i < 25; i++) {
             push.push(
-                new Discord.SelectMenuOptionBuilder()
+                new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(curpick[i]?.emoji ?? '📜')
                     .setLabel(curpick[i]?.label ?? `#${i + 1}`)
                     .setDescription(curpick[i]?.name ?? '_')
                     .setValue(curpick[i]?.val ?? curpick[i].name)
             );
             inputMenu.addOptions(
-                new Discord.SelectMenuOptionBuilder()
+                new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(curpick[i]?.emoji ?? '📜')
                     .setLabel(curpick[i]?.label ?? `#${i + 1}`)
                     .setDescription(curpick[i]?.name ?? '_')
@@ -1330,8 +1349,8 @@ Bot Version: ${pkgjson.version}
 
 }
 
-export function invite(input: extypes.commandInput){
-    
+export function invite(input: extypes.commandInput) {
+
     let commanduser: Discord.User;
 
 
