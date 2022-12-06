@@ -1320,8 +1320,8 @@ Users: ${input.client.users.cache.size}`,
         .setDescription(`
 [Created by SaberStrike](https://sbrstrkkdwmdr.github.io/sbr-web/)
 [Commands](https://sbrstrkkdwmdr.github.io/sbrbot/commands)
-Prefix: ${input.config.prefix}
-Server prefix: ${serverpfx}
+Global prefix: ${input.config.prefix.includes('`') ? `"${input.config.prefix}"` : `\`${input.config.prefix}\``}
+Server prefix: ${serverpfx.includes('`') ? `"${serverpfx}"` : `\`${serverpfx}\``}
 Bot Version: ${pkgjson.version}
 `);
 

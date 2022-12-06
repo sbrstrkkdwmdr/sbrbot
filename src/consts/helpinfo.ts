@@ -374,7 +374,7 @@ const osucmds: commandInfo[] = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the badge weighting of',
                 options: ['N/A'],
@@ -487,7 +487,7 @@ const osucmds: commandInfo[] = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
@@ -600,7 +600,7 @@ const osucmds: commandInfo[] = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to get',
                 options: ['N/A'],
@@ -889,7 +889,7 @@ const osucmds: commandInfo[] = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
@@ -1019,7 +1019,7 @@ const osucmds: commandInfo[] = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the profile of',
                 options: ['N/A'],
@@ -1169,7 +1169,7 @@ const osucmds: commandInfo[] = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
@@ -1301,7 +1301,7 @@ const osucmds: commandInfo[] = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
@@ -1712,7 +1712,7 @@ const osucmds: commandInfo[] = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the score(s) of',
                 options: ['N/A'],
@@ -1951,7 +1951,7 @@ const osucmds: commandInfo[] = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
@@ -2043,7 +2043,7 @@ const osucmds: commandInfo[] = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
@@ -2314,7 +2314,7 @@ const osucmds: commandInfo[] = [
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [{
             name: 'user',
-            type: 'string/integer/user mention',
+            type: 'string/ integer/ user mention',
             required: false,
             description: 'The user to show the beatmaps of',
             options: ['N/A'],
@@ -2403,7 +2403,7 @@ const osucmds: commandInfo[] = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the stats of',
                 options: ['N/A'],
