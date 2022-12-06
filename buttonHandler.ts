@@ -96,6 +96,15 @@ export default (input: {
                         }
                     }
                     break;
+                case 'ppcalc':
+                    {
+                        //interaction is converted to a base interaction first because button interaction and select menu interaction don't overlap
+                        overrides.id = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
+                        if (interaction?.message?.components[1]?.components[0]) {
+                            overrides.overwriteModal = interaction.message.components[1].components[0] as any;
+                        }
+                    }
+                    break;
                 case 'help':
                     {
                         overrides.ex = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
@@ -167,6 +176,11 @@ export default (input: {
                 break;
             case 'pinned':
                 osucmds.pinned({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
+            case 'ppcalc':
+                osucmds.ppCalc({ commandType, obj, args, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;

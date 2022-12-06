@@ -10077,6 +10077,14 @@ export async function ppCalc(input: extypes.commandInput) {
             }
         }
             break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            if (!input.obj.message.embeds[0]) {
+                return;
+            }
+            commanduser = input.obj.member.user;
+        }
+            break;
     }
     if (input.overrides != null) {
         if (input.overrides?.overwriteModal != null) {
@@ -10153,7 +10161,7 @@ export async function ppCalc(input: extypes.commandInput) {
     let bmsdata: osuApiTypes.Beatmapset;
 
     const inputModal = new Discord.StringSelectMenuBuilder()
-        .setCustomId(`${mainconst.version}-Select-map-${commanduser.id}-${input.absoluteID}`)
+        .setCustomId(`${mainconst.version}-Select-ppcalc-${commanduser.id}-${input.absoluteID}`)
         .setPlaceholder('Select a map');
 
     //fetch map data and mapset data from id
@@ -10759,6 +10767,7 @@ export async function ppCalc(input: extypes.commandInput) {
         obj: input.obj,
         args: {
             embeds: embeds,
+            components: useComponents,
             edit: true
         }
     });
@@ -11303,7 +11312,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
     let commanduser: Discord.User;
     let reachedMaxCount = false;
 
-    let mode:osuApiTypes.GameMode = 'osu'
+    let mode: osuApiTypes.GameMode = 'osu';
 
     let embedStyle: extypes.osuCmdStyle = 'L';
 
