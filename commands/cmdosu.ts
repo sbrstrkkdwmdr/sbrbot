@@ -207,7 +207,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
         args: {
             embeds: [embed]
         }
-    });
+    }, input.canReply);
     log.logCommand({
         event: 'Success',
         commandName: '',
@@ -381,7 +381,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         args: {
             content: `${user} has ${scorecount} #1 scores`
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -717,7 +717,7 @@ export async function lb(input: extypes.commandInput) {
             components: [pgbuttons],
             edit: true
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -1098,7 +1098,7 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
             embeds: [embed],
             components: [pgbuttons, buttons]
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -1266,7 +1266,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
         args: {
             embeds: [Embed]
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -1946,7 +1946,7 @@ ${onlinestatus}
             components: graphonly == true ? [] : [buttons],
             edit: true
         }
-    });
+    }, input.canReply);
 
 
     log.logCommand({
@@ -2690,7 +2690,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             components: [pgbuttons, buttons],
             edit: true
         }
-    });
+    }, input.canReply);
 
 
 
@@ -3292,7 +3292,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             components: [pgbuttons, buttons],
             edit: true
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -4102,7 +4102,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             components: [pgbuttons, buttons],
             edit: true
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -4854,7 +4854,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             components: [pgbuttons, buttons],
             edit: true
         }
-    });
+    }, input.canReply);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
@@ -5966,7 +5966,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
             components: [pgbuttons, buttons],
             edit: true
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -6242,7 +6242,7 @@ ${isfail}
         args: {
             embeds: [Embed]
         }
-    });
+    }, input.canReply);
 
 
     log.logCommand({
@@ -6936,7 +6936,7 @@ ${srStr}
             components: [buttons],
             edit: true
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -7196,7 +7196,7 @@ export async function scorepost(input: extypes.commandInput) {
         args: {
             content: titleString
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -7876,7 +7876,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             components: [pgbuttons, buttons],
             edit: true
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -8319,7 +8319,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
                 components: [buttons],
                 files: useFiles
             }
-        });
+        }, input.canReply);
     }
 
     log.logCommand({
@@ -8737,7 +8737,7 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
             embeds: [scoreEmbed],
             edit: true
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -9841,7 +9841,7 @@ HP${baseHP}`;
             components: useComponents,
             edit: true
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -10770,7 +10770,7 @@ export async function ppCalc(input: extypes.commandInput) {
             components: useComponents,
             edit: true
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -10942,7 +10942,7 @@ export async function randomMap(input: extypes.commandInput) {
         args: {
             content: txt
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -11279,7 +11279,8 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
         args: {
             embeds: [osuEmbed]
         }
-    });
+    }, input.canReply
+    );
 
     log.logCommand({
         event: 'Success',
@@ -11927,7 +11928,7 @@ Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${fil
             embeds: [mapList],
             components: [pgbuttons, buttons]
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -12106,7 +12107,7 @@ export async function trackadd(input: extypes.commandInput) {
         args: {
             content: replymsg,
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -12279,7 +12280,7 @@ export async function trackremove(input: extypes.commandInput) {
         args: {
             content: replymsg,
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -12394,7 +12395,7 @@ export async function trackchannel(input: extypes.commandInput) {
         args: {
             content: `Tracking channel set to <#${channelId}>`,
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -12522,7 +12523,7 @@ export async function tracklist(input: extypes.commandInput) {
         args: {
             embeds: [userListEmbed],
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -13030,7 +13031,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
             embeds: [embed],
             components: useComponents
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -13277,7 +13278,7 @@ export async function osuset(input: extypes.commandInput) {
         args: {
             content: txt,
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -13440,7 +13441,7 @@ export async function saved(input: extypes.commandInput) {
         args: {
             embeds: [Embed],
         }
-    });
+    }, input.canReply);
     log.logCommand({
         event: 'Success',
         commandName: '',
@@ -13756,7 +13757,7 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
         args: {
             embeds: [embed]
         }
-    });
+    }, input.canReply);
 
 
     log.logCommand({

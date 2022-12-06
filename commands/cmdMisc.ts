@@ -80,7 +80,7 @@ export function _8ball(input: extypes.commandInput) {
         args: {
             content: `${responses[Math.floor(Math.random() * responses.length)]}`,
         }
-    });
+    },input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -506,7 +506,7 @@ export async function image(input: extypes.commandInput) {
         args: {
             embeds: useEmbeds
         }
-    });
+    },input.canReply);
 
     fs.appendFileSync(`logs/cmd/commands${input.obj.guildId}.log`,
         `
@@ -770,7 +770,7 @@ export function roll(input: extypes.commandInput) {
         args: {
             content: `${eq}`,
         }
-    });
+    },input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -996,7 +996,7 @@ Description: \`${curItem.description}\`
         args: {
             embeds: [searchEmbed]
         }
-    });
+    },input.canReply);
 
     log.logCommand({
         event: 'Success',

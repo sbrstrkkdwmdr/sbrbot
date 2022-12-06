@@ -125,7 +125,7 @@ export function checkperms(input: extypes.commandInput) {
         args: {
             embeds: [embed],
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -321,7 +321,7 @@ export function getUser(input: extypes.commandInput) {
         args: {
             embeds: [Embedr]
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -419,7 +419,7 @@ export function getUserAv(input: extypes.commandInput) {
         args: {
             embeds: [Embedr]
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -511,7 +511,7 @@ export async function debug(input: extypes.commandInput) {
             args: {
                 content: errorstr
             }
-        });
+        }, input.canReply);
         return;
     }
 
@@ -692,7 +692,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
         commandType: input.commandType,
         obj: input.obj,
         args: usemsgArgs
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -973,7 +973,7 @@ export function find(input: extypes.commandInput) {
         args: {
             embeds: [Embedr]
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -1061,7 +1061,7 @@ export function leaveguild(input: extypes.commandInput) {
         args: {
             content: 'You don\'t have permissions to use this command'
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -1152,7 +1152,7 @@ export async function prefix(input: extypes.commandInput) {
         args: {
             content: replymsg
         }
-    });
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -1236,7 +1236,7 @@ export function servers(input: extypes.commandInput) {
         commandType: input.commandType,
         obj: input.obj,
         args: rw
-    });
+    }, input.canReply);
 
     fs.appendFileSync(`${path}/logs/cmd/commands${input.obj.guildId}.log`,
         `

@@ -16,7 +16,7 @@ export async function sendMessage(input: {
         edit?: boolean,
     };
 },
-    canReply?: boolean
+    canReply: boolean
 ) {
     try {
         if (input.args.react == true) {
@@ -50,7 +50,15 @@ export async function sendMessage(input: {
         } else {
             switch (input.commandType) {
                 case 'message': case 'link': {
-                    if (canReply != false) {
+                    if (!canReply) {
+                        (input.obj as Discord.Message<any>).channel.send({
+                            content: `${input.args.content ?? ''}`,
+                            embeds: input.args.embeds ?? [],
+                            files: input.args.files ?? [],
+                            components: input.args.components ?? [],
+                        })
+                            .catch(x => console.log(x));
+                    } else {
                         (input.obj as Discord.Message<any>).reply({
                             content: `${input.args.content ?? ''}`,
                             embeds: input.args.embeds ?? [],
@@ -60,8 +68,6 @@ export async function sendMessage(input: {
                             failIfNotExists: true
                         })
                             .catch();
-                    } else {
-
                     }
                 }
                     break;

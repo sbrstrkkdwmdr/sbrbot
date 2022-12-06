@@ -29,6 +29,7 @@ module.exports = {
         currentDate: Date,
         overrides: extypes.overrides,
         userdata: extypes.data,
+        canReply: boolean;
     }) {
         let commanduser: Discord.User;
 
@@ -109,8 +110,9 @@ module.exports = {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-            }
-        });
+            },
+        }, input.canReply
+        );
 
         log.logFile('command',
             `

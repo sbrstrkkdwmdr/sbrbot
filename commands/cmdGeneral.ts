@@ -786,7 +786,7 @@ ${num ? '' : '[number]'}`;
             args: {
                 embeds: useEmbeds
             }
-        }
+        },input.canReply
     );
 
     log.logCommand({
@@ -1220,7 +1220,7 @@ export function help(input: extypes.commandInput) {
                 embeds: useEmbeds,
                 components: useComponents
             }
-        }
+        },input.canReply
     );
 
     log.logCommand({
@@ -1335,7 +1335,7 @@ Bot Version: ${pkgjson.version}
                 embeds: [Embed],
                 components: [buttons]
             }
-        }
+        },input.canReply
     );
 
 
@@ -1432,7 +1432,7 @@ export function invite(input: extypes.commandInput) {
         args: {
             content: mainconst.linkInvite
         }
-    });
+    },input.canReply);
 
     log.logFile('command',
         `
@@ -1621,7 +1621,7 @@ export function math(input: extypes.commandInput) {
             args: {
                 content: equation
             }
-        }
+        },input.canReply
     );
 
 
@@ -1765,7 +1765,7 @@ export function remind(input: extypes.commandInput) {
                     args: {
                         content: 'Please specify a time'
                     }
-                });
+                },input.canReply);
 
             }
             if (!input.args[1]) {
@@ -1778,7 +1778,7 @@ export function remind(input: extypes.commandInput) {
                     args: {
                         content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`'
                     }
-                });
+                },input.canReply);
             }
         }
             break;
@@ -1807,7 +1807,7 @@ export function remind(input: extypes.commandInput) {
                         content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`',
                         ephemeral: true
                     }
-                });
+                },input.canReply);
             }
         }
 
@@ -1886,7 +1886,7 @@ export function remind(input: extypes.commandInput) {
             args: {
                 react: true
             }
-        });
+        },input.canReply);
 
 
 
@@ -1983,7 +1983,7 @@ Current Shard:
         args: {
             embeds: [Embed],
         }
-    });
+    },input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -2190,7 +2190,7 @@ export function time(input: extypes.commandInput) {
                     args: {
                         embeds: [Embed]
                     }
-                });
+                },input.canReply);
                 return;
             }
 
@@ -2214,7 +2214,7 @@ export function time(input: extypes.commandInput) {
         args: {
             embeds: [Embed]
         }
-    });
+    },input.canReply);
 
     log.logCommand({
         event: 'Success',

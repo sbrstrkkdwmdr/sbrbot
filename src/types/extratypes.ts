@@ -199,6 +199,7 @@ export type commandInput = {
     commandType: commandType,
     obj: commandObject,
     args: string[],
+    canReply: boolean,
     button?: commandButtonTypes,
     config?: config,
     client?: Discord.Client,
