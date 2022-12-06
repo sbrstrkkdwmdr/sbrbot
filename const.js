@@ -1174,7 +1174,7 @@ const osucommands = [
                 descriptor: 'Returns your 3rd personal best score'
             },
             {
-                text:'PREFIXMSGsotarks',
+                text: 'PREFIXMSGsotarks',
                 descriptor: 'Returns your top plays mapped by sotarks'
             }
         ],
@@ -1183,7 +1183,7 @@ const osucommands = [
             'taikotop', 'toptaiko', 'tt', 'topt',
             'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tf', 'tctb', 'topf', 'topc',
             'maniatop', 'topmania', 'tm', 'topm',
-            'sotarks', 'sotarksosu', 
+            'sotarks', 'sotarksosu',
             'sotarkstaiko', 'taikosotarks', 'sotarkst', 'tsotarks',
             'sotaksfruits', 'fruitssotarks', 'fruitsotarks', 'sotarksfruit', 'sotarkscatch', 'catchsotarks', 'sotarksctb', 'ctbsotarks', 'sotarksf', 'sotarksc',
             'sotarksmania', 'maniasotarks', 'sotarksm', 'msotarks'
@@ -2713,4 +2713,100 @@ const admincommands = [
         aliases: [],
         options: []
     }
+]
+
+const buttons = [
+    {
+        name: 'Refresh',
+        description: 'Refreshes the embed',
+        imagesrc: './img/buttons/refresh.png',
+        emojisrc: '',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'BigLeftArrow',
+        description: 'Switches to the first page',
+        imagesrc: './img/buttons/page_first.png',
+        emojisrc: '',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'LeftArrow',
+        description: 'Switches to the previous page',
+        imagesrc: './img/buttons/page_previous.png',
+        emojisrc: '',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'Search',
+        description: 'Enter a page number to go to',
+        imagesrc: '',
+        emojisrc: '🔍',
+        examples: [{
+            text: '2',
+            descriptor: 'Goes to page 2. If the page number is invalid, it will go to the last page'
+        }],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'RightArrow',
+        description: 'Switches to the next page',
+        imagesrc: './img/buttons/page_next.png',
+        emojisrc: '',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'BigRightArrow',
+        description: 'Switches to the last page',
+        imagesrc: './img/buttons/page_last.png',
+        emojisrc: '',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'detailMore',
+        description: 'Expands the details of the current embed',
+        imagesrc: './img/buttons/details_more.png',
+        emojisrc: '',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'detailLess',
+        description: 'Collapses the details of the current embed',
+        imagesrc: './img/buttons/details_less',
+        emojisrc: '',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'Detailed',
+        description: 'Toggles the detailed view of the current embed',
+        imagesrc: '',
+        emojisrc: '📝',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'Random',
+        description: 'Picks a random value from a list',
+        imagesrc: '',
+        emojisrc: '🎲',
+        examples: [],
+        aliases: [],
+        options: []
+    },
 ]
