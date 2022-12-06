@@ -355,7 +355,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
 
     }
 
-    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     if (input.commandType == 'interaction') {
         (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
@@ -1459,9 +1459,9 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         }
     }
 
-    if(input.overrides != null){
-        if (input.overrides.mode){
-            mode = input.overrides.mode
+    if (input.overrides != null) {
+        if (input.overrides.mode) {
+            mode = input.overrides.mode;
         }
     }
 
@@ -1640,7 +1640,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
-            osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
+            osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
         } catch (error) {
             osufunc.logCall(error);
         }
@@ -2459,7 +2459,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
-    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -3849,7 +3849,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
-    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -4625,7 +4625,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
-    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -5329,7 +5329,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
-    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -6779,7 +6779,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         return;
     }
 
-    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, scoredata.user.username, 'osudata', osufunc.modeValidator(mode));
@@ -7617,7 +7617,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
     }
 
-    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
@@ -9474,9 +9474,9 @@ export async function map(input: extypes.commandInput) {
         });
         ppissue = '';
         try {
-            totaldiff = mapdata.difficulty_rating != ppComputed[0].difficulty.stars?.toFixed(2) ?
-            `${mapdata.difficulty_rating}=>${ppComputed[0].difficulty.stars?.toFixed(2)}` : 
-            `${mapdata.difficulty_rating}`
+            totaldiff = mapdata.difficulty_rating.toFixed(2) != ppComputed[0].difficulty.stars?.toFixed(2) ?
+                `${mapdata.difficulty_rating.toFixed(2)}=>${ppComputed[0].difficulty.stars?.toFixed(2)}` :
+                `${mapdata.difficulty_rating.toFixed(2)}`;
         } catch (error) {
             totaldiff = mapdata.difficulty_rating;
         }
@@ -11303,6 +11303,8 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
     let commanduser: Discord.User;
     let reachedMaxCount = false;
 
+    let mode:osuApiTypes.GameMode = 'osu'
+
     let embedStyle: extypes.osuCmdStyle = 'L';
 
     let mapDetailed: number = 1;
@@ -11693,7 +11695,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         return;
     }
 
-    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator('osu'));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator('osu'));
@@ -13642,7 +13644,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
-    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));

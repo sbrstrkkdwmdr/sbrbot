@@ -1466,6 +1466,9 @@ export async function userStatsCache(user: osuApiTypes.UserStatistics[] | osuApi
                 user = user as osuApiTypes.UserStatistics[];
                 for (let i = 0; i < user.length; i++) {
                     const curuser = user[i];
+                    if (!(curuser?.pp || !curuser?.global_rank)) {
+                        break;
+                    }
                     let findname = await database.findOne({
                         where: {
                             osuid: curuser.user.id
@@ -1498,6 +1501,9 @@ export async function userStatsCache(user: osuApiTypes.UserStatistics[] | osuApi
                 user = user as osuApiTypes.User[];
                 for (let i = 0; i < user.length; i++) {
                     const curuser = user[i];
+                    if (!(curuser?.statistics?.pp || !curuser?.statistics?.global_rank)) {
+                        break;
+                    }
                     let findname = await database.findOne({
                         where: {
                             osuid: curuser.id
@@ -1509,37 +1515,37 @@ export async function userStatsCache(user: osuApiTypes.UserStatistics[] | osuApi
 
                     if (typeof findname == 'undefined' || !findname) {
                         await database.create({
-                            osuid: curuser.id,
-                            country: curuser.country_code,
-                            [mode + 'pp']: curuser.statistics.pp,
-                            [mode + 'rank']: curuser.statistics.global_rank,
-                            [mode + 'acc']: curuser.statistics.hit_accuracy
+                            osuid: `${curuser.id}`,
+                            country: `${curuser.country_code}`,
+                            [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
+                            [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
+                            [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
                         }).then(x => {
                             console.log(x);
                             console.log({
-                                osuid: curuser.id,
-                                country: curuser.country_code,
-                                [mode + 'pp']: curuser.statistics.pp,
-                                [mode + 'rank']: curuser.statistics.global_rank,
-                                [mode + 'acc']: curuser.statistics.hit_accuracy
+                                osuid: `${curuser.id}`,
+                                country: `${curuser.country_code}`,
+                                [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
+                                [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
+                                [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
                             });
                         });
                     } else {
                         await database.update({
-                            [mode + 'pp']: curuser.statistics.pp,
-                            [mode + 'rank']: curuser.statistics.global_rank,
-                            [mode + 'acc']: curuser.statistics.hit_accuracy
+                            [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
+                            [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
+                            [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
                         },
                             {
-                                where: { osuid: curuser.id }
+                                where: { osuid: `${curuser.id}` }
                             }).then(x => {
                                 console.log(x);
                                 console.log({
-                                    osuid: curuser.id,
-                                    country: curuser.country_code,
-                                    [mode + 'pp']: curuser.statistics.pp,
-                                    [mode + 'rank']: curuser.statistics.global_rank,
-                                    [mode + 'acc']: curuser.statistics.hit_accuracy
+                                    osuid: `${curuser.id}`,
+                                    country: `${curuser.country_code}`,
+                                    [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
+                                    [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
+                                    [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
                                 });
                             });
                     }
@@ -1555,7 +1561,12 @@ export async function userStatsCache(user: osuApiTypes.UserStatistics[] | osuApi
 
 export async function userStatsCacheFix(database: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode) {
     const users = await database.findAll();
-    const actualusers = [];
+    const actualusers: {
+        pp: string,
+        rank: string,
+        acc: string,
+        uid: string;
+    }[] = [];
     for (let i = 0; i < users.length; i++) {
         const curuser = {
             pp: users[i].dataValues[`${mode}pp`],
@@ -1566,11 +1577,11 @@ export async function userStatsCacheFix(database: Sequelize.ModelStatic<any>, mo
         actualusers.push(curuser);
     }
 
-    actualusers.sort((a, b) => b.pp - a.pp);
+    actualusers.sort((a, b) => (+b.pp) - (+a.pp));
 
     for (let i = 0; i < actualusers.length; i++) {
         const curuser = actualusers[i];
-        let givenrank = i + 1;
+        let givenrank = curuser.rank;
         //if user doesn't have a rank, make it null
         if (typeof curuser.pp == 'undefined' || !curuser.pp) {
             givenrank = null;
