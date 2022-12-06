@@ -10,20 +10,19 @@ export async function sendMessage(input: {
         content?: string,
         embeds?: Discord.EmbedBuilder[] | Discord.Embed[],
         files?: string[],
-        components?: Discord.ActionRowBuilder[] | Discord.ActionRowComponent[],
+        components?: Discord.ActionRowBuilder<any>[],
         ephemeral?: boolean,
         react?: boolean,
         edit?: boolean,
     };
-}) {
+},
+    canReply?: boolean
+) {
     try {
         if (input.args.react == true) {
             switch (input.commandType) {
                 case 'message': {
-                    //@ts-expect-error aaaaaaaaa
-                    //This expression is not callable.
-                    //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-                    input.obj.react('✅')
+                    (input.obj as Discord.Message<any>).react('✅')
                         .catch();
                 }
                     break;
@@ -31,14 +30,10 @@ export async function sendMessage(input: {
                 //==============================================================================================================================================================================================
 
                 case 'interaction': {
-                    //@ts-expect-error wwwwwwww
-                    //This expression is not callable.
-                    //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-                    input.obj.reply({
+                    (input.obj as Discord.CommandInteraction).reply({
                         content: '✅',
                         ephemeral: true,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                         .catch();
                 }
@@ -47,8 +42,7 @@ export async function sendMessage(input: {
 
                     break;
                 case 'button': {
-                    //@ts-expect-error property 'message' does not exist on 'Message<any>'
-                    input.obj.message.react('✅')
+                    (input.obj as Discord.ButtonInteraction).message.react('✅')
                         .catch();
                 }
                     break;
@@ -56,18 +50,19 @@ export async function sendMessage(input: {
         } else {
             switch (input.commandType) {
                 case 'message': case 'link': {
-                    //@ts-expect-error aaaaaaaaaaa
-                    //This expression is not callable.
-                    //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-                    input.obj.reply({
-                        content: `${input.args.content ?? ''}`,
-                        embeds: input.args.embeds ?? [],
-                        files: input.args.files ?? [],
-                        components: input.args.components ?? [],
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
+                    if (canReply != false) {
+                        (input.obj as Discord.Message<any>).reply({
+                            content: `${input.args.content ?? ''}`,
+                            embeds: input.args.embeds ?? [],
+                            files: input.args.files ?? [],
+                            components: input.args.components ?? [],
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                            .catch();
+                    } else {
+
+                    }
                 }
                     break;
 
@@ -76,29 +71,22 @@ export async function sendMessage(input: {
                 case 'interaction': {
                     if (input.args.edit == true) {
                         setTimeout(() => {
-                            //@ts-expect-error property 'editReply' does not exist on 'Message<any>'
-                            input.obj.editReply({
+                            (input.obj as Discord.CommandInteraction<any>).editReply({
                                 content: `${input.args.content ?? ''}`,
                                 embeds: input.args.embeds ?? [],
                                 files: input.args.files ?? [],
                                 components: input.args.components ?? [],
                                 allowedMentions: { repliedUser: false },
-                                failIfNotExists: true,
-                                ephemeral: input.args.ephemeral ?? false
                             })
                                 .catch();
                         }, 1000);
                     } else {
-                        //@ts-expect-error aaaaaaa
-                        //This expression is not callable.
-                        //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-                        input.obj.reply({
+                        (input.obj as Discord.CommandInteraction<any>).reply({
                             content: `${input.args.content ?? ''}`,
                             embeds: input.args.embeds ?? [],
                             files: input.args.files ?? [],
                             components: input.args.components ?? [],
                             allowedMentions: { repliedUser: false },
-                            failIfNotExists: true,
                             ephemeral: input.args.ephemeral ?? false
                         })
                             .catch();
@@ -109,14 +97,12 @@ export async function sendMessage(input: {
 
                     break;
                 case 'button': {
-                    //@ts-expect-error property 'message' does not exist on 'Message<any>'
-                    input.obj.message.edit({
+                    (input.obj as Discord.ButtonInteraction).message.edit({
                         content: `${input.args.content ?? ''}`,
                         embeds: input.args.embeds ?? [],
                         files: input.args.files ?? [],
                         components: input.args.components ?? [],
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                         .catch();
                 }
