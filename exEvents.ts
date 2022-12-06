@@ -259,7 +259,7 @@ export default (input: {
                     return;
                 } else {
                     if (file.includes('temp')) {
-                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
                             fs.unlinkSync('./files/maps/' + file);
                             osufunc.logCall(file, 'deleted file');
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
@@ -293,7 +293,7 @@ export default (input: {
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     } else {
-                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 15)) {
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 3)) {
                             fs.unlinkSync('./cache/commandData/' + file);
                             osufunc.logCall(file, 'deleted file');
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
