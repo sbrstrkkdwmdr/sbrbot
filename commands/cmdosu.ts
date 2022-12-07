@@ -3052,7 +3052,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         filterMapTitle: filterTitle,
         reverse: reverse,
     });
-    firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
+    firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
 
     if (scoresarg.fields.length == 0) {
         firstsEmbed.addFields([{
@@ -3073,7 +3073,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                     temptxt += scoresarg.string[i];
                 }
                 firstsEmbed.setDescription(
-                    `${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
+                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
                     + temptxt
                 );
                 break;
@@ -3531,7 +3531,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             }
         }
 
-        lbEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(scoresarg.maxPages)}`);
+        lbEmbed.setDescription(`Page: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}`);
 
         if (scoresarg.isFirstPage) {
             (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
@@ -4464,7 +4464,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             filterMapTitle: filterTitle,
             reverse: reverse
         });
-    topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`);
+    topEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`);
     if (scoresarg.fields.length == 0) {
         topEmbed.addFields([{
             name: 'Error',
@@ -4484,7 +4484,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
                     temptxt += scoresarg.string[i];
                 }
                 topEmbed.setDescription(
-                    `${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}`
+                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}`
                     + temptxt
                 );
                 break;
@@ -5218,7 +5218,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             filterMapTitle: filterTitle,
             reverse: false
         });
-    pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
+    pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
     if (scoresarg.fields.length == 0) {
         pinnedEmbed.addFields([{
             name: 'Error',
@@ -5238,7 +5238,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                     temptxt += scoresarg.string[i];
                 }
                 pinnedEmbed.setDescription(
-                    `${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
+                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
                     + temptxt
                 );
                 break;
@@ -6352,7 +6352,7 @@ ${srStr}
                 rsEmbed.addFields(scoresarg.fields[i]);
             }
         }
-        rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 5)}
+        rsEmbed.setDescription(`Page: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
 ${emojis.gamemodes[mode]}
 ${filterTitle ? `Filter: ${filterTitle}` : ''}
 `);
@@ -8242,7 +8242,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             reverse: reverse,
             mapidOverride: mapdata.id
         });
-    scoresEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\nmode: ${mode}\n`);
+    scoresEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\nmode: ${mode}\n`);
     if (scoresarg.fields.length == 0) {
         scoresEmbed.addFields([{
             name: 'Error',
@@ -8262,7 +8262,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                     temptxt += scoresarg.string[i];
                 }
                 scoresEmbed.setDescription(
-                    `${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}`
+                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}`
                     + temptxt
                 );
                 break;
