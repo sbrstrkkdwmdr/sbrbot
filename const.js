@@ -352,7 +352,7 @@ const osucommands = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the badge weighting of',
                 options: ['N/A'],
@@ -463,7 +463,7 @@ const osucommands = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
@@ -576,7 +576,7 @@ const osucommands = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to get',
                 options: ['N/A'],
@@ -861,7 +861,7 @@ const osucommands = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
@@ -991,7 +991,7 @@ const osucommands = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the profile of',
                 options: ['N/A'],
@@ -1140,7 +1140,7 @@ const osucommands = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
@@ -1271,7 +1271,7 @@ const osucommands = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
@@ -1681,7 +1681,7 @@ const osucommands = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the score(s) of',
                 options: ['N/A'],
@@ -1919,7 +1919,7 @@ const osucommands = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
@@ -2010,7 +2010,7 @@ const osucommands = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the scores of',
                 options: ['N/A'],
@@ -2270,7 +2270,7 @@ const osucommands = [
         aliases: ['ub', 'userb', 'ubm', 'um', 'usermaps'],
         options: [{
             name: 'user',
-            type: 'string/integer/user mention',
+            type: 'string/ integer/ user mention',
             required: false,
             description: 'The user to show the beatmaps of',
             options: ['N/A'],
@@ -2359,7 +2359,7 @@ const osucommands = [
         options: [
             {
                 name: 'user',
-                type: 'string/integer/user mention',
+                type: 'string/ integer/ user mention',
                 required: false,
                 description: 'The user to show the stats of',
                 options: ['N/A'],
