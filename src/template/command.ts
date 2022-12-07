@@ -12,6 +12,7 @@ import * as log from '../../src/log.js';
 import * as osufunc from '../../src/osufunc.js';
 import * as extypes from '../../src/types/extraTypes.js';
 import * as osuApiTypes from '../../src/types/osuApiTypes.js';
+import * as mainconst from '../consts/main.js';
 import * as osumodcalc from '../osumodcalc.js';
 import * as func from '../tools.js';
 
@@ -67,26 +68,26 @@ module.exports = {
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-BigLeftArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.first),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-LeftArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.previous),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-RightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.next),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-BigRightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.last),
             );
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-Refresh-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.main.refresh),
             );

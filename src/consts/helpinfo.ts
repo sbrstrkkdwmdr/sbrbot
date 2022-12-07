@@ -1788,6 +1788,37 @@ const osucmds: commandInfo[] = [
         ]
     },
     {
+        name: 'recentactivity',
+        description: 'Displays the user\'s most recent activity',
+        usage: 'recentactivity [user] [-page]',
+        slashusage: 'recentactivity [user] [page]',
+        examples: [],
+        aliases: ['recentact', 'rsact'],
+        options: [
+            {
+                name: 'user',
+                type: 'string/ integer/ user mention',
+                required: false,
+                description: 'The user to show the activity(s) of',
+                options: ['N/A'],
+                defaultValue: 'The user who ran the command',
+                examples: ['SaberStrike', 'user:SaberStrike'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'page',
+                type: 'integer',
+                required: false,
+                description: 'The page of activities to show',
+                options: ['N/A'],
+                defaultValue: '1',
+                aliases: ['p'],
+                examples: ['-p 2', 'page:2'],
+                commandTypes: ['message', 'interaction', 'button']
+            },
+        ]
+    },
+    {
         name: 'render',
         description: 'Renders the last requested beatmap',
         usage: 'render [-(comboColour)] [+(mods)] [-start] [-end] [-speed]',

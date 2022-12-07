@@ -1959,6 +1959,427 @@ ${onlinestatus}
 
 }
 
+export async function recent_activity(input: extypes.commandInput & { statsCache: any; }) {
+
+    let commanduser: Discord.User;
+
+    let user = 'SaberStrike';
+    let searchid;
+    let page = 1;
+    let filter;
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+
+            if (input.args.includes('-page')) {
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-p')) {
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-?')) {
+                const temp = func.parseArg(input.args, '-?', 'string', filter, true);
+                filter = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            input.args = cleanArgs(input.args);
+
+            user = input.args.join(' ');
+            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+                user = null;
+            }
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+
+            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
+            page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]);
+
+            switch (input.button) {
+                case 'BigLeftArrow':
+                    page = 1;
+                    break;
+                case 'LeftArrow':
+                    page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1;
+                    break;
+                case 'RightArrow':
+                    page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1;
+                    break;
+                case 'BigRightArrow':
+                    page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n')[0]);
+                    break;
+            }
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+        if (input.overrides.page != null) {
+            page = parseInt(`${input.overrides.page}`);
+        }
+    }
+    //==============================================================================================================================================================================================
+
+    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-BigLeftArrow-recentactivity-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.first),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-LeftArrow-recentactivity-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.previous),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Search-recentactivity-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.search),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-RightArrow-recentactivity-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.next),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-BigRightArrow-recentactivity-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.last),
+        );
+    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Refresh-recentactivity-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.refresh),
+        );
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'recentactivity',
+        options: [
+            {
+                name: 'User',
+                value: user
+            },
+            {
+                name: 'Search ID',
+                value: searchid
+            },
+            {
+                name: 'Page',
+                value: page
+            },
+            {
+                name: 'Filter',
+                value: filter
+            }
+        ]
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    //if user is null, use searchid
+    if (user == null) {
+        const cuser = await osufunc.searchUser(searchid, input.userdata, true);
+        user = cuser.username;
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
+    }
+
+    if (page < 2 || typeof page != 'number') {
+        page = 1;
+    }
+    page--;
+
+    if (input.commandType == 'interaction') {
+        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+            content: 'Loading...',
+            allowedMentions: { repliedUser: false },
+        }).catch();
+    }
+
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(user, 'osudata', 'osu') &&
+        !('error' in func.findFile(user, 'osudata', 'osu')) &&
+        input.button != 'Refresh'
+    ) {
+        osudataReq = func.findFile(user, 'osudata', 'osu');
+    } else {
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: 'osu'
+            }
+        });
+    }
+
+    let osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'recent_activity', input.obj.guildId, 'osuData');
+
+    if (osudata?.error || !osudata.id) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            if (input.commandType == 'interaction') {
+                setTimeout(() => {
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        content: `Error - could not find user \`${user}\``,
+                        allowedMentions: { repliedUser: false },
+                    });
+                }, 1000);
+            } else {
+
+                (input.obj as Discord.Message<any>).reply({
+                    content: `Error - could not find user \`${user}\``,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                });
+            }
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'osu',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: `Could not find user ${user}`
+        });
+        return;
+    }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', 'osu');
+    func.storeFile(osudataReq, user, 'osudata', 'osu');
+
+    if (input.commandType != 'button' || input.button == 'Refresh') {
+        try {
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
+            osufunc.userStatsCache([osudata], input.statsCache, 'osu', 'User');
+        } catch (error) {
+            osufunc.logCall(error);
+        }
+    }
+
+    let recentActivityReq: osufunc.apiReturn;
+
+    if (func.findFile(input.absoluteID, 'rsactdata') &&
+        !('error' in func.findFile(input.absoluteID, 'rsactdata')) &&
+        input.button != 'Refresh'
+    ) {
+        recentActivityReq = func.findFile(input.absoluteID, 'rsactdata');
+    } else {
+        recentActivityReq = await osufunc.apiget({
+            type: 'user_recent_activity',
+            params: {
+                userid: osudata.id,
+                opts: ['limit=100']
+            }
+        });
+    }
+
+    const rsactData: osuApiTypes.Event[] & osuApiTypes.Error = recentActivityReq.apiData;
+
+    osufunc.debug(recentActivityReq, 'command', 'recent_activity', input.obj.guildId, 'rsactData');
+
+    if (rsactData?.error) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            if (input.commandType == 'interaction') {
+                setTimeout(() => {
+                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        content: `Error - could not find recent data`,
+                        allowedMentions: { repliedUser: false },
+                    });
+                }, 1000);
+            } else {
+
+                (input.obj as Discord.Message<any>).reply({
+                    content: `Error - could not find recent data`,
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                });
+            }
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'recent_activity',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: `Could not find recent data`
+        });
+        return;
+    }
+
+    func.storeFile(recentActivityReq, input.absoluteID, 'rsactData', 'osu');
+
+    const pageLength = 5;
+
+    if (page < 1) {
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+
+    }
+    if (page >= Math.ceil(rsactData.length / pageLength) - 1) {
+        page = Math.ceil(rsactData.length / pageLength) - 1;
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
+
+    }
+
+    const curEmbed = new Discord.EmbedBuilder()
+        .setTitle(`Recent Activity for ${osudata.username}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/osu`)
+        .setAuthor({
+            name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
+            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
+        })
+        .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
+        .setDescription(`Page: ${page + 1}/${Math.ceil(rsactData.length / pageLength)}`)
+        ;
+
+    for (let i = 0; i < rsactData.length && i < pageLength; i++) {
+        let curEv = rsactData[i + (page * pageLength)];
+        if (!curEv) break;
+        const obj = {
+            name: `#${i + (page * pageLength) + 1} | `,
+            value: 'null',
+            inline: false
+        };
+        switch (curEv.type) {
+            case 'achievement': {
+                const temp = curEv as osuApiTypes.EventAchievement;
+                obj.name += `${temp.achievement}`;
+                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'beatmapPlaycount': {
+                const temp = curEv as osuApiTypes.EventBeatmapPlaycount;
+                obj.name += `Achieved ${temp.count} plays`;
+                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
+                    + `[${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url})`
+                    ;
+            } break;
+            case 'beatmapsetDelete': {
+                const temp = curEv as osuApiTypes.EventBeatmapsetDelete;
+                obj.name += `Deleted a mapset`;
+                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
+                    + `[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
+                    ;
+            } break;
+            case 'beatmapsetRevive': {
+                const temp = curEv as osuApiTypes.EventBeatmapsetRevive;
+                obj.name += `Revived a mapset`;
+                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
+                    + `[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
+                    ;
+            } break;
+            case 'beatmapsetUpdate': {
+                const temp = curEv as osuApiTypes.EventBeatmapsetUpdate;
+                obj.name += `Updated a mapset`;
+                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
+                    + `[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
+                    ;
+            } break;
+            case 'beatmapsetUpload': {
+                const temp = curEv as osuApiTypes.EventBeatmapsetUpload;
+                obj.name += `Submitted a new mapset`;
+                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
+                    + `[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
+                    ;
+            } break;
+            case 'rank': {
+                const temp = (curEv as osuApiTypes.EventRank);
+                obj.name += `Achieved rank #${temp.rank}`;
+                obj.value =
+                    `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>
+[${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url})
+${emojis.grades[temp.scoreRank]} | ${emojis.gamemodes[temp.mode]}
+`;
+            }
+                break;
+            case 'rankLost': {
+                const temp = curEv as osuApiTypes.EventRankLost;
+                obj.name += `Lost a #1 rank`;
+                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
+                    + `[${temp.beatmap.title}](${temp.beatmap.url})`;
+            } break;
+            case 'userSupportAgain': {
+                const temp = curEv as osuApiTypes.EventUserSupportAgain;
+                obj.name += `Gained supporter`;
+                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'userSupportFirst': {
+                const temp = curEv as osuApiTypes.EventUserSupportFirst;
+                obj.name += `Gained supporter for the first time`;
+                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'userSupportGift': {
+                const temp = curEv as osuApiTypes.EventUserSupportGift;
+                obj.name += `Gifted supporter`;
+                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'usernameChange': {
+                const temp = curEv as osuApiTypes.EventUsernameChange;
+                obj.name += `Changed username`;
+                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
+                    + `${temp.user.previousUsername}=>${temp.user.username}`
+                    ;
+            } break;
+        }
+        curEmbed.addFields([obj]);
+    }
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [curEmbed],
+            components: [pgbuttons, buttons]
+        },
+    }, input.canReply
+    );
+
+    log.logFile('command',
+        `
+----------------------------------------------------
+success
+ID: ${input.absoluteID}
+----------------------------------------------------
+\n\n`,
+        { guildId: `${input.obj.guildId}` }
+    );
+
+}
+
 //scores
 
 /**
@@ -7053,7 +7474,7 @@ export async function scorepost(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
-        commandName: 'COMMANDNAME',
+        commandName: 'recentactivity',
         options: [
             {
                 name: 'Score ID',

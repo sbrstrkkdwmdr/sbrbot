@@ -19,7 +19,7 @@ export default (input: {
     statsCache;
 }) => {
     const graphChannel = input.client.channels.cache.get(input.config.graphChannelId) as Discord.TextChannel;
-    
+
     input.client.on('interactionCreate', interaction => {
         if (!(interaction.type == Discord.InteractionType.MessageComponent || interaction.type == Discord.InteractionType.ModalSubmit)) return;
         if (interaction.applicationId != input.client.application.id) return;
@@ -68,7 +68,7 @@ export default (input: {
             .setTitle('Error - Button does not work')
             .setDescription('Feature not yet implemented/supported');
 
-        const PageOnlyCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'scores', 'userbeatmaps'];
+        const PageOnlyCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'recentactivity', 'scores', 'userbeatmaps'];
         const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores'];
         if (button == 'Search' && PageOnlyCommands.includes(command)) {
             const menu = new Discord.ModalBuilder()
@@ -195,6 +195,11 @@ export default (input: {
                 break;
             case 'recent':
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
+            case 'recentactivity':
+                osucmds.recent_activity({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;

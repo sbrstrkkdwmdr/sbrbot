@@ -651,6 +651,13 @@ export default (input: {
                     checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
                 }
                 break;
+            case 'recentactivity':case 'recentact': case 'rsact':
+                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                    osucmds.recent_activity({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+                } else {
+                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
+                }
+                break;
             case 'saved':
                 if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
                     osucmds.saved({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
