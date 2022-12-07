@@ -96,7 +96,7 @@ li a:hover {
 }
 
 .divSubheading {
-    display:flex;
+    display: flex;
     flex: content;
     justify-content: center;
 }
@@ -131,7 +131,7 @@ th {
     border: 1px solid #d8d8d8;
     padding: 10px;
     width: 5%;
-    word-wrap: break-word;
+    word-wrap: normal;
     border-radius: 2px;
     font-family: 'Consolas';
     font-weight: bolder;
