@@ -735,6 +735,9 @@ export async function apiget(input: apiInput) {
                 case 'user_get_maps_alt':
                     url += `users/${input.params.username ?? input.params.userid}/beatmapsets/${input.params.category ?? 'favourite'}&limit=100`;
                     break;
+                case 'user_recent_activity':
+                    url += `users/${input.params.username ?? input.params.userid}/recent_activity`;
+                    break;
             }
         }
     }
@@ -1520,15 +1523,6 @@ export async function userStatsCache(user: osuApiTypes.UserStatistics[] | osuApi
                             [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
                             [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
                             [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
-                        }).then(x => {
-                            console.log(x);
-                            console.log({
-                                osuid: `${curuser.id}`,
-                                country: `${curuser.country_code}`,
-                                [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
-                                [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
-                                [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
-                            });
                         });
                     } else {
                         await database.update({
@@ -1538,15 +1532,6 @@ export async function userStatsCache(user: osuApiTypes.UserStatistics[] | osuApi
                         },
                             {
                                 where: { osuid: `${curuser.id}` }
-                            }).then(x => {
-                                console.log(x);
-                                console.log({
-                                    osuid: `${curuser.id}`,
-                                    country: `${curuser.country_code}`,
-                                    [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
-                                    [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
-                                    [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
-                                });
                             });
                     }
                 }
