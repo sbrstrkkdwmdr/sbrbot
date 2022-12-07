@@ -70,7 +70,7 @@ function generateCommands() {
                     <td class="tdOpts">${option.description}</td>
                     <td class="tdOpts">${option.options ? option.options.join(', ') : ''}</td>
                     <td class="tdOpts">${option.defaultValue}</td>
-                    <td class="tdOpts">${option.examples ? option.examples.join(', ') : ''}</td>
+                    <td class="tdOpts">${option.examples ? option.examples.join('\n') : ''}</td>
                     <td class="tdOpts">${option.commandTypes ? option.commandTypes.join(', ') : ''}</td>
                 </tr>
                 `
