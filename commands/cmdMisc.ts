@@ -24,7 +24,7 @@ import * as msgfunc from './msgfunc.js';
 /**
  * yes or no
  */
-export function _8ball(input: extypes.commandInput) {
+export async function _8ball(input: extypes.commandInput) {
 
     let commanduser;
 
@@ -74,21 +74,32 @@ export function _8ball(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             content: `${responses[Math.floor(Math.random() * responses.length)]}`,
         }
-    },input.canReply);
+    }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -457,12 +468,13 @@ export async function image(input: extypes.commandInput) {
 
 
     if (!res || res.status !== 200) {
-        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-            content: 'Error: could not fetch the requested image.',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        })
-            .catch(error => { });
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Error - could not find requested image(s)`,
+            }
+        }, input.canReply);
         return;
     }
 
@@ -470,12 +482,13 @@ export async function image(input: extypes.commandInput) {
     fs.writeFileSync(`debug/command-image=imageSearch=${input.obj.guildId}.json`, JSON.stringify(response, null, 4), 'utf-8');
 
     if (!response.items) {
-        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-            content: `Error: no results found for \`${query}\``,
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        })
-            .catch(error => { });
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Error - no results found`,
+            }
+        }, input.canReply);
         return;
     }
 
@@ -500,22 +513,31 @@ export async function image(input: extypes.commandInput) {
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: useEmbeds
         }
-    },input.canReply);
+    }, input.canReply);
 
-    fs.appendFileSync(`logs/cmd/commands${input.obj.guildId}.log`,
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`, 'utf-8');
-
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 }
 
 /**
@@ -691,7 +713,7 @@ export function poll(input: extypes.commandInput) {
 /**
  * random number
  */
-export function roll(input: extypes.commandInput) {
+export async function roll(input: extypes.commandInput) {
 
     let commanduser;
     let maxNum: number;
@@ -764,21 +786,31 @@ export function roll(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             content: `${eq}`,
         }
-    },input.canReply);
+    }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -954,10 +986,15 @@ export async function ytsearch(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (!query || query.length < 1) {
-        return (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-            content: 'Please provide a search query.',
-            ephemeral: true
-        });
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Error - invalid search query`,
+                edit: true
+            }
+        }, input.canReply);
+        return;
     }
     const searchEmbed: Discord.EmbedBuilder = new Discord.EmbedBuilder()
         .setTitle(`YouTube search results for: ${query}`)
@@ -990,20 +1027,30 @@ Description: \`${curItem.description}\`
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: [searchEmbed]
         }
-    },input.canReply);
+    }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }

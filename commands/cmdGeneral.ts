@@ -23,7 +23,7 @@ import * as msgfunc from './msgfunc.js';
 /**
  * convert a value
  */
-export function convert(input: extypes.commandInput) {
+export async function convert(input: extypes.commandInput) {
 
     let commanduser;
     let cat1;
@@ -779,7 +779,7 @@ ${num ? '' : '[number]'}`;
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage(
+    const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
@@ -789,20 +789,30 @@ ${num ? '' : '[number]'}`;
         }, input.canReply
     );
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
 /**
  * list all commands or info about a specific command
  */
-export function help(input: extypes.commandInput) {
+export async function help(input: extypes.commandInput) {
 
     let commanduser;
     let rdm = false;
@@ -1212,7 +1222,7 @@ export function help(input: extypes.commandInput) {
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage(
+    const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
@@ -1223,13 +1233,23 @@ export function help(input: extypes.commandInput) {
         }, input.canReply
     );
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -1327,7 +1347,7 @@ Bot Version: ${pkgjson.version}
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage(
+    const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
@@ -1338,18 +1358,27 @@ Bot Version: ${pkgjson.version}
         }, input.canReply
     );
 
-
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
-export function invite(input: extypes.commandInput) {
+export async function invite(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
 
@@ -1396,7 +1425,7 @@ export function invite(input: extypes.commandInput) {
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -1404,22 +1433,30 @@ export function invite(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
 /**
  * perform basic math operation
  */
-export function math(input: extypes.commandInput) {
+export async function math(input: extypes.commandInput) {
 
     let commanduser;
 
@@ -1584,7 +1621,7 @@ export function math(input: extypes.commandInput) {
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage(
+        const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
@@ -1594,21 +1631,29 @@ export function math(input: extypes.commandInput) {
         }, input.canReply
     );
 
-
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
-
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        })
+    }
 }
 
 /**
  * ping bot
  */
-export function ping(input: extypes.commandInput) {
+export async function ping(input: extypes.commandInput) {
     let commanduser;
     switch (input.commandType) {
         case 'message': {
@@ -1710,7 +1755,7 @@ ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
 /**
  * set reminder
  */
-export function remind(input: extypes.commandInput) {
+export async function remind(input: extypes.commandInput) {
 
     let commanduser;
 
@@ -1729,7 +1774,7 @@ export function remind(input: extypes.commandInput) {
             user = input.obj.author;
 
             if (!input.args[0]) {
-                return msgfunc.sendMessage({
+                return await msgfunc.sendMessage({
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
@@ -1742,7 +1787,7 @@ export function remind(input: extypes.commandInput) {
                 remindertxt = 'null';
             }
             if (!input.args[0].endsWith('d') && !input.args[0].endsWith('h') && !input.args[0].endsWith('m') && !input.args[0].endsWith('s') && !time.includes(':') && !time.includes('.')) {
-                return msgfunc.sendMessage({
+                return await msgfunc.sendMessage({
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
@@ -1770,7 +1815,7 @@ export function remind(input: extypes.commandInput) {
             user = input.obj.member.user;
 
             if (!time.endsWith('d') && !time.endsWith('h') && !time.endsWith('m') && !time.endsWith('s') && !time.includes(':') && !time.includes('.')) {
-                return msgfunc.sendMessage({
+                return await msgfunc.sendMessage({
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
@@ -1849,7 +1894,7 @@ export function remind(input: extypes.commandInput) {
     sendremind(reminder, time, input.obj, sendtochannel, remindertxt, user);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage(
+        const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
@@ -1858,22 +1903,30 @@ export function remind(input: extypes.commandInput) {
             }
         }, input.canReply);
 
-
-
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        })
+    }
 
 }
 
 /**
  * bot stats
  */
-export function stats(input: extypes.commandInput) {
+export async function stats(input: extypes.commandInput) {
 
     let commanduser;
 
@@ -1947,7 +2000,7 @@ Current Shard:
         );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+        const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -1955,20 +2008,30 @@ Current Shard:
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
 
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        })
+    }
 }
 
 /**
  * get timezone
  */
-export function time(input: extypes.commandInput) {
+export async function time(input: extypes.commandInput) {
 
     let commanduser;
 
@@ -2154,7 +2217,7 @@ export function time(input: extypes.commandInput) {
                     inline: false
                 }]
                 );
-                msgfunc.sendMessage({
+               await msgfunc.sendMessage({
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
@@ -2178,7 +2241,7 @@ export function time(input: extypes.commandInput) {
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -2186,12 +2249,22 @@ export function time(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }

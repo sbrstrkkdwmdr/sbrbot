@@ -17,14 +17,14 @@ import * as trackfunc from '../src/trackfunc.js';
 import * as extypes from '../src/types/extraTypes.js';
 import * as msgfunc from './msgfunc.js';
 
-export function name(input: extypes.commandInput) {
+export async function name(input: extypes.commandInput) {
 
 }
 
 /**
  * return permissions of user
  */
-export function checkperms(input: extypes.commandInput) {
+export async function checkperms(input: extypes.commandInput) {
 
     let commanduser;
     let searchUser;
@@ -119,7 +119,7 @@ export function checkperms(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -127,20 +127,30 @@ export function checkperms(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
 /**
  * force crash bot
  */
-export function crash(input: extypes.commandInput) {
+export async function crash(input: extypes.commandInput) {
 
     let commanduser;
     let baseCommandType;
@@ -187,7 +197,7 @@ export function crash(input: extypes.commandInput) {
     process.exit(1);
 }
 
-export function getUser(input: extypes.commandInput) {
+export async function getUser(input: extypes.commandInput) {
 
     let commanduser;
     let id;
@@ -315,7 +325,7 @@ export function getUser(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -323,17 +333,28 @@ export function getUser(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
-export function getUserAv(input: extypes.commandInput) {
+export async function getUserAv(input: extypes.commandInput) {
 
     let commanduser;
     let id;
@@ -413,7 +434,7 @@ export function getUserAv(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -421,13 +442,23 @@ export function getUserAv(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -502,7 +533,7 @@ export async function debug(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (failed == true) {
-        msgfunc.sendMessage({
+        await msgfunc.sendMessage({
             commandType: input.commandType,
             obj: input.obj,
             args: {
@@ -685,25 +716,35 @@ Joined(EPOCH):  ${member.joinedTimestamp}
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: usemsgArgs
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 }
 
 /**
  * find user/role/channel/guild/emoji from id 
  */
-export function find(input: extypes.commandInput) {
+export async function find(input: extypes.commandInput) {
 
     let commanduser;
     let type;
@@ -734,7 +775,14 @@ export function find(input: extypes.commandInput) {
             }
             if (isNaN(id) && (!(input.obj.mentions.users.size > 0 && type == 'user') || !(input.obj.mentions.channels.size > 0 && type == 'channel') || !(input.obj.mentions.roles.size == 1 && type == 'roles'))) {
 
-                input.obj.reply({ content: 'Please specify an id to find', allowedMentions: { repliedUser: false } })
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Please specify an ID to find`,
+                        edit: true
+                    }
+                }, input.canReply)
                     .catch(error => { });
                 return;
             }
@@ -964,7 +1012,7 @@ export function find(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -972,20 +1020,31 @@ export function find(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
 /**
  * leave guild/server matching id given (or cur guild)
  */
-export function leaveguild(input: extypes.commandInput) {
+export async function leaveguild(input: extypes.commandInput) {
 
     let commanduser;
     let guildId;
@@ -1052,7 +1111,7 @@ export function leaveguild(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -1060,13 +1119,23 @@ export function leaveguild(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -1143,7 +1212,7 @@ export async function prefix(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -1151,20 +1220,31 @@ export async function prefix(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
 /**
  * list of guilds bot is in
  */
-export function servers(input: extypes.commandInput) {
+export async function servers(input: extypes.commandInput) {
 
     let commanduser;
 
@@ -1229,18 +1309,29 @@ export function servers(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: rw
     }, input.canReply);
 
-    fs.appendFileSync(`${path}/logs/cmd/commands${input.obj.guildId}.log`,
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`, 'utf-8');
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }

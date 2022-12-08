@@ -100,10 +100,13 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -129,20 +132,14 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: `Error - could not find user \`${user}\``,
-                        allowedMentions: { repliedUser: false },
-                    });
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
                     content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                });
-            }
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -201,20 +198,31 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
         ]);
     //\nFormula: rank^(0.9937^badges^2)
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: [embed]
         }
     }, input.canReply);
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 }
 
 /**
@@ -333,11 +341,16 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
     const osudata: osuApiTypes.User = osudataReq.apiData;
     osufunc.debug(osudataReq, 'command', 'globals', input.obj.guildId, 'osuData');
     if (osudata?.error) {
-        if (input.commandType != 'button') (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-            content: `Could not find user ${user}`,
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
-        }).catch();
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find user \`${user}\``,
+                    edit: true
+                }
+            }, input.canReply);
+        }
         log.logCommand({
             event: 'Error',
             commandName: 'globals',
@@ -358,10 +371,13 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
     osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     const scorecount = osudata?.scores_first_count ?? 0;
@@ -375,7 +391,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         }
     }
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -383,13 +399,24 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -525,10 +552,13 @@ export async function lb(input: extypes.commandInput) {
     const rarr = [];
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
 
@@ -709,7 +739,7 @@ export async function lb(input: extypes.commandInput) {
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -719,13 +749,23 @@ export async function lb(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -956,23 +996,25 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
             },
             ignoreNonAlphaChar: true,
             version: 2
-        }).catch(() => {
+        }).catch(async () => {
             if (country != 'ALL') {
-                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                    content: 'Invalid country code',
-                    embeds: [],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Invalid country code`,
+                        edit: true
+                    }
+                }, input.canReply);
             } else {
-                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                    content: 'Error',
-                    embeds: [],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             return;
         })) as osufunc.apiReturn;
@@ -983,20 +1025,14 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
 
     if (rankingdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: 'Error - could not fetch rankings',
-                        allowedMentions: { repliedUser: false },
-                    }).catch();
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
-                    content: 'Error - could not fetch rankings',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not fetch rankings`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -1016,14 +1052,14 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
         return;
     }
     if (rankingdata.ranking.length == 0) {
-
-        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-            content: 'No data found',
-            embeds: [],
-            files: [],
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `No data found`,
+                edit: true
+            }
+        }, input.canReply);
         return;
     }
 
@@ -1091,7 +1127,7 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -1100,13 +1136,24 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -1260,7 +1307,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -1268,13 +1315,24 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -1555,11 +1613,13 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
     mode = mode ? osufunc.modeValidator(mode) : null;
 
     if (input.commandType == 'interaction') {
-
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -1585,21 +1645,14 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: `Error - could not find user \`${user}\``,
-                        allowedMentions: { repliedUser: false },
-                    });
-                }, 1000);
-            } else {
-
-                (input.obj as Discord.Message).reply({
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
                     content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                });
-            }
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -1784,21 +1837,14 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
             if (osutopdata?.error) {
                 if (input.commandType != 'button' && input.commandType != 'link') {
-                    if (input.commandType == 'interaction') {
-                        setTimeout(() => {
-                            (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                                content: 'Error - could not fetch user\'s top scores',
-                                allowedMentions: { repliedUser: false },
-                            }).catch();
-                        }, 1000);
-                    } else {
-
-                        (input.obj as Discord.Message).reply({
-                            content: 'Error - could not fetch user\'s top scores',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch();
-                    }
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: `Error - could not fetch user's top scores`,
+                            edit: true
+                        }
+                    }, input.canReply);
                 }
                 log.logCommand({
                     event: 'Error',
@@ -1823,21 +1869,14 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
             if (mostplayeddata?.error) {
                 if (input.commandType != 'button' && input.commandType != 'link') {
-                    if (input.commandType == 'interaction') {
-                        setTimeout(() => {
-                            (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                                content: 'Error - could not fetch user\'s most played beatmaps',
-                                allowedMentions: { repliedUser: false },
-                            }).catch();
-                        }, 1000);
-                    } else {
-
-                        (input.obj as Discord.Message).reply({
-                            content: 'Error - could not fetch user\'s most played beatmaps',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch();
-                    }
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: `Error - could not fetch user's most played beatmaps`,
+                            edit: true
+                        }
+                    }, input.canReply);
                 }
                 log.logCommand({
                     event: 'Error',
@@ -1938,7 +1977,7 @@ ${onlinestatus}
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -1948,14 +1987,23 @@ ${onlinestatus}
         }
     }, input.canReply);
 
-
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -2120,10 +2168,13 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
     page--;
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -2149,21 +2200,14 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: `Error - could not find user \`${user}\``,
-                        allowedMentions: { repliedUser: false },
-                    });
-                }, 1000);
-            } else {
-
-                (input.obj as Discord.Message).reply({
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
                     content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                });
-            }
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -2211,21 +2255,14 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
 
     if (rsactData?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: `Error - could not find recent data`,
-                        allowedMentions: { repliedUser: false },
-                    });
-                }, 1000);
-            } else {
-
-                (input.obj as Discord.Message).reply({
-                    content: `Error - could not find recent data`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                });
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find recent activity`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -2358,7 +2395,7 @@ ${emojis.grades[temp.scoreRank]} | ${emojis.gamemodes[temp.mode]}
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -2368,15 +2405,23 @@ ${emojis.grades[temp.scoreRank]} | ${emojis.gamemodes[temp.mode]}
     }, input.canReply
     );
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    );
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -2823,11 +2868,13 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
 
     if (input.commandType == 'interaction') {
-
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -2853,21 +2900,14 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: `Error - could not find user \`${user}\``,
-                        allowedMentions: { repliedUser: false },
-                    });
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
                     content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                });
-            }
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -2904,20 +2944,14 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         const fd: osuApiTypes.Score[] & osuApiTypes.Error = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: 'Error - could not find user\'s #1 scores',
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply({
-                        content: 'Error - could not find user\'s #1 scores',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find user \`${user}\``,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -2990,20 +3024,14 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         };
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: `Error - could not find requested score`,
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply({
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
                         content: `Error - could not find requested score`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -3105,7 +3133,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         }
     }
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -3115,15 +3143,23 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         }
     }, input.canReply);
 
-
-
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -3303,10 +3339,13 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     let mapdataReq: osufunc.apiReturn;
@@ -3330,20 +3369,14 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                        allowedMentions: { repliedUser: false },
-                    }).catch();
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
-                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find beatmap ${mapid}`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -3365,8 +3398,14 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
         artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
     } catch (error) {
-        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'error - map not found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-            .catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Error - could not find map ${mapid}`,
+                edit: true
+            }
+        }, input.canReply);
         return;
     }
     fulltitle = `${artist} - ${title} [${mapdata.version}]`;
@@ -3402,20 +3441,14 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
         if (lbdataf?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply({
-                        content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find leaderboards for ${mapid}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -3447,20 +3480,14 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             };
             if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
                 if (input.commandType != 'button' && input.commandType != 'link') {
-                    if (input.commandType == 'interaction') {
-                        setTimeout(() => {
-                            (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                                content: `Error - could not find requested score`,
-                                allowedMentions: { repliedUser: false },
-                            }).catch();
-                        }, 1000);
-                    } else {
-                        (input.obj as Discord.Message).reply({
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
                             content: `Error - could not find requested score`,
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch();
-                    }
+                            edit: true
+                        }
+                    }, input.canReply);
                 }
                 log.logCommand({
                     event: 'Error',
@@ -3570,20 +3597,14 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
         if (lbdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply({
-                        content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find leaderboards for ${mapid}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -3614,20 +3635,14 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             };
             if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
                 if (input.commandType != 'button' && input.commandType != 'link') {
-                    if (input.commandType == 'interaction') {
-                        setTimeout(() => {
-                            (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                                content: `Error - could not find requested score`,
-                                allowedMentions: { repliedUser: false },
-                            }).catch();
-                        }, 1000);
-                    } else {
-                        (input.obj as Discord.Message).reply({
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
                             content: `Error - could not find requested score`,
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch();
-                    }
+                            edit: true
+                        }
+                    }, input.canReply);
                 }
                 log.logCommand({
                     event: 'Error',
@@ -3707,7 +3722,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -3717,13 +3732,23 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -4217,10 +4242,13 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         );
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -4246,20 +4274,14 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).reply({
-                        content: `Error - could not find user \`${user}\``,
-                        allowedMentions: { repliedUser: false },
-                    });
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
                     content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                });
-            }
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -4299,22 +4321,16 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 
     osufunc.debug(osutopdataReq, 'command', 'osutop', input.obj.guildId, 'osuTopData');
 
-    if (osutopdata?.error) {
+    if (osutopdata?.error || !osutopdata[0]?.user?.username) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).reply({
-                        content: `Error - could not find \`${user}\`'s top scores`,
-                        allowedMentions: { repliedUser: false },
-                    });
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
                     content: `Error - could not find \`${user}\`'s top scores`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                });
-            }
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -4328,31 +4344,6 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     }
 
     func.storeFile(osutopdataReq, input.absoluteID, 'osutopdata');
-
-    try {
-        osutopdata[0].user.username;
-    } catch (error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).reply({
-                        content: `Error - could not fetch \`${user}\`'s top scores`,
-                        allowedMentions: { repliedUser: false },
-                    })
-                        .catch();
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
-                    content: `Error - could not fetch \`${user}\`'s top scores`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
-            }
-        }
-        return;
-    }
-
 
     let showtrue = false;
     if (sort != 'pp') {
@@ -4407,20 +4398,14 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         };
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: `Error - could not find requested score`,
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply({
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
                         content: `Error - could not find requested score`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -4519,7 +4504,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -4529,13 +4514,23 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -4998,10 +4993,13 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     mode = osufunc.modeValidator(mode);
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -5025,19 +5023,15 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
 
     osufunc.debug(osudataReq, 'command', 'pinned', input.obj.guildId, 'osuData');
     if (osudata?.error || !osudata.id) {
-        if (input.commandType == 'interaction') {
-            setTimeout(() => {
-                (input.obj as Discord.ChatInputCommandInteraction).reply({
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
                     content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                });
-            }, 1000);
-        } else {
-            (input.obj as Discord.Message).reply({
-                content: `Error - could not find user \`${user}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            });
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -5072,20 +5066,14 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         const fd: osuApiTypes.Score[] & osuApiTypes.Error = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: 'Error - could not find user\'s pinned scores',
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply({
-                        content: 'Error - could not find user\'s pinned scores',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find user \`${user}\``,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -5163,20 +5151,14 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         };
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: `Error - could not find requested score`,
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply({
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
                         content: `Error - could not find requested score`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -5273,7 +5255,9 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         }
     }
 
-    msgfunc.sendMessage({
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -5283,15 +5267,24 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         }
     }, input.canReply);
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -5739,11 +5732,14 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                content: `Error - could not fetch user \`${user}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch();
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find user ${user}`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -5762,11 +5758,13 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        })
-            .catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     let rsdataReq: osufunc.apiReturn;
@@ -5792,21 +5790,14 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
     osufunc.debug(rsdataReq, 'command', 'recent', input.obj.guildId, 'rsData');
     if (rsdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: `Error - could not fetch \`${user}\`'s recent scores`,
-                        allowedMentions: { repliedUser: false },
-                    }).catch();
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
-                    content: `Error - could not fetch \`${user}\`'s recent scores`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
-            }
-
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find \`${user}\`'s recent scores`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -5871,22 +5862,14 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             }
 
             if (input.button == null) {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: err,
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply(
-                        {
-                            content: err,
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                        .catch();
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: err,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             return;
         }
@@ -5912,20 +5895,14 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         osufunc.debug(mapdataReq, 'command', 'recent', input.obj.guildId, 'mapData');
         if (mapdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: 'Error - could not find beatmap',
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply({
-                        content: 'Error - could not find beatmap',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find beatmap ${curbm.id}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -6385,7 +6362,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -6395,13 +6372,24 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -6662,7 +6650,7 @@ ${isfail}
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -6670,14 +6658,23 @@ ${isfail}
         }
     }, input.canReply);
 
-
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -6907,12 +6904,14 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
 
     if (scoredata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                content: 'Error - could not fetch score data',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch();
-
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find score`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -6927,8 +6926,14 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     try {
         if (typeof scoredata?.error != 'undefined') {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
-                    .catch();
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - this score is invalid/unsubmitted and cannot be parsed`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -6945,9 +6950,13 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     func.storeFile(scoredataReq, scoreid, 'scoredata');
 
     if (input.commandType == 'interaction' && input.overrides == null) {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
-            .catch();
-
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     osufunc.debug(scoredataReq, 'command', 'scoreparse', input.obj.guildId, 'scoreData');
@@ -6955,8 +6964,14 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         scoredata.rank.toUpperCase();
     } catch (error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
-                .catch();
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - this score is invalid/unsubmitted and cannot be parsed`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -6986,20 +7001,14 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
 
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: 'Error - could not fetch beatmap data',
-                        allowedMentions: { repliedUser: false },
-                    }).catch();
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
-                    content: 'Error - could not fetch beatmap data',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find beatmap ${scoredata.beatmap.id}`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -7179,19 +7188,15 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
 
     osufunc.debug(osudataReq, 'command', 'scoreparse', input.obj.guildId, 'osuData');
     if (osudata?.error) {
-        if (input.commandType == 'interaction') {
-            setTimeout(() => {
-                (input.obj as Discord.ChatInputCommandInteraction).reply({
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
                     content: `Error - could not find user \`${scoredata?.user?.username}\``,
-                    allowedMentions: { repliedUser: false },
-                });
-            }, 1000);
-        } else if (input.commandType == 'message') {
-            (input.obj as Discord.Message).reply({
-                content: `Error - could not find user \`${scoredata?.user?.username}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            });
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -7353,7 +7358,7 @@ ${srStr}
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -7363,13 +7368,23 @@ ${srStr}
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -7513,11 +7528,14 @@ export async function scorepost(input: extypes.commandInput) {
 
     if (scoredata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                content: 'Error - could not fetch score data',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch();
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find score`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         return;
     }
@@ -7543,20 +7561,14 @@ export async function scorepost(input: extypes.commandInput) {
 
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: `Error - could not fetch beatmap data for map \`${scoredata.beatmap.id}\`.`,
-                        allowedMentions: { repliedUser: false },
-                    }).catch();
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
-                    content: `Error - could not fetch beatmap data for map \`${scoredata.beatmap.id}\`.`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find beatmap ${scoredata.beatmap.id}`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -7611,7 +7623,7 @@ export async function scorepost(input: extypes.commandInput) {
         `${pptxt} | ${scoredata.mode}`;
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -7619,13 +7631,23 @@ export async function scorepost(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -7984,10 +8006,13 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -8012,19 +8037,15 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     osufunc.debug(osudataReq, 'command', 'scores', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
-        if (input.commandType == 'interaction') {
-            setTimeout(() => {
-                (input.obj as Discord.ChatInputCommandInteraction).reply({
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
                     content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                });
-            }, 1000);
-        } else {
-            (input.obj as Discord.Message).reply({
-                content: `Error - could not find user \`${user}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            });
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -8066,20 +8087,14 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
     if (scoredataPresort?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: 'Error - could not fetch scores',
-                        allowedMentions: { repliedUser: false },
-                    }).catch();
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
-                    content: 'Error - could not fetch scores',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find ${user}'s scores on ${mapid}`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -8095,18 +8110,8 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     func.storeFile(scoredataReq, input.absoluteID, 'scores');
 
     const scoredata: osuApiTypes.Score[] = scoredataPresort.scores;
-    try {
-        scoredata.length < 1;
-    } catch (error) {
-        return (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-            content: `Error - no scores found for \`${user}\` on map \`${mapid}\``,
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        })
-            .catch();
-    }
-    osufunc.debug(scoredataReq, 'command', 'scores', input.obj.guildId, 'scoreData');
 
+    osufunc.debug(scoredataReq, 'command', 'scores', input.obj.guildId, 'scoreData');
 
     if (parseScore == true) {
         let pid = parseInt(parseId) - 1;
@@ -8126,20 +8131,14 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         };
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: `Error - could not find requested score`,
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply({
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
                         content: `Error - could not find requested score`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -8175,20 +8174,14 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     osufunc.debug(mapdataReq, 'command', 'scores', input.obj.guildId, 'mapData');
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: 'Error - could not fetch beatmap data',
-                        allowedMentions: { repliedUser: false },
-                    }).catch();
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
-                    content: 'Error - could not fetch beatmap data',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find beatmap ${mapid}`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -8291,7 +8284,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -8301,13 +8294,23 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -8513,10 +8516,13 @@ export async function scorestats(input: extypes.commandInput) {
     mode = mode ? osufunc.modeValidator(mode) : null;
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -8542,11 +8548,14 @@ export async function scorestats(input: extypes.commandInput) {
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                content: `Error - could not fetch user \`${user}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch();
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find user ${user}`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -8577,20 +8586,14 @@ export async function scorestats(input: extypes.commandInput) {
         const fd: osuApiTypes.Score[] & osuApiTypes.Error = req.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: `Error - could not find user's ${scoreTypes} scores`,
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply({
-                        content: `Error - could not find user's ${scoreTypes} scores`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find user \`${user}\``,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -8717,7 +8720,6 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
     //SEND/EDIT MSG==============================================================================================================================================================================================
     if (input.commandType == 'button') {
         input.obj = input.obj as Discord.ButtonInteraction;
-
         input.obj.reply({
             files: useFiles,
             ephemeral: true
@@ -8729,8 +8731,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
 
 
     } else {
-
-        msgfunc.sendMessage({
+        const finalMessage = await msgfunc.sendMessage({
             commandType: input.commandType,
             obj: input.obj,
             args: {
@@ -8740,6 +8741,24 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
                 files: useFiles
             }
         }, input.canReply);
+        if (finalMessage == true) {
+            log.logCommand({
+                event: 'Success',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+            });
+        } else {
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+            });
+        }
+        return;
     }
 
     log.logCommand({
@@ -8981,9 +9000,13 @@ export async function simulate(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
-            .catch();
-
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     let mapdataReq: osufunc.apiReturn;
@@ -9007,12 +9030,14 @@ export async function simulate(input: extypes.commandInput) {
 
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch();
-
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find map ${mapid}`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -9150,7 +9175,7 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
         ]);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -9159,13 +9184,24 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -9356,11 +9392,14 @@ export async function map(input: extypes.commandInput) {
                         mapid = parseInt(idfirst);
                     }
                 } catch (error) {
-                    (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                        content: 'Please enter a valid beatmap link.',
-                        allowedMentions: { repliedUser: false }
-                    })
-                        .catch(error => { });
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: `Error - invalid beatmap link. `,
+                            edit: true
+                        }
+                    }, input.canReply);
                     return;
                 }
             } else if (messagenohttp.includes('q=')) {
@@ -9400,6 +9439,14 @@ export async function map(input: extypes.commandInput) {
 
                 const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
                 if (bmsdata?.error) {
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: `Error - could not find beatmapset ${setid}`,
+                            edit: true
+                        }
+                    }, input.canReply);
                     log.logCommand({
                         event: 'Error',
                         commandName: '',
@@ -9413,13 +9460,14 @@ export async function map(input: extypes.commandInput) {
                 try {
                     mapid = bmsdata.beatmaps[0].id;
                 } catch (error) {
-                    (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                        content: 'Please enter a valid beatmap link.',
-                        allowedMentions: {
-                            repliedUser: false
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: `Error - no beatmaps found in beatmapset ${setid}`,
+                            edit: true
                         }
-                    })
-                        .catch(error => { });
+                    }, input.canReply);
                     log.logCommand({
                         event: 'Error',
                         commandName: '',
@@ -9570,11 +9618,14 @@ export async function map(input: extypes.commandInput) {
 
         if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not find map ${mapid}`,
+                    edit: true
+                }
+            }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -9608,11 +9659,14 @@ export async function map(input: extypes.commandInput) {
 
         if (bmsdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find mapset ${mapdata.beatmapset_id}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -9620,7 +9674,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmap data for ${mapid}`
+                customString: `Could not find beatmapset data for ${mapdata.beatmapset_id}`
             });
             return;
         }
@@ -9675,11 +9729,14 @@ export async function map(input: extypes.commandInput) {
 
         if (mapidtest?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                    content: 'Error - could not fetch beatmap search data.',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - beatmap search failed`,
+                    edit: true
+                }
+            }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -9687,7 +9744,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmap data for ${mapid}`
+                customString: `Beatmap search failed`
             });
             return;
         }
@@ -9695,16 +9752,43 @@ export async function map(input: extypes.commandInput) {
         let mapidtest2;
 
         if (mapidtest.length == 0) {
-            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                .catch();
-
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - no maps found for "${maptitleq}"`,
+                    edit: true
+                }
+            }, input.canReply);
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: ''
+            })
             return;
         }
         try {
             mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
         } catch (error) {
-            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                .catch();
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not sort maps`,
+                    edit: true
+                }
+            }, input.canReply);
+            log.logCommand({
+                event: 'Error',
+                commandName: '',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: ''
+            })
             return;
         }
         const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset; }[] = [];
@@ -9743,11 +9827,14 @@ export async function map(input: extypes.commandInput) {
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
         if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                });
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find map ${mapidtest2.id}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -9755,7 +9842,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmap data for ${mapid}`
+                customString: `Could not find beatmap data for ${mapidtest2.id}`
             });
             return;
         }
@@ -9802,12 +9889,13 @@ export async function map(input: extypes.commandInput) {
     }
     let statusimg = emojis.rankedstatus.graveyard;
     if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: "Loading...",
-            allowedMentions: { repliedUser: false }
-        })
-            .catch();
-
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
     switch (mapdata.status) {
         case 'ranked':
@@ -9996,14 +10084,6 @@ HP${baseHP}`;
 
     if (mapperdata?.error) {
         mapperdata = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
-        // if (commandType != 'button' && commandType != 'link') {
-        //     (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-        //         content: 'Error - could not find mapper',
-        //         allowedMentions: { repliedUser: false },
-        //         failIfNotExists: true
-        //     })
-        // }
-        // return;
         log.logCommand({
             event: 'Error',
             commandName: '',
@@ -10253,7 +10333,7 @@ HP${baseHP}`;
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -10263,13 +10343,24 @@ HP${baseHP}`;
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -10385,118 +10476,6 @@ export async function ppCalc(input: extypes.commandInput) {
 
             break;
 
-        case 'link': {
-            input.obj = (input.obj as Discord.Message);
-
-            commanduser = input.obj.author;
-
-            const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
-            mapmods =
-                input.obj.content.includes('+') ?
-                    messagenohttp.split('+')[1] : 'NM';
-            if (input.args[0] && input.args[0].startsWith('query')) {
-                maptitleq = input.args[1];
-            } else if (
-                (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmapsets/') && messagenohttp.includes('#'))) ||
-                (!messagenohttp.includes('/s/') && (messagenohttp.includes('/b/'))) ||
-                (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmaps/')))
-            ) {
-                let idfirst;
-                try {
-                    if (messagenohttp.includes('beatmapsets')) {
-
-                        idfirst = messagenohttp.split('#')[1].split('/')[1];
-                    } else if (messagenohttp.includes('?')) {
-                        idfirst = messagenohttp.split('beatmaps/')[1].split('?')[0];
-                    }
-                    else {
-                        idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1];
-                    }
-                    if (isNaN(+idfirst)) {
-                        mapid = parseInt(idfirst.split(' ')[0]);
-                    } else {
-                        mapid = parseInt(idfirst);
-                    }
-                } catch (error) {
-                    (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                        content: 'Please enter a valid beatmap link.',
-                        allowedMentions: { repliedUser: false }
-                    })
-                        .catch(error => { });
-                    return;
-                }
-            } else if (messagenohttp.includes('q=')) {
-                maptitleq =
-                    messagenohttp.includes('&') ?
-                        messagenohttp.split('q=')[1].split('&')[0] :
-                        messagenohttp.split('q=')[1];
-            } else {
-                let setid = 910392;
-                if (!messagenohttp.includes('/beatmapsets/')) {
-                    setid = +messagenohttp.split('/s/')[1];
-
-                    if (isNaN(setid)) {
-                        setid = +messagenohttp.split('/s/')[1].split(' ')[0];
-                    }
-                } else if (!messagenohttp.includes('/s/')) {
-                    setid = +messagenohttp.split('/beatmapsets/')[1];
-
-                    if (isNaN(setid)) {
-                        setid = +messagenohttp.split('/s/')[1].split(' ')[0];
-                    }
-                }
-                let bmsdataReq: osufunc.apiReturn;
-                if (func.findFile(setid, `bmsdata`) &&
-                    !('error' in func.findFile(setid, `bmsdata`)) &&
-                    input.button != 'Refresh') {
-                    bmsdataReq = func.findFile(setid, `bmsdata`);
-                } else {
-                    bmsdataReq = await osufunc.apiget({
-                        type: 'mapset_get',
-                        params: {
-                            id: setid
-                        }
-                    });
-                    // bmsdataReq = await osufunc.apiget('mapset_get', `${setid}`)
-                }
-
-                const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
-                if (bmsdata?.error) {
-                    log.logCommand({
-                        event: 'Error',
-                        commandName: '',
-                        commandType: input.commandType,
-                        commandId: input.absoluteID,
-                        object: input.obj,
-                        customString: `Could not find beatmapset data for ${setid}`
-                    });
-                    return;
-                }
-                try {
-                    mapid = bmsdata.beatmaps[0].id;
-                } catch (error) {
-                    (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                        content: 'Please enter a valid beatmap link.',
-                        allowedMentions: {
-                            repliedUser: false
-                        }
-                    })
-                        .catch(error => { });
-                    return;
-                }
-            }
-            if (input.args.includes('-bpm')) {
-                const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
-                overrideBpm = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-speed')) {
-                const temp = func.parseArg(input.args, '-speed', 'number', overrideSpeed);
-                overrideSpeed = temp.value;
-                input.args = temp.newArgs;
-            }
-        }
-            break;
         case 'button': {
             input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
@@ -10606,11 +10585,14 @@ export async function ppCalc(input: extypes.commandInput) {
 
         if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find map ${mapid}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -10644,11 +10626,14 @@ export async function ppCalc(input: extypes.commandInput) {
 
         if (bmsdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find mapset ${mapdata.beatmapset_id}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -10656,7 +10641,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmap data for ${mapid}`
+                customString: `Could not find beatmapset data for ${mapdata.beatmapset_id}`
             });
             return;
         }
@@ -10711,11 +10696,14 @@ export async function ppCalc(input: extypes.commandInput) {
 
         if (mapidtest?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                    content: 'Error - could not fetch beatmap search data.',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - no maps found for "${maptitleq}"`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -10723,7 +10711,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmap data for search "${searchRestrict}"`
+                customString: `Could not find beatmap data for search "${maptitleq}"`
             });
             return;
         }
@@ -10731,16 +10719,27 @@ export async function ppCalc(input: extypes.commandInput) {
         let mapidtest2;
 
         if (mapidtest.length == 0) {
-            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                .catch();
-
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - no maps found for "${maptitleq}"`,
+                    edit: true
+                }
+            }, input.canReply);
             return;
         }
         try {
             mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
         } catch (error) {
-            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                .catch();
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - `,
+                    edit: true
+                }
+            }, input.canReply);
             return;
         }
         const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset; }[] = [];
@@ -10779,11 +10778,14 @@ export async function ppCalc(input: extypes.commandInput) {
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
         if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                });
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find map ${mapidtest2[0].id}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -10826,12 +10828,13 @@ export async function ppCalc(input: extypes.commandInput) {
         mapmods = osumodcalc.OrderMods(mapmods.toUpperCase());
     }
     if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: "Loading...",
-            allowedMentions: { repliedUser: false }
-        })
-            .catch();
-
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     if (customCS == 'current' || isNaN(+customCS)) {
@@ -11182,7 +11185,7 @@ export async function ppCalc(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -11192,13 +11195,23 @@ export async function ppCalc(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 
 }
@@ -11353,7 +11366,7 @@ export async function randomMap(input: extypes.commandInput) {
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -11361,14 +11374,23 @@ export async function randomMap(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
-
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 }
 
 /**
@@ -11630,11 +11652,14 @@ export async function maplocal(input: extypes.commandInput) {
     try {
         mapgraph = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains'));
     } catch (error) {
-        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-            content: 'Error - calculating strain graph.',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        });
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Error - could not produce strains graph`,
+                edit: true
+            }
+        }, input.canReply);
     }
     let osuEmbed;
     try {
@@ -11672,11 +11697,14 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
             ])
             .setImage(`${mapgraph}`);
     } catch (error) {
-        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-            content: 'Error - unknown',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        });
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Error - `,
+                edit: true
+            }
+        }, input.canReply);
         console.log(error);
         log.logCommand({
             event: 'Error',
@@ -11690,7 +11718,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -11699,13 +11727,23 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
     }, input.canReply
     );
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 }
 
 /**
@@ -12069,10 +12107,13 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction).reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -12097,19 +12138,15 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
     osufunc.debug(osudataReq, 'command', 'userbeatmaps', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
-        if (input.commandType == 'interaction') {
-            setTimeout(() => {
-                (input.obj as Discord.ChatInputCommandInteraction).reply({
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
                     content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                });
-            }, 1000);
-        } else {
-            (input.obj as Discord.Message).reply({
-                content: `Error - could not find user \`${user}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            });
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -12147,20 +12184,14 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         const fd: osuApiTypes.Beatmapset[] & osuApiTypes.Error = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: `Error - could not find user's ${calc.toCapital(filter)} maps`,
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply({
-                        content: `Error - could not find user's ${calc.toCapital(filter)} maps`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find user \`${user}\``,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -12233,20 +12264,14 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         };
         if (input.overrides.id == null) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                            content: `Error - could not find map`,
-                            allowedMentions: { repliedUser: false },
-                        }).catch();
-                    }, 1000);
-                } else {
-                    (input.obj as Discord.Message).reply({
-                        content: `Error - could not find map`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch();
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find requested map`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -12339,7 +12364,7 @@ Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${fil
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -12349,13 +12374,23 @@ Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${fil
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 
 }
@@ -12461,13 +12496,14 @@ export async function trackadd(input: extypes.commandInput) {
     });
 
     if (!guildsetting.dataValues.trackChannel) {
-        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-            content: 'The current guild does not have a tracking channel',
-            embeds: [],
-            files: [],
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Error - current server does not have a tracking channel`,
+                edit: true
+            }
+        }, input.canReply);
         return;
     }
 
@@ -12520,7 +12556,7 @@ export async function trackadd(input: extypes.commandInput) {
     }
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -12528,13 +12564,23 @@ export async function trackadd(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -12628,21 +12674,6 @@ export async function trackremove(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    // const guildsetting = await input.guildSettings.findOne({
-    //     where: { guildId: input.obj.guildId }
-    // })
-
-    // if (!guildsetting.dataValues.trackChannel) {
-    //     (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-    //         content: 'The current guild does not have a tracking channel',
-    //         embeds: [],
-    //         files: [],
-    //         allowedMentions: { repliedUser: false },
-    //         failIfNotExists: true
-    //     }).catch()
-    //     return;
-    // }
-
     let osudataReq: osufunc.apiReturn;
 
     if (func.findFile(user, 'osudata', mode) &&
@@ -12692,8 +12723,7 @@ export async function trackremove(input: extypes.commandInput) {
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -12701,13 +12731,24 @@ export async function trackremove(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -12769,33 +12810,36 @@ export async function trackchannel(input: extypes.commandInput) {
     if (!channelId) {
         //the current channel is...
         if (!guildsetting.dataValues.trackChannel) {
-            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                content: 'The current guild does not have a tracking channel',
-                embeds: [],
-                files: [],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch();
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - the current guild does not have a tracking channel`,
+                    edit: true
+                }
+            }, input.canReply);
             return;
         }
-        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-            content: `The current tracking channel is <#${guildsetting.dataValues.trackChannel}>`,
-            embeds: [],
-            files: [],
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `The current tracking channel is <#${guildsetting.dataValues.trackChannel}>`,
+                edit: true
+            }
+        }, input.canReply);
         return;
     }
 
     if (!channelId || isNaN(+channelId) || !input.client.channels.cache.get(channelId)) {
-        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-            content: 'Please provide a valid channel ID',
-            embeds: [],
-            files: [],
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        }).catch();
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Error - Invalid channel id`,
+                edit: true
+            }
+        }, input.canReply);
         return;
     }
 
@@ -12808,7 +12852,7 @@ export async function trackchannel(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -12816,13 +12860,23 @@ export async function trackchannel(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -12935,7 +12989,7 @@ export async function tracklist(input: extypes.commandInput) {
         );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -12943,13 +12997,23 @@ export async function tracklist(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 }
 
 //other
@@ -13442,7 +13506,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
     if (embedescription) embed.setDescription(embedescription);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -13451,13 +13515,23 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -13611,12 +13685,14 @@ export async function osuset(input: extypes.commandInput) {
         const thing = osufunc.modeValidatorAlt(mode);
         mode = thing.mode;
         if (thing.isincluded == false) {
-
-            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
-                content: 'Error - invalid mode given',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            });
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - invalid mode given`,
+                    edit: true
+                }
+            }, input.canReply);
             return;
         }
     }
@@ -13690,7 +13766,7 @@ export async function osuset(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -13698,13 +13774,23 @@ export async function osuset(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
@@ -13853,20 +13939,31 @@ export async function saved(input: extypes.commandInput) {
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: [Embed],
         }
     }, input.canReply);
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 }
 
 /**
@@ -14046,20 +14143,14 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: `Error - could not find user \`${user}\``,
-                        allowedMentions: { repliedUser: false },
-                    });
-                }, 1000);
-            } else {
-                (input.obj as Discord.Message).reply({
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
                     content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                });
-            }
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -14097,21 +14188,14 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
 
     if (osutopdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
-                        content: 'Error - could not fetch user\'s top scores',
-                        allowedMentions: { repliedUser: false },
-                    }).catch();
-                }, 1000);
-            } else {
-
-                (input.obj as Discord.Message).reply({
-                    content: 'Error - could not fetch user\'s top scores',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch();
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Could not fetch user's top scores`,
+                    edit: true
+                }
+            }, input.canReply);
         }
         log.logCommand({
             event: 'Error',
@@ -14169,7 +14253,7 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
         );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -14177,14 +14261,23 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
         }
     }, input.canReply);
 
-
-    log.logCommand({
-        event: 'Success',
-        commandName: '',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        object: input.obj,
-    });
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: '',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    }
 
 }
 
