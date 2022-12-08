@@ -67,7 +67,9 @@ export async function sendMessage(input: {
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
                         })
-                            .catch();
+                            .catch(err => {
+                                sendMessage(input, false)
+                            });
                     }
                 }
                     break;

@@ -43,7 +43,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
 
@@ -57,7 +57,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
             user = input.obj.options.getString('user');
@@ -66,7 +66,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
         }
@@ -100,7 +100,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         }).catch();
@@ -131,13 +131,13 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
                     });
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -231,7 +231,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
 
@@ -248,7 +248,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
             user = input.obj.options.getString('user');
@@ -258,7 +258,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
@@ -333,7 +333,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
     const osudata: osuApiTypes.User = osudataReq.apiData;
     osufunc.debug(osudataReq, 'command', 'globals', input.obj.guildId, 'osuData');
     if (osudata?.error) {
-        if (input.commandType != 'button') (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        if (input.commandType != 'button') (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
             content: `Could not find user ${user}`,
             allowedMentions: { repliedUser: false },
             failIfNotExists: false,
@@ -358,7 +358,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
     osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         }).catch();
@@ -407,7 +407,7 @@ export async function lb(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             const gamemode = input.args[0];
             if (!input.args[0] || gamemode == 'osu' || gamemode == 'o' || gamemode == '0' || gamemode == 'standard' || gamemode == 'std') {
@@ -429,7 +429,7 @@ export async function lb(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             const gamemode = input.obj.options.getString('mode');
             if (!gamemode || gamemode == 'osu' || gamemode == 'o' || gamemode == '0' || gamemode == 'standard' || gamemode == 'std') {
@@ -450,7 +450,7 @@ export async function lb(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
@@ -525,7 +525,7 @@ export async function lb(input: extypes.commandInput) {
     const rarr = [];
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         }).catch();
@@ -745,7 +745,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             if (input.args.includes('-page')) {
                 const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
@@ -805,7 +805,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             input.obj.options.getString('country') ? country = input.obj.options.getString('country').toUpperCase() : country = 'ALL';
             input.obj.options.getString('mode') ? mode = input.obj.options.getString('mode').toLowerCase() : mode = 'osu';
@@ -817,7 +817,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
             const pageParsed =
                 parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]);
@@ -958,7 +958,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
             version: 2
         }).catch(() => {
             if (country != 'ALL') {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                     content: 'Invalid country code',
                     embeds: [],
                     files: [],
@@ -966,7 +966,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
                     failIfNotExists: true
                 }).catch();
             } else {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                     content: 'Error',
                     embeds: [],
                     files: [],
@@ -985,13 +985,13 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: 'Error - could not fetch rankings',
                         allowedMentions: { repliedUser: false },
                     }).catch();
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: 'Error - could not fetch rankings',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -1017,7 +1017,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
     }
     if (rankingdata.ranking.length == 0) {
 
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
             content: 'No data found',
             embeds: [],
             files: [],
@@ -1126,7 +1126,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
                 mode = 'osu';
@@ -1176,7 +1176,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             value = input.obj.options.getInteger('value') ?? 100;
             mode = input.obj.options.getString('mode') as osuApiTypes.GameMode ?? 'osu';
@@ -1185,7 +1185,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1295,7 +1295,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-details')) {
@@ -1376,7 +1376,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = input.obj.member.user.id;
 
@@ -1389,7 +1389,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
@@ -1441,7 +1441,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         }
             break;
         case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
 
@@ -1556,7 +1556,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
     if (input.commandType == 'interaction') {
 
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         }).catch();
@@ -1587,14 +1587,14 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
                     });
                 }, 1000);
             } else {
 
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -1615,7 +1615,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
     //check for player's default mode if mode is null
     if ((
 
-        (input.commandType == 'interaction' && !(input.obj as Discord.ChatInputCommandInteraction<any>)?.options?.getString('mode'))
+        (input.commandType == 'interaction' && !(input.obj as Discord.ChatInputCommandInteraction)?.options?.getString('mode'))
         || input.commandType == 'message' || input.commandType == 'link'
     ) &&
         osudata.playmode != 'osu' &&
@@ -1732,7 +1732,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
 
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             embeds: [loading],
                             allowedMentions: { repliedUser: false },
                         })
@@ -1786,14 +1786,14 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                 if (input.commandType != 'button' && input.commandType != 'link') {
                     if (input.commandType == 'interaction') {
                         setTimeout(() => {
-                            (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                            (input.obj as Discord.ChatInputCommandInteraction).editReply({
                                 content: 'Error - could not fetch user\'s top scores',
                                 allowedMentions: { repliedUser: false },
                             }).catch();
                         }, 1000);
                     } else {
 
-                        (input.obj as Discord.Message<any>).reply({
+                        (input.obj as Discord.Message).reply({
                             content: 'Error - could not fetch user\'s top scores',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
@@ -1825,14 +1825,14 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                 if (input.commandType != 'button' && input.commandType != 'link') {
                     if (input.commandType == 'interaction') {
                         setTimeout(() => {
-                            (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                            (input.obj as Discord.ChatInputCommandInteraction).editReply({
                                 content: 'Error - could not fetch user\'s most played beatmaps',
                                 allowedMentions: { repliedUser: false },
                             }).catch();
                         }, 1000);
                     } else {
 
-                        (input.obj as Discord.Message<any>).reply({
+                        (input.obj as Discord.Message).reply({
                             content: 'Error - could not fetch user\'s most played beatmaps',
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
@@ -1970,7 +1970,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
 
@@ -2000,14 +2000,14 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
 
             user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
@@ -2030,7 +2030,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
         }
             break;
         case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
         }
             break;
@@ -2120,7 +2120,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
     page--;
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         }).catch();
@@ -2151,14 +2151,14 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
                     });
                 }, 1000);
             } else {
 
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -2213,14 +2213,14 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: `Error - could not find recent data`,
                         allowedMentions: { repliedUser: false },
                     });
                 }, 1000);
             } else {
 
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: `Error - could not find recent data`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -2411,7 +2411,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-page')) {
@@ -2548,7 +2548,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
 
@@ -2571,7 +2571,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
@@ -2824,7 +2824,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
     if (input.commandType == 'interaction') {
 
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         }).catch();
@@ -2856,13 +2856,13 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
                     });
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -2906,13 +2906,13 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: 'Error - could not find user\'s #1 scores',
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply({
+                    (input.obj as Discord.Message).reply({
                         content: 'Error - could not find user\'s #1 scores',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -2992,13 +2992,13 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply({
+                    (input.obj as Discord.Message).reply({
                         content: `Error - could not find requested score`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -3145,7 +3145,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
 
             if (input.args.includes('-page')) {
@@ -3180,7 +3180,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             mapid = input.obj.options.getInteger('id');
             page = input.obj.options.getInteger('page');
@@ -3195,7 +3195,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
@@ -3303,7 +3303,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         }).catch();
@@ -3332,13 +3332,13 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                     }).catch();
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -3365,7 +3365,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
         artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
     } catch (error) {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'error - map not found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'error - map not found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
             .catch();
         return;
     }
@@ -3404,13 +3404,13 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply({
+                    (input.obj as Discord.Message).reply({
                         content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -3449,13 +3449,13 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 if (input.commandType != 'button' && input.commandType != 'link') {
                     if (input.commandType == 'interaction') {
                         setTimeout(() => {
-                            (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                            (input.obj as Discord.ChatInputCommandInteraction).editReply({
                                 content: `Error - could not find requested score`,
                                 allowedMentions: { repliedUser: false },
                             }).catch();
                         }, 1000);
                     } else {
-                        (input.obj as Discord.Message<any>).reply({
+                        (input.obj as Discord.Message).reply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
@@ -3572,13 +3572,13 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply({
+                    (input.obj as Discord.Message).reply({
                         content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -3616,13 +3616,13 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 if (input.commandType != 'button' && input.commandType != 'link') {
                     if (input.commandType == 'interaction') {
                         setTimeout(() => {
-                            (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                            (input.obj as Discord.ChatInputCommandInteraction).editReply({
                                 content: `Error - could not find requested score`,
                                 allowedMentions: { repliedUser: false },
                             }).catch();
                         }, 1000);
                     } else {
-                        (input.obj as Discord.Message<any>).reply({
+                        (input.obj as Discord.Message).reply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
                             failIfNotExists: true
@@ -3755,7 +3755,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             mode = null;
@@ -3909,7 +3909,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
 
@@ -3932,7 +3932,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
@@ -4217,7 +4217,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         );
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         }).catch();
@@ -4248,13 +4248,13 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.ChatInputCommandInteraction).reply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
                     });
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -4303,13 +4303,13 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.ChatInputCommandInteraction).reply({
                         content: `Error - could not find \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
                     });
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: `Error - could not find \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -4335,14 +4335,14 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.ChatInputCommandInteraction).reply({
                         content: `Error - could not fetch \`${user}\`'s top scores`,
                         allowedMentions: { repliedUser: false },
                     })
                         .catch();
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: `Error - could not fetch \`${user}\`'s top scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -4409,13 +4409,13 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply({
+                    (input.obj as Discord.Message).reply({
                         content: `Error - could not find requested score`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -4567,7 +4567,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
 
@@ -4707,7 +4707,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = input.obj.member.user.id;
 
@@ -4738,7 +4738,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
 
             if (!input.obj.message.embeds[0]) {
                 return;
@@ -4998,7 +4998,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     mode = osufunc.modeValidator(mode);
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         }).catch();
@@ -5027,13 +5027,13 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
             setTimeout(() => {
-                (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.ChatInputCommandInteraction).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                 });
             }, 1000);
         } else {
-            (input.obj as Discord.Message<any>).reply({
+            (input.obj as Discord.Message).reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -5074,13 +5074,13 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: 'Error - could not find user\'s pinned scores',
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply({
+                    (input.obj as Discord.Message).reply({
                         content: 'Error - could not find user\'s pinned scores',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -5165,13 +5165,13 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply({
+                    (input.obj as Discord.Message).reply({
                         content: `Error - could not find requested score`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -5320,7 +5320,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
 
@@ -5410,7 +5410,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
             user = input.obj.options.getString('user');
@@ -5425,13 +5425,13 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
-            user = (input.obj.message as Discord.Message<any>).embeds[0].author.url.split('u/')[1];
+            user = (input.obj.message as Discord.Message).embeds[0].author.url.split('u/')[1];
             //title.split('for ')[1]
             const modething = input.obj.message.embeds[0].footer ? input.obj.message.embeds[0].description.split('\n')[1] : input.obj.message.embeds[0].description.split(' | ')[1].split('\n')[0];
             switch (true) {
@@ -5739,7 +5739,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                 content: `Error - could not fetch user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -5762,7 +5762,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         })
@@ -5794,13 +5794,13 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: `Error - could not fetch \`${user}\`'s recent scores`,
                         allowedMentions: { repliedUser: false },
                     }).catch();
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: `Error - could not fetch \`${user}\`'s recent scores`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -5873,13 +5873,13 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             if (input.button == null) {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: err,
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply(
+                    (input.obj as Discord.Message).reply(
                         {
                             content: err,
                             allowedMentions: { repliedUser: false },
@@ -5914,13 +5914,13 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: 'Error - could not find beatmap',
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply({
+                    (input.obj as Discord.Message).reply({
                         content: 'Error - could not find beatmap',
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -6417,7 +6417,7 @@ export async function replayparse(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
         }
@@ -6426,7 +6426,7 @@ export async function replayparse(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
 
@@ -6434,12 +6434,12 @@ export async function replayparse(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
         case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
         } break;
@@ -6697,7 +6697,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
 
@@ -6727,7 +6727,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
 
@@ -6735,7 +6735,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
 
             //osu.ppy.sh/scores/<mode>/<id>
@@ -6764,7 +6764,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         }
             break;
         case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             if (input.args.includes('-detailed')) {
                 scoredetailed = 2;
@@ -6907,7 +6907,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
 
     if (scoredata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                 content: 'Error - could not fetch score data',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -6927,7 +6927,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     try {
         if (typeof scoredata?.error != 'undefined') {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
+                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
                     .catch();
             }
             log.logCommand({
@@ -6945,7 +6945,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     func.storeFile(scoredataReq, scoreid, 'scoredata');
 
     if (input.commandType == 'interaction' && input.overrides == null) {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
+        (input.obj as Discord.ChatInputCommandInteraction).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
             .catch();
 
     }
@@ -6955,7 +6955,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         scoredata.rank.toUpperCase();
     } catch (error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
+            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
                 .catch();
         }
         log.logCommand({
@@ -6988,13 +6988,13 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: 'Error - could not fetch beatmap data',
                         allowedMentions: { repliedUser: false },
                     }).catch();
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: 'Error - could not fetch beatmap data',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -7181,13 +7181,13 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     if (osudata?.error) {
         if (input.commandType == 'interaction') {
             setTimeout(() => {
-                (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.ChatInputCommandInteraction).reply({
                     content: `Error - could not find user \`${scoredata?.user?.username}\``,
                     allowedMentions: { repliedUser: false },
                 });
             }, 1000);
         } else if (input.commandType == 'message') {
-            (input.obj as Discord.Message<any>).reply({
+            (input.obj as Discord.Message).reply({
                 content: `Error - could not find user \`${scoredata?.user?.username}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -7385,7 +7385,7 @@ export async function scorepost(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
 
             if (input.args.includes('-osu')) {
@@ -7446,7 +7446,7 @@ export async function scorepost(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
 
             scoreId = input.obj.options.getInteger('id');
@@ -7457,12 +7457,12 @@ export async function scorepost(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
         case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
         }
             break;
@@ -7513,7 +7513,7 @@ export async function scorepost(input: extypes.commandInput) {
 
     if (scoredata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                 content: 'Error - could not fetch score data',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -7545,13 +7545,13 @@ export async function scorepost(input: extypes.commandInput) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: `Error - could not fetch beatmap data for map \`${scoredata.beatmap.id}\`.`,
                         allowedMentions: { repliedUser: false },
                     }).catch();
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: `Error - could not fetch beatmap data for map \`${scoredata.beatmap.id}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -7655,7 +7655,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
@@ -7712,7 +7712,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
             user = input.obj.options.getString('username');
@@ -7730,7 +7730,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
@@ -7984,7 +7984,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         }).catch();
@@ -8014,13 +8014,13 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
             setTimeout(() => {
-                (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.ChatInputCommandInteraction).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                 });
             }, 1000);
         } else {
-            (input.obj as Discord.Message<any>).reply({
+            (input.obj as Discord.Message).reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -8068,13 +8068,13 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: 'Error - could not fetch scores',
                         allowedMentions: { repliedUser: false },
                     }).catch();
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: 'Error - could not fetch scores',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -8098,7 +8098,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     try {
         scoredata.length < 1;
     } catch (error) {
-        return (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        return (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
             content: `Error - no scores found for \`${user}\` on map \`${mapid}\``,
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
@@ -8128,13 +8128,13 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: `Error - could not find requested score`,
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply({
+                    (input.obj as Discord.Message).reply({
                         content: `Error - could not find requested score`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -8177,13 +8177,13 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: 'Error - could not fetch beatmap data',
                         allowedMentions: { repliedUser: false },
                     }).catch();
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: 'Error - could not fetch beatmap data',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -8329,7 +8329,7 @@ export async function scorestats(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-osu')) {
@@ -8428,7 +8428,7 @@ export async function scorestats(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
             input.obj.options.getString('user') ? user = input.obj.options.getString('user') : null;
@@ -8439,7 +8439,7 @@ export async function scorestats(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
             user = input.obj.message.embeds[0].author.url.split('/u/')[1].split('/')[0];
@@ -8449,7 +8449,7 @@ export async function scorestats(input: extypes.commandInput) {
         }
             break;
         case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
         }
             break;
@@ -8513,7 +8513,7 @@ export async function scorestats(input: extypes.commandInput) {
     mode = mode ? osufunc.modeValidator(mode) : null;
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         }).catch();
@@ -8542,7 +8542,7 @@ export async function scorestats(input: extypes.commandInput) {
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                 content: `Error - could not fetch user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -8579,13 +8579,13 @@ export async function scorestats(input: extypes.commandInput) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: `Error - could not find user's ${scoreTypes} scores`,
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply({
+                    (input.obj as Discord.Message).reply({
                         content: `Error - could not find user's ${scoreTypes} scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -8716,13 +8716,13 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     if (input.commandType == 'button') {
-        input.obj = input.obj as Discord.ButtonInteraction<any>;
+        input.obj = input.obj as Discord.ButtonInteraction;
 
         input.obj.reply({
             files: useFiles,
             ephemeral: true
         }).catch(error => {
-            (input.obj as Discord.ButtonInteraction<any>).editReply({
+            (input.obj as Discord.ButtonInteraction).editReply({
                 files: useFiles,
             });
         });
@@ -8774,7 +8774,7 @@ export async function simulate(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
             const ctn = input.obj.content;
@@ -8906,7 +8906,7 @@ export async function simulate(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             mapid = input.obj.options.getInteger('id');
             mods = input.obj.options.getString('mods');
@@ -8922,7 +8922,7 @@ export async function simulate(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -8981,7 +8981,7 @@ export async function simulate(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
+        (input.obj as Discord.ChatInputCommandInteraction).reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
             .catch();
 
     }
@@ -9007,7 +9007,7 @@ export async function simulate(input: extypes.commandInput) {
 
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                 content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -9197,7 +9197,7 @@ export async function map(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
 
@@ -9278,7 +9278,7 @@ export async function map(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
 
             mapid = input.obj.options.getInteger('id');
@@ -9293,7 +9293,7 @@ export async function map(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
@@ -9324,7 +9324,7 @@ export async function map(input: extypes.commandInput) {
             break;
 
         case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
 
@@ -9356,7 +9356,7 @@ export async function map(input: extypes.commandInput) {
                         mapid = parseInt(idfirst);
                     }
                 } catch (error) {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                         content: 'Please enter a valid beatmap link.',
                         allowedMentions: { repliedUser: false }
                     })
@@ -9413,7 +9413,7 @@ export async function map(input: extypes.commandInput) {
                 try {
                     mapid = bmsdata.beatmaps[0].id;
                 } catch (error) {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                         content: 'Please enter a valid beatmap link.',
                         allowedMentions: {
                             repliedUser: false
@@ -9570,7 +9570,7 @@ export async function map(input: extypes.commandInput) {
 
         if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -9608,7 +9608,7 @@ export async function map(input: extypes.commandInput) {
 
         if (bmsdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -9675,7 +9675,7 @@ export async function map(input: extypes.commandInput) {
 
         if (mapidtest?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                     content: 'Error - could not fetch beatmap search data.',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -9695,7 +9695,7 @@ export async function map(input: extypes.commandInput) {
         let mapidtest2;
 
         if (mapidtest.length == 0) {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 .catch();
 
             return;
@@ -9703,7 +9703,7 @@ export async function map(input: extypes.commandInput) {
         try {
             mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
         } catch (error) {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 .catch();
             return;
         }
@@ -9743,7 +9743,7 @@ export async function map(input: extypes.commandInput) {
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
         if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -9802,7 +9802,7 @@ export async function map(input: extypes.commandInput) {
     }
     let statusimg = emojis.rankedstatus.graveyard;
     if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: "Loading...",
             allowedMentions: { repliedUser: false }
         })
@@ -9997,7 +9997,7 @@ HP${baseHP}`;
     if (mapperdata?.error) {
         mapperdata = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
         // if (commandType != 'button' && commandType != 'link') {
-        //     (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        //     (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
         //         content: 'Error - could not find mapper',
         //         allowedMentions: { repliedUser: false },
         //         failIfNotExists: true
@@ -10298,7 +10298,7 @@ export async function ppCalc(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
 
@@ -10371,7 +10371,7 @@ export async function ppCalc(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
 
             mapid = input.obj.options.getInteger('id');
@@ -10386,7 +10386,7 @@ export async function ppCalc(input: extypes.commandInput) {
             break;
 
         case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
 
@@ -10418,7 +10418,7 @@ export async function ppCalc(input: extypes.commandInput) {
                         mapid = parseInt(idfirst);
                     }
                 } catch (error) {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                         content: 'Please enter a valid beatmap link.',
                         allowedMentions: { repliedUser: false }
                     })
@@ -10475,7 +10475,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 try {
                     mapid = bmsdata.beatmaps[0].id;
                 } catch (error) {
-                    (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                    (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                         content: 'Please enter a valid beatmap link.',
                         allowedMentions: {
                             repliedUser: false
@@ -10498,7 +10498,7 @@ export async function ppCalc(input: extypes.commandInput) {
         }
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
@@ -10606,7 +10606,7 @@ export async function ppCalc(input: extypes.commandInput) {
 
         if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -10644,7 +10644,7 @@ export async function ppCalc(input: extypes.commandInput) {
 
         if (bmsdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -10711,7 +10711,7 @@ export async function ppCalc(input: extypes.commandInput) {
 
         if (mapidtest?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                     content: 'Error - could not fetch beatmap search data.',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -10731,7 +10731,7 @@ export async function ppCalc(input: extypes.commandInput) {
         let mapidtest2;
 
         if (mapidtest.length == 0) {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 .catch();
 
             return;
@@ -10739,7 +10739,7 @@ export async function ppCalc(input: extypes.commandInput) {
         try {
             mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
         } catch (error) {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
+            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
                 .catch();
             return;
         }
@@ -10779,7 +10779,7 @@ export async function ppCalc(input: extypes.commandInput) {
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
         if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                     content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -10826,7 +10826,7 @@ export async function ppCalc(input: extypes.commandInput) {
         mapmods = osumodcalc.OrderMods(mapmods.toUpperCase());
     }
     if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: "Loading...",
             allowedMentions: { repliedUser: false }
         })
@@ -11215,7 +11215,7 @@ export async function randomMap(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             if (input.args.includes('-ranked')) {
                 mapType = 'Ranked';
@@ -11298,19 +11298,19 @@ export async function randomMap(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
         case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
         }
             break;
@@ -11382,7 +11382,7 @@ export async function maplocal(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
         }
@@ -11391,7 +11391,7 @@ export async function maplocal(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
 
@@ -11399,12 +11399,12 @@ export async function maplocal(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
         case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
         } break;
@@ -11433,8 +11433,8 @@ export async function maplocal(input: extypes.commandInput) {
     let errtxt = '';
     let mods = 'NM';
 
-    if ((input.obj as Discord.Message<any>).content.includes('+')) {
-        mods = (input.obj as Discord.Message<any>).content.split('+')[1].split(' ')[0];
+    if ((input.obj as Discord.Message).content.includes('+')) {
+        mods = (input.obj as Discord.Message).content.split('+')[1].split(' ')[0];
     }
 
     try {
@@ -11630,7 +11630,7 @@ export async function maplocal(input: extypes.commandInput) {
     try {
         mapgraph = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains'));
     } catch (error) {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
             content: 'Error - calculating strain graph.',
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
@@ -11672,7 +11672,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
             ])
             .setImage(`${mapgraph}`);
     } catch (error) {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
             content: 'Error - unknown',
             allowedMentions: { repliedUser: false },
             failIfNotExists: true
@@ -11738,7 +11738,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
 
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
@@ -11850,7 +11850,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
 
@@ -11872,7 +11872,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
             const curembed: Discord.Embed = input.obj.message.embeds[0];
@@ -12069,7 +12069,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
     }
 
     if (input.commandType == 'interaction') {
-        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.ChatInputCommandInteraction).reply({
             content: 'Loading...',
             allowedMentions: { repliedUser: false },
         }).catch();
@@ -12099,13 +12099,13 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
     if (osudata?.error || !osudata.id) {
         if (input.commandType == 'interaction') {
             setTimeout(() => {
-                (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
+                (input.obj as Discord.ChatInputCommandInteraction).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                 });
             }, 1000);
         } else {
-            (input.obj as Discord.Message<any>).reply({
+            (input.obj as Discord.Message).reply({
                 content: `Error - could not find user \`${user}\``,
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -12149,13 +12149,13 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: `Error - could not find user's ${calc.toCapital(filter)} maps`,
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply({
+                    (input.obj as Discord.Message).reply({
                         content: `Error - could not find user's ${calc.toCapital(filter)} maps`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -12235,13 +12235,13 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             if (input.commandType != 'button' && input.commandType != 'link') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             content: `Error - could not find map`,
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
-                    (input.obj as Discord.Message<any>).reply({
+                    (input.obj as Discord.Message).reply({
                         content: `Error - could not find map`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
@@ -12375,7 +12375,7 @@ export async function trackadd(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
@@ -12419,7 +12419,7 @@ export async function trackadd(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             user = input.obj.options.getString('user');
 
@@ -12428,7 +12428,7 @@ export async function trackadd(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -12461,7 +12461,7 @@ export async function trackadd(input: extypes.commandInput) {
     });
 
     if (!guildsetting.dataValues.trackChannel) {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
             content: 'The current guild does not have a tracking channel',
             embeds: [],
             files: [],
@@ -12548,7 +12548,7 @@ export async function trackremove(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
@@ -12592,7 +12592,7 @@ export async function trackremove(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             user = input.obj.options.getString('user');
         }
@@ -12600,7 +12600,7 @@ export async function trackremove(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -12633,7 +12633,7 @@ export async function trackremove(input: extypes.commandInput) {
     // })
 
     // if (!guildsetting.dataValues.trackChannel) {
-    //     (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+    //     (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
     //         content: 'The current guild does not have a tracking channel',
     //         embeds: [],
     //         files: [],
@@ -12721,7 +12721,7 @@ export async function trackchannel(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
             channelId = input.args[0];
@@ -12732,7 +12732,7 @@ export async function trackchannel(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             channelId = (input.obj.options.getChannel('channel')).id;
         }
@@ -12740,7 +12740,7 @@ export async function trackchannel(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -12769,7 +12769,7 @@ export async function trackchannel(input: extypes.commandInput) {
     if (!channelId) {
         //the current channel is...
         if (!guildsetting.dataValues.trackChannel) {
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                 content: 'The current guild does not have a tracking channel',
                 embeds: [],
                 files: [],
@@ -12778,7 +12778,7 @@ export async function trackchannel(input: extypes.commandInput) {
             }).catch();
             return;
         }
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
             content: `The current tracking channel is <#${guildsetting.dataValues.trackChannel}>`,
             embeds: [],
             files: [],
@@ -12789,7 +12789,7 @@ export async function trackchannel(input: extypes.commandInput) {
     }
 
     if (!channelId || isNaN(+channelId) || !input.client.channels.cache.get(channelId)) {
-        (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+        (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
             content: 'Please provide a valid channel ID',
             embeds: [],
             files: [],
@@ -12835,21 +12835,21 @@ export async function tracklist(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -12972,7 +12972,7 @@ export async function compare(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             if (input.obj.mentions.users.size > 1) {
                 firstsearchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
@@ -12995,7 +12995,7 @@ export async function compare(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
 
             commanduser = input.obj.member.user;
             //@ts-expect-error string not assignable blah blah
@@ -13013,7 +13013,7 @@ export async function compare(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
 
             if (!input.obj.message.embeds[0]) {
                 return;
@@ -13477,7 +13477,7 @@ export async function osuset(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
@@ -13536,7 +13536,7 @@ export async function osuset(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             name = input.obj.options.getString('user');
             mode = input.obj.options.getString('mode');
@@ -13548,7 +13548,7 @@ export async function osuset(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -13612,7 +13612,7 @@ export async function osuset(input: extypes.commandInput) {
         mode = thing.mode;
         if (thing.isincluded == false) {
 
-            (input.obj as Discord.Message<any> | Discord.ChatInputCommandInteraction<any>).reply({
+            (input.obj as Discord.Message | Discord.ChatInputCommandInteraction).reply({
                 content: 'Error - invalid mode given',
                 allowedMentions: { repliedUser: false },
                 failIfNotExists: true
@@ -13726,7 +13726,7 @@ export async function saved(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
 
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
@@ -13738,14 +13738,14 @@ export async function saved(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -13884,7 +13884,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
 
@@ -13952,7 +13952,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
 
@@ -13967,7 +13967,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
         }
@@ -14048,13 +14048,13 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: `Error - could not find user \`${user}\``,
                         allowedMentions: { repliedUser: false },
                     });
                 }, 1000);
             } else {
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: `Error - could not find user \`${user}\``,
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true
@@ -14099,14 +14099,14 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         if (input.commandType != 'button' && input.commandType != 'link') {
             if (input.commandType == 'interaction') {
                 setTimeout(() => {
-                    (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
+                    (input.obj as Discord.ChatInputCommandInteraction).editReply({
                         content: 'Error - could not fetch user\'s top scores',
                         allowedMentions: { repliedUser: false },
                     }).catch();
                 }, 1000);
             } else {
 
-                (input.obj as Discord.Message<any>).reply({
+                (input.obj as Discord.Message).reply({
                     content: 'Error - could not fetch user\'s top scores',
                     allowedMentions: { repliedUser: false },
                     failIfNotExists: true

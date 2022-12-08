@@ -32,7 +32,7 @@ export function convert(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             cat1 = input.args[0];
             cat2 = input.args[1];
@@ -55,7 +55,7 @@ export function convert(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
 
             cat1 = input.obj.options.getString('from');
@@ -69,7 +69,7 @@ export function convert(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -843,7 +843,7 @@ export function help(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             command = input.args[0];
             if (!input.args[0]) {
@@ -855,7 +855,7 @@ export function help(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             command = input.obj.options.getString('command');
         }
@@ -864,7 +864,7 @@ export function help(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
             if (input.button == 'Random') {
                 rdm = true;
@@ -1242,7 +1242,7 @@ export async function info(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
         }
             break;
@@ -1250,7 +1250,7 @@ export async function info(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
 
@@ -1258,7 +1258,7 @@ export async function info(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1356,25 +1356,25 @@ export function invite(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
         case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
         }
             break;
@@ -1430,7 +1430,7 @@ export function math(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             type = 'basic';
         }
@@ -1439,7 +1439,7 @@ export function math(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             type = input.obj.options.getString('type');
             num1 = input.obj.options.getNumber('num1');
@@ -1450,7 +1450,7 @@ export function math(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1612,7 +1612,7 @@ export function ping(input: extypes.commandInput) {
     let commanduser;
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
         }
             break;
@@ -1620,7 +1620,7 @@ export function ping(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
 
@@ -1628,7 +1628,7 @@ export function ping(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1663,12 +1663,12 @@ ${trueping}`);
     const preEdit = new Date();
     //@ts-expect-error aaaaaaaaaa
     //This expression is not callable.
-    //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
+    //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
     input.obj.reply({
         embeds: [pingEmbed],
         allowedMentions: { repliedUser: false },
         failIfNotExists: true
-    }).then((msg: Discord.Message<any> | Discord.CommandInteraction) => {
+    }).then((msg: Discord.Message | Discord.CommandInteraction) => {
         const timeToEdit = new Date().getTime() - preEdit.getTime();
         pingEmbed.setDescription(`
 Client latency: ${input.client.ws.ping}ms
@@ -1684,7 +1684,7 @@ ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
                 });
                 break;
             case 'interaction':
-                //@ts-expect-error 'editReply' property does not exist on Message<any>
+                //@ts-expect-error 'editReply' property does not exist on Message
                 input.obj.editReply({
                     embeds: [pingEmbed],
                     allowedMentions: { repliedUser: false },
@@ -1721,7 +1721,7 @@ export function remind(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             time = input.args[0];
             remindertxt = input.args.join(' ').replaceAll(input.args[0], '');
@@ -1756,7 +1756,7 @@ export function remind(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
 
 
@@ -1785,7 +1785,7 @@ export function remind(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1879,7 +1879,7 @@ export function stats(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
         }
             break;
@@ -1887,7 +1887,7 @@ export function stats(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
 
@@ -1895,7 +1895,7 @@ export function stats(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1976,7 +1976,7 @@ export function time(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             fetchtimezone = input.args.join(' ');
         }
@@ -1985,7 +1985,7 @@ export function time(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
 
             fetchtimezone = input.obj.options.getString('timezone');
@@ -1995,7 +1995,7 @@ export function time(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
