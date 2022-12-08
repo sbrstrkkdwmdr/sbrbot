@@ -1712,7 +1712,7 @@ export function Stats(arr: number[]) {
  * @returns mappers of scores in order of most common to least common, with percentage
  */
 export function CommonMappers(arr: osuApiTypes.Score[]) {
-    let mapperArray: {
+    const mapperArray: {
         mapper: string,
         count: number,
         percentage: number;
@@ -1736,7 +1736,7 @@ export function CommonMappers(arr: osuApiTypes.Score[]) {
 }
 
 export function CommonMods(arr: osuApiTypes.Score[]) {
-    let modComboArray: {
+    const modComboArray: {
         mods: string,
         count: number,
         percentage: number;
@@ -1761,7 +1761,7 @@ export function CommonMods(arr: osuApiTypes.Score[]) {
 
 export function ModToEmojis(mods: string[], canEmoji?: boolean) {
     if (canEmoji) {
-        let modEmojis: string[] = [];
+        const modEmojis: string[] = [];
         for (let i = 0; i < mods.length; i++) {
             let current: string = '';
             //find

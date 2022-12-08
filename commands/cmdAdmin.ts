@@ -479,9 +479,6 @@ export async function debug(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
     log.logCommand({
         event: 'Command',
@@ -682,7 +679,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             break;
         default: {
             usemsgArgs = {
-                content: 'Invalid type. Valid types are: \`commandfile\`,\`servers\`,\`channels\`,\`users\`,\`forcetrack\`,\`curcmdid\`,\`logs\`'
+                content: 'Invalid type. Valid types are: `commandfile`,`servers`,`channels`,`users`,`forcetrack`,`curcmdid`,`logs`'
             };
         }
     }

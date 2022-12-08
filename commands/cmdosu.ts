@@ -39,7 +39,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
     let commanduser: Discord.User;
     let user;
     let searchid;
-    let embedStyle: extypes.osuCmdStyle = 'A';
+    const embedStyle: extypes.osuCmdStyle = 'A';
 
     switch (input.commandType) {
         case 'message': {
@@ -399,7 +399,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
 export async function lb(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
-    let embedStyle: extypes.osuCmdStyle = 'L';
+    const embedStyle: extypes.osuCmdStyle = 'L';
 
     let page = 0;
     let mode = 'osu';
@@ -741,7 +741,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
     let page = 0;
     let spotlight;
 
-    let embedStyle: extypes.osuCmdStyle = 'L';
+    const embedStyle: extypes.osuCmdStyle = 'L';
 
     switch (input.commandType) {
         case 'message': {
@@ -1121,7 +1121,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
     let value;
     let mode: osuApiTypes.GameMode = 'osu';
 
-    let embedStyle: extypes.osuCmdStyle = 'A';
+    const embedStyle: extypes.osuCmdStyle = 'A';
 
 
     switch (input.commandType) {
@@ -2143,7 +2143,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
         });
     }
 
-    let osudata: osuApiTypes.User = osudataReq.apiData;
+    const osudata: osuApiTypes.User = osudataReq.apiData;
 
     osufunc.debug(osudataReq, 'command', 'recent_activity', input.obj.guildId, 'osuData');
 
@@ -2267,7 +2267,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
         ;
 
     for (let i = 0; i < rsactData.length && i < pageLength; i++) {
-        let curEv = rsactData[i + (page * pageLength)];
+        const curEv = rsactData[i + (page * pageLength)];
         if (!curEv) break;
         const obj = {
             name: `#${i + (page * pageLength) + 1} | `,
@@ -2925,7 +2925,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find user\'s #1 scores offset by ${cinitnum}`
+                customString: `Could not find user's #1 scores offset by ${cinitnum}`
             });
             return;
         }
@@ -3067,7 +3067,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (scoredetailed) {
-            case 0: case 2:
+            case 0: case 2: {
                 let temptxt = '\n';
                 for (let i = 0; i < scoresarg.string.length; i++) {
                     temptxt += scoresarg.string[i];
@@ -3076,11 +3076,13 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                     `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
                     + temptxt
                 );
+            }
                 break;
-            case 1: default:
+            case 1: default: {
                 for (let i = 0; i < scoresarg.fields.length; i++) {
                     firstsEmbed.addFields([scoresarg.fields[i]]);
                 }
+            }
                 break;
         }
     }
@@ -3137,7 +3139,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     let page;
     let parseId = null;
     let parseScore = false;
-    let embedStyle: extypes.osuCmdStyle = 'L';
+    const embedStyle: extypes.osuCmdStyle = 'L';
     let scoredetailed: number = 1;
 
 
@@ -4478,7 +4480,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (scoredetailed) {
-            case 0: case 2:
+            case 0: case 2: {
                 let temptxt = '\n';
                 for (let i = 0; i < scoresarg.string.length; i++) {
                     temptxt += scoresarg.string[i];
@@ -4487,11 +4489,13 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
                     `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}`
                     + temptxt
                 );
+            }
                 break;
-            case 1: default:
+            case 1: default: {
                 for (let i = 0; i < scoresarg.fields.length; i++) {
                     topEmbed.addFields([scoresarg.fields[i]]);
                 }
+            }
                 break;
         }
     }
@@ -5232,7 +5236,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (scoredetailed) {
-            case 0: case 2:
+            case 0: case 2: {
                 let temptxt = '\n';
                 for (let i = 0; i < scoresarg.string.length; i++) {
                     temptxt += scoresarg.string[i];
@@ -5241,11 +5245,13 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                     `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
                     + temptxt
                 );
+            }
                 break;
-            case 1: default:
+            case 1: default: {
                 for (let i = 0; i < scoresarg.fields.length; i++) {
                     pinnedEmbed.addFields([scoresarg.fields[i]]);
                 }
+            }
                 break;
         }
     }
@@ -6471,7 +6477,6 @@ export async function replayparse(input: extypes.commandInput) {
     }
     osufunc.debug(replay, 'fileparse', 'replay', input.obj.guildId, 'replayData');
 
-    let mapdata: osuApiTypes.Beatmap;
     let mapdataReq: osufunc.apiReturn;
 
     if (func.findFile(replay.beatmapMD5, `mapdata`) &&
@@ -6488,7 +6493,7 @@ export async function replayparse(input: extypes.commandInput) {
                 }
             });
     }
-    mapdata = mapdataReq.apiData;
+    const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
     func.storeFile(mapdataReq, replay.beatmapMD5, 'mapdata');
 
     osufunc.debug(mapdataReq, 'fileparse', 'replay', input.obj.guildId, 'mapData');
@@ -6880,7 +6885,6 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     }
 
     let scoredataReq: osufunc.apiReturn;
-    let scoredata: osuApiTypes.Score;
 
     if (func.findFile(scoreid, 'scoredata') &&
         !('error' in func.findFile(scoreid, 'scoredata')) &&
@@ -6898,7 +6902,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             });
     }
 
-    scoredata = scoredataReq.apiData;
+    const scoredata: osuApiTypes.Score = scoredataReq.apiData;
 
 
     if (scoredata?.error) {
@@ -7463,9 +7467,6 @@ export async function scorepost(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
 
     log.logCommand({
@@ -7491,7 +7492,6 @@ export async function scorepost(input: extypes.commandInput) {
 
 
     let scoredataReq: osufunc.apiReturn;
-    let scoredata: osuApiTypes.Score;
 
     if (func.findFile(scoreId, 'scoredata') &&
         !('error' in func.findFile(scoreId, 'scoredata')) &&
@@ -7509,7 +7509,7 @@ export async function scorepost(input: extypes.commandInput) {
             });
     }
 
-    scoredata = scoredataReq.apiData;
+    const scoredata: osuApiTypes.Score = scoredataReq.apiData;
 
     if (scoredata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
@@ -8256,7 +8256,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (scoredetailed) {
-            case 0: case 2:
+            case 0: case 2: {
                 let temptxt = '\n';
                 for (let i = 0; i < scoresarg.string.length; i++) {
                     temptxt += scoresarg.string[i];
@@ -8265,11 +8265,13 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                     `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}`
                     + temptxt
                 );
+            }
                 break;
-            case 1: default:
+            case 1: default: {
                 for (let i = 0; i < scoresarg.fields.length; i++) {
                     scoresEmbed.addFields([scoresarg.fields[i]]);
                 }
+            }
                 break;
         }
     }
@@ -8323,7 +8325,7 @@ export async function scorestats(input: extypes.commandInput) {
 
     let reachedMaxCount = false;
 
-    let embedStyle: extypes.osuCmdStyle = 'A';
+    const embedStyle: extypes.osuCmdStyle = 'A';
 
     switch (input.commandType) {
         case 'message': {
@@ -8452,9 +8454,6 @@ export async function scorestats(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
 
     //detailed button
@@ -8581,13 +8580,13 @@ export async function scorestats(input: extypes.commandInput) {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
                         (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
-                            content: `Error - could not find user\'s ${scoreTypes} scores`,
+                            content: `Error - could not find user's ${scoreTypes} scores`,
                             allowedMentions: { repliedUser: false },
                         }).catch();
                     }, 1000);
                 } else {
                     (input.obj as Discord.Message<any>).reply({
-                        content: `Error - could not find user\'s ${scoreTypes} scores`,
+                        content: `Error - could not find user's ${scoreTypes} scores`,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
                     }).catch();
@@ -8771,7 +8770,7 @@ export async function simulate(input: extypes.commandInput) {
     let overrideSpeed = 1;
     let overrideBpm: number = null;
 
-    let embedStyle: extypes.osuCmdStyle = 'S';
+    const embedStyle: extypes.osuCmdStyle = 'S';
 
     switch (input.commandType) {
         case 'message': {
@@ -9182,7 +9181,7 @@ export async function map(input: extypes.commandInput) {
     let mapmods;
     let maptitleq: string = null;
     let detailed: number = 1;
-    let searchRestrict = 'any';
+    const searchRestrict = 'any';
     let overrideSpeed = 1;
     let overrideBpm: number = null;
 
@@ -10283,7 +10282,7 @@ export async function ppCalc(input: extypes.commandInput) {
     let mapid;
     let mapmods;
     let maptitleq: string = null;
-    let searchRestrict = 'any';
+    const searchRestrict = 'any';
     let overrideSpeed = 1;
     let overrideBpm: number = null;
 
@@ -10295,7 +10294,7 @@ export async function ppCalc(input: extypes.commandInput) {
     let customOD: 'current' | number = 'current';
     let customHP: 'current' | number = 'current';
 
-    let embedStyle: extypes.osuCmdStyle = 'M';
+    const embedStyle: extypes.osuCmdStyle = 'M';
 
     switch (input.commandType) {
         case 'message': {
@@ -11316,9 +11315,6 @@ export async function randomMap(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
 
     log.logCommand({
@@ -11382,7 +11378,7 @@ export async function maplocal(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
 
-    let embedStyle: extypes.osuCmdStyle = 'M';
+    const embedStyle: extypes.osuCmdStyle = 'M';
 
     switch (input.commandType) {
         case 'message': {
@@ -11734,7 +11730,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
     let commanduser: Discord.User;
     let reachedMaxCount = false;
 
-    let mode: osuApiTypes.GameMode = 'osu';
+    const mode: osuApiTypes.GameMode = 'osu';
 
     let embedStyle: extypes.osuCmdStyle = 'L';
 
@@ -12312,7 +12308,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
         switch (mapDetailed) {
-            case 0: case 2:
+            case 0: case 2: {
                 let temptxt = '\n';
                 for (let i = 0; i < mapsarg.string.length; i++) {
                     temptxt += mapsarg.string[i];
@@ -12323,11 +12319,13 @@ ${mapsarg.filter}
 Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${filterTitle}` : ''}${reachedMaxCount ? '\nOnly the first 500 mapsets are shown' : ''}`
                     + temptxt
                 );
+            }
                 break;
-            case 1: default:
+            case 1: default: {
                 for (let i = 0; i < mapsarg.fields.length; i++) {
                     mapList.addFields([mapsarg.fields[i]]);
                 }
+            }
                 break;
         }
     }
@@ -12833,8 +12831,7 @@ export async function trackchannel(input: extypes.commandInput) {
  */
 export async function tracklist(input: extypes.commandInput) {
     let commanduser: Discord.User;
-    let embedStyle: extypes.osuCmdStyle = 'L';
-
+    const embedStyle: extypes.osuCmdStyle = 'L';
 
     switch (input.commandType) {
         case 'message': {
@@ -13883,7 +13880,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
     let searchid;
     let mode;
 
-    let embedStyle: extypes.osuCmdStyle = 'A';
+    const embedStyle: extypes.osuCmdStyle = 'A';
 
     switch (input.commandType) {
         case 'message': {

@@ -786,7 +786,7 @@ ${num ? '' : '[number]'}`;
             args: {
                 embeds: useEmbeds
             }
-        },input.canReply
+        }, input.canReply
     );
 
     log.logCommand({
@@ -1170,7 +1170,7 @@ export function help(input: extypes.commandInput) {
             .setComponents(selectCategoryMenu)
     );
     let curpick: any = 'def';
-    let push = [];
+    const push = [];
 
 
     switch (commandCategory) {
@@ -1186,7 +1186,7 @@ export function help(input: extypes.commandInput) {
         case 'misc':
             curpick = helpinfo.othercmds;
             break;
-    };
+    }
 
     //@ts-expect-error false and true no overlap error
     if (commandfound == true) {
@@ -1220,7 +1220,7 @@ export function help(input: extypes.commandInput) {
                 embeds: useEmbeds,
                 components: useComponents
             }
-        },input.canReply
+        }, input.canReply
     );
 
     log.logCommand({
@@ -1288,7 +1288,7 @@ export async function info(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const curGuildSettings = await input.guildSettings.findOne({ where: { guildid: input.obj.guildId } });
-    let serverpfx = curGuildSettings.dataValues.prefix;
+    const serverpfx = curGuildSettings.dataValues.prefix;
 
     // const starttime = new Date((fs.readFileSync(`${path}\\debug\\starttime.txt`)).toString());
 
@@ -1335,7 +1335,7 @@ Bot Version: ${pkgjson.version}
                 embeds: [Embed],
                 components: [buttons]
             }
-        },input.canReply
+        }, input.canReply
     );
 
 
@@ -1379,37 +1379,7 @@ export function invite(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
-
-    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.first),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.previous),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.next),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.last),
-        );
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.refresh),
-        );
 
     log.logCommand({
         event: 'Command',
@@ -1432,7 +1402,7 @@ export function invite(input: extypes.commandInput) {
         args: {
             content: mainconst.linkInvite
         }
-    },input.canReply);
+    }, input.canReply);
 
     log.logFile('command',
         `
@@ -1621,7 +1591,7 @@ export function math(input: extypes.commandInput) {
             args: {
                 content: equation
             }
-        },input.canReply
+        }, input.canReply
     );
 
 
@@ -1765,7 +1735,7 @@ export function remind(input: extypes.commandInput) {
                     args: {
                         content: 'Please specify a time'
                     }
-                },input.canReply);
+                }, input.canReply);
 
             }
             if (!input.args[1]) {
@@ -1778,7 +1748,7 @@ export function remind(input: extypes.commandInput) {
                     args: {
                         content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`'
                     }
-                },input.canReply);
+                }, input.canReply);
             }
         }
             break;
@@ -1807,7 +1777,7 @@ export function remind(input: extypes.commandInput) {
                         content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`',
                         ephemeral: true
                     }
-                },input.canReply);
+                }, input.canReply);
             }
         }
 
@@ -1886,7 +1856,7 @@ export function remind(input: extypes.commandInput) {
             args: {
                 react: true
             }
-        },input.canReply);
+        }, input.canReply);
 
 
 
@@ -1983,7 +1953,7 @@ Current Shard:
         args: {
             embeds: [Embed],
         }
-    },input.canReply);
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
@@ -2190,7 +2160,7 @@ export function time(input: extypes.commandInput) {
                     args: {
                         embeds: [Embed]
                     }
-                },input.canReply);
+                }, input.canReply);
                 return;
             }
 
@@ -2214,7 +2184,7 @@ export function time(input: extypes.commandInput) {
         args: {
             embeds: [Embed]
         }
-    },input.canReply);
+    }, input.canReply);
 
     log.logCommand({
         event: 'Success',
