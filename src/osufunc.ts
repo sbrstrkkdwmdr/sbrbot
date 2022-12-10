@@ -59,7 +59,7 @@ export async function mapcalc(
         customHP?: number,
         maxLimit?: number,
     },
-    mapIsRank?: string
+    mapIsRank: boolean
 ) {
     let ppl: rosu.PerformanceAttributes[];
 
@@ -147,7 +147,7 @@ export async function scorecalc(
         calctype?: number | null, passedObj?: number | null, failed?: boolean | null,
         clockRate?: number | null,
     },
-    mapIsRank?: string
+    mapIsRank: boolean
 ) {
     let ppl: rosu.PerformanceAttributes[];
 
@@ -1192,14 +1192,11 @@ export function getMapImages(mapSetId: string | number) {
  * @param curCall - start at 0
  * @returns 
  */
-export async function dlMap(mapid: number | string, curCall: number, isRanked?: string,) {
+export async function dlMap(mapid: number | string, curCall: number, isRanked?: boolean,) {
     const mapFiles = fs.readdirSync('./files/maps');
     let mapDir = '';
     if (mapFiles.some(x => x.includes(`${mapid}`)) == false) {
-        let curType = 'temp';
-        if (['ranked', 'loved', 'approved'].some(x => x.includes(isRanked ?? 'temp'))) {
-            curType = 'perm';
-        }
+        let curType = isRanked ? 'perm' : 'temp';
 
         const url = `https://osu.ppy.sh/osu/${mapid}`;
         const path = `./files/maps/${curType}${mapid}.osu`;
@@ -1239,6 +1236,10 @@ export async function dlMap(mapid: number | string, curCall: number, isRanked?: 
         }
     }
     return mapDir.replace('./', '');
+}
+
+export function mapStatus(map: osuApiTypes.Beatmapset | osuApiTypes.Beatmap) {
+    if (map.ranked > 0 && map.ranked != 3) return true;
 }
 
 /**
