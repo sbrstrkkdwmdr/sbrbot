@@ -3176,7 +3176,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     let parseId = null;
     let parseScore = false;
     const embedStyle: extypes.osuCmdStyle = 'L';
-    let scoredetailed: number = 1;
+    const scoredetailed: number = 1;
 
 
     switch (input.commandType) {
@@ -6401,7 +6401,7 @@ export async function replayparse(input: extypes.commandInput) {
     let commanduser: Discord.User;
     let replay;
 
-    let embedStyle: extypes.osuCmdStyle = 'S';
+    const embedStyle: extypes.osuCmdStyle = 'S';
 
     switch (input.commandType) {
         case 'message': {
@@ -13808,7 +13808,7 @@ export async function saved(input: extypes.commandInput) {
     };
     let overrideTitle;
 
-    let embedStyle: extypes.osuCmdStyle = 'A';
+    const embedStyle: extypes.osuCmdStyle = 'A';
 
     switch (input.commandType) {
         case 'message': {

@@ -760,7 +760,7 @@ export async function apiget(input: apiInput) {
                 error: 'Too many calls made to the api'
             },
         };
-    };
+    }
 
     let data: apiReturn = {
         url: null,

@@ -65,8 +65,6 @@ const sequelize = new Sequelize.Sequelize('database', 'username', 'password', {
     storage: 'database.sqlite',
 });
 
-
-
 const userdata = sequelize.define('userdata', {
     userid: {
         type: Sequelize.STRING,
