@@ -2434,284 +2434,27 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
     let commanduser: Discord.User;
 
-    let user;
-    let searchid;
-    let page = 0;
+    const parseArgs = await parseArgs_scoreList(input)
+    
+    let user = parseArgs.user;
+    let searchid = parseArgs.searchid;
+    let page = parseArgs.page ?? 0;
 
-    let scoredetailed: number = 1;
-    let sort: embedStuff.scoreSort = 'recent';
-    let reverse = false;
-    let mode = 'osu';
+    let scoredetailed: number = parseArgs.scoredetailed ?? 1;
 
-    let filteredMapper = null;
-    let filteredMods = null;
-    let filterTitle = null;
+    let sort: embedStuff.scoreSort = parseArgs.sort ?? 'recent';
+    let reverse = parseArgs.reverse ?? false;
+    let mode = parseArgs.mode ?? 'osu';
+    let filteredMapper = parseArgs.filteredMapper ?? null;
+    let filteredMods = parseArgs.filteredMods ?? null;
+    let filterTitle = parseArgs.filterTitle ?? null;
 
-    let parseScore = false;
-    let parseId = null;
+    let parseScore = parseArgs.parseScore ?? false;
+    let parseId = parseArgs.parseId ?? null;
 
-    let reachedMaxCount = false;
+    let reachedMaxCount = parseArgs.reachedMaxCount ?? false;
     let embedStyle: extypes.osuCmdStyle = 'L';
 
-
-    switch (input.commandType) {
-        case 'message': {
-            input.obj = (input.obj as Discord.Message);
-            commanduser = input.obj.author;
-            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if (input.args.includes('-page')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            if (input.args.includes('-parse')) {
-                parseScore = true;
-                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
-                parseId = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            if (input.args.includes('-detailed')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-detailed'), 1);
-            }
-            if (input.args.includes('-d')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-d'), 1);
-            }
-            if (input.args.includes('-compress')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-compress'), 1);
-            }
-            if (input.args.includes('-c')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-c'), 1);
-            }
-
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
-            }
-
-            if (input.args.includes('-recent')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-recent'), 1);
-            }
-            if (input.args.includes('-performance')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-performance'), 1);
-            }
-            if (input.args.includes('-pp')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-pp'), 1);
-            }
-            if (input.args.includes('-score')) {
-                sort = 'score';
-                input.args.splice(input.args.indexOf('-score'), 1);
-            }
-            if (input.args.includes('-acc')) {
-                sort = 'acc';
-                input.args.splice(input.args.indexOf('-acc'), 1);
-            }
-            if (input.args.includes('-combo')) {
-                sort = 'combo';
-                input.args.splice(input.args.indexOf('-combo'), 1);
-            }
-            if (input.args.includes('-misses')) {
-                sort = 'miss',
-                    input.args.splice(input.args.indexOf('-misses'));
-            }
-            if (input.args.includes('-miss')) {
-                sort = 'miss';
-                input.args.splice(input.args.indexOf('-miss'), 1);
-            }
-            if (input.args.includes('-rank')) {
-                sort = 'rank';
-                input.args.splice(input.args.indexOf('-rank'), 1);
-            }
-            if (input.args.includes('-r')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
-                filterTitle = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            input.args = cleanArgs(input.args);
-
-            user = input.args.join(' ');
-            if (!input.args[0] || input.args[0].includes(searchid)) {
-                user = null;
-            }
-        }
-            break;
-
-        //==============================================================================================================================================================================================
-
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
-            commanduser = input.obj.member.user;
-            searchid = commanduser.id;
-
-            user = input.obj.options.getString('user');
-            page = input.obj.options.getInteger('page');
-            scoredetailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
-            sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
-            reverse = input.obj.options.getBoolean('reverse');
-            mode = input.obj.options.getString('mode') ?? 'osu';
-            filteredMapper = input.obj.options.getString('mapper');
-            filteredMods = input.obj.options.getString('mods');
-            filterTitle = input.obj.options.getString('filter');
-            parseId = input.obj.options.getInteger('parse');
-            if (parseId != null) {
-                parseScore = true;
-            }
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            if (!input.obj.message.embeds[0]) {
-                return;
-            }
-
-            commanduser = input.obj.member.user;
-            searchid = commanduser.id;
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
-            page = 0;
-            if (input.obj.message.embeds[0].description) {
-                if (input.obj.message.embeds[0].description.includes('mapper')) {
-                    filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }
-                if (input.obj.message.embeds[0].description.includes('mods')) {
-                    filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }
-                if (input.obj.message.embeds[0].description.includes('map')) {
-                    filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
-                }
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
-                switch (true) {
-                    case sort1.includes('score'):
-                        sort = 'score';
-                        break;
-                    case sort1.includes('acc'):
-                        sort = 'acc';
-                        break;
-                    case sort1.includes('pp'):
-                        sort = 'pp';
-                        break;
-                    case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent';
-                        break;
-                    case sort1.includes('combo'):
-                        sort = 'combo';
-                        break;
-                    case sort1.includes('miss'):
-                        sort = 'miss';
-                        break;
-                    case sort1.includes('rank'):
-                        sort = 'rank';
-                        break;
-
-                }
-
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
-                if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
-                    reverse = true;
-                } else {
-                    reverse = false;
-                }
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
-                page = 0;
-                switch (input.button) {
-                    case 'BigLeftArrow':
-                        page = 1;
-                        break;
-                    case 'LeftArrow':
-                        page = pageParsed - 1;
-                        break;
-                    case 'RightArrow':
-                        page = pageParsed + 1;
-                        break;
-                    case 'BigRightArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
-                        break;
-                    default:
-                        page = pageParsed;
-                        break;
-                }
-                switch (input.button) {
-                    case 'Detail0':
-                        scoredetailed = 0;
-                        break;
-                    case 'Detail1':
-                        scoredetailed = 1;
-
-                        break;
-                    case 'Detail2':
-                        scoredetailed = 2;
-                        break;
-                    default:
-                        if (input.obj.message.embeds[0].footer.text.includes('LE')) {
-                            scoredetailed = 2;
-                        }
-                        if (input.obj.message.embeds[0].footer.text.includes('LC')) {
-                            scoredetailed = 0;
-                        }
-                        break;
-                }
-            }
-
-        }
-            break;
-    }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
             page = input.overrides.page;
@@ -3759,306 +3502,29 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 
     let commanduser: Discord.User;
 
-    let user;
-    let mode;
-    let sort: embedStuff.scoreSort;
-    let reverse;
-    let page;
-    let mapper;
-    let mods;
-    let filterTitle;
+    const parseArgs = await parseArgs_scoreList(input)
+    
+    let user = parseArgs.user;
+    let searchid = parseArgs.searchid;
+    let page = parseArgs.page ?? 0;
 
-    let searchid;
+    let scoredetailed: number = parseArgs.scoredetailed ?? 1;
+
+    let sort: embedStuff.scoreSort = parseArgs.sort ?? 'recent';
+    let reverse = parseArgs.reverse ?? false;
+    let mode = parseArgs.mode ?? 'osu';
+    let filteredMapper = parseArgs.filteredMapper ?? null;
+    let filteredMods = parseArgs.filteredMods ?? null;
+    let filterTitle = parseArgs.filterTitle ?? null;
+
+    let parseScore = parseArgs.parseScore ?? false;
+    let parseId = parseArgs.parseId ?? null;
+
+    let reachedMaxCount = parseArgs.reachedMaxCount ?? false;
+    
+    let embedStyle: extypes.osuCmdStyle = 'L';
     let noMiss = false;
 
-    let parseScore = false;
-    let parseId = null;
-
-    let scoredetailed: number = 1;
-
-    let embedStyle: extypes.osuCmdStyle = 'L';
-
-    switch (input.commandType) {
-        case 'message': {
-            input.obj = (input.obj as Discord.Message);
-            commanduser = input.obj.author;
-            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            mode = null;
-            sort = 'pp';
-            page = 1;
-
-            mapper = null;
-            mods = null;
-            if (input.args.includes('-parse')) {
-                parseScore = true;
-                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
-                parseId = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            if (input.args.includes('-page')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-detailed')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-detailed'), 1);
-            }
-            if (input.args.includes('-d')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-d'), 1);
-            }
-            if (input.args.includes('-compress')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-compress'), 1);
-            }
-            if (input.args.includes('-c')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-c'), 1);
-            }
-
-            if (input.args.includes('-mods')) {
-                const temp = func.parseArg(input.args, '-mods', 'string', mods);
-                mods = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-reverse')) {
-                reverse = true;
-                input.args.splice(input.args.indexOf('-reverse'), 1);
-            }
-
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
-            }
-
-            if (input.args.includes('-recent')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-recent'), 1);
-            }
-            if (input.args.includes('-performance')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-performance'), 1);
-            }
-            if (input.args.includes('-pp')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-pp'), 1);
-            }
-            if (input.args.includes('-score')) {
-                sort = 'score';
-                input.args.splice(input.args.indexOf('-score'), 1);
-            }
-            if (input.args.includes('-acc')) {
-                sort = 'acc';
-                input.args.splice(input.args.indexOf('-acc'), 1);
-            }
-            if (input.args.includes('-combo')) {
-                sort = 'combo';
-                input.args.splice(input.args.indexOf('-combo'), 1);
-            }
-            if (input.args.includes('-misses')) {
-                sort = 'miss',
-                    input.args.splice(input.args.indexOf('-misses'));
-            }
-            if (input.args.includes('-miss')) {
-                sort = 'miss';
-                input.args.splice(input.args.indexOf('-miss'), 1);
-            }
-            if (input.args.includes('-rank')) {
-                sort = 'rank';
-                input.args.splice(input.args.indexOf('-rank'), 1);
-            }
-            if (input.args.includes('-r')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-
-            if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
-                filterTitle = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            input.args = cleanArgs(input.args);
-
-            user = input.args.join(' ');
-
-            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null;
-            }
-        }
-            break;
-
-        //==============================================================================================================================================================================================
-
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
-            commanduser = input.obj.member.user;
-            searchid = commanduser.id;
-
-            user = input.obj.options.getString('user');
-            mode = input.obj.options.getString('mode');
-            mapper = input.obj.options.getString('mapper');
-            mods = input.obj.options.getString('mods');
-            sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
-            page = input.obj.options.getInteger('page');
-            filterTitle = input.obj.options.getString('filter');
-            parseId = input.obj.options.getInteger('parse');
-            if (parseId != null) {
-                parseScore = true;
-            }
-
-            reverse = input.obj.options.getBoolean('reverse');
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            if (!input.obj.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.obj.member.user;
-            searchid = commanduser.id;
-
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];//obj.message.embeds[0].title.split('Top plays of ')[1]
-
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
-
-            if (input.obj.message.embeds[0].description) {
-                if (input.obj.message.embeds[0].description.includes('mapper')) {
-                    mapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }
-
-                if (input.obj.message.embeds[0].description.includes('mods')) {
-
-                    mods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }
-
-                if (input.obj.message.embeds[0].description.includes('map')) {
-
-                    filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
-                }
-
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
-                switch (true) {
-                    case sort1.includes('score'):
-                        sort = 'score';
-                        break;
-                    case sort1.includes('acc'):
-                        sort = 'acc';
-                        break;
-                    case sort1.includes('pp'):
-                        sort = 'pp';
-                        break;
-                    case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent';
-                        break;
-                    case sort1.includes('combo'):
-                        sort = 'combo';
-                        break;
-                    case sort1.includes('miss'):
-                        sort = 'miss';
-                        break;
-                    case sort1.includes('rank'):
-                        sort = 'rank';
-                        break;
-
-                }
-
-
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
-                if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
-                    reverse = true;
-                } else {
-                    reverse = false;
-                }
-
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
-                page = 0;
-                switch (input.button) {
-                    case 'BigLeftArrow':
-                        page = 1;
-                        break;
-                    case 'LeftArrow':
-                        page = pageParsed - 1;
-                        break;
-                    case 'RightArrow':
-                        page = pageParsed + 1;
-                        break;
-                    case 'BigRightArrow':
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
-                        break;
-                    default:
-                        page = pageParsed;
-                        break;
-                }
-                switch (input.button) {
-                    case 'Detail0':
-                        scoredetailed = 0;
-                        break;
-                    case 'Detail1':
-                        scoredetailed = 1;
-                        break;
-                    case 'Detail2':
-                        scoredetailed = 2;
-                        break;
-                    default:
-                        if (input.obj.message.embeds[0].footer.text.includes('LE')) {
-                            scoredetailed = 2;
-                        }
-                        if (input.obj.message.embeds[0].footer.text.includes('LC')) {
-                            scoredetailed = 0;
-                        }
-                        break;
-                }
-            }
-        }
-            break;
-    }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
             page = input.overrides.page;
@@ -4073,10 +3539,10 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             mode = input.overrides.mode;
         }
         if (input.overrides.filterMapper != null) {
-            mapper = input.overrides.filterMapper;
+            filteredMapper = input.overrides.filterMapper;
         }
         if (input.overrides.filterMods != null) {
-            mapper = input.overrides.filterMods;
+            filteredMods = input.overrides.filterMods;
         }
         if (input.overrides.miss != null) {
             noMiss = true;
@@ -4119,11 +3585,11 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             },
             {
                 name: 'Mapper',
-                value: mapper
+                value: filteredMapper
             },
             {
                 name: 'Mods',
-                value: mods
+                value: filteredMods
             },
             {
                 name: 'Detailed',
@@ -4311,7 +3777,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             type: 'best',
             params: {
                 userid: osudata.id,
-                mode: mode,
+                mode: osufunc.modeValidator(mode),
                 opts: ['limit=100', 'offset=0']
             }
         });
@@ -4441,15 +3907,15 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             scores: osutopdata,
             detailed: scoredetailed,
             showWeights: true,
-            page: page,
+            page,
             showMapTitle: true,
             showTruePosition: showtrue,
-            sort: sort,
+            sort,
             truePosType: 'pp',
-            filteredMapper: mapper,
-            filteredMods: mods,
+            filteredMapper,
+            filteredMods,
             filterMapTitle: filterTitle,
-            reverse: reverse
+            reverse
         });
     topEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`);
     if (scoresarg.fields.length == 0) {
@@ -4541,300 +4007,28 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
 
     let commanduser: Discord.User;
 
-    let user;
-    let searchid;
-    let page = 0;
+    
+    const parseArgs = await parseArgs_scoreList(input)
+    
+    let user = parseArgs.user;
+    let searchid = parseArgs.searchid;
+    let page = parseArgs.page ?? 0;
 
-    let scoredetailed: number = 1;
+    let scoredetailed: number = parseArgs.scoredetailed ?? 1;
 
-    let sort: embedStuff.scoreSort = 'recent';
-    let reverse = false;
-    let mode = 'osu';
-    let filteredMapper = null;
-    let filteredMods = null;
-    let filterTitle = null;
+    let sort: embedStuff.scoreSort = parseArgs.sort ?? 'recent';
+    let reverse = parseArgs.reverse ?? false;
+    let mode = parseArgs.mode ?? 'osu';
+    let filteredMapper = parseArgs.filteredMapper ?? null;
+    let filteredMods = parseArgs.filteredMods ?? null;
+    let filterTitle = parseArgs.filterTitle ?? null;
 
-    let parseScore = false;
-    let parseId = null;
+    let parseScore = parseArgs.parseScore ?? false;
+    let parseId = parseArgs.parseId ?? null;
 
-    let reachedMaxCount = false;
+    let reachedMaxCount = parseArgs.reachedMaxCount ?? false;
     let embedStyle: extypes.osuCmdStyle = 'L';
 
-    switch (input.commandType) {
-        case 'message': {
-            input.obj = (input.obj as Discord.Message);
-
-            commanduser = input.obj.author;
-
-            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if (input.args.includes('-parse')) {
-                parseScore = true;
-                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
-                parseId = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            if (input.args.includes('-page')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            if (input.args.includes('-detailed')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-detailed'), 1);
-            }
-            if (input.args.includes('-d')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-d'), 1);
-            }
-            if (input.args.includes('-compress')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-compress'), 1);
-            }
-            if (input.args.includes('-c')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-c'), 1);
-            }
-
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
-            }
-
-            if (input.args.includes('-recent')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-recent'), 1);
-            }
-            if (input.args.includes('-performance')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-performance'), 1);
-            }
-            if (input.args.includes('-pp')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-pp'), 1);
-            }
-            if (input.args.includes('-score')) {
-                sort = 'score';
-                input.args.splice(input.args.indexOf('-score'), 1);
-            }
-            if (input.args.includes('-acc')) {
-                sort = 'acc';
-                input.args.splice(input.args.indexOf('-acc'), 1);
-            }
-            if (input.args.includes('-combo')) {
-                sort = 'combo';
-                input.args.splice(input.args.indexOf('-combo'), 1);
-            }
-            if (input.args.includes('-misses')) {
-                sort = 'miss',
-                    input.args.splice(input.args.indexOf('-misses'));
-            }
-            if (input.args.includes('-miss')) {
-                sort = 'miss';
-                input.args.splice(input.args.indexOf('-miss'), 1);
-            }
-            if (input.args.includes('-rank')) {
-                sort = 'rank';
-                input.args.splice(input.args.indexOf('-rank'), 1);
-            }
-            if (input.args.includes('-r')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-
-            if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
-                filterTitle = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            input.args = cleanArgs(input.args);
-
-            user = input.args.join(' ');
-            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null;
-            }
-        }
-            break;
-
-        //==============================================================================================================================================================================================
-
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
-            commanduser = input.obj.member.user;
-            searchid = input.obj.member.user.id;
-
-            user = input.obj.options.getString('user');
-
-            page = input.obj.options.getInteger('page');
-
-            scoredetailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
-            sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
-
-            reverse = input.obj.options.getBoolean('reverse');
-
-            mode = input.obj.options.getString('mode') ?? 'osu';
-
-            filteredMapper = input.obj.options.getString('mapper');
-
-            filterTitle = input.obj.options.getString('filter');
-
-            parseId = input.obj.options.getInteger('parse');
-            if (parseId != null) {
-                parseScore = true;
-            }
-
-            filteredMods = input.obj.options.getString('mods');
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-
-            if (!input.obj.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.obj.member.user;
-            searchid = commanduser.id;
-
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
-            page = 0;
-
-            if (input.obj.message.embeds[0].description) {
-                if (input.obj.message.embeds[0].description.includes('mapper')) {
-                    filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }
-
-                if (input.obj.message.embeds[0].description.includes('mods')) {
-                    filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }
-
-                if (input.obj.message.embeds[0].description.includes('map')) {
-                    filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
-                }
-
-
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
-                switch (true) {
-                    case sort1.includes('score'):
-                        sort = 'score';
-                        break;
-                    case sort1.includes('acc'):
-                        sort = 'acc';
-                        break;
-                    case sort1.includes('pp'):
-                        sort = 'pp';
-                        break;
-                    case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent';
-                        break;
-                    case sort1.includes('combo'):
-                        sort = 'combo';
-                        break;
-                    case sort1.includes('miss'):
-                        sort = 'miss';
-                        break;
-                    case sort1.includes('rank'):
-                        sort = 'rank';
-                        break;
-
-                }
-
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
-                if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
-                    reverse = true;
-                } else {
-                    reverse = false;
-                }
-
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
-                page = 0;
-                switch (input.button) {
-                    case 'BigLeftArrow':
-                        page = 1;
-                        break;
-                    case 'LeftArrow':
-                        page = pageParsed - 1;
-                        break;
-                    case 'RightArrow':
-                        page = pageParsed + 1;
-                        break;
-                    case 'BigRightArrow':
-
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
-                        break;
-                    default:
-                        page = pageParsed;
-                        break;
-                }
-                switch (input.button) {
-                    case 'Detail0':
-                        scoredetailed = 0;
-                        break;
-                    case 'Detail1':
-                        scoredetailed = 1;
-                        break;
-                    case 'Detail2':
-                        scoredetailed = 2;
-                        break;
-                    default:
-                        if (input.obj.message.embeds[0].footer.text.includes('LE')) {
-                            scoredetailed = 2;
-                        }
-                        if (input.obj.message.embeds[0].footer.text.includes('LC')) {
-                            scoredetailed = 0;
-                        }
-                        break;
-                }
-            }
-        }
-            break;
-    }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
             page = parseInt(`${input.overrides.page}`);
@@ -9618,14 +8812,14 @@ export async function map(input: extypes.commandInput) {
 
         if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-            await msgfunc.sendMessage({
-                commandType: input.commandType,
-                obj: input.obj,
-                args: {
-                    content: `Error - could not find map ${mapid}`,
-                    edit: true
-                }
-            }, input.canReply);
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - could not find map ${mapid}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -9729,14 +8923,14 @@ export async function map(input: extypes.commandInput) {
 
         if (mapidtest?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-            await msgfunc.sendMessage({
-                commandType: input.commandType,
-                obj: input.obj,
-                args: {
-                    content: `Error - beatmap search failed`,
-                    edit: true
-                }
-            }, input.canReply);
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error - beatmap search failed`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             log.logCommand({
                 event: 'Error',
@@ -9767,7 +8961,7 @@ export async function map(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 customString: ''
-            })
+            });
             return;
         }
         try {
@@ -9788,7 +8982,7 @@ export async function map(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 customString: ''
-            })
+            });
             return;
         }
         const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset; }[] = [];
@@ -14280,6 +13474,305 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
     }
 
 }
+
+//ARG HANDLING
+
+async function parseArgs_scoreList(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+
+    let user;
+    let searchid;
+    let page = 0;
+
+    let scoredetailed: number = 1;
+
+    let sort: embedStuff.scoreSort = 'recent';
+    let reverse = false;
+    let mode = 'osu';
+    let filteredMapper = null;
+    let filteredMods = null;
+    let filterTitle = null;
+
+    let parseScore = false;
+    let parseId = null;
+
+    let reachedMaxCount = false;
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message);
+
+            commanduser = input.obj.author;
+
+            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+            if (input.args.includes('-parse')) {
+                parseScore = true;
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+                parseId = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.includes('-page')) {
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-p')) {
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.includes('-detailed')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if (input.args.includes('-d')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if (input.args.includes('-compress')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if (input.args.includes('-c')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
+            }
+
+            if (input.args.includes('-osu')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-f')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
+            }
+
+            if (input.args.includes('-recent')) {
+                sort = 'recent';
+                input.args.splice(input.args.indexOf('-recent'), 1);
+            }
+            if (input.args.includes('-performance')) {
+                sort = 'pp';
+                input.args.splice(input.args.indexOf('-performance'), 1);
+            }
+            if (input.args.includes('-pp')) {
+                sort = 'pp';
+                input.args.splice(input.args.indexOf('-pp'), 1);
+            }
+            if (input.args.includes('-score')) {
+                sort = 'score';
+                input.args.splice(input.args.indexOf('-score'), 1);
+            }
+            if (input.args.includes('-acc')) {
+                sort = 'acc';
+                input.args.splice(input.args.indexOf('-acc'), 1);
+            }
+            if (input.args.includes('-combo')) {
+                sort = 'combo';
+                input.args.splice(input.args.indexOf('-combo'), 1);
+            }
+            if (input.args.includes('-misses')) {
+                sort = 'miss',
+                    input.args.splice(input.args.indexOf('-misses'));
+            }
+            if (input.args.includes('-miss')) {
+                sort = 'miss';
+                input.args.splice(input.args.indexOf('-miss'), 1);
+            }
+            if (input.args.includes('-rank')) {
+                sort = 'rank';
+                input.args.splice(input.args.indexOf('-rank'), 1);
+            }
+            if (input.args.includes('-r')) {
+                sort = 'recent';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+
+            if (input.args.includes('-?')) {
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
+                filterTitle = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            input.args = cleanArgs(input.args);
+
+            user = input.args.join(' ');
+            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+                user = null;
+            }
+        }
+            break;
+
+        //==============================================================================================================================================================================================
+
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            searchid = input.obj.member.user.id;
+
+            user = input.obj.options.getString('user');
+            page = input.obj.options.getInteger('page');
+            scoredetailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
+            sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
+            reverse = input.obj.options.getBoolean('reverse');
+            mode = input.obj.options.getString('mode') ?? 'osu';
+            filteredMapper = input.obj.options.getString('mapper');
+            filterTitle = input.obj.options.getString('filter');
+            parseId = input.obj.options.getInteger('parse');
+            if (parseId != null) {
+                parseScore = true;
+            }
+            filteredMods = input.obj.options.getString('mods');
+        }
+
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
+
+            if (!input.obj.message.embeds[0]) {
+                return;
+            }
+            commanduser = input.obj.member.user;
+            searchid = commanduser.id;
+
+            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
+            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
+            page = 0;
+
+            if (input.obj.message.embeds[0].description) {
+                if (input.obj.message.embeds[0].description.includes('mapper')) {
+                    filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
+                }
+
+                if (input.obj.message.embeds[0].description.includes('mods')) {
+                    filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
+                }
+
+                if (input.obj.message.embeds[0].description.includes('map')) {
+                    filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
+                }
+
+
+                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
+                switch (true) {
+                    case sort1.includes('score'):
+                        sort = 'score';
+                        break;
+                    case sort1.includes('acc'):
+                        sort = 'acc';
+                        break;
+                    case sort1.includes('pp'):
+                        sort = 'pp';
+                        break;
+                    case sort1.includes('old'): case sort1.includes('recent'):
+                        sort = 'recent';
+                        break;
+                    case sort1.includes('combo'):
+                        sort = 'combo';
+                        break;
+                    case sort1.includes('miss'):
+                        sort = 'miss';
+                        break;
+                    case sort1.includes('rank'):
+                        sort = 'rank';
+                        break;
+
+                }
+
+                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
+                if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
+                    reverse = true;
+                } else {
+                    reverse = false;
+                }
+
+                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
+                page = 0;
+                switch (input.button) {
+                    case 'BigLeftArrow':
+                        page = 1;
+                        break;
+                    case 'LeftArrow':
+                        page = pageParsed - 1;
+                        break;
+                    case 'RightArrow':
+                        page = pageParsed + 1;
+                        break;
+                    case 'BigRightArrow':
+
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
+                        break;
+                    default:
+                        page = pageParsed;
+                        break;
+                }
+                switch (input.button) {
+                    case 'Detail0':
+                        scoredetailed = 0;
+                        break;
+                    case 'Detail1':
+                        scoredetailed = 1;
+                        break;
+                    case 'Detail2':
+                        scoredetailed = 2;
+                        break;
+                    default:
+                        if (input.obj.message.embeds[0].footer.text.includes('LE')) {
+                            scoredetailed = 2;
+                        }
+                        if (input.obj.message.embeds[0].footer.text.includes('LC')) {
+                            scoredetailed = 0;
+                        }
+                        break;
+                }
+            }
+        }
+            break;
+    }
+    return {
+        user, searchid, page, scoredetailed,
+        sort, reverse, mode,
+        filteredMapper, filteredMods, filterTitle,
+        parseScore, parseId,
+        reachedMaxCount
+    };
+}
+
 
 /**
  * 
