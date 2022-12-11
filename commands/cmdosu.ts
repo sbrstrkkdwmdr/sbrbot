@@ -5331,7 +5331,7 @@ export async function replayparse(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     try {
-        replay = replayparser.parseReplay(`${filespath}/replay.osr`);
+        replay = replayparser.parseReplay(`${filespath}\\replays\\${input.absoluteID}.osr`);
     } catch (err) {
         log.logCommand(
             {
@@ -5465,6 +5465,7 @@ export async function replayparse(input: extypes.commandInput) {
     const failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true;
 
     try {
+        if(!mapdata.id) throw new Error('no map');
         xpp = await osufunc.scorecalc({
             mods: osumodcalc.ModIntToString(replay.mods),
             gamemode: osumodcalc.ModeIntToName(replay.gameMode),
@@ -10241,8 +10242,8 @@ export async function maplocal(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let map: string = '';
-    if (fs.existsSync(`${filespath}/tempdiff.osu`)) {
-        map = fs.readFileSync(`${filespath}/tempdiff.osu`, 'utf-8');
+    if (fs.existsSync(`${filespath}\\localmaps\\${input.absoluteID}.osu`)) {
+        map = fs.readFileSync(`${filespath}\\localmaps\\${input.absoluteID}.osu`, 'utf-8');
     } else {
         return;
     }

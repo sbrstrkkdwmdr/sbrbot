@@ -252,19 +252,39 @@ export default (input: {
      * removes map files that are older than 1 hour
      */
     function clearMapFiles() {
-        return;
         const files = fs.readdirSync('./files/maps');
         for (const file of files) {
             fs.stat('./files/maps/' + file, (err, stat) => {
                 if (err) {
                     return;
                 } else {
-                    if (file.includes('temp')) {
+                    if (file.includes('undefined')) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
                             fs.unlinkSync('./files/maps/' + file);
                             osufunc.logCall(file, 'deleted file');
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
+                    }
+                }
+            });
+
+        }
+    }
+
+    /**
+     * clears files in files/replays and files/localmaps
+     */
+    function clearParseFiles() {
+        const files = fs.readdirSync('./files/maps');
+        for (const file of files) {
+            fs.stat('./files/maps/' + file, (err, stat) => {
+                if (err) {
+                    return;
+                } else {
+                    if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
+                        fs.unlinkSync('./files/maps/' + file);
+                        osufunc.logCall(file, 'deleted file');
+                        // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                     }
                 }
             });

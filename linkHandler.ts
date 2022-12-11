@@ -163,7 +163,7 @@ progress: ${m.progress ? m.progress : 'none'}
                 absoluteID = func.generateId();
             }
             const attachosr = message.attachments.first().url;
-            const osrdlfile = fs.createWriteStream(`${filespath}/replay.osr`);
+            const osrdlfile = fs.createWriteStream(`${filespath}\\replays\\${absoluteID}.osr`);
             https.get(`${attachosr}`, function (response) {
                 response.pipe(osrdlfile);
             });//
@@ -180,7 +180,7 @@ progress: ${m.progress ? m.progress : 'none'}
                 absoluteID = func.generateId();
             }
             const attachosu = message.attachments.first().url;
-            const osudlfile = fs.createWriteStream(`${filespath}/tempdiff.osu`);
+            const osudlfile = fs.createWriteStream(`${filespath}\\localmaps\\${absoluteID}.osu`);
             https.get(`${attachosu}`, function (response) {
                 response.pipe(osudlfile);
             });
