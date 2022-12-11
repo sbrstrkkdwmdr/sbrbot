@@ -29,6 +29,12 @@ import * as msgfunc from './msgfunc.js';
 export async function name(input: extypes.commandInput) {
 }
 
+/**
+ * main command functions at the top
+ * arg handling and other stuff is at the bottom
+ */
+
+
 //user stats
 
 /**
@@ -13076,7 +13082,6 @@ async function parseArgs_scoreList(input: extypes.commandInput) {
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
-
             commanduser = input.obj.author;
 
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
