@@ -168,142 +168,162 @@ export default (input: {
 
         const missembed = 'EmbedLinks';
 
-        // const input: extypes.commandInput = { commandType, obj, args, canReply, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel };
-        
-        execCommand_switch(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply, missembed);
-
+        const allowed = execCommand_checker(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply, missembed);
+        if (allowed) {
+            execCommand_switch(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply, missembed);
+        }
         fs.appendFileSync('logs/totalcommands.txt', 'x');
         return;
     }
 
+    function execCommand_checker(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[],
+        canReply: boolean, missembed: string
+    ) {
+        const requireEmbedCommands: string[] = [
+            //gen
+            'convert', 'help', 'info', 'invite', 'ping', 'remind', 'stats', 'time',
+            //misc
+            'image', 'imagesearch', 'poll', 'vote', 'ytsearch', 'yt', 'yts',
+            //osu
+            'bws', 'badgeweightsystem', 'badgeweight', 'badgeweightseed', 'badgerank',
+            'compare', 'common',
+            'firsts', 'firstplaceranks', 'fpr', 'fp', '#1s', 'first', '#1', '1s',
+            'globals',
+            'leaderboard', 'maplb', 'mapleaderboard',
+            'lb',
+            'map', 'm',
+            'maprandom', 'f2', 'maprand', 'mapsuggest', 'randommap', 'randmap',
+            'osu', 'profile', 'o', 'user', 'taiko', 'drums', 'fruits', 'ctb', 'catch', 'mania',
+            'osuseet', 'setuser', 'set', 'setmode', 'setskin',
+            'nochokes', 'nc',
+            'osutop', 'top', 't', 'ot', 'toposu', 'topo',
+            'taikotop', 'toptaiko', 'tt', 'topt',
+            'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tctb', 'tf', 'topf', 'topc',
+            'maniatop', 'topmania', 'tm', 'topm',
+            'sotarks', 'sotarksosu', 'sotarkstaiko', 'taikosotarks', 'sotarkst', 'tsotarks',
+            'sotarksfruits', 'fruitssotarks', 'fruitsotarks', 'sotarksfruit', 'sotarkscatch', 'catchsotarks', 'sotarksctb', 'ctbsotarks', 'fsotarks', 'sotarksf', 'csotarks', 'sotarksc',
+            'sotarksmania', 'maniasotarks', 'sotarksm', 'msotarks',
+            'pinned',
+            'ppcalc', 'mapcalc', 'mapperf', 'maperf', 'mappp',
+            'pp', 'rank',
+            'ranking', 'rankings',
+            'rs', 'recent', 'r',
+            'rs best', 'recent best', 'rsbest', 'recentbest', 'rb',
+            'recentlist', 'rl',
+            'recentlisttaiko', 'rlt',
+            'recentlistfruits', 'rlf', 'rlctb', 'rlc',
+            'recentlistmania', 'rlm',
+            'recenttaiko', 'rt',
+            'recentfruits', 'rf', 'rctb',
+            'recentmania', 'rm',
+            'recentactivity', 'recentact', 'rsact',
+            'saved',
+            'scoreparse', 'score', 'sp',
+            'scores', 'c',
+            'scorestats', 'ss',
+            'simplay', 'simulate', 'sim',
+            'skin',
+            'trackadd', 'track', 'ta', 'trackremove', 'trackrm', 'tr', 'untrack', 'trackchannel', 'tc', 'tracklist', 'tl',
+            'userbeatmaps', 'ub', 'userb', 'ubm', 'um', 'usermaps',
+            'whatif', 'wi',
+            //admin
+            'avatar', 'av', 'pfp',
+            'checkperms', 'fetchperms', 'checkpermissions', 'permissions', 'perms',
+            'prefix', 'servers', 'userinfo'
+        ];
+        const requireReactions: string[] = [
+            'poll', 'vote'
+        ];
+        const botRequireAdmin: string[] = [
+            'avatar', 'av', 'pfp',
+            'checkperms', 'fetchperms', 'checkpermissions', 'permissions', 'perms',
+            'userinfo'
+        ];
+        const userRequireAdminOrOwner: string[] = [
+            'checkperms', 'fetchperms', 'checkpermissions', 'permissions', 'perms',
+            'userinfo'
+        ];
+
+        const userRequireOwner: string[] = [
+            'crash', 'debug', 'servers'
+        ];
+
+        let noperms = false;
+
+        if (!((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message' && requireEmbedCommands.some(x => command.includes(x))) || commandType == 'interaction')) {
+            checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
+            noperms = true;
+        }
+        if (!(checks.botHasPerms(obj, input.client, ['AddReactions']) && requireReactions.some(x => command.includes(x)))) {
+            checkcmds.noperms(commandType, obj, 'bot', canReply, 'AddReactions');
+            noperms = true;
+        }
+        if (!(checks.botHasPerms(obj, input.client, ['Administrator']) && botRequireAdmin.some(x => command.includes(x)))) {
+            checkcmds.noperms(commandType, obj, 'bot', canReply, 'Administrator');
+            noperms = true;
+        }
+        if (!((checks.isAdmin(userid, obj.guildId, input.client) || checks.isOwner(userid)) && userRequireAdminOrOwner.some(x => command.includes(x)))) {
+            checkcmds.noperms(commandType, obj, 'user', canReply, 'Administrator');
+            noperms = true;
+        }
+        if (!(checks.isOwner(userid)) && userRequireOwner.some(x => command.includes(x))) {
+            checkcmds.noperms(commandType, obj, 'user', canReply, 'Administrator');
+            noperms = true;
+        }
+        if (noperms) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     function execCommand_switch(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[],
-        canReply:boolean, missembed:string
-        ){
+        canReply: boolean, missembed: string
+    ) {
         switch (command) {
             case 'convert':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commands.convert({
-                        commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel
-                    });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                commands.convert({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'help':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    // commandStruct.commands.get('help').execute({commandType, obj, args, canReply, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata})
-                    commands.help({
-                        commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel
-                    });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                commands.help({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'info':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    // commandStruct.commands.get('info').execute({commandType, obj, args, canReply, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata})
-                    commands.info({
-                        commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel,
-                        guildSettings: input.guildSettings
-                    });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                commands.info({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, guildSettings: input.guildSettings });
                 break;
             case 'invite':
-                commands.invite({
-                    commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel
-                });
+                commands.invite({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'math':
-                commands.math({
-                    commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel
-                });
-                // commandStruct.commands.get('math').execute({commandType, obj, args, canReply, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata})
+                commands.math({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'ping':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    commands.ping({
-                        commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel
-                    });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                commands.ping({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'remind':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    // commandStruct.commands.get('remind').execute({commandType, obj, args, canReply, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata})
-                    commands.remind({
-                        commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel
-                    });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                commands.remind({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'stats':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    // commandStruct.commands.get('stats').execute({commandType, obj, args, canReply, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata})
-                    commands.stats({
-                        commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel
-                    });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                commands.stats({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'time':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    // commandStruct.commands.get('time').execute({commandType, obj, args, canReply, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata})
-                    commands.time({
-                        commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel
-                    });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                commands.time({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
 
+            //misc
             case '8ball': case 'ask':
                 misccmds._8ball({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
-            // case 'gif':
-            //     if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-            //         misccmds.gif({ commandType, obj, args, canReply, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel })
-            //     } else {
-            //         checkcmds.noperms(commandType, obj, 'bot', canReply)
-            //     }
-            //     break;
             case 'image': case 'imagesearch':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    misccmds.image({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                misccmds.image({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'poll': case 'vote':
-                if ((
-                    (checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') ||
-                    commandType == 'interaction') &&
-                    checks.botHasPerms(obj, input.client, ['AddReactions'])) {
-                    misccmds.poll({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed + ', AddReactions');
-                }
+                misccmds.poll({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'roll':
                 misccmds.roll({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
-            // case 'say':
-            //     if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-            //         misccmds.say({ commandType, obj, args, canReply, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel })
-            //     } else {
-            //         checkcmds.noperms(commandType, obj, 'bot', canReply)
-            //     }
-            //     break;
-            case 'ytsearch': case 'yt':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    misccmds.ytsearch({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+            case 'ytsearch': case 'yt': case 'yts':
+                misccmds.ytsearch({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
 
             //osu commands below
@@ -452,271 +472,164 @@ export default (input: {
                 }
                 break;
             case 'taikotop': case 'toptaiko': case 'tt': case 'topt':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                {
                     overrides = {
                         mode: 'taiko'
                     };
                     osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
+                } break;
             case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tctb': case 'tf': case 'topf': case 'topc':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                {
                     overrides = {
                         mode: 'fruits'
                     };
                     osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
+                } break;
             case 'maniatop': case 'topmania': case 'tm': case 'topm':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                {
                     overrides = {
                         mode: 'mania'
                     };
                     osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
+                } break;
             case 'sotarks': case 'sotarksosu':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                {
                     overrides = {
                         filterMapper: 'Sotarks'
                     };
                     osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
+                } break;
             case 'sotarkstaiko': case 'taikosotarks': case 'sotarkst': case 'tsotarks':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                {
                     overrides = {
                         filterMapper: 'Sotarks',
                         mode: 'taiko'
                     };
                     osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
+                } break;
             case 'sotarksfruits': case 'fruitssotarks': case 'fruitsotarks': case 'sotarksfruit': case 'sotarkscatch': case 'catchsotarks':
             case 'sotarksctb': case 'ctbsotarks': case 'fsotarks': case 'sotarksf': case 'csotarks': case 'sotarksc':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
+                {
                     overrides = {
                         filterMapper: 'Sotarks',
                         mode: 'fruits'
                     };
                     osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
-            case 'sotarksmania': case 'maniasottarks': case 'sotarksm': case 'msotarks':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    overrides = {
-                        filterMapper: 'Sotarks',
-                        mode: 'mania'
-                    };
-                    osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
+                } break;
+            case 'sotarksmania': case 'maniasottarks': case 'sotarksm': case 'msotarks': {
+                overrides = {
+                    filterMapper: 'Sotarks',
+                    mode: 'mania'
+                };
+                osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+            } break;
 
-            case 'pinned':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.pinned({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
-            case 'ppcalc': case 'mapcalc': case 'mapperf': case 'maperf': case 'mappp':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.ppCalc({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
-            case 'pp':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    const overrides = {
-                        type: 'pp',
-                        commandAs: commandType
-                    };
-                    osucmds.rankpp({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
-            case 'rank':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    const overrides = {
-                        type: 'rank',
-                        commandAs: commandType
-                    };
-                    osucmds.rankpp({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
+            case 'pinned': {
+                osucmds.pinned({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+            } break;
+            case 'ppcalc': case 'mapcalc': case 'mapperf': case 'maperf': case 'mappp': {
+                osucmds.ppCalc({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
+            } break;
+            case 'pp': {
+                overrides = {
+                    type: 'pp',
+                    commandAs: commandType
+                };
+                osucmds.rankpp({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache, graphChannel });
+            } break;
+            case 'rank': {
+                overrides = {
+                    type: 'rank',
+                    commandAs: commandType
+                };
+                osucmds.rankpp({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache, graphChannel });
+            } break;
             case 'ranking': case 'rankings':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.ranking({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                osucmds.ranking({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache, graphChannel });
                 break;
             case 'rs': case 'recent': case 'r':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 break;
             case 'rs best': case 'recent best':
-            case 'rsbest': case 'recentbest': case 'rb':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    overrides = {
-                        type: 'list',
-                        sort: 'pp'
-                    };
-                    osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
-            case 'recentlist': case 'rl':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    overrides = {
-                        type: 'list'
-                    };
-                    osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
-            case 'recentlisttaiko': case 'rlt':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    overrides = {
-                        type: 'list',
-                        mode: 'taiko'
-                    };
-                    osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
-            case 'recentlistfruits': case 'rlf': case 'rlctb': case 'rlc':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    overrides = {
-                        type: 'list',
-                        mode: 'fruits'
-                    };
-                    osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
-            case 'recentlistmania': case 'rlm':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    overrides = {
-                        type: 'list',
-                        mode: 'mania'
-                    };
-                    osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
-            case 'recenttaiko': case 'rt':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    overrides = {
-                        mode: 'taiko'
-                    };
-                    osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
-            case 'recentfruits': case 'rf': case 'rctb':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    overrides = {
-                        mode: 'fruits'
-                    };
-                    osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
-            case 'recentmania': case 'rm':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    overrides = {
-                        mode: 'mania'
-                    };
-                    osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
-            case 'recentactivity':case 'recentact': case 'rsact':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.recent_activity({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+            case 'rsbest': case 'recentbest': case 'rb': {
+                overrides = {
+                    type: 'list',
+                    sort: 'pp'
+                };
+                osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+            } break;
+            case 'recentlist': case 'rl': {
+                overrides = {
+                    type: 'list'
+                };
+                osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+            } break;
+            case 'recentlisttaiko': case 'rlt': {
+                overrides = {
+                    type: 'list',
+                    mode: 'taiko'
+                };
+                osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+            } break;
+            case 'recentlistfruits': case 'rlf': case 'rlctb': case 'rlc': {
+                overrides = {
+                    type: 'list',
+                    mode: 'fruits'
+                };
+                osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+            } break;
+            case 'recentlistmania': case 'rlm': {
+                overrides = {
+                    type: 'list',
+                    mode: 'mania'
+                };
+                osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+            } break;
+            case 'recenttaiko': case 'rt': {
+                overrides = {
+                    mode: 'taiko'
+                };
+                osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+            } break;
+            case 'recentfruits': case 'rf': case 'rctb': {
+                overrides = {
+                    mode: 'fruits'
+                };
+                osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+            } break;
+            case 'recentmania': case 'rm': {
+                overrides = {
+                    mode: 'mania'
+                };
+                osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+            } break;
+            case 'recentactivity': case 'recentact': case 'rsact':
+                osucmds.recent_activity({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 break;
             case 'saved':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.saved({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                osucmds.saved({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
 
             case 'scoreparse': case 'score': case 'sp':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.scoreparse({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                osucmds.scoreparse({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 break;
             case 'scores': case 'c':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.scores({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                osucmds.scores({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 break;
             case 'scorestats': case 'ss':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.scorestats({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                osucmds.scorestats({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'simplay': case 'simulate': case 'sim':
-                // checkcmds.disabled(commandType, obj, 'command');
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.simulate({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                osucmds.simulate({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
-            case 'skin':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    overrides = {
-                        type: 'skin',
-                        ex: 'skin',
-                        commandAs: commandType
-                    };
-                    osucmds.saved({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
-                break;
+            case 'skin': {
+                overrides = {
+                    type: 'skin',
+                    ex: 'skin',
+                    commandAs: commandType
+                };
+                osucmds.saved({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
+            } break;
             case 'trackadd': case 'track': case 'ta':
                 osucmds.trackadd({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings, graphChannel });
                 break;
@@ -724,93 +637,50 @@ export default (input: {
                 osucmds.trackremove({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings, graphChannel });
                 break;
             case 'trackchannel': case 'tc':
-                if (checks.isAdmin(userid, obj.guildId, input.client) || checks.isOwner(userid)) {
-                    osucmds.trackchannel({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'user', canReply, '');
-                }
+                osucmds.trackchannel({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings, graphChannel });
                 break;
             case 'tracklist': case 'tl':
                 osucmds.tracklist({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings, graphChannel });
                 break;
             case 'userbeatmaps': case 'ub': case 'userb': case 'ubm': case 'um': case 'usermaps':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 break;
             case 'whatif': case 'wi':
-                if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
-                    osucmds.whatif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, missembed);
-                }
+                osucmds.whatif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache, graphChannel });
                 break;
 
             //admincmds below
             case 'avatar': case 'av': case 'pfp':
-                if (checks.botHasPerms(obj, input.client, ['Administrator'])) {
-                    admincmds.getUserAv({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, 'Administrator');
-                }
+                admincmds.getUserAv({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
-                if (checks.botHasPerms(obj, input.client, ['Administrator'])) {
-                    if ((checks.isAdmin(userid, obj.guildId, input.client) || checks.isOwner(userid))) {
-                        admincmds.checkperms({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                    } else {
-                        checkcmds.noperms(commandType, obj, 'user', canReply, 'Administrator');
-                    }
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, 'Administrator');
-                }
+                admincmds.checkperms({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'crash':
-                if (checks.isOwner(userid)) {
-                    admincmds.crash({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'user', canReply, 'Administrator');
-                }
+                admincmds.crash({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'debug':
-                if (checks.isOwner(userid)) {
-                    admincmds.debug({
-                        commandType, obj, args, canReply, button,
-                        config: input.config, client: input.client,
-                        absoluteID, currentDate, overrides,
-                        userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings, graphChannel
-                    });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'user', canReply, 'Administrator');
-                }
+                admincmds.debug({
+                    commandType, obj, args, canReply, button,
+                    config: input.config, client: input.client,
+                    absoluteID, currentDate, overrides,
+                    userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings, graphChannel
+                });
                 break;
             case 'leaveguild': case 'leave':
-                if (checks.isAdmin(userid, obj.guildId, input.client) || checks.isOwner(userid)) {
-                    admincmds.leaveguild({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'user', canReply, 'Administrator');
-                }
+                admincmds.leaveguild({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'prefix':
                 admincmds.prefix({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, guildSettings: input.guildSettings, graphChannel });
                 break;
             case 'servers':
-                if (checks.isOwner(userid)) {
-                    admincmds.servers({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'user', canReply, 'Administrator');
-                }
+                admincmds.servers({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             /* case 'user': */ case 'userinfo':
-                if (checks.botHasPerms(obj, input.client, ['Administrator'])) {
-                    admincmds.getUser({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                } else {
-                    checkcmds.noperms(commandType, obj, 'bot', canReply, 'Administrator');
-                }
+                admincmds.getUser({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
         }
+        return;
     }
 }
 
