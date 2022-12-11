@@ -86,7 +86,7 @@ export async function _8ball(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: '8ball',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -94,7 +94,7 @@ export async function _8ball(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: '8ball',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -395,7 +395,7 @@ export function gif(input: extypes.commandInput) {
 
     log.logCommand({
         event: 'Success',
-        commandName: '',
+        commandName: 'gif',
         commandType: input.commandType,
         commandId: input.absoluteID,
         object: input.obj,
@@ -524,7 +524,7 @@ export async function image(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'image',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -532,7 +532,7 @@ export async function image(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'image',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -702,7 +702,7 @@ export function poll(input: extypes.commandInput) {
 
     log.logCommand({
         event: 'Success',
-        commandName: '',
+        commandName: 'poll',
         commandType: input.commandType,
         commandId: input.absoluteID,
         object: input.obj,
@@ -797,7 +797,7 @@ export async function roll(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'roll',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -805,7 +805,7 @@ export async function roll(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'roll',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -923,7 +923,7 @@ export function say(input: extypes.commandInput) {
 
     log.logCommand({
         event: 'Success',
-        commandName: '',
+        commandName: 'say',
         commandType: input.commandType,
         commandId: input.absoluteID,
         object: input.obj,
@@ -1038,7 +1038,7 @@ Description: \`${curItem.description}\`
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'ytsearch',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1046,7 +1046,7 @@ Description: \`${curItem.description}\`
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'ytsearch',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,

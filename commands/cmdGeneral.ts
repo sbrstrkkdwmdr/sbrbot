@@ -792,7 +792,7 @@ ${num ? '' : '[number]'}`;
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'convert',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -800,7 +800,7 @@ ${num ? '' : '[number]'}`;
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'convert',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1236,7 +1236,7 @@ export async function help(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'help',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1244,7 +1244,7 @@ export async function help(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'help',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1361,7 +1361,7 @@ Bot Version: ${pkgjson.version}
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'info',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1369,7 +1369,7 @@ Bot Version: ${pkgjson.version}
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'info',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1436,7 +1436,7 @@ export async function invite(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'invite',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1444,7 +1444,7 @@ export async function invite(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'invite',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1634,7 +1634,7 @@ export async function math(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'math',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1642,7 +1642,7 @@ export async function math(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'math',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1745,7 +1745,7 @@ ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
 
     log.logCommand({
         event: 'Success',
-        commandName: '',
+        commandName: 'ping',
         commandType: input.commandType,
         commandId: input.absoluteID,
         object: input.obj,
@@ -1906,7 +1906,7 @@ export async function remind(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'remind',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1914,7 +1914,7 @@ export async function remind(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'remind',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -2012,7 +2012,7 @@ Current Shard:
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'stats',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -2020,7 +2020,7 @@ Current Shard:
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'stats',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -2252,7 +2252,7 @@ export async function time(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'time',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -2260,7 +2260,7 @@ export async function time(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'time',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,

@@ -209,7 +209,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'bws',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -217,7 +217,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'bws',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -403,7 +403,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'globals',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -411,7 +411,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'globals',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -730,7 +730,7 @@ export async function lb(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'lb',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -738,7 +738,7 @@ export async function lb(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'lb',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1097,7 +1097,7 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'ranking',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1105,7 +1105,7 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'ranking',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1276,7 +1276,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'rank/pp',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1284,7 +1284,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'rank/pp',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1947,7 +1947,7 @@ ${onlinestatus}
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'osu',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1955,7 +1955,7 @@ ${onlinestatus}
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'osu',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -2348,7 +2348,7 @@ ${emojis.grades[temp.scoreRank]} | ${emojis.gamemodes[temp.mode]}
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'recent_activity',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -2356,7 +2356,7 @@ ${emojis.grades[temp.scoreRank]} | ${emojis.gamemodes[temp.mode]}
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'recent_activity',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -2775,7 +2775,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'firsts',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -2783,7 +2783,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'firsts',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -3216,7 +3216,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'maplb',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -3254,7 +3254,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 }
                 log.logCommand({
                     event: 'Error',
-                    commandName: '',
+                    commandName: 'maplb',
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
@@ -3343,7 +3343,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'maplb',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -3351,7 +3351,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'maplb',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -3415,13 +3415,17 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 
     //==============================================================================================================================================================================================
 
+
+    const commandButtonName: 'osutop' | 'nochokes' =
+        noMiss == true ? 'nochokes' : 'osutop';
+
     log.logCommand({
         event: 'Command',
         commandType: input.commandType,
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
-        commandName: 'osutop',
+        commandName: commandButtonName,
         options: [
             {
                 name: 'User',
@@ -3481,9 +3485,6 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         page = 1;
     }
     page--;
-
-    const commandButtonName: 'osutop' | 'nochokes' =
-        noMiss == true ? 'nochokes' : 'osutop';
 
     let buttons = new Discord.ActionRowBuilder()
         .addComponents(
@@ -3561,7 +3562,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: commandButtonName,
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -3610,7 +3611,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: commandButtonName,
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -3685,7 +3686,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: commandButtonName,
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -3793,7 +3794,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: commandButtonName,
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -3801,7 +3802,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: commandButtonName,
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -3983,7 +3984,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'pinned',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -4025,7 +4026,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'pinned',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -4110,7 +4111,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'pinned',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -4219,7 +4220,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'pinned',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -4227,7 +4228,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'pinned',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -4625,7 +4626,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'recent',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -4683,7 +4684,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'recent',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -4788,7 +4789,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'recent',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -5258,7 +5259,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'recent',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -5266,7 +5267,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'recent',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -5465,7 +5466,7 @@ export async function replayparse(input: extypes.commandInput) {
     const failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true;
 
     try {
-        if(!mapdata.id) throw new Error('no map');
+        if (!mapdata.id) throw new Error('no map');
         xpp = await osufunc.scorecalc({
             mods: osumodcalc.ModIntToString(replay.mods),
             gamemode: osumodcalc.ModeIntToName(replay.gameMode),
@@ -5544,7 +5545,7 @@ ${isfail}
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'replayparse',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -5552,7 +5553,7 @@ ${isfail}
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'replayparse',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -5765,7 +5766,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'scoreparse',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -5787,7 +5788,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'scoreparse',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -5825,7 +5826,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'scoreparse',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -5862,7 +5863,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'scoreparse',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -6050,7 +6051,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'scoreparse',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -6221,7 +6222,7 @@ ${srStr}
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'scoreparse',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -6229,7 +6230,7 @@ ${srStr}
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'scoreparse',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -6422,7 +6423,7 @@ export async function scorepost(input: extypes.commandInput) {
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'scorepost',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -6484,7 +6485,7 @@ export async function scorepost(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'scorepost',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -6492,7 +6493,7 @@ export async function scorepost(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'scorepost',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -6845,7 +6846,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'scores',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -6894,7 +6895,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'scores',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -6938,7 +6939,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'scores',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -6981,7 +6982,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'scores',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -7093,7 +7094,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'scores',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -7101,7 +7102,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'scores',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -7355,7 +7356,7 @@ export async function scorestats(input: extypes.commandInput) {
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'scorestats',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -7393,7 +7394,7 @@ export async function scorestats(input: extypes.commandInput) {
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'scorestats',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -7540,7 +7541,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
         if (finalMessage == true) {
             log.logCommand({
                 event: 'Success',
-                commandName: '',
+                commandName: 'scorestats',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -7548,7 +7549,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
         } else {
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'scorestats',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -7559,7 +7560,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
 
     log.logCommand({
         event: 'Success',
-        commandName: '',
+        commandName: 'scorestats',
         commandType: input.commandType,
         commandId: input.absoluteID,
         object: input.obj,
@@ -7837,7 +7838,7 @@ export async function simulate(input: extypes.commandInput) {
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'simulate',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -7984,7 +7985,7 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'simulate',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -7992,7 +7993,7 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'simulate',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -8245,7 +8246,7 @@ export async function map(input: extypes.commandInput) {
                     }, input.canReply);
                     log.logCommand({
                         event: 'Error',
-                        commandName: '',
+                        commandName: 'map',
                         commandType: input.commandType,
                         commandId: input.absoluteID,
                         object: input.obj,
@@ -8266,7 +8267,7 @@ export async function map(input: extypes.commandInput) {
                     }, input.canReply);
                     log.logCommand({
                         event: 'Error',
-                        commandName: '',
+                        commandName: 'map',
                         commandType: input.commandType,
                         commandId: input.absoluteID,
                         object: input.obj,
@@ -8425,7 +8426,7 @@ export async function map(input: extypes.commandInput) {
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'map',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -8466,7 +8467,7 @@ export async function map(input: extypes.commandInput) {
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'map',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -8536,7 +8537,7 @@ export async function map(input: extypes.commandInput) {
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'map',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -8558,7 +8559,7 @@ export async function map(input: extypes.commandInput) {
             }, input.canReply);
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'map',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -8579,7 +8580,7 @@ export async function map(input: extypes.commandInput) {
             }, input.canReply);
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'map',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -8634,7 +8635,7 @@ export async function map(input: extypes.commandInput) {
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'map',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -8882,7 +8883,7 @@ HP${baseHP}`;
         mapperdata = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'map',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -9044,7 +9045,7 @@ HP${baseHP}`;
             gdData = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'map',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -9143,7 +9144,7 @@ HP${baseHP}`;
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'map',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -9151,7 +9152,7 @@ HP${baseHP}`;
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'map',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -9392,7 +9393,7 @@ export async function ppCalc(input: extypes.commandInput) {
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'ppcalc',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -9433,7 +9434,7 @@ export async function ppCalc(input: extypes.commandInput) {
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'ppcalc',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -9503,7 +9504,7 @@ export async function ppCalc(input: extypes.commandInput) {
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'ppcalc',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -9994,7 +9995,7 @@ export async function ppCalc(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'ppcalc',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -10002,7 +10003,7 @@ export async function ppCalc(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'ppcalc',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -10173,7 +10174,7 @@ export async function randomMap(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'map (random)',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -10181,7 +10182,7 @@ export async function randomMap(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'map (random)',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -10504,7 +10505,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
         console.log(error);
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'map (file)',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -10526,7 +10527,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'map (local)',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -10534,7 +10535,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'map (local)',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -10892,7 +10893,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'userbeatmaps',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -10937,7 +10938,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'userbeatmaps',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -11017,7 +11018,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             }
             log.logCommand({
                 event: 'Error',
-                commandName: '',
+                commandName: 'userbeatmaps',
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
@@ -11119,7 +11120,7 @@ Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${fil
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'userbeatmaps',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11127,7 +11128,7 @@ Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${fil
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'userbeatmaps',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11274,7 +11275,7 @@ export async function trackadd(input: extypes.commandInput) {
         replymsg = `Error - could not find user \`${user}\``;
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'track add',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11309,7 +11310,7 @@ export async function trackadd(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'track add',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11317,7 +11318,7 @@ export async function trackadd(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'track add',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11441,7 +11442,7 @@ export async function trackremove(input: extypes.commandInput) {
         replymsg = `Error - could not find user \`${user}\``;
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'track remove',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11477,7 +11478,7 @@ export async function trackremove(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'track remove',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11485,7 +11486,7 @@ export async function trackremove(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'track remove',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11605,7 +11606,7 @@ export async function trackchannel(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'track channel',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11613,7 +11614,7 @@ export async function trackchannel(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'track channel',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11722,7 +11723,7 @@ export async function tracklist(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'track list',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11730,7 +11731,7 @@ export async function tracklist(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'track list',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -12190,7 +12191,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
         });
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'compare',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -12219,7 +12220,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'compare',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -12227,7 +12228,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'compare',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -12478,7 +12479,7 @@ export async function osuset(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'osuset',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -12486,7 +12487,7 @@ export async function osuset(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'osuset',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -12651,7 +12652,7 @@ export async function saved(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'saved',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -12659,7 +12660,7 @@ export async function saved(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'saved',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -12855,7 +12856,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'whatif',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -12900,7 +12901,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         }
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'whatif',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -12965,7 +12966,7 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'whatif',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -12973,7 +12974,7 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'whatif',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,

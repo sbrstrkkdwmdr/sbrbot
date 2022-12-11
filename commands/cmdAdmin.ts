@@ -77,7 +77,7 @@ export async function checkperms(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
-        commandName: 'check permissions',
+        commandName: 'checkperms',
         options: [
             {
                 name: 'User',
@@ -130,7 +130,7 @@ export async function checkperms(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'checkperms',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -138,7 +138,7 @@ export async function checkperms(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'checkperms',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -337,7 +337,7 @@ export async function getUser(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'get user',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -345,7 +345,7 @@ export async function getUser(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'get user',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -445,7 +445,7 @@ export async function getUserAv(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'get user avatar',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -453,7 +453,7 @@ export async function getUserAv(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'get user avatar',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -725,7 +725,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'debug',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -733,7 +733,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'debug',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -892,11 +892,11 @@ export async function find(input: extypes.commandInput) {
                         Embedr.setThumbnail(`${userfind.user.avatarURL()}`);
                         Embedr.setDescription(
                             `ID: ${userfind.user.id}
-                    Status: ${up}
-                    Account creation date: ${userfind.user.createdAt}
-                    Bot: ${userfind.user.bot}
-                    Flags: ${userfind.user.flags.toArray().join(',')}
-                    `);
+Status: ${up}
+Account creation date: ${userfind.user.createdAt}
+Bot: ${userfind.user.bot}
+Flags: ${userfind.user.flags.toArray().join(',')}
+`);
                         return;
                     }
                 });
@@ -919,12 +919,12 @@ export async function find(input: extypes.commandInput) {
                                 Embedr.setImage(`${guildfind.bannerURL()}`);
                             }
                             Embedr.setDescription(`
-                ID: ${guildfind.id}
-                Owner: <@${guildfind.ownerId}>
-                Total user count: ${guildfind.members.cache.size}
-                Total channel count: ${guildfind.channels.cache.size}
-                Creation date: ${guildfind.createdAt}
-                `);
+ID: ${guildfind.id}
+Owner: <@${guildfind.ownerId}>
+Total user count: ${guildfind.members.cache.size}
+Total channel count: ${guildfind.channels.cache.size}
+Creation date: ${guildfind.createdAt}
+`);
                             return;
                         }
                     });
@@ -945,12 +945,12 @@ export async function find(input: extypes.commandInput) {
                                 Embedr.setThumbnail(`${guild.iconURL()}`);
                             }
                             Embedr.setDescription(`
-                ID: ${channelfind.id}
-                Topic: ${channelfind.topic}
-                [Type: ${channelfind.type}](https://discord-api-types.dev/api/discord-api-types-v10/enum/ChannelType)
-                Parent: ${channelfind.parent ? channelfind.parent.name : 'No parent'} ${channelfind.parent ? '| ' + channelfind.parent.id + ' | Type ' + channelfind.parent.type : ''}
-                Guild: ${guild.name} | ${guild.id}
-                `);
+ID: ${channelfind.id}
+Topic: ${channelfind.topic}
+[Type: ${channelfind.type}](https://discord-api-types.dev/api/discord-api-types-v10/enum/ChannelType)
+Parent: ${channelfind.parent ? channelfind.parent.name : 'No parent'} ${channelfind.parent ? '| ' + channelfind.parent.id + ' | Type ' + channelfind.parent.type : ''}
+Guild: ${guild.name} | ${guild.id}
+`);
                             return;
                         }
                     });
@@ -971,11 +971,11 @@ export async function find(input: extypes.commandInput) {
                                 Embedr.setThumbnail(`${guild.iconURL()}`);
                             }
                             Embedr.setDescription(`
-                ID: ${rolefind.id}
-                Colour: [${rolefind.color ? rolefind.color : 'null'}](https://discord.js.org/#/docs/discord.js/main/class/Role?scrollTo=color)
-                Emoji: ${rolefind.unicodeEmoji ? rolefind.unicodeEmoji : 'null'}
-                Guild: ${guild.name} | ${guild.id}
-                `);
+ID: ${rolefind.id}
+Colour: [${rolefind.color ? rolefind.color : 'null'}](https://discord.js.org/#/docs/discord.js/main/class/Role?scrollTo=color)
+Emoji: ${rolefind.unicodeEmoji ? rolefind.unicodeEmoji : 'null'}
+Guild: ${guild.name} | ${guild.id}
+`);
                             Embedr.setColor(rolefind.color);
                             return;
                         }
@@ -993,10 +993,10 @@ export async function find(input: extypes.commandInput) {
                         Embedr.setThumbnail(`${emojifind.url}`);
                     }
                     Embedr.setDescription(`
-                ID: ${emojifind.id}
-                Emoji: \`<:${guild.emojis.cache.get(id).name}:${id}>\`
-                Guild: ${guild.name} | ${guild.id}
-                `);
+ID: ${emojifind.id}
+Emoji: \`<:${guild.emojis.cache.get(id).name}:${id}>\`
+Guild: ${guild.name} | ${guild.id}
+`);
                     return;
                 }
             });
@@ -1005,8 +1005,8 @@ export async function find(input: extypes.commandInput) {
         default:
             Embedr.setTitle('Invalid search parameters');
             Embedr.setDescription(`
-        Valid Types: user, guild, channel, role, emoji
-        `);
+Valid Types: user, guild, channel, role, emoji
+`);
             break;
     }
 
@@ -1024,7 +1024,7 @@ export async function find(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'find',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1032,7 +1032,7 @@ export async function find(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'find',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1122,7 +1122,7 @@ export async function leaveguild(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'leave guild',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1130,7 +1130,7 @@ export async function leaveguild(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'leave guild',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1224,7 +1224,7 @@ export async function prefix(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'prefix',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1232,7 +1232,7 @@ export async function prefix(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'prefix',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1319,7 +1319,7 @@ export async function servers(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: '',
+            commandName: 'servers',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -1327,7 +1327,7 @@ export async function servers(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: '',
+            commandName: 'servers',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
