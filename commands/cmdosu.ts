@@ -2251,8 +2251,8 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             case 'achievement': {
                 const temp = curEv as osuApiTypes.EventAchievement;
                 obj.name += `Achieved ${temp.achievement.name}`;
-                obj.value = 
-`<t:${(new Date(temp.created_at).getTime()) / 1000}:R>
+                obj.value =
+                    `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>
 ${temp.achievement.grouping}
 ${temp.achievement.description}
 `;
@@ -4471,7 +4471,6 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             }
 
             if (input.obj.message.embeds[0].description.includes('Filter:')) {
-
                 filterTitle = input.obj.message.embeds[0].description.split('Filter: ')[1].split('\n')[0];
             }
         }
@@ -4580,6 +4579,10 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         page = 1;
     }
     page--;
+
+    if (list) {
+        embedStyle = embedStyle.replace('S', 'L') as extypes.osuCmdStyle;
+    }
 
     const checkDetails = await buttonsAddDetails('recent', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle);
     buttons = checkDetails.buttons;
@@ -5472,7 +5475,7 @@ export async function replayparse(input: extypes.commandInput) {
             score: replay.score,
             calctype: 0,
             passedObj: totalhits,
-        },new Date(mapdata.last_updated));
+        }, new Date(mapdata.last_updated));
         ppissue = '';
     } catch (error) {
         xpp = [{
