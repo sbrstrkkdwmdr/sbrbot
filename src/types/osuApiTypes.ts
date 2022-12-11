@@ -760,6 +760,19 @@ type Versions = {
 };
 
 //Event
+
+export type Achievement = {
+    icon_url?: string,
+    id: number,
+    name?: string,
+    grouping?: string,
+    ordering?: number,
+    slug: string,
+    description?: string,
+    mode?: GameMode,
+    instructions: string;
+};
+
 export type EventType = EventAchievement |
     EventBeatmapPlaycount | EventBeatmapsetApprove | EventBeatmapsetDelete | EventBeatmapsetRevive | EventBeatmapsetUpdate | EventBeatmapsetUpload |
     EventRank | EventRankLost |
@@ -784,7 +797,7 @@ export type EventUser = {
 } & Event;
 
 export type EventAchievement = {
-    achievement: any,
+    achievement: Achievement,
     user: EventUser;
 } & Event;
 export type EventBeatmapPlaycount = {

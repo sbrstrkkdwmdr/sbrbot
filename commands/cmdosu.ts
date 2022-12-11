@@ -2250,8 +2250,12 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
         switch (curEv.type) {
             case 'achievement': {
                 const temp = curEv as osuApiTypes.EventAchievement;
-                obj.name += `${temp.achievement}`;
-                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.name += `Achieved ${temp.achievement.name}`;
+                obj.value = 
+`<t:${(new Date(temp.created_at).getTime()) / 1000}:R>
+${temp.achievement.grouping}
+${temp.achievement.description}
+`;
             } break;
             case 'beatmapPlaycount': {
                 const temp = curEv as osuApiTypes.EventBeatmapPlaycount;
