@@ -217,11 +217,11 @@ Current Client ID:        ${client.user.id}
         fs.mkdirSync(`${path}\\trackingFiles`);
     }
     if (!fs.existsSync(`${path}\\cache`)) {
-        console.log('Creating ${path}\\cache folder');
+        console.log(`Creating ${path}\\cache folder`);
         fs.mkdirSync(`${path}\\cache`);
     }
     if (!fs.existsSync(`${path}\\cache\\commandData`)) {
-        console.log('Creating ${path}\\cache\\commandData folder');
+        console.log(`Creating ${path}\\cache\\commandData folder`);
         fs.mkdirSync(`${path}\\cache\\commandData`);
     }
     if (!fs.existsSync(`${path}\\cache\\debug`)) {
@@ -243,6 +243,18 @@ Current Client ID:        ${client.user.id}
     if (!fs.existsSync(`${path}\\files`)) {
         console.log(`Creating ${path}\\files folder`);
         fs.mkdirSync(`${path}\\files`);
+    }
+    if (!fs.existsSync(`${path}\\files\\maps`)) {
+        console.log(`Creating ${path}\\files\\maps folder`);
+        fs.mkdirSync(`${path}\\files\\maps`);
+    }
+    if (!fs.existsSync(`${path}\\files\\replays`)) {
+        console.log(`Creating ${path}\\files\\replays folder`);
+        fs.mkdirSync(`${path}\\files\\replays`);
+    }
+    if (!fs.existsSync(`${path}\\files\\localmaps`)) {
+        console.log(`Creating ${path}\\files\\localmaps folder`);
+        fs.mkdirSync(`${path}\\files\\localmaps`);
     }
 
     if (!fs.existsSync(`${path}\\logs\\debug.log`)) {

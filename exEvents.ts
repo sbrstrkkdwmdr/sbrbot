@@ -252,6 +252,7 @@ export default (input: {
      * removes map files that are older than 1 hour
      */
     function clearMapFiles() {
+        return;
         const files = fs.readdirSync('./files/maps');
         for (const file of files) {
             fs.stat('./files/maps/' + file, (err, stat) => {

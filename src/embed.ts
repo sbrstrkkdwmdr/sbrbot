@@ -229,7 +229,7 @@ export async function scoreList(
                 calctype: 0,
                 passedObj: 0,
                 failed: false
-            }, osufunc.mapStatus(curscore.beatmap));
+            }, new Date(curscore.beatmap.last_updated));
         if (curscore.accuracy != 1) {
             if (curscore.pp == null || isNaN(curscore.pp)) {
                 pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`;

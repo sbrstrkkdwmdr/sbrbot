@@ -4975,7 +4975,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 score: curscore.score,
                 calctype: 0,
                 passedObj: embedStuff.getTotalHits(curscore.mode, curscore),
-            }, osufunc.mapStatus(curscore.beatmap));
+            }, new Date(curscore.beatmap.last_updated));
 
             totaldiff = ppcalcing[1].difficulty.stars.toFixed(2);
 
@@ -5472,7 +5472,7 @@ export async function replayparse(input: extypes.commandInput) {
             score: replay.score,
             calctype: 0,
             passedObj: totalhits,
-        },osufunc.mapStatus(mapdata));
+        },new Date(mapdata.last_updated));
         ppissue = '';
     } catch (error) {
         xpp = [{
@@ -5938,7 +5938,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             score: scoredata.score,
             calctype: 0,
             passedObj: embedStuff.getTotalHits(scoredata.mode, scoredata),
-        }, osufunc.mapStatus(mapdata));
+        }, new Date(mapdata.last_updated));
 
         ppissue = '';
         osufunc.debug(ppcalcing, 'command', 'scoreparse', input.obj.guildId, 'ppCalcing');
@@ -6436,7 +6436,7 @@ export async function scorepost(input: extypes.commandInput) {
         acc: scoredata.accuracy,
         maxcombo: scoredata.max_combo,
         mapid: scoredata.beatmap.id
-    }, osufunc.mapStatus(mapdata));
+    }, new Date(mapdata.last_updated));
 
     let pptxt: string;
 
@@ -7879,7 +7879,7 @@ export async function simulate(input: extypes.commandInput) {
         score: null,
         calctype: 0,
         clockRate: overrideSpeed
-    }, osufunc.mapStatus(mapdata));
+    }, new Date(mapdata.last_updated));
     osufunc.debug(score, 'command', 'simulate', input.obj.guildId, 'ppCalc');
 
     const fcaccgr =
@@ -7901,7 +7901,7 @@ export async function simulate(input: extypes.commandInput) {
         mapid,
         calctype: 0,
         clockRate: 1
-    }, osufunc.mapStatus(mapdata));
+    }, new Date(mapdata.last_updated));
 
     const title = mapdata.beatmapset?.title ?
         mapdata.beatmapset?.title != mapdata.beatmapset?.title_unicode ?
@@ -8771,7 +8771,7 @@ export async function map(input: extypes.commandInput) {
             customAR,
             customOD,
             customHP
-        }, osufunc.mapStatus(mapdata));
+        }, new Date(mapdata.last_updated));
         ppissue = '';
         try {
             totaldiff = mapdata.difficulty_rating.toFixed(2) != ppComputed[0].difficulty.stars?.toFixed(2) ?
@@ -8887,7 +8887,7 @@ HP${baseHP}`;
     }
     func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
 
-    const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode);
+    const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode, new Date(mapdata.last_updated));
     try {
         osufunc.debug(strains, 'command', 'map', input.obj.guildId, 'strains');
 
@@ -9700,7 +9700,7 @@ export async function ppCalc(input: extypes.commandInput) {
             customOD,
             customHP,
             maxLimit: 21
-        }, osufunc.mapStatus(mapdata));
+        }, new Date(mapdata.last_updated));
         ppissue = '';
         try {
             totaldiff = ppComputed[0].difficulty.stars?.toFixed(2);

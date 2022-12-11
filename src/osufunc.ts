@@ -12,6 +12,7 @@ import * as extypes from './types/extratypes.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 //const config = JSON.parse(fs.readFileSync('../config/config.json', 'utf-8'));
 import config from '../config/config.json' assert { type: 'json' };
+import { path, precomppath } from '../path.js';
 
 /* module.exports = {
     modemods, modemappers
@@ -59,7 +60,7 @@ export async function mapcalc(
         customHP?: number,
         maxLimit?: number,
     },
-    mapIsRank: boolean
+    lastUpdated: Date
 ) {
     let ppl: rosu.PerformanceAttributes[];
 
@@ -72,7 +73,7 @@ export async function mapcalc(
             if (!fs.existsSync('files/maps/')) {
                 fs.mkdirSync('files/maps/');
             }
-            const mapPath = await dlMap(obj.mapid, 0, mapIsRank);
+            const mapPath = await dlMap(obj.mapid, 0, lastUpdated);
 
             if (!(typeof mapPath == 'string')) {
                 return mapPath;
@@ -147,7 +148,7 @@ export async function scorecalc(
         calctype?: number | null, passedObj?: number | null, failed?: boolean | null,
         clockRate?: number | null,
     },
-    mapIsRank: boolean
+    lastUpdated: Date
 ) {
     let ppl: rosu.PerformanceAttributes[];
 
@@ -169,7 +170,7 @@ export async function scorecalc(
                     console.log('creating files/maps/');
                     fs.mkdirSync('files/maps/');
                 }
-                const mapPath = await dlMap(obj.mapid, 0, mapIsRank);
+                const mapPath = await dlMap(obj.mapid, 0, lastUpdated);
 
 
                 if (!(typeof mapPath == 'string')) {
@@ -305,11 +306,11 @@ export async function scorecalc(
  * @param mode 
  * @returns the strains of a beatmap. times given in milliseconds
  */
-export async function straincalc(mapid: number, mods: string, calctype: number, mode: string) {
+export async function straincalc(mapid: number, mods: string, calctype: number, mode: string, lastUpdated: Date) {
     let strains;
     switch (calctype) {
         case 0: default: {
-            const mapPath = await dlMap(mapid, 0);
+            const mapPath = await dlMap(mapid, 0, lastUpdated);
 
             if (!(typeof mapPath == 'string')) {
                 return mapPath;
@@ -1087,7 +1088,7 @@ export async function searchUser(searchid: string, userdata: any, findMode: bool
 
 export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) {
     try {
-        const init = fs.readFileSync(`cache/previous/${type}${serverId}.json`);
+        const init = fs.readFileSync(`${path}cache/previous/${type}${serverId}.json`);
         return `${init}`;
     } catch (error) {
         let data;
@@ -1192,19 +1193,18 @@ export function getMapImages(mapSetId: string | number) {
  * @param curCall - start at 0
  * @returns 
  */
-export async function dlMap(mapid: number | string, curCall: number, isRanked?: boolean,) {
-    const mapFiles = fs.readdirSync('./files/maps');
+export async function dlMap(mapid: number | string, curCall: number, lastUpdated: Date) {
+    const mapFiles = fs.readdirSync(`${path}/files/maps`);
+    let isFound = false;
     let mapDir = '';
     if (mapFiles.some(x => x.includes(`${mapid}`)) == false) {
-        let curType = isRanked ? 'perm' : 'temp';
-
         const url = `https://osu.ppy.sh/osu/${mapid}`;
-        const path = `./files/maps/${curType}${mapid}.osu`;
-        mapDir = path;
-        if (!fs.existsSync(path)) {
-            fs.mkdirSync(`./files/maps/`, { recursive: true });
+        const thispath = `${path}/files/maps/${mapid}.osu`;
+        mapDir = thispath;
+        if (!fs.existsSync(thispath)) {
+            fs.mkdirSync(`${path}/files/maps/`, { recursive: true });
         }
-        const writer = fs.createWriteStream(path);
+        const writer = fs.createWriteStream(thispath);
         const res = await fetch(url);
         logCall(url, 'Beatmap file download');
         res.body.pipe(writer);
@@ -1213,29 +1213,34 @@ export async function dlMap(mapid: number | string, curCall: number, isRanked?: 
                 resolve('w');
             }, 1000);
         });
-        logCall(mapDir.replace('./', ''), 'saved file');
+        logCall(mapDir.replace(`${path}/`, ''), 'saved file');
     } else {
         for (let i = 0; i < mapFiles.length; i++) {
             const curmap = mapFiles[i];
             if (curmap.includes(`${mapid}`)) {
-                mapDir = `./files/maps/${curmap}`;
+                mapDir = `${path}/files/maps/${curmap}`;
             }
         }
-        logCall(mapDir.replace('./', ''), 'found file');
+        isFound = true;
+        logCall(mapDir.replace(`${path}/`, ''), 'found file');
     }
-    const fileStat = fs.statSync(mapDir.replace('./', ''));
+    const fileStat = fs.statSync(mapDir);
     if (fileStat.size < 500) {
-        await fs.unlinkSync(mapDir.replace('./', ''));
+        await fs.unlinkSync(mapDir);
         if (!curCall) {
             curCall = 0;
         }
         if (curCall > 3) {
             throw new Error('Map file size is too small. Deleting file...');
         } else {
-            return await dlMap(mapid, curCall + 1, isRanked);
+            return await dlMap(mapid, curCall + 1, lastUpdated);
         }
     }
-    return mapDir.replace('./', '');
+    if (fileStat.birthtimeMs < lastUpdated.getTime() && isFound == true) {
+        await fs.unlinkSync(mapDir);
+        return await dlMap(mapid, curCall + 1, lastUpdated);
+    }
+    return mapDir;
 }
 
 export function mapStatus(map: osuApiTypes.Beatmapset | osuApiTypes.Beatmap) {

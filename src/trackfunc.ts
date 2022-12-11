@@ -152,7 +152,7 @@ export async function getEmbed(
             calctype: 0,
             passedObj: totalhits,
             failed: false
-        }, osufunc.mapStatus(curscore.beatmap));
+        }, new Date(curscore.beatmap.last_updated));
 
     let pp: string;
     if (data.scoredata.accuracy != 1) {
