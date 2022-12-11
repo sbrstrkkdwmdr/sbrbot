@@ -169,6 +169,16 @@ export default (input: {
         const missembed = 'EmbedLinks';
 
         // const input: extypes.commandInput = { commandType, obj, args, canReply, button,config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel };
+        
+        execCommand_switch(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply, missembed);
+
+        fs.appendFileSync('logs/totalcommands.txt', 'x');
+        return;
+    }
+
+    function execCommand_switch(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[],
+        canReply:boolean, missembed:string
+        ){
         switch (command) {
             case 'convert':
                 if ((checks.botHasPerms(obj, input.client, ['EmbedLinks']) && commandType == 'message') || commandType == 'interaction') {
@@ -801,9 +811,6 @@ export default (input: {
                 }
                 break;
         }
-
-        fs.appendFileSync('logs/totalcommands.txt', 'x');
-        return;
     }
 }
 
