@@ -32,16 +32,14 @@ export function noperms(commandType, obj, type: 'bot' | 'user', canReply, missin
         case 'user': {
             switch (commandType) {
                 //==============================================================================================================================================================================================
-                case 'interaction': {
-                    obj.reply({
-                        content: 'You do not have permission to use this command.' + `\nMissing permissions: ${missing}`,
-                        embeds: [],
-                        files: [],
-                        ephemeral: true,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
+                case 'interaction': case 'message': {
+                    msgfunc.sendMessage({
+                        commandType: commandType,
+                        obj: obj,
+                        args: {
+                            content: 'You do not have permission to use this command.' + `\nMissing permissions: ${missing}`
+                        }
+                    }, canReply);
                 }
 
             }
