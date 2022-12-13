@@ -2256,91 +2256,81 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
         const curEv = rsactData[i + (page * pageLength)];
         if (!curEv) break;
         const obj = {
-            name: `#${i + (page * pageLength) + 1} | `,
+            name: `#${i + (page * pageLength) + 1}`,
             value: 'null',
             inline: false
         };
         switch (curEv.type) {
             case 'achievement': {
                 const temp = curEv as osuApiTypes.EventAchievement;
-                obj.name += `Achieved ${temp.achievement.name}`;
                 obj.value =
                     `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>
-${temp.achievement.grouping}
-${temp.achievement.description}
+Unlocked the **${temp.achievement.name}** medal!
+Group: ${temp.achievement.grouping}
+Description: ${temp.achievement.description}
 `;
             } break;
             case 'beatmapPlaycount': {
                 const temp = curEv as osuApiTypes.EventBeatmapPlaycount;
-                obj.name += `Achieved ${temp.count} plays`;
                 obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `[${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url})`
+                    + ` Achieved ${temp.count} plays on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url})`
                     ;
             } break;
             case 'beatmapsetDelete': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetDelete;
-                obj.name += `Deleted a mapset`;
                 obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
+                    + `Deleted [${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
                     ;
             } break;
             case 'beatmapsetRevive': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetRevive;
-                obj.name += `Revived a mapset`;
                 obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
+                    + `Revived [${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
                     ;
             } break;
             case 'beatmapsetUpdate': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetUpdate;
-                obj.name += `Updated a mapset`;
                 obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
+                    + `Updated [${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
                     ;
             } break;
             case 'beatmapsetUpload': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetUpload;
-                obj.name += `Submitted a new mapset`;
                 obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
+                    + `Submitted [${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
                     ;
             } break;
             case 'rank': {
                 const temp = (curEv as osuApiTypes.EventRank);
-                obj.name += `Achieved rank #${temp.rank}`;
+                obj.name += ``;
                 obj.value =
                     `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>
-[${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url})
+Achieved rank #${temp.rank} on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url})
 ${emojis.grades[temp.scoreRank]} | ${emojis.gamemodes[temp.mode]}
 `;
             }
                 break;
             case 'rankLost': {
                 const temp = curEv as osuApiTypes.EventRankLost;
-                obj.name += `Lost a #1 rank`;
                 obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `[${temp.beatmap.title}](${temp.beatmap.url})`;
+                    + `Lost #1 on [${temp.beatmap.title}](${temp.beatmap.url})`;
             } break;
             case 'userSupportAgain': {
                 const temp = curEv as osuApiTypes.EventUserSupportAgain;
-                obj.name += `Gained supporter`;
-                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.value = `Purchased supporter <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'userSupportFirst': {
                 const temp = curEv as osuApiTypes.EventUserSupportFirst;
-                obj.name += `Gained supporter for the first time`;
-                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.value = `Purchased supporter for the first time <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'userSupportGift': {
                 const temp = curEv as osuApiTypes.EventUserSupportGift;
-                obj.name += `Gifted supporter`;
-                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.value = `Was gifted supporter <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'usernameChange': {
                 const temp = curEv as osuApiTypes.EventUsernameChange;
-                obj.name += `Changed username`;
                 obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `${temp.user.previousUsername}=>${temp.user.username}`
+                    + `Changed their username from ${temp.user.previousUsername} to ${temp.user.username}`
                     ;
             } break;
         }
