@@ -2714,6 +2714,8 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         filteredMods: filteredMods,
         filterMapTitle: filterTitle,
         reverse: reverse,
+    }, {
+        useScoreMap: true
     });
     firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
 
@@ -3154,6 +3156,9 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             reverse: false,
             mapidOverride: mapdata.id,
             showUserName: true
+        }, {
+            useScoreMap: false,
+            overrideMapLastDate: mapdata.last_updated
         });
 
         if (scoresarg.fields.length == 0) {
@@ -3733,7 +3738,11 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             filteredMods,
             filterMapTitle: filterTitle,
             reverse
-        });
+        },
+        {
+            useScoreMap: true
+        }
+    );
     topEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`);
     if (scoresarg.fields.length == 0) {
         topEmbed.addFields([{
@@ -4158,6 +4167,9 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             filteredMods: filteredMods,
             filterMapTitle: filterTitle,
             reverse: false
+        },
+        {
+            useScoreMap: true
         });
     pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
     if (scoresarg.fields.length == 0) {
@@ -5207,6 +5219,9 @@ ${srStr}
                 filteredMods: null,
                 filterMapTitle: filterTitle,
                 reverse: false
+            },
+            {
+                useScoreMap: true
             });
         if (scoresarg.fields.length == 0) {
             rsEmbed.addFields([{
@@ -7037,6 +7052,10 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             filterMapTitle: null,
             reverse: reverse,
             mapidOverride: mapdata.id
+        },
+        {
+            useScoreMap: false,
+            overrideMapLastDate: mapdata.last_updated
         });
     scoresEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\nmode: ${mode}\n`);
     if (scoresarg.fields.length == 0) {

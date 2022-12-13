@@ -24,6 +24,10 @@ export async function scoreList(
         reverse: boolean,
         mapidOverride?: number,
         showUserName?: boolean,
+    },
+    mapping: {
+        useScoreMap: boolean,
+        overrideMapLastDate?: string;
     }
 ) {
     let filtereddata = asObj.scores.slice();
@@ -229,7 +233,12 @@ export async function scoreList(
                 calctype: 0,
                 passedObj: 0,
                 failed: false
-            }, new Date(curscore.beatmap.last_updated));
+            },
+                mapping.useScoreMap ?
+                    new Date(curscore.beatmap.last_updated)
+                    :
+                    new Date(mapping.overrideMapLastDate)
+            );
         if (curscore.accuracy != 1) {
             if (curscore.pp == null || isNaN(curscore.pp)) {
                 pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`;
