@@ -18,6 +18,11 @@ export async function sendMessage(input: {
 },
     canReply: boolean
 ) {
+
+    if (input.args.files) {
+        input.args.files = checkFileLimit(input.args.files);
+    }
+
     try {
         if (input.args.react == true) {
             switch (input.commandType) {
@@ -68,7 +73,7 @@ export async function sendMessage(input: {
                             failIfNotExists: true
                         })
                             .catch(err => {
-                                sendMessage(input, false)
+                                sendMessage(input, false);
                             });
                     }
                 }
@@ -123,6 +128,14 @@ export async function sendMessage(input: {
     }
     return true;
 
+}
+
+function checkFileLimit(files: string[]) {
+    if (files.length > 10) {
+        return files.slice(0, 9);
+    } else {
+        return files;
+    }
 }
 
 export async function SendFileToChannel(channel: Discord.GuildTextBasedChannel, filePath: string) {
