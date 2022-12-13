@@ -1,0 +1,89 @@
+0.0.0
+NON EXISTENT
+0.1.0
+discord.js v12
+osu commands didn't work at this point in time
+https://github.com/sbrstrkkdwmdr/sbrbot/tree/discordjs-v12
+0.1.1
+didn't know how to use oauthv2 so osu cmds no work ww
+can't remember what else
+???
+0.2.0
+discord.js v13
+first implementation of slash commands
+osu commands actually work??!?!
+can't remember what else 
+
+0.3.0
+discord.js v13
+switched from booba to rosu-pp
+can't remember what else 
+0.4.0
+discord.js v14
+switched from using ts-node with commonjs to nodenext (all because of this video - https://www.youtube.com/watch?v=H91aqUHn8sE)
+
++ added command select menu to help
++ fixed server lb 
++ added server prefix command 
++ reworked database 
++ reworked cooldown to only affect api commands 
++ added admin commands 
++ edited debugging 
++ added pp/rank command(s)
++ added compare top plays 
++ added bws command 
++ added #1 scores count 
++ added osutrack 
++ added nochokes command 
++ added ranking command 
++ added whatif 
++ fixed osutrack 
++ fix pp calculations crashing on non-std gamemodes
++ added global rank to scoreparse 
++ added user beatmaps(ets) command
++ fixed pages on scores
++ map based commands can now fetch id via links (ie sbr-c osu.ppy.sh/b/4204)
++ fixed how graphs are stored so they can be seen after more than 3 days
+
+
++ added get avatar commands 
++ edit debugging 
+
+
+0.4.1
++ updated buttons
++ firsts, osutop/top, nochokes/nc, sotarks, pinned, recent/rs/rl, scores/c, userbeatmaps/ubm have options to use different "detail" modes (show more or less information)
++ osu command has an added graph button
++ switched from commonjs to nodenext (boot time is faster)
++ added ppcalc command
++ fixed links and .osrs not working
+- disabled simulate (rewriting argument handling)
+- disabled localmapparse
+
+0.4.2
++ fixed map and simulate
++ fixed page search
++ fixed recent/rs showing the wrong star rating
++ added taiko, fruits, and mania aliases for osu (ie sbr-taiko displays taiko profile)
++ added map selection menu to ppcalc
++ added buttons to help
++ fixed permission errors
++ pp and rank should be more accurate now
++ general code clean up 
+
+0.4.3
++ fix ppcalc being slow (deleting wrong maps)
++ general code clean up
++ add recentactivity/rsact command.
++ fixed pages for expanded lists 
+
+0.4.4
++ fix medals in recentactivity/rsact displaying as [object Object]
++ fix rl displaying only one score
++ fix permissions checker
++ fix maplb and scores/c crashing when calculating pp (undefined map object)
++ fix map ids not being stored in the correct path 
+0.4.5
++ edit recent activity/rsact formatting
++ fix osutop sorting by recent instead of pp
++ edit beatmapsetApprove not being handled 
