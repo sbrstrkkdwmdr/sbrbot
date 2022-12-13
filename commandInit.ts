@@ -668,6 +668,25 @@ export default (input: {
             options: cmdconfig.rsopts
         },
         {
+            name: 'recentactivity',
+            description: 'Displays the user\'s most recent activity',
+            dmPermission: false,
+            options: [
+                {
+                    name: 'user',
+                    description: 'the username or id',
+                    required: false,
+                    type: Discord.ApplicationCommandOptionType.String
+                },
+                {
+                    name: 'page',
+                    description: 'the page to show',
+                    required: false,
+                    type: Discord.ApplicationCommandOptionType.Integer,
+                },
+            ]
+        },
+        {
             name: 'scores',
             description: 'Displays the user\'s scores for a set map',
             dmPermission: false,

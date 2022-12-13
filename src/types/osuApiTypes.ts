@@ -781,7 +781,7 @@ export type EventType = EventAchievement |
 
 export type EventTypes =
     'achievement' |
-    'beatmapPlaycount' | 'beatmapsetDelete' | 'beatmapsetRevive' | 'beatmapsetUpdate' | 'beatmapsetUpload' |
+    'beatmapPlaycount' | 'beatmapsetApprove' | 'beatmapsetDelete' | 'beatmapsetRevive' | 'beatmapsetUpdate' | 'beatmapsetUpload' |
     'rank' | 'rankLost' |
     'userSupportAgain' | 'userSupportFirst' | 'userSupportGift' |
     'usernameChange';

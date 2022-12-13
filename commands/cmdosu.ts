@@ -2020,6 +2020,8 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
+            user = input.obj.options.getString('user');
+            page = input.obj.options.getInteger('page');
         }
             //==============================================================================================================================================================================================
 
@@ -2226,7 +2228,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
 
     func.storeFile(recentActivityReq, input.absoluteID, 'rsactData', 'osu');
 
-    const pageLength = 5;
+    const pageLength = 10;
 
     if (page < 1) {
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
@@ -2252,90 +2254,83 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
         .setDescription(`Page: ${page + 1}/${Math.ceil(rsactData.length / pageLength)}`)
         ;
 
+    let actText = '';
+
     for (let i = 0; i < rsactData.length && i < pageLength; i++) {
         const curEv = rsactData[i + (page * pageLength)];
         if (!curEv) break;
         const obj = {
-            name: `#${i + (page * pageLength) + 1}`,
-            value: 'null',
-            inline: false
+            number: `${i + (page * pageLength) + 1}`,
+            desc: 'null',
         };
         switch (curEv.type) {
             case 'achievement': {
                 const temp = curEv as osuApiTypes.EventAchievement;
-                obj.value =
-                    `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>
-Unlocked the **${temp.achievement.name}** medal!
-Group: ${temp.achievement.grouping}
-Description: ${temp.achievement.description}
-`;
+                obj.desc = `Unlocked the **${temp.achievement.name}** medal! <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'beatmapsetApprove': {
+                const temp = curEv as osuApiTypes.EventBeatmapsetApprove;
+                obj.desc = `Approved **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'beatmapPlaycount': {
                 const temp = curEv as osuApiTypes.EventBeatmapPlaycount;
-                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + ` Achieved ${temp.count} plays on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url})`
-                    ;
+                obj.desc =
+                    `Achieved ${temp.count} plays on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url}) <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'beatmapsetDelete': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetDelete;
-                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `Deleted [${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
-                    ;
+                obj.desc = `Deleted **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'beatmapsetRevive': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetRevive;
-                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `Revived [${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
-                    ;
+                obj.desc = `Revived **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'beatmapsetUpdate': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetUpdate;
-                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `Updated [${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
-                    ;
+                obj.desc = `Updated **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'beatmapsetUpload': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetUpload;
-                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `Submitted [${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})`
-                    ;
+                obj.desc = `Submitted **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'rank': {
                 const temp = (curEv as osuApiTypes.EventRank);
-                obj.name += ``;
-                obj.value =
-                    `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>
-Achieved rank #${temp.rank} on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url})
-${emojis.grades[temp.scoreRank]} | ${emojis.gamemodes[temp.mode]}
-`;
+                obj.desc =
+                    `Achieved rank **#${temp.rank}** on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url}) <t:${(new Date(temp.created_at).getTime()) / 1000}:R> (${emojis.gamemodes[temp.mode]})`;
             }
                 break;
             case 'rankLost': {
                 const temp = curEv as osuApiTypes.EventRankLost;
-                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `Lost #1 on [${temp.beatmap.title}](${temp.beatmap.url})`;
+                obj.desc = `Lost #1 on **[${temp.beatmap.title}](${temp.beatmap.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'userSupportAgain': {
                 const temp = curEv as osuApiTypes.EventUserSupportAgain;
-                obj.value = `Purchased supporter <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.desc = `Purchased supporter <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'userSupportFirst': {
                 const temp = curEv as osuApiTypes.EventUserSupportFirst;
-                obj.value = `Purchased supporter for the first time <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.desc = `Purchased supporter for the first time <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'userSupportGift': {
                 const temp = curEv as osuApiTypes.EventUserSupportGift;
-                obj.value = `Was gifted supporter <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.desc = `Was gifted supporter <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'usernameChange': {
                 const temp = curEv as osuApiTypes.EventUsernameChange;
-                obj.value = `<t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    + `Changed their username from ${temp.user.previousUsername} to ${temp.user.username}`
+                obj.desc = `Changed their username from ${temp.user.previousUsername} to ${temp.user.username} <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
                     ;
             } break;
         }
-        curEmbed.addFields([obj]);
+        actText += `**${obj.number})** ${obj.desc}\n\n`;
     }
+    if (actText.length == 0) {
+        actText = 'No recent activity found';
+    }
+    curEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsactData.length / pageLength)}
+
+    
+${actText}`);
+
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
@@ -2343,7 +2338,8 @@ ${emojis.grades[temp.scoreRank]} | ${emojis.gamemodes[temp.mode]}
         obj: input.obj,
         args: {
             embeds: [curEmbed],
-            components: [pgbuttons, buttons]
+            components: [pgbuttons, buttons],
+            edit: true
         },
     }, input.canReply
     );
