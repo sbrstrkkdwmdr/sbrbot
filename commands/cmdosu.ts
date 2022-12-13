@@ -1710,6 +1710,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
     let useEmbeds = [];
     if (graphonly == true) {
+        embedStyle = 'G';
         const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',');
         const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',');
 
@@ -1763,17 +1764,17 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             const chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
 
             const ChartsEmbedRank = new Discord.EmbedBuilder()
-                .setFooter({
-                    text: `${embedStyle}`
-                })
+                /*                 .setFooter({
+                                    text: `${embedStyle}`
+                                }) */
                 .setDescription('Click on the image to see the full chart')
                 .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
                 .setImage(`${chartrank}`);
 
             const ChartsEmbedPlay = new Discord.EmbedBuilder()
-                .setFooter({
-                    text: `${embedStyle}`
-                })
+                /*                 .setFooter({
+                                    text: `${embedStyle}`
+                                }) */
                 .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
                 .setImage(`${chartplay}`);
 
