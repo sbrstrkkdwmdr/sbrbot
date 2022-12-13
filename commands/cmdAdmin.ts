@@ -546,7 +546,7 @@ export async function debug(input: extypes.commandInput) {
     switch (type) {
         //return api files for []
         case 'commandfile': {
-            let cmdidcur = '0';
+            let cmdidcur = `${(+input.absoluteID) - 1}`;
             if (!inputstr || isNaN(+inputstr)) {
                 cmdidcur = fs.readFileSync(`${path}/id.txt`, 'utf-8');
             } else {
@@ -558,7 +558,12 @@ export async function debug(input: extypes.commandInput) {
                     content: 'Cache folder is currently empty'
                 };
             } else {
-                const searchfiles = files.filter(x => `${x}`.includes(`${cmdidcur}`));
+                const searchfiles = files.filter(x => {
+                    return (`${x}`.includes(`${cmdidcur}-`))
+                        &&
+                        `${x}`.indexOf(`${cmdidcur}-`) == 0;
+                }
+                );
                 if (searchfiles.length < 1) {
                     usemsgArgs = {
                         content: `No files found with the id ${cmdidcur}`
@@ -681,9 +686,8 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             break;
         //get id of current cmd
         case 'curcmdid': {
-            const cmdidcur = fs.readFileSync(`${path}/id.txt`, 'utf-8');
             usemsgArgs = {
-                content: 'Last command\'s ID is ' + cmdidcur
+                content: 'Last command\'s ID is ' + `${(+input.absoluteID) - 1}`
             };
         }
             break;
