@@ -3385,7 +3385,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 
     let scoredetailed: number = parseArgs.scoredetailed ?? 1;
 
-    let sort: embedStuff.scoreSort = parseArgs.sort ?? 'recent';
+    let sort: embedStuff.scoreSort = parseArgs.sort ?? 'pp';
     let reverse = parseArgs.reverse ?? false;
     let mode = parseArgs.mode ?? 'osu';
     let filteredMapper = parseArgs.filteredMapper ?? null;
