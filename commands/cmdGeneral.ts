@@ -804,6 +804,7 @@ ${num ? '' : '[number]'}`;
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -1248,6 +1249,7 @@ export async function help(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -1373,6 +1375,7 @@ Bot Version: ${pkgjson.version}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -1448,6 +1451,7 @@ export async function invite(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -1646,6 +1650,7 @@ export async function math(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         })
     }
 }
@@ -1918,6 +1923,7 @@ export async function remind(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         })
     }
 
@@ -2024,6 +2030,7 @@ Current Shard:
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         })
     }
 }
@@ -2264,6 +2271,7 @@ export async function time(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 

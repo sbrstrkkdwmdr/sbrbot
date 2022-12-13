@@ -98,6 +98,7 @@ export async function _8ball(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -536,6 +537,7 @@ export async function image(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 }
@@ -809,6 +811,7 @@ export async function roll(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -1050,6 +1053,7 @@ Description: \`${curItem.description}\`
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 

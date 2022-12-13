@@ -227,6 +227,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 }
@@ -421,6 +422,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -748,6 +750,7 @@ export async function lb(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -1115,6 +1118,7 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -1294,6 +1298,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -1966,6 +1971,7 @@ ${onlinestatus}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -2367,6 +2373,7 @@ ${emojis.grades[temp.scoreRank]} | ${emojis.gamemodes[temp.mode]}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -2796,6 +2803,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -3367,6 +3375,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -3822,6 +3831,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -4251,6 +4261,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -5293,6 +5304,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -5579,6 +5591,7 @@ ${isfail}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -6256,6 +6269,7 @@ ${srStr}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -6519,6 +6533,7 @@ export async function scorepost(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -7132,6 +7147,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -7579,6 +7595,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                customString: 'Message failed to send'
             });
         }
         return;
@@ -8023,6 +8040,7 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -8589,7 +8607,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: ''
+                customString: 'No maps found for the search given'
             });
             return;
         }
@@ -8610,7 +8628,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: ''
+                customString: 'Maps failed to sort'
             });
             return;
         }
@@ -9182,6 +9200,7 @@ HP${baseHP}`;
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -10033,6 +10052,7 @@ export async function ppCalc(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -10212,6 +10232,7 @@ export async function randomMap(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 }
@@ -10565,6 +10586,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 }
@@ -11158,6 +11180,7 @@ Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${fil
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -11348,6 +11371,7 @@ export async function trackadd(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -11516,6 +11540,7 @@ export async function trackremove(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -11644,6 +11669,7 @@ export async function trackchannel(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -11761,6 +11787,7 @@ export async function tracklist(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 }
@@ -12258,6 +12285,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -12517,6 +12545,7 @@ export async function osuset(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -12690,6 +12719,7 @@ export async function saved(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 }
@@ -13004,6 +13034,7 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 

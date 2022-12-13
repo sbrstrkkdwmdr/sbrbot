@@ -150,6 +150,7 @@ Date:         ${(new Date).toISOString()}
 Date (epoch): ${(new Date).getTime()}
 ID:           ${input.commandId}
 ====================================================`;
+            break;
     }
     if (config.storeCommandLogs) {
         fs.appendFileSync(`${path}/logs/${input?.object?.guildId ? 'cmd/' + input?.object?.guildId + '.log' : 'commands.log'}`, output, 'utf-8');

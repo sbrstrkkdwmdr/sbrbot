@@ -142,6 +142,7 @@ export async function checkperms(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -349,6 +350,7 @@ export async function getUser(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -457,6 +459,7 @@ export async function getUserAv(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -741,6 +744,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 }
@@ -1040,6 +1044,7 @@ Valid Types: user, guild, channel, role, emoji
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -1138,6 +1143,7 @@ export async function leaveguild(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -1240,6 +1246,7 @@ export async function prefix(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 
@@ -1335,6 +1342,7 @@ export async function servers(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            customString: 'Message failed to send'
         });
     }
 

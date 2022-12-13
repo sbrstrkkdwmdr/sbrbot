@@ -107,22 +107,30 @@ module.exports = {
 
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
-        msgfunc.sendMessage({
+        const finalMessage = await msgfunc.sendMessage({
             commandType: input.commandType,
             obj: input.obj,
             args: {
-            },
-        }, input.canReply
-        );
+            }
+        }, input.canReply);
 
-        log.logFile('command',
-            `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        );
+        if (finalMessage == true) {
+            log.logCommand({
+                event: 'Success',
+                commandName: 'COMMANDNAME',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+            });
+        } else {
+            log.logCommand({
+                event: 'Error',
+                commandName: 'COMMANDNAME',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: 'Message failed to send',
+            });
+        }
     }
 };
