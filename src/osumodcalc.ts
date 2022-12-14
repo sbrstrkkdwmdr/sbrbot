@@ -30,7 +30,7 @@ export type ValObj = {
     };
 };
 export type ModList =
-    'EZ' | 'HD' | 'FI' | 'HT' | 'DT' | 'NC' | 'HR' | 'SD' | 'PF' | 'FL' | 'NF' | 'AT' | 'RX' | 'AP' | 'TP' | 'SO' | 'TD' | '1K' | '2K' | '3K' | '4K' | '5K' | '6K' | '7K' | '8K' | '9K' | 'CP' | 'RD' | 'MR';
+    'EZ' | 'HD' | 'FI' | 'HT' | 'DT' | 'NC' | 'HR' | 'SD' | 'PF' | 'FL' | 'NF' | 'AT' | 'CM' | 'RL' | 'AP' | 'TP' | 'SO' | 'TD' | '1K' | '2K' | '3K' | '4K' | '5K' | '6K' | '7K' | '8K' | '9K' | 'CP' | 'RD' | 'MR' | 'SV2';
 
 
 /**
@@ -417,7 +417,7 @@ export enum ModShort {
     HR = 16,
     SD = 32,
     DT = 64,
-    RX = 128,
+    RL = 128,
     HT = 256,
     NC = 512,
     FL = 1024,
@@ -432,14 +432,14 @@ export enum ModShort {
     '8K' = 524288,
     FI = 1048576,
     RD = 2097152,
-    CN = 4194304,
+    CM = 4194304,
     TP = 8388608,
     '9K' = 16777216,
     CP = 33554432,
     '1K' = 67108864,
     '3K' = 134217728,
     '2K' = 268435456,
-    V2 = 536870912,
+    SV2 = 536870912,
     MR = 1073741824
 }
 
@@ -477,7 +477,7 @@ function ModStringToInt(mods: string) {
     modInt += mods.toUpperCase().includes('9K') ? 16777216 : 0;
     modInt += mods.toUpperCase().includes('FI') ? 1048576 : 0;
     modInt += mods.toUpperCase().includes('RDM') ? 2097152 : 0;
-    modInt += mods.toUpperCase().includes('CN') ? 4194304 : 0;
+    modInt += mods.toUpperCase().includes('CM') ? 4194304 : 0;
     modInt += mods.toUpperCase().includes('TP') ? 8388608 : 0;
     modInt += mods.toUpperCase().includes('KC') ? 33554432 : 0;
     modInt += mods.toUpperCase().includes('SV2') || mods.toUpperCase().includes('S2') ? 536870912 : 0;
@@ -499,7 +499,7 @@ function ModIntToString(modInt: number) {
     modString += modInt & 16 ? 'HR' : '';
     modString += modInt & 32 ? 'SD' : '';
     modString += modInt & 64 ? 'DT' : '';
-    modString += modInt & 128 ? 'RX' : '';
+    modString += modInt & 128 ? 'RL' : '';
     modString += modInt & 256 ? 'HT' : '';
     modString += modInt & 512 ? 'NC' : '';
     modString += modInt & 1024 ? 'FL' : '';
@@ -537,11 +537,14 @@ function ModIntToString(modInt: number) {
  * @returns reorders mods to be in the correct order and removes duplicates.
  */
 function OrderMods(modString: string) {
-    const ModsOrder: ModList[] = ['EZ', 'HD', 'FI', 'HT', 'DT', 'NC', 'HR', 'SD', 'PF', 'FL', 'NF', 'AT', 'RX', 'AP', 'TP', 'SO', 'TD', '1K', '2K', '3K', '4K', '5K', '6K', '7K', '8K', '9K', 'CP', 'RD', 'MR'];
+    const ModsOrder: ModList[] = ['EZ', 'HD', 'FI', 'HT', 'DT', 'NC', 'HR', 'SD', 'PF', 'FL', 'NF', 'AT', 'CM', 'RL', 'AP', 'TP', 'SO', 'TD', '1K', '2K', '3K', '4K', '5K', '6K', '7K', '8K', '9K', 'CP', 'RD', 'MR', 'SV2'];
     const modStringArray = modString.toUpperCase().replaceAll(' ', '').replaceAll(',', '').replace(/(.{2})/g, "$1 ")
-        .replaceAll('RLX', 'RX')
-        .replaceAll('RL', 'RX')
+        .replaceAll('RLX', 'RL')
+        .replaceAll('RX', 'RL')
         .replaceAll('AU', 'AT')
+        .replaceAll('CN', 'CM')
+        .replaceAll('V2', 'SV2')
+        .replaceAll('S2', 'SV2')
         .split(' ');
     const modStringArrayOrdered = [];
     const modStringArrayOrderedtest = [];
