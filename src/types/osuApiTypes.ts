@@ -23,7 +23,7 @@ export type BeatmapCompact = {
     failtimes: Failtimes;
     id: number,
     max_combo?: number,
-    mode: string,
+    mode: GameMode,
     status: string,
     total_length: number,
     user_id: number,

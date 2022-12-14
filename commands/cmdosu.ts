@@ -3042,7 +3042,9 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             lbdataReq = await osufunc.apiget({
                 type: 'scores_get_map',
                 params: {
-                    id: mapid
+                    id: mapid,
+                    mode: mapdata.mode,
+                    opts: [`mods=${mapmods}`]
                 }
             });
         }

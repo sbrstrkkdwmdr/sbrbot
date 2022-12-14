@@ -707,7 +707,7 @@ export async function apiget(input: apiInput) {
                     url += `users/${input.params.username ?? input.params.userid}/scores/firsts?limit=100`;
                     break;
                 case 'scores_get_map': case 'maplb':
-                    url += `beatmaps/${input.params.id}/scores`;
+                    url += `beatmaps/${input.params.id}/scores?mode=${input.params.mode ?? 'osu'}`;
                     break;
                 case 'scores_get_pinned': case 'pinned':
                     url += `users/${input.params.username ?? input.params.userid}/scores/pinned?mode=${input.params.mode ?? 'osu'}`;
