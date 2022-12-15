@@ -1687,7 +1687,10 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
     const onlinestatus = osudata.is_online == true ?
         `**${emojis.onlinestatus.online} Online**` :
-        `**${emojis.onlinestatus.offline} Offline** | Last online <t:${(new Date(osudata.last_visit)).getTime() / 1000}:R>`;
+        (new Date(osudata.last_visit)).getTime() != 0 ?
+        `**${emojis.onlinestatus.offline} Offline** | Last online <t:${(new Date(osudata.last_visit)).getTime() / 1000}:R>`
+        : `**${emojis.onlinestatus.offline} Offline**`
+        ;
 
     const prevnames = osudata.previous_usernames.length > 0 ?
         '**Previous Usernames:** ' + osudata.previous_usernames.join(', ') :
@@ -1870,7 +1873,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             let mostplaytxt = ``;
             for (let i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
                 const bmpc = mostplayeddata[i2];
-                mostplaytxt += `\`${bmpc.count.toString() + ' plays'.padEnd(15, ' ')}\` | [${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id})\n`;
+                mostplaytxt += `\`${(bmpc.count.toString() + ' plays').padEnd(15, ' ')}\` | [${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id})\n`;
             }
             osuEmbed.addFields([
                 {
@@ -1889,6 +1892,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     value:
                         `**Player joined** <t:${new Date(osudata.join_date).getTime() / 1000}:R>                        
 ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
+**Medals**: ${osudata.user_achievements.length}
 **Followers:** ${osudata.follower_count}
 ${prevnames}
 ${onlinestatus}
@@ -1932,6 +1936,7 @@ ${onlinestatus}
 **Accuracy:** ${(osustats.hit_accuracy != null ? osustats.hit_accuracy : 0).toFixed(2)}%
 **Play Count:** ${playcount}
 **Level:** ${lvl}
+**Medals**: ${osudata.user_achievements.length}
 ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}\n
 **Player joined** <t:${new Date(osudata.join_date).getTime() / 1000}:R>
 **Followers:** ${osudata.follower_count}

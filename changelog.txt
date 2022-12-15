@@ -87,3 +87,6 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 + edit recent activity/rsact formatting
 + fix osutop sorting by recent instead of pp
 + edit beatmapsetApprove not being handled 
++ added medals count to osu
++ fix last online showing 53+ years ago 
++ fix spacing on most played count
