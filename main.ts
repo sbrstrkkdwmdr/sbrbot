@@ -296,7 +296,7 @@ Current Client ID:        ${client.user.id}
 
     }).then(res => res.json())
         .then(res => {
-            fs.writeFileSync(`${path}\\config/osuauth.json`, JSON.stringify(res));
+            fs.writeFileSync(`${path}\\config\\osuauth.json`, JSON.stringify(res));
             fs.appendFileSync(`${path}\\logs\\updates.log`, '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
 
         }
