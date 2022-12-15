@@ -560,9 +560,12 @@ export type SpotLights = {
 } & Error;
 
 export type Timestamp = string; //& Error
-//iso 8601 date
-//ie 2019-09-05T06:31:20+00:00
-
+/**
+ * iso 8601 date
+ * ${YYYY}-${MM}-${DD}T${hh}:${mm}:${ss}+${hh}:${mm}
+ * year-month-dayThour-minute-second+hour:minute
+ * ie 2019-09-05T06:31:20+00:00
+*/
 export type UpdateStream = {
     display_name?: string | null,
     id: number,
@@ -624,7 +627,10 @@ export type UserCompact = {
     statstics_rulesets?: UserStatisticsRulesets,
     support_level?: any,
     unread_pm_count?: any,
-    user_achievements?: any,
+    user_achievements?: {
+        achieved_at: Timestamp,
+        achievement_id: number;
+    }[],
     user_preferences?: any,
 } & Error;
 

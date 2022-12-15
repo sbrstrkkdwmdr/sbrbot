@@ -1,5 +1,428 @@
 import * as osuapitypes from '../types/osuApiTypes.js';
 
+export const achievementSolutions: {
+    "id": number,
+    "name": string,
+    "solution": string;
+}[] = [
+        {
+            id: 1,
+            name: "500 Combo",
+            solution: "Pass a map with at least 500 combo in osu! standard."
+        },
+        {
+            id: 2,
+            name: "???",
+            solution: "Unknown solution."
+        },
+        {
+            id: 3,
+            name: "750 Combo",
+            solution: "Pass a map with at least 750 combo in osu! standard."
+        },
+        {
+            id: 4,
+            name: "1,000 Combo",
+            solution: "Pass a map with at least 1000 combo in osu! standard."
+        },
+        {
+            id: 6,
+            name: "Don't let the bunny distract you!",
+            solution: "Achieve a full combo on https://osu.ppy.sh/beatmapsets/184#osu/8708 with any mods."
+        },
+        {
+            "id": 13,
+            "name": "Catch 20,000 fruits",
+            solution: "Catch a total of 20,000 fruits in osu! catch the beat."
+        },
+        {
+            "id": null,
+            "name": "Catch 200,000 fruits",
+            solution: "Catch a total of 200,000 fruits in osu! catch the beat."
+        },
+        {
+            "id": null,
+            "name": "Catch 2,000,000 fruits",
+            solution: "Catch a total of 2 million fruits in osu! catch the beat."
+        },
+        {
+            "id": null,
+            "name": "Catch 20,000,000 fruits",
+            solution: "Catch a total of 20 million fruits in osu! catch the beat."
+        },
+        {
+            "id": 15,
+            "name": "S-ranker",
+            solution: "Pass five maps with an S rank or higher in a row."
+        },
+        {
+            "id": 16,
+            "name": "Most Improved",
+            solution: "Get a D rank on any map you haven't played before with at least 100k score, then get an S on the second try. NF allowed."
+        },
+        {
+            "id": 20,
+            "name": "5,000 Plays",
+            solution: "Obtain a total of 5,000 plays in osu! standard."
+        },
+        {
+            "id": 21,
+            "name": "15,000 Plays",
+            solution: "Obtain a total of 15k plays in osu! standard."
+        },
+        {
+            "id": 22,
+            "name": "25,000 Plays",
+            solution: "Obtain a total of 25k plays in osu! standard."
+        },
+        {
+            "id": 23, //estimated ID
+            "name": "50,000 Plays",
+            solution: "Obtain a total of 50k plays in osu! standard."
+        },
+        {
+            "id": 31,
+            "name": "30,000 Drum Hits",
+            solution: "Obtain a total of 30k drum hits in osu! taiko."
+        },
+        {
+            "id": 32,//estimated ID
+            "name": "300,000 Drum Hits",
+            solution: "Obtain a total of 300k drum hits in osu! taiko."
+        },
+        {
+            "id": 33,//estimated ID
+            "name": "3,000,000 Drum Hits",
+            solution: "Obtain a total of 3M drum hits in osu! taiko."
+        },
+        {
+            "id": 34,//estimated ID
+            "name": "30,000,000",
+            solution: "Obtain a total of 30M drum hits in osu! taiko."
+        },
+        {
+            "id": 38,
+            "name": "Consolation Prize",
+            solution: "Pass a map with a D rank and at least 100k score. No mods allowed."
+        },
+        {
+            "id": 39,
+            "name": "Challenge Accepted",
+            solution: "Pass any approved map."
+        },
+        {
+            "id": 40,
+            "name": "Stumbler",
+            solution: "FC a map with a B rank or lower."
+        },
+        {
+            "id": 46,
+            "name": "40,000 Keys",
+            solution: "Click at least 40k keys in osu! mania."
+        },
+        {
+            "id": 47, //estimated ID 
+            "name": "400,000 Keys",
+            solution: "Click at least 400k keys in osu! mania."
+        },
+        {
+            "id": 48, //estimated ID
+            "name": "4,000,000 Keys",
+            solution: "Click at least 4M keys in osu! mania."
+        },
+        {
+            "id": 49, //estimated ID
+            "name": "40,000,000 Keys",
+            solution: "Click at least 40M keys in osu! mania."
+        },
+        {
+            "id": 50,
+            "name": "I can see the top",
+            solution: "Reach at least rank 50,000 in any gamemode."
+        },
+        {
+            "id": 54,
+            "name": "Twin Perspectives",
+            solution: "Pass any map with at least 100 combo in osu! mania."
+        },
+        {
+            "id": 55,
+            "name": "Rising Star",
+            solution: "Pass any 1* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 56,
+            "name": "Constellation Prize",
+            solution: "Pass any 2* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 57,
+            "name": "Building Confidence",
+            solution: "Pass any 3* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 58,
+            "name": "Insanity Approaches",
+            solution: "Pass any 4* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 59,
+            "name": "These Clarion Skies",
+            solution: "Pass any 5* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 60,
+            "name": "Above and Beyond",
+            solution: "Pass any 6* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 61,
+            "name": "Supremacy",
+            solution: "Pass any 7* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 62,
+            "name": "Absolution",
+            solution: "Pass any 8* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 63,
+            "name": "Totality",
+            solution: "Full combo any 1* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 64,
+            "name": "Business As Usual",
+            solution: "Full combo any 2* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 65,
+            "name": "Building Steam",
+            solution: "Full combo any 3* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 66,
+            "name": "Moving Forward",
+            solution: "Full combo any 4* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 67,
+            "name": "Paradigm Shift",
+            solution: "Full combo any 5* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 68,
+            "name": "Anguish Quelled",
+            solution: "Full combo any 6* map in osu! standard without EZ, NF, or HT."
+        },
+        {
+            "id": 71,
+            "name": "My First Don",
+            solution: "Pass any 1* map in osu! taiko without EZ, NF, or HT."
+        },
+        {
+            "id": 72,
+            "name": "Katsu Katsu Katsu",
+            solution: "Pass any 2* map in osu! taiko without EZ, NF, or HT."
+        },
+        {
+            "id": 73,
+            "name": "Not Even Trying",
+            solution: "Pass any 3* map in osu! taiko without EZ, NF, or HT."
+        },
+        {
+            "id": 79,
+            "name": "A Slice Of Life",
+            solution: "Pass any 1* map in osu! catch the beat without EZ, NF, or HT."
+        },
+        {
+            "id": 80,
+            "name": "Dashing Ever Forward",
+            solution: "Pass any 2* map in osu! catch the beat without EZ, NF, or HT."
+        },
+        {
+            "id": 87,
+            "name": "First Steps",
+            solution: "Pass any 1* map in osu! mania without EZ, NF, or HT."
+        },
+        {
+            "id": 88,
+            "name": "No Normal Player",
+            solution: "Pass any 2* map in osu! mania without EZ, NF, or HT."
+        },
+        {
+            "id": 95,
+            "name": "Keeping Time",
+            solution: "Full combo any 1* map in osu! taiko without EZ, NF, or HT."
+        },
+        {
+            "id": 96,
+            "name": "To Your Own Beat",
+            solution: "Full combo any 2* map in osu! taiko without EZ, NF, or HT."
+        },
+        {
+            "id": 103,
+            "name": "Sweet And Sour",
+            solution: "Full combo any 1* map in osu! catch the beat without EZ, NF, or HT."
+        },
+        {
+            "id": 104,
+            "name": "Reaching The Core",
+            solution: "Full combo any 1* map in osu! catch the beat without EZ, NF, or HT."
+        },
+        {
+            "id": 111,
+            "name": "Keystruck",
+            solution: "Full combo any 1* map in osu! mania without EZ, NF, or HT."
+        },
+        {
+            "id": 119,
+            "name": "Finality",
+            solution: "Pass any map with only Sudden Death."
+        },
+        {
+            "id": 120,
+            "name": "Perfectionist",
+            solution: "Pass any map with only Perfect."
+        },
+        {
+            "id": 121,
+            "name": "Rock Around The Clock",
+            solution: "Pass any map with only Hardrock."
+        },
+        {
+            "id": 122,
+            "name": "Time And A Half",
+            solution: "Pass any map with only Doubletime."
+        },
+        {
+            "id": 123,
+            "name": "Sweet Rave Party",
+            solution: "Pass any map with only Nightcore."
+        },
+        {
+            "id": 124,
+            "name": "Blindsight",
+            solution: "Pass any map with only Hidden."
+        },
+        {
+            "id": 125,
+            "name": "Are You Afraid Of The Dark?",
+            solution: "Pass any map with only Flashlight."
+        },
+        {
+            "id": 126,
+            "name": "Dial It Right Back",
+            solution: "Pass any map with only Easy."
+        },
+        {
+            "id": 127,
+            "name": "Risk Averse",
+            solution: "Complete any map with only No Fail."
+        },
+        {
+            "id": 128,
+            "name": "Slowboat",
+            solution: "Pass any map with only Halftime."
+        },
+        {
+            "id": 129,
+            "name": "Burned Out",
+            solution: "Pass any map with only Spun Out."
+        },
+        {
+            "id": 132,
+            "name": "Perseverance",
+            solution: "Pass any map longer than 7 minutes."
+        },
+        {
+            "id": 136,
+            "name": "Afterimage",
+            solution: "Pass any map with HDHT."
+        },
+        {
+            "id": 137,
+            "name": "To The Core",
+            solution: "Pass any nightcore map with DT or NC."
+        },
+        {
+            "id": 138,
+            "name": "Prepared",
+            solution: "FC any map with NF"
+        },
+        {
+            "id": 139,
+            "name": "Eclipse",
+            solution: "Pass any map with HDFL"
+        },
+        {
+            "id": 141,
+            "name": "Tunnel Vision",
+            solution: "Pass any map with less than 200 combo using FL. NF is allowed."
+        },
+        {
+            "id": 142,
+            "name": "Behold No Deception",
+            solution: "FC a map with EZ that is 4* after mod calculations."
+        },
+        {
+            "id": 144,
+            "name": "Lights Out",
+            solution: "Pass any map with NCFL."
+        },
+        {
+            "id": 147,
+            "name": "Camera Shy",
+            solution: "FC any map with HDNF."
+        },
+        {
+            "id": 148,
+            "name": "The Sum Of All Fears",
+            solution: "FC any map EXCEPT for the very last note."
+        },
+        {
+            "id": 152,
+            "name": "No Time To Spare",
+            solution: "FC any map with DT that is 30 seconds or less (after mods)."
+        },
+        {
+            "id": 154,
+            "name": "Realtor Extraordinaire",
+            solution: "FC any difficulty of cYsmix - House With Legs, with DTHR."
+        },
+        {
+            "id": 168,
+            "name": "50/50",
+            solution: "Get 50 50s on any map."
+        },
+        {
+            "id": 176,
+            "name": "Feelin' It",
+            solution: "Pass map where your max combo is half or equal to the map's BPM."
+        },
+        {
+            "id": 177,
+            "name": "Overconfident",
+            solution: "Pass any map with <60% accuracy while using HD/DT/NC/HR/FL."
+        },
+        {
+            "id": 222,
+            "name": "Natural 20",
+            solution: "FC any 5*+ map where your 300s count is a multiple of 20."
+        },
+        {
+            "id": 276,
+            "name": "Dead Center",
+            solution: "FC any 3*+ map which has an equal amount of circles and sliders."
+        },
+        {
+            "id": 287,
+            "name": "When You See It",
+            solution: "Pass any map by xi (case sensitive) with accuracy ending in 7.27%. All mods allowed."
+        },
+
+    ];
+
 export const achievements: osuapitypes.Achievement[] = [
     {
         "icon_url": null,
@@ -861,7 +1284,7 @@ export const achievements: osuapitypes.Achievement[] = [
     },
     {
         "icon_url": null,
-        "id": 15,
+        "id": 177,
         "name": "Overconfident",
         "grouping": "Hush-Hush",
         "ordering": null,
