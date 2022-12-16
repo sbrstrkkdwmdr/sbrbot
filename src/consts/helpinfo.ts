@@ -1016,6 +1016,7 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Shows SaberStrike\'s osu profile with extra details'
             }
         ],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.main.graph],
         options: [
             {
                 name: 'user',
@@ -1424,6 +1425,7 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: ['mapcalc', 'mapperf', 'maperf', 'mappp'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'query',
@@ -1614,6 +1616,7 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Shows the leaderboards for the 227th spotlight'
             }
         ],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last],
         aliases: [],
         options: [{
             name: 'country',
@@ -1708,7 +1711,7 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: ['rs', 'r', 'rt', 'rf', 'rm', 'rctb', 'rl', 'rlt', 'rlf', 'rlm', 'rlctb'],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.main.map],
         options: [
             {
                 name: 'user',
@@ -1794,6 +1797,7 @@ const osucmds: commandInfo[] = [
         slashusage: 'recentactivity [user] [page]',
         examples: [],
         aliases: ['recentact', 'rsact'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last],
         options: [
             {
                 name: 'user',
@@ -1931,7 +1935,7 @@ const osucmds: commandInfo[] = [
             },
         ],
         aliases: ['score', 'sp'],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.main.map],
         options: [
             {
                 name: 'id',
@@ -1979,6 +1983,7 @@ const osucmds: commandInfo[] = [
             }
         ],
         aliases: ['c'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'user',
