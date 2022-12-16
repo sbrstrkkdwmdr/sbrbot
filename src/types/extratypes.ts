@@ -220,7 +220,9 @@ export type commandButtonTypes =
     'Detail0' | 'Detail1' | 'Detail2' | 'Detail3' |
     'DetailN1' |
     'Graph' | 
-    'SearchMenu' | 'Sort' | 'SortMenu';
+    'SearchMenu' | 'Sort' | 'SortMenu' | 
+    'Map'
+    ;
 
 export type osustatscache = {
     osuid: string,

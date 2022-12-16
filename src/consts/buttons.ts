@@ -25,7 +25,8 @@ export const label = {
         detailMore: '<:details_more:1047767495693565973>',
         detailLess: '<:details_less:1047767494011662416>',
         random: '🎲',
-        graph: '📈'
+        graph: '📈',
+        map: '🗺'
     },
     page_old: {
         first: '⬅',

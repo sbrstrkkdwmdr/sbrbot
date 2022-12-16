@@ -1688,8 +1688,8 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
     const onlinestatus = osudata.is_online == true ?
         `**${emojis.onlinestatus.online} Online**` :
         (new Date(osudata.last_visit)).getTime() != 0 ?
-        `**${emojis.onlinestatus.offline} Offline** | Last online <t:${(new Date(osudata.last_visit)).getTime() / 1000}:R>`
-        : `**${emojis.onlinestatus.offline} Offline**`
+            `**${emojis.onlinestatus.offline} Offline** | Last online <t:${(new Date(osudata.last_visit)).getTime() / 1000}:R>`
+            : `**${emojis.onlinestatus.offline} Offline**`
         ;
 
     const prevnames = osudata.previous_usernames.length > 0 ?
@@ -4779,6 +4779,14 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             }
             return;
         }
+
+        buttons.addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Map-scoreparse-${commanduser.id}-${input.absoluteID}-${curscore.beatmap.id}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.map)
+        );
+
         const curbm = curscore.beatmap;
         const curbms = curscore.beatmapset;
 
@@ -5748,18 +5756,6 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let buttons = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-Refresh-scoreparse-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.refresh),
-        );
-
-    const checkDetails = await buttonsAddDetails('scoreparse', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle);
-    buttons = checkDetails.buttons;
-    embedStyle = checkDetails.embedStyle;
-
     let scoredataReq: osufunc.apiReturn;
 
     if (func.findFile(scoreid, 'scoredata') &&
@@ -5802,31 +5798,44 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         });
         return;
     }
-    try {
-        if (typeof scoredata?.error != 'undefined') {
-            if (input.commandType != 'button' && input.commandType != 'link') {
-                await msgfunc.sendMessage({
-                    commandType: input.commandType,
-                    obj: input.obj,
-                    args: {
-                        content: `Error - this score is invalid/unsubmitted and cannot be parsed`,
-                        edit: true
-                    }
-                }, input.canReply);
-            }
-            log.logCommand({
-                event: 'Error',
-                commandName: 'scoreparse',
+    if (typeof scoredata?.error != 'undefined') {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
                 commandType: input.commandType,
-                commandId: input.absoluteID,
-                object: input.obj,
-                customString: `Invalid score - osu.ppy.sh/scores/${scoremode}/${scoreid}`
-            });
-            return;
+                obj: input.obj,
+                args: {
+                    content: `Error - this score is invalid/unsubmitted and cannot be parsed`,
+                    edit: true
+                }
+            }, input.canReply);
         }
-    } catch (error) {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scoreparse',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: `Invalid score - osu.ppy.sh/scores/${scoremode}/${scoreid}`
+        });
+        return;
     }
-    func.storeFile(scoredataReq, scoreid, 'scoredata');
+    func.storeFile(scoredataReq, scoreid, 'scoredata', osufunc.modeValidator(scoredata.mode));
+
+    let buttons = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Refresh-scoreparse-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.refresh),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Map-scoreparse-${commanduser.id}-${input.absoluteID}-${scoredata.beatmap.id}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.map)
+        );
+
+    const checkDetails = await buttonsAddDetails('scoreparse', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle);
+    buttons = checkDetails.buttons;
+    embedStyle = checkDetails.embedStyle;
 
     if (input.commandType == 'interaction' && input.overrides == null) {
         await msgfunc.sendMessage({

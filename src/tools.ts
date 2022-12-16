@@ -120,55 +120,63 @@ const cacheById = [
 export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuApiTypes.Beatmapset[] | osuApiTypes.Beatmap[]) & osuApiTypes.Error), id: string | number, name: string, mode?: osuApiTypes.GameMode, type?: string) {
     try {
         if (cacheById.some(x => name.includes(x))) {
-            if (name.includes('mapdata')) {
-                const datamap: osuApiTypes.Beatmap = (data as osufunc.apiReturn).apiData as any;
-                let status = '';
-                switch (datamap.status) {
-                    case 'ranked':
-                        status = 'Ranked';
-                        break;
-                    case 'loved':
-                        status = 'Loved';
-                        break;
-                    case 'approved':
-                        status = 'Approved';
-                        break;
-                    case 'pending':
-                        status = 'Pending';
-                        break;
-                    default: case 'graveyard':
-                        status = 'Graveyard';
-                        break;
-                }
-                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
-            } else if (name.includes('bmsdata')) {
-                const datamap: osuApiTypes.Beatmapset = (data as osufunc.apiReturn).apiData as any;
-                let status = '';
-                switch (datamap.status) {
-                    case 'ranked':
-                        status = 'Ranked';
-                        break;
-                    case 'loved':
-                        status = 'Loved';
-                        break;
-                    case 'approved':
-                        status = 'Approved';
-                        break;
-                    case 'pending':
-                        status = 'Pending';
-                        break;
-                    default: case 'graveyard':
-                        status = 'Graveyard';
-                        break;
-                }
-                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
-            } else if (name.includes('osudata')) {
-                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, JSON.stringify(data, null, 2));
-            } else if (name.includes('maplistdata')) {
-                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2));
-            }
-            else {
-                fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2));
+            switch (true) {
+                case (name.includes('mapdata')): {
+                    const datamap: osuApiTypes.Beatmap = (data as osufunc.apiReturn).apiData as any;
+                    let status = '';
+                    switch (datamap.status) {
+                        case 'ranked':
+                            status = 'Ranked';
+                            break;
+                        case 'loved':
+                            status = 'Loved';
+                            break;
+                        case 'approved':
+                            status = 'Approved';
+                            break;
+                        case 'pending':
+                            status = 'Pending';
+                            break;
+                        default: case 'graveyard':
+                            status = 'Graveyard';
+                            break;
+                    }
+                    fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
+                } break;
+                case (name.includes('bmsdata')): {
+                    const datamap: osuApiTypes.Beatmapset = (data as osufunc.apiReturn).apiData as any;
+                    let status = '';
+                    switch (datamap.status) {
+                        case 'ranked':
+                            status = 'Ranked';
+                            break;
+                        case 'loved':
+                            status = 'Loved';
+                            break;
+                        case 'approved':
+                            status = 'Approved';
+                            break;
+                        case 'pending':
+                            status = 'Pending';
+                            break;
+                        default: case 'graveyard':
+                            status = 'Graveyard';
+                            break;
+                    }
+                    fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
+                } break;
+                case (name.includes('osudata')):case (name.includes('scoredata')): {
+                    fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, JSON.stringify(data, null, 2));
+                } break;
+                case (name.includes('maplistdata')): {
+                    fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2));
+                } break;
+                // case (name.includes('scoredata')): {
+                //     fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2));
+                // } break;
+                default: {
+                    fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2));
+                } break;
             }
         } else {
             fs.writeFileSync(`${truepath}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, JSON.stringify(data, null, 2));

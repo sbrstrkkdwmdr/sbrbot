@@ -104,3 +104,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [ADD] added medals count to osu
 [FIX] fix last online showing 53+ years ago 
 [FIX] fix spacing on most played count
+[ADD] added a display map button to rs and scoreparse
