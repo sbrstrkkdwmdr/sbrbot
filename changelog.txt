@@ -2,6 +2,8 @@
 [REM] = removal
 [FIX] = fix
 [QOL] = quality of life
+[MAJ] = major change
+[MIN] = minor change 
 
 0.0.0
 NON EXISTENT
@@ -41,7 +43,7 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [ADD] added command select menu to help
 [FIX] fixed server lb 
 [ADD] added server prefix command 
-[QOL] reworked database 
+[MIN] reworked database 
 [QOL] reworked cooldown to only affect api commands 
 [ADD] added admin commands 
 [QOL] edited debugging 
@@ -68,11 +70,11 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] updated buttons
 [ADD] firsts, osutop/top, nochokes/nc, sotarks, pinned, recent/rs/rl, scores/c, userbeatmaps/ubm have options to use different "detail" modes (show more or less information)
 [ADD] osu command has an added graph button
-[QOL] switched from commonjs to nodenext (boot time is faster)
+[MAJ] switched from commonjs to nodenext (boot time is faster)
 [ADD] added ppcalc command
 [FIX] fixed links and .osrs not working
-[REM] disabled simulate (rewriting argument handling)
-[REM] disabled localmapparse
+[REM] disabled simulate temporarily (rewriting argument handling)
+[REM] disabled localmapparse temporarily (making separate map parser)
 
 0.4.2
 [FIX] fixed map and simulate
@@ -83,11 +85,11 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [ADD] added buttons to help
 [FIX] fixed permission errors
 [QOL] pp and rank should be more accurate now
-[QOL] general code clean up 
+[MIN] general code clean up 
 
 0.4.3
 [QOL] fix ppcalc being slow (deleting wrong maps)
-[QOL] general code clean up
+[MIN] general code clean up
 [ADD] add recentactivity/rsact command.
 [FIX] fixed pages for expanded lists 
 
@@ -105,3 +107,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] fix last online showing 53+ years ago 
 [FIX] fix spacing on most played count
 [ADD] added a display map button to rs and scoreparse
+[QOL] switched rankings from sbr v11 to osu default
