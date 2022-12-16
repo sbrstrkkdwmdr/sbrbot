@@ -17,6 +17,36 @@ const template = {
     }
 }
 
+const buttonsObjs = {
+    label: {
+        page: {
+            first: '<:first:1025231767067689001>',
+            previous: '<:previous:1025231772943913040>',
+            search: '🔍',
+            next: '<:next:1025231771262001182> ',
+            last: '<:last:1025231769361989642>',
+        },
+        main: {
+            refresh: '<:refresh:1025233415383031918>',
+            detailed: '📝',
+            detailDefault: '',
+            detailMore: '<:details_more:1047767495693565973>',
+            detailLess: '<:details_less:1047767494011662416>',
+            random: '🎲',
+            graph: '📈',
+            map: '🗺'
+        },
+        page_old: {
+            first: '⬅',
+            previous: '◀',
+            search: '🔍',
+            next: '▶',
+            last: '➡',
+        },
+    }
+}
+
+
 const mods = [
     'NM',
     'NF',
