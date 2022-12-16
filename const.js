@@ -386,6 +386,7 @@ const osucommands = [
             }
         ],
         aliases: ['common'],
+        buttons: [buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last],
         options: [
             {
                 name: 'type',
@@ -460,6 +461,7 @@ const osucommands = [
             }
         ],
         aliases: ['firstplaceranks', 'first', 'fpr', 'fp', '#1s', '1s', '#1'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'user',
@@ -593,6 +595,7 @@ const osucommands = [
         slashusage: 'lb [mode]',
         examples: [],
         aliases: [],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last],
         options: [
             {
                 name: 'mode',
@@ -641,6 +644,7 @@ const osucommands = [
             }
         ],
         aliases: ['m'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'query',
@@ -760,6 +764,7 @@ const osucommands = [
             }
         ],
         aliases: ['leaderboard', 'mapleaderboard'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last,],
         options: [
             {
                 name: 'id',
@@ -858,6 +863,7 @@ const osucommands = [
             }
         ],
         aliases: ['nc'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'user',
@@ -988,6 +994,7 @@ const osucommands = [
                 descriptor: 'Shows SaberStrike\'s osu profile with extra details'
             }
         ],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.main.graph],
         options: [
             {
                 name: 'user',
@@ -1137,6 +1144,7 @@ const osucommands = [
             'sotaksfruits', 'fruitssotarks', 'fruitsotarks', 'sotarksfruit', 'sotarkscatch', 'catchsotarks', 'sotarksctb', 'ctbsotarks', 'sotarksf', 'sotarksc',
             'sotarksmania', 'maniasotarks', 'sotarksm', 'msotarks'
         ],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'user',
@@ -1268,6 +1276,7 @@ const osucommands = [
             }
         ],
         aliases: [],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'user',
@@ -1394,6 +1403,7 @@ const osucommands = [
             }
         ],
         aliases: ['mapcalc', 'mapperf', 'maperf', 'mappp'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'query',
@@ -1584,6 +1594,7 @@ const osucommands = [
                 descriptor: 'Shows the leaderboards for the 227th spotlight'
             }
         ],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last],
         aliases: [],
         options: [{
             name: 'country',
@@ -1678,6 +1689,7 @@ const osucommands = [
             }
         ],
         aliases: ['rs', 'r', 'rt', 'rf', 'rm', 'rctb', 'rl', 'rlt', 'rlf', 'rlm', 'rlctb'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.main.map],
         options: [
             {
                 name: 'user',
@@ -1752,6 +1764,38 @@ const osucommands = [
                 aliases: ['-d', '-compress', '-c'],
                 defaultValue: '1',
                 examples: ['detailed:true', '-detailed', '-compress'],
+                commandTypes: ['message', 'interaction', 'button']
+            },
+        ]
+    },
+    {
+        name: 'recentactivity',
+        description: 'Displays the user\'s most recent activity',
+        usage: 'recentactivity [user] [-page]',
+        slashusage: 'recentactivity [user] [page]',
+        examples: [],
+        aliases: ['recentact', 'rsact'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last],
+        options: [
+            {
+                name: 'user',
+                type: 'string/ integer/ user mention',
+                required: false,
+                description: 'The user to show the activity(s) of',
+                options: ['N/A'],
+                defaultValue: 'The user who ran the command',
+                examples: ['SaberStrike', 'user:SaberStrike'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'page',
+                type: 'integer',
+                required: false,
+                description: 'The page of activities to show',
+                options: ['N/A'],
+                defaultValue: '1',
+                aliases: ['p'],
+                examples: ['-p 2', 'page:2'],
                 commandTypes: ['message', 'interaction', 'button']
             },
         ]
@@ -1869,6 +1913,7 @@ const osucommands = [
             },
         ],
         aliases: ['score', 'sp'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.main.map],
         options: [
             {
                 name: 'id',
@@ -1916,6 +1961,7 @@ const osucommands = [
             }
         ],
         aliases: ['c'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [
             {
                 name: 'user',
@@ -2007,6 +2053,7 @@ const osucommands = [
             }
         ],
         aliases: ['ss'],
+        buttons: [buttonsObjs.label.main.detailed],
         options: [
             {
                 name: 'user',
@@ -2224,6 +2271,16 @@ const osucommands = [
         ]
     },
     {
+        name: 'tracklist',
+        description: 'Displays a list of the currently tracked users in the server',
+        usage: 'tracklist',
+        slashusage: 'tracklist',
+        examples: [],
+        aliases: ['tl'],
+        buttons: [buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last,],
+        options: []
+    },
+    {
         name: 'trackremove',
         description: 'Removes a user from the tracklist',
         usage: 'trackremove [user]',
@@ -2268,6 +2325,7 @@ const osucommands = [
             }
         ],
         aliases: ['ub', 'userb', 'ubm', 'um', 'usermaps'],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
         options: [{
             name: 'user',
             type: 'string/ integer/ user mention',
