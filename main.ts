@@ -192,6 +192,11 @@ Current Client ID:        ${client.user.id}
         console.log(`Creating ${path}\\id.txt`);
         fs.writeFileSync(`${path}\\id.txt`, '0', 'utf-8');
     }
+    if (!fs.existsSync(`${path}\\totalcommands.txt`)) {
+        console.log(`Creating ${path}\\totalcommands.txt`);
+        fs.writeFileSync(`${path}\\totalcommands.txt`, '0', 'utf-8');
+    }
+
     if (!fs.existsSync(`${path}\\debug`)) {
         console.log(`Creating ${path}\\debug folder`);
         fs.mkdirSync(`${path}\\debug`);

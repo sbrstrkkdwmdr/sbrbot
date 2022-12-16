@@ -1,12 +1,12 @@
 import Discord from "discord.js";
 import fs from 'fs';
-import * as checks from './src/checks.js';
-
 import * as admincmds from './commands/cmdAdmin.js';
 import * as checkcmds from './commands/cmdChecks.js';
 import * as commands from './commands/cmdGeneral.js';
 import * as misccmds from './commands/cmdMisc.js';
 import * as osucmds from './commands/cmdosu.js';
+import { path } from './path.js';
+import * as checks from './src/checks.js';
 import * as mainconst from './src/consts/main.js';
 import * as embedStuff from './src/embed.js';
 import * as extypes from './src/types/extratypes.js';
@@ -241,6 +241,6 @@ export default (input: {
                     .catch(error => { });
                 break;
         }
-        fs.appendFileSync('logs/totalcommands.txt', 'x');
+        fs.appendFileSync(`${path}/logs/totalcommands.txt`, 'x');
     });
 };

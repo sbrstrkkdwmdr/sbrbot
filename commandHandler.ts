@@ -1,5 +1,6 @@
 import Discord from 'discord.js';
 import fs from 'fs';
+import { path } from './path.js';
 import * as checks from './src/checks.js';
 import * as cd from './src/consts/cooldown.js';
 import * as defaults from './src/consts/defaults.js';
@@ -171,7 +172,7 @@ export default (input: {
         if (allowed == true) {
             execCommand_switch(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply);
         }
-        fs.appendFileSync('logs/totalcommands.txt', 'x');
+        fs.appendFileSync(`${path}/logs/totalcommands.txt`, 'x');
         return;
     }
 

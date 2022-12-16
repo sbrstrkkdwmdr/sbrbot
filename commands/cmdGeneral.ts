@@ -1975,7 +1975,7 @@ export async function stats(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const starttime = new Date((fs.readFileSync(`${path}debug/starttime.txt`)).toString());
+    const starttime = new Date((fs.readFileSync(`${path}\\debug\\starttime.txt`)).toString());
     const trueping = input.obj.createdAt.getTime() - new Date().getTime() + 'ms';
 
     const uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
