@@ -108,3 +108,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] fix spacing on most played count
 [ADD] added a display map button to rs and scoreparse
 [QOL] switched rankings from sbr v11 to osu default
+[FIX] fix stats crashing due to invalid paths
