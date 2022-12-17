@@ -112,4 +112,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] fix stats crashing due to invalid paths
 
 0.4.6
-[QOL] update help info and docs
+[QOL] update help info and docs 
