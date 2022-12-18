@@ -8,12 +8,12 @@ const truepath = `${path}`;
 // truepath.path
 
 export function generateId() {
-    const lid = fs.readFileSync(`id.txt`, 'utf8');
-    if (+lid == null) {
-        fs.writeFileSync(`id.txt`, `1`);
+    const lid = fs.readFileSync(`${path}/id.txt`, 'utf8');
+    if (+lid == null || isNaN(+lid)) {
+        fs.writeFileSync(`${path}/id.txt`, `1`);
         return 0;
     }
-    fs.writeFileSync(`id.txt`, `${+lid + 1}`);
+    fs.writeFileSync(`${path}/id.txt`, `${+lid + 1}`, 'utf-8');
     return +lid + 1;
 
 }

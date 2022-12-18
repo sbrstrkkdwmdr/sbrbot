@@ -2,12 +2,14 @@ import Discord from 'discord.js';
 import fs from 'fs';
 import fetch from 'node-fetch';
 import Sequelize from 'sequelize';
+import { path } from './path.js';
 import * as osufunc from './src/osufunc.js';
 import * as osumodcalc from './src/osumodcalc.js';
 import * as track from './src/trackfunc.js';
 import * as extypes from './src/types/extratypes.js';
 import * as osuapitypes from './src/types/osuApiTypes.js';
 import * as osuApiTypes from './src/types/osuApiTypes.js';
+
 export default (input: {
     userdata,
     client,
@@ -227,6 +229,7 @@ export default (input: {
     }
 
     function clearUnused() {
+        return;
         (async () => {
             await input.guildSettings.destroy({
                 where: { guildid: null, guildname: null }
@@ -252,15 +255,15 @@ export default (input: {
      * removes map files that are older than 1 hour
      */
     function clearMapFiles() {
-        const files = fs.readdirSync('./files/maps');
+        const files = fs.readdirSync(`${path}/files/maps`);
         for (const file of files) {
-            fs.stat('./files/maps/' + file, (err, stat) => {
+            fs.stat(`${path}/files/maps` + file, (err, stat) => {
                 if (err) {
                     return;
                 } else {
                     if (file.includes('undefined')) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
-                            fs.unlinkSync('./files/maps/' + file);
+                            fs.unlinkSync(`${path}/files/maps/` + file);
                             osufunc.logCall(file, 'deleted file');
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
@@ -275,14 +278,14 @@ export default (input: {
      * clears files in files/replays and files/localmaps
      */
     function clearParseFiles() {
-        const files = fs.readdirSync('./files/maps');
+        const files = fs.readdirSync(`${path}/files/maps`);
         for (const file of files) {
-            fs.stat('./files/maps/' + file, (err, stat) => {
+            fs.stat(`${path}/files/maps/` + file, (err, stat) => {
                 if (err) {
                     return;
                 } else {
                     if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
-                        fs.unlinkSync('./files/maps/' + file);
+                        fs.unlinkSync(`${path}/files/maps/` + file);
                         osufunc.logCall(file, 'deleted file');
                         // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                     }
@@ -298,9 +301,9 @@ export default (input: {
      * maps and users are stored for an hour
      */
     function clearCommandCache() {
-        const files = fs.readdirSync('./cache/commandData');
+        const files = fs.readdirSync(`${path}/cache/commandData`);
         for (const file of files) {
-            fs.stat('./cache/commandData/' + file, (err, stat) => {
+            fs.stat(`${path}/cache/commandData/` + file, (err, stat) => {
                 if (err) {
                     return;
                 } else {
@@ -309,13 +312,13 @@ export default (input: {
                     }
                     else if (cacheById.some(x => file.startsWith(x))) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24)) {
-                            fs.unlinkSync('./cache/commandData/' + file);
+                            fs.unlinkSync(`${path}/cache/commandData/` + file);
                             osufunc.logCall(file, 'deleted file');
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     } else {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 3)) {
-                            fs.unlinkSync('./cache/commandData/' + file);
+                            fs.unlinkSync(`${path}/cache/commandData/` + file);
                             osufunc.logCall(file, 'deleted file');
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }

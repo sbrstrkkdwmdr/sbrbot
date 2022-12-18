@@ -366,7 +366,7 @@ export async function straincalc(mapid: number, mods: string, calctype: number, 
  */
 export async function straincalclocal(path: string | null, mods: string, calctype: number, mode: string) {
     if (path == null) {
-        path = './files/tempdiff.osu';
+        path = `${path}/files/tempdiff.osu`;
     }
     let strains;
     switch (calctype) {
@@ -545,7 +545,7 @@ export async function graph(x: number[] | string[], y: number[], label: string, 
         });
     chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250);
 
-    const curt = `./cache/graphs/${(new Date).getTime()}.jpg`;
+    const curt = `${path}/cache/graphs/${(new Date).getTime()}.jpg`;
 
     await chart.toFile(curt);
 
@@ -788,7 +788,7 @@ export async function apiget(input: apiInput) {
             apiData: datafirst,
             error
         };
-        fs.writeFileSync(`./cache/err${Date.now()}.json`, JSON.stringify(data, null, 2));
+        fs.writeFileSync(`${path}/cache/err${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
     const after = perf.performance.now();
     try {
@@ -815,7 +815,7 @@ export async function apiget(input: apiInput) {
             apiData: datafirst,
             error
         };
-        fs.writeFileSync(`./cache/err${Date.now()}.json`, JSON.stringify(data, null, 2));
+        fs.writeFileSync(`${path}/cache/err${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
     logCall(url);
 
