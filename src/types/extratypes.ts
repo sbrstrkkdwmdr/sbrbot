@@ -19,6 +19,7 @@ export type config = {
     LogApiCallsToFile: boolean,
     enableTracking: boolean,
     graphChannelId: string,
+    storeCommandLogs:boolean,
 };
 
 export type guildSettings = {
