@@ -10,6 +10,10 @@ import * as osumodcalc from './osumodcalc.js';
 import * as extypes from './types/extratypes.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 
+/**
+ * converts a .osu file to a JSON object
+ * @param path path to the .osu file
+ */
 async function mapToObject(path: string) {
     let mapString = fs.readFileSync(path, 'utf8');
     /**
@@ -83,120 +87,144 @@ async function mapToObject(path: string) {
      */
 
     let mapObject: mapObject = {
-        general: {
-            audioFilename: '',
-            audioLeadIn: 0,
-            previewTime: 0,
-            countdown: 0,
-            sampleSet: '',
-            stackLeniency: 0,
-            mode: 0,
-            letterboxInBreaks: 0,
-            specialStyle: 0,
-            widescreenStoryboard: 0
+        General: {
+            AudioFilename: mapString.split('AudioFilename: ')[1].split('\n')[0],
+            AudioLeadIn: +mapString.split('AudioLeadIn: ')[1].split('\n')[0],
+            PreviewTime: +mapString.split('PreviewTime: ')[1].split('\n')[0],
+            Countdown: +mapString.split('Countdown: ')[1].split('\n')[0],
+            SampleSet: mapString.split('SampleSet: ')[1].split('\n')[0],
+            StackLeniency: +mapString.split('StackLeniency: ')[1].split('\n')[0],
+            Mode: +mapString.split('Mode: ')[1].split('\n')[0],
+            LetterboxInBreaks: +mapString.split('LetterboxInBreaks: ')[1].split('\n')[0],
+            SpecialStyle: +mapString.split('SpecialStyle: ')[1].split('\n')[0],
+            WidescreenStoryboard: +mapString.split('WidescreenStoryboard: ')[1].split('\n')[0]
         },
-        editor: {
-            distanceSpacing: 0,
-            beatDivisor: 0,
-            gridSize: 0,
-            timelineZoom: 0
+        Editor: {
+            DistanceSpacing: +mapString.split('DistanceSpacing: ')[1].split('\n')[0],
+            BeatDivisor: +mapString.split('BeatDivisor: ')[1].split('\n')[0],
+            GridSize: +mapString.split('GridSize: ')[1].split('\n')[0],
+            TimelineZoom: +mapString.split('TimelineZoom: ')[1].split('\n')[0],
         },
-        metadata: {
-            title: '',
-            titleUnicode: '',
-            artist: '',
-            artistUnicode: '',
-            creator: '',
-            version: '',
-            source: '',
-            tags: '',
-            beatmapID: 0,
-            beatmapSetID: 0
+        Metadata: {
+            Title: mapString.split('Title: ')[1].split('\n')[0],
+            TitleUnicode: mapString.split('TitleUnicode: ')[1].split('\n')[0],
+            Artist: mapString.split('Artist: ')[1].split('\n')[0],
+            ArtistUnicode: mapString.split('ArtistUnicode: ')[1].split('\n')[0],
+            Creator: mapString.split('Creator: ')[1].split('\n')[0],
+            Version: mapString.split('Version: ')[1].split('\n')[0],
+            Source: mapString.split('Source: ')[1].split('\n')[0],
+            Tags: mapString.split('Tags: ')[1].split('\n')[0],
+            BeatmapID: +mapString.split('BeatmapID: ')[1].split('\n')[0],
+            BeatmapSetID: +mapString.split('BeatmapSetID: ')[1].split('\n')[0],
         },
-        difficulty: {
-            hpDrainRate: 0,
-            circleSize: 0,
-            overallDifficulty: 0,
-            approachRate: 0,
-            sliderMultiplier: 0,
-            sliderTickRate: 0
+        Difficulty: {
+            HPDrainRate: +mapString.split('HPDrainRate: ')[1].split('\n')[0],
+            CircleSize: +mapString.split('CircleSize: ')[1].split('\n')[0],
+            OverallDifficulty: +mapString.split('OverallDifficulty: ')[1].split('\n')[0],
+            ApproachRate: +mapString.split('ApproachRate: ')[1].split('\n')[0],
+            SliderMultiplier: +mapString.split('SliderMultiplier: ')[1].split('\n')[0],
+            SliderTickRate: +mapString.split('SliderTickRate: ')[1].split('\n')[0],
         },
-        events: {
-            backgroundAndVideoEvents: [],
-            breakPeriods: [],
-            storyboardLayer0: [],
-            storyboardLayer1: [],
-            storyboardLayer2: [],
-            storyboardLayer3: [],
-            storyboardLayer4: [],
-            storyboardSoundSamples: []
+        Events: {
+            BackgroundAndVideoEvents: [],
+            BreakPeriods: [],
+            StoryboardLayer0: [],
+            StoryboardLayer1: [],
+            StoryboardLayer2: [],
+            StoryboardLayer3: [],
+            StoryboardLayer4: [],
+            StoryboardSoundSamples: []
         },
-        timingPoints: {
-
-        },
-        hitObjects: {
-
-        }
+        TimingPoints: mapToObject_TimingPoints(mapString),
+        HitObjects: mapToObject_HitObjects(mapString)
 
     };
+}
 
+function mapToObject_TimingPoints(str: string) {
+    const arr: timingPoints[] = [];
+    const section = str.split('[TimingPoints]\n')[1].split('[HitObjects]')[0];
+    //for each line, get the timing point
+    for (let i = 0; i < section.split('\n').length; i++) {
+        const cur = section.split('\n')[i];
+        if (cur.trim().length == 0) break;
+        const curAsArr = cur.split(',');
+        arr.push({
+            Offset: +curAsArr[0],
+            MsPerBeat: +curAsArr[1],
+            Meter: +curAsArr[2],
+            SampleType: +curAsArr[3],
+            SampleSet: +curAsArr[4],
+            Volume: +curAsArr[5],
+            Inherited: +curAsArr[6],
+            Kiai: +curAsArr[7],
+        });
+    }
+    return arr;
+}
 
+function mapToObject_HitObjects(str: string) {
+    const arr: hitObjects[] = [];
+    const section = str.split('[HitObjects]\n')[1];
+    //for each line, get the hitobject
+    for (let i = 0; i < section.split('\n').length; i++) {
+        const cur = section.split('\n')[i];
+        if (cur.trim().length == 0) break;
+    }
+    return arr;
 }
 
 export type mapObject = {
-    general: {
-        audioFilename: string,
-        audioLeadIn: number,
-        previewTime: number,
-        countdown: number,
-        sampleSet: string,
-        stackLeniency: number,
-        mode: number,
-        letterboxInBreaks: number,
-        specialStyle: number,
-        widescreenStoryboard: number;
+    General: {
+        AudioFilename: string,
+        AudioLeadIn: number,
+        PreviewTime: number,
+        Countdown: number,
+        SampleSet: string,
+        StackLeniency: number,
+        Mode: number,
+        LetterboxInBreaks: number,
+        SpecialStyle: number,
+        WidescreenStoryboard: number;
     },
-    editor: {
-        distanceSpacing: number,
-        beatDivisor: number,
-        gridSize: number,
-        timelineZoom: number;
+    Editor: {
+        DistanceSpacing: number,
+        BeatDivisor: number,
+        GridSize: number,
+        TimelineZoom: number;
     },
-    metadata: {
-        title: string,
-        titleUnicode: string,
-        artist: string,
-        artistUnicode: string,
-        creator: string,
-        version: string,
-        source: string,
-        tags: string,
-        beatmapID: number,
-        beatmapSetID: number;
+    Metadata: {
+        Title: string,
+        TitleUnicode: string,
+        Artist: string,
+        ArtistUnicode: string,
+        Creator: string,
+        Version: string,
+        Source: string,
+        Tags: string,
+        BeatmapID: number,
+        BeatmapSetID: number;
     },
-    difficulty: {
-        hpDrainRate: number,
-        circleSize: number,
-        overallDifficulty: number,
-        approachRate: number,
-        sliderMultiplier: number,
-        sliderTickRate: number;
+    Difficulty: {
+        HPDrainRate: number,
+        CircleSize: number,
+        OverallDifficulty: number,
+        ApproachRate: number,
+        SliderMultiplier: number,
+        SliderTickRate: number;
     },
-    events: {
-        backgroundAndVideoEvents: string[],
-        breakPeriods: string[];
-        storyboardLayer0: string[],
-        storyboardLayer1: string[],
-        storyboardLayer2: string[],
-        storyboardLayer3: string[],
-        storyboardLayer4: string[],
-        storyboardSoundSamples: string[];
+    Events: {
+        BackgroundAndVideoEvents: string[],
+        BreakPeriods: string[];
+        StoryboardLayer0: string[],
+        StoryboardLayer1: string[],
+        StoryboardLayer2: string[],
+        StoryboardLayer3: string[],
+        StoryboardLayer4: string[],
+        StoryboardSoundSamples: string[];
     },
-    timingPoints: {
-
-    },
-    hitObjects: {
-    },
+    TimingPoints: timingPoints[],
+    HitObjects: hitObjects[],
 };
 
 /**
@@ -224,14 +252,14 @@ export type storyboardActions = string | number;
  * 
 */
 export type timingPoints = {
-    offset: number,
-    msPerBeat: number,
-    meter: number,
-    sampleType: number,
-    sampleSet: number,
-    volume: number,
-    inherited: number,
-    kiai: number;
+    Offset: number,
+    MsPerBeat: number,
+    Meter: number,
+    SampleType: number,
+    SampleSet: number,
+    Volume: number,
+    Inherited: number,
+    Kiai: number;
 };
 
 export type hitObjects = circle | slider | spinner;
