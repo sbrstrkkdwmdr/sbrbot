@@ -137,6 +137,11 @@ export default (input: {
 
         if (button == 'Map') {
             overrides.id = buttonsplit[5];
+            if(buttonsplit[5].includes('+')){
+                const temp = buttonsplit[5].split('+')
+                overrides.id = temp[0]
+                overrides.filterMods = temp[1]
+            }
             overrides.commandAs = 'interaction';
             overrides.commanduser = interaction.member.user as Discord.User;
             await interaction.reply({

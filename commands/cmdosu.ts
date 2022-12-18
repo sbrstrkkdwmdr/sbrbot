@@ -4782,7 +4782,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 
         buttons.addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-Map-scoreparse-${commanduser.id}-${input.absoluteID}-${curscore.beatmap.id}`)
+                .setCustomId(`${mainconst.version}-Map-scoreparse-${commanduser.id}-${input.absoluteID}-${curscore.beatmap.id}${curscore.mods ? '+' + curscore.mods.join() : ''}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.map)
         );
@@ -5828,7 +5828,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-Map-scoreparse-${commanduser.id}-${input.absoluteID}-${scoredata.beatmap.id}`)
+                .setCustomId(`${mainconst.version}-Map-scoreparse-${commanduser.id}-${input.absoluteID}-${scoredata.beatmap.id}${scoredata.mods ? '+' + scoredata.mods.join() : ''}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.map)
         );
@@ -8347,6 +8347,9 @@ export async function map(input: extypes.commandInput) {
         }
         if (input.overrides?.commandAs != null) {
             input.commandType = input.overrides.commandAs;
+        }
+        if (input.overrides?.filterMods != null) {
+            mapmods = input.overrides.filterMods;
         }
     }
 
