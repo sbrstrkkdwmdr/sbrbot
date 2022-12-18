@@ -192,9 +192,9 @@ Current Client ID:        ${client.user.id}
         console.log(`Creating ${path}\\id.txt`);
         fs.writeFileSync(`${path}\\id.txt`, '0', 'utf-8');
     }
-    if (!fs.existsSync(`${path}\\logs\\totalcommands.txt`)) {
-        console.log(`Creating ${path}\\logs\\totalcommands.txt`);
-        fs.writeFileSync(`${path}\\logs\\totalcommands.txt`, '0', 'utf-8');
+    if(!fs.existsSync(`${path}\\trackingFiles`)){
+        console.log(`Creating ${path}\\trackingFiles`);
+        fs.writeFileSync(`${path}\\trackingFiles`, '0', 'utf-8');
     }
 
     if (!fs.existsSync(`${path}\\debug`)) {
@@ -204,6 +204,10 @@ Current Client ID:        ${client.user.id}
     if (!fs.existsSync(`${path}\\logs`)) {
         console.log(`Creating ${path}\\logs folder`);
         fs.mkdirSync(`${path}\\logs`);
+    }
+    if (!fs.existsSync(`${path}\\logs\\totalcommands.txt`)) {
+        console.log(`Creating ${path}\\logs\\totalcommands.txt`);
+        fs.writeFileSync(`${path}\\logs\\totalcommands.txt`, '0', 'utf-8');
     }
     if (!fs.existsSync(`${path}\\logs\\gen`)) {
         console.log(`Creating ${path}\\logs\\gen folder`);
@@ -234,8 +238,8 @@ Current Client ID:        ${client.user.id}
         fs.mkdirSync(`${path}\\cache\\debug`);
     }
     if (!fs.existsSync(`${path}\\cache\\debug\\command`)) {
-        console.log(`Creating ${path}\\cache\\debug/command folder`);
-        fs.mkdirSync(`${path}\\cache\\debug/command`);
+        console.log(`Creating ${path}\\cache\\debug\\command folder`);
+        fs.mkdirSync(`${path}\\cache\\debug\\command`);
     }
     if (!fs.existsSync(`${path}\\cache\\previous`)) {
         console.log(`Creating previous IDs folder (${path}\\previous)`);

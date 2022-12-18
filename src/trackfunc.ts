@@ -2,12 +2,14 @@ import Discord from 'discord.js';
 import fs from 'fs';
 import rosu from 'rosu-pp';
 import Sequelize from 'sequelize';
+import { path } from '../path.js';
 import * as def from './consts/defaults.js';
 import * as embedstuff from './embed.js';
 import * as log from './log.js';
 import * as osufunc from './osufunc.js';
 import * as func from './tools.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
+
 export async function editTrackUser(fr: {
     database: Sequelize.ModelStatic<any>,
     userid: string | number,
@@ -77,17 +79,17 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
     // osufunc.updateUserStats(thisUser, fr.mode, userdata)
 
     if (curdata?.[0]?.user_id && fr.inital == true) {
-        fs.writeFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata, null, 2));
+        fs.writeFileSync(`${path}\\trackingFiles\\${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata, null, 2));
         return;
     }
     if (curdata?.[0]?.user_id) {
-        if (fs.existsSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`)) {
+        if (fs.existsSync(`${path}\\trackingFiles\\${curdata[0].user_id}_${fr.mode}.json`)) {
             let previous: osuApiTypes.Score[] & osuApiTypes.Error;
             try {
-                previous = JSON.parse(fs.readFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, 'utf-8'));
+                previous = JSON.parse(fs.readFileSync(`${path}\\trackingFiles\\${curdata[0].user_id}_${fr.mode}.json`, 'utf-8'));
             }
             catch {
-                fs.writeFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata, null, 2));
+                fs.writeFileSync(`${path}\\trackingFiles\\${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata, null, 2));
                 return;
             }
 
@@ -105,7 +107,7 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
                 }
             }
         }
-        fs.writeFileSync(`trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata.slice().sort((a, b) =>
+        fs.writeFileSync(`${path}\\trackingFiles\\${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata.slice().sort((a, b) =>
             parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
             -
             parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
