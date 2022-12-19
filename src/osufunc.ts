@@ -1822,8 +1822,9 @@ export async function calcUr(
     const replay: extypes.replay = await osureplayparser(osr);
     const map = await mapParser.mapToObject(osu);
 
-    //get allowed pixel offset
+    //get offset
     const pixeloffset = osumodcalc.csToRadius(map.Difficulty.CircleSize);
+    const hitOffset = osumodcalc.ODtoms(map.Difficulty.OverallDifficulty).hitwindow_50;
 
     //get every hitobject
     const hitObjectTimings: {
@@ -1889,16 +1890,80 @@ export async function calcUr(
         }
     }
 
+    //gets avg. from the absolute perfect hit;
+    const unstableRateF: number[] = [];
+
     for (let i = 0; i < taps.length; i++) {
+        const curHit = taps[i];
+        const curHitObj = hitObjectTimings[0];
         let doable = true;
         let missaim = false;
         let mistap = false;
         let objectGONE = false;
 
-        
+        if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
+            doable = true;
+            objectGONE = true;
+        } else {
+            missaim = true;
+            doable = false;
+        }
+
+        if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
+            doable = true;
+            objectGONE = true;
+        } else {
+            mistap = true;
+            doable = false;
+        }
+
+        if ((curHit.time - curHitObj.time) > hitOffset) {
+            objectGONE = true;
+        }
 
         if (objectGONE) {
             hitObjectTimings.shift();
+        }
+        if (doable) {
+            unstableRateF.push(curHit.time - curHitObj.time);
+        }
+    }
+    const avg = unstableRateF.reduce((prev, cur) => prev + cur, 0);
+
+    //now does the same as before with avg factored in
+    for (let i = 0; i < taps.length; i++) {
+        const curHit = taps[i];
+        const curHitObj = hitObjectTimings[0];
+        let doable = true;
+        let missaim = false;
+        let mistap = false;
+        let objectGONE = false;
+
+        if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
+            doable = true;
+            objectGONE = true;
+        } else {
+            missaim = true;
+            doable = false;
+        }
+
+        if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
+            doable = true;
+            objectGONE = true;
+        } else {
+            mistap = true;
+            doable = false;
+        }
+
+        if ((curHit.time - curHitObj.time) > hitOffset) {
+            objectGONE = true;
+        }
+
+        if (objectGONE) {
+            hitObjectTimings.shift();
+        }
+        if (doable) {
+            unstableRate.push((curHit.time - curHitObj.time) - avg);
         }
     }
 
