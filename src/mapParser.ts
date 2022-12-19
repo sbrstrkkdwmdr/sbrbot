@@ -6,6 +6,7 @@ import rosu from 'rosu-pp';
 import Sequelize from 'sequelize';
 import config from '../config/config.json';
 import * as cmdchecks from './checks.js';
+import * as osufunc from './osufunc.js';
 import * as osumodcalc from './osumodcalc.js';
 import * as extypes from './types/extratypes.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
@@ -14,7 +15,7 @@ import * as osuApiTypes from './types/osuApiTypes.js';
  * converts a .osu file to a JSON object
  * @param path path to the .osu file
  */
-async function mapToObject(path: string) {
+export async function mapToObject(path: string) {
     let mapString = fs.readFileSync(path, 'utf8');
     /**
      * osu file format v{num}
@@ -136,9 +137,12 @@ async function mapToObject(path: string) {
             StoryboardSoundSamples: []
         },
         TimingPoints: mapToObject_TimingPoints(mapString),
-        HitObjects: mapToObject_HitObjects(mapString)
+        HitObjects: mapToObject_HitObjects(mapString,
+            osufunc.modeValidator(+mapString.split('Mode: ')[1].split('\n')[0])
+        )
 
     };
+    return mapObject;
 }
 
 function mapToObject_TimingPoints(str: string) {
@@ -163,13 +167,23 @@ function mapToObject_TimingPoints(str: string) {
     return arr;
 }
 
-function mapToObject_HitObjects(str: string) {
+function mapToObject_HitObjects(str: string, mode: osuApiTypes.GameMode) {
     const arr: hitObjects[] = [];
     const section = str.split('[HitObjects]\n')[1];
     //for each line, get the hitobject
     for (let i = 0; i < section.split('\n').length; i++) {
         const cur = section.split('\n')[i];
         if (cur.trim().length == 0) break;
+        switch (mode) {
+            case 'osu': default:
+                break;
+            case 'taiko':
+                break;
+            case 'fruits':
+                break;
+            case 'mania':
+                break;
+        }
     }
     return arr;
 }
@@ -264,22 +278,54 @@ export type timingPoints = {
 
 export type hitObjects = circle | slider | spinner;
 
+export type baseHitObject = {
+    position: {
+        x: number,
+        y: number;
+    },
+    time: number,
+};
+
 /**
  * 112,120,154,5,0,0:0:0:0:
  * x, y, time, type, hitSound, extras
  */
-export type circle = {
-
+export type circle = baseHitObject & {
+    type: number,
+    hitsound: number,
+    //
+    //
+    //
+    //
 };
 
 /**
  * 390,275,5270,6,0,P|395:333|403:346,3,46.4100002832642,10|8|8|8,0:2|0:3|0:3|0:3,0:0:0:0:
  * x, y, time, type, hitsound, curve, repeat, pixelLength, edgeHitsounds, edgeAdditions
  */
-export type slider = {};
+export type slider = baseHitObject & {
+    curveType: string,
+    curvePoints: {
+        x: number,
+        y: number,
+    }[];
+
+    //
+    //
+    //
+    //
+};
 
 /**
  * 256,192,29536,12,14,30506,0:0:0:0:
  * x, y, time, 
  */
-export type spinner = {};
+export type spinner = baseHitObject & {
+    //
+    //
+    timeEnding: number;
+    //
+    //
+    //
+    //
+};

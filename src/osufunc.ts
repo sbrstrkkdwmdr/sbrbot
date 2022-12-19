@@ -11,8 +11,11 @@ import * as osumodcalc from './osumodcalc.js';
 import * as extypes from './types/extratypes.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 //const config = JSON.parse(fs.readFileSync('../config/config.json', 'utf-8'));
+import * as osureplayparser from 'osureplayparser';
 import config from '../config/config.json' assert { type: 'json' };
 import { path, precomppath } from '../path.js';
+import * as mapParser from './mapParser.js';
+
 
 /* module.exports = {
     modemods, modemappers
@@ -1804,3 +1807,100 @@ export function randomMap(type?: 'Ranked' | 'Loved' | 'Approved' | 'Qualified' |
         err: errormsg
     };
 }
+
+/**
+ * 
+ * @param osr path to replay file
+ * @param osu path to .osu file (map)
+ */
+export async function calcUr(
+    osr: string,
+    osu: string
+) {
+    const unstableRate: number[] = [];
+
+    const replay: extypes.replay = await osureplayparser(osr);
+    const map = await mapParser.mapToObject(osu);
+
+    //get allowed pixel offset
+    const pixeloffset = osumodcalc.csToRadius(map.Difficulty.CircleSize);
+
+    //get every hitobject
+    const hitObjectTimings: {
+        x: number,
+        y: number,
+        time: number,
+    }[] = [];
+    for (let i = 0; i < map.HitObjects.length; i++) {
+        const curObj = map.HitObjects[i];
+        hitObjectTimings.push({
+            x: curObj.position.x,
+            y: curObj.position.y,
+            time: curObj.time
+
+        });
+    }
+
+    //get every tap
+    const taps: {
+        x: number,
+        y: number,
+        time: number,
+    }[] = [];
+    for (let i = 0; i < replay.replay_data.length; i++) {
+        const curHit = replay.replay_data[i];
+        const lastHit = replay.replay_data[i - 1];
+        let tapTime: number;
+
+        let tapCounts = false;
+
+        if (!curHit) break;
+        if (!lastHit) {
+            if (curHit.keysPressed.k1 ||
+                curHit.keysPressed.k2 ||
+                curHit.keysPressed.m1 ||
+                curHit.keysPressed.m2
+            ) {
+                tapCounts = true;
+                const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
+                tapTime = tempArr.reduce((a, b) => a + b, 0);
+            }
+        } else {
+            //check if a key was pressed that wasn't pressed before
+            if ((curHit.keysPressed.k1 && lastHit.keysPressed.k1 == false) ||
+                (curHit.keysPressed.k2 && lastHit.keysPressed.k2 == false) ||
+                (curHit.keysPressed.m1 && lastHit.keysPressed.m1 == false) ||
+                (curHit.keysPressed.m2 && lastHit.keysPressed.m2 == false)
+            ) {
+                tapCounts = true;
+                const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
+                tapTime = tempArr.reduce((a, b) => a + b, 0);
+            }
+        }
+
+        if (tapCounts) {
+            taps.push(
+                {
+                    x: curHit.x,
+                    y: curHit.y,
+                    time: tapTime
+                }
+            );
+        }
+    }
+
+    for (let i = 0; i < taps.length; i++) {
+        let doable = true;
+        let missaim = false;
+        let mistap = false;
+        let objectGONE = false;
+
+        
+
+        if (objectGONE) {
+            hitObjectTimings.shift();
+        }
+    }
+
+    return (unstableRate.reduce((b, a) => b + a, 0) / unstableRate.length) * 10;
+}   

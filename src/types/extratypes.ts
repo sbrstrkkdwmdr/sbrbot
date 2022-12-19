@@ -264,3 +264,37 @@ export type osuCmdStyle =
     'PC' | // profile compressed
     'G'; // graph
 
+    export type replay = {
+        gameMode:number,
+        gameVersion:number,
+        beatmapMD5:string,
+        playerName:string,
+        replayMD5:string,
+        number_300s:number,
+        number_100s:number,
+        number_50s:number,
+        gekis:number,
+        katus:number,
+        misses:number,
+        score:number,
+        max_combo:number,
+        perfect_combo:number,
+        mods:number,
+        life_bar:string,
+        timestamp:string,
+        replay_length:number,
+        replay_data: {
+            timeSinceLastAction:number,
+            x:number,
+            y:number,
+            keyPressedBitWise:number,
+            keysPressed:{
+                k1:boolean,
+                k2:boolean,
+                m1:boolean,
+                m2:boolean
+            }
+        }[],
+        raw_replay_data:string
+    }
+
