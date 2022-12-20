@@ -13133,7 +13133,7 @@ async function parseArgs_scoreList(input: extypes.commandInput) {
 
     let scoredetailed: number = 1;
 
-    let sort: embedStuff.scoreSort = 'recent';
+    let sort: embedStuff.scoreSort = null;
     let reverse = false;
     let mode = 'osu';
     let filteredMapper = null;
