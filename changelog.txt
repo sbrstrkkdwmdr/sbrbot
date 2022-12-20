@@ -116,3 +116,5 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] map button on rs and scoreparse now uses mod from the score 
 [FIX] fix paths ('./' => `${path}/`)
 [FIX] add missing config properties
+[ADD] unstable rate calculator 
+[ADD] map parser 

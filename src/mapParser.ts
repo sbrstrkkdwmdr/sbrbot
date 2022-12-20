@@ -176,6 +176,13 @@ function mapToObject_HitObjects(str: string, mode: osuApiTypes.GameMode) {
         if (cur.trim().length == 0) break;
         switch (mode) {
             case 'osu': default:
+                arr.push({
+                    position: {
+                        x: +cur.split(',')[0],
+                        y: +cur.split(',')[1]
+                    },
+                    time: +cur.split(',')[2]
+                })
                 break;
             case 'taiko':
                 break;
@@ -291,8 +298,8 @@ export type baseHitObject = {
  * x, y, time, type, hitSound, extras
  */
 export type circle = baseHitObject & {
-    type: number,
-    hitsound: number,
+    type?: number,
+    hitsound?: number,
     //
     //
     //
