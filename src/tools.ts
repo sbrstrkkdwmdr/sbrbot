@@ -1,11 +1,9 @@
 import fs = require('fs');
-// import truepath = require('../path').path
-import { path } from '../path.js';
+import https from 'https';
+import { filespath, path } from '../path.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
 import * as calc from './calc.js';
 import * as osufunc from './osufunc.js';
-const truepath = `${path}`;
-// truepath.path
 
 export function generateId() {
     const lid = fs.readFileSync(`${path}/id.txt`, 'utf8');
@@ -141,7 +139,7 @@ export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuA
                             status = 'Graveyard';
                             break;
                     }
-                    fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
+                    fs.writeFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
                 } break;
                 case (name.includes('bmsdata')): {
                     const datamap: osuApiTypes.Beatmapset = (data as osufunc.apiReturn).apiData as any;
@@ -163,23 +161,23 @@ export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuA
                             status = 'Graveyard';
                             break;
                     }
-                    fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
+                    fs.writeFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
                 } break;
-                case (name.includes('osudata')):case (name.includes('scoredata')): {
-                    fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, JSON.stringify(data, null, 2));
+                case (name.includes('osudata')): case (name.includes('scoredata')): {
+                    fs.writeFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, JSON.stringify(data, null, 2));
                 } break;
                 case (name.includes('maplistdata')): {
-                    fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2));
+                    fs.writeFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2));
                 } break;
                 // case (name.includes('scoredata')): {
-                //     fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2));
+                //     fs.writeFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2));
                 // } break;
                 default: {
-                    fs.writeFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2));
+                    fs.writeFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2));
                 } break;
             }
         } else {
-            fs.writeFileSync(`${truepath}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, JSON.stringify(data, null, 2));
+            fs.writeFileSync(`${path}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, JSON.stringify(data, null, 2));
         }
         return true;
     } catch (error) {
@@ -195,45 +193,45 @@ export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuA
  */
 export function findFile(id: string | number, name: string, mode?: osuApiTypes.GameMode, type?: string) {
     if (cacheById.some(x => name.includes(x))) {
-        if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`)) {
-            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, 'utf-8'));
+        if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}.json`)) {
+            return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, 'utf-8'));
         }
         if (name.includes('osudata')) {
-            if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`)) {
-                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, 'utf-8'));
+            if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, 'utf-8'));
             }
         }
         else if (name.includes('mapdata')) {
-            if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`, 'utf-8'));
-            } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`, 'utf-8'));
-            } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`, 'utf-8'));
-            } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`, 'utf-8'));
+            if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`, 'utf-8'));
             }
         } else if (name.includes('bmsdata')) {
-            if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`, 'utf-8'));
-            } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`, 'utf-8'));
-            } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`, 'utf-8'));
-            } else if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`, 'utf-8'));
+            if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`, 'utf-8'));
             }
         } else if (name.includes('maplistdata')) {
-            if (fs.existsSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`)) {
-                return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, 'utf-8'));
+            if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, 'utf-8'));
             }
         }
         else {
             return false;
         }
     } else {
-        if (fs.existsSync(`${truepath}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`)) {
-            return JSON.parse(fs.readFileSync(`${truepath}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, 'utf-8'));
+        if (fs.existsSync(`${path}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`)) {
+            return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, 'utf-8'));
         } else {
             return false;
         }
@@ -297,4 +295,21 @@ export function parseArg(
         newArgs: args
     };
 
+}
+
+/**
+ * 
+ * @param input URL to the file
+ * @param output where to save the file once finished (INCLUDE FILE EXTENSIONS)
+ */
+export async function downloadFile(
+    input: string,
+    output: string,
+) {
+    const file = fs.createWriteStream(`${output}`);
+    await https.get(`${input}`, function (response) {
+        response.pipe(file);
+    });
+
+    return output;
 }
