@@ -5547,6 +5547,14 @@ export async function replayparse(input: extypes.commandInput) {
         : '';
 
     const chart = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay'));
+
+    const unstableRate =
+        mapdata.id ?
+            await osufunc.calcUr(
+                `${filespath}\\replays\\${input.absoluteID}.osr`,
+                `${path}/files/maps/${mapdata.id}.osu`
+            ) : null;
+
     const Embed = new Discord.EmbedBuilder()
         .setFooter({
             text: `${embedStyle}`
@@ -5560,6 +5568,7 @@ export async function replayparse(input: extypes.commandInput) {
             `
 ${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapcombo}x** | ${accuracy.toFixed(2)}%
 \`${hitlist}\`
+${unstableRate ? `${unstableRate.unstablerate}UR` : ''}
 ${xpp[0].pp.toFixed(2)}pp | ${xpp[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC 
 ${ppissue}
 ${isfail}

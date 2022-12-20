@@ -11,7 +11,7 @@ import * as osumodcalc from './osumodcalc.js';
 import * as extypes from './types/extratypes.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 //const config = JSON.parse(fs.readFileSync('../config/config.json', 'utf-8'));
-import * as osureplayparser from 'osureplayparser';
+import * as replayparser from 'osureplayparser';
 import config from '../config/config.json' assert { type: 'json' };
 import { path, precomppath } from '../path.js';
 import * as mapParser from './mapParser.js';
@@ -1812,6 +1812,8 @@ export function randomMap(type?: 'Ranked' | 'Loved' | 'Approved' | 'Qualified' |
  * 
  * @param osr path to replay file
  * @param osu path to .osu file (map)
+ * @returns unstable rate - the unstable rate
+ * @returns averageoffset - the avg ms off from a "perfect" hit. negatives are early
  */
 export async function calcUr(
     osr: string,
@@ -1819,8 +1821,20 @@ export async function calcUr(
 ) {
     const unstableRate: number[] = [];
 
-    const replay: extypes.replay = await osureplayparser(osr);
-    const map = await mapParser.mapToObject(osu);
+    let replay: extypes.replay = await replayparser.parseReplay(osr);
+    let map = await mapParser.mapObject_Alt(osu);
+
+    try {
+        replay = await replayparser.parseReplay(osr);
+        map = await mapParser.mapObject_Alt(osu);
+    } catch (error) {
+        return {
+            unstablerate: 0,
+            averageOffset: 0,
+        };
+    }
+
+    console.log(map.HitObjects);
 
     //get offset
     const pixeloffset = osumodcalc.csToRadius(map.Difficulty.CircleSize);
@@ -1855,30 +1869,32 @@ export async function calcUr(
 
         let tapCounts = false;
 
-        if (!curHit) break;
-        if (!lastHit) {
-            if (curHit.keysPressed.k1 ||
-                curHit.keysPressed.k2 ||
-                curHit.keysPressed.m1 ||
-                curHit.keysPressed.m2
-            ) {
-                tapCounts = true;
-                const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
-                tapTime = tempArr.reduce((a, b) => a + b, 0);
-            }
+        if (!curHit) {
+            tapCounts = false;
         } else {
-            //check if a key was pressed that wasn't pressed before
-            if ((curHit.keysPressed.k1 && lastHit.keysPressed.k1 == false) ||
-                (curHit.keysPressed.k2 && lastHit.keysPressed.k2 == false) ||
-                (curHit.keysPressed.m1 && lastHit.keysPressed.m1 == false) ||
-                (curHit.keysPressed.m2 && lastHit.keysPressed.m2 == false)
-            ) {
-                tapCounts = true;
-                const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
-                tapTime = tempArr.reduce((a, b) => a + b, 0);
+            if (!lastHit) {
+                if (curHit.keysPressed.k1 ||
+                    curHit.keysPressed.k2 ||
+                    curHit.keysPressed.m1 ||
+                    curHit.keysPressed.m2
+                ) {
+                    tapCounts = true;
+                    const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
+                    tapTime = tempArr.reduce((a, b) => a + b, 0);
+                }
+            } else {
+                //check if a key was pressed that wasn't pressed before
+                if ((curHit.keysPressed.k1 && lastHit.keysPressed.k1 == false) ||
+                    (curHit.keysPressed.k2 && lastHit.keysPressed.k2 == false) ||
+                    (curHit.keysPressed.m1 && lastHit.keysPressed.m1 == false) ||
+                    (curHit.keysPressed.m2 && lastHit.keysPressed.m2 == false)
+                ) {
+                    tapCounts = true;
+                    const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
+                    tapTime = tempArr.reduce((a, b) => a + b, 0);
+                }
             }
         }
-
         if (tapCounts) {
             taps.push(
                 {
@@ -1889,6 +1905,8 @@ export async function calcUr(
             );
         }
     }
+
+    console.log(taps);
 
     //gets avg. from the absolute perfect hit;
     const unstableRateF: number[] = [];
@@ -1916,7 +1934,6 @@ export async function calcUr(
             mistap = true;
             doable = false;
         }
-
         if ((curHit.time - curHitObj.time) > hitOffset) {
             objectGONE = true;
         }
@@ -1929,6 +1946,8 @@ export async function calcUr(
         }
     }
     const avg = unstableRateF.reduce((prev, cur) => prev + cur, 0);
+
+    console.log(avg);
 
     //now does the same as before with avg factored in
     for (let i = 0; i < taps.length; i++) {
@@ -1967,5 +1986,10 @@ export async function calcUr(
         }
     }
 
-    return (unstableRate.reduce((b, a) => b + a, 0) / unstableRate.length) * 10;
+    console.log(unstableRate);
+
+    return {
+        unstablerate: (unstableRate.reduce((b, a) => b + a, 0) / unstableRate.length) * 10,
+        averageOffset: avg,
+    };
 }   
