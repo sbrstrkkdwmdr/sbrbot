@@ -116,7 +116,8 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] map button on rs and scoreparse now uses mod from the score 
 [FIX] fix paths ('./' => `${path}/`)
 [FIX] add missing config properties
-[ADD] unstable rate calculator 
-[ADD] map parser 
+[ADD] unstable rate calculator (WIP - calculations are very off)
+[ADD] map parser (WIP)
 [FIX] fix osutop sorting by recent 
 [QOL] edit ranking grades (again) for readability 
+[FIX] fix rank lost events not using the beatmap url (was using /b/mapid instead of https://osu.ppy.sh/b/mapid)

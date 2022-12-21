@@ -2306,7 +2306,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
                 break;
             case 'rankLost': {
                 const temp = curEv as osuApiTypes.EventRankLost;
-                obj.desc = `Lost #1 on **[${temp.beatmap.title}](${temp.beatmap.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.desc = `Lost #1 on **[${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'userSupportAgain': {
                 const temp = curEv as osuApiTypes.EventUserSupportAgain;
