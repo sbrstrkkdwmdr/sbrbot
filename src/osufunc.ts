@@ -1873,10 +1873,11 @@ export async function calcUr(
             tapCounts = false;
         } else {
             if (!lastHit) {
-                if (curHit.keysPressed.k1 ||
-                    curHit.keysPressed.k2 ||
-                    curHit.keysPressed.m1 ||
-                    curHit.keysPressed.m2
+                console.log('no last hit')
+                if (curHit.keysPressed.K1 ||
+                    curHit.keysPressed.K2 ||
+                    curHit.keysPressed.M1 ||
+                    curHit.keysPressed.M2
                 ) {
                     tapCounts = true;
                     const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
@@ -1884,10 +1885,10 @@ export async function calcUr(
                 }
             } else {
                 //check if a key was pressed that wasn't pressed before
-                if ((curHit.keysPressed.k1 && lastHit.keysPressed.k1 == false) ||
-                    (curHit.keysPressed.k2 && lastHit.keysPressed.k2 == false) ||
-                    (curHit.keysPressed.m1 && lastHit.keysPressed.m1 == false) ||
-                    (curHit.keysPressed.m2 && lastHit.keysPressed.m2 == false)
+                if ((curHit.keysPressed.K1 && lastHit.keysPressed.K1 == false) ||
+                    (curHit.keysPressed.K2 && lastHit.keysPressed.K2 == false) ||
+                    (curHit.keysPressed.M1 && lastHit.keysPressed.M1 == false) ||
+                    (curHit.keysPressed.M2 && lastHit.keysPressed.M2 == false)
                 ) {
                     tapCounts = true;
                     const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);

@@ -289,10 +289,10 @@ export type osuCmdStyle =
             y:number,
             keyPressedBitWise:number,
             keysPressed:{
-                k1:boolean,
-                k2:boolean,
-                m1:boolean,
-                m2:boolean
+                K1:boolean,
+                K2:boolean,
+                M1:boolean,
+                M2:boolean
             }
         }[],
         raw_replay_data:string
