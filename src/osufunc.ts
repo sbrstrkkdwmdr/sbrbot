@@ -1908,10 +1908,6 @@ export async function calcUr(
         }
     }
 
-    hitObjectTimings = hitObjectTimings.filter(x => {
-        return x;
-    });
-
     logCall(JSON.stringify(hitObjectTimings, null, 2));
 
     const hitObjectsforAvg = hitObjectTimings.slice();
