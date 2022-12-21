@@ -657,7 +657,7 @@ export async function apiget(input: apiInput) {
     if (!input.callNum) input.callNum = 0;
 
     const baseurl = 'https://osu.ppy.sh/api';
-    const accessN = fs.readFileSync('config/osuauth.json', 'utf-8');
+    const accessN = fs.readFileSync(`${path}/config/osuauth.json`, 'utf-8');
     let access_token;
     try {
         access_token = JSON.parse(accessN).access_token;
@@ -855,8 +855,8 @@ export async function updateToken() {
     `, 'utf-8');
         });
     if (newtoken.access_token) {
-        fs.writeFileSync('config/osuauth.json', JSON.stringify(newtoken));
-        fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
+        fs.writeFileSync(`${path}/config/osuauth.json`, JSON.stringify(newtoken));
+        fs.appendFileSync(`${path}/logs/updates.log`, '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
     }
     logCall('https://osu.ppy.sh/oauth/token', 'Update token');
 }
@@ -866,7 +866,7 @@ export function logCall(data: string, title?: string) {
         console.log((title ? title : 'Api call') + ': ' + data);
     }
     if (config.LogApiCallsToFile == true) {
-        fs.appendFileSync("logs/console.log", `${(title ? title : 'Api call') + ': ' + data}\n`);
+        fs.appendFileSync(`${path}/logs/console.log`, `${(title ? title : 'Api call') + ': ' + data}\n`);
     }
     return;
 }
@@ -1841,7 +1841,7 @@ export async function calcUr(
     const hitOffset = osumodcalc.ODtoms(map.Difficulty.OverallDifficulty).hitwindow_50;
 
     //get every hitobject
-    const hitObjectTimings: {
+    let hitObjectTimings: {
         x: number,
         y: number,
         time: number,
@@ -1852,9 +1852,10 @@ export async function calcUr(
             x: curObj.position.x,
             y: curObj.position.y,
             time: curObj.time
-
         });
     }
+
+
 
     //get every tap
     const taps: {
@@ -1873,7 +1874,7 @@ export async function calcUr(
             tapCounts = false;
         } else {
             if (!lastHit) {
-                console.log('no last hit')
+                console.log('no last hit');
                 if (curHit.keysPressed.K1 ||
                     curHit.keysPressed.K2 ||
                     curHit.keysPressed.M1 ||
@@ -1907,48 +1908,65 @@ export async function calcUr(
         }
     }
 
-    console.log(taps);
+    hitObjectTimings = hitObjectTimings.filter(x => {
+        return x;
+    });
+
+    logCall(JSON.stringify(hitObjectTimings, null, 2));
+
+    const hitObjectsforAvg = hitObjectTimings.slice();
 
     //gets avg. from the absolute perfect hit;
     const unstableRateF: number[] = [];
 
     for (let i = 0; i < taps.length; i++) {
         const curHit = taps[i];
-        const curHitObj = hitObjectTimings[0];
+        const curHitObj = hitObjectsforAvg[0];
         let doable = true;
         let missaim = false;
         let mistap = false;
         let objectGONE = false;
 
-        if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
-            doable = true;
-            objectGONE = true;
-        } else {
-            missaim = true;
-            doable = false;
+        console.log(i);
+        console.log(curHit);
+        console.log(curHitObj);
+
+        if (hitObjectsforAvg.length == 0) {
+            break;
         }
 
-        if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
-            doable = true;
-            objectGONE = true;
+        if (!curHitObj) {
+            hitObjectsforAvg.shift();
         } else {
-            mistap = true;
-            doable = false;
-        }
-        if ((curHit.time - curHitObj.time) > hitOffset) {
-            objectGONE = true;
-        }
 
-        if (objectGONE) {
-            hitObjectTimings.shift();
-        }
-        if (doable) {
-            unstableRateF.push(curHit.time - curHitObj.time);
+            if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
+                doable = true;
+                objectGONE = true;
+            } else {
+                missaim = true;
+                doable = false;
+            }
+
+            if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
+                doable = true;
+                objectGONE = true;
+            } else {
+                mistap = true;
+                doable = false;
+            }
+            if ((curHit.time - curHitObj.time) > hitOffset) {
+                objectGONE = true;
+            }
+
+            if (objectGONE) {
+                hitObjectsforAvg.shift();
+            }
+            if (doable) {
+                unstableRateF.push(curHit.time - curHitObj.time);
+            }
         }
     }
-    const avg = unstableRateF.reduce((prev, cur) => prev + cur, 0);
-
-    console.log(avg);
+    const avg = (unstableRateF.filter(x => x).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length;
 
     //now does the same as before with avg factored in
     for (let i = 0; i < taps.length; i++) {
@@ -1959,38 +1977,51 @@ export async function calcUr(
         let mistap = false;
         let objectGONE = false;
 
-        if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
-            doable = true;
-            objectGONE = true;
-        } else {
-            missaim = true;
-            doable = false;
+        if (hitObjectTimings.length == 0) {
+            break;
         }
 
-        if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
-            doable = true;
-            objectGONE = true;
-        } else {
-            mistap = true;
-            doable = false;
-        }
-
-        if ((curHit.time - curHitObj.time) > hitOffset) {
-            objectGONE = true;
-        }
-
-        if (objectGONE) {
+        if (!curHitObj) {
             hitObjectTimings.shift();
-        }
-        if (doable) {
-            unstableRate.push((curHit.time - curHitObj.time) - avg);
+        } else {
+
+            if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
+                doable = true;
+                objectGONE = true;
+            } else {
+                missaim = true;
+                doable = false;
+            }
+
+            if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
+                doable = true;
+                objectGONE = true;
+            } else {
+                mistap = true;
+                doable = false;
+            }
+
+            if ((curHit.time - curHitObj.time) > hitOffset) {
+                objectGONE = true;
+            }
+
+            if (objectGONE) {
+                hitObjectTimings.shift();
+            }
+            if (doable) {
+                unstableRate.push((curHit.time - curHitObj.time) - avg);
+            }
         }
     }
 
     console.log(unstableRate);
+    console.log((unstableRate.reduce((prev, cur) => Math.abs(prev) + Math.abs(cur), 0)));
+    console.log(unstableRate.length);
 
     return {
-        unstablerate: (unstableRate.reduce((b, a) => b + a, 0) / unstableRate.length) * 10,
+        unstablerate: ((unstableRate.reduce((prev, cur) => Math.abs(prev) + Math.abs(cur), 0)) / unstableRate.length) * 10,
         averageOffset: avg,
+        averageEarly: (unstableRateF.filter(x => x < 0).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length,
+        averageLate: (unstableRateF.filter(x => x > 0).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length
     };
 }   

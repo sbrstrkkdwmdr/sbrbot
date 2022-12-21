@@ -19,7 +19,7 @@ export type config = {
     LogApiCallsToFile: boolean,
     enableTracking: boolean,
     graphChannelId: string,
-    storeCommandLogs:boolean,
+    storeCommandLogs: boolean,
 };
 
 export type guildSettings = {
@@ -217,11 +217,11 @@ export type commandButtonTypes =
     'BigLeftArrow' | 'LeftArrow' | 'Search' | 'RightArrow' | 'BigRightArrow' |
     'Refresh' | 'Select' | 'Random' |
     'DetailEnable' | 'DetailDisable' | 'Detailed' | 'Details' |
-    'DetailDefault' | 'DetailMore' | 'DetailLess' | 
+    'DetailDefault' | 'DetailMore' | 'DetailLess' |
     'Detail0' | 'Detail1' | 'Detail2' | 'Detail3' |
     'DetailN1' |
-    'Graph' | 
-    'SearchMenu' | 'Sort' | 'SortMenu' | 
+    'Graph' |
+    'SearchMenu' | 'Sort' | 'SortMenu' |
     'Map'
     ;
 
@@ -264,37 +264,37 @@ export type osuCmdStyle =
     'PC' | // profile compressed
     'G'; // graph
 
-    export type replay = {
-        gameMode:number,
-        gameVersion:number,
-        beatmapMD5:string,
-        playerName:string,
-        replayMD5:string,
-        number_300s:number,
-        number_100s:number,
-        number_50s:number,
-        gekis:number,
-        katus:number,
-        misses:number,
-        score:number,
-        max_combo:number,
-        perfect_combo:number,
-        mods:number,
-        life_bar:string,
-        timestamp:string,
-        replay_length:number,
-        replay_data: {
-            timeSinceLastAction:number,
-            x:number,
-            y:number,
-            keyPressedBitWise:number,
-            keysPressed:{
-                K1:boolean,
-                K2:boolean,
-                M1:boolean,
-                M2:boolean
-            }
-        }[],
-        raw_replay_data:string
-    }
+export type replay = {
+    gameMode: number,
+    gameVersion: number,
+    beatmapMD5: string,
+    playerName: string,
+    replayMD5: string,
+    number_300s: number,
+    number_100s: number,
+    number_50s: number,
+    gekis: number,
+    katus: number,
+    misses: number,
+    score: number,
+    max_combo: number,
+    perfect_combo: number,
+    mods: number,
+    life_bar: string,
+    timestamp: string,
+    replay_length: number,
+    replay_data: {
+        timeSinceLastAction: number,
+        x: number,
+        y: number,
+        keyPressedBitWise: number,
+        keysPressed: {
+            K1: boolean,
+            K2: boolean,
+            M1: boolean,
+            M2: boolean;
+        };
+    }[],
+    raw_replay_data: string;
+}
 
