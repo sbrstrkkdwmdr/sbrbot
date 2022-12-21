@@ -5548,7 +5548,7 @@ export async function replayparse(input: extypes.commandInput) {
 
     const chart = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay'));
 
-    const unstableRate =
+    const UR =
         mapdata.id ?
             await osufunc.calcUr(
                 `${filespath}\\replays\\${input.absoluteID}.osr`,
@@ -5568,7 +5568,7 @@ export async function replayparse(input: extypes.commandInput) {
             `
 ${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapcombo}x** | ${accuracy.toFixed(2)}%
 \`${hitlist}\`
-${unstableRate ? `${unstableRate.unstablerate}UR` : ''}
+${UR ? `${UR.unstablerate.toFixed(2)}UR | ${UR.averageEarly.toFixed(2)}ms - ${UR.averageLate.toFixed(2)}ms` : ''}
 ${xpp[0].pp.toFixed(2)}pp | ${xpp[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC 
 ${ppissue}
 ${isfail}
