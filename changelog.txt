@@ -118,3 +118,5 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] add missing config properties
 [ADD] unstable rate calculator 
 [ADD] map parser 
+[FIX] fix osutop sorting by recent 
+[QOL] edit ranking grades (again) for readability 

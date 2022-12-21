@@ -30,15 +30,26 @@ const rankedstatus = {
 };
 
 const grades = {
-    XH: '<:RankingXH:1053124033497018449>', //platinum SS
-    X: '<:RankingX:1053124031089475645>', //gold SS
-    SH: '<:RankingSH:1053124029625683978>', //platinum S
-    S: '<:RankingS:1053124027755020318>', //gold S
-    A: '<:RankingA:1053124018028425266>',
-    B: '<:RankingB:1053124019978784778>',
-    C: '<:RankingC:1053124021912342569>',
-    D: '<:RankingD:1053124023837524090>',
-    F: '<:RankingF:1053124025901125642>',
+    XH: '<:RankingXH:1054912277788242000>', //platinum SS
+    X: '<:RankingX:1054912275846275135>', //gold SS
+    SH: '<:RankingSH:1054912272759259210>', //platinum S
+    S: '<:RankingS:1054912270926348379>', //gold S
+    A: '<:RankingA:1054912256963514439>',
+    B: '<:RankingB:1054912259882749972>',
+    C: '<:RankingC:1054912262504185886>',
+    D: '<:RankingD:1054912266190991360>',
+    F: '<:RankingF:1054912268816621679>',
+    osuDefault: {
+        XH: '<:RankingXH:1053124033497018449>', //platinum SS
+        X: '<:RankingX:1053124031089475645>', //gold SS
+        SH: '<:RankingSH:1053124029625683978>', //platinum S
+        S: '<:RankingS:1053124027755020318>', //gold S
+        A: '<:RankingA:1053124018028425266>',
+        B: '<:RankingB:1053124019978784778>',
+        C: '<:RankingC:1053124021912342569>',
+        D: '<:RankingD:1053124023837524090>',
+        F: '<:RankingF:1053124025901125642>',
+    },
     old: {
         XH: '<:rankingxh:927797179597357076>', //platinum SS
         X: '<:rankingX:927797179832229948>', //gold SS
