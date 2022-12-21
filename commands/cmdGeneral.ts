@@ -944,7 +944,7 @@ export async function help(input: extypes.commandInput) {
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-Random-help-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.random),
+                .setEmoji(buttonsthing.label.extras.random),
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-Detailed-help-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)

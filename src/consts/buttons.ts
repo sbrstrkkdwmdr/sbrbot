@@ -24,6 +24,8 @@ export const label = {
         detailDefault: '',
         detailMore: '<:details_more:1047767495693565973>',
         detailLess: '<:details_less:1047767494011662416>',
+    },
+    extras: {
         random: '🎲',
         graph: '📈',
         map: '🗺'

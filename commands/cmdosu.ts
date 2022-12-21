@@ -1536,7 +1536,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-Graph-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.graph),
+                .setEmoji(buttonsthing.label.extras.graph),
         );
     if (graphonly != true) {
         switch (detailed) {
@@ -4784,7 +4784,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-Map-scoreparse-${commanduser.id}-${input.absoluteID}-${curscore.beatmap.id}${curscore.mods ? '+' + curscore.mods.join() : ''}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.map)
+                .setEmoji(buttonsthing.label.extras.map)
         );
 
         const curbm = curscore.beatmap;
@@ -5839,7 +5839,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-Map-scoreparse-${commanduser.id}-${input.absoluteID}-${scoredata.beatmap.id}${scoredata.mods ? '+' + scoredata.mods.join() : ''}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.map)
+                .setEmoji(buttonsthing.label.extras.map)
         );
 
     const checkDetails = await buttonsAddDetails('scoreparse', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle);
