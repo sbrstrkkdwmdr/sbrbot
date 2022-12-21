@@ -2301,7 +2301,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             case 'rank': {
                 const temp = (curEv as osuApiTypes.EventRank);
                 obj.desc =
-                    `Achieved rank **#${temp.rank}** on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url}) <t:${(new Date(temp.created_at).getTime()) / 1000}:R> (${emojis.gamemodes[temp.mode]})`;
+                    `Achieved rank **#${temp.rank}** on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url}) (${emojis.gamemodes[temp.mode]}) <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             }
                 break;
             case 'rankLost': {
