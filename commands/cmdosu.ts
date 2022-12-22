@@ -2046,6 +2046,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
+            searchid = commanduser.id
             user = input.obj.options.getString('user');
             page = input.obj.options.getInteger('page');
         }
