@@ -32,9 +32,12 @@ const buttonsObjs = {
             detailDefault: '',
             detailMore: '<:details_more:1047767495693565973>',
             detailLess: '<:details_less:1047767494011662416>',
+        },
+        extras: {
             random: '🎲',
             graph: '📈',
-            map: '🗺'
+            map: '🗺',
+            user: '<:user:1055261081800552448>'
         },
         page_old: {
             first: '⬅',
@@ -159,6 +162,7 @@ const generalcommands = [
             }
         ],
         aliases: [],
+        buttons: [buttonsObjs.label.extras.random, buttonsObjs.label.main.detailed],
         options: [
             {
                 name: 'command',
@@ -379,6 +383,7 @@ const osucommands = [
             },
         ],
         aliases: ['badgeweightsystem', 'badgeweight', 'badgeweigthseed', 'badgerank'],
+        buttons: [buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'user',
@@ -491,7 +496,7 @@ const osucommands = [
             }
         ],
         aliases: ['firstplaceranks', 'first', 'fpr', 'fp', '#1s', '1s', '#1'],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'user',
@@ -605,6 +610,7 @@ const osucommands = [
         slashusage: 'globals [username]',
         examples: [],
         aliases: [],
+        buttons: [buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'user',
@@ -674,7 +680,7 @@ const osucommands = [
             }
         ],
         aliases: ['m'],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'query',
@@ -893,7 +899,7 @@ const osucommands = [
             }
         ],
         aliases: ['nc'],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'user',
@@ -1024,7 +1030,7 @@ const osucommands = [
                 descriptor: 'Shows SaberStrike\'s osu profile with extra details'
             }
         ],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.main.graph],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.graph],
         options: [
             {
                 name: 'user',
@@ -1174,7 +1180,7 @@ const osucommands = [
             'sotaksfruits', 'fruitssotarks', 'fruitsotarks', 'sotarksfruit', 'sotarkscatch', 'catchsotarks', 'sotarksctb', 'ctbsotarks', 'sotarksf', 'sotarksc',
             'sotarksmania', 'maniasotarks', 'sotarksm', 'msotarks'
         ],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'user',
@@ -1306,7 +1312,7 @@ const osucommands = [
             }
         ],
         aliases: [],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'user',
@@ -1719,7 +1725,7 @@ const osucommands = [
             }
         ],
         aliases: ['rs', 'r', 'rt', 'rf', 'rm', 'rctb', 'rl', 'rlt', 'rlf', 'rlm', 'rlctb'],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.main.map],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.map, buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'user',
@@ -1805,7 +1811,7 @@ const osucommands = [
         slashusage: 'recentactivity [user] [page]',
         examples: [],
         aliases: ['recentact', 'rsact'],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'user',
@@ -1943,7 +1949,7 @@ const osucommands = [
             },
         ],
         aliases: ['score', 'sp'],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.main.map],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.map, buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'id',
@@ -1991,7 +1997,7 @@ const osucommands = [
             }
         ],
         aliases: ['c'],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'user',
@@ -2083,7 +2089,7 @@ const osucommands = [
             }
         ],
         aliases: ['ss'],
-        buttons: [buttonsObjs.label.main.detailed],
+        buttons: [buttonsObjs.label.main.detailed, buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'user',
@@ -2355,7 +2361,7 @@ const osucommands = [
             }
         ],
         aliases: ['ub', 'userb', 'ubm', 'um', 'usermaps'],
-        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore],
+        buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
         options: [{
             name: 'user',
             type: 'string/ integer/ user mention',
@@ -2444,6 +2450,7 @@ const osucommands = [
             }
         ],
         aliases: ['wi'],
+        buttons: [buttonsObjs.label.extras.user],
         options: [
             {
                 name: 'user',
