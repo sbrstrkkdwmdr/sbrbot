@@ -158,6 +158,14 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
         return;
     }
 
+    const buttons = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-User-bws-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.user),
+        );
+
     osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
 
     let badgecount = 0;
@@ -208,7 +216,8 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [embed]
+            embeds: [embed],
+            components: [buttons]
         }
     }, input.canReply);
 
@@ -347,7 +356,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
     });
     const osudata: osuApiTypes.User = osudataReq.apiData;
     osufunc.debug(osudataReq, 'command', 'globals', input.obj.guildId, 'osuData');
-    if (osudata?.error) {
+    if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -369,11 +378,13 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         return;
     }
 
-    if (!osudata.id) {
-        return input.obj.channel.send('Error - no user found')
-            .catch();
-
-    }
+    const buttons = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-User-globals-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.user),
+        );
 
     osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
@@ -402,7 +413,8 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            content: `${user} has ${scorecount} #1 scores`
+            content: `${user} has ${scorecount} #1 scores`,
+            components: [buttons]
         }
     }, input.canReply);
 
@@ -1489,6 +1501,15 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         if (input.overrides.mode) {
             mode = input.overrides.mode;
         }
+        if (input.overrides.id) {
+            user = input.overrides.id;
+        }
+        if (input.overrides.commandAs) {
+            input.commandType = input.overrides.commandAs;
+        }
+        if (input.overrides.commanduser) {
+            commanduser = input.overrides.commanduser;
+        }
     }
 
     //OPTIONS==============================================================================================================================================================================================
@@ -2187,6 +2208,13 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             osufunc.logCall(error);
         }
     }
+    buttons
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-User-recentactivity-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.user),
+        );
 
     let recentActivityReq: osufunc.apiReturn;
 
@@ -2553,6 +2581,13 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         });
         return;
     }
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-firsts-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
 
     osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
@@ -3585,6 +3620,13 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-${commandButtonName}-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
+
     osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
@@ -4016,6 +4058,13 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-pinned-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
 
     let pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []; //= await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
     async function getScoreCount(cinitnum) {
@@ -4662,6 +4711,13 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-recent-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
 
     if (input.commandType == 'interaction') {
         await msgfunc.sendMessage({
@@ -5839,7 +5895,11 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-Map-scoreparse-${commanduser.id}-${input.absoluteID}-${scoredata.beatmap.id}${scoredata.mods ? '+' + scoredata.mods.join() : ''}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.extras.map)
+                .setEmoji(buttonsthing.label.extras.map),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-User-scoreparse-${commanduser.id}-${input.absoluteID}-${scoredata.user_id}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.user),
         );
 
     const checkDetails = await buttonsAddDetails('scoreparse', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle);
@@ -6909,6 +6969,13 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-scores-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
+
     let scoredataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'scores') &&
         input.commandType == 'button' &&
@@ -7420,6 +7487,13 @@ export async function scorestats(input: extypes.commandInput) {
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-scorestats-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
 
     let scoresdata: osuApiTypes.Score[] & osuApiTypes.Error = [];
 
@@ -9112,6 +9186,22 @@ HP${baseHP}`;
         }
         func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
         Embed.setDescription(`Guest difficulty by [${gdData?.username}](https://osu.ppy.sh/u/${mapdata.user_id})`);
+
+        buttons
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-User-map-${commanduser.id}-${input.absoluteID}-${gdData.id}+${gdData.playmode}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.extras.user),
+            );
+    } else {
+        buttons
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-User-map-${commanduser.id}-${input.absoluteID}-${mapperdata.id}+${mapperdata.playmode}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.extras.user),
+            );
     }
 
     if (mapgraph) {
@@ -10968,6 +11058,13 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator('osu'));
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator('osu'));
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-userbeatmaps-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
 
     let maplistdata: osuApiTypes.Beatmapset[] & osuApiTypes.Error = [];
 
@@ -12935,6 +13032,14 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
+    const buttons = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-User-whatif-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.user),
+        );
+
     osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
 
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
@@ -13029,7 +13134,8 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [embed]
+            embeds: [embed],
+            components: [buttons]
         }
     }, input.canReply);
 

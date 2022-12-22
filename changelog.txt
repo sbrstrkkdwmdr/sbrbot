@@ -121,3 +121,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] fix osutop sorting by recent 
 [QOL] edit ranking grades (again) for readability 
 [FIX] fix rank lost events not using the beatmap url (was using /b/mapid instead of https://osu.ppy.sh/b/mapid)
+[ADD] add user button to bws, firsts, globals, map, nochokes, osutop, pinned, recent, recentactivity, scoreparse, scores, scorestats, ubm, whatif

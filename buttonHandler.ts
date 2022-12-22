@@ -10,6 +10,7 @@ import * as checks from './src/checks.js';
 import * as mainconst from './src/consts/main.js';
 import * as embedStuff from './src/embed.js';
 import * as extypes from './src/types/extratypes.js';
+import * as osuapitypes from './src/types/osuApiTypes.js';
 
 export default (input: {
     userdata,
@@ -137,10 +138,10 @@ export default (input: {
 
         if (button == 'Map') {
             overrides.id = buttonsplit[5];
-            if(buttonsplit[5].includes('+')){
-                const temp = buttonsplit[5].split('+')
-                overrides.id = temp[0]
-                overrides.filterMods = temp[1]
+            if (buttonsplit[5].includes('+')) {
+                const temp = buttonsplit[5].split('+');
+                overrides.id = temp[0];
+                overrides.filterMods = temp[1];
             }
             overrides.commandAs = 'interaction';
             overrides.commanduser = interaction.member.user as Discord.User;
@@ -150,6 +151,16 @@ export default (input: {
 
             });
             await osucmds.map({ commandType: 'other', obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
+            return;
+        }
+
+        if (button == 'User') {
+            overrides.id = buttonsplit[5].split('+')[0];
+            overrides.mode = buttonsplit[5].split('+')[1] as osuapitypes.GameMode;
+            overrides.commandAs = 'interaction';
+            overrides.commanduser = interaction.member.user as Discord.User;
+
+            await osucmds.osu({ commandType: 'other', obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
             return;
         }
 

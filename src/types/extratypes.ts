@@ -222,7 +222,8 @@ export type commandButtonTypes =
     'DetailN1' |
     'Graph' |
     'SearchMenu' | 'Sort' | 'SortMenu' |
-    'Map'
+    'Map' |
+    'User'
     ;
 
 export type osustatscache = {

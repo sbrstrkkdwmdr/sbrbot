@@ -28,7 +28,8 @@ export const label = {
     extras: {
         random: '🎲',
         graph: '📈',
-        map: '🗺'
+        map: '🗺',
+        user: '<:user:1055261081800552448>'
     },
     page_old: {
         first: '⬅',
