@@ -37,6 +37,7 @@ can't remember what else
 
 
 0.4.0
+2022-09-14 --- 2022-11-07
 discord.js v14
 switched from using ts-node with commonjs to nodenext (all because of this video - https://www.youtube.com/watch?v=H91aqUHn8sE)
 
@@ -67,6 +68,7 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 
 
 0.4.1
+2022-12-03
 [QOL] updated buttons
 [ADD] firsts, osutop/top, nochokes/nc, sotarks, pinned, recent/rs/rl, scores/c, userbeatmaps/ubm have options to use different "detail" modes (show more or less information)
 [ADD] osu command has an added graph button
@@ -77,6 +79,7 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [REM] disabled localmapparse temporarily (making separate map parser)
 
 0.4.2
+2022-12-06
 [FIX] fixed map and simulate
 [FIX] fixed page search
 [FIX] fixed recent/rs showing the wrong star rating
@@ -88,12 +91,14 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [MIN] general code clean up 
 
 0.4.3
+2022-12-10
 [QOL] fix ppcalc being slow (deleting wrong maps)
 [MIN] general code clean up
 [ADD] add recentactivity/rsact command.
 [FIX] fixed pages for expanded lists 
 
 0.4.4
+2022-12-13
 [FIX] fix medals in recentactivity/rsact displaying as [object Object]
 [FIX] fix rl displaying only one score
 [FIX] fix permissions checker
@@ -101,6 +106,7 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] fix map ids not being stored in the correct path 
 
 0.4.5
+2022-12-16
 [QOL] edit recent activity/rsact formatting
 [FIX] fix osutop sorting by recent instead of pp
 [FIX] edit beatmapsetApprove not being handled 
@@ -111,7 +117,8 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] switched rankings from sbr v11 to osu default
 [FIX] fix stats crashing due to invalid paths
 
-0.4.6
+0.4.6 
+2022-12-22
 [QOL] update help info and docs 
 [QOL] map button on rs and scoreparse now uses mod from the score 
 [FIX] fix paths ('./' => `${path}/`)
