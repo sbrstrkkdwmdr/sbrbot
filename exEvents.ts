@@ -50,17 +50,42 @@ export default (input: {
         const rdm = Math.floor(Math.random() * 100);
         let string;
         let fr = 0;
-        if (rdm > 1) {
-            let map = getMap();
-            if (map == false) {
-                string = `Artist - Title [version]`
-            } else {
-                string = `${map.beatmapset.artist} - ${map.beatmapset.title} [${map.version}]`;
+        switch (true) {
+            case rdm > 50: {
+                let map = getMap();
+                if (map == false) {
+                    string = `Artist - Title [version]`;
+                } else {
+                    string = `${map.beatmapset.artist} - ${map.beatmapset.title} [${map.version}]`;
+                }
+                fr = 2;
             }
-            fr = 2;
-        } else {
-            string = 'you';
-            fr = 3;
+                break;
+            case rdm > 1: {
+                const gamesList = [
+                    'osu!',
+                    'osu!',
+                    'osu!',
+                    'osu!',
+                    'osu!',
+                    'osu!',
+                    'osu!',
+                    'Halo: Infinite',
+                    'Halo: The Master Chief Collection',
+                    'Bloons Monkey City',
+                    'Bloons TD Battles',
+                    'McOsu',
+                    'Brawlhalla',
+                ];
+                string = gamesList[Math.floor(Math.random() * gamesList.length)];
+                fr = 0;
+            }
+                break;
+            default: {
+                string = 'you';
+                fr = 3;
+            }
+                break;
         }
 
         input.client.user.setPresence({
