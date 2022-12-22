@@ -12,7 +12,7 @@ import * as osuApiTypes from './src/types/osuApiTypes.js';
 
 export default (input: {
     userdata,
-    client,
+    client: Discord.Client,
     config: extypes.config,
     oncooldown,
     guildSettings: Sequelize.ModelStatic<any>,
@@ -32,73 +32,60 @@ export default (input: {
     }, 1000 * 60 * 60 * 24);
 
     //status updates
-    const songsarr = [
-        "Yomi Yori kikoyu, Koukoku no hi to Honoo no Shoujo [Kurushimi]",
-        "FREEDOM DiVE [FOUR DiMENSIONS]",
-        "A FOOL MOON NIGHT [Piggey's Destruction]",
-        "Sidetracked Day [Infinity Inside]",
-        "Cirno's Perfect Math Class [TAG4]",
-        "Glorious Crown [FOUR DIMENSIONS]",
-        "Made of Fire [Oni]",
-        "小さな恋のうた (Synth Rock Cover) [Together]",
-        "C18H27NO3(extend) [Pure Darkness]",
-        "BLUE DRAGON [Blue Dragon]",
-        "-ERROR [Drowning]",
-        "Remote Control [Insane] +HDDT",
-        "Usatei 2011 [Ozzy's Extra]",
-        "Chocomint's made of fire hddt 98.54 full combo",
-        "Ascension to Heaven [Death] +HDDTHR",
-        "Can't Defeat Airman [Holy Shit! It's Airman!!!]",
-        "The Big Black [WHO'S AFRAID OF THE BIG BLACK]"
-    ];
+    const activities = [];
 
-    const activities = [
-        {
-            name: `240BPM | ${input.config.prefix}help`,
-            type: 1,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: songsarr[Math.floor(Math.random() * songsarr.length)] + ` | ${input.config.prefix}help`,
-            type: 2,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: `dt farm maps | ${input.config.prefix}help`,
-            type: 0,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: `nothing in particular | ${input.config.prefix}help`,
-            type: 3,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: `games | ${input.config.prefix}help`,
-            type: 0,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: `hr | ${input.config.prefix}help`,
-            type: 0,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: songsarr[Math.floor(Math.random() * songsarr.length)] + ` | ${input.config.prefix}help`,
-            type: 0,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: `you | ${input.config.prefix}help`,
-            type: 3,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
+    //get map url
+    function getMap() {
+        const filesPathing = `${path}\\cache\\commandData`;
+        const maps = fs.readdirSync(`${filesPathing}`).filter(x => x.includes('mapdata'));
+        if (maps.length == 0) {
+            return false;
         }
+        const mapFile = maps[Math.floor(Math.random() * maps.length)];
+        const map = (JSON.parse(fs.readFileSync(`${filesPathing}\\${mapFile}`, 'utf-8'))).apiData as osuapitypes.Beatmap;
+        return map;
+    }
+
+    function setActivity() {
+        const rdm = Math.floor(Math.random() * 100);
+        let string;
+        let fr = 0;
+        if (rdm > 1) {
+            let map = getMap();
+            if (map == false) {
+                string = `Artist - Title [version]`
+            } else {
+                string = `${map.beatmapset.artist} - ${map.beatmapset.title} [${map.version}]`;
+            }
+            fr = 2;
+        } else {
+            string = 'you';
+            fr = 3;
+        }
+
+        input.client.user.setPresence({
+            activities: [{
+                name: `${string} | ${input.config.prefix}help`,
+                type: fr,
+                url: 'https://twitch.tv/sbrstrkkdwmdr'
+            }],
+            status: 'dnd',
+            afk: false
+        });
+    }
+
+    const activityChristmas = [
+        {
+            name: `Merry Christmas! | ${input.config.prefix}help`,
+            type: 0,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: `🎄 | ${input.config.prefix}help`,
+            type: 0,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
     ];
-    const activityChristmas = [{
-        name: `Merry Christmas! | ${input.config.prefix}help`,
-        type: 0,
-        url: 'https://twitch.tv/sbrstrkkdwmdr',
-    }];
     const activityHalloween = [{
         name: `Happy Halloween! | ${input.config.prefix}help`,
         type: 0,
@@ -109,49 +96,59 @@ export default (input: {
         type: 0,
         url: 'https://twitch.tv/sbrstrkkdwmdr',
     }
-
     ];
     const activityNewYear = [{
         name: `Happy New Year! | ${input.config.prefix}help`,
         type: 0,
         url: 'https://twitch.tv/sbrstrkkdwmdr',
-    }];
-
-    input.client.user.setPresence({
-        activities: [activities[0]],
-        status: 'dnd',
-        afk: false
-    });
+    },
+    {
+        name: `Happy New Year!! | ${input.config.prefix}help`,
+        type: 0,
+        url: 'https://twitch.tv/sbrstrkkdwmdr',
+    },
+    {
+        name: `Happy New Year!!! | ${input.config.prefix}help`,
+        type: 0,
+        url: 'https://twitch.tv/sbrstrkkdwmdr',
+    }
+    ];
 
     //seasonal status updates
     const Events = ['None', 'New Years', 'Halloween', 'Christmas'];
 
     let curEvent = Events[0];
     let activityarr = activities;
+
     setInterval(() => {
         updateStatus();
     }, 60 * 1000);
+
     updateStatus();
 
     function updateStatus() {
         const date = new Date();
         const day = date.getDate();
         const month = date.getMonth() + 1;
+        let specialDay = false;
         if ((month == 12 && day == 31) || (month == 1 && day == 1)) {
             if (curEvent != Events[1]) {
                 curEvent = Events[1];
                 activityarr = activityNewYear;
+                specialDay = true;
             }
         }
         else if (month == 10 && day == 31) {
             if (curEvent != Events[2]) {
                 curEvent = Events[2];
                 activityarr = activityHalloween;
+                specialDay = true;
             }
         } else if (month == 12 && day == 25) {
             if (curEvent != Events[3]) {
                 curEvent = Events[3];
                 activityarr = activityChristmas;
+                specialDay = true;
             }
         } else {
             if (curEvent != Events[0]) {
@@ -159,11 +156,15 @@ export default (input: {
                 activityarr = activities;
             }
         }
-        input.client.user.setPresence({
-            activities: [activityarr[Math.floor(Math.random() * activityarr.length)]],
-            status: 'dnd',
-            afk: false
-        });
+        if (specialDay == true) {
+            input.client.user.setPresence({
+                activities: [activityarr[Math.floor(Math.random() * activityarr.length)]],
+                status: 'dnd',
+                afk: false
+            });
+        } else {
+            setActivity();
+        }
     }
 
     input.client.on('messageCreate', async (message) => {
@@ -191,7 +192,8 @@ export default (input: {
                 } catch (error) {
                     serverPrefix = input.config.prefix;
                 }
-                return message.reply({ content: `Global prefix is \`${prefix}\`\nServer prefix is \`${serverPrefix}\``, allowedMentions: { repliedUser: false } });
+                message.reply({ content: `Global prefix is \`${prefix}\`\nServer prefix is \`${serverPrefix}\``, allowedMentions: { repliedUser: false } });
+                return;
             }
         }
 
