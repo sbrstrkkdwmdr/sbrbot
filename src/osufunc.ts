@@ -1091,31 +1091,55 @@ export async function searchUser(searchid: string, userdata: any, findMode: bool
 
 export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) {
     try {
-        const init = fs.readFileSync(`${path}/cache/previous/${type}${serverId}.json`);
-        return `${init}`;
+        const init = JSON.parse(fs.readFileSync(`${path}/cache/previous/${type}${serverId}.json`, 'utf-8')) as {
+            id: string,
+            apiData: osuApiTypes.Score,
+            mods: string,
+        };
+        return init;
     } catch (error) {
-        let data;
+        let data: {
+            id: string,
+            apiData: {},
+            mods: string;
+        };
         switch (type) {
             case 'map':
-                data = '4204';
+                data = {
+                    id: '4204',
+                    apiData: null,
+                    mods: 'EZHDFL'
+                };
                 break;
             case 'user':
-                data = '2';
+                data = {
+                    id: '2',
+                    apiData: null,
+                    mods: null,
+                };
                 break;
             case 'score':
-                data = JSON.stringify(require('template/score.json'), null, 2);
+                data = {
+                    id: null,
+                    apiData: JSON.parse(fs.readFileSync(`${precomppath}\\src\\template\\score.json`, 'utf-8')),
+                    mods: null,
+                };
                 break;
         }
-        fs.writeFileSync(`${path}/cache/previous/${type}${serverId}.json`, data);
+        fs.writeFileSync(`${path}/cache/previous/${type}${serverId}.json`, JSON.stringify(data, null, 2));
         return data;
     }
 }
-export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string, data: string) {
-    if (type == 'score') {
-        fs.writeFileSync(`${path}/cache/previous/${type}${serverId}.json`, JSON.stringify(data, null, 2));
-    } else {
-        fs.writeFileSync(`${path}/cache/previous/${type}${serverId}.json`, data);
+export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string, data: {
+    id: string,
+    apiData: {},
+    mods: string,
+}) {
+    if (!data.mods || data.mods.length == 0) {
+        data.mods = 'NM';
     }
+
+    fs.writeFileSync(`${path}/cache/previous/${type}${serverId}.json`, JSON.stringify(data, null, 2));
     return;
 }
 

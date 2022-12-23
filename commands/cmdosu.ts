@@ -400,7 +400,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
 
     const scorecount = osudata?.scores_first_count ?? 0;
 
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
@@ -1968,7 +1968,7 @@ ${onlinestatus}
             useEmbeds = [osuEmbed];
         }
     }
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -2046,7 +2046,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-            searchid = commanduser.id
+            searchid = commanduser.id;
             user = input.obj.options.getString('user');
             page = input.obj.options.getInteger('page');
         }
@@ -2796,7 +2796,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
@@ -2987,7 +2987,11 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     page--;
 
     if (!mapid) {
-        mapid = osufunc.getPreviousId('map', input.obj.guildId);
+        const temp = osufunc.getPreviousId('map', input.obj.guildId);
+        mapid = temp.id;
+        if (!mapmods || osumodcalc.OrderMods(mapmods).length == 0) {
+            mapmods = temp.mods;
+        }
     }
 
     if (input.commandType == 'interaction') {
@@ -3228,7 +3232,13 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         }
 
-        osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+        osufunc.writePreviousId('map', input.obj.guildId,
+            {
+                id: `${mapdata.id}`,
+                apiData: null,
+                mods: mapmods
+            }
+        );
     } else {
         if (func.findFile(input.absoluteID, 'lbdata') &&
             input.commandType == 'button' &&
@@ -3365,7 +3375,13 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         }
         lbEmbed.setDescription(`${scoretxt}`);
 
-        osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+        osufunc.writePreviousId('map', input.obj.guildId,
+            {
+                id: `${mapdata.id}`,
+                apiData: null,
+                mods: mapmods
+            }
+        );
 
         if (page <= 1) {
             (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
@@ -3823,7 +3839,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         }
     }
 
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
     if (scoresarg.isFirstPage) {
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
@@ -4267,7 +4283,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
@@ -5261,9 +5277,19 @@ ${srStr}
         }
 
 
-        osufunc.writePreviousId('map', input.obj.guildId, `${curbm.id}`);
-        osufunc.writePreviousId('score', input.obj.guildId, JSON.stringify(curscore));
-        osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+        osufunc.writePreviousId('map', input.obj.guildId,
+            {
+                id: `${curbm.id}`,
+                apiData: null,
+                mods: curscore.mods.join()
+            });
+        osufunc.writePreviousId('score', input.obj.guildId,
+            {
+                id: `${curscore.id}`,
+                apiData: curscore,
+                mods: curscore.mods.join()
+            });
+        osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
     } else if (list == true) {
         rsEmbed
@@ -5322,7 +5348,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
             (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         }
     }
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
@@ -5374,7 +5400,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
 export async function replayparse(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
-    let replay;
+    let replay: extypes.replay;
 
     const embedStyle: extypes.osuCmdStyle = 'S';
 
@@ -5461,7 +5487,13 @@ export async function replayparse(input: extypes.commandInput) {
 
     osufunc.debug(mapdataReq, 'fileparse', 'replay', input.obj.guildId, 'mapData');
     if (mapdata?.id) {
-        typeof mapdata.id == 'number' ? osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`) : '';
+        typeof mapdata.id == 'number' ? osufunc.writePreviousId('map', input.obj.guildId,
+            {
+                id: `${mapdata.id}`,
+                apiData: null,
+                mods: osumodcalc.ModIntToString(replay.mods)
+            }
+        ) : '';
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -6311,8 +6343,19 @@ ${srStr}
             break;
     }
 
-    osufunc.writePreviousId('score', input.obj.guildId, JSON.stringify(scoredata, null, 2));
-    osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+    osufunc.writePreviousId('score', input.obj.guildId,
+        {
+            id: `${scoredata.id}`,
+            apiData: scoredata,
+            mods: scoredata.mods.join()
+        });
+    osufunc.writePreviousId('map', input.obj.guildId,
+        {
+            id: `${mapdata.id}`,
+            apiData: null,
+            mods: scoredata.mods.join()
+        }
+    );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
@@ -7187,8 +7230,14 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     }
 
 
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
-    osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    osufunc.writePreviousId('map', input.obj.guildId,
+        {
+            id: `${mapdata.id}`,
+            apiData: null,
+            mods: filteredMods
+        }
+    );
 
     if (scoresarg.isFirstPage) {
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
@@ -9257,7 +9306,13 @@ HP${baseHP}`;
         await embeds.push(passEmbed);
     }
 
-    osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+    osufunc.writePreviousId('map', input.obj.guildId,
+        {
+            id: `${mapdata.id}`,
+            apiData: null,
+            mods: mapmods
+        }
+    );
 
 
     useComponents.push(buttons);
@@ -9274,7 +9329,13 @@ HP${baseHP}`;
         useComponents.push(selectrow);
     }
 
-    osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+    osufunc.writePreviousId('map', input.obj.guildId,
+        {
+            id: `${mapdata.id}`,
+            apiData: null,
+            mods: mapmods
+        }
+    );
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -10112,7 +10173,13 @@ export async function ppCalc(input: extypes.commandInput) {
     }
     const embeds = [Embed];
 
-    osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+    osufunc.writePreviousId('map', input.obj.guildId,
+        {
+            id: `${mapdata.id}`,
+            apiData: null,
+            mods: mapmods
+        }
+    );
 
 
     let frmod = inputModal;
@@ -10127,7 +10194,13 @@ export async function ppCalc(input: extypes.commandInput) {
         useComponents.push(selectrow);
     }
 
-    osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+    osufunc.writePreviousId('map', input.obj.guildId,
+        {
+            id: `${mapdata.id}`,
+            apiData: null,
+            mods: mapmods
+        }
+    );
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -12346,7 +12419,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                 break;
 
         }
-        osufunc.writePreviousId('user', input.obj.guildId, `${seconduser.id}`);
+        osufunc.writePreviousId('user', input.obj.guildId, {id:`${seconduser.id}`, apiData: null, mods: null});
     } catch (error) {
         embedTitle = 'Error';
         usefields.push({
