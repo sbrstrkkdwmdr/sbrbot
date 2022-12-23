@@ -202,37 +202,37 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
         case (cat1 == 'f' || cat1 == 'fahrenheit') && (cat2 == 'c' || cat2 == 'celsius' || cat2 == 'celcius'):
             conv = 'Temperature conversion';
             convtype = 'Farhenheit to Celsius';
-            eq = `${num}f => ${Math.abs((num - 32) * 5 / 9)}c`;
+            eq = `${num}f => ${(num - 32) * 5 / 9}c`;
             formula = '`((x)-32)*5/9`';
             break;
         case (cat1 == 'f' || cat1 == 'fahrenheit') && (cat2 == 'k' || cat2 == 'kelvin'):
             conv = 'Temperature conversion';
             convtype = 'Farhenheit to Kelvin';
-            eq = `${num}f => ${Math.abs((num - 32) * 5 / 9 + 273.15)}c`;
+            eq = `${num}f => ${(num - 32) * 5 / 9 + 273.15}c`;
             formula = `((x)-32)*5/9 + 273.15`;
             break;
         case (cat1 == 'c' || cat1 == 'celsius' || cat1 == 'celcius') && (cat2 == 'f' || cat2 == 'fahrenheit'):
             conv = 'Temperature conversion';
             convtype = 'Celsius to Farhenheit';
-            eq = `${num}c => ${Math.abs(num * 9 / 5 + 32)}f`;
+            eq = `${num}c => ${num * 9 / 5 + 32}f`;
             formula = '`x*9/5+32`';
             break;
         case (cat1 == 'c' || cat1 == 'celsius' || cat1 == 'celcius') && (cat2 == 'k' || cat2 == 'kelvin'):
             conv = 'Temperature conversion';
             convtype = 'Celsius to Kelvin';
-            eq = `${num}c => ${Math.abs(num + 273.15)}k`;
+            eq = `${num}c => ${num + 273.15}k`;
             formula = '`x+273.15`';
             break;
         case (cat1 == 'k' || cat1 == 'kelvin') && (cat2 == 'c' || cat2 == 'celsius' || cat2 == 'celcius'):
             conv = 'Temperature conversion';
             convtype = 'Kelvin to Celsius';
-            eq = `${num}k => ${Math.abs(num - 273.15)}c`;
+            eq = `${num}k => ${num - 273.15}c`;
             formula = '`x-273.15`';
             break;
         case (cat1 == 'k' || cat1 == 'kelvin') && (cat2 == 'f' || cat2 == 'fahrenheit'):
             conv = 'Temperature conversion';
             convtype = 'Kelvin to Farhenheit';
-            eq = `${num}k => ${Math.abs((num - 273.15) * 9 / 5 + 32)}f`;
+            eq = `${num}k => ${(num - 273.15) * 9 / 5 + 32}f`;
             formula = '`(x-273.15)*9/5+32`';
             break;
 
@@ -249,13 +249,13 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
         case (cat1 == 'in' || cat1 == 'inch') && (cat2 == 'm' || cat2 == 'metres'):
             conv = 'Distance conversion';
             convtype = 'Inches to Metres';
-            eq = `${num}in => ${Math.abs(num / 39.37)}m`;
+            eq = `${num}in => ${num / 39.37}m`;
             formula = '`x/39.37`';
             break;
         case (cat1 == 'in' || cat1 == 'inch') && (cat2 == 'mi' || cat2 == 'miles'):
             conv = 'Distance conversion';
             convtype = 'Inches to Miles';
-            eq = `${num}in => ${Math.abs(num / 63360)}mi`;
+            eq = `${num}in => ${num / 63360}mi`;
             formula = '`x/63360`';
             break;
 
@@ -268,13 +268,13 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
         case (cat1 == 'ft' || cat1 == 'feet') && (cat2 == 'm' || cat2 == 'metres'):
             conv = 'Distance conversion';
             convtype = 'Feet to Metres';
-            eq = `${num}ft => ${Math.abs(num / 3.28084)}m`;
+            eq = `${num}ft => ${num / 3.28084}m`;
             formula = '`x/3.28084` (approx)';
             break;
         case (cat1 == 'ft' || cat1 == 'feet') && (cat2 == 'mi' || cat2 == 'miles'):
             conv = 'Distance conversion';
             convtype = 'Feet to Miles';
-            eq = `${num}ft => ${Math.abs(num / 5280)}mi`;
+            eq = `${num}ft => ${num / 5280}mi`;
             formula = '`x/5280`';
             break;
 

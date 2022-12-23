@@ -134,3 +134,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 
 [ADD] statuses now use maps cached in .\\cache\\commandData\\
 [MIN] reworked statuses
+[FIX] fixed convert not showing the - sign on negative numbers (i didn't know what Math.abs() meant when i first made the command)
