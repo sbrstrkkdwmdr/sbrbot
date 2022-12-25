@@ -2938,6 +2938,21 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         if (input.overrides.page != null) {
             page = input.overrides.page;
         }
+        if (input.overrides.id) {
+            mapid = input.overrides.id;
+        }
+        // if(input.overrides.mode){
+        //     mode = input.overrides.mode            
+        // }
+        if (input.overrides.filterMods) {
+            mapmods = input.overrides.filterMods;
+        }
+        if (input.overrides.commandAs) {
+            input.commandType = input.overrides.commandAs;
+        }
+        if (input.overrides.commanduser) {
+            commanduser = input.overrides.commanduser;
+        }
     }
 
     //==============================================================================================================================================================================================
@@ -8493,6 +8508,10 @@ export async function map(input: extypes.commandInput) {
             .setCustomId(`${mainconst.version}-Refresh-map-${commanduser.id}-${input.absoluteID}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.main.refresh),
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-Leaderboard-map-${commanduser.id}-${input.absoluteID}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.leaderboard)
     );
 
     log.logCommand({
@@ -12419,7 +12438,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                 break;
 
         }
-        osufunc.writePreviousId('user', input.obj.guildId, {id:`${seconduser.id}`, apiData: null, mods: null});
+        osufunc.writePreviousId('user', input.obj.guildId, { id: `${seconduser.id}`, apiData: null, mods: null });
     } catch (error) {
         embedTitle = 'Error';
         usefields.push({

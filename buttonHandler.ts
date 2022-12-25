@@ -164,6 +164,23 @@ export default (input: {
             return;
         }
 
+        if (button == 'Leaderboard') {
+            switch (command) {
+                case 'map': {
+                    const curEmbed = obj.message.embeds[0];
+                    // #<mode>/id
+                    overrides.id = curEmbed.url.split('#')[1].split('/')[1];
+                    overrides.mode = curEmbed.url.split('#')[1].split('/')[0] as osuapitypes.GameMode;
+                    overrides.filterMods = curEmbed.title?.split('+')?.[1] ?? null;
+                    overrides.commandAs = 'interaction';
+
+                    overrides.commanduser = interaction.member.user as Discord.User;
+                    await osucmds.maplb({ commandType: 'other', obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache })
+                    return;
+                }
+            }
+        }
+
         switch (command) {
             case 'compare':
                 await osucmds.compare({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
