@@ -13,6 +13,7 @@ import * as buttonsthing from '../src/consts/buttons.js';
 import * as colours from '../src/consts/colours.js';
 import * as def from '../src/consts/defaults.js';
 import * as emojis from '../src/consts/emojis.js';
+import * as errors from '../src/consts/errors.js';
 import * as helpinfo from '../src/consts/helpinfo.js';
 import * as mainconst from '../src/consts/main.js';
 import * as embedStuff from '../src/embed.js';
@@ -24,7 +25,6 @@ import * as trackfunc from '../src/trackfunc.js';
 import * as extypes from '../src/types/extraTypes.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
 import * as msgfunc from './msgfunc.js';
-
 
 export async function name(input: extypes.commandInput) {
 }
@@ -142,7 +142,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user \`${user}\``,
+                    content: errors.noUser(user),
                     edit: true
                 }
             }, input.canReply);
@@ -153,7 +153,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
         return;
     }
@@ -362,7 +362,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user \`${user}\``,
+                    content: errors.noUser(user),
                     edit: true
                 }
             }, input.canReply);
@@ -373,7 +373,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
         return;
     }
@@ -408,6 +408,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
             osufunc.logCall(error);
         }
     }
+
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
@@ -1638,7 +1639,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user \`${user}\``,
+                    content: errors.noUser(user),
                     edit: true
                 }
             }, input.canReply);
@@ -1649,7 +1650,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
         return;
     }
@@ -2182,7 +2183,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user \`${user}\``,
+                    content: errors.noUser(user),
                     edit: true
                 }
             }, input.canReply);
@@ -2193,7 +2194,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
         return;
     }
@@ -2567,7 +2568,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user \`${user}\``,
+                    content: errors.noUser(user),
                     edit: true
                 }
             }, input.canReply);
@@ -2578,7 +2579,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
         return;
     }
@@ -2618,7 +2619,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find user \`${user}\``,
+                        content: errors.noUser(user),
                         edit: true
                     }
                 }, input.canReply);
@@ -3636,7 +3637,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user \`${user}\``,
+                    content: errors.noUser(user),
                     edit: true
                 }
             }, input.canReply);
@@ -3647,7 +3648,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
         return;
     }
@@ -4070,7 +4071,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user \`${user}\``,
+                    content: errors.noUser(user),
                     edit: true
                 }
             }, input.canReply);
@@ -4081,7 +4082,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
         return;
     }
@@ -4119,7 +4120,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find user \`${user}\``,
+                        content: errors.noUser(user),
                         edit: true
                     }
                 }, input.canReply);
@@ -4734,7 +4735,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
         return;
     }
@@ -7006,7 +7007,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user \`${user}\``,
+                    content: errors.noUser(user),
                     edit: true
                 }
             }, input.canReply);
@@ -7017,7 +7018,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
         return;
 
@@ -7545,7 +7546,7 @@ export async function scorestats(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
         return;
     }
@@ -7579,7 +7580,7 @@ export async function scorestats(input: extypes.commandInput) {
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find user \`${user}\``,
+                        content: errors.noUser(user),
                         edit: true
                     }
                 }, input.canReply);
@@ -11131,7 +11132,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user \`${user}\``,
+                    content: errors.noUser(user),
                     edit: true
                 }
             }, input.canReply);
@@ -11142,7 +11143,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
         return;
     }
@@ -11183,7 +11184,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find user \`${user}\``,
+                        content: errors.noUser(user),
                         edit: true
                     }
                 }, input.canReply);
@@ -11525,14 +11526,14 @@ export async function trackadd(input: extypes.commandInput) {
     let replymsg;
 
     if (osudata?.error || !osudata.id) {
-        replymsg = `Error - could not find user \`${user}\``;
+        replymsg = errors.noUser(user);
         log.logCommand({
             event: 'Error',
             commandName: 'track add',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
     } else {
 
@@ -11693,14 +11694,14 @@ export async function trackremove(input: extypes.commandInput) {
     let replymsg;
 
     if (osudata?.error || !osudata.id) {
-        replymsg = `Error - could not find user \`${user}\``;
+        replymsg = errors.noUser(user);
         log.logCommand({
             event: 'Error',
             commandName: 'track remove',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
     } else {
 
@@ -13109,7 +13110,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user \`${user}\``,
+                    content: errors.noUser(user),
                     edit: true
                 }
             }, input.canReply);
@@ -13120,7 +13121,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${user}`
+            customString: errors.noUser(user)
         });
         return;
     }
