@@ -616,6 +616,21 @@ export type apiReturn = {
 };
 
 /**
+ * @param url url used in the api call
+ * @param totaltimeNum total time taken in seconds 
+ * @param input input to the api call 
+ * @param apiData data returned from the api call
+ * @param error error returned from the api call
+ */
+export type apiReturnOT = {
+    url: string,
+    totaltimeNum: number,
+    input: any,
+    apiData: any,
+    error?: Error,
+};
+
+/**
  * @param type type of api call to make
  * @param params params to pass to the api call
  * @param params.username username to get data for
@@ -791,7 +806,7 @@ export async function apiget(input: apiInput) {
             apiData: datafirst,
             error
         };
-        fs.writeFileSync(`${path}/cache/err${Date.now()}.json`, JSON.stringify(data, null, 2));
+        fs.writeFileSync(`${path}/cache/err_osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
     const after = perf.performance.now();
     try {
@@ -818,7 +833,7 @@ export async function apiget(input: apiInput) {
             apiData: datafirst,
             error
         };
-        fs.writeFileSync(`${path}/cache/err${Date.now()}.json`, JSON.stringify(data, null, 2));
+        fs.writeFileSync(`${path}/cache/err_osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
     logCall(url);
 
@@ -827,6 +842,147 @@ export async function apiget(input: apiInput) {
     }
     return data;
 }
+
+export async function apigetOT(input: {
+    param: {
+        type: 'countries_all' | 'countries_limitedAll' | 'countries_number' |
+        'country_users' | 'country_details' | 'country_stats' | 'country_topplayers' | 'country_plays' | 'country_short' |
+        'users_all' | 'users_limitedAll' | 'users_number' | 'users_top' |
+        'user_details' | 'user_stats' | 'user_plays' | 'user_id' | 'user_name' |
+        'stats_all' | 'stats_commonSets' | 'stats_HistoricTop',
+        country?: string,
+        id?: string | number,
+        name?: string,
+        else?: string,
+    };
+    callNum: number;
+}) {
+    let baseurl = 'https://osutracker.com/api';
+    type apiReturn = null;
+
+    if (!input.callNum) {
+        input.callNum = 0;
+    }
+
+    switch (input.param.type) {
+        case 'countries_all': //returns => (interface Country + extras)[]
+            baseurl += `/countries/all`;
+            break;
+        case 'countries_limitedAll': //returns => (interface Country)[]
+            baseurl += `/countries/limitedAll`;
+            break;
+        case 'countries_number': //returns => type number
+            baseurl += `/countries/number`;
+            break;
+        case 'country_details': //returns => interface Country
+            baseurl += `/countries/${input.param.country ?? input.param.name}/details`;
+            break;
+        case 'country_plays': //returns interface CountryPlays[]
+            baseurl += `/countries/${input.param.country ?? input.param.name}/plays`;
+            break;
+        case 'country_short': //returns type string
+            baseurl += `/countries/${input.param.else}`;
+            break;
+        case 'country_stats': //returns => interface interface CountryStat[]
+            baseurl += `/countries/${input.param.country ?? input.param.name}/stats`;
+            break;
+        case 'country_topplayers': //returns interface countryPlayers[]
+            baseurl += `/countries/${input.param.else}/players`;
+            break;
+        case 'country_users': //returns {data:any[], numberResults:number}
+            baseurl += `/countries/allFilter/${input.param.country ?? input.param.name}`;
+            break;
+        case 'users_all': //returns (interface User + extras)[]
+            baseurl += `/users/all`;
+            break;
+        case 'users_limitedAll': //returns interface User[]
+            baseurl += `/users/limitedAll`;
+            break;
+        case 'users_number': //returns type number
+            baseurl += `/users/number`;
+            break;
+        case 'users_top': //returns 
+            baseurl += `/users/topUserIds`;
+            break;
+        case 'user_details'://returns 
+            baseurl += `/users/${input.param.id}`;
+            break;
+        case 'user_id'://returns 
+            baseurl += `/users/${input.param.name}/getId`;
+            break;
+        case 'user_name'://returns 
+            baseurl += `/users/${input.param.id}/getName`;
+            break;
+        case 'user_plays'://returns 
+            baseurl += `/users/${input.param.id}/plays`;
+            break;
+        case 'user_stats'://returns 
+            baseurl += `/users/${input.param.id}/stats`;
+            break;
+        case 'stats_all'://returns 
+            baseurl += `/stats/`;
+            break;
+        case 'stats_commonSets'://returns 
+            baseurl += `/stats/farmSets`;
+            break;
+        case 'stats_HistoricTop'://returns 
+            baseurl += `/stats/historicTop`;
+            break;
+    }
+
+    let data: apiReturnOT = {
+        url: baseurl,
+        totaltimeNum: null,
+        input: input,
+        apiData: null
+    };
+
+    let datafirst;
+
+    const before = perf.performance.now();
+    try {
+        datafirst = await fetch(baseurl, {
+        }).then(res => res.json());
+    } catch (error) {
+        data = {
+            url: baseurl,
+            input,
+            totaltimeNum: perf.performance.now() - before,
+            apiData: datafirst,
+            error
+        };
+        fs.writeFileSync(`${path}/cache/err_osutrackerapi${Date.now()}.json`, JSON.stringify(data, null, 2));
+    }
+    const after = perf.performance.now();
+    try {
+        if ('error' in datafirst) {
+            throw new Error('nullwww');
+        }
+        data = {
+            url: baseurl,
+            input,
+            totaltimeNum: after - before,
+            apiData: datafirst
+        };
+    } catch (error) {
+        data = {
+            url: baseurl,
+            input,
+            totaltimeNum: after - before,
+            apiData: datafirst,
+            error
+        };
+        fs.writeFileSync(`${path}/cache/errr_osutrackerapi${Date.now()}.json`, JSON.stringify(data, null, 2));
+    }
+    logCall(baseurl);
+
+    if (data.apiData.apiData) {
+        data = data.apiData;
+    }
+    return data;
+}
+
+
 
 export async function updateToken() {
     const clientId = config.osuClientID;
