@@ -131,7 +131,7 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [ADD] add user button to bws, firsts, globals, map, nochokes, osutop, pinned, recent, recentactivity, scoreparse, scores, scorestats, ubm, whatif
 
 0.4.7
-
+2022-12-28
 [ADD] statuses now use maps cached in .\\cache\\commandData\\
 [MIN] reworked statuses
 [FIX] fixed convert not showing the - sign on negative numbers (i didn't know what Math.abs() meant when i first made the command)
