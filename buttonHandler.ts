@@ -9,6 +9,7 @@ import { path } from './path.js';
 import * as checks from './src/checks.js';
 import * as mainconst from './src/consts/main.js';
 import * as embedStuff from './src/embed.js';
+import * as osumodcalc from './src/osumodcalc.js';
 import * as extypes from './src/types/extratypes.js';
 import * as osuapitypes from './src/types/osuApiTypes.js';
 
@@ -171,11 +172,13 @@ export default (input: {
                     // #<mode>/id
                     overrides.id = curEmbed.url.split('#')[1].split('/')[1];
                     overrides.mode = curEmbed.url.split('#')[1].split('/')[0] as osuapitypes.GameMode;
-                    overrides.filterMods = curEmbed.title?.split('+')?.[1] ?? null;
+                    overrides.filterMods = curEmbed.title?.split('+')?.[1] && curEmbed.title?.split('+')?.[1] != 'NM' && !osumodcalc.unrankedMods_stable(curEmbed.title?.split('+')?.[1])
+                        ? curEmbed.title?.split('+')?.[1]
+                        : null;
                     overrides.commandAs = 'interaction';
 
                     overrides.commanduser = interaction.member.user as Discord.User;
-                    await osucmds.maplb({ commandType: 'other', obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache })
+                    await osucmds.maplb({ commandType: 'other', obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                     return;
                 }
             }

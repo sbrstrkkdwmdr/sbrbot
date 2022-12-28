@@ -29,8 +29,15 @@ export type ValObj = {
         lengthFull: string,
     };
 };
+
 export type ModList =
-    'EZ' | 'HD' | 'FI' | 'HT' | 'DT' | 'NC' | 'HR' | 'SD' | 'PF' | 'FL' | 'NF' | 'AT' | 'CM' | 'RL' | 'AP' | 'TP' | 'SO' | 'TD' | '1K' | '2K' | '3K' | '4K' | '5K' | '6K' | '7K' | '8K' | '9K' | 'CP' | 'RD' | 'MR' | 'SV2';
+    'EZ' | 'HD' | 'FI' | 'HT' | 'DT' | 'NC' | 'HR' | 'FL' | 'SD' | 'PF' | 'NF' | 'AT' | 'CM' | 'RL' | 'AP' | 'TP' | 'SO' | 'TD' | '1K' | '2K' | '3K' | '4K' | '5K' | '6K' | '7K' | '8K' | '9K' | 'CP' | 'RD' | 'MR' | 'SV2';
+
+export type ModListLazer = ModList | 'DC' | 'BL' | 'ST' /**strict tracking */ | 'DA' | 'CL' | 'AL' | 'ST' /**single tap */ | 'TR' /**transform */ | 'WI' | 'SI' | 'GR' | 'DF' | 'WU' | 'WD' | 'TR' /**traceable */ | 'BR' | 'AD' | 'MU' | 'NS' | 'MG' | 'RP' | 'AS' | 'FF';
+
+export type ModListLong = 'Easy' | 'Hidden' | 'Fade in' | 'Half Time' | 'Double Time' | 'Nightcore' | 'Hard Rock' | 'Flashlight' | 'Sudden Death' | 'Perfect' | 'No Fail' | 'Auto' | 'Cinema' | 'Relax' | 'Autopilot' | 'Target Practice' | 'Spun Out' | 'Touch device' | '1K' | '2K' | '3K' | '4K' | '5K' | '6K' | '7K' | '8K' | '9K' | 'Co-op' | 'Random' | 'Mirror' | 'ScoreV2';
+
+export type ModListLazerLong = ModListLong | 'Daycore' | 'Blinds' | 'Strict Tracking' | 'Difficulty Adjust' | 'Classic' | 'Alternate' | 'Single Tap' | 'Transform' | 'Wiggle' | 'Spin In' | 'Grow' | 'Deflate' | 'Wind Up' | 'Wind Down' | 'Traceable' | 'Barrel Roll' | 'Approach Different' | 'Muted' | 'No Scope' | 'Magnetised' | 'Repel' | 'Adaptive Speed' | 'Freeze Frame';
 
 
 /**
@@ -537,7 +544,7 @@ function ModIntToString(modInt: number) {
  * @returns reorders mods to be in the correct order and removes duplicates.
  */
 function OrderMods(modString: string) {
-    const ModsOrder: ModList[] = ['EZ', 'HD', 'FI', 'HT', 'DT', 'NC', 'HR', 'SD', 'PF', 'FL', 'NF', 'AT', 'CM', 'RL', 'AP', 'TP', 'SO', 'TD', '1K', '2K', '3K', '4K', '5K', '6K', '7K', '8K', '9K', 'CP', 'RD', 'MR', 'SV2'];
+    const ModsOrder: ModList[] = ['EZ', 'HD', 'FI', 'HT', 'DT', 'NC', 'HR', 'FL', 'SD', 'PF', 'NF', 'AT', 'CM', 'RL', 'AP', 'TP', 'SO', 'TD', '1K', '2K', '3K', '4K', '5K', '6K', '7K', '8K', '9K', 'CP', 'RD', 'MR', 'SV2'];
     const modStringArray = modString.toUpperCase().replaceAll(' ', '').replaceAll(',', '').replace(/(.{2})/g, "$1 ")
         .replaceAll('RLX', 'RL')
         .replaceAll('RX', 'RL')
@@ -653,6 +660,31 @@ function longModName(modstring: string) {
         .replaceAll('S2', 'ScoreV2 ')
         .replaceAll('MR', 'Mirror ')
         ;
+}
+
+/**
+ * checks if any of the mods given are "unranked" (unsubmitted on stable)
+ * @param mods shorthand mods name to verify (ie HDDT not hidden double time or 72)
+ */
+function unrankedMods_stable(mods: string) {
+    let val = false;
+    const unverifiable: ModList[] = [
+        'AT', 'CM', 'RL', 'AP', 'SV2', 'TP'
+    ];
+    val = unverifiable.some(x => mods.includes(x));
+    return val;
+}
+
+/**
+ * checks if any of the mods given are "unranked" (unsubmitted on stable)
+ * @param mods shorthand mods name to verify (ie HDDT not hidden double time or 72)
+ */
+function unrankedMods_lazer(mods: string) {
+    let val = false;
+    const unverifiable: ModListLazer[] = [
+        'AT', 'CM'
+    ];
+    return val;
 }
 
 /**
@@ -861,6 +893,7 @@ export {
     ODtoms, ARtoms, msToAR, msToOD,
     toEZ, toHR,
     ModStringToInt, ModIntToString, OrderMods, shortModName, longModName,
+    unrankedMods_stable, unrankedMods_lazer,
     csToRadius, csFromRadius,
     calcValues,
     ModeNameToInt, ModeIntToName

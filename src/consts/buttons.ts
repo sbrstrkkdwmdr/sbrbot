@@ -29,8 +29,8 @@ export const label = {
         random: '🎲',
         graph: '📈',
         map: '🗺',
-        user: '<:user:1055261081800552448>',
-        leaderboard: '???'
+        user: '<:user:1057463807930277988>',
+        leaderboard: '<:leaderboard:1057463857305632908>'
     },
     page_old: {
         first: '⬅',
