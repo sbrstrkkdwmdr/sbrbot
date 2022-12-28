@@ -158,7 +158,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
         return;
     }
 
-    const buttons = new Discord.ActionRowBuilder()
+    const cmdbuttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-User-bws-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
@@ -217,7 +217,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
         obj: input.obj,
         args: {
             embeds: [embed],
-            components: [buttons]
+            components: [cmdbuttons]
         }
     }, input.canReply);
 
@@ -378,7 +378,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         return;
     }
 
-    const buttons = new Discord.ActionRowBuilder()
+    const cmdbuttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-User-globals-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
@@ -415,7 +415,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         obj: input.obj,
         args: {
             content: `${user} has ${scorecount} #1 scores`,
-            components: [buttons]
+            components: [cmdbuttons]
         }
     }, input.canReply);
 
@@ -8511,10 +8511,6 @@ export async function map(input: extypes.commandInput) {
             .setCustomId(`${mainconst.version}-Refresh-map-${commanduser.id}-${input.absoluteID}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.main.refresh),
-        new Discord.ButtonBuilder()
-            .setCustomId(`${mainconst.version}-Leaderboard-map-${commanduser.id}-${input.absoluteID}`)
-            .setStyle(buttonsthing.type.current)
-            .setEmoji(buttonsthing.label.extras.leaderboard)
     );
 
     log.logCommand({
@@ -9279,6 +9275,13 @@ HP${baseHP}`;
                     .setEmoji(buttonsthing.label.extras.user),
             );
     }
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-Leaderboard-map-${commanduser.id}-${input.absoluteID}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.leaderboard)
+    );
 
     if (mapgraph) {
         Embed.setImage(`${mapgraph}`);
