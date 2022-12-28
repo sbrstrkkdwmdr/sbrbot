@@ -2961,7 +2961,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     const buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-Refresh-leaderboard-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-maplb-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
@@ -3005,9 +3005,6 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     if (!mapid) {
         const temp = osufunc.getPreviousId('map', input.obj.guildId);
         mapid = temp.id;
-        if (!mapmods || osumodcalc.OrderMods(mapmods).length == 0) {
-            mapmods = temp.mods;
-        }
     }
 
     if (input.commandType == 'interaction') {
@@ -3409,6 +3406,13 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         }
     }
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-Map-maplb-${commanduser.id}-${input.absoluteID}-${mapid}${mapmods && mapmods != 'NM' ? '+' + mapmods : ''}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.map)
+    );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({

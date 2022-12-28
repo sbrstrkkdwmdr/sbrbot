@@ -139,3 +139,6 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [ADD] added a leaderboard button to map cmd (uses map mods)
 [ADD] bug tracker
 [QOL] moved changelog.txt and bugs.txt to changelog\\
+[ADD] added map button to maplb
+[QOL] re-ordered some buttons for clarity
+[REM] maplb no longer uses the last map's mods
