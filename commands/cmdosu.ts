@@ -6966,8 +6966,9 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
     mode = osufunc.modeValidator(mode);
 
-    if (!mapid || isNaN(mapid)) {
-        mapid = osufunc.getPreviousId('map', input.obj.guildId);
+    if (!mapid) {
+        const temp = osufunc.getPreviousId('map', input.obj.guildId);
+        mapid = temp.id;
     }
 
     if (input.commandType == 'interaction') {
@@ -7986,8 +7987,9 @@ export async function simulate(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    if (!mapid || isNaN(mapid)) {
-        mapid = osufunc.getPreviousId('map', input.obj.guildId);
+    if (!mapid) {
+        const temp = osufunc.getPreviousId('map', input.obj.guildId);
+        mapid = temp.id;
     }
 
     if (input.commandType == 'interaction') {
@@ -8568,8 +8570,12 @@ export async function map(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
 
-    if (!mapid || isNaN(mapid)) {
-        mapid = osufunc.getPreviousId('map', input.obj.guildId);
+    if (!mapid) {
+        const temp = osufunc.getPreviousId('map', input.obj.guildId);
+        mapid = temp.id;
+        if (!mapmods || osumodcalc.OrderMods(mapmods).length == 0) {
+            mapmods = temp.mods;
+        }
     }
     if (detailed == 2) {
         buttons.addComponents(
@@ -9579,8 +9585,12 @@ export async function ppCalc(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
 
-    if (!mapid || isNaN(mapid)) {
-        mapid = osufunc.getPreviousId('map', input.obj.guildId);
+    if (!mapid) {
+        const temp = osufunc.getPreviousId('map', input.obj.guildId);
+        mapid = temp.id;
+        if (!mapmods || osumodcalc.OrderMods(mapmods).length == 0) {
+            mapmods = temp.mods;
+        }
     }
     let mapdataReq: osufunc.apiReturn;
     let mapdata: osuApiTypes.Beatmap;
@@ -12188,10 +12198,10 @@ export async function compare(input: extypes.commandInput) {
                     return;
                 }
             } else {
-                if (osufunc.getPreviousId('user', `${input.obj.guildId}`) == null) {
+                if (osufunc.getPreviousId('user', `${input.obj.guildId}`).id == null) {
                     throw new Error('Second user not found');
                 }
-                second = osufunc.getPreviousId('user', `${input.obj.guildId}`);
+                second = osufunc.getPreviousId('user', `${input.obj.guildId}`).id;
             }
         }
         if (first == null) {

@@ -137,3 +137,5 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] fixed convert not showing the - sign on negative numbers (i didn't know what Math.abs() meant when i first made the command)
 [QOL] rework get/write prev id to store mods.
 [ADD] added a leaderboard button to map cmd (uses map mods)
+[ADD] bug tracker
+[QOL] moved changelog.txt and bugs.txt to changelog\\

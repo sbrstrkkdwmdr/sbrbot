@@ -1,0 +1,17 @@
+since 0.4.7
+
+#1) 
+issue: custom emojis in interaction replies don't always work (showing :emoji_name: instead of the actual emoji)
+found: a while ago?
+fixed: N/A
+
+#2)
+issue: unstable rate calculator is very inaccurate
+found: 2022-12-21 
+fixed: N/A
+
+#3)
+issue: prev map id searching for [object Object] instead of id
+found: 2022-12-28
+fixed: 2022-12-28
+
