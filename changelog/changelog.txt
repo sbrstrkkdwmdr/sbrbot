@@ -145,5 +145,6 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 
 0.4.8
 
-[QOL] reworked author.name sections
+[QOL] edited author.name sections
 [QOL] added user info to recent's author.name section
+[ADD] to do list
