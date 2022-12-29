@@ -142,3 +142,8 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [ADD] added map button to maplb
 [QOL] re-ordered some buttons for clarity
 [REM] maplb no longer uses the last map's mods
+
+0.4.8
+
+[QOL] reworked author.name sections
+[QOL] added user info to recent's author.name section

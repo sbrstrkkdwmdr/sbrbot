@@ -184,7 +184,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
             text: `${embedStyle}`
         })
         .setAuthor({
-            name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
+            name: `${osudata.username} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
@@ -5155,7 +5155,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             .setTitle(`#${page + 1} most recent ${showFails == 1 ? 'play' : 'pass'} for ${curscore.user.username} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>`)
             .setURL(`https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}`)
             .setAuthor({
-                name: `${trycountstr}`,
+                name: `${trycountstr} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
                 url: `https://osu.ppy.sh/u/${osudata.id}`,
                 iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
             })
@@ -6230,7 +6230,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         })
         .setColor(colours.embedColour.score.dec)
         .setAuthor({
-            name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
+            name: `${osudata.username} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
         })
@@ -7186,7 +7186,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setImage(`${mapdata.beatmapset.covers['cover@2x']}`)
         .setAuthor({
-            name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
+            name: `${osudata.username} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/users/${osudata.id}/${osufunc.modeValidator(mode)}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
