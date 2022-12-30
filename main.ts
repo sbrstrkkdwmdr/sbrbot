@@ -249,6 +249,10 @@ Current Client ID:        ${client.user.id}
         console.log(`Creating ${path}\\cache\\graphs\\ folder`);
         fs.mkdirSync(`${path}\\cache\\graphs`);
     }
+    if (!fs.existsSync(`${path}\\cache\\errors`)) {
+        console.log(`Creating ${path}\\cache\\errors\\ folder`);
+        fs.mkdirSync(`${path}\\cache\\errors`);
+    }
     if (!fs.existsSync(`${path}\\files`)) {
         console.log(`Creating ${path}\\files folder`);
         fs.mkdirSync(`${path}\\files`);

@@ -806,7 +806,7 @@ export async function apiget(input: apiInput) {
             apiData: datafirst,
             error
         };
-        fs.writeFileSync(`${path}/cache/err_osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
+        fs.writeFileSync(`${path}\\cache\\errors\\osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
     const after = perf.performance.now();
     try {
@@ -833,7 +833,7 @@ export async function apiget(input: apiInput) {
             apiData: datafirst,
             error
         };
-        fs.writeFileSync(`${path}/cache/err_osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
+        fs.writeFileSync(`${path}\\cache\\errors\\osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
     logCall(url);
 
