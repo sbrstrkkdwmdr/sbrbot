@@ -291,7 +291,7 @@ export default (input: {
                     if (file.includes('undefined')) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
                             fs.unlinkSync(`${path}/files/maps/` + file);
-                            osufunc.logCall(file, 'deleted file');
+                            osufunc.logCall(`${path}\\files\\maps\\` + file, 'deleted file');
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     }
@@ -313,7 +313,7 @@ export default (input: {
                 } else {
                     if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
                         fs.unlinkSync(`${path}/files/maps/` + file);
-                        osufunc.logCall(file, 'deleted file');
+                        osufunc.logCall(`${path}\\files\\maps\\` + file, 'deleted file');
                         // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                     }
                 }
@@ -340,13 +340,13 @@ export default (input: {
                     else if (cacheById.some(x => file.startsWith(x))) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24)) {
                             fs.unlinkSync(`${path}/cache/commandData/` + file);
-                            osufunc.logCall(file, 'deleted file');
+                            osufunc.logCall(`${path}\\cache\\commandData\\` + file, 'deleted file');
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     } else {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 3)) {
                             fs.unlinkSync(`${path}/cache/commandData/` + file);
-                            osufunc.logCall(file, 'deleted file');
+                            osufunc.logCall(`${path}\\cache\\commandData\\` + file, 'deleted file');
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     }
