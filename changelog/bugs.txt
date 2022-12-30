@@ -1,8 +1,8 @@
 recorded since 0.4.7
 
 template =>
-issue: string 
 status: fixed | wip | intentional
+issue: string 
 author: string 
 found: date 
 fixed: date 
@@ -12,8 +12,8 @@ additional notes: string
 ========================
 
 #1) 
+    status: FIXED
     issue: custom emojis in interaction replies don't always work (showing :emoji_name: instead of the actual emoji)
-    status: fixed (kinda?)
     author: sbrstrkkdwmdr
     found: a while ago?
     fixed: a while ago?
@@ -23,8 +23,8 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
 
 #2)
-    issue: unstable rate calculator is very inaccurate
     status: WIP
+    issue: unstable rate calculator is very inaccurate
     author: sbrstrkkdwmdr
     found: 2022-12-21 
     fixed: N/A
@@ -34,12 +34,23 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
 
 #3)
+    status: FIXED
     issue: prev map id searching for [object Object] instead of id
-    status: fixed
     author: sbrstrkkdwmdr
     found: 2022-12-28
     fixed: 2022-12-28
     solution: replace getpreviousid(); with getpreviousid().id;
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#4)
+    status: WIP
+    issue: profiles with missing data cause crashes [/dist/commands/cmdosu.js:1528]
+    author: sbrstrkkdwmdr
+    found: 2022-12-30 22:51 AEDT (UTC+11)
+    fixed: 
+    solution: 
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------

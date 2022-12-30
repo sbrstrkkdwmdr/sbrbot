@@ -110,3 +110,11 @@ author:
     author: sbrstrkkdwmdr 
 
 -------------------------------------------------------------------------------------------------------------------------
+
+#11)
+    description: add profile card command 
+    type: new command
+    status: not yet started 
+    request date: 2022-12-30 22:53 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
