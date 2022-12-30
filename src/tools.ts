@@ -1,5 +1,7 @@
 import fs = require('fs');
 import https from 'https';
+// import * as nfetch from 'node-fetch';
+import nfetch from 'node-fetch';
 import { filespath, path } from '../path.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
 import * as calc from './calc.js';
@@ -312,4 +314,11 @@ export async function downloadFile(
     });
 
     return output;
+}
+
+export async function fetch(url: string) {
+    const data = await nfetch(url, {
+        method: 'GET',
+    }).then(res => res.json());
+    return data;
 }

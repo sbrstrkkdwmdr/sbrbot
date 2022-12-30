@@ -94,9 +94,9 @@ author:
 #9) 
     description: osu map ranks command (ie counts of #1s, top tens, top 25s etc.)
     type: new command
-    status: not yet started  
+    status: finished
     request date: 2022-12-27 23:36 AEDT (UTC+11)
-    finish date: 
+    finish date: 2022-12-30 22:47 AEDT (UTC+11)
     author: sbrstrkkdwmdr 
 
 -------------------------------------------------------------------------------------------------------------------------

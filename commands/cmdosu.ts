@@ -24,6 +24,7 @@ import * as func from '../src/tools.js';
 import * as trackfunc from '../src/trackfunc.js';
 import * as extypes from '../src/types/extraTypes.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
+import * as othertypes from '../src/types/othertypes.js';
 import * as msgfunc from './msgfunc.js';
 
 export async function name(input: extypes.commandInput) {
@@ -398,8 +399,6 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         }, input.canReply);
     }
 
-    const scorecount = osudata?.scores_first_count ?? 0;
-
     osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
@@ -409,12 +408,35 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         }
     }
 
+    const baseURL = `https://osustats.respektive.pw/counts/`;
+
+    const data = await func.fetch(baseURL + osudata.id) as othertypes.osustatsType;
+
+    const countsEmbed = new Discord.EmbedBuilder()
+        .setAuthor({
+            name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
+            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
+        })
+        .setTitle(`Top X leaderboard counts for ${osudata.username}`)
+        .setThumbnail(`${osudata.avatar_url ?? def.images.user.url}`)
+        .setDescription(`
+\`Top 1   | ${data.top1s.toString().padEnd(6, ' ')} | #${data.top1s_rank.toString().padEnd(10, ' ')}\`
+\`Top 8   | ${data.top8s.toString().padEnd(6, ' ')} | #${data.top8s_rank.toString().padEnd(10, ' ')}\`
+\`Top 15  | ${data.top15s.toString().padEnd(6, ' ')} | #${data.top15s_rank.toString().padEnd(10, ' ')}\`
+\`Top 25  | ${data.top25s.toString().padEnd(6, ' ')} | #${data.top25s_rank.toString().padEnd(10, ' ')}\`
+\`Top 50  | ${data.top50s.toString().padEnd(6, ' ')} | #${data.top50s_rank.toString().padEnd(10, ' ')}\`
+\`Top 100 | ${data.top100s.toString().padEnd(6, ' ')} | #${data.top100s_rank.toString().padEnd(10, ' ')}\`
+`)
+
+        ;
+
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            content: `${user} has ${scorecount} #1 scores`,
+            embeds: [countsEmbed],
             components: [cmdbuttons]
         }
     }, input.canReply);
