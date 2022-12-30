@@ -1715,17 +1715,17 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
     const grades = osustats.grade_counts;
 
     const playerrank =
-        osudata.statistics.global_rank ?
+        osudata.statistics?.global_rank ?
             func.separateNum(osudata.statistics.global_rank) :
             '---';
     const countryrank =
-        osudata.statistics.country_rank ?
+        osudata.statistics?.country_rank ?
             func.separateNum(osudata.statistics.country_rank) :
             '---';
 
     const rankglobal = ` ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)`;
 
-    const peakRank = osudata?.rank_highest.rank ?
+    const peakRank = osudata?.rank_highest?.rank ?
         `\n**Peak Rank**: #${func.separateNum(osudata.rank_highest.rank)} (<t:${new Date(osudata.rank_highest.updated_at).getTime() / 1000}:R>)` :
         '';
 
@@ -1761,20 +1761,35 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`);
 
     let useEmbeds = [];
-    if (graphonly == true) {
-        embedStyle = 'G';
-        const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',');
-        const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',');
 
-        const chartplay = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true));
-        const chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
+    async function getGraphs() {
+        let chartplay;
+        let chartrank;
 
+        let nulltext = def.invisbleChar;
+
+        if (
+            (!osudata.monthly_playcounts ||
+                osudata.monthly_playcounts.length == 0) ||
+            (!osudata.rank_history ||
+                osudata.rank_history.length == 0)) {
+            nulltext = 'Error - Missing data';
+            chartplay = def.images.any.url;
+            chartrank = chartplay;
+        } else {
+            const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',');
+            const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',');
+
+            chartplay = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true));
+            chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
+        }
         const ChartsEmbedRank = new Discord.EmbedBuilder()
             .setFooter({
                 text: `${embedStyle}`
             })
             .setTitle(`${osudata.username}`)
             .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
+            .setDescription(nulltext)
             .setImage(`${chartrank}`);
 
         const ChartsEmbedPlay = new Discord.EmbedBuilder()
@@ -1784,7 +1799,13 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
             .setImage(`${chartplay}`);
 
-        useEmbeds.push(ChartsEmbedRank, ChartsEmbedPlay);
+        return [ChartsEmbedRank, ChartsEmbedPlay];
+    }
+
+    if (graphonly == true) {
+        embedStyle = 'G';
+        const graphembeds = await getGraphs();
+        useEmbeds = graphembeds;
     } else {
         if (detailed == 2) {
             const loading = new Discord.EmbedBuilder()
@@ -1809,26 +1830,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     }, 1000);
                 }
             }
-            const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',');
-            const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',');
-
-            const chartplay = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true));
-            const chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
-
-            const ChartsEmbedRank = new Discord.EmbedBuilder()
-                /*                 .setFooter({
-                                    text: `${embedStyle}`
-                                }) */
-                .setDescription('Click on the image to see the full chart')
-                .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
-                .setImage(`${chartrank}`);
-
-            const ChartsEmbedPlay = new Discord.EmbedBuilder()
-                /*                 .setFooter({
-                                    text: `${embedStyle}`
-                                }) */
-                .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
-                .setImage(`${chartplay}`);
+            const graphembeds = await getGraphs();
 
             let osutopdataReq: osufunc.apiReturn;
             if (func.findFile(input.absoluteID, 'osutopdata') &&
@@ -1906,14 +1908,10 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             }
             const secperplay = osudata?.statistics.play_time / parseFloat(playcount.replaceAll(',', ''));
 
-            const highestcombo = func.separateNum((osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo);
-            const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2);
-            const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2);
-            let totalpp = 0;
-            for (let i2 = 0; i2 < osutopdata.length; i2++) {
-                totalpp += osutopdata[i2].pp;
-            }
-            const avgpp = (totalpp / osutopdata.length).toFixed(2);
+            const combostats = osufunc.Stats(osutopdata.map(x => x?.max_combo ?? 0));
+            const ppstats = osufunc.Stats(osutopdata.map(x => x?.pp ?? 0));
+            const accstats = osufunc.Stats(osutopdata.map(x => (x?.accuracy * 100) ?? 100));
+
             let mostplaytxt = ``;
             for (let i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
                 const bmpc = mostplayeddata[i2];
@@ -1956,23 +1954,23 @@ ${onlinestatus}
                 {
                     name: 'Top play info',
                     value:
-                        `**Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
-        **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
+                        `**Most common mapper:** ${osufunc.modemappers(osutopdata)?.beatmapset?.creator ?? 'None'}
+        **Most common mods:** ${osufunc.modemods(osutopdata)?.mods?.toString()?.replaceAll(',', '') ?? 'None'}
         **Gamemode:** ${mode}
-        **Highest combo:** ${highestcombo}`,
+        **Highest combo:** ${combostats.highest}`,
                     inline: true
                 },
                 {
                     name: '-',
-                    value: `**Highest pp:** ${maxpp}
-        **Lowest pp:** ${minpp}
-        **Average pp:** ${avgpp}
-        **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
-        **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%`,
+                    value: `**Highest pp:** ${ppstats.highest?.toFixed(2)}
+        **Lowest pp:** ${ppstats.lowest?.toFixed(2)}
+        **Average pp:** ${ppstats.average?.toFixed(2)}
+        **Highest accuracy:** ${accstats.highest?.toFixed(2)}%
+        **Lowest accuracy:** ${accstats.lowest?.toFixed(2)}%`,
                     inline: true
                 }]);
 
-            useEmbeds = [osuEmbed, ChartsEmbedRank, ChartsEmbedPlay];
+            useEmbeds = [osuEmbed].concat(graphembeds);
         } else {
             osuEmbed.setDescription(`
 **Global Rank:**${rankglobal}${peakRank}

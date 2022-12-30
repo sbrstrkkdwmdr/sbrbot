@@ -49,7 +49,7 @@ additional notes: string
     issue: profiles with missing data cause crashes [/dist/commands/cmdosu.js:1528]
     author: sbrstrkkdwmdr
     found: 2022-12-30 22:51 AEDT (UTC+11)
-    fixed: 
+    fixed: 2022-12-31 10:44 AEDT (UTC+11)
     solution: 
     additional notes:
 

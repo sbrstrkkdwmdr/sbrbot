@@ -149,3 +149,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] added user info to recent's author.name section
 [ADD] to do list
 [ADD] added counts of maplbs (#1s, #50s etc...)
+[FIX] fixed osu profile command crashing on users with null data
