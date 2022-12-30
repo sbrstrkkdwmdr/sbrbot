@@ -12,6 +12,7 @@ import * as helpinfo from '../src/consts/helpinfo.js';
 import * as mainconst from '../src/consts/main.js';
 import * as embedStuff from '../src/embed.js';
 import * as log from '../src/log.js';
+import * as osufunc from '../src/osufunc.js';
 import * as func from '../src/tools.js';
 import * as trackfunc from '../src/trackfunc.js';
 import * as extypes from '../src/types/extraTypes.js';
@@ -471,7 +472,7 @@ export async function getUserAv(input: extypes.commandInput) {
 export async function debug(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
-    type debugtype = 'commandfile' | 'servers' | 'channels' | 'users' | 'forcetrack' | 'curcmdid' | 'logs';
+    type debugtype = 'commandfile' | 'servers' | 'channels' | 'users' | 'forcetrack' | 'curcmdid' | 'logs' | 'clear';
 
     let type: debugtype;
     let inputstr;
@@ -715,11 +716,69 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             }
         }
             break;
+        case 'clear': {
+            type clearTypes = 'all' | 'normal' | 'permanent' | 'previous' | 'pmaps' | 'pscores' | 'pusers' | 'users' | 'errors' | 'trueall';
+            //all in command data, temporary files, permanent files, all in previous
+            const ctype = input.args[1] as clearTypes;
+
+            function clear(input: clearTypes) {
+                switch (ctype) {
+                    case 'normal': default: { //clears all temprary files (cache/commandData)
+                        osufunc.logCall(`manually clearing temporary files in ${path}\\cache\\commandData\\`, 'Event');
+                        const curpath = `${path}\\cache\\commandData`;
+                        const files = fs.readdirSync(curpath);
+
+                    }
+                        break;
+                    case 'all': { //clears all files in commandData
+                        osufunc.logCall(`manually clearing all files in ${path}\\cache\\commandData\\`, 'Event');
+                        const curpath = `${path}\\cache\\commandData`;
+                        const files = fs.readdirSync(curpath);
+                        for (const file of files) {
+                            fs.unlinkSync(`${path}\\cache\\commandData\\` + file);
+                            osufunc.logCall(`${path}\\cache\\commandData\\` + file, 'deleted file');
+                        }
+                    }
+                    case 'trueall': { //clears everything in cache
+                        clear('all');
+                        clear('previous');
+                        clear('errors');
+                    }
+                    case 'permanent': { // clears all permanent files (maps and mapsets)
+
+                    }
+                    case 'users': { //clears all osudata files
+
+                    }
+                    case 'previous': { // clears all previous files
+
+                    }
+                    case 'pmaps': { //clears previous maps
+
+                    }
+                    case 'pscores': { //clears previous scores
+
+                    }
+                    case 'errors': { //clears all errors
+                        osufunc.logCall(`manually clearing all err files in ${path}\\cache\\err\\`, 'Event');
+                        const curpath = `${path}\\cache\\errors`;
+                        const files = fs.readdirSync(curpath);
+                        for (const file of files) {
+                            fs.unlinkSync(`${path}\\cache\\errors\\` + file);
+                            osufunc.logCall(`${path}\\cache\\errors\\` + file, 'deleted file');
+                        }
+                    }
+                }
+            }
+            clear(ctype);
+        }
+            break;
         default: {
             usemsgArgs = {
-                content: 'Invalid type. Valid types are: `commandfile`,`servers`,`channels`,`users`,`forcetrack`,`curcmdid`,`logs`'
+                content: 'Valid types are: `commandfile`,`servers`,`channels`,`users`,`forcetrack`,`curcmdid`,`logs`, `clear`'
             };
         }
+
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
