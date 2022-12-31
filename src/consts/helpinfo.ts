@@ -593,7 +593,7 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'globals',
-        description: 'Shows the number of #1(#25, 50 etc..) scores a player has. Fetches data from https://osustats.respektive.pw/counts/[user_id]',
+        description: 'Shows the number of #1(#25, 50 etc..) scores a player has. ',
         usage: 'globals [username]',
         slashusage: 'globals [username]',
         examples: [],

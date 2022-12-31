@@ -45,7 +45,7 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
 
 #4)
-    status: WIP
+    status: FIXED
     issue: profiles with missing data cause crashes [/dist/commands/cmdosu.js:1528]
     author: sbrstrkkdwmdr
     found: 2022-12-30 22:51 AEDT (UTC+11)

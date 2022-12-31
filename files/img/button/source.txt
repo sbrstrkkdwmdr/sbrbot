@@ -1,0 +1,15 @@
+detailed        : i forgor 💀
+details_default : https://thenounproject.com/icon/page-select-596992/
+details_less    : emoji ‹
+details_more    : emoji ‹
+graph           : https://thenounproject.com/icon/graph-1059307/
+leaderboard     : https://thenounproject.com/icon/leaderboard-3922525/
+map             : https://thenounproject.com/icon/map-972140/
+page_first      : emoji «
+page_last       : emoji »
+page_next       : emoji ›
+page_previous   : emoji ‹
+page_select     : https://thenounproject.com/icon/search-801015/
+random          : https://thenounproject.com/icon/dice-644924/
+refresh         : emoji 🔁
+user            : i made it

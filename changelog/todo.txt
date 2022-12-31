@@ -104,9 +104,9 @@ author:
 #10) 
     description: make all button emojis the same theme
     type: quality of life
-    status: WIP 
+    status: FINISHED 
     request date: 2022-12-28 20:22 AEDT (UTC+11)
-    finish date: 
+    finish date: 2023-01-01 1:19 AEDT (UTC+11)
     author: sbrstrkkdwmdr 
 
 -------------------------------------------------------------------------------------------------------------------------
