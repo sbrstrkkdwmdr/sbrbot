@@ -52,15 +52,18 @@ copy the key and paste it into the google.apiKey field </br>
 
 ## credits n stuff
 
-Discord API wrapper: [Discord.js](discord.js.org/)</br>
-Performance/SR calculations: [rosu](https://github.com/MaxOhn/rosu-pp-js)</br>
-Fetch: [node-fetch](https://www.npmjs.com/package/node-fetch)</br>
-Database: [Sequelize](https://www.npmjs.com/package/sequelize)</br>
-Mod calculations: [osumodcalculator](https://www.npmjs.com/package/osumodcalculator)</br>
-Image to text parser: [tesseract.js](https://github.com/naptha/tesseract.js)</br>
-Youtube search: [yt-search](https://www.npmjs.com/package/yt-search)</br>
-Graph/chart generator: [chartjs-to-image](https://www.npmjs.com/package/chartjs-to-image)</br>
-osr file parser: [osureplayparser](https://www.npmjs.com/package/osureplayparser)</br>
+- Discord API wrapper: [Discord.js](https://discord.js.org/)</br>
+- Performance/SR calculations: [rosu-pp](https://github.com/MaxOhn/rosu-pp-js)</br>
+- Image to text parser: [tesseract.js](https://github.com/naptha/tesseract.js)</br>
+- Youtube search: [yt-search](https://www.npmjs.com/package/yt-search)</br>
+- Database: [Sequelize](https://www.npmjs.com/package/sequelize)</br>
+- Mod calculations: [osumodcalculator](https://www.npmjs.com/package/osumodcalculator)</br>
+- Graph/chart generator: [chartjs-to-image](https://www.npmjs.com/package/chartjs-to-image)</br>
+- [osu! api v2](https://osu.ppy.sh/docs/index.html?javascript#introduction) </br>
+- [osu!stats api](https://github.com/respektive/osustats)</br>
+- [node-fetch](https://www.npmjs.com/package/node-fetch)</br>
+- [osureplayparser](https://www.npmjs.com/package/osureplayparser)</br>
+
 
 ## config properties
 
