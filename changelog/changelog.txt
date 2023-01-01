@@ -153,3 +153,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] edit buttons to all be the same style
 [FIX] fix maplb page buttons disabling on the second page if mods were selected
 [QOL] all users can access the user, map and maplb buttons even if they didn't send the command
+[ADD] added a warning on buttons that aren't allowed to be used

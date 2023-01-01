@@ -22,6 +22,8 @@ export default (input: {
 }) => {
     const graphChannel = input.client.channels.cache.get(input.config.graphChannelId) as Discord.TextChannel;
 
+    const buttonWarnedUsers = new Set();
+
     input.client.on('interactionCreate', async (interaction) => {
         if (!(interaction.type == Discord.InteractionType.MessageComponent || interaction.type == Discord.InteractionType.ModalSubmit)) return;
         if (interaction.applicationId != input.client.application.id) return;
@@ -63,8 +65,20 @@ export default (input: {
             commandAs: commandType,
         };
         if (specid && specid != 'any' && specid != interaction.user.id) {
-            interaction.deferUpdate()
-                .catch(error => { });
+            if (!buttonWarnedUsers.has(interaction.member.user.id)) {
+                interaction.reply({
+                    content: 'You cannot use this button',
+                    ephemeral: true,
+                    allowedMentions: { repliedUser: false }
+                });
+                buttonWarnedUsers.add(interaction.member.user.id);
+                setTimeout(() => {
+                    buttonWarnedUsers.delete(interaction.member.user.id);
+                }, 1000 * 60 * 60 * 24);
+            } else {
+                interaction.deferUpdate()
+                    .catch(error => { });
+            }
             return;
         }
         const errorEmbed = new Discord.EmbedBuilder()
