@@ -30,13 +30,13 @@ author:
     author: sbrstrkkdwmdr 
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #3) 
-    description: fix pages on lb and maplb
+    description: fix pages on maplb
     type: bug fix
-    status: WIP 
+    status: FINISHED 
     request date: 2022-10-30 11:21 AEDT (UTC+11)
-    finish date: 
+    finish date: 2023-01-01 16:34 AEDT (UTC+11)
     author: sbrstrkkdwmdr 
 
 -------------------------------------------------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ author:
     author: sbrstrkkdwmdr 
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #9) 
     description: osu map ranks command (ie counts of #1s, top tens, top 25s etc.)
     type: new command
@@ -100,7 +100,7 @@ author:
     author: sbrstrkkdwmdr 
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #10) 
     description: make all button emojis the same theme
     type: quality of life

@@ -21,8 +21,19 @@ additional notes: string
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #2)
+    status: FIXED
+    issue: maplb page buttons being disabled on page 2
+    author: sbrstrkkdwmdr
+    found: 2022-10-30 11:21 AEDT (UTC+11)
+    fixed: 2023-01-01 16:34 AEDT (UTC+11)     
+    solution: change a 1 to a 0
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#3)
     status: WIP
     issue: unstable rate calculator is very inaccurate
     author: sbrstrkkdwmdr
@@ -32,8 +43,8 @@ additional notes: string
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
-
-#3)
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+#4)
     status: FIXED
     issue: prev map id searching for [object Object] instead of id
     author: sbrstrkkdwmdr
@@ -43,8 +54,8 @@ additional notes: string
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
-
-#4)
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+#5)
     status: FIXED
     issue: profiles with missing data cause crashes [/dist/commands/cmdosu.js:1528]
     author: sbrstrkkdwmdr
@@ -54,4 +65,3 @@ additional notes: string
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
-

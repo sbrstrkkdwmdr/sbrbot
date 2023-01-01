@@ -3416,7 +3416,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             }
         );
 
-        if (page <= 1) {
+        if (page <= 0) {
             (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
             (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
         }
