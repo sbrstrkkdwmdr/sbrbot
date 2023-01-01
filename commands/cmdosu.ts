@@ -162,7 +162,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
     const cmdbuttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-User-bws-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                .setCustomId(`${mainconst.version}-User-bws-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.extras.user),
         );
@@ -382,7 +382,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
     const cmdbuttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-User-globals-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                .setCustomId(`${mainconst.version}-User-globals-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.extras.user),
         );
@@ -2233,7 +2233,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
     buttons
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-User-recentactivity-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                .setCustomId(`${mainconst.version}-User-recentactivity-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.extras.user),
         );
@@ -2606,7 +2606,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
     buttons.addComponents(
         new Discord.ButtonBuilder()
-            .setCustomId(`${mainconst.version}-User-firsts-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setCustomId(`${mainconst.version}-User-firsts-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.extras.user),
     );
@@ -3429,7 +3429,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
     buttons.addComponents(
         new Discord.ButtonBuilder()
-            .setCustomId(`${mainconst.version}-Map-maplb-${commanduser.id}-${input.absoluteID}-${mapid}${mapmods && mapmods != 'NM' ? '+' + mapmods : ''}`)
+            .setCustomId(`${mainconst.version}-Map-maplb-any-${input.absoluteID}-${mapid}${mapmods && mapmods != 'NM' ? '+' + mapmods : ''}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.extras.map)
     );
@@ -3679,7 +3679,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 
     buttons.addComponents(
         new Discord.ButtonBuilder()
-            .setCustomId(`${mainconst.version}-User-${commandButtonName}-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setCustomId(`${mainconst.version}-User-${commandButtonName}-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.extras.user),
     );
@@ -4118,7 +4118,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
 
     buttons.addComponents(
         new Discord.ButtonBuilder()
-            .setCustomId(`${mainconst.version}-User-pinned-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setCustomId(`${mainconst.version}-User-pinned-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.extras.user),
     );
@@ -4771,7 +4771,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 
     buttons.addComponents(
         new Discord.ButtonBuilder()
-            .setCustomId(`${mainconst.version}-User-recent-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setCustomId(`${mainconst.version}-User-recent-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.extras.user),
     );
@@ -4895,7 +4895,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 
         buttons.addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-Map-scoreparse-${commanduser.id}-${input.absoluteID}-${curscore.beatmap.id}${curscore.mods ? '+' + curscore.mods.join() : ''}`)
+                .setCustomId(`${mainconst.version}-Map-recent-any-${input.absoluteID}-${curscore.beatmap.id}${curscore.mods ? '+' + curscore.mods.join() : ''}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.extras.map)
         );
@@ -5966,11 +5966,11 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-Map-scoreparse-${commanduser.id}-${input.absoluteID}-${scoredata.beatmap.id}${scoredata.mods ? '+' + scoredata.mods.join() : ''}`)
+                .setCustomId(`${mainconst.version}-Map-scoreparse-any-${input.absoluteID}-${scoredata.beatmap.id}${scoredata.mods ? '+' + scoredata.mods.join() : ''}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.extras.map),
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-User-scoreparse-${commanduser.id}-${input.absoluteID}-${scoredata.user_id}`)
+                .setCustomId(`${mainconst.version}-User-scoreparse-any-${input.absoluteID}-${scoredata.user_id}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.extras.user),
         );
@@ -7056,7 +7056,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
     buttons.addComponents(
         new Discord.ButtonBuilder()
-            .setCustomId(`${mainconst.version}-User-scores-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setCustomId(`${mainconst.version}-User-scores-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.extras.user),
     );
@@ -7581,7 +7581,7 @@ export async function scorestats(input: extypes.commandInput) {
 
     buttons.addComponents(
         new Discord.ButtonBuilder()
-            .setCustomId(`${mainconst.version}-User-scorestats-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setCustomId(`${mainconst.version}-User-scorestats-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.extras.user),
     );
@@ -9286,7 +9286,7 @@ HP${baseHP}`;
         buttons
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`${mainconst.version}-User-map-${commanduser.id}-${input.absoluteID}-${gdData.id}+${gdData.playmode}`)
+                    .setCustomId(`${mainconst.version}-User-map-any-${input.absoluteID}-${gdData.id}+${gdData.playmode}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.extras.user),
             );
@@ -9294,7 +9294,7 @@ HP${baseHP}`;
         buttons
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`${mainconst.version}-User-map-${commanduser.id}-${input.absoluteID}-${mapperdata.id}+${mapperdata.playmode}`)
+                    .setCustomId(`${mainconst.version}-User-map-any-${input.absoluteID}-${mapperdata.id}+${mapperdata.playmode}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.extras.user),
             );
@@ -11192,7 +11192,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
 
     buttons.addComponents(
         new Discord.ButtonBuilder()
-            .setCustomId(`${mainconst.version}-User-userbeatmaps-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setCustomId(`${mainconst.version}-User-userbeatmaps-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.extras.user),
     );
@@ -13166,7 +13166,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
     const buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-User-whatif-${commanduser.id}-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                .setCustomId(`${mainconst.version}-User-whatif-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.extras.user),
         );

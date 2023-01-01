@@ -152,3 +152,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] fixed osu profile command crashing on users with null data
 [QOL] edit buttons to all be the same style
 [FIX] fix maplb page buttons disabling on the second page if mods were selected
+[QOL] all users can access the user, map and maplb buttons even if they didn't send the command

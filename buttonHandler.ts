@@ -37,6 +37,7 @@ export default (input: {
         const obj = interaction;
 
         //version-buttonType-baseCommand-userId-commandId-extraValue
+        //buttonVer-button-command-specid-absoluteID-???
         const buttonsplit = interaction.customId.split('-');
         const buttonVer = buttonsplit[0];
         const button = buttonsplit[1] as extypes.commandButtonTypes;
@@ -61,7 +62,7 @@ export default (input: {
             overwriteModal: null,
             commandAs: commandType,
         };
-        if (specid && specid != interaction.user.id) {
+        if (specid && specid != 'any' && specid != interaction.user.id) {
             interaction.deferUpdate()
                 .catch(error => { });
             return;
