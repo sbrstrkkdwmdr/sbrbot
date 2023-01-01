@@ -56,7 +56,7 @@ export default (input: {
                 if (map == false) {
                     string = `Artist - Title [version]`;
                 } else {
-                    string = `${map.beatmapset.artist} - ${map.beatmapset.title} [${map.version}]`;
+                    string = `${map.beatmapset.artist} - ${map.beatmapset.title}`;
                 }
                 fr = 2;
             }
@@ -64,18 +64,8 @@ export default (input: {
             case rdm > 1: {
                 const gamesList = [
                     'osu!',
-                    'osu!',
-                    'osu!',
-                    'osu!',
-                    'osu!',
-                    'osu!',
-                    'osu!',
-                    'Halo: Infinite',
-                    'Halo: The Master Chief Collection',
-                    'Bloons Monkey City',
-                    'Bloons TD Battles',
+                    'osu! Lazer',
                     'McOsu',
-                    'Brawlhalla',
                 ];
                 string = gamesList[Math.floor(Math.random() * gamesList.length)];
                 fr = 0;

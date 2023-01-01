@@ -54,7 +54,7 @@ author:
 #5) 
     description: score title/thumbnail generator 
     type: new command
-    status: not yet started 
+    status: WIP - not yet started 
     request date: 2022-11-25 11:45 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr 
@@ -74,7 +74,7 @@ author:
 #7) 
     description: health and strains graph for recent and scoreparse
     type: new feature
-    status: not yet started  
+    status: WIP - not yet started  
     request date: 2022-12-18 21:50 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr 
@@ -84,7 +84,7 @@ author:
 #8) 
     description: show point of fail on strains graph (recent)
     type: new feature
-    status: not yet started 
+    status: WIP - not yet started 
     request date: 2022-12-27 10:33 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr 
@@ -94,7 +94,7 @@ author:
 #9) 
     description: osu map ranks command (ie counts of #1s, top tens, top 25s etc.)
     type: new command
-    status: finished
+    status: FINISHED
     request date: 2022-12-27 23:36 AEDT (UTC+11)
     finish date: 2022-12-30 22:47 AEDT (UTC+11)
     author: sbrstrkkdwmdr 
@@ -114,7 +114,7 @@ author:
 #11)
     description: add profile card command 
     type: new command
-    status: not yet started 
+    status: WIP - not yet started 
     request date: 2022-12-30 22:53 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr
