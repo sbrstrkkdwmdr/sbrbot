@@ -14,6 +14,7 @@ import * as osuApiTypes from './types/osuApiTypes.js';
 import * as replayparser from 'osureplayparser';
 import config from '../config/config.json' assert { type: 'json' };
 import { path, precomppath } from '../path.js';
+import * as log from './log.js';
 import * as mapParser from './mapParser.js';
 
 
@@ -835,7 +836,7 @@ export async function apiget(input: apiInput) {
         };
         fs.writeFileSync(`${path}\\cache\\errors\\osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
-    logCall(url);
+    log.toOutput(url);
 
     if (data.apiData.apiData) {
         data = data.apiData;
@@ -974,7 +975,7 @@ export async function apigetOT(input: {
         };
         fs.writeFileSync(`${path}/cache/errr_osutrackerapi${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
-    logCall(baseurl);
+    log.toOutput(baseurl);
 
     if (data.apiData.apiData) {
         data = data.apiData;
@@ -1014,18 +1015,18 @@ export async function updateToken() {
         fs.writeFileSync(`${path}/config/osuauth.json`, JSON.stringify(newtoken));
         fs.appendFileSync(`${path}/logs/updates.log`, '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
     }
-    logCall('https://osu.ppy.sh/oauth/token', 'Update token');
+    log.toOutput('Update token: https://osu.ppy.sh/oauth/token');
 }
 
-export function logCall(data: string, title?: string) {
-    if (config.LogApiCalls == true) {
-        console.log((title ? title : 'Api call') + ': ' + data);
-    }
-    if (config.LogApiCallsToFile == true) {
-        fs.appendFileSync(`${path}/logs/console.log`, `${(title ? title : 'Api call') + ': ' + data}\n`);
-    }
-    return;
-}
+// export function log.toOutput(data: string, title?: string) {
+//     if (config.LogApiCalls == true) {
+//         console.log((title ? title : 'Api call') + ': ' + data);
+//     }
+//     if (config.LogApiCallsToFile == true) {
+//         fs.appendFileSync(`${path}/logs/console.log`, `${(title ? title : 'Api call') + ': ' + data}\n`);
+//     }
+//     return;
+// }
 
 export async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase: any) {
     const allUsers = await sqlDatabase.findAll();
@@ -1389,14 +1390,14 @@ export async function dlMap(mapid: number | string, curCall: number, lastUpdated
         }
         const writer = fs.createWriteStream(thispath);
         const res = await fetch(url);
-        logCall(url, 'Beatmap file download');
+        log.toOutput(`Beatmap file download: ${url}`);
         res.body.pipe(writer);
         await new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve('w');
             }, 1000);
         });
-        logCall(mapDir.replace(`${path}/`, ''), 'saved file');
+        log.toOutput(`Saved file: ${mapDir.replace(`${path}/`, '')}`);
     } else {
         for (let i = 0; i < mapFiles.length; i++) {
             const curmap = mapFiles[i];
@@ -1405,7 +1406,7 @@ export async function dlMap(mapid: number | string, curCall: number, lastUpdated
             }
         }
         isFound = true;
-        logCall(mapDir.replace(`${path}/`, ''), 'found file');
+        log.toOutput(`Found file: ${mapDir.replace(`${path}/`, '')}`);
     }
     const fileStat = fs.statSync(mapDir);
     if (fileStat.size < 500) {
@@ -2088,7 +2089,7 @@ export async function calcUr(
         }
     }
 
-    logCall(JSON.stringify(hitObjectTimings, null, 2));
+    log.toOutput(JSON.stringify(hitObjectTimings, null, 2));
 
     const hitObjectsforAvg = hitObjectTimings.slice();
 

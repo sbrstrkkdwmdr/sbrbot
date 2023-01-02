@@ -159,6 +159,16 @@ ID:           ${input.commandId}
 // commandLog,
 // optsLog,
 
+export function toOutput(string: string) {
+    if (config.LogApiCalls == true) {
+        console.log(string);
+    }
+    if (config.LogApiCallsToFile == true) {
+        fs.appendFileSync(`${path}/logs/console.log`, `${string}\n`);
+    }
+    return;
+}
+
 export {
     errLog,
     logFile

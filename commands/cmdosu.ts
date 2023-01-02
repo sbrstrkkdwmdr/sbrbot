@@ -404,7 +404,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            osufunc.logCall(error);
+            log.toOutput(error);
         }
     }
 
@@ -1707,7 +1707,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
             osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
         } catch (error) {
-            osufunc.logCall(error);
+            log.toOutput(error);
         }
     }
 
@@ -2227,7 +2227,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
             osufunc.userStatsCache([osudata], input.statsCache, 'osu', 'User');
         } catch (error) {
-            osufunc.logCall(error);
+            log.toOutput(error);
         }
     }
     buttons
@@ -2822,7 +2822,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            osufunc.logCall(error);
+            log.toOutput(error);
         }
     }
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -3893,7 +3893,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            osufunc.logCall(error);
+            log.toOutput(error);
         }
     }
 
@@ -4328,7 +4328,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            osufunc.logCall(error);
+            log.toOutput(error);
         }
     }
 
@@ -5152,7 +5152,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                     curscore.pp.toFixed(2) :
                     NaN;
             ppissue = 'Error - pp calculator could not calculate beatmap';
-            osufunc.logCall(error);
+            log.toOutput(error);
         }
         const title =
             curbms.title == curbms.title_unicode ?
@@ -5394,7 +5394,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            osufunc.logCall(error);
+            log.toOutput(error);
         }
     }
 

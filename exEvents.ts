@@ -3,6 +3,7 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import Sequelize from 'sequelize';
 import { path } from './path.js';
+import * as log from './src/log.js';
 import * as osufunc from './src/osufunc.js';
 import * as osumodcalc from './src/osumodcalc.js';
 import * as track from './src/trackfunc.js';
@@ -281,7 +282,7 @@ export default (input: {
                     if (file.includes('undefined')) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
                             fs.unlinkSync(`${path}/files/maps/` + file);
-                            osufunc.logCall(`${path}\\files\\maps\\` + file, 'deleted file');
+                            log.toOutput(`Deleted file ${path}\\files\\maps\\` + file);
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     }
@@ -303,7 +304,7 @@ export default (input: {
                 } else {
                     if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
                         fs.unlinkSync(`${path}/files/maps/` + file);
-                        osufunc.logCall(`${path}\\files\\maps\\` + file, 'deleted file');
+                        log.toOutput(`Deleted file ${path}\\files\\maps\\` + file);
                         // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                     }
                 }
@@ -330,13 +331,13 @@ export default (input: {
                     else if (cacheById.some(x => file.startsWith(x))) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24)) {
                             fs.unlinkSync(`${path}/cache/commandData/` + file);
-                            osufunc.logCall(`${path}\\cache\\commandData\\` + file, 'deleted file');
+                            log.toOutput(`Deleted file ${path}\\cache\\commandData\\` + file);
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     } else {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 3)) {
                             fs.unlinkSync(`${path}/cache/commandData/` + file);
-                            osufunc.logCall(`${path}\\cache\\commandData\\` + file, 'deleted file');
+                            log.toOutput(`Deleted file ${path}\\cache\\commandData\\` + file);
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     }

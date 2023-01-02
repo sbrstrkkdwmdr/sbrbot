@@ -97,7 +97,7 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
 
 
                 if (!previous.find(x => x.id == curdata[i].id)) {
-                    osufunc.logCall(curdata[i]?.user?.username ?? 'null name', 'Found new score for');
+                    log.toOutput(`Found new score for: ${curdata[i]?.user?.username ?? 'null name'}`);
                     sendMsg(await getEmbed({
                         scoredata: curdata[i],
                         scorepos: i
@@ -192,10 +192,10 @@ export async function getEmbed(
 
 export async function trackUsers(db, client, guildSettings) {
     if (!db || !client || !guildSettings) {
-        osufunc.logCall(`Missing object`, 'Error');
-        osufunc.logCall(`${db != null}`, 'Database exists');
-        osufunc.logCall(`${client != null}`, 'Client exists');
-        osufunc.logCall(`${guildSettings != null}`, 'Guild Settings exists');
+        log.toOutput(`Error - Missing object`);
+        log.toOutput(`Database: ${db != null}`);
+        log.toOutput(`Client: ${client != null}`);
+        log.toOutput(`Guild settings: ${guildSettings != null}`);
         return;
     }
 
@@ -205,7 +205,7 @@ export async function trackUsers(db, client, guildSettings) {
         const user = allUsers[i];
 
         setTimeout(() => {
-            osufunc.logCall(`index ${i}. Next track in ${Math.floor(WaitTime / allUsers.length)}`, 'Tracking');
+            log.toOutput(`Tracking - index ${i}. Next track in ${Math.floor(WaitTime / allUsers.length)}`);
             let willFetch = false;
             if (!(typeof user.osuid == 'undefined' || user.osuid == null || user.osuid == undefined)) {
                 if (`${user.guildsosu}`.length > 0 && `${user.guildsosu}`.length != 4) {
@@ -243,9 +243,9 @@ export async function trackUsers(db, client, guildSettings) {
             }
 
             if (willFetch == true) {
-                osufunc.logCall(`Fetching ${user.osuid}`, 'Tracking');
+                log.toOutput(`Tracking - Fetching ${user.osuid}`);
             } else {
-                osufunc.logCall(`User ${user.osuid} has no tracked channels`, 'Tracking cancelled');
+                log.toOutput(`Tracking cancelled - User ${user.osuid} has no tracked channels`);
             }
         },
             i < 1 ? 0 : (Math.floor(WaitTime / allUsers.length)));
@@ -277,9 +277,9 @@ export async function sendMsg(embed: Discord.EmbedBuilder, curuser: string, trac
                 });
                 if (curset?.dataValues?.trackChannel) {
                     await channels.push(`${curset.trackChannel}`);
-                    osufunc.logCall(`${curset.trackChannel}`, 'Found channel in guild settings');
+                    log.toOutput(`Found channel in guild settings - ${curset.trackChannel}`);
                 } else {
-                    osufunc.logCall('No channel set', 'Found channel in guild settings');
+                    log.toOutput('Found channel in guild settings - No channel set');
                 }
             }
         });
@@ -293,15 +293,14 @@ export async function sendMsg(embed: Discord.EmbedBuilder, curuser: string, trac
         channels.filter((item, index) => channels.indexOf(item) === index).forEach(channel => {
             const curchannel: Discord.GuildTextBasedChannel = client.channels.cache.get(channel) as Discord.GuildTextBasedChannel;
             if (curchannel) {
-                osufunc.logCall(curchannel.id, 'Sending to channel');
+                log.toOutput(`Sending to channel: ${curchannel.id}`);
                 curchannel.send({
                     embeds: [embed]
                 }).catch(error => {
-                    osufunc.logCall(error, 'error sending to channel');
-                    log.logFile('error', log.errLog('sending track embed', error));
+                    log.toOutput(`Error sending to channel: ${error}`);
                 });
             } else {
-                osufunc.logCall('Channel not found', 'error sending to channel');
+                log.toOutput(`Error sending to channel: Channel not found`);
             }
         });
     }, 2000);

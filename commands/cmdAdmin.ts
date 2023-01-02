@@ -724,19 +724,19 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             function clear(input: clearTypes) {
                 switch (ctype) {
                     case 'normal': default: { //clears all temprary files (cache/commandData)
-                        osufunc.logCall(`manually clearing temporary files in ${path}\\cache\\commandData\\`, 'Event');
+                        log.toOutput(`manually clearing temporary files in ${path}\\cache\\commandData\\`);
                         const curpath = `${path}\\cache\\commandData`;
                         const files = fs.readdirSync(curpath);
 
                     }
                         break;
                     case 'all': { //clears all files in commandData
-                        osufunc.logCall(`manually clearing all files in ${path}\\cache\\commandData\\`, 'Event');
+                        log.toOutput(`manually clearing all files in ${path}\\cache\\commandData\\`);
                         const curpath = `${path}\\cache\\commandData`;
                         const files = fs.readdirSync(curpath);
                         for (const file of files) {
                             fs.unlinkSync(`${path}\\cache\\commandData\\` + file);
-                            osufunc.logCall(`${path}\\cache\\commandData\\` + file, 'deleted file');
+                            log.toOutput(`${path}\\cache\\commandData\\` + file);
                         }
                     }
                     case 'trueall': { //clears everything in cache
@@ -760,12 +760,12 @@ Joined(EPOCH):  ${member.joinedTimestamp}
 
                     }
                     case 'errors': { //clears all errors
-                        osufunc.logCall(`manually clearing all err files in ${path}\\cache\\err\\`, 'Event');
+                        log.toOutput(`manually clearing all err files in ${path}\\cache\\err\\`);
                         const curpath = `${path}\\cache\\errors`;
                         const files = fs.readdirSync(curpath);
                         for (const file of files) {
                             fs.unlinkSync(`${path}\\cache\\errors\\` + file);
-                            osufunc.logCall(`${path}\\cache\\errors\\` + file, 'deleted file');
+                            log.toOutput(`${path}\\cache\\errors\\` + file);
                         }
                     }
                 }
