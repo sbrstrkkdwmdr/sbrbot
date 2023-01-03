@@ -65,3 +65,17 @@ additional notes: string
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
+
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+#6)
+    status: WIP
+    issue: using buttons sometimes causes an "interaction failed" error
+    author: sbrstrkkdwmdr
+    found: 2023-01-03 19:59 AEDT (UTC+11)
+    fixed: 
+    solution: 
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+
+

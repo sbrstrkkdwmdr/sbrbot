@@ -229,7 +229,7 @@ export default (input: {
                 overrides.miss = true;
                 await osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
-                    .catch(error => { });
+                    .catch(error => { console.log(error); });
                 break;
             case 'osu':
                 await osucmds.osu({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
@@ -239,7 +239,7 @@ export default (input: {
             case 'osutop':
                 await osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 interaction.deferUpdate()
-                    .catch(error => { });
+                    .catch(error => { console.log(error); });
                 break;
             case 'pinned':
                 await osucmds.pinned({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
