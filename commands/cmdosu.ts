@@ -13528,6 +13528,161 @@ async function parseArgs_scoreList_message(input: extypes.commandInput) {
     };
 }
 
+async function parseArgs_scoreList_interaction(input: extypes.commandInput) {
+    input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+
+    const searchid = input.obj.member.user.id;
+
+    const user = input.obj.options.getString('user') ?? undefined;
+    const page = input.obj.options.getInteger('page') ?? 0;
+    const scoredetailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
+    const sort = input.obj.options.getString('sort') as embedStuff.scoreSort ?? null;
+    const reverse = input.obj.options.getBoolean('reverse') ?? false;
+    const mode = input.obj.options.getString('mode') ?? 'osu';
+    const filteredMapper = input.obj.options.getString('mapper') ?? null;
+    const filterTitle = input.obj.options.getString('filter') ?? null;
+    const parseId = input.obj.options.getInteger('parse') ?? null;
+    const parseScore = parseId != null ? true : false;
+    const filteredMods = input.obj.options.getString('mods') ?? null;
+    const filterRank = input.obj.options.getString('filterRank') ? osumodcalc.checkGrade(input.obj.options.getString('filterRank')) : null;
+
+    return {
+        user, searchid, page, scoredetailed,
+        sort, reverse, mode,
+        filteredMapper, filteredMods, filterTitle, filterRank,
+        parseScore, parseId,
+    };
+}
+
+async function parseArgs_scoreList_button(input: extypes.commandInput) {
+    let user;
+    let page = 0;
+
+    let scoredetailed: number = 1;
+
+    let sort: embedStuff.scoreSort = null;
+    let reverse = false;
+    let mode = 'osu';
+
+    let filteredMapper = null;
+    let filteredMods = null;
+    let filterTitle = null;
+    let filterRank: osuApiTypes.Rank = null;
+
+    let parseScore = false;
+    let parseId = null;
+
+    input.obj = (input.obj as Discord.ButtonInteraction);
+
+    if (!input.obj.message.embeds[0]) {
+        return;
+    }
+    const searchid = input.obj.member.user.id;
+
+    user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
+    mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
+    page = 0;
+
+    if (input.obj.message.embeds[0].description) {
+        if (input.obj.message.embeds[0].description.includes('mapper')) {
+            filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
+        }
+
+        if (input.obj.message.embeds[0].description.includes('mods')) {
+            filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
+        }
+
+        if (input.obj.message.embeds[0].description.includes('map')) {
+            filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
+        }
+
+        if (input.obj.message.embeds[0].description.includes('rank')) {
+            filterRank = osumodcalc.checkGrade(input.obj.message.embeds[0].description.split('rank: ')[1].split('\n')[0]);
+        }
+
+
+        const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
+        switch (true) {
+            case sort1.includes('score'):
+                sort = 'score';
+                break;
+            case sort1.includes('acc'):
+                sort = 'acc';
+                break;
+            case sort1.includes('pp'):
+                sort = 'pp';
+                break;
+            case sort1.includes('old'): case sort1.includes('recent'):
+                sort = 'recent';
+                break;
+            case sort1.includes('combo'):
+                sort = 'combo';
+                break;
+            case sort1.includes('miss'):
+                sort = 'miss';
+                break;
+            case sort1.includes('rank'):
+                sort = 'rank';
+                break;
+
+        }
+
+        const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
+        if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
+            reverse = true;
+        } else {
+            reverse = false;
+        }
+
+        const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
+        page = 0;
+        switch (input.button) {
+            case 'BigLeftArrow':
+                page = 1;
+                break;
+            case 'LeftArrow':
+                page = pageParsed - 1;
+                break;
+            case 'RightArrow':
+                page = pageParsed + 1;
+                break;
+            case 'BigRightArrow':
+
+                page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
+                break;
+            default:
+                page = pageParsed;
+                break;
+        }
+        switch (input.button) {
+            case 'Detail0':
+                scoredetailed = 0;
+                break;
+            case 'Detail1':
+                scoredetailed = 1;
+                break;
+            case 'Detail2':
+                scoredetailed = 2;
+                break;
+            default:
+                if (input.obj.message.embeds[0].footer.text.includes('LE')) {
+                    scoredetailed = 2;
+                }
+                if (input.obj.message.embeds[0].footer.text.includes('LC')) {
+                    scoredetailed = 0;
+                }
+                break;
+        }
+    }
+
+    return {
+        user, searchid, page, scoredetailed,
+        sort, reverse, mode,
+        filteredMapper, filteredMods, filterTitle, filterRank,
+        parseScore, parseId,
+    };
+}
+
 async function parseArgs_scoreList(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
@@ -13579,20 +13734,20 @@ async function parseArgs_scoreList(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = input.obj.member.user.id;
-
-            user = input.obj.options.getString('user');
-            page = input.obj.options.getInteger('page');
-            scoredetailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
-            sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
-            reverse = input.obj.options.getBoolean('reverse');
-            mode = input.obj.options.getString('mode') ?? 'osu';
-            filteredMapper = input.obj.options.getString('mapper');
-            filterTitle = input.obj.options.getString('filter');
-            parseId = input.obj.options.getInteger('parse');
-            if (parseId != null) {
-                parseScore = true;
-            }
-            filteredMods = input.obj.options.getString('mods');
+            const temp = await parseArgs_scoreList_interaction(input);
+            user = temp.user;
+            searchid = temp.searchid;
+            page = temp.page;
+            scoredetailed = temp.scoredetailed;
+            sort = temp.sort;
+            reverse = temp.reverse;
+            mode = temp.mode;
+            filteredMapper = temp.filteredMapper;
+            filteredMods = temp.filteredMods;
+            filterTitle = temp.filterTitle;
+            parseScore = temp.parseScore;
+            parseId = temp.parseId;
+            filterRank = temp.filterRank;
         }
 
             //==============================================================================================================================================================================================
@@ -13601,107 +13756,21 @@ async function parseArgs_scoreList(input: extypes.commandInput) {
         case 'button': {
             input.obj = (input.obj as Discord.ButtonInteraction);
 
-            if (!input.obj.message.embeds[0]) {
-                return;
-            }
             commanduser = input.obj.member.user;
-            searchid = commanduser.id;
-
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
-            page = 0;
-
-            if (input.obj.message.embeds[0].description) {
-                if (input.obj.message.embeds[0].description.includes('mapper')) {
-                    filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }
-
-                if (input.obj.message.embeds[0].description.includes('mods')) {
-                    filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }
-
-                if (input.obj.message.embeds[0].description.includes('map')) {
-                    filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
-                }
-
-                if (input.obj.message.embeds[0].description.includes('rank')) {
-                    filterRank = osumodcalc.checkGrade(input.obj.message.embeds[0].description.split('rank: ')[1].split('\n')[0]);
-                }
-
-
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
-                switch (true) {
-                    case sort1.includes('score'):
-                        sort = 'score';
-                        break;
-                    case sort1.includes('acc'):
-                        sort = 'acc';
-                        break;
-                    case sort1.includes('pp'):
-                        sort = 'pp';
-                        break;
-                    case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent';
-                        break;
-                    case sort1.includes('combo'):
-                        sort = 'combo';
-                        break;
-                    case sort1.includes('miss'):
-                        sort = 'miss';
-                        break;
-                    case sort1.includes('rank'):
-                        sort = 'rank';
-                        break;
-
-                }
-
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
-                if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
-                    reverse = true;
-                } else {
-                    reverse = false;
-                }
-
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
-                page = 0;
-                switch (input.button) {
-                    case 'BigLeftArrow':
-                        page = 1;
-                        break;
-                    case 'LeftArrow':
-                        page = pageParsed - 1;
-                        break;
-                    case 'RightArrow':
-                        page = pageParsed + 1;
-                        break;
-                    case 'BigRightArrow':
-
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
-                        break;
-                    default:
-                        page = pageParsed;
-                        break;
-                }
-                switch (input.button) {
-                    case 'Detail0':
-                        scoredetailed = 0;
-                        break;
-                    case 'Detail1':
-                        scoredetailed = 1;
-                        break;
-                    case 'Detail2':
-                        scoredetailed = 2;
-                        break;
-                    default:
-                        if (input.obj.message.embeds[0].footer.text.includes('LE')) {
-                            scoredetailed = 2;
-                        }
-                        if (input.obj.message.embeds[0].footer.text.includes('LC')) {
-                            scoredetailed = 0;
-                        }
-                        break;
-                }
-            }
+            const temp = await parseArgs_scoreList_button(input);
+            user = temp.user;
+            searchid = temp.searchid;
+            page = temp.page;
+            scoredetailed = temp.scoredetailed;
+            sort = temp.sort;
+            reverse = temp.reverse;
+            mode = temp.mode;
+            filteredMapper = temp.filteredMapper;
+            filteredMods = temp.filteredMods;
+            filterTitle = temp.filterTitle;
+            parseScore = temp.parseScore;
+            parseId = temp.parseId;
+            filterRank = temp.filterRank;
         }
             break;
     }

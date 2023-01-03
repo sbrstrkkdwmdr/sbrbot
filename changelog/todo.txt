@@ -120,9 +120,19 @@ author:
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #12)
-    description: add score rank filter to and edit arg handling in score list commands
+    description: add score rank filter to score list commands
+    type: new feature
+    status: FINISHED
+    request date: 2023-01-03 18:01 AEDT (UTC+11)
+    finish date: 2023-01-03 22:39 AEDT (UTC+11)
+    author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+#13)
+    description: edit arg handling in score list commands
     type: new feature
     status: WIP - not yet started 
     request date: 2023-01-03 18:01 AEDT (UTC+11)
@@ -131,7 +141,7 @@ author:
 
 -------------------------------------------------------------------------------------------------------------------------
 
-#13)
+#14)
     description: put command options like filter and sort in a separate embed or section or smth
     type: new feature
     status: WIP - not yet started 
