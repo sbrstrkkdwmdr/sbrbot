@@ -2440,14 +2440,16 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
     let sort: embedStuff.scoreSort = parseArgs.sort ?? 'recent';
     let reverse = parseArgs.reverse ?? false;
     let mode = parseArgs.mode ?? 'osu';
+
     let filteredMapper = parseArgs.filteredMapper ?? null;
     let filteredMods = parseArgs.filteredMods ?? null;
     let filterTitle = parseArgs.filterTitle ?? null;
+    let filterRank = parseArgs.filterRank ?? null;
 
     let parseScore = parseArgs.parseScore ?? false;
     let parseId = parseArgs.parseId ?? null;
 
-    let reachedMaxCount = parseArgs.reachedMaxCount ?? false;
+    let reachedMaxCount = false;
     let embedStyle: extypes.osuCmdStyle = 'L';
 
     if (input.overrides != null) {
@@ -2509,6 +2511,10 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             {
                 name: 'Filter',
                 value: filterTitle
+            },
+            {
+                name: 'Rank',
+                value: filterRank
             }
         ]
     });
@@ -2699,6 +2705,10 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         );
     }
 
+    if (filterRank) {
+        firstscoresdata = firstscoresdata.filter(x => x.rank == filterRank);
+    }
+
     if (parseScore == true) {
         let pid = parseInt(parseId) - 1;
         if (pid < 0) {
@@ -2766,9 +2776,10 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         showTruePosition: true,
         sort: sort,
         truePosType: 'recent',
-        filteredMapper: filteredMapper,
-        filteredMods: filteredMods,
+        filteredMapper,
+        filteredMods,
         filterMapTitle: filterTitle,
+        filterRank,
         reverse: reverse,
     }, {
         useScoreMap: true
@@ -3228,6 +3239,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             filteredMapper: null,
             filteredMods: null,
             filterMapTitle: null,
+            filterRank: null,
             reverse: false,
             mapidOverride: mapdata.id,
             showUserName: true
@@ -3486,14 +3498,16 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     let filteredMapper = parseArgs.filteredMapper ?? null;
     let filteredMods = parseArgs.filteredMods ?? null;
     let filterTitle = parseArgs.filterTitle ?? null;
+    let filterRank = parseArgs.filterRank ?? null;
 
     let parseScore = parseArgs.parseScore ?? false;
     let parseId = parseArgs.parseId ?? null;
 
-    let reachedMaxCount = parseArgs.reachedMaxCount ?? false;
+    let reachedMaxCount = false;
 
     let embedStyle: extypes.osuCmdStyle = 'L';
     let noMiss = false;
+
 
     if (input.overrides != null) {
         if (input.overrides.page != null) {
@@ -3580,8 +3594,11 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             {
                 name: 'No misses',
                 value: noMiss
+            },
+            {
+                name: 'Rank',
+                value: filterRank
             }
-
         ]
     });
 
@@ -3772,6 +3789,10 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         osutopdata = osutopdata.filter(x => x.statistics.count_miss == 0);
     }
 
+    if (filterRank) {
+        osutopdata = osutopdata.filter(x => x.rank == filterRank);
+    }
+
     if (parseScore == true) {
         let pid = parseInt(parseId) - 1;
         if (pid < 0) {
@@ -3839,6 +3860,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             filteredMapper,
             filteredMods,
             filterMapTitle: filterTitle,
+            filterRank,
             reverse
         },
         {
@@ -3946,14 +3968,16 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     let sort: embedStuff.scoreSort = parseArgs.sort ?? 'recent';
     let reverse = parseArgs.reverse ?? false;
     let mode = parseArgs.mode ?? 'osu';
+
     let filteredMapper = parseArgs.filteredMapper ?? null;
     let filteredMods = parseArgs.filteredMods ?? null;
     let filterTitle = parseArgs.filterTitle ?? null;
+    let filterRank = parseArgs.filterRank ?? null;
 
     let parseScore = parseArgs.parseScore ?? false;
     let parseId = parseArgs.parseId ?? null;
 
-    let reachedMaxCount = parseArgs.reachedMaxCount ?? false;
+    let reachedMaxCount = false;
     let embedStyle: extypes.osuCmdStyle = 'L';
 
     if (input.overrides != null) {
@@ -4027,6 +4051,10 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             {
                 name: 'Filter',
                 value: filterTitle
+            },
+            {
+                name: 'Rank',
+                value: filterRank
             }
 
         ]
@@ -4208,7 +4236,9 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
         );
     }
-
+    if (filterRank) {
+        pinnedscoresdata = pinnedscoresdata.filter(x => x.rank == filterRank);
+    }
     if (parseScore == true) {
         let pid = parseInt(parseId) - 1;
         if (pid < 0) {
@@ -4276,6 +4306,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             filteredMapper: filteredMapper,
             filteredMods: filteredMods,
             filterMapTitle: filterTitle,
+            filterRank,
             reverse: false
         },
         {
@@ -4381,9 +4412,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
     let sort: embedStuff.scoreSort = 'recent';
     let showFails = 1;
     let filterTitle = null;
-
-    let isFirstPage = false;
-    let isLastPage = false;
+    let filterRank: osuApiTypes.Rank = null;
 
     let embedStyle: extypes.osuCmdStyle = 'S';
 
@@ -4403,43 +4432,6 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             if (input.args.includes('-l')) {
                 list = true;
                 input.args.splice(input.args.indexOf('-l'), 1);
-            }
-
-            if (input.args.includes('-page')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            if (input.args.includes('-detailed')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-detailed'), 1);
-            }
-            if (input.args.includes('-d')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-d'), 1);
-            }
-            if (input.args.includes('-compress')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-compress'), 1);
-            }
-            if (input.args.includes('-c')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-c'), 1);
-            }
-
-            if (input.args.includes('-mode')) {
-                mode = (input.args[input.args.indexOf('-mode') + 1]);
-                input.args.splice(input.args.indexOf('-mode'), 2);
-            }
-            if (input.args.includes('-m')) {
-                mode = (input.args[input.args.indexOf('-m') + 1]);
-                input.args.splice(input.args.indexOf('-m'), 2);
             }
             if (input.args.includes('-passes=true')) {
                 showFails = 0;
@@ -4461,11 +4453,15 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 showFails = 0;
                 input.args.splice(input.args.indexOf('-nf'), 1);
             }
-            if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
-                filterTitle = temp.value;
-                input.args = temp.newArgs;
-            }
+
+            const temp = await parseArgs_scoreList_message(input);
+
+            page = temp.page;
+            mode = temp.mode;
+            sort = temp.sort;
+            filterTitle = temp.filterTitle;
+            scoredetailed = temp.scoredetailed;
+            filterRank = temp.filterRank;
 
             input.args = cleanArgs(input.args);
 
@@ -4473,8 +4469,6 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null;
             }
-            isFirstPage = true;
-
         }
             break;
 
@@ -4530,7 +4524,6 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             page = 0;
             if (input.button == 'BigLeftArrow') {
                 page = 1;
-                isFirstPage = true;
             }
             if (input.obj.message.embeds[0].footer.text.includes('L')) {
                 switch (input.button) {
@@ -4550,12 +4543,6 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 list = true;
                 if (isNaN(+(input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) || ((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) == 'NaN') {
                     page = 1;
-                }
-                if (page < 2) {
-                    isFirstPage = true;
-                }
-                if (page == parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n')[0])) {
-                    isLastPage = true;
                 }
             } else {
                 switch (input.button) {
@@ -4603,6 +4590,10 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             if (input.obj.message.embeds[0].description.includes('Filter:')) {
                 filterTitle = input.obj.message.embeds[0].description.split('Filter: ')[1].split('\n')[0];
             }
+            if (input.obj.message.embeds[0].description.includes('Filter by rank:')) {
+                filterRank = osumodcalc.checkGrade(input.obj.message.embeds[0].description.split('Filter by rank: ')[1].split('\n')[0]);
+            }
+
         }
             break;
     }
@@ -4680,6 +4671,10 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             {
                 name: 'Detailed',
                 value: scoredetailed
+            },
+            {
+                name: 'Rank',
+                value: filterRank
             }
 
         ]
@@ -4705,7 +4700,6 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
     mode = osufunc.modeValidator(mode);
 
     if (page < 2 || typeof page != 'number') {
-        isFirstPage = true;
         page = 1;
     }
     page--;
@@ -4853,6 +4847,10 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             ||
             filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
         );
+    }
+
+    if (filterRank) {
+        rsdata = rsdata.filter(x => x.rank == filterRank);
     }
 
     const rsEmbed = new Discord.EmbedBuilder()
@@ -5187,8 +5185,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
 ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
-${filterTitle ? `Filter: ${filterTitle}` : ''}
-${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 ${rspassinfo}\n\`${hitlist}\` | ${curscore.max_combo}x/**${mapdata.max_combo}x** combo
 **${rspp}**pp ${fcflag}\n${ppissue}
 `);
@@ -5200,7 +5197,7 @@ ${rspassinfo}\n\`${hitlist}\` | ${curscore.max_combo}x/**${mapdata.max_combo}x**
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
 ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
-${filterTitle ? `Filter: ${filterTitle}` : ''}
+${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}
 `)
                     .addFields([
                         {
@@ -5251,8 +5248,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
 ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
-${filterTitle ? `Filter: ${filterTitle}` : ''}
-`)
+${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}`)
                     .addFields([
                         {
                             name: 'SCORE DETAILS',
@@ -5354,6 +5350,7 @@ ${srStr}
                 filteredMapper: null,
                 filteredMods: null,
                 filterMapTitle: filterTitle,
+                filterRank,
                 reverse: false
             },
             {
@@ -6712,6 +6709,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     let mode = 'osu';
     let filteredMapper = null;
     let filteredMods = null;
+    let filterRank = null;
 
     let parseScore = false;
     let parseId = null;
@@ -7229,6 +7227,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             filteredMapper: filteredMapper,
             filteredMods: filteredMods,
             filterMapTitle: null,
+            filterRank,
             reverse: reverse,
             mapidOverride: mapdata.id
         },
@@ -13362,7 +13361,7 @@ async function buttonsAddDetails(command: string, commanduser: Discord.User, com
 
 //ARG HANDLING
 
-async function parseArgs_scoreList(input: extypes.commandInput) {
+async function parseArgs_scoreList_message(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
     let user;
@@ -13381,142 +13380,196 @@ async function parseArgs_scoreList(input: extypes.commandInput) {
     let parseScore = false;
     let parseId = null;
 
-    let reachedMaxCount = false;
+    let filterRank: osuApiTypes.Rank = null;
+
+    input.obj = input.obj as Discord.Message;
+
+    searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+    if (input.args.includes('-parse')) {
+        parseScore = true;
+        const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+        parseId = temp.value;
+        input.args = temp.newArgs;
+    }
+
+    if (input.args.includes('-page')) {
+        const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+        page = temp.value;
+        input.args = temp.newArgs;
+    }
+    if (input.args.includes('-p')) {
+        const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
+        page = temp.value;
+        input.args = temp.newArgs;
+    }
+
+    if (input.args.includes('-detailed')) {
+        scoredetailed = 2;
+        input.args.splice(input.args.indexOf('-detailed'), 1);
+    }
+    if (input.args.includes('-d')) {
+        scoredetailed = 2;
+        input.args.splice(input.args.indexOf('-d'), 1);
+    }
+    if (input.args.includes('-compress')) {
+        scoredetailed = 0;
+        input.args.splice(input.args.indexOf('-compress'), 1);
+    }
+    if (input.args.includes('-c')) {
+        scoredetailed = 0;
+        input.args.splice(input.args.indexOf('-c'), 1);
+    }
+
+    if (input.args.includes('-osu')) {
+        mode = 'osu';
+        input.args.splice(input.args.indexOf('-osu'), 1);
+    }
+    if (input.args.includes('-o')) {
+        mode = 'osu';
+        input.args.splice(input.args.indexOf('-o'), 1);
+    }
+    if (input.args.includes('-taiko')) {
+        mode = 'taiko';
+        input.args.splice(input.args.indexOf('-taiko'), 1);
+    }
+    if (input.args.includes('-t')) {
+        mode = 'taiko';
+        input.args.splice(input.args.indexOf('-t'), 1);
+    }
+    if (input.args.includes('-catch')) {
+        mode = 'fruits';
+        input.args.splice(input.args.indexOf('-catch'), 1);
+    }
+    if (input.args.includes('-fruits')) {
+        mode = 'fruits';
+        input.args.splice(input.args.indexOf('-fruits'), 1);
+    }
+    if (input.args.includes('-ctb')) {
+        mode = 'fruits';
+        input.args.splice(input.args.indexOf('-ctb'), 1);
+    }
+    if (input.args.includes('-f')) {
+        mode = 'fruits';
+        input.args.splice(input.args.indexOf('-f'));
+    }
+    if (input.args.includes('-mania')) {
+        mode = 'mania';
+        input.args.splice(input.args.indexOf('-mania'), 1);
+    }
+    if (input.args.includes('-m')) {
+        mode = 'mania';
+        input.args.splice(input.args.indexOf('-m'));
+    }
+
+    if (input.args.includes('-recent')) {
+        sort = 'recent';
+        input.args.splice(input.args.indexOf('-recent'), 1);
+    }
+    if (input.args.includes('-performance')) {
+        sort = 'pp';
+        input.args.splice(input.args.indexOf('-performance'), 1);
+    }
+    if (input.args.includes('-pp')) {
+        sort = 'pp';
+        input.args.splice(input.args.indexOf('-pp'), 1);
+    }
+    if (input.args.includes('-score')) {
+        sort = 'score';
+        input.args.splice(input.args.indexOf('-score'), 1);
+    }
+    if (input.args.includes('-acc')) {
+        sort = 'acc';
+        input.args.splice(input.args.indexOf('-acc'), 1);
+    }
+    if (input.args.includes('-combo')) {
+        sort = 'combo';
+        input.args.splice(input.args.indexOf('-combo'), 1);
+    }
+    if (input.args.includes('-misses')) {
+        sort = 'miss',
+            input.args.splice(input.args.indexOf('-misses'));
+    }
+    if (input.args.includes('-miss')) {
+        sort = 'miss';
+        input.args.splice(input.args.indexOf('-miss'), 1);
+    }
+    if (input.args.includes('-rank')) {
+        sort = 'rank';
+        input.args.splice(input.args.indexOf('-rank'), 1);
+    }
+    if (input.args.includes('-r')) {
+        sort = 'recent';
+        input.args.splice(input.args.indexOf('-r'), 1);
+    }
+
+    if (input.args.includes('-?')) {
+        const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
+        filterTitle = temp.value;
+        input.args = temp.newArgs;
+    }
+
+    if (input.args.includes('-grade')) {
+        const temp = func.parseArg(input.args, '-grade', 'string', filterRank, false);
+        filterRank = osumodcalc.checkGrade(temp.value);
+        input.args = temp.newArgs;
+    }
+
+    input.args = cleanArgs(input.args);
+
+    user = input.args.join(' ');
+    if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+        user = null;
+    }
+    return {
+        user, searchid, page, scoredetailed,
+        sort, reverse, mode,
+        filteredMapper, filteredMods, filterTitle, filterRank,
+        parseScore, parseId,
+    };
+}
+
+async function parseArgs_scoreList(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+
+    let user;
+    let searchid;
+    let page = 0;
+
+    let scoredetailed: number = 1;
+
+    let sort: embedStuff.scoreSort = null;
+    let reverse = false;
+    let mode = 'osu';
+
+    let filteredMapper = null;
+    let filteredMods = null;
+    let filterTitle = null;
+    let filterRank: osuApiTypes.Rank = null;
+
+    let parseScore = false;
+    let parseId = null;
+
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
 
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if (input.args.includes('-parse')) {
-                parseScore = true;
-                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
-                parseId = temp.value;
-                input.args = temp.newArgs;
-            }
+            const temp = await parseArgs_scoreList_message(input);
+            user = temp.user;
+            searchid = temp.searchid;
+            page = temp.page;
+            scoredetailed = temp.scoredetailed;
+            sort = temp.sort;
+            reverse = temp.reverse;
+            mode = temp.mode;
+            filteredMapper = temp.filteredMapper;
+            filteredMods = temp.filteredMods;
+            filterTitle = temp.filterTitle;
+            parseScore = temp.parseScore;
+            parseId = temp.parseId;
+            filterRank = temp.filterRank;
 
-            if (input.args.includes('-page')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            if (input.args.includes('-detailed')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-detailed'), 1);
-            }
-            if (input.args.includes('-d')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-d'), 1);
-            }
-            if (input.args.includes('-compress')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-compress'), 1);
-            }
-            if (input.args.includes('-c')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-c'), 1);
-            }
-
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
-            }
-
-            if (input.args.includes('-recent')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-recent'), 1);
-            }
-            if (input.args.includes('-performance')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-performance'), 1);
-            }
-            if (input.args.includes('-pp')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-pp'), 1);
-            }
-            if (input.args.includes('-score')) {
-                sort = 'score';
-                input.args.splice(input.args.indexOf('-score'), 1);
-            }
-            if (input.args.includes('-acc')) {
-                sort = 'acc';
-                input.args.splice(input.args.indexOf('-acc'), 1);
-            }
-            if (input.args.includes('-combo')) {
-                sort = 'combo';
-                input.args.splice(input.args.indexOf('-combo'), 1);
-            }
-            if (input.args.includes('-misses')) {
-                sort = 'miss',
-                    input.args.splice(input.args.indexOf('-misses'));
-            }
-            if (input.args.includes('-miss')) {
-                sort = 'miss';
-                input.args.splice(input.args.indexOf('-miss'), 1);
-            }
-            if (input.args.includes('-rank')) {
-                sort = 'rank';
-                input.args.splice(input.args.indexOf('-rank'), 1);
-            }
-            if (input.args.includes('-r')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-
-            if (input.args.includes('-?')) {
-                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
-                filterTitle = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            input.args = cleanArgs(input.args);
-
-            user = input.args.join(' ');
-            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null;
-            }
         }
             break;
 
@@ -13569,6 +13622,10 @@ async function parseArgs_scoreList(input: extypes.commandInput) {
 
                 if (input.obj.message.embeds[0].description.includes('map')) {
                     filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
+                }
+
+                if (input.obj.message.embeds[0].description.includes('rank')) {
+                    filterRank = osumodcalc.checkGrade(input.obj.message.embeds[0].description.split('rank: ')[1].split('\n')[0]);
                 }
 
 
@@ -13652,9 +13709,8 @@ async function parseArgs_scoreList(input: extypes.commandInput) {
         commanduser,
         user, searchid, page, scoredetailed,
         sort, reverse, mode,
-        filteredMapper, filteredMods, filterTitle,
+        filteredMapper, filteredMods, filterTitle, filterRank,
         parseScore, parseId,
-        reachedMaxCount
     };
 }
 

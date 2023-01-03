@@ -531,7 +531,7 @@ export type Score = {
     pp: number,
     rank_country?: string,
     rank_global?: string | number,
-    rank: string,
+    rank: Rank,
     replay: string,
     score: number,
     statistics: Statistics,
@@ -893,7 +893,7 @@ type Post = {
 type Mod = string;
 //'NM' | ''
 
-type Rank = 'XH' | 'X' | 'SH' | 'S' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
+export type Rank = 'XH' | 'X' | 'SH' | 'S' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 
 type Statistics = {
     count_100: number,

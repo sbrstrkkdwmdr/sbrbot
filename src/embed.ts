@@ -21,6 +21,7 @@ export async function scoreList(
         filteredMapper: string,
         filteredMods: string,
         filterMapTitle: string,
+        filterRank: osuapitypes.Rank,
         reverse: boolean,
         mapidOverride?: number,
         showUserName?: boolean,
@@ -52,6 +53,9 @@ export async function scoreList(
     }
     if (asObj.filterMapTitle != null) {
         filterinfo += `\nmap: ${asObj.filterMapTitle}`;
+    }
+    if (asObj.filterRank != null) {
+        filterinfo += `\nrank: ${asObj.filterRank}`;
     }
 
     let newData = filtereddata.slice();

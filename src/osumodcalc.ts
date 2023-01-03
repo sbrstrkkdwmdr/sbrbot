@@ -1,3 +1,5 @@
+import * as osuapitypes from './types/osuApiTypes.js';
+
 
 export type OverallDifficultyObj = {
     hitwindow_300: number,
@@ -885,10 +887,56 @@ function ModeIntToName(mode: number): string {
     }
 }
 
+/**
+ * 
+ * @param string 
+ */
+function checkGrade(string: string, defaultRank?: osuapitypes.Rank) {
+    let grade: osuapitypes.Rank;
+
+    if (!defaultRank) {
+        defaultRank = 'A';
+    }
+
+    switch (true) {
+        case string.toUpperCase().includes('SSH'):
+            grade = 'XH';
+            break;
+        case string.toUpperCase().includes('SS'):
+            grade = 'X';
+            break;
+        case string.toUpperCase().includes('SH'):
+            grade = 'SH';
+            break;
+        case string.toUpperCase().includes('S'):
+            grade = 'S';
+            break;
+        case string.toUpperCase().includes('A'):
+            grade = 'A';
+            break;
+        case string.toUpperCase().includes('B'):
+            grade = 'B';
+            break;
+        case string.toUpperCase().includes('C'):
+            grade = 'C';
+            break;
+        case string.toUpperCase().includes('D'):
+            grade = 'D';
+            break;
+        case string.toUpperCase().includes('F'):
+            grade = 'F';
+            break;
+        default:
+            grade = defaultRank;
+            break;
+    }
+    return grade;
+}
+
 //module.exports = { DoubleTimeAR, HalfTimeAR, calcgrade, calcgradeTaiko, calcgradeCatch, calcgradeMania, odDT, odHT, ODtoms, ARtoms, msToAR, msToOD, toEZ, toHR, ModStringToInt, ModIntToString, OrderMods, shortModName, longModName, csToRadius, csFromRadius }
 export {
     DoubleTimeAR, HalfTimeAR,
-    calcgrade, calcgradeTaiko, calcgradeCatch, calcgradeMania,
+    calcgrade, calcgradeTaiko, calcgradeCatch, calcgradeMania, checkGrade,
     odDT, odHT,
     ODtoms, ARtoms, msToAR, msToOD,
     toEZ, toHR,

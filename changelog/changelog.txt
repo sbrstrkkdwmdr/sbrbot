@@ -156,3 +156,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [ADD] added a warning on buttons that aren't allowed to be used
 [QOL] edited some user-based urls to automatically scroll to certain sections (the osutop url scrolls to top_ranks etc.
 [QOL] change incorrect timezone message to ask for region instead of country
+[ADD] filter by score rank
