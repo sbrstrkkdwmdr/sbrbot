@@ -154,4 +154,5 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] fix maplb page buttons disabling on the second page if mods were selected
 [QOL] all users can access the user, map and maplb buttons even if they didn't send the command
 [ADD] added a warning on buttons that aren't allowed to be used
-[QOL] edited some user-based urls to automatically scroll to certain sections (the osutop url scrolls to top_ranks etc.)
+[QOL] edited some user-based urls to automatically scroll to certain sections (the osutop url scrolls to top_ranks etc.
+[QOL] change incorrect timezone message to ask for region instead of country

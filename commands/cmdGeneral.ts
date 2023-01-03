@@ -1625,7 +1625,7 @@ export async function math(input: extypes.commandInput) {
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-        const finalMessage = await msgfunc.sendMessage(
+    const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
@@ -1651,7 +1651,7 @@ export async function math(input: extypes.commandInput) {
             commandId: input.absoluteID,
             object: input.obj,
             customString: 'Message failed to send'
-        })
+        });
     }
 }
 
@@ -1899,7 +1899,7 @@ export async function remind(input: extypes.commandInput) {
     sendremind(reminder, time, input.obj, sendtochannel, remindertxt, user);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-        const finalMessage = await msgfunc.sendMessage(
+    const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
@@ -1924,7 +1924,7 @@ export async function remind(input: extypes.commandInput) {
             commandId: input.absoluteID,
             object: input.obj,
             customString: 'Message failed to send'
-        })
+        });
     }
 
 }
@@ -2006,7 +2006,7 @@ Current Shard:
         );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-        const finalMessage = await msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -2031,7 +2031,7 @@ Current Shard:
             commandId: input.absoluteID,
             object: input.obj,
             customString: 'Message failed to send'
-        })
+        });
     }
 }
 
@@ -2157,28 +2157,28 @@ export async function time(input: extypes.commandInput) {
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
         .setTitle('Current Time')
-        .addFields([{
-            name: 'UTC/GMT+00:00',
-            value: `\n**Date**: ${truedate}` +
-                `\n**Full Date**: ${datenow12h}` +
-                `\n**Full Date(24h)**: ${Datenow}` +
-                `\n\n**Full Date ISO8601**: ${input.currentDate.toISOString()}` +
-                `\n**EPOCH(ms)**: ${epoch}` +
-                `\n**Days since Jan 1st 2022**: [${thedaysthingyiuseonmydiscordstatus}]`
-            ,
-            inline: false
-        }]
-        )
-        .addFields([{
-            name: `UTC/GMT${offset} (Host's Local Time)`,
-            value: `\n**Date**: ${reltruedate}` +
-                `\n**Full Date**: ${reldatenow12h}` +
-                `\n**Full Date(24h)**: ${`${input.currentDate}`.split('GMT')[0]}` +
-                `\n**Time since command was last used**: ${minlastvisw} `
-            ,
-            inline: false
-        }]
-        );
+        .addFields([
+            {
+                name: 'UTC/GMT+00:00',
+                value: `\n**Date**: ${truedate}` +
+                    `\n**Full Date**: ${datenow12h}` +
+                    `\n**Full Date(24h)**: ${Datenow}` +
+                    `\n\n**Full Date ISO8601**: ${input.currentDate.toISOString()}` +
+                    `\n**EPOCH(ms)**: ${epoch}` +
+                    `\n**Days since Jan 1st 2022**: [${thedaysthingyiuseonmydiscordstatus}]`
+                ,
+                inline: false
+            },
+            // {
+            //     name: `UTC/GMT${offset} (Host's Local Time)`,
+            //     value: `\n**Date**: ${reltruedate}` +
+            //         `\n**Full Date**: ${reldatenow12h}` +
+            //         `\n**Full Date(24h)**: ${`${input.currentDate}`.split('GMT')[0]}` +
+            //         `\n**Time since command was last used**: ${minlastvisw} `
+            //     ,
+            //     inline: false
+            // }
+        ]);
     if (fetchtimezone != null && fetchtimezone != '') {
         if (fetchtimezone.includes('/')) {
             const timezone = input.args.splice(0, 1000).join(" ");
@@ -2224,7 +2224,7 @@ export async function time(input: extypes.commandInput) {
                     inline: false
                 }]
                 );
-               await msgfunc.sendMessage({
+                await msgfunc.sendMessage({
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
@@ -2238,7 +2238,7 @@ export async function time(input: extypes.commandInput) {
             Embed.addFields([{
                 name: `UTC/GMT +??:?? (Requested Time)`,
                 value: `\nRecived invalid timezone!` +
-                    `\nBoth Country and City must be specified` +
+                    `\nBoth **region** and **city** must be specified` +
                     `\ni.e **Australia/Melbourne**` +
                     `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
                 ,
