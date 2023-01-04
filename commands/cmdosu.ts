@@ -421,12 +421,12 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         .setTitle(`Top X leaderboard counts for ${osudata.username}`)
         .setThumbnail(`${osudata.avatar_url ?? def.images.user.url}`)
         .setDescription(`
-\`Top 1   | ${data.top1s.toString().padEnd(6, ' ')} | #${data.top1s_rank.toString().padEnd(10, ' ')}\`
-\`Top 8   | ${data.top8s.toString().padEnd(6, ' ')} | #${data.top8s_rank.toString().padEnd(10, ' ')}\`
-\`Top 15  | ${data.top15s.toString().padEnd(6, ' ')} | #${data.top15s_rank.toString().padEnd(10, ' ')}\`
-\`Top 25  | ${data.top25s.toString().padEnd(6, ' ')} | #${data.top25s_rank.toString().padEnd(10, ' ')}\`
-\`Top 50  | ${data.top50s.toString().padEnd(6, ' ')} | #${data.top50s_rank.toString().padEnd(10, ' ')}\`
-\`Top 100 | ${data.top100s.toString().padEnd(6, ' ')} | #${data.top100s_rank.toString().padEnd(10, ' ')}\`
+\`Top 1   | ${`${data.top1s}`.padEnd(6, ' ')} | #${`${data.top1s_rank ?? 'null'}`.padEnd(10, ' ')}\`
+\`Top 8   | ${`${data.top8s}`.padEnd(6, ' ')} | #${`${data.top8s_rank ?? 'null'}`.padEnd(10, ' ')}\`
+\`Top 15  | ${`${data.top15s}`.padEnd(6, ' ')} | #${`${data.top15s_rank ?? 'null'}`.padEnd(10, ' ')}\`
+\`Top 25  | ${`${data.top25s}`.padEnd(6, ' ')} | #${`${data.top25s_rank ?? 'null'}`.padEnd(10, ' ')}\`
+\`Top 50  | ${`${data.top50s}`.padEnd(6, ' ')} | #${`${data.top50s_rank ?? 'null'}`.padEnd(10, ' ')}\`
+\`Top 100 | ${`${data.top100s}`.padEnd(6, ' ')} | #${`${data.top100s_rank ?? 'null'}`.padEnd(10, ' ')}\`
 `)
 
         ;
