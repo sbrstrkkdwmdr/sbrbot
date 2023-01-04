@@ -159,3 +159,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [ADD] filter by score rank
 [MIN] rework score list handling for readability or smth idk
 [QOL] update helpinfo
+[FIX] fix help command crashing (#7)

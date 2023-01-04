@@ -955,6 +955,7 @@ export async function help(input: extypes.commandInput) {
     const useComponents: any = [buttons];
 
     function commandEmb(command: helpinfo.commandInfo, embed) {
+
         let desc = '';
         desc += command.description + "\n";
         if (command.usage) {
@@ -964,13 +965,24 @@ export async function help(input: extypes.commandInput) {
             desc += `\nSlash Command: \`/${command.slashusage}\``;
         }
 
+        let exceedTxt = '';
+        let exceeds = false;
+
         const opts = command.options;
         let opttxt = '';
         for (let i = 0; i < opts.length; i++) {
             const reqtxt = opts[i].required ? 'required' : 'optional';
-            opttxt += `\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options &&
+            const newtxt = `\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options &&
                 !opts[i].options.includes('N/A') && !opts[i].options.includes('null') && !opts[i].options.includes('true') && !opts[i].options.includes('false')
                 ? `(${opts[i].options.map(x => `\`${x}\``).join('/')})` : ''}\n`;
+
+            if ((opttxt + newtxt).length > 1000) {
+                exceeds = true;
+                exceedTxt += 'Some options are omitted due to character limits. For a full list check [here](https://sbrstrkkdwmdr.github.io/sbrbot/commands.html#osu)';
+                break;
+            }
+
+            opttxt += newtxt;
         }
         if (opttxt.length < 1) {
             opttxt = 'No options';
@@ -1005,6 +1017,15 @@ export async function help(input: extypes.commandInput) {
                     value: commandbuttons
                 }
             ]);
+        if (exceeds) {
+            embed.addFields([
+                {
+                    name: 'Error',
+                    value: exceedTxt,
+                    inline: false
+                }
+            ]);
+        }
     }
     function getemb() {
         if (command != null) {
