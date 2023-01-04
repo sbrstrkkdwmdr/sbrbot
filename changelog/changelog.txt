@@ -144,7 +144,7 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [REM] maplb no longer uses the last map's mods
 
 0.4.8
-
+2023-01-04
 [QOL] edited author.name sections
 [QOL] added user info to recent's author.name section
 [ADD] to do list
