@@ -158,3 +158,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] change incorrect timezone message to ask for region instead of country
 [ADD] filter by score rank
 [MIN] rework score list handling for readability or smth idk
+[QOL] update helpinfo

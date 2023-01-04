@@ -25,17 +25,19 @@ export type commandInfo = {
     }[],
     aliases?: string[];
     buttons?: string[];
-    options: {
-        name: string,
-        type: string,
-        required: string | boolean,
-        description: string,
-        options: string[],
-        defaultValue: string,
-        commandTypes: extypes.commandType[],
-        examples: string[],
-        aliases?: string[];
-    }[],
+    options: commandInfoOptions[],
+};
+
+export type commandInfoOptions = {
+    name: string,
+    type: string,
+    required: string | boolean,
+    description: string,
+    options: string[],
+    defaultValue: string,
+    commandTypes: extypes.commandType[],
+    examples: string[],
+    aliases?: string[];
 };
 
 const mods = [
@@ -73,282 +75,399 @@ const mods = [
     'MR'
 ];
 
-    const cmds: commandInfo[] = [
-        {
-            name: 'convert',
-            description: 'Converts a number from one unit to another',
-            usage: 'convert [from] [to] [number]',
-            slashusage: 'convert [from] [to] [number]',
-            examples: [
-                {
-                    text: 'PREFIXMSGconvert km mi 10',
-                    descriptor: 'Converts 10 kilometers to miles'
-                },
-                {
-                    text: 'PREFIXMSGconvert k c 273.15',
-                    descriptor: 'Converts 273.15 kelvin to celsius'
-                },
-            ],
-            aliases: [],
-            options: [
-                {
-                    name: 'from',
-                    type: 'string',
-                    required: true,
-                    description: 'The unit to convert from',
-                    options: ['N/A'],
-                    defaultValue: 'N/A',
-                    examples: ['k', 'from:kelvin'],
-                    commandTypes: ['message', 'interaction']
-                },
-                {
-                    name: 'to',
-                    type: 'string',
-                    required: true,
-                    description: 'The unit to convert to',
-                    options: [
-                        'celsius', 'fahrenheit', 'kelvin',
-                        'inches', 'feet', 'metres', 'miles',
-                        'seconds', 'minutes', 'hours', 'days', 'years',
-                        'fluid ounces', 'cups', 'pints', 'litres', 'gallons', 'cubic metres',
-                        'grams', 'Newtons(WIP)', 'kilograms(WIP)', 'ounces', 'pounds', 'metric tonnes',
-                        'help', 'SI units'
-                    ],
-                    defaultValue: 'N/A',
-                    examples: ['c', 'to:celsius'],
-                    commandTypes: ['message', 'interaction']
-                },
-                {
-                    name: 'number',
-                    type: 'float',
-                    required: true,
-                    description: 'The number to convert',
-                    options: ['N/A'],
-                    defaultValue: 'N/A',
-                    examples: ['273.15', 'number:273.15'],
-                    commandTypes: ['message', 'interaction']
-                }
-            ]
-        },
-        {
-            name: 'help',
-            description: 'Shows a list of commands or information about a specific command',
-            usage: 'help [command]',
-            slashusage: 'help [command]',
-            examples: [
-                {
-                    text: 'PREFIXMSGhelp',
-                    descriptor: 'Shows a list of all commands'
-                },
-                {
-                    text: 'PREFIXMSGhelp convert',
-                    descriptor: 'Shows information about the convert command'
-                },
-                {
-                    text: '/help recent',
-                    descriptor: 'Shows information about the recent command'
-                }
-            ],
-            aliases: [],
-            buttons: [buttonsObjs.label.extras.random, buttonsObjs.label.main.detailed],
-            options: [
-                {
-                    name: 'command',
-                    type: 'string',
-                    required: false,
-                    description: 'The command to get information about',
-                    options: ['N/A'],
-                    defaultValue: 'N/A',
-                    examples: ['recent', 'command:osutop'],
-                    commandTypes: ['message', 'interaction', 'button']
-                },
-            ]
-        },
-        {
-            name: 'info',
-            description: 'Shows information about the bot',
-            usage: 'info',
-            slashusage: 'null',
-            examples: [],
-            aliases: [],
-            options: []
-        },
-        {
-            name: 'math',
-            description: 'Solves a math problem',
-            usage: 'math [problem]',
-            slashusage: 'math [type] [num1] [num2]',
-            examples: [
-                {
-                    text: 'PREFIXMSGmath 2+2',
-                    descriptor: 'Solves 2+2'
-                },
-                {
-                    text: '/math type:pythag num1:3 num2:4',
-                    descriptor: 'Solves the pythagorean theorem with a=3 and b=4'
-                },
-            ],
-            aliases: [],
-            options: [
-                {
-                    name: 'problem',
-                    type: 'string',
-                    required: 'true (if using message command)',
-                    description: 'The math problem to solve',
-                    options: [
-                        'non numerical characters are ignored (excluding pi)',
-                    ],
-                    defaultValue: 'N/A',
-                    examples: ['8/2(2+2)', '2^32'],
-                    commandTypes: ['message']
-                },
-                {
-                    name: 'type',
-                    type: 'string',
-                    required: 'true (if using slash command)',
-                    description: 'The type of math problem',
-                    options: [
-                        'square', 'square root',
-                        'factorial',
-                        'highest common factor', 'lowest common multiple',
-                        'approach rate +dt', 'approach rate +ht', 'approach rate(ms)',
-                        'circumference', 'area of a circle',
-                        'pythag',
-                        'conversion to significant figures',
-                        'od+dt', 'od+ht', 'od(ms)',
-                        'mod int to string'
-                    ],
-                    defaultValue: 'N/A',
-                    examples: ['type:pythag'],
-                    commandTypes: ['interaction']
-                },
-                {
-                    name: 'num1',
-                    type: 'float',
-                    required: 'true (if using slash command)',
-                    description: 'The first number',
-                    options: ['N/A'],
-                    defaultValue: 'N/A',
-                    examples: ['num1:4'],
-                    commandTypes: ['interaction']
-                },
-                {
-                    name: 'num2',
-                    type: 'float',
-                    required: 'true (sometimes)',
-                    description: 'The second number',
-                    options: ['N/A'],
-                    defaultValue: 'N/A',
-                    examples: ['num2:5'],
-                    commandTypes: ['interaction']
-                }
-            ]
-        },
-        {
-            name: 'ping',
-            description: 'Pings the bot and returns the latency',
-            usage: 'ping',
-            slashusage: 'ping',
-            examples: [],
-            aliases: [],
-            options: []
-        },
-        {
-            name: 'remind',
-            description: 'Sets a reminder',
-            usage: 'reminder [time] [reminder]',
-            slashusage: 'reminder [time] [reminder] [sendinchannel]',
-            examples: [
-                {
-                    text: 'PREFIXMSGremind 1h30m30s reminder',
-                    descriptor: 'Sets a reminder for 1 hour, 30 minutes, and 30 seconds'
-                },
-                {
-                    text: 'PREFIXMSGremind 2:05 fc',
-                    descriptor: 'Sets a reminder for 2 minutes and 5 seconds'
-                },
-                {
-                    text: '/remind time:1h30m30s reminder:reminder sendinchannel:true',
-                    descriptor: 'Sets a reminder for 1 hour, 30 minutes, and 30 seconds and sends it in the channel'
-                }
-            ],
-            aliases: [],
-            options: [
-                {
-                    name: 'time',
-                    type: 'string',
-                    required: true,
-                    description: 'The time until the reminder',
-                    options: [
-                        'format: [number][unit] or hh:mm:ss',
-                        'units: s, m, h, d, w, y',
-                    ],
-                    defaultValue: '0s',
-                    examples: ['1h30m30s', '5:23:02'],
-                    commandTypes: ['message', 'interaction']
-                },
-                {
-                    name: 'reminder',
-                    type: 'string',
-                    required: false,
-                    description: 'The reminder',
-                    options: ['N/A'],
-                    defaultValue: 'null',
-                    examples: ['this is a reminder', 'reminder:this is a reminder'],
-                    commandTypes: ['message', 'interaction']
-                },
-                {
-                    name: 'sendinchannel',
-                    type: 'boolean',
-                    required: false,
-                    description: 'Whether to send the reminder in the channel or in a DM. Admin only',
-                    options: ['true', 'false'],
-                    defaultValue: 'false',
-                    examples: ['sendinchannel:true'],
-                    commandTypes: ['interaction']
-                }
-            ]
-        },
-        {
-            name: 'stats',
-            description: 'Shows the bot\'s statistics',
-            usage: 'stats',
-            slashusage: 'null',
-            examples: [],
-            aliases: [],
-            options: []
-        },
-        {
-            name: 'time',
-            description: 'Shows the current time in a specific timezone as well as UTC and the bot\'s timezone',
-            usage: 'time [timezone]',
-            slashusage: 'time [timezone]',
-            examples: [
-                {
-                    text: 'PREFIXMSGtime',
-                    descriptor: 'Shows the current time in UTC and the bot\'s timezone'
-                },
+const scoreListCommandOptions: commandInfoOptions[] = [
+    {
+        name: 'user',
+        type: 'string/ integer/ user mention',
+        required: false,
+        description: 'The user to show the scores of',
+        options: ['N/A'],
+        defaultValue: 'The user who ran the command',
+        examples: ['mrekk', 'user:mrekk'],
+        commandTypes: ['message', 'interaction']
+    },
+    {
+        name: 'mode',
+        type: 'string',
+        required: false,
+        description: 'The mode to show the scores in',
+        options: ['osu', 'taiko', 'fruits', 'mania'],
+        defaultValue: 'osu',
+        examples: ['taiko', 'mode:mania'],
+        commandTypes: ['message', 'interaction']
+    },
+    {
+        name: 'sort',
+        type: 'string',
+        required: false,
+        description: 'The sort order of the scores',
+        options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
+        defaultValue: 'pp',
+        examples: ['sort:score', '-recent'],
+        commandTypes: ['message', 'interaction']
+    },
+    {
+        name: 'reverse',
+        type: 'boolean',
+        required: false,
+        description: 'Whether to reverse the sort order',
+        options: ['true', 'false'],
+        defaultValue: 'false',
+        examples: ['reverse:true', '-reverse'],
+        commandTypes: ['message', 'interaction']
+    },
+    {
+        name: 'page',
+        type: 'integer',
+        required: false,
+        description: 'The page of scores to show',
+        options: ['N/A'],
+        defaultValue: '1',
+        aliases: ['p'],
+        examples: ['page:6', '-p 4'],
+        commandTypes: ['message', 'interaction', 'button']
+    },
+    {
+        name: 'mapper',
+        type: 'string',
+        required: false,
+        description: 'The mapper to filter the scores by',
+        options: ['N/A'],
+        defaultValue: 'null',
+        examples: ['mapper:Sotarks'],
+        commandTypes: ['interaction']
+    },
+    {
+        name: 'mods',
+        type: 'string',
+        required: false,
+        description: 'The mods to filter the scores by',
+        options: mods,
+        defaultValue: 'null',
+        examples: ['mods:HDHR'],
+        commandTypes: ['interaction']
+    },
+    {
+        name: 'detailed',
+        type: 'number',
+        required: false,
+        description: 'How much information to show about the scores. 0 = less details, 2 = more details',
+        options: ['c/0', '/1', 'd/2'],
+        aliases: ['-d', '-compress', '-c'],
+        defaultValue: '1',
+        examples: ['detailed:true', '-detailed', '-compress'],
+        commandTypes: ['message', 'interaction', 'button']
+    },
+    {
+        name: 'parse',
+        type: 'number',
+        required: false,
+        description: 'Parse the score with the specific index',
+        options: ['N/A'],
+        defaultValue: '0',
+        examples: ['-parse 5', 'parse:5'],
+        commandTypes: ['message', 'interaction']
+    },
+    {
+        name: 'filter',
+        type: 'string',
+        required: false,
+        description: 'Filters all scores to only show maps with the specified string',
+        options: ['N/A'],
+        defaultValue: 'null',
+        examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
+        aliases: ['?'],
+        commandTypes: ['message', 'interaction']
+    },
+    {
+        name: 'grade',
+        type: 'string',
+        required: false,
+        description: 'Filters all scores to only show scores matching the given grade/rank',
+        options: ['XH', 'SSH', 'X', 'SS', 'SH', 'S', 'A', 'B', 'C', 'D', 'F'],
+        defaultValue: 'null',
+        examples: ['-grade XH', 'grade:S'],
+        commandTypes: ['message', 'interaction']
+    }
+];
 
-                {
-                    text: 'PREFIXMSGtime Australia/Melbourne',
-                    descriptor: 'Shows the current time in Australia/Melbourne'
-                },
-            ],
-            aliases: [],
-            options: [
-                {
-                    name: 'timezone',
-                    type: 'string',
-                    required: false,
-                    description: 'The timezone to show the time in (see here - https://stackoverflow.com/a/54500197)',
-                    options: ['Formatted as [region][city]'],
-                    defaultValue: 'UTC',
-                    examples: ['Australia/Melbourne', 'Europe/Warsaw'],
-                    commandTypes: ['message', 'interaction']
-                }
-            ]
-        }
-    ];
+
+const cmds: commandInfo[] = [
+    {
+        name: 'convert',
+        description: 'Converts a number from one unit to another',
+        usage: 'convert [from] [to] [number]',
+        slashusage: 'convert [from] [to] [number]',
+        examples: [
+            {
+                text: 'PREFIXMSGconvert km mi 10',
+                descriptor: 'Converts 10 kilometers to miles'
+            },
+            {
+                text: 'PREFIXMSGconvert k c 273.15',
+                descriptor: 'Converts 273.15 kelvin to celsius'
+            },
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'from',
+                type: 'string',
+                required: true,
+                description: 'The unit to convert from',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: ['k', 'from:kelvin'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'to',
+                type: 'string',
+                required: true,
+                description: 'The unit to convert to',
+                options: [
+                    'celsius', 'fahrenheit', 'kelvin',
+                    'inches', 'feet', 'metres', 'miles',
+                    'seconds', 'minutes', 'hours', 'days', 'years',
+                    'fluid ounces', 'cups', 'pints', 'litres', 'gallons', 'cubic metres',
+                    'grams', 'Newtons(WIP)', 'kilograms(WIP)', 'ounces', 'pounds', 'metric tonnes',
+                    'help', 'SI units'
+                ],
+                defaultValue: 'N/A',
+                examples: ['c', 'to:celsius'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'number',
+                type: 'float',
+                required: true,
+                description: 'The number to convert',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: ['273.15', 'number:273.15'],
+                commandTypes: ['message', 'interaction']
+            }
+        ]
+    },
+    {
+        name: 'help',
+        description: 'Shows a list of commands or information about a specific command',
+        usage: 'help [command]',
+        slashusage: 'help [command]',
+        examples: [
+            {
+                text: 'PREFIXMSGhelp',
+                descriptor: 'Shows a list of all commands'
+            },
+            {
+                text: 'PREFIXMSGhelp convert',
+                descriptor: 'Shows information about the convert command'
+            },
+            {
+                text: '/help recent',
+                descriptor: 'Shows information about the recent command'
+            }
+        ],
+        aliases: [],
+        buttons: [buttonsObjs.label.extras.random, buttonsObjs.label.main.detailed],
+        options: [
+            {
+                name: 'command',
+                type: 'string',
+                required: false,
+                description: 'The command to get information about',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: ['recent', 'command:osutop'],
+                commandTypes: ['message', 'interaction', 'button']
+            },
+        ]
+    },
+    {
+        name: 'info',
+        description: 'Shows information about the bot',
+        usage: 'info',
+        slashusage: 'null',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'math',
+        description: 'Solves a math problem',
+        usage: 'math [problem]',
+        slashusage: 'math [type] [num1] [num2]',
+        examples: [
+            {
+                text: 'PREFIXMSGmath 2+2',
+                descriptor: 'Solves 2+2'
+            },
+            {
+                text: '/math type:pythag num1:3 num2:4',
+                descriptor: 'Solves the pythagorean theorem with a=3 and b=4'
+            },
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'problem',
+                type: 'string',
+                required: 'true (if using message command)',
+                description: 'The math problem to solve',
+                options: [
+                    'non numerical characters are ignored (excluding pi)',
+                ],
+                defaultValue: 'N/A',
+                examples: ['8/2(2+2)', '2^32'],
+                commandTypes: ['message']
+            },
+            {
+                name: 'type',
+                type: 'string',
+                required: 'true (if using slash command)',
+                description: 'The type of math problem',
+                options: [
+                    'square', 'square root',
+                    'factorial',
+                    'highest common factor', 'lowest common multiple',
+                    'approach rate +dt', 'approach rate +ht', 'approach rate(ms)',
+                    'circumference', 'area of a circle',
+                    'pythag',
+                    'conversion to significant figures',
+                    'od+dt', 'od+ht', 'od(ms)',
+                    'mod int to string'
+                ],
+                defaultValue: 'N/A',
+                examples: ['type:pythag'],
+                commandTypes: ['interaction']
+            },
+            {
+                name: 'num1',
+                type: 'float',
+                required: 'true (if using slash command)',
+                description: 'The first number',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: ['num1:4'],
+                commandTypes: ['interaction']
+            },
+            {
+                name: 'num2',
+                type: 'float',
+                required: 'true (sometimes)',
+                description: 'The second number',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: ['num2:5'],
+                commandTypes: ['interaction']
+            }
+        ]
+    },
+    {
+        name: 'ping',
+        description: 'Pings the bot and returns the latency',
+        usage: 'ping',
+        slashusage: 'ping',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'remind',
+        description: 'Sets a reminder',
+        usage: 'reminder [time] [reminder]',
+        slashusage: 'reminder [time] [reminder] [sendinchannel]',
+        examples: [
+            {
+                text: 'PREFIXMSGremind 1h30m30s reminder',
+                descriptor: 'Sets a reminder for 1 hour, 30 minutes, and 30 seconds'
+            },
+            {
+                text: 'PREFIXMSGremind 2:05 fc',
+                descriptor: 'Sets a reminder for 2 minutes and 5 seconds'
+            },
+            {
+                text: '/remind time:1h30m30s reminder:reminder sendinchannel:true',
+                descriptor: 'Sets a reminder for 1 hour, 30 minutes, and 30 seconds and sends it in the channel'
+            }
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'time',
+                type: 'string',
+                required: true,
+                description: 'The time until the reminder',
+                options: [
+                    'format: [number][unit] or hh:mm:ss',
+                    'units: s, m, h, d, w, y',
+                ],
+                defaultValue: '0s',
+                examples: ['1h30m30s', '5:23:02'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'reminder',
+                type: 'string',
+                required: false,
+                description: 'The reminder',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['this is a reminder', 'reminder:this is a reminder'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'sendinchannel',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to send the reminder in the channel or in a DM. Admin only',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: ['sendinchannel:true'],
+                commandTypes: ['interaction']
+            }
+        ]
+    },
+    {
+        name: 'stats',
+        description: 'Shows the bot\'s statistics',
+        usage: 'stats',
+        slashusage: 'null',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'time',
+        description: 'Shows the current time in a specific timezone as well as UTC and the bot\'s timezone',
+        usage: 'time [timezone]',
+        slashusage: 'time [timezone]',
+        examples: [
+            {
+                text: 'PREFIXMSGtime',
+                descriptor: 'Shows the current time in UTC and the bot\'s timezone'
+            },
+
+            {
+                text: 'PREFIXMSGtime Australia/Melbourne',
+                descriptor: 'Shows the current time in Australia/Melbourne'
+            },
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'timezone',
+                type: 'string',
+                required: false,
+                description: 'The timezone to show the time in (see here - https://stackoverflow.com/a/54500197)',
+                options: ['Formatted as [region][city]'],
+                defaultValue: 'UTC',
+                examples: ['Australia/Melbourne', 'Europe/Warsaw'],
+                commandTypes: ['message', 'interaction']
+            }
+        ]
+    }
+];
 
 const osucmds: commandInfo[] = [
     {
@@ -458,8 +577,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'firsts',
         description: 'Shows the #1 global scores of a user',
-        usage: 'firsts [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)]',
-        slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter]',
+        usage: 'firsts [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)] [-grade]',
+        slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter] [grade]',
         examples: [
             {
                 text: 'PREFIXMSGfirsts SaberStrike',
@@ -485,111 +604,7 @@ const osucmds: commandInfo[] = [
         ],
         aliases: ['firstplaceranks', 'first', 'fpr', 'fp', '#1s', '1s', '#1'],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
-        options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to show the scores of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['mrekk', 'user:mrekk'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The mode to show the scores in',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-                examples: ['taiko', 'mode:mania'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'sort',
-                type: 'string',
-                required: false,
-                description: 'The sort order of the scores',
-                options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
-                defaultValue: 'pp',
-                examples: ['sort:score', '-recent'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'reverse',
-                type: 'boolean',
-                required: false,
-                description: 'Whether to reverse the sort order',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: ['reverse:true', '-reverse'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'page',
-                type: 'integer',
-                required: false,
-                description: 'The page of scores to show',
-                options: ['N/A'],
-                defaultValue: '1',
-                aliases: ['p'],
-                examples: ['page:6', '-p 4'],
-                commandTypes: ['message', 'interaction', 'button']
-            },
-            {
-                name: 'mapper',
-                type: 'string',
-                required: false,
-                description: 'The mapper to filter the scores by',
-                options: ['N/A'],
-                defaultValue: 'null',
-                examples: ['mapper:Sotarks'],
-                commandTypes: ['interaction']
-            },
-            {
-                name: 'mods',
-                type: 'string',
-                required: false,
-                description: 'The mods to filter the scores by',
-                options: mods,
-                defaultValue: 'null',
-                examples: ['mods:HDHR'],
-                commandTypes: ['interaction']
-            },
-            {
-                name: 'detailed',
-                type: 'number',
-                required: false,
-                description: 'How much information to show about the scores. 0 = less details, 2 = more details',
-                options: ['c/0', '/1', 'd/2'],
-                aliases: ['-d', '-compress', '-c'],
-                defaultValue: '1',
-                examples: ['detailed:true', '-detailed', '-compress'],
-                commandTypes: ['message', 'interaction', 'button']
-            },
-            {
-                name: 'parse',
-                type: 'number',
-                required: false,
-                description: 'Parse the score with the specific index',
-                options: ['N/A'],
-                defaultValue: '0',
-                examples: ['-parse 5', 'parse:5'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'filter',
-                type: 'string',
-                required: false,
-                description: 'Filters all scores to only show maps with the specified string',
-                options: ['N/A'],
-                defaultValue: 'null',
-                examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
-                aliases: ['?'],
-                commandTypes: ['message', 'interaction']
-            },
-        ]
+        options: scoreListCommandOptions
     },
     {
         name: 'globals',
@@ -862,8 +877,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'nochokes',
         description: 'Shows the user\'s top plays without misses',
-        usage: 'nochokes [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)]',
-        slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter]',
+        usage: 'nochokes [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)] [-grade]',
+        slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter] [grade]',
         examples: [
             {
                 text: 'PREFIXMSGnochokes SaberStrike',
@@ -888,111 +903,7 @@ const osucmds: commandInfo[] = [
         ],
         aliases: ['nc'],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
-        options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to show the scores of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['mrekk', 'user:mrekk'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The mode to show the scores in',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-                examples: ['taiko', 'mode:mania'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'sort',
-                type: 'string',
-                required: false,
-                description: 'The sort order of the scores',
-                options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
-                defaultValue: 'pp',
-                examples: ['sort:score', '-recent'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'reverse',
-                type: 'boolean',
-                required: false,
-                description: 'Whether to reverse the sort order',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: ['reverse:true', '-reverse'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'page',
-                type: 'integer',
-                required: false,
-                description: 'The page of scores to show',
-                options: ['N/A'],
-                defaultValue: '1',
-                aliases: ['p'],
-                examples: ['page:6', '-p 4'],
-                commandTypes: ['message', 'interaction', 'button']
-            },
-            {
-                name: 'mapper',
-                type: 'string',
-                required: false,
-                description: 'The mapper to filter the scores by',
-                options: ['N/A'],
-                defaultValue: 'null',
-                examples: ['mapper:Sotarks'],
-                commandTypes: ['interaction']
-            },
-            {
-                name: 'mods',
-                type: 'string',
-                required: false,
-                description: 'The mods to filter the scores by',
-                options: mods,
-                defaultValue: 'null',
-                examples: ['mods:HDHR'],
-                commandTypes: ['interaction']
-            },
-            {
-                name: 'detailed',
-                type: 'number',
-                required: false,
-                description: 'How much information to show about the scores. 0 = less details, 2 = more details',
-                options: ['c/0', '/1', 'd/2'],
-                aliases: ['-d', '-compress', '-c'],
-                defaultValue: '1',
-                examples: ['detailed:true', '-detailed', '-compress'],
-                commandTypes: ['message', 'interaction', 'button']
-            },
-            {
-                name: 'parse',
-                type: 'number',
-                required: false,
-                description: 'Parse the score with the specific index',
-                options: ['N/A'],
-                defaultValue: '0',
-                examples: ['-parse 5', 'parse:5'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'filter',
-                type: 'string',
-                required: false,
-                description: 'Filters all scores to only show maps with the specified string',
-                options: ['N/A'],
-                defaultValue: 'null',
-                examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
-                aliases: ['?'],
-                commandTypes: ['message', 'interaction']
-            },
-        ]
+        options: scoreListCommandOptions
     },
     {
         name: 'osu',
@@ -1126,8 +1037,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'osutop',
         description: 'Shows the top scores of a user',
-        usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)]',
-        slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter]',
+        usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade]',
+        slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter] [grade]',
         examples: [
             {
                 text: 'PREFIXMSGosutop SaberStrike',
@@ -1169,117 +1080,13 @@ const osucmds: commandInfo[] = [
             'sotarksmania', 'maniasotarks', 'sotarksm', 'msotarks'
         ],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
-        options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to show the scores of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['mrekk', 'user:mrekk'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The mode to show the scores in',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-                examples: ['taiko', 'mode:mania'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'sort',
-                type: 'string',
-                required: false,
-                description: 'The sort order of the scores',
-                options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
-                defaultValue: 'pp',
-                examples: ['sort:score', '-recent'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'reverse',
-                type: 'boolean',
-                required: false,
-                description: 'Whether to reverse the sort order',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: ['reverse:true', '-reverse'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'page',
-                type: 'integer',
-                required: false,
-                description: 'The page of scores to show',
-                options: ['N/A'],
-                defaultValue: '1',
-                aliases: ['p'],
-                examples: ['page:6', '-p 4'],
-                commandTypes: ['message', 'interaction', 'button']
-            },
-            {
-                name: 'mapper',
-                type: 'string',
-                required: false,
-                description: 'The mapper to filter the scores by',
-                options: ['N/A'],
-                defaultValue: 'null',
-                examples: ['mapper:Sotarks'],
-                commandTypes: ['interaction']
-            },
-            {
-                name: 'mods',
-                type: 'string',
-                required: false,
-                description: 'The mods to filter the scores by',
-                options: mods,
-                defaultValue: 'null',
-                examples: ['mods:HDHR'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'detailed',
-                type: 'number',
-                required: false,
-                description: 'How much information to show about the scores. 0 = less details, 2 = more details',
-                options: ['c/0', '/1', 'd/2'],
-                aliases: ['-d', '-compress', '-c'],
-                defaultValue: '1',
-                examples: ['detailed:true', '-detailed', '-compress'],
-                commandTypes: ['message', 'interaction', 'button']
-            },
-            {
-                name: 'parse',
-                type: 'number',
-                required: false,
-                description: 'Parse the score with the specific index',
-                options: ['N/A'],
-                defaultValue: '0',
-                examples: ['-parse 5', 'parse:5'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'filter',
-                type: 'string',
-                required: false,
-                description: 'Filters all scores to only show maps with the specified string',
-                options: ['N/A'],
-                defaultValue: 'null',
-                examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
-                aliases: ['?'],
-                commandTypes: ['message', 'interaction']
-            },
-        ]
+        options: scoreListCommandOptions
     },
     {
         name: 'pinned',
         description: 'Shows the pinned scores of a user',
-        usage: 'pinned [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)]',
-        slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter]',
+        usage: 'pinned [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)] [-grade]',
+        slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter] [grade]',
         examples: [
             {
                 text: 'PREFIXMSGpinned SaberStrike',
@@ -1301,111 +1108,7 @@ const osucmds: commandInfo[] = [
         ],
         aliases: [],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
-        options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to show the scores of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['mrekk', 'user:mrekk'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The mode to show the scores in',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-                examples: ['taiko', 'mode:mania'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'sort',
-                type: 'string',
-                required: false,
-                description: 'The sort order of the scores',
-                options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
-                defaultValue: 'pp',
-                examples: ['sort:score', '-recent'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'reverse',
-                type: 'boolean',
-                required: false,
-                description: 'Whether to reverse the sort order',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: ['reverse:true', '-reverse'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'page',
-                type: 'integer',
-                required: false,
-                description: 'The page of scores to show',
-                options: ['N/A'],
-                defaultValue: '1',
-                aliases: ['p'],
-                examples: ['page:6', '-p 4'],
-                commandTypes: ['message', 'interaction', 'button']
-            },
-            {
-                name: 'mapper',
-                type: 'string',
-                required: false,
-                description: 'The mapper to filter the scores by',
-                options: ['N/A'],
-                defaultValue: 'null',
-                examples: ['mapper:Sotarks'],
-                commandTypes: ['interaction']
-            },
-            {
-                name: 'mods',
-                type: 'string',
-                required: false,
-                description: 'The mods to filter the scores by',
-                options: mods,
-                defaultValue: 'null',
-                examples: ['mods:HDHR'],
-                commandTypes: ['interaction']
-            },
-            {
-                name: 'detailed',
-                type: 'number',
-                required: false,
-                description: 'How much information to show about the scores. 0 = less details, 2 = more details',
-                options: ['c/0', '/1', 'd/2'],
-                aliases: ['-d', '-compress', '-c'],
-                defaultValue: '1',
-                examples: ['detailed:true', '-detailed', '-compress'],
-                commandTypes: ['message', 'interaction', 'button']
-            },
-            {
-                name: 'parse',
-                type: 'number',
-                required: false,
-                description: 'Parse the score with the specific index',
-                options: ['N/A'],
-                defaultValue: '0',
-                examples: ['-parse 5', 'parse:5'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'filter',
-                type: 'string',
-                required: false,
-                description: 'Filters all scores to only show maps with the specified string',
-                options: ['N/A'],
-                defaultValue: 'null',
-                examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
-                aliases: ['?'],
-                commandTypes: ['message', 'interaction']
-            },
-        ]
+        options: scoreListCommandOptions
     },
     {
         name: 'ppcalc',
@@ -1676,8 +1379,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'recent',
         description: 'Shows the recent score(s) of a user',
-        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-?]',
-        slashusage: 'recent [user] [page] [mode] [list] [filter]',
+        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-?] [-grade]',
+        slashusage: 'recent [user] [page] [mode] [list] [filter] [grade]',
         examples: [
             {
                 text: 'PREFIXMSGrecent',
@@ -1714,83 +1417,32 @@ const osucmds: commandInfo[] = [
         ],
         aliases: ['rs', 'r', 'rt', 'rf', 'rm', 'rctb', 'rl', 'rlt', 'rlf', 'rlm', 'rlctb'],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.map, buttonsObjs.label.extras.user],
-        options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to show the score(s) of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['SaberStrike', 'user:SaberStrike'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'page',
-                type: 'integer',
-                required: false,
-                description: 'The page of scores to show',
-                options: ['N/A'],
-                defaultValue: '1',
-                aliases: ['p'],
-                examples: ['-p 2', 'page:2'],
-                commandTypes: ['message', 'interaction', 'button']
-            },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The mode to show the score(s) in',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-                examples: ['-taiko', 'mode:fruits'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'list',
-                type: 'boolean',
-                required: false,
-                description: 'Whether to show multiple scores. If false, only the most recent score will be shown',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                aliases: ['l'],
-                examples: ['-l', 'list:true'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'passes',
-                type: 'boolean',
-                required: false,
-                description: 'Whether to show only scores that were passed. If false, all scores will be shown',
-                options: ['true', 'false'],
-                defaultValue: 'true',
-                aliases: ['pass', 'nofail', 'nf'],
-                examples: ['-pass',],
-                commandTypes: ['message']
-            },
-            {
-                name: 'filter',
-                type: 'string',
-                required: false,
-                description: 'Filters all scores to only show maps with the specified string',
-                options: ['N/A'],
-                defaultValue: 'null',
-                examples: ['-? "Mismagius The Big Black"', '-? sotarks', 'filter:kira kira days'],
-                aliases: ['?'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'detailed',
-                type: 'number',
-                required: false,
-                description: 'How much information to show about the score(s). 0 = less details, 2 = more details',
-                options: ['c/0', '/1', 'd/2'],
-                aliases: ['-d', '-compress', '-c'],
-                defaultValue: '1',
-                examples: ['detailed:true', '-detailed', '-compress'],
-                commandTypes: ['message', 'interaction', 'button']
-            },
-        ]
+        options: scoreListCommandOptions.slice()
+            .splice(8, 1) //removes parse param
+            .concat([
+                {
+                    name: 'list',
+                    type: 'boolean',
+                    required: false,
+                    description: 'Whether to show multiple scores. If false, only the most recent score will be shown',
+                    options: ['true', 'false'],
+                    defaultValue: 'false',
+                    aliases: ['l'],
+                    examples: ['-l', 'list:true'],
+                    commandTypes: ['message', 'interaction']
+                },
+                {
+                    name: 'passes',
+                    type: 'boolean',
+                    required: false,
+                    description: 'Whether to show only scores that were passed. If false, all scores will be shown',
+                    options: ['true', 'false'],
+                    defaultValue: 'true',
+                    aliases: ['pass', 'nofail', 'nf'],
+                    examples: ['-pass',],
+                    commandTypes: ['message']
+                },
+            ])
     },
     {
         name: 'recentactivity',
@@ -1964,8 +1616,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'scores',
         description: 'Shows the scores of a user on a beatmap',
-        usage: 'scores [user] [id] [-page/-p] [-parse]',
-        slashusage: 'scores [user] [id] [sort] [reverse] [page] [detailed] [parse]',
+        usage: 'scores [user] [id] [-page/-p] [-parse] [-grade]',
+        slashusage: 'scores [user] [id] [sort] [reverse] [page] [detailed] [parse] [grade]',
         examples: [
             {
                 text: 'PREFIXMSGscores saberstrike',
@@ -1982,84 +1634,27 @@ const osucmds: commandInfo[] = [
             {
                 text: 'PREFIXMSGscores -parse 5',
                 descriptor: 'Returns your fifth most recent score on the most recent beatmap'
-            }
+            },
+            {
+                text: 'PREFIXMSGc https://osu.ppy.sh/beatmapsets/3367#osu/21565',
+                descriptor: 'Shows your scores on the beatmap with the id 21565'
+            },
         ],
         aliases: ['c'],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
-        options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to show the scores of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['mrekk', 'user:mrekk'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The mode to show the scores in',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-                examples: ['taiko', 'mode:mania'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'sort',
-                type: 'string',
-                required: false,
-                description: 'The sort order of the scores',
-                options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
-                defaultValue: 'pp',
-                examples: ['sort:score', '-recent'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'reverse',
-                type: 'boolean',
-                required: false,
-                description: 'Whether to reverse the sort order',
-                options: ['true', 'false'],
-                defaultValue: 'false',
-                examples: ['reverse:true', '-reverse'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'page',
-                type: 'integer',
-                required: false,
-                description: 'The page of scores to show',
-                options: ['N/A'],
-                defaultValue: '1',
-                aliases: ['p'],
-                examples: ['page:6', '-p 4'],
-                commandTypes: ['message', 'interaction', 'button']
-            },
-            {
-                name: 'detailed',
-                type: 'number',
-                required: false,
-                description: 'How much information to show about the scores. 0 = less details, 2 = more details',
-                options: ['c/0', '/1', 'd/2'],
-                aliases: ['-d', '-compress', '-c'],
-                defaultValue: '1',
-                examples: ['detailed:true', '-detailed', '-compress'],
-                commandTypes: ['message', 'interaction', 'button']
-            },
-            {
-                name: 'parse',
-                type: 'number',
-                required: false,
-                description: 'Parse the score with the specific index',
-                options: ['N/A'],
-                defaultValue: '0',
-                examples: ['-parse 5', 'parse:5'],
-                commandTypes: ['message', 'interaction']
-            },
-        ]
+        options:
+            scoreListCommandOptions.concat([
+                {
+                    name: 'id',
+                    type: 'integer/map link',
+                    required: false,
+                    description: 'The map ID to search for',
+                    options: ['N/A'],
+                    defaultValue: 'the most recent map in the guild',
+                    examples: ['4204', 'id:4204'],
+                    commandTypes: ['message', 'interaction', 'link', 'button']
+                },
+            ])
     },
     {
         name: 'scorestats',
