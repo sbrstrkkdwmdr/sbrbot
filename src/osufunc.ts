@@ -2214,13 +2214,12 @@ export async function getFailPoint(
     objectsPassed: number,
     mapPath: string
 ) {
-
-    const decoder = new osuparsers.BeatmapDecoder();
-
-    const beatmap = decoder.decodeFromPath(mapPath, false) as osuparsertypes.Beatmap;
-
-    const objectOfFail = beatmap.hitObjects[objectsPassed - 1];
-
-    const time = objectOfFail.startTime;
+    let time = 1000;
+    if (fs.existsSync(mapPath)) {
+        const decoder = new osuparsers.BeatmapDecoder();
+        const beatmap = decoder.decodeFromPath(mapPath, false) as osuparsertypes.Beatmap;
+        const objectOfFail = beatmap.hitObjects[objectsPassed - 1];
+        time = objectOfFail.startTime;
+    }
     return time;
 }

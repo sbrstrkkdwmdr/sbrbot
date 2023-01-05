@@ -5031,41 +5031,6 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             case 'mania':
                 totalhits = gamehits.count_geki + gamehits.count_300 + gamehits.count_katu + gamehits.count_100 + gamehits.count_50 + gamehits.count_miss;
         }
-        const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
-        const guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
-        const curbmpasstime = Math.floor(guesspasspercentage / 100 * curbm.hit_length);
-
-        let rsgrade;
-        switch (curscore.rank.toUpperCase()) {
-            case 'F':
-                rspassinfo = `${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.hit_length)})`;
-                rsgrade = emojis.grades.F;
-                break;
-            case 'D':
-                rsgrade = emojis.grades.D;
-                break;
-            case 'C':
-                rsgrade = emojis.grades.C;
-                break;
-            case 'B':
-                rsgrade = emojis.grades.B;
-                break;
-            case 'A':
-                rsgrade = emojis.grades.A;
-                break;
-            case 'S':
-                rsgrade = emojis.grades.S;
-                break;
-            case 'SH':
-                rsgrade = emojis.grades.SH;
-                break;
-            case 'X':
-                rsgrade = emojis.grades.X;
-                break;
-            case 'XH':
-                rsgrade = emojis.grades.XH;
-                break;
-        }
         let totaldiff: string;
         let hitlist: string;
         switch (scoredetailed) {
@@ -5152,6 +5117,46 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             ppissue = 'Error - pp calculator could not calculate beatmap';
             log.toOutput(error);
         }
+
+        const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
+        const msToFail = await osufunc.getFailPoint(totalhits, `${path}\\files\\maps\\${curbm.id}.osu`)
+
+        const curbmpasstime = Math.floor(msToFail / 1000);
+        const guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
+
+
+        let rsgrade;
+        switch (curscore.rank.toUpperCase()) {
+            case 'F':
+                rspassinfo = `${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.total_length)})`;
+                rsgrade = emojis.grades.F;
+                break;
+            case 'D':
+                rsgrade = emojis.grades.D;
+                break;
+            case 'C':
+                rsgrade = emojis.grades.C;
+                break;
+            case 'B':
+                rsgrade = emojis.grades.B;
+                break;
+            case 'A':
+                rsgrade = emojis.grades.A;
+                break;
+            case 'S':
+                rsgrade = emojis.grades.S;
+                break;
+            case 'SH':
+                rsgrade = emojis.grades.SH;
+                break;
+            case 'X':
+                rsgrade = emojis.grades.X;
+                break;
+            case 'XH':
+                rsgrade = emojis.grades.XH;
+                break;
+        }
+
         const title =
             curbms.title == curbms.title_unicode ?
                 curbms.title :
