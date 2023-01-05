@@ -5119,17 +5119,34 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         }
 
         const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
-        const msToFail = await osufunc.getFailPoint(totalhits, `${path}\\files\\maps\\${curbm.id}.osu`)
+        const msToFail = await osufunc.getFailPoint(totalhits, `${path}\\files\\maps\\${curbm.id}.osu`);
 
         const curbmpasstime = Math.floor(msToFail / 1000);
         const guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
 
+        let showFailGraph = false;
+        let FailGraph = '';
 
         let rsgrade;
         switch (curscore.rank.toUpperCase()) {
-            case 'F':
+            case 'F': {
                 rspassinfo = `${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.total_length)})`;
                 rsgrade = emojis.grades.F;
+                // showFailGraph = true;
+                // const strains = await osufunc.straincalc(mapdata.id, curscore.mods.join(''), 0, mapdata.mode, new Date(mapdata.last_updated));
+
+                // FailGraph = await msgfunc.SendFileToChannel(input.graphChannel,
+                //     await osufunc.failGraph(
+                //         {
+                //             x: strains.strainTime,
+                //             y: strains.value,
+                //         },
+                //         {
+                //             time: msToFail,
+                //             objectNumber: totalhits,
+                //         }
+                //     ));
+            }
                 break;
             case 'D':
                 rsgrade = emojis.grades.D;

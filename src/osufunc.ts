@@ -555,7 +555,99 @@ export async function graph(x: number[] | string[], y: number[], label: string, 
     await chart.toFile(curt);
 
     return curt;
+}
 
+export async function failGraph(
+    mapdata: {
+        x: [],
+        y: [],
+    },
+    point: {
+        time: number,
+        objectNumber: number,
+    }
+) {
+
+    let curx = [];
+    let cury = [];
+
+    if (mapdata.y.length > 200) {
+        const div = mapdata.y.length / 200;
+        for (let i = 0; i < 200; i++) {
+            const offset = Math.ceil(i * div);
+            const curval = mapdata.y[offset];
+            cury.push(curval);
+            curx.push(mapdata.x[offset]);
+        }
+    } else {
+        curx = mapdata.x;
+        cury = mapdata.y;
+    }
+
+    const datasets = [{
+        label: '',
+        data: cury,
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        borderWidth: 1,
+        pointRadius: 0
+    }];
+
+    const chart = new charttoimg()
+        .setConfig({
+            type: 'line',
+            data: {
+                labels: curx,
+                datasets: datasets
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                elements: {
+                    point: {
+                        radius: customRadius,
+                        display: true,
+                    }
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            display: true,
+                            ticks: {
+                                autoSkip: true,
+                                maxTicksLimit: 10
+                            }
+                        }
+                    ],
+                    yAxes: [
+                        {
+                            display: false,
+                            type: 'linear',
+                            ticks: {
+                                reverse: false,
+                                beginAtZero: true
+                            },
+                        }
+                    ]
+                }
+            }
+        });
+
+    function customRadius(context) {
+        let index = context.dataIndex;
+        let value = context.dataset.data[index];
+        return index === point.objectNumber || value >= 8 ?
+            10 : 0;
+    }
+
+    chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250);
+
+    const curt = `${path}/cache/graphs/${(new Date).getTime()}.jpg`;
+
+    await chart.toFile(curt);
+
+    return curt;
 }
 
 type overrideGraph = 'replay' | 'rank' | 'strains' | 'bar' | 'health';

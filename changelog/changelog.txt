@@ -161,3 +161,8 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] update helpinfo
 [FIX] fix help command crashing (#7)
 [FIX] fix globals crashing
+
+0.4.9
+
+[QOL] increase accuracy of fail point calculator
+[ADD] graph that shows exact point of fail in rs
