@@ -95,3 +95,15 @@ additional notes: string
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
+
+#8)
+    status: WIP
+    issue: NaN values on the x-axis of strain graphs
+    cause: 
+    author: sbrstrkkdwmdr
+    found: 2023-01-05 12:46 AEDT (UTC+11)
+    fixed: 
+    solution: 
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
