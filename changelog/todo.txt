@@ -82,7 +82,7 @@ author:
 -------------------------------------------------------------------------------------------------------------------------
 
 #8) 
-    description: show point of fail on strains graph (recent)
+    description: show point of fail on strains graph (recent). get num of hits to get exact object point of fail. use mapcalc to identify exact point
     type: new feature
     status: WIP - not yet started 
     request date: 2022-12-27 10:33 AEDT (UTC+11)

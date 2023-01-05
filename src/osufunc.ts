@@ -11,12 +11,13 @@ import * as osumodcalc from './osumodcalc.js';
 import * as extypes from './types/extratypes.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 //const config = JSON.parse(fs.readFileSync('../config/config.json', 'utf-8'));
+import * as osuparsers from 'osu-parsers';
 import * as replayparser from 'osureplayparser';
 import config from '../config/config.json' assert { type: 'json' };
 import { path, precomppath } from '../path.js';
 import * as log from './log.js';
 import * as mapParser from './mapParser.js';
-
+import * as osuparsertypes from './types/osuparsertypes.js';
 
 /* module.exports = {
     modemods, modemappers
@@ -2201,4 +2202,25 @@ export async function calcUr(
         averageEarly: (unstableRateF.filter(x => x < 0).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length,
         averageLate: (unstableRateF.filter(x => x > 0).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length
     };
-}   
+}
+
+/**
+ * 
+ * @param objectsPassed total number of hits
+ * @param mapPath path to the map file
+ * @returns the point of fail in a map in milliseconds
+ */
+export async function getFailPoint(
+    objectsPassed: number,
+    mapPath: string
+) {
+
+    const decoder = new osuparsers.BeatmapDecoder();
+
+    const beatmap = decoder.decodeFromPath(mapPath, false) as osuparsertypes.Beatmap;
+
+    const objectOfFail = beatmap.hitObjects[objectsPassed - 1];
+
+    const time = objectOfFail.startTime;
+    return time;
+}
