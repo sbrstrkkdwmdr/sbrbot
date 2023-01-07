@@ -130,6 +130,13 @@ export default (input: {
                     {
                         overrides.ex = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
                     }
+                case 'time':
+                    {
+                        overrides.ex = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
+                        if (interaction?.message?.components[0]?.components[0]) {
+                            overrides.overwriteModal = interaction.message.components[0].components[0] as any;
+                        }
+                    }
             }
         }
 
@@ -288,6 +295,11 @@ export default (input: {
 
             case 'help':
                 await commands.help({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
+                interaction.deferUpdate()
+                    .catch(error => { });
+                break;
+            case 'time':
+                await commands.time({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 interaction.deferUpdate()
                     .catch(error => { });
                 break;

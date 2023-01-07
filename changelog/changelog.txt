@@ -166,3 +166,5 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 
 [QOL] increase accuracy of fail point calculator
 [ADD] graph that shows exact point of fail in rs
+[QOL] reworked time command: uses timezones like CST, AEST and UTC+10 instead of [region]/[city]
+[QOL] fixed time command offset displaying incorrectly (#9)

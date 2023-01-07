@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
+import moment from 'moment';
 import * as replayparser from 'osureplayparser';
 import pkgjson from '../package.json' assert { type: 'json' };
 import { path } from '../path.js';
@@ -12,6 +13,7 @@ import * as def from '../src/consts/defaults.js';
 import * as emojis from '../src/consts/emojis.js';
 import * as helpinfo from '../src/consts/helpinfo.js';
 import * as mainconst from '../src/consts/main.js';
+import * as timezoneList from '../src/consts/timezones.js';
 import * as embedStuff from '../src/embed.js';
 import * as log from '../src/log.js';
 import * as osufunc from '../src/osufunc.js';
@@ -20,6 +22,7 @@ import * as func from '../src/tools.js';
 import * as extypes from '../src/types/extraTypes.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
 import * as msgfunc from './msgfunc.js';
+
 /**
  * convert a value
  */
@@ -2065,6 +2068,8 @@ export async function time(input: extypes.commandInput) {
 
     let fetchtimezone;
 
+    let useComponents = [];
+
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
@@ -2092,6 +2097,12 @@ export async function time(input: extypes.commandInput) {
             break;
     }
 
+    if (input?.overrides) {
+        if (input?.overrides?.ex) {
+            fetchtimezone = input?.overrides?.ex;
+        }
+    }
+
 
     //==============================================================================================================================================================================================
 
@@ -2111,160 +2122,123 @@ export async function time(input: extypes.commandInput) {
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const epoch = new Date().getTime();
-    const Datenow = new Date(input.currentDate).toUTCString();
+    const currentDate = new Date();
 
-    const msepochsince = (epoch) - 1640995200000;
-    const thedaysthingyiuseonmydiscordstatus = (msepochsince / 1000 / 60 / 60 / 24).toFixed(2);
-
-    const rn = new Date();
-    const datenow12hhours = calc.to12htime(rn);
-    const day = calc.dayhuman(rn.getUTCDay());
-    const date = rn.getUTCDate();
-    const month = calc.tomonthname(rn.getUTCMonth());//tomonthname(rn.getUTCMonth())
-    const year = rn.getUTCFullYear();
-    const datenow12h = `${day}, ${date} ${month} ${year} ${datenow12hhours}`;
-    const lasttime = fs.existsSync(`${path}/debug/timesince.txt`) ? (fs.readFileSync(`${path}/debug/timesince.txt`)).toString() :
-        (new Date()).toString();
-
-
-    const lasttimetodateobj = new Date(lasttime);
-    const timetonum = (rn.getTime() - lasttimetodateobj.getTime()) / (1000 * 60);
-
-    const lasvisdays = (Math.trunc(timetonum / 60 / 24));
-    const lastvishours = (Math.trunc(timetonum / 60)) % 24;
-    const lastvisminutes = Math.trunc(timetonum % 60);
-    let minlastvisw = '';
-
-    if (lasvisdays > 0) {
-        minlastvisw += lasvisdays + "d ";
-    }
-    if (lastvishours > 0) {
-        minlastvisw += lastvishours + "h ";
-    }
-    if (lastvisminutes > 0) {
-        minlastvisw += lastvisminutes + "m "; //+ lastvisminutes + "m");
-    }
-    if (minlastvisw == '') {
-        minlastvisw = 'now';
-    }
-
-
-    fs.writeFileSync(`${path}/debug/timesince.txt`, rn.toString());
-
-    let monthnum: number | string = rn.getUTCMonth();
-    let daynum: number | string = rn.getUTCDate();
-    if (monthnum < 10) { monthnum = '0' + monthnum; }
-    if (daynum < 10) { daynum = '0' + daynum; }
-    const truedate = `${year}/${monthnum}/${daynum}`;
-
-    const offsetnum = rn.getTimezoneOffset();
-    const offset = calc.fixoffset(offsetnum);
-
-    const reldatenow12hhours = calc.relto12htime(rn);
-    const relday = calc.dayhuman(rn.getDay());
-    const reldate = rn.getDate();
-    const relmonth = calc.tomonthname(rn.getMonth());//tomonthname(rn.getUTCMonth())
-    const relyear = rn.getFullYear();
-    const reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`;
-
-    let relmonthnum: number | string = rn.getMonth();
-    let reldaynum: number | string = rn.getDate();
-    if (relmonthnum < 10) { relmonthnum = '0' + relmonthnum; }
-    if (reldaynum < 10) { reldaynum = '0' + reldaynum; }
-    const reltruedate = `${relyear}/${relmonthnum}/${reldaynum}`;
-
+    const curTime = moment();
 
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
         .setTitle('Current Time')
         .addFields([
             {
+                /**
+                 *  value: `\n**Date**: ${reqTime.format("DD/MM/YYYY")}` +
+                        `\n**Full Date**: ${reqTime.format("d, DDD MMM YYYY hh:mm:ssA Z")}` +
+                        `\n**Full Date(24h)**: ${reqTime.format("d, DDD MMM YYYY HH:mm:ss Z")}` +
+                        `\n**Full Date ISO8601**: ${reqTime.format("YYYY-MM-DDTHH:mm:ss.SSS")}`,
+
+                 */
                 name: 'UTC/GMT+00:00',
-                value: `\n**Date**: ${truedate}` +
-                    `\n**Full Date**: ${datenow12h}` +
-                    `\n**Full Date(24h)**: ${Datenow}` +
-                    `\n\n**Full Date ISO8601**: ${input.currentDate.toISOString()}` +
-                    `\n**EPOCH(ms)**: ${epoch}` +
-                    `\n**Days since Jan 1st 2022**: [${thedaysthingyiuseonmydiscordstatus}]`
+                value: `\n**Date**: ${curTime.format("DD/MM/YYYY")}` +
+                    `\n**Full Date**: ${curTime.format("d, DDD MMM YYYY hh:mm:ssA Z")}` +
+                    `\n**Full Date(24h)**: ${curTime.format("d, DDD MMM YYYY HH:mm:ss Z")}` +
+                    `\n\n**Full Date ISO8601**: ${curTime.toISOString()}` +
+                    `\n**EPOCH(ms)**: ${curTime.valueOf()}`
                 ,
                 inline: false
             },
-            // {
-            //     name: `UTC/GMT${offset} (Host's Local Time)`,
-            //     value: `\n**Date**: ${reltruedate}` +
-            //         `\n**Full Date**: ${reldatenow12h}` +
-            //         `\n**Full Date(24h)**: ${`${input.currentDate}`.split('GMT')[0]}` +
-            //         `\n**Time since command was last used**: ${minlastvisw} `
-            //     ,
-            //     inline: false
-            // }
         ]);
     if (fetchtimezone != null && fetchtimezone != '') {
-        if (fetchtimezone.includes('/')) {
-            const timezone = input.args.splice(0, 1000).join(" ");
-            const timeopts = {
-                timeZone: `${timezone}`,
-                hour12: false
-            };
-            const timeopts2 = {
-                timeZone: `${timezone}`,
-                hour12: true
-            };
-            try {
-                const optionaldatefirst = new Date(new Date().toLocaleString('en-US', timeopts));//).toISOString();
-                const optionaldateISO = new Date(optionaldatefirst).toISOString();
-                const optionaldateDate = new Date(optionaldateISO).toLocaleDateString();
-                const optionaldate = new Date(optionaldateISO);//.toString();
-                const optionaldate12hfirst = new Date(new Date().toLocaleString('en-US', timeopts2));
+        try {
+            let offset = 0;
+            const found: timezoneList.timezone[] = [];
+            for (let i = 0; i < timezoneList.timezones.length; i++) {
+                const curTimeZone = timezoneList.timezones[i];
+                if (curTimeZone.aliases.includes(fetchtimezone.toUpperCase())) {
+                    found.push(curTimeZone);
+                    offset = curTimeZone.offsetDirection == '+' ?
+                        curTimeZone.offsetHours :
+                        -curTimeZone.offsetHours;
+                }
+            }
 
-                const optionaldate2 = `${calc.dayhuman(optionaldate.getDay())}, ${calc.tomonthname(optionaldate.getMonth())} ${optionaldate.getDate()} ${optionaldate.getFullYear()}`;
-                const optionaldatetime = calc.relto12htime(new Date(optionaldate12hfirst));
-                const optionaldate12h = `${optionaldate2} ${optionaldatetime}`;
+            if (found.length == 0) {
+                throw new Error("Unrecognised timezone");
+            }
 
-                const optionaldatehours = (optionaldate.getHours());
-                const optionaldateutchours = (new Date().getUTCHours());
-                const optionaldateoffsetNEW = calc.fixoffset((optionaldateutchours - optionaldatehours) * 60); //had to remake another version of offset 
+            if (input?.overrides?.overwriteModal) {
+                useComponents = [
+                    new Discord.ActionRowBuilder()
+                        .addComponents(input?.overrides?.overwriteModal as Discord.StringSelectMenuBuilder)
+                ];
+            } else if (found.length > 1) {
+                const buttons = new Discord.ActionRowBuilder();
+                if (input?.overrides?.overwriteModal) {
+                    buttons
+                        .addComponents(input?.overrides?.overwriteModal as Discord.StringSelectMenuBuilder);
+                } else {
+                    const inputModal = new Discord.StringSelectMenuBuilder()
+                        .setCustomId(`${mainconst.version}-Select-time-${commanduser.id}-${input.absoluteID}`)
+                        .setPlaceholder('Select a timezone');
 
-                Embed
-                    .addFields([{
-                        name: `UTC/GMT ${optionaldateoffsetNEW} (Requested Time)`,
-                        value: `\n**Date**: ${optionaldateDate}` +
-                            `\n**Full Date**: ${optionaldate12h}` +
-                            `\n**Full Date(24h)**: ${`${optionaldate}`.split('GMT')[0]}` +
-                            `\n**Full Date ISO8601**: ${optionaldateISO}`,
-                        inline: false
-                    }]);
-            } catch (error) {
+                    for (let i = 0; i < found.length && i < 10; i++) {
+                        inputModal.addOptions(
+                            new Discord.StringSelectMenuOptionBuilder()
+                                .setLabel(`#${i + 1}`)
+                                .setDescription(`${found[i].aliases[i]}`)
+                                .setValue(`${found[i].aliases[i]}`)
+                        );
+                    }
+                    buttons.addComponents(inputModal);
+                }
+                useComponents = [buttons];
+            }
+
+            if (useComponents.length == 0) {
+                if (input?.overrides?.overwriteModal) {
+
+                }
+            }
+
+            const offsetToMinutes = Math.floor(offset * 60);
+
+            const reqTime = moment().utcOffset(offsetToMinutes);
+
+            const Hrs = offset > 0 ?
+                Math.floor(offset).toString().padStart(3, '+0') :
+                Math.floor(offset).toString().replace('-', '').padStart(3, '-0');
+
+            const offsetReadable = `UTC${Hrs}:${(Math.abs(offsetToMinutes % 60)).toString().padStart(2, '0')}`;
+
+            Embed
+                .addFields([{
+                    name: `${fetchtimezone.toUpperCase()}/${offsetReadable} (Requested Time)`,
+                    value: `\n**Date**: ${reqTime.format("DD/MM/YYYY")}` +
+                        `\n**Full Date**: ${reqTime.format("d, DDD MMM YYYY hh:mm:ssA Z")}` +
+                        `\n**Full Date(24h)**: ${reqTime.format("d, DDD MMM YYYY HH:mm:ss Z")}` +
+                        `\n**Full Date ISO8601**: ${reqTime.toISOString(true)}`,
+                    inline: false
+                }]);
+        } catch (error) {
+            console.log(error);
+            if (error.includes('timezone')) {
                 Embed.addFields([{
                     name: `UTC/GMT +??:?? (Requested Time)`,
                     value: `\nRecived invalid timezone!` +
                         `\n\`${fetchtimezone}\` is not a valid timezone` +
-                        `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid timezones`
+                        `\n Check [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset) for valid timezones`
+                    // `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid timezones`
                     ,
                     inline: false
-                }]
-                );
-                await msgfunc.sendMessage({
-                    commandType: input.commandType,
-                    obj: input.obj,
-                    args: {
-                        embeds: [Embed]
-                    }
-                }, input.canReply);
-                return;
+                }]);
+            } else {
+                Embed.addFields([{
+                    name: `UTC/GMT +??:?? (Requested Time)`,
+                    value: `There was an error trying to parse the timezone`,
+                    inline: false
+                }]);
             }
-
-        } else {
-            Embed.addFields([{
-                name: `UTC/GMT +??:?? (Requested Time)`,
-                value: `\nRecived invalid timezone!` +
-                    `\nBoth **region** and **city** must be specified` +
-                    `\ni.e **Australia/Melbourne**` +
-                    `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
-                ,
-                inline: false
-            }]);
+            useComponents = [];
         }
     }
 
@@ -2273,7 +2247,8 @@ export async function time(input: extypes.commandInput) {
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [Embed]
+            embeds: [Embed],
+            components: useComponents
         }
     }, input.canReply);
 
