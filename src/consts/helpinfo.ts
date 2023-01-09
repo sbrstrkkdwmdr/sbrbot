@@ -1943,7 +1943,9 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Shows Mismagius\'s loved beatmaps on page 2, sorted by title in reverse'
             }
         ],
-        aliases: ['ub', 'userb', 'ubm', 'um', 'usermaps'],
+        aliases: ['ub', 'userb', 'ubm', 'um', 'usermaps',
+            'ranked', 'favourite', 'favourites', 'graveyard', 'unranked', 'loved', 'pending', 'wip', 'nominated', 'bn', 'guest', 'gd', 'most_played', 'mp', 'mostplayed'
+        ],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
         options: [{
             name: 'user',

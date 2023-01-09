@@ -10851,7 +10851,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
  * list of user's maps
  */
 export async function userBeatmaps(input: extypes.commandInput & { statsCache: any; }) {
-    let filter: 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' | 'nominated' | 'guest' = 'favourite';
+    let filter: 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' | 'nominated' | 'guest' | 'most_played' = 'favourite';
     let sort:
         'title' | 'artist' |
         'difficulty' | 'status' |
@@ -10961,7 +10961,22 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                 filter = 'guest';
                 input.args.splice(input.args.indexOf('-gd'), 1);
             }
-
+            if (input.args.includes('-mostplayed')) {
+                filter = 'most_played';
+                input.args.splice(input.args.indexOf('-mostplayed'), 1);
+            }
+            if (input.args.includes('-most')) {
+                filter = 'most_played';
+                input.args.splice(input.args.indexOf('-most'), 1);
+            }
+            if (input.args.includes('-most_played')) {
+                filter = 'most_played';
+                input.args.splice(input.args.indexOf('-most_played'), 1);
+            }
+            if (input.args.includes('-mp')) {
+                filter = 'most_played';
+                input.args.splice(input.args.indexOf('-mp'), 1);
+            }
             if (input.args.includes('-reverse')) {
                 reverse = true;
                 input.args.splice(input.args.indexOf('-reverse'), 1);
@@ -11073,6 +11088,34 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
     if (input.overrides != null) {
         if (input.overrides.page) {
             page = input.overrides.page;
+        }
+        if (input.overrides.ex) {
+            switch (input.overrides.ex) {
+                case 'ranked':
+                    filter = 'ranked';
+                    break;
+                case 'favourite':
+                    filter = 'favourite';
+                    break;
+                case 'graveyard':
+                    filter = 'graveyard';
+                    break;
+                case 'loved':
+                    filter = 'loved';
+                    break;
+                case 'pending':
+                    filter = 'pending';
+                    break;
+                case 'nominated':
+                    filter = 'nominated';
+                    break;
+                case 'guest':
+                    filter = 'guest';
+                    break;
+                case 'most_played':
+                    filter = 'most_played';
+                    break;
+            }
         }
     }
     //==============================================================================================================================================================================================
@@ -11218,7 +11261,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             .setEmoji(buttonsthing.label.extras.user),
     );
 
-    let maplistdata: osuApiTypes.Beatmapset[] & osuApiTypes.Error = [];
+    let maplistdata: (osuApiTypes.Beatmapset[] & osuApiTypes.Error | osuApiTypes.BeatmapPlayCountArr) = [];
 
     async function getScoreCount(cinitnum) {
         if (cinitnum >= 499) {
@@ -11235,7 +11278,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             version: 2,
 
         });
-        const fd: osuApiTypes.Beatmapset[] & osuApiTypes.Error = fdReq.apiData;
+        const fd = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
@@ -11261,7 +11304,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             if (!fd[i] || typeof fd[i] == 'undefined') { break; }
             maplistdata.push(fd[i]);
         }
-        if (fd.length == 100) {
+        if (fd.length == 100 && filter != 'most_played') {
             await getScoreCount(cinitnum + 100);
         }
 
@@ -11280,27 +11323,32 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
     func.storeFile(maplistdata, osudata.id, 'maplistdata', null, filter);
 
     if (filterTitle) {
-        maplistdata = maplistdata.filter((map) =>
-            (
+        maplistdata =
+            filter == 'most_played' ?
+                (maplistdata as osuApiTypes.BeatmapPlayCountArr).filter((x) =>
+                    fr(x.beatmapset)
+                ) : (maplistdata as osuApiTypes.Beatmapset[]).filter((x) => fr(x));
+        function fr(map) {
+            return (
                 map.title.toLowerCase().replaceAll(' ', '')
                 +
                 map.artist.toLowerCase().replaceAll(' ', '')
                 +
                 map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', '')
             ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            ||
-            map.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            ||
-            map.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            ||
-            map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-            ||
-            filterTitle.toLowerCase().replaceAll(' ', '').includes(map.title.toLowerCase().replaceAll(' ', ''))
-            ||
-            filterTitle.toLowerCase().replaceAll(' ', '').includes(map.artist.toLowerCase().replaceAll(' ', ''))
-            ||
-            filterTitle.toLowerCase().replaceAll(' ', '').includes(map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', ''))
-        );
+                ||
+                map.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                ||
+                map.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                ||
+                map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                ||
+                filterTitle.toLowerCase().replaceAll(' ', '').includes(map.title.toLowerCase().replaceAll(' ', ''))
+                ||
+                filterTitle.toLowerCase().replaceAll(' ', '').includes(map.artist.toLowerCase().replaceAll(' ', ''))
+                ||
+                filterTitle.toLowerCase().replaceAll(' ', '').includes(map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', ''));
+        }
     }
 
     if (parseMap == true) {
@@ -11312,7 +11360,10 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             pid = maplistdata.length - 1;
         }
         input.overrides = {
-            id: maplistdata[pid]?.beatmaps[0]?.id,
+            id:
+                filter == 'most_played' ?
+                    (maplistdata as osuApiTypes.BeatmapPlayCountArr)[pid]?.beatmap_id :
+                    (maplistdata as osuApiTypes.Beatmapset[])[pid]?.beatmaps[0]?.id,
             commanduser,
             commandAs: input.commandType
         };
@@ -11346,8 +11397,15 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         page = Math.ceil(maplistdata.length / 5) - 1;
     }
 
-    const mapsarg = await embedStuff.mapList({
-        type: 'mapset',
+
+
+    let mapsarg;
+
+    mapsarg = await embedStuff.mapList({
+        type:
+            filter == 'most_played' ?
+                'mapsetplays' :
+                'mapset',
         maps: maplistdata,
         page: page,
         sort,

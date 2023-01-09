@@ -101,8 +101,8 @@ export type BeatmapPlaycount = {
 export type BeatmapsetCompact = {
     artist: string,
     artist_unicode: string,
-    beatmaps?: BeatmapCompact[],
-    converts?: BeatmapCompact[],
+    beatmaps?: Beatmap[],
+    converts?: Beatmap[],
     covers: Covers,
     creator: string,
     current_user_attributes?: any,

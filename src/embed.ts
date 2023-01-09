@@ -428,8 +428,8 @@ export function hitList(
 
 export async function mapList(
     data: {
-        type: 'mapset' | 'map',
-        maps: osuapitypes.Beatmap[] | osuapitypes.Beatmapset[],
+        type: 'mapset' | 'map' | 'mapsetplays',
+        maps: osuapitypes.Beatmap[] | osuapitypes.Beatmapset[] | osuapitypes.BeatmapPlayCountArr,
         page: number,
         sort: mapSort,
         reverse: boolean,
@@ -490,36 +490,36 @@ export async function mapList(
                     break;
                 case 'cs':
                     maps.sort((a, b) =>
-                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].cs -
-                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].cs
+                        b.beatmaps.sort((a, b) => b.cs - a.cs)[0].cs -
+                        a.beatmaps.sort((a, b) => b.cs - a.cs)[0].cs
                     );
                     sortinfo = 'Sorted by circle size';
                     break;
                 case 'ar':
                     maps.sort((a, b) =>
-                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].ar -
-                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].ar
+                        b.beatmaps.sort((a, b) => b.ar - a.ar)[0].ar -
+                        a.beatmaps.sort((a, b) => b.ar - a.ar)[0].ar
                     );
                     sortinfo = 'Sorted by approach rate';
                     break;
                 case 'od':
                     maps.sort((a, b) =>
-                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].accuracy -
-                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].accuracy
+                        b.beatmaps.sort((a, b) => b.accuracy - a.accuracy)[0].accuracy -
+                        a.beatmaps.sort((a, b) => b.accuracy - a.accuracy)[0].accuracy
                     );
                     sortinfo = 'Sorted by overall difficulty';
                     break;
                 case 'hp':
                     maps.sort((a, b) =>
-                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].drain -
-                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].drain
+                        b.beatmaps.sort((a, b) => b.drain - a.drain)[0].drain -
+                        a.beatmaps.sort((a, b) => b.drain - a.drain)[0].drain
                     );
                     sortinfo = 'Sorted by hp';
                     break;
                 case 'length':
                     maps.sort((a, b) =>
-                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].total_length -
-                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].total_length
+                        b.beatmaps[0].total_length -
+                        a.beatmaps[0].total_length
                     );
                     sortinfo = 'Sorted by length';
                     break;
@@ -611,6 +611,66 @@ ${topmap.status == 'ranked' ?
             }
         }
             break;
+        case 'mapsetplays': {
+            const maps = data.maps as osuapitypes.BeatmapPlayCountArr;
+            if (data.reverse == true) {
+                maps.reverse();
+                sortinfo += ' (reversed)';
+            }
+            filterinfo += sortinfo;
+            if (page >= Math.ceil(maps.length / usePage)) {
+                page = Math.ceil(maps.length / usePage) - 1;
+            }
+            if (page < 0) {
+                page = 0;
+            }
+
+            newData = maps;
+
+            for (let i = 0; i < usePage && i < maps.length; i++) {
+                const offset = page * usePage + i;
+                const current = maps[offset];
+                const curmapset = current.beatmapset;
+                const topmap = current.beatmap;
+                if (!curmapset) {
+                    break;
+                }
+                switch (data.detailed) {
+                    case 0: case 2:
+                        mapsArr.push({
+                            name: '',
+                            value: '',
+                            inline: false,
+                        });
+                        mapsArrStr.push(
+                            `
+**#${offset + 1} | [${curmapset.artist} - ${curmapset.title}](https://osu.ppy.sh/s/${curmapset.id})**
+**${current.count}x plays**
+`
+                        );
+                        break;
+                    case 1: default:
+                        mapsArr.push({
+                            name: `${offset + 1}`,
+                            value:
+                                `
+[**${curmapset.artist} - ${curmapset.title}**](https://osu.ppy.sh/s/${curmapset.id})
+**${current.count}x plays**
+${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
+${calc.secondsToTime(topmap.total_length)} | ${func.separateNum(curmapset.favourite_count)} favourites
+`,
+                            inline: false
+                        });
+                        mapsArrStr.push(
+`**#${offset + 1} | [${curmapset.artist} - ${curmapset.title}](https://osu.ppy.sh/s/${curmapset.id})**
+**${current.count}x plays**
+${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
+${calc.secondsToTime(topmap.total_length)} | ${func.separateNum(curmapset.favourite_count)} favourites`
+);
+                        break;
+                }
+            }
+        }
             // case 'map': {
 
             // }

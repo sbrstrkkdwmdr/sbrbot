@@ -150,17 +150,17 @@ author:
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #15)
     description: make most played, ranked, graveyard, loved commands as aliases to ubm
     type: new command (alias)
-    status: WIP - not yet started 
+    status: finished
     request date: 2023-01-06 18:10 AEDT (UTC+11)
-    finish date: 
+    finish date: 2023-01-09 15:15 AEDT (UTC+11)
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #16)
     description: add timezone options to time (ie AEDT, CST, UTC+XX)
     type: QOL

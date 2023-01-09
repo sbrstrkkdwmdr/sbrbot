@@ -117,7 +117,7 @@ const cacheById = [
  * @param id command id. if storing a map use the map id/md5 or user id if storing a user
  * @param name 
  */
-export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuApiTypes.Beatmapset[] | osuApiTypes.Beatmap[]) & osuApiTypes.Error), id: string | number, name: string, mode?: osuApiTypes.GameMode, type?: string) {
+export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuApiTypes.Beatmapset[] | osuApiTypes.Beatmap[]) & osuApiTypes.Error) | osuApiTypes.BeatmapPlayCountArr, id: string | number, name: string, mode?: osuApiTypes.GameMode, type?: string) {
     try {
         if (cacheById.some(x => name.includes(x))) {
             switch (true) {
