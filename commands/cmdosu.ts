@@ -7677,44 +7677,74 @@ export async function scorestats(input: extypes.commandInput) {
         Embed.setDescription('No scores found');
     } else {
         Embed.setDescription(`${func.separateNum(scoresdata.length)} scores found\n${reachedMaxCount ? 'Only first 100 scores are calculated' : ''}`);
-        const mappers = osufunc.CommonMappers(scoresdata);
-        const mods = osufunc.CommonMods(scoresdata);
+        const mappers = calc.findMode(scoresdata.map(x => x.beatmapset.creator));
+        const mods = calc.findMode(scoresdata.map(x => {
+            return x.mods.length == 0 ?
+                'NM' :
+                x.mods.join('');
+        }));
+        const grades = calc.findMode(scoresdata.map(x => x.rank));
         const acc = osufunc.Stats(scoresdata.map(x => x.accuracy));
         const pp = osufunc.Stats(scoresdata.map(x => x.pp));
         const combo = osufunc.Stats(scoresdata.map(x => x.max_combo));
 
 
         if (input.commandType == 'button') {
-            let frmappertxt = '';
-            let frmodstxt = '';
+            let mappersStr = '';
             for (let i = 0; i < mappers.length; i++) {
-                frmappertxt += `#${i + 1}. ${mappers[i].mapper} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`;
+                mappersStr += `#${i + 1}. ${mappers[i].string} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`;
             }
+            let modsStr = '';
             for (let i = 0; i < mods.length; i++) {
-                frmodstxt += `#${i + 1}. ${mods[i].mods} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`;
+                modsStr += `#${i + 1}. ${mods[i].string} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`;
+            }
+            let gradesStr = '';
+            for (let i = 0; i < grades.length; i++) {
+                gradesStr += `#${i + 1}. ${grades[i].string} - ${func.separateNum(grades[i].count)} | ${grades[i].percentage.toFixed(2)}%\n`;
             }
 
-            fs.writeFileSync(`cache/commandData/${input.absoluteID}Mappers.txt`, frmappertxt, 'utf-8');
-            fs.writeFileSync(`cache/commandData/${input.absoluteID}Mods.txt`, frmodstxt, 'utf-8');
-            useFiles = [`cache/commandData/${input.absoluteID}Mappers.txt`, `cache/commandData/${input.absoluteID}Mods.txt`];
+            const MappersPath = `${path}/cache/commandData/${input.absoluteID}Mappers.txt`;
+            const ModsPath = `${path}/cache/commandData/${input.absoluteID}Mods.txt`;
+            const RanksPath = `${path}/cache/commandData/${input.absoluteID}Ranks.txt`;
+
+            fs.writeFileSync(MappersPath, mappersStr, 'utf-8');
+            fs.writeFileSync(ModsPath, modsStr, 'utf-8');
+            fs.writeFileSync(RanksPath, gradesStr, 'utf-8');
+            useFiles = [MappersPath, ModsPath, RanksPath];
         } else {
             let mappersStr = '';
             for (let i = 0; i < mappers.length && i < 5; i++) {
-                mappersStr += `#${i + 1}. ${mappers[i].mapper} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`;
+                mappersStr += `#${i + 1}. ${mappers[i].string} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`;
             }
             let modsStr = '';
             for (let i = 0; i < mods.length && i < 5; i++) {
-                modsStr += `#${i + 1}. ${mods[i].mods} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`;
+                modsStr += `#${i + 1}. ${mods[i].string} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`;
             }
+            let gradesStr = '';
+            for (let i = 0; i < grades.length && i < 5; i++) {
+                gradesStr += `#${i + 1}. ${grades[i].string} - ${func.separateNum(grades[i].count)} | ${grades[i].percentage.toFixed(2)}%\n`;
+            }
+
 
             Embed.addFields([{
                 name: 'Mappers',
-                value: mappersStr,
+                value: mappersStr.length == 0 ?
+                    'No data available' :
+                    mappersStr,
                 inline: true,
             },
             {
                 name: 'Mods',
-                value: modsStr,
+                value: modsStr.length == 0 ?
+                    'No data available' :
+                    modsStr,
+                inline: true
+            },
+            {
+                name: 'Ranks',
+                value: gradesStr.length == 0 ?
+                    'No data available' :
+                    gradesStr,
                 inline: true
             },
             {
@@ -7725,7 +7755,7 @@ Lowest: ${(acc?.lowest * 100)?.toFixed(2)}%
 Average: ${(acc?.average * 100)?.toFixed(2)}%
 ${acc?.ignored > 0 ? `Skipped: ${acc?.ignored}` : ''}
 `,
-                inline: false
+                inline: true
             },
             {
                 name: 'PP',

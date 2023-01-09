@@ -169,3 +169,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] reworked time command: uses timezones like CST, AEST and UTC+10 instead of [region]/[city]
 [FIX] fixed time command offset displaying incorrectly (#9)
 [FIX] fixed sorting by cs/ar/od/hp/length not working in ubm
+[ADD] added stats for score grades to scorestats

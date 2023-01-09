@@ -477,6 +477,29 @@ export async function waitPls(func: () => any, seconds: number) {
     return;
 }
 
+export function findMode(input: string[]) {
+    const array: {
+        string: string,
+        count: number,
+        percentage: number;
+    }[] = [];
+    input.forEach(x => {
+        const indx = array.findIndex(y => y.string == x);
+        if (indx == -1) {
+            array.push({
+                string: x,
+                count: 1,
+                percentage: 0
+            });
+        } else {
+            array[indx].count++;
+        }
+    });
+    array.sort((a, b) => b.count - a.count);
+    array.forEach(x => x.percentage = (x.count / input.length) * 100);
+    return array;
+}
+
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
 // export {
 //     findHCF, findLCM,
