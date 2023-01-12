@@ -163,7 +163,7 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] fix globals crashing
 
 0.4.9
-
+2023-01-12
 [QOL] increase accuracy of fail point calculator
 [ADD] graph that shows exact point of fail in rs
 [QOL] reworked time command: uses timezones like CST, AEST and UTC+10 instead of [region]/[city]
