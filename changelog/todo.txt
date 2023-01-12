@@ -169,3 +169,23 @@ author:
     finish date: 2023-01-08 00:53 AEDT (UTC+11)
     author: sbrstrkkdwmdr
 
+-------------------------------------------------------------------------------------------------------------------------
+
+#17)
+    description: put strains and fail graph on same graph (also divide by top number of each set so they're all on the same scale)
+    type: QOL
+    status: WIP
+    request date: 2023-01-10 20:35 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#18)
+    description: add scores button to rs and scoreparse
+    type: QOL
+    status: WIP
+    request date: 2023-01-10 21:05 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
+

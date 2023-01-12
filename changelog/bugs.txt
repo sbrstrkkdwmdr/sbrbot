@@ -119,3 +119,15 @@ additional notes: string
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
+
+#10)
+    status: WIP
+    issue: halftime AR is higher than no mod AR 
+    cause: 
+    author: sbrstrkkdwmdr
+    found: 2023-01-10 20:28 AEDT (UTC+11)
+    fixed: 
+    solution: 
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------

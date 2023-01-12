@@ -1030,7 +1030,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not fetch rankings`,
+                    content: errors.uErr.osu.rankings,
                     edit: true
                 }
             }, input.canReply);
@@ -1041,7 +1041,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Could not fetch ranking data'
+            customString: errors.uErr.osu.rankings
         });
         return;
     }
@@ -1859,7 +1859,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                         commandType: input.commandType,
                         obj: input.obj,
                         args: {
-                            content: `Error - could not fetch user's top scores`,
+                            content: errors.uErr.osu.scores.best.replace('[ID]', user),
                             edit: true
                         }
                     }, input.canReply);
@@ -1870,7 +1870,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
-                    customString: 'Could not find user\'s top scores'
+                    customString: errors.uErr.osu.scores.best.replace('ID', user)
                 });
                 return;
             }
@@ -1891,7 +1891,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                         commandType: input.commandType,
                         obj: input.obj,
                         args: {
-                            content: `Error - could not fetch user's most played beatmaps`,
+                            content: errors.uErr.osu.profile.mostplayed,
                             edit: true
                         }
                     }, input.canReply);
@@ -1902,7 +1902,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
-                    customString: 'Could not find user\'s most played'
+                    customString: errors.uErr.osu.profile.mostplayed
                 });
                 return;
             }
@@ -2265,7 +2265,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find recent activity`,
+                    content: errors.uErr.osu.profile.rsact,
                     edit: true
                 }
             }, input.canReply);
@@ -2276,7 +2276,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find recent data`
+            customString: errors.uErr.osu.profile.rsact
         });
         return;
     }
@@ -2645,7 +2645,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: errors.noUser(user),
+                        content: errors.uErr.osu.scores.first.replace('[ID]', user) + ` offset by ${cinitnum}`,
                         edit: true
                     }
                 }, input.canReply);
@@ -2656,7 +2656,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find user's #1 scores offset by ${cinitnum}`
+                customString: errors.uErr.osu.scores.first.replace('[ID]', user) + ` offset by ${cinitnum}`
             });
             return;
         }
@@ -2729,7 +2729,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find requested score`,
+                        content: `${errors.uErr.osu.score.nf} at index ${pid}`,
                         edit: true
                     }
                 }, input.canReply);
@@ -2740,7 +2740,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find requested score at index ${pid}`
+                customString: `${errors.uErr.osu.score.nf} at index ${pid}`
             });
             return;
         }
@@ -3073,7 +3073,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find beatmap ${mapid}`,
+                    content: `${errors.uErr.osu.map.m.replace('[ID]', mapid)}`,
                     edit: true
                 }
             }, input.canReply);
@@ -3084,7 +3084,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find beatmap data for ${mapid}`
+            customString: `${errors.uErr.osu.map.m.replace('[ID]', mapid)}`
         });
         return;
     }
@@ -3102,7 +3102,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: `Error - could not find map ${mapid}`,
+                content: `${errors.uErr.osu.map.m.replace('[ID]', mapid)}`,
                 edit: true
             }
         }, input.canReply);
@@ -3147,7 +3147,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find leaderboards for ${mapid}`,
+                        content: `${errors.uErr.osu.map.lb.replace('[ID]', mapid)}`,
                         edit: true
                     }
                 }, input.canReply);
@@ -3158,7 +3158,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find leaderboards for ${mapid} (API V2)`
+                customString: `${errors.uErr.osu.map.lb.replace('[ID]', mapid)} (API V2)`
             });
             return;
         }
@@ -3186,7 +3186,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                         commandType: input.commandType,
                         obj: input.obj,
                         args: {
-                            content: `Error - could not find requested score`,
+                            content: `${errors.uErr.osu.score.nf} at index ${pid}`,
                             edit: true
                         }
                     }, input.canReply);
@@ -3197,7 +3197,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
-                    customString: `Could not find the requested score at index ${pid}`
+                    customString: `${errors.uErr.osu.score.nf} at index ${pid}`
                 });
                 return;
             }
@@ -3313,7 +3313,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find leaderboards for ${mapid}`,
+                        content: `${errors.uErr.osu.map.lb.replace('[ID]', mapid)}`,
                         edit: true
                     }
                 }, input.canReply);
@@ -3324,7 +3324,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find leaderboards for ${mapid} (API v1)`
+                customString: `${errors.uErr.osu.map.lb.replace('[ID]', mapid)} (API v1)`
             });
             return;
         }
@@ -3351,7 +3351,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                         commandType: input.commandType,
                         obj: input.obj,
                         args: {
-                            content: `Error - could not find requested score`,
+                            content: `${errors.uErr.osu.score.nf} at index ${pid}`,
                             edit: true
                         }
                     }, input.canReply);
@@ -3362,7 +3362,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
-                    customString: `Could not find requested score at index ${pid}`
+                    customString: `${errors.uErr.osu.score.nf} at index ${pid}`
                 });
                 return;
             }
@@ -3734,7 +3734,9 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find \`${user}\`'s top scores`,
+                    content: `${errors.uErr.osu.scores.best
+                        .replace('[ID]', user)
+                        }`,
                     edit: true
                 }
             }, input.canReply);
@@ -3745,7 +3747,9 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find users top scores`
+            customString: `${errors.uErr.osu.scores.best
+                .replace('[ID]', user)
+                }`
         });
         return;
     }
@@ -3813,7 +3817,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find requested score`,
+                        content: `${errors.uErr.osu.score.nf} at index ${pid}`,
                         edit: true
                     }
                 }, input.canReply);
@@ -3824,7 +3828,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find requested score at index ${pid}`
+                customString: `${errors.uErr.osu.score.nf} at index ${pid}`
             });
             return;
         }
@@ -4172,7 +4176,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: errors.noUser(user),
+                        content: `${errors.uErr.osu.scores.pinned.replace('[ID]', user)} offset by ${cinitnum}`,
                         edit: true
                     }
                 }, input.canReply);
@@ -4183,7 +4187,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find user's pinned scores offset by ${cinitnum}`
+                customString: `${errors.uErr.osu.scores.pinned.replace('[ID]', user)} offset by ${cinitnum}`
             });
             return;
         }
@@ -4259,7 +4263,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find requested score`,
+                        content: `${errors.uErr.osu.score.nf} at index ${pid}`,
                         edit: true
                     }
                 }, input.canReply);
@@ -4270,7 +4274,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find requested score at index ${pid}`
+                customString: `${errors.uErr.osu.score.nf} at index ${pid}`
             });
             return;
         }
@@ -4742,7 +4746,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user ${user}`,
+                    content: errors.noUser(user),
                     edit: true
                 }
             }, input.canReply);
@@ -4807,7 +4811,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find \`${user}\`'s recent scores`,
+                    content: `${errors.uErr.osu.scores.recent.replace('[ID]', user)}`,
                     edit: true
                 }
             }, input.canReply);
@@ -4818,7 +4822,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user's recent scores`
+            customString: `${errors.uErr.osu.scores.recent.replace('[ID]', user)}`
         });
         return;
     }
@@ -4873,9 +4877,15 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 
         const curscore = rsdata[0 + page];
         if (!curscore || curscore == undefined || curscore == null) {
-            let err = `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores`;
+            let err = `${errors.uErr.osu.scores.recent_ms
+                .replace('[ID]', user)
+                .replace('[MODE]', emojis.gamemodes[osufunc.modeValidator(mode)])
+                }`;
             if (filterTitle) {
-                err = `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores matching \`${filterTitle}\``;
+                err = `${errors.uErr.osu.scores.recent_ms
+                    .replace('[ID]', user)
+                    .replace('[MODE]', emojis.gamemodes[osufunc.modeValidator(mode)])
+                    } matching \`${filterTitle}\``;
             }
 
             if (input.button == null) {
@@ -4924,7 +4934,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find beatmap ${curbm.id}`,
+                        content: `${errors.uErr.osu.map.m.replace('[ID]', curbm.id.toString())}`,
                         edit: true
                     }
                 }, input.canReply);
@@ -4935,7 +4945,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmap data for ${curbm.id}`
+                customString: `${errors.uErr.osu.map.m.replace('[ID]', curbm.id.toString())}`
             });
             return;
         }
@@ -5114,7 +5124,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 curscore.pp ?
                     curscore.pp.toFixed(2) :
                     NaN;
-            ppissue = 'Error - pp calculator could not calculate beatmap';
+            ppissue = errors.uErr.osu.performance.crash;
             log.toOutput(error);
         }
 
@@ -5669,7 +5679,7 @@ export async function replayparse(input: extypes.commandInput) {
         {
             pp: 0
         }];
-        ppissue = 'Error - could not fetch beatmap';
+        ppissue = errors.uErr.osu.performance.mapMissing;
     }
 
     const lifebar = replay.life_bar.split('|');
@@ -5940,7 +5950,9 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find score`,
+                    content: errors.uErr.osu.score.nd
+                        .replace('[SID]', scoreid.toString())
+                        .replace('[MODE]', scoremode),
                     edit: true
                 }
             }, input.canReply);
@@ -5951,7 +5963,9 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find score data for ${scoreid} in ${scoremode}`
+            customString: errors.uErr.osu.score.nd
+                .replace('[SID]', scoreid.toString())
+                .replace('[MODE]', scoremode)
         });
         return;
     }
@@ -5961,7 +5975,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - this score is invalid/unsubmitted and cannot be parsed`,
+                    content: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`,
                     edit: true
                 }
             }, input.canReply);
@@ -5972,7 +5986,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Invalid score - osu.ppy.sh/scores/${scoremode}/${scoreid}`
+            customString: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`
         });
         return;
     }
@@ -6017,7 +6031,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - this score is invalid/unsubmitted and cannot be parsed`,
+                    content: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`,
                     edit: true
                 }
             }, input.canReply);
@@ -6028,7 +6042,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Invalid score - osu.ppy.sh/scores/${scoremode}/${scoreid}`
+            customString: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`,
         });
         return;
     }
@@ -6054,7 +6068,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find beatmap ${scoredata.beatmap.id}`,
+                    content: errors.uErr.osu.map.m.replace('[ID]', scoredata.beatmap.id.toString()),
                     edit: true
                 }
             }, input.canReply);
@@ -6065,7 +6079,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find beatmap data for ${scoredata.beatmap.id}`
+            customString: errors.uErr.osu.map.m.replace('[ID]', scoredata.beatmap.id.toString())
         });
         return;
     }
@@ -6242,7 +6256,9 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user \`${scoredata?.user?.username}\``,
+                    content: `${errors.uErr.osu.profile.user
+                        .replace('[ID]', scoredata?.user?.username)
+                        }`,
                     edit: true
                 }
             }, input.canReply);
@@ -6253,7 +6269,9 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find user ${scoredata.user_id} AKA ${scoredata.user.username}`
+            customString: `${errors.uErr.osu.profile.user
+                .replace('[ID]', scoredata?.user?.username)
+                } AKA ${scoredata.user.username}`
         });
         return;
     }
@@ -6593,7 +6611,7 @@ export async function scorepost(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find score`,
+                    content: `${errors.uErr.osu.score.nf}`,
                     edit: true
                 }
             }, input.canReply);
@@ -6626,7 +6644,7 @@ export async function scorepost(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find beatmap ${scoredata.beatmap.id}`,
+                    content: errors.uErr.osu.map.m.replace('[ID]', scoredata.beatmap.id.toString()),
                     edit: true
                 }
             }, input.canReply);
@@ -6637,7 +6655,7 @@ export async function scorepost(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find beatmap data for ${scoredata.beatmap.id}`
+            customString: errors.uErr.osu.map.m.replace('[ID]', scoredata.beatmap.id.toString())
         });
         return;
     }
@@ -7108,7 +7126,9 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find ${user}'s scores on ${mapid}`,
+                    content: errors.uErr.osu.scores.map
+                        .replace('[ID]', user)
+                        .replace('[MID', mapid),
                     edit: true
                 }
             }, input.canReply);
@@ -7119,7 +7139,9 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find beatmap scores`
+            customString: errors.uErr.osu.scores.map
+                .replace('[ID]', user)
+                .replace('[MID', mapid)
         });
         return;
     }
@@ -7152,7 +7174,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find requested score`,
+                        content: `${errors.uErr.osu.score.nf} at index ${pid}`,
                         edit: true
                     }
                 }, input.canReply);
@@ -7163,7 +7185,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find requested score at index ${pid}`
+                customString: `${errors.uErr.osu.score.nf} at index ${pid}`
             });
             return;
         }
@@ -7195,7 +7217,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find beatmap ${mapid}`,
+                    content: errors.uErr.osu.map.m.replace('[ID]', mapid),
                     edit: true
                 }
             }, input.canReply);
@@ -7206,7 +7228,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find beatmap data for ${mapid}`
+            customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
         });
         return;
     }
@@ -7581,7 +7603,7 @@ export async function scorestats(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find user ${user}`,
+                    content: errors.noUser(user),
                     edit: true
                 }
             }, input.canReply);
@@ -8102,7 +8124,7 @@ export async function simulate(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - could not find map ${mapid}`,
+                    content: errors.uErr.osu.map.m.replace('[ID]', mapid),
                     edit: true
                 }
             }, input.canReply);
@@ -8113,7 +8135,7 @@ export async function simulate(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `Could not find beatmap data for ${mapid}`
+            customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
         });
         return;
     }
@@ -8465,7 +8487,7 @@ export async function map(input: extypes.commandInput) {
                         commandType: input.commandType,
                         obj: input.obj,
                         args: {
-                            content: `Error - invalid beatmap link. `,
+                            content: errors.uErr.osu.map.url,
                             edit: true
                         }
                     }, input.canReply);
@@ -8512,7 +8534,7 @@ export async function map(input: extypes.commandInput) {
                         commandType: input.commandType,
                         obj: input.obj,
                         args: {
-                            content: `Error - could not find beatmapset ${setid}`,
+                            content: errors.uErr.osu.map.ms.replace('[ID]', mapid),
                             edit: true
                         }
                     }, input.canReply);
@@ -8522,7 +8544,7 @@ export async function map(input: extypes.commandInput) {
                         commandType: input.commandType,
                         commandId: input.absoluteID,
                         object: input.obj,
-                        customString: `Could not find beatmapset data for ${setid}`
+                        customString: errors.uErr.osu.map.ms.replace('[ID]', mapid)
                     });
                     return;
                 }
@@ -8533,7 +8555,7 @@ export async function map(input: extypes.commandInput) {
                         commandType: input.commandType,
                         obj: input.obj,
                         args: {
-                            content: `Error - no beatmaps found in beatmapset ${setid}`,
+                            content: errors.uErr.osu.map.setonly.replace('[ID]', bmsdata.id.toString()),
                             edit: true
                         }
                     }, input.canReply);
@@ -8543,7 +8565,7 @@ export async function map(input: extypes.commandInput) {
                         commandType: input.commandType,
                         commandId: input.absoluteID,
                         object: input.obj,
-                        customString: `Could not find beatmapset data for ${setid} (invalid link)`
+                        customString: errors.uErr.osu.map.setonly.replace('[ID]', bmsdata.id.toString())
                     });
                     return;
                 }
@@ -8698,7 +8720,7 @@ export async function map(input: extypes.commandInput) {
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find map ${mapid}`,
+                        content: errors.uErr.osu.map.m.replace('[ID]', mapid),
                         edit: true
                     }
                 }, input.canReply);
@@ -8709,7 +8731,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmap data for ${mapid}`
+                customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
             });
             return;
         }
@@ -8739,7 +8761,7 @@ export async function map(input: extypes.commandInput) {
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find mapset ${mapdata.beatmapset_id}`,
+                        content: errors.uErr.osu.map.ms.replace('[ID]', mapdata.beatmapset_id.toString()),
                         edit: true
                     }
                 }, input.canReply);
@@ -8750,7 +8772,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmapset data for ${mapdata.beatmapset_id}`
+                customString: errors.uErr.osu.map.ms.replace('[ID]', mapdata.beatmapset_id.toString())
             });
             return;
         }
@@ -8809,7 +8831,7 @@ export async function map(input: extypes.commandInput) {
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - beatmap search failed`,
+                        content: errors.uErr.osu.map.search,
                         edit: true
                     }
                 }, input.canReply);
@@ -8820,7 +8842,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Beatmap search failed`
+                customString: errors.uErr.osu.map.search
             });
             return;
         }
@@ -8832,7 +8854,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - no maps found for "${maptitleq}"`,
+                    content: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq),
                     edit: true
                 }
             }, input.canReply);
@@ -8842,7 +8864,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: 'No maps found for the search given'
+                customString: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq)
             });
             return;
         }
@@ -8907,7 +8929,7 @@ export async function map(input: extypes.commandInput) {
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find map ${mapidtest2.id}`,
+                        content: `${errors.uErr.osu.map.m.replace('[ID]', mapidtest2.id)}`,
                         edit: true
                     }
                 }, input.canReply);
@@ -8918,7 +8940,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmap data for ${mapidtest2.id}`
+                customString: `${errors.uErr.osu.map.m.replace('[ID]', mapidtest2.id)}`
             });
             return;
         }
@@ -9705,7 +9727,7 @@ export async function ppCalc(input: extypes.commandInput) {
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find map ${mapid}`,
+                        content: errors.uErr.osu.map.m.replace('[ID]', mapid),
                         edit: true
                     }
                 }, input.canReply);
@@ -9716,7 +9738,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmap data for ${mapid}`
+                customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
             });
             return;
         }
@@ -9746,7 +9768,7 @@ export async function ppCalc(input: extypes.commandInput) {
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find mapset ${mapdata.beatmapset_id}`,
+                        content: errors.uErr.osu.map.m.replace('[ID]', mapdata.beatmapset_id.toString()),
                         edit: true
                     }
                 }, input.canReply);
@@ -9757,7 +9779,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmapset data for ${mapdata.beatmapset_id}`
+                customString: errors.uErr.osu.map.m.replace('[ID]', mapdata.beatmapset_id.toString())
             });
             return;
         }
@@ -9816,7 +9838,7 @@ export async function ppCalc(input: extypes.commandInput) {
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - no maps found for "${maptitleq}"`,
+                        content: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq),
                         edit: true
                     }
                 }, input.canReply);
@@ -9827,7 +9849,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmap data for search "${maptitleq}"`
+                customString: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq)
             });
             return;
         }
@@ -9839,7 +9861,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - no maps found for "${maptitleq}"`,
+                    content: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq),
                     edit: true
                 }
             }, input.canReply);
@@ -9898,7 +9920,7 @@ export async function ppCalc(input: extypes.commandInput) {
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find map ${mapidtest2[0].id}`,
+                        content: errors.uErr.osu.map.m.replace('[ID]', mapidtest2[0].id),
                         edit: true
                     }
                 }, input.canReply);
@@ -9909,7 +9931,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find beatmap data for ${mapid}`
+                customString: errors.uErr.osu.map.m.replace('[ID]', mapidtest2[0].id)
             });
             return;
         }
@@ -10786,7 +10808,7 @@ export async function maplocal(input: extypes.commandInput) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: `Error - could not produce strains graph`,
+                content: errors.uErr.osu.map.strains_graph,
                 edit: true
             }
         }, input.canReply);
@@ -11315,7 +11337,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: errors.noUser(user),
+                        content: `Could not find user's ${calc.toCapital(filter)} maps`,
                         edit: true
                     }
                 }, input.canReply);
@@ -11403,7 +11425,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: `Error - could not find requested map`,
+                        content: errors.uErr.osu.map.m_uk + `at index ${pid}`,
                         edit: true
                     }
                 }, input.canReply);
@@ -11414,7 +11436,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `Could not find requested beatmap at index ${pid}`
+                customString: errors.uErr.osu.map.m_uk + `at index ${pid}`
             });
             return;
         }
@@ -11644,7 +11666,7 @@ export async function trackadd(input: extypes.commandInput) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: `Error - current server does not have a tracking channel`,
+                content: errors.uErr.osu.tracking.channel_ms,
                 edit: true
             }
         }, input.canReply);
@@ -11960,7 +11982,7 @@ export async function trackchannel(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - the current guild does not have a tracking channel`,
+                    content: errors.uErr.osu.tracking.channel_ms,
                     edit: true
                 }
             }, input.canReply);
@@ -11982,7 +12004,7 @@ export async function trackchannel(input: extypes.commandInput) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: `Error - Invalid channel id`,
+                content: errors.uErr.admin.channel.msid,
                 edit: true
             }
         }, input.canReply);
@@ -12797,7 +12819,7 @@ export async function osuset(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `Error - invalid mode given`,
+                    content: errors.uErr.osu.set.mode,
                     edit: true
                 }
             }, input.canReply);
