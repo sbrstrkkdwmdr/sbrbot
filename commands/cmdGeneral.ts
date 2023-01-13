@@ -2140,8 +2140,8 @@ export async function time(input: extypes.commandInput) {
                  */
                 name: 'UTC/GMT+00:00',
                 value: `\n**Date**: ${curTime.format("DD/MM/YYYY")}` +
-                    `\n**Full Date**: ${curTime.format("d, DDD MMM YYYY hh:mm:ssA Z")}` +
-                    `\n**Full Date(24h)**: ${curTime.format("d, DDD MMM YYYY HH:mm:ss Z")}` +
+                    `\n**Full Date**: ${curTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
+                    `\n**Full Date(24h)**: ${curTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
                     `\n\n**Full Date ISO8601**: ${curTime.toISOString()}` +
                     `\n**EPOCH(ms)**: ${curTime.valueOf()}`
                 ,
@@ -2214,8 +2214,8 @@ export async function time(input: extypes.commandInput) {
                 .addFields([{
                     name: `${fetchtimezone.toUpperCase()}/${offsetReadable} (Requested Time)`,
                     value: `\n**Date**: ${reqTime.format("DD/MM/YYYY")}` +
-                        `\n**Full Date**: ${reqTime.format("d, DDD MMM YYYY hh:mm:ssA Z")}` +
-                        `\n**Full Date(24h)**: ${reqTime.format("d, DDD MMM YYYY HH:mm:ss Z")}` +
+                        `\n**Full Date**: ${reqTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
+                        `\n**Full Date(24h)**: ${reqTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
                         `\n**Full Date ISO8601**: ${reqTime.toISOString(true)}`,
                     inline: false
                 }]);

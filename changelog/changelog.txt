@@ -171,3 +171,7 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] fixed sorting by cs/ar/od/hp/length not working in ubm
 [ADD] added stats for score grades to scorestats
 [QOL] moved errors to a separate object 
+
+0.4.10
+
+[QOL] time command shows days again
