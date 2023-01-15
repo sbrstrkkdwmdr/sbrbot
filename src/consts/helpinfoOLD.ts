@@ -12,16 +12,16 @@ const template = [
             }
         ]
     }
-]
+];
 
 type commandInfo = {
     name: string,
     description: string,
     usage?: string,
     slashusage?: string,
-    options: { name: string, description: string }[],
-    aliases?: string
-}
+    options: { name: string, description: string; }[],
+    aliases?: string;
+};
 
 const cmds: commandInfo[] = [
     {
@@ -121,7 +121,7 @@ const cmds: commandInfo[] = [
         options: []
 
     }
-]
+];
 
 const othercmds: commandInfo[] = [
     {
@@ -213,7 +213,7 @@ const othercmds: commandInfo[] = [
             }
         ]
     }
-]
+];
 
 
 const osucmds: commandInfo[] = [
@@ -533,7 +533,7 @@ const osucmds: commandInfo[] = [
         ]
     }
 
-]
+];
 
 const admincmds: commandInfo[] = [
     {
@@ -617,7 +617,7 @@ const admincmds: commandInfo[] = [
             }
         ]
     }
-]
+];
 
 const links = [
     {
@@ -679,8 +679,8 @@ const links = [
         aliases: '`'
     }
 
-]
+];
 
 //module.exports = { cmds, osucmds, admincmds, links, musiccmds }
-export { cmds, othercmds, osucmds, admincmds, links }
+export { cmds, othercmds, osucmds, admincmds, links };
 

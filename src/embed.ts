@@ -1,17 +1,17 @@
-import osuapitypes = require('./types/osuApiTypes');
-import osumodcalc = require('osumodcalculator');
-import emojis = require('./consts/emojis');
-import osufunc = require('./osufunc');
-import fs = require('fs');
-import func = require('./tools');
-import calc = require('./calc');
-import Discord = require('discord.js');
-import cmdchecks = require('./checks');
+import Discord from 'discord.js';
+import fs from 'fs';
+import * as calc from './calc.js';
+import * as cmdchecks from './checks.js';
+import * as emojis from './consts/emojis.js';
+import * as osufunc from './osufunc.js';
+import * as osumodcalc from './osumodcalc.js';
+import * as func from './tools.js';
+import * as osuapitypes from './types/osuApiTypes.js';
 
 export async function scoreList(
     asObj: {
         scores: osuapitypes.Score[],
-        detailed: boolean,
+        detailed: number,
         showWeights: boolean,
         page: number,
         showMapTitle: boolean,
@@ -20,314 +20,305 @@ export async function scoreList(
         truePosType: scoreSort,
         filteredMapper: string,
         filteredMods: string,
+        filterMapTitle: string,
+        filterRank: osuapitypes.Rank,
         reverse: boolean,
         mapidOverride?: number,
         showUserName?: boolean,
+    },
+    mapping: {
+        useScoreMap: boolean,
+        overrideMapLastDate?: string;
     }
 ) {
-
-    const scores = asObj.scores
-    const detailed = asObj.detailed
-    const showWeights = asObj.showWeights
-    let page = asObj.page
-    const showMapTitle = asObj.showMapTitle
-    const showTruePosition = asObj.showTruePosition
-    let sort = asObj.sort
-    const truePosType = asObj.truePosType
-    const filteredMapper = asObj.filteredMapper
-    let filteredMods = asObj.filteredMods
-    const reverse = asObj.reverse
-    const mapidOverride = asObj.mapidOverride
-
-
-    let filtereddata = scores.slice()
+    let filtereddata = asObj.scores.slice();
     let filterinfo = '';
 
-    if (filteredMapper != null) {
-        filtereddata = scores.slice().filter(array => array.beatmapset.creator.toLowerCase() == filteredMapper.toLowerCase())
-        filterinfo += `\nmapper: ${filteredMapper}`
+    if (asObj.filteredMapper != null) {
+        filtereddata = filtereddata.filter(array => array.beatmapset.creator.toLowerCase() == asObj.filteredMapper.toLowerCase());
+        filterinfo += `\nmapper: ${asObj.filteredMapper}`;
     }
-    let calcmods = osumodcalc.OrderMods(filteredMods + '')
+    let calcmods = osumodcalc.OrderMods(asObj.filteredMods + '');
     if (calcmods.length < 1) {
-        calcmods = 'NM'
-        filteredMods = null
+        calcmods = 'NM';
+        asObj.filteredMods = null;
     }
-    if (filteredMods != null && !filteredMods.includes('any')) {
-        filtereddata = scores.slice().filter(array => array.mods.toString().replaceAll(',', '') == calcmods)
-        filterinfo += `\nmods: ${filteredMods}`
+    if (asObj.filteredMods != null && !asObj.filteredMods.includes('any')) {
+        filtereddata = filtereddata.filter(array => array.mods.toString().replaceAll(',', '') == calcmods);
+        filterinfo += `\nmods: ${asObj.filteredMods}`;
     }
-    if (filteredMods != null && filteredMods.includes('any')) {
-        filtereddata = scores.slice().filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods))
-        filterinfo += `\nmods: ${filteredMods}`
+    if (asObj.filteredMods != null && asObj.filteredMods.includes('any')) {
+        filtereddata = filtereddata.filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods));
+        filterinfo += `\nmods: ${asObj.filteredMods}`;
+    }
+    if (asObj.filterMapTitle != null) {
+        filterinfo += `\nmap: ${asObj.filterMapTitle}`;
+    }
+    if (asObj.filterRank != null) {
+        filterinfo += `\nrank: ${asObj.filterRank}`;
     }
 
-    let newData = filtereddata.slice()
+    let newData = filtereddata.slice();
     let sortinfo;
-    switch (sort) {
+    switch (asObj.sort) {
         case 'score':
-            newData = filtereddata.slice().sort((a, b) => b.score - a.score)
-            sortinfo = `\nsorted by highest score`
+            newData = await filtereddata.slice().sort((a, b) => b.score - a.score);
+            sortinfo = `\nsorted by highest score`;
             break;
         case 'acc':
-            newData = filtereddata.slice().sort((a, b) => b.accuracy - a.accuracy)
-            sortinfo = `\nsorted by highest accuracy`
+            newData = await filtereddata.slice().sort((a, b) => b.accuracy - a.accuracy);
+            sortinfo = `\nsorted by highest accuracy`;
             break;
         case 'pp': default:
-            newData = filtereddata.slice().sort((a, b) => b.pp - a.pp)
-            sortinfo = `\nsorted by highest pp`
-            sort = 'pp'
+            newData = await filtereddata.slice().sort((a, b) => b.pp - a.pp);
+            sortinfo = `\nsorted by highest pp`;
+            asObj.sort = 'pp';
             break;
         case 'recent':
-            newData = filtereddata.slice().sort((a, b) => parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')))
-            sortinfo = `\nsorted by most recent`
+            newData = await filtereddata.slice().sort((a, b) =>
+                parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
+                -
+                parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')));
+            sortinfo = `\nsorted by most recent`;
             break;
         case 'combo':
-            newData = filtereddata.slice().sort((a, b) => b.max_combo - a.max_combo)
-            sortinfo = `\nsorted by highest combo`
+            newData = await filtereddata.slice().sort((a, b) => b.max_combo - a.max_combo);
+            sortinfo = `\nsorted by highest combo`;
             break;
         case 'miss':
-            newData = filtereddata.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss)
-            sortinfo = `\nsorted by least misses`
+            newData = await filtereddata.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss);
+            sortinfo = `\nsorted by least misses`;
             break;
         case 'rank':
-            newData = filtereddata.slice().sort((a, b) => a.rank.localeCompare(b.rank))
-            sortinfo = `\nsorted by best rank`
+            newData = await filtereddata.slice().sort((a, b) => a.rank.localeCompare(b.rank));
+            sortinfo = `\nsorted by best rank`;
             break;
     }
-    if (reverse == true) {
-        newData.reverse()
-        switch (sort) {
+    if (asObj.reverse == true) {
+        newData.reverse();
+        switch (asObj.sort) {
             case 'score':
-                sortinfo = `\nsorted by lowest score`
+                sortinfo = `\nsorted by lowest score`;
                 break;
             case 'acc':
-                sortinfo = `\nsorted by lowest accuracy`
+                sortinfo = `\nsorted by lowest accuracy`;
                 break;
             case 'pp': default:
-                sortinfo = `\nsorted by lowest pp`
+                sortinfo = `\nsorted by lowest pp`;
                 break;
             case 'recent':
-                sortinfo = `\nsorted by oldest`
+                sortinfo = `\nsorted by oldest`;
                 break;
             case 'combo':
-                sortinfo = `\nsorted by lowest combo`
+                sortinfo = `\nsorted by lowest combo`;
                 break;
             case 'miss':
-                sortinfo = `\nsorted by most misses`
+                sortinfo = `\nsorted by most misses`;
                 break;
             case 'rank':
-                sortinfo = `\nsorted by worst rank`
+                sortinfo = `\nsorted by worst rank`;
                 break;
         }
     }
-    filterinfo += sortinfo
-
-    if (page >= Math.ceil(newData.length / 5)) {
-        page = Math.ceil(newData.length / 5) - 1
-    }
+    filterinfo += sortinfo;
 
     const scoresAsArrStr = [];
     const scoresAsFields: Discord.EmbedField[] = [];
 
-    fs.writeFileSync('debug.json', JSON.stringify(scores, null, 2));
+    fs.writeFileSync('debug.json', JSON.stringify(asObj.scores, null, 2));
 
     let trueIndex: string | number = '';
 
-    let truePosArr = newData.slice()
+    let truePosArr = newData.slice();
 
-    if (showTruePosition && sort != truePosType) {
-        truePosArr = await scores.slice().sort((a, b) => b.pp - a.pp)
+    if (asObj.showTruePosition && asObj.sort != asObj.truePosType) {
+        switch (asObj.truePosType) {
+            case 'score':
+                truePosArr = await asObj.scores.slice().sort((a, b) => b.score - a.score);
+                break;
+            case 'acc':
+                truePosArr = await asObj.scores.slice().sort((a, b) => b.accuracy - a.accuracy);
+                break;
+            case 'pp': default:
+                truePosArr = await asObj.scores.slice().sort((a, b) => b.pp - a.pp);
+                break;
+            case 'recent':
+                truePosArr = await asObj.scores.slice().sort((a, b) =>
+                    parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
+                    -
+                    parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
+                );
+                break;
+            case 'combo':
+                truePosArr = await asObj.scores.slice().sort((a, b) => b.max_combo - a.max_combo);
+                break;
+            case 'miss':
+                truePosArr = await asObj.scores.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss);
+                break;
+            case 'rank':
+                truePosArr = await asObj.scores.slice().sort((a, b) => a.rank.localeCompare(b.rank));
+                break;
+        }
     }
 
-    for (let i = 0; i < 5 && i < newData.length; i++) {
-        const scoreoffset = page * 5 + i
-        const curscore = newData[scoreoffset]
+    let perPage = 5;
+    switch (asObj.detailed) {
+        case 0:
+        case 1:
+            perPage = 5;
+            break;
+        case 2:
+            perPage = 10;
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+    }
+
+    if (asObj.page >= Math.ceil(newData.length / perPage)) {
+        asObj.page = Math.ceil(newData.length / perPage) - 1;
+    }
+
+    for (let i = 0; i < newData.length && i < perPage; i++) {
+        const scoreoffset = asObj.page * perPage + i;
+        const curscore = newData[scoreoffset];
 
         if (!curscore) {
             break;
         }
-        if (showTruePosition && sort != truePosType) {
+        if (asObj.showTruePosition && asObj.sort != asObj.truePosType) {
             if (curscore.id != truePosArr[scoreoffset].id) {
-                trueIndex = await truePosArr.indexOf(curscore) + 1
+                trueIndex = await truePosArr.indexOf(curscore) + 1;
             } else {
-                trueIndex = ''
+                trueIndex = '';
             }
         }
 
-        const mapid = mapidOverride ?? curscore.beatmap.id;
+        const mapid = asObj.mapidOverride ?? curscore.beatmap.id;
 
-        if (detailed === true) {
-            const ranking = curscore.rank.toUpperCase()
-            let grade: string = gradeToEmoji(ranking);
-            const hitstats = curscore.statistics
-            let hitlist: string = hitList(
-                {
-                    gamemode: curscore.mode,
-                    count_geki: hitstats.count_geki,
-                    count_300: hitstats.count_300,
-                    count_katu: hitstats.count_katu,
-                    count_100: hitstats.count_100,
-                    count_50: hitstats.count_50,
-                    count_miss: hitstats.count_miss,
-                }
-            )
+        const ranking = curscore.rank.toUpperCase();
+        const grade: string = gradeToEmoji(ranking);
 
-            const tempMods = curscore.mods
-            let ifmods: string;
+        const hitstats = curscore.statistics;
 
-            if (!tempMods || tempMods.join('') == '' || tempMods == null || tempMods == undefined) {
-                ifmods = ''
-            } else {
-                ifmods = '+' + tempMods.toString().replaceAll(",", '')
+        const hitlist: string = hitList(
+            {
+                gamemode: curscore.mode,
+                count_geki: hitstats.count_geki,
+                count_300: hitstats.count_300,
+                count_katu: hitstats.count_katu,
+                count_100: hitstats.count_100,
+                count_50: hitstats.count_50,
+                count_miss: hitstats.count_miss,
             }
+        );
 
-            let pptxt: string;
-            const ppcalcing =
-                await osufunc.scorecalc({
-                    mods: curscore.mods.join('').length > 1 ?
-                        curscore.mods.join('') : 'NM',
-                    gamemode: curscore.mode,
-                    mapid: curscore.beatmap.id,
-                    miss: hitstats.count_miss,
-                    acc: curscore.accuracy,
-                    maxcombo: curscore.max_combo,
-                    score: curscore.score,
-                    calctype: 0,
-                    passedObj: 0,
-                    failed: false
-                })
-            if (curscore.accuracy != 1) {
-                if (curscore.pp == null || isNaN(curscore.pp)) {
-                    pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`
-                } else {
-                    pptxt = `${curscore.pp.toFixed(2)}pp`
-                }
-                if (curscore.perfect == false) {
-                    pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`
-                }
-                pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`
-            } else {
-                if (curscore.pp == null || isNaN(curscore.pp)) {
-                    pptxt =
-                        `${await ppcalcing[0].pp.toFixed(2)}pp`
-                } else {
-                    pptxt =
-                        `${curscore.pp.toFixed(2)}pp`
-                }
-            }
-            let showtitle: string;
+        const tempMods = curscore.mods;
+        let ifmods: string;
 
-            if (showMapTitle == true) {
-                showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}`
-            } else {
-                showtitle = `Score #${i + 1 + (page * 5)}${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods}`
-            }
-            if (asObj.showUserName == true) {
-                showtitle = `[${curscore.user.username}](https://osu.ppy.sh/u/${curscore.user.id})`
-            }
-            let weighted;
-            if (showWeights == true) {
-                weighted = `${(curscore?.weight?.pp)?.toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`
-            } else {
-                weighted = ''
-            }
-
-            scoresAsFields.push({
-                name: `#${i + 1 + (page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
-                value: `
-**${showtitle}**
-[**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${func.separateNum(curscore.score)} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
-${pptxt} | ${weighted}
-`,
-                inline: false
-            })
-            scoresAsArrStr.push(
-                `\n**#${i + 1 + (page * 5)} | **${showtitle}**
-[**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${func.separateNum(curscore.score)} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | \`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
-${pptxt} | ${weighted}
-
-`
-            )
+        if (!tempMods || tempMods.join('') == '' || tempMods == null || tempMods == undefined) {
+            ifmods = '';
         } else {
-            const ranking = curscore.rank.toUpperCase()
-            let grade: string = gradeToEmoji(ranking);
+            ifmods = '+' + osumodcalc.OrderMods(tempMods.join(''));
+        }
 
-            const hitstats = curscore.statistics
-
-            let hitlist: string = hitList(
-                {
-                    gamemode: curscore.mode,
-                    count_geki: hitstats.count_geki,
-                    count_300: hitstats.count_300,
-                    count_katu: hitstats.count_katu,
-                    count_100: hitstats.count_100,
-                    count_50: hitstats.count_50,
-                    count_miss: hitstats.count_miss,
-                }
-            )
-
-            const tempMods = curscore.mods
-            let ifmods: string;
-
-            if (!tempMods || tempMods.join('') == '' || tempMods == null || tempMods == undefined) {
-                ifmods = ''
-            } else {
-                ifmods = '+' + osumodcalc.OrderMods(tempMods.join(''))
-            }
-
-            let pptxt: string;
-
-
+        let pptxt: string;
+        const ppcalcing =
+            await osufunc.scorecalc({
+                mods: curscore.mods.join('').length > 1 ?
+                    curscore.mods.join('') : 'NM',
+                gamemode: curscore.mode,
+                mapid,
+                miss: hitstats.count_miss,
+                acc: curscore.accuracy,
+                maxcombo: curscore.max_combo,
+                score: curscore.score,
+                calctype: 0,
+                passedObj: 0,
+                failed: false
+            },
+                mapping.useScoreMap ?
+                    new Date(curscore.beatmap.last_updated)
+                    :
+                    new Date(mapping.overrideMapLastDate)
+            );
+        if (curscore.accuracy != 1) {
             if (curscore.pp == null || isNaN(curscore.pp)) {
-                const ppcalcing = await osufunc.scorecalc({
-                    mods: curscore.mods.join('').length > 1 ?
-                        curscore.mods.join('') : 'NM',
-                    gamemode: curscore.mode,
-                    mapid: curscore.beatmap.id,
-                    miss: hitstats.count_miss,
-                    acc: curscore.accuracy,
-                    maxcombo: curscore.max_combo,
-                    score: curscore.score,
-                    calctype: 0,
-                    passedObj: 0,
-                    failed: false
-                })
+                pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`;
+            } else {
+                pptxt = `${curscore.pp.toFixed(2)}pp`;
+            }
+            if (curscore.perfect == false) {
+                pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`;
+            }
+            pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`;
+        } else {
+            if (curscore.pp == null || isNaN(curscore.pp)) {
                 pptxt =
-                    `${await ppcalcing[0].pp.toFixed(2)}pp`
+                    `${await ppcalcing[0].pp.toFixed(2)}pp`;
             } else {
                 pptxt =
-                    `${curscore.pp.toFixed(2)}pp`
+                    `${curscore.pp.toFixed(2)}pp`;
             }
+        }
 
-            let showtitle: string;
+        let showtitle: string;
 
-            if (showMapTitle == true) {
-                showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}\n`
-            } else {
-                showtitle = `[Score #${i + 1 + (page * 5)}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
-            }
-            if (asObj.showUserName == true) {
-                showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods} | `
-            }
+        if (asObj.showMapTitle == true) {
+            showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}`;
+        } else {
+            showtitle = `[Score #${i + 1 + (asObj.page * perPage)}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods}`;
+        }
+        if (asObj.showUserName == true) {
+            showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods}`;
+        }
 
-            scoresAsFields.push({
-                name: `#${i + 1 + (page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
-                value: `
-**${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${pptxt}
-\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
+        let weighted;
+        if (asObj.showWeights == true) {
+            weighted = `\n${(curscore?.weight?.pp)?.toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`;
+        } else {
+            weighted = '';
+        }
+
+        switch (asObj.detailed) {
+            case 0: case 2: {
+                let useTitle = `**#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}** | ${showtitle ? '**' + showtitle + '**' : ''}`;
+                if (showtitle.includes('Score #')) {
+                    useTitle = `**${showtitle}**`;
+                }
+                scoresAsFields.push({
+                    name: `#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
+                    value: `
+${showtitle ? '**' + showtitle + '**' : ''}
+\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} ${curscore?.pp ? `| ` + curscore.pp.toFixed(2) + 'pp' : ''}
 `,
-                inline: false
-            })
-            scoresAsArrStr.push(
-                `#${i + 1 + (page * 5)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
-**${showtitle}** [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${pptxt}
-\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x
+                    inline: false
+                });
+                scoresAsArrStr.push(`
+${useTitle}
+\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} ${curscore?.pp ? `| ` + curscore.pp.toFixed(2) + 'pp' : ''}`);
+            }
+                break;
+            default: case 1: {
+                scoresAsFields.push({
+                    name: `#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
+                    value: `
+${showtitle ? '**' + showtitle + '**\n' : ''} [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+${pptxt} ${weighted}`,
+                    inline: false
+                });
+                scoresAsArrStr.push(
+                    `#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
+${showtitle ? '**' + showtitle + '**\n' : ''} [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+${pptxt} ${weighted}
 `
-            )
+                );
+            }
+                break;
+
         }
     }
 
@@ -335,10 +326,11 @@ ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} | ${pptxt}
         string: scoresAsArrStr,
         fields: scoresAsFields,
         filter: filterinfo,
-        maxPages: Math.ceil(newData.length / 5),
-        isFirstPage: page == 0,
-        isLastPage: page >= Math.ceil(newData.length / 5) - 1
-    }
+        maxPages: Math.ceil(newData.length / perPage),
+        isFirstPage: asObj.page == 0,
+        isLastPage: asObj.page >= Math.ceil(newData.length / perPage) - 1,
+        usedPage: asObj.page
+    };
 
 }
 
@@ -355,7 +347,7 @@ export function score(score: osuapitypes.Score, map: osuapitypes.Beatmap, detail
     return fields;
 }
 
-export type scoreSort = 'pp' | 'score' | 'acc' | 'recent' | 'combo' | 'miss' | 'rank'
+export type scoreSort = 'pp' | 'score' | 'acc' | 'recent' | 'combo' | 'miss' | 'rank';
 
 export function user() { }
 
@@ -368,37 +360,37 @@ export function userList(data: {
 
 }
 
-export type userSort = 'pp' | 'rank' | 'acc' | 'playcount' | 'level' | 'joindate' | 'countryrank' | 'countrypp' | 'score' | 'score_ranked'
+export type userSort = 'pp' | 'rank' | 'acc' | 'playcount' | 'level' | 'joindate' | 'countryrank' | 'countrypp' | 'score' | 'score_ranked';
 
 export function gradeToEmoji(str: string) {
     let grade;
     switch (str) {
         case 'F':
-            grade = emojis.grades.F
+            grade = emojis.grades.F;
             break;
         case 'D':
-            grade = emojis.grades.D
+            grade = emojis.grades.D;
             break;
         case 'C':
-            grade = emojis.grades.C
+            grade = emojis.grades.C;
             break;
         case 'B':
-            grade = emojis.grades.B
+            grade = emojis.grades.B;
             break;
         case 'A':
-            grade = emojis.grades.A
+            grade = emojis.grades.A;
             break;
         case 'S':
-            grade = emojis.grades.S
+            grade = emojis.grades.S;
             break;
         case 'SH':
-            grade = emojis.grades.SH
+            grade = emojis.grades.SH;
             break;
         case 'X':
-            grade = emojis.grades.X
+            grade = emojis.grades.X;
             break;
         case 'XH':
-            grade = emojis.grades.XH
+            grade = emojis.grades.XH;
             break;
     }
     return grade;
@@ -407,9 +399,9 @@ export function gradeToEmoji(str: string) {
 export function hitList(
     obj: {
         gamemode: osuapitypes.GameMode,
-        count_geki?: number
+        count_geki?: number;
         count_300: number,
-        count_katu?: number
+        count_katu?: number;
         count_100: number,
         count_50?: number,
         count_miss: number,
@@ -419,16 +411,16 @@ export function hitList(
     switch (obj.gamemode) {
         case 'osu':
         default:
-            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`
+            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`;
             break;
         case 'taiko':
-            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_miss)}`
+            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_miss)}`;
             break;
         case 'fruits':
-            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`
+            hitList = `${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`;
             break;
         case 'mania':
-            hitList = `${func.separateNum(obj.count_geki)}/${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_katu)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`
+            hitList = `${func.separateNum(obj.count_geki)}/${func.separateNum(obj.count_300)}/${func.separateNum(obj.count_katu)}/${func.separateNum(obj.count_100)}/${func.separateNum(obj.count_50)}/${func.separateNum(obj.count_miss)}`;
             break;
     }
     return hitList;
@@ -436,87 +428,99 @@ export function hitList(
 
 export async function mapList(
     data: {
-        type: 'mapset' | 'map',
-        maps: osuapitypes.Beatmap[] | osuapitypes.Beatmapset[],
+        type: 'mapset' | 'map' | 'mapsetplays',
+        maps: osuapitypes.Beatmap[] | osuapitypes.Beatmapset[] | osuapitypes.BeatmapPlayCountArr,
         page: number,
         sort: mapSort,
         reverse: boolean,
+        detailed: number,
     }
 ) {
     let filterinfo: string = '';
     let newData = [];
-    let mapsArr: Discord.EmbedField[] = [];
+    const mapsArr: Discord.EmbedField[] = [];
+    const mapsArrStr: string[] = [];
     let page = data.page;
     let sortinfo = '';
 
+    let usePage = 5;
+
+    switch (data.detailed) {
+        case 0:
+            break;
+        case 2:
+            usePage = 10;
+            break;
+    }
+
     switch (data.type) {
         case 'mapset': {
-            let maps = data.maps as osuapitypes.Beatmapset[];
+            const maps = data.maps as osuapitypes.Beatmapset[];
             switch (data.sort) {
                 case 'title':
-                    maps.sort((a, b) => a.title.localeCompare(b.title))
+                    maps.sort((a, b) => a.title.localeCompare(b.title));
                     sortinfo = 'Sorted by title';
                     break;
                 case 'artist':
-                    maps.sort((a, b) => a.artist.localeCompare(b.artist))
+                    maps.sort((a, b) => a.artist.localeCompare(b.artist));
                     sortinfo = 'Sorted by artist';
                     break;
                 case 'difficulty':
                     maps.sort((a, b) =>
                         b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].difficulty_rating -
                         a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].difficulty_rating
-                    )
+                    );
                     sortinfo = 'Sorted by difficulty';
                     break;
                 case 'plays':
-                    maps.sort((a, b) => b.play_count - a.play_count)
+                    maps.sort((a, b) => b.play_count - a.play_count);
                     sortinfo = 'Sorted by playcount';
                     break;
                 case 'dateadded':
-                    maps.sort((a, b) => new Date(b.submitted_date).getTime() - new Date(a.submitted_date).getTime())
+                    maps.sort((a, b) => new Date(b.submitted_date).getTime() - new Date(a.submitted_date).getTime());
                     sortinfo = 'Sorted by date added';
                     break;
                 case 'favourites':
-                    maps.sort((a, b) => b.favourite_count - a.favourite_count)
+                    maps.sort((a, b) => b.favourite_count - a.favourite_count);
                     sortinfo = 'Sorted by favourites';
                     break;
                 case 'bpm':
-                    maps.sort((a, b) => b.bpm - a.bpm)
+                    maps.sort((a, b) => b.bpm - a.bpm);
                     sortinfo = 'Sorted by bpm';
                     break;
                 case 'cs':
                     maps.sort((a, b) =>
-                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].cs -
-                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].cs
-                    )
+                        b.beatmaps.sort((a, b) => b.cs - a.cs)[0].cs -
+                        a.beatmaps.sort((a, b) => b.cs - a.cs)[0].cs
+                    );
                     sortinfo = 'Sorted by circle size';
                     break;
                 case 'ar':
                     maps.sort((a, b) =>
-                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].ar -
-                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].ar
-                    )
+                        b.beatmaps.sort((a, b) => b.ar - a.ar)[0].ar -
+                        a.beatmaps.sort((a, b) => b.ar - a.ar)[0].ar
+                    );
                     sortinfo = 'Sorted by approach rate';
                     break;
                 case 'od':
                     maps.sort((a, b) =>
-                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].accuracy -
-                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].accuracy
-                    )
+                        b.beatmaps.sort((a, b) => b.accuracy - a.accuracy)[0].accuracy -
+                        a.beatmaps.sort((a, b) => b.accuracy - a.accuracy)[0].accuracy
+                    );
                     sortinfo = 'Sorted by overall difficulty';
                     break;
                 case 'hp':
                     maps.sort((a, b) =>
-                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].drain -
-                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].drain
-                    )
+                        b.beatmaps.sort((a, b) => b.drain - a.drain)[0].drain -
+                        a.beatmaps.sort((a, b) => b.drain - a.drain)[0].drain
+                    );
                     sortinfo = 'Sorted by hp';
                     break;
                 case 'length':
                     maps.sort((a, b) =>
-                        b.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].total_length -
-                        a.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0].total_length
-                    )
+                        b.beatmaps[0].total_length -
+                        a.beatmaps[0].total_length
+                    );
                     sortinfo = 'Sorted by length';
                     break;
                 default:
@@ -527,9 +531,10 @@ export async function mapList(
                 maps.reverse();
                 sortinfo += ' (reversed)';
             }
-            filterinfo += sortinfo
-            if (page >= Math.ceil(maps.length / 5)) {
-                page = Math.ceil(maps.length / 5) - 1
+
+            filterinfo += sortinfo;
+            if (page >= Math.ceil(maps.length / usePage)) {
+                page = Math.ceil(maps.length / usePage) - 1;
             }
             if (page < 0) {
                 page = 0;
@@ -537,9 +542,9 @@ export async function mapList(
 
             newData = maps;
 
-            for (let i = 0; i < 5 && i < maps.length; i++) {
-                const offset = page * 5 + i
-                const curmapset = maps[offset]
+            for (let i = 0; i < usePage && i < maps.length; i++) {
+                const offset = page * usePage + i;
+                const curmapset = maps[offset];
                 if (!curmapset) {
                     break;
                 }
@@ -553,45 +558,175 @@ export async function mapList(
                  * ranked date
                  * favourite count
                  */
-                const topmap = curmapset.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0]
-                mapsArr.push({
-                    name: `${offset + 1}`,
-                    value:
-                        `
+                const topmap = curmapset.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0];
+
+                switch (data.detailed) {
+                    case 0: case 2:
+                        mapsArr.push({
+                            name: '',
+                            value: '',
+                            inline: false,
+                        });
+                        mapsArrStr.push(
+                            `
+**#${offset + 1} | [${curmapset.artist} - ${curmapset.title}](https://osu.ppy.sh/s/${curmapset.id})**
+${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bpm} | ${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bpm}`
+                        );
+                        break;
+                    case 1: default:
+                        mapsArr.push({
+                            name: `${offset + 1}`,
+                            value:
+                                `
 [**${curmapset.artist} - ${curmapset.title}**](https://osu.ppy.sh/s/${curmapset.id})
 ${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
 ${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bpm}
 ${func.separateNum(curmapset.play_count)} plays | ${func.separateNum(topmap.passcount)} passes | ${func.separateNum(curmapset.favourite_count)} favourites
 Submitted <t:${new Date(curmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(curmapset.last_updated).getTime() / 1000}:R>
 ${topmap.status == 'ranked' ?
-                            `Ranked <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
-                        }${topmap.status == 'approved' || topmap.status == 'qualified' ?
-                            `Approved/Qualified <t: ${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
-                        }${topmap.status == 'loved' ?
-                            `Loved <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
-                        }`,
-                    inline: false
-                })
+                                    `Ranked <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                                }${topmap.status == 'approved' || topmap.status == 'qualified' ?
+                                    `Approved/Qualified <t: ${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                                }${topmap.status == 'loved' ?
+                                    `Loved <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                                }`,
+                            inline: false
+                        });
+                        mapsArrStr.push(
+                            `**#${offset + 1} | [${curmapset.artist} - ${curmapset.title}](https://osu.ppy.sh/s/${curmapset.id})**
+${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
+${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bpm}
+${func.separateNum(curmapset.play_count)} plays | ${func.separateNum(topmap.passcount)} passes | ${func.separateNum(curmapset.favourite_count)} favourites
+Submitted <t:${new Date(curmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(curmapset.last_updated).getTime() / 1000}:R>
+${topmap.status == 'ranked' ?
+                                `Ranked <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                            }${topmap.status == 'approved' || topmap.status == 'qualified' ?
+                                `Approved/Qualified <t: ${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                            }${topmap.status == 'loved' ?
+                                `Loved <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                            }`
+                        );
+                        break;
+                }
             }
         }
             break;
-        case 'map': {
+        case 'mapsetplays': {
+            const maps = data.maps as osuapitypes.BeatmapPlayCountArr;
+            if (data.reverse == true) {
+                maps.reverse();
+                sortinfo += ' (reversed)';
+            }
+            filterinfo += sortinfo;
+            if (page >= Math.ceil(maps.length / usePage)) {
+                page = Math.ceil(maps.length / usePage) - 1;
+            }
+            if (page < 0) {
+                page = 0;
+            }
 
+            newData = maps;
+
+            for (let i = 0; i < usePage && i < maps.length; i++) {
+                const offset = page * usePage + i;
+                const current = maps[offset];
+                const curmapset = current.beatmapset;
+                const topmap = current.beatmap;
+                if (!curmapset) {
+                    break;
+                }
+                switch (data.detailed) {
+                    case 0: case 2:
+                        mapsArr.push({
+                            name: '',
+                            value: '',
+                            inline: false,
+                        });
+                        mapsArrStr.push(
+                            `
+**#${offset + 1} | [${curmapset.artist} - ${curmapset.title}](https://osu.ppy.sh/s/${curmapset.id})**
+**${current.count}x plays**
+`
+                        );
+                        break;
+                    case 1: default:
+                        mapsArr.push({
+                            name: `${offset + 1}`,
+                            value:
+                                `
+[**${curmapset.artist} - ${curmapset.title}**](https://osu.ppy.sh/s/${curmapset.id})
+**${current.count}x plays**
+${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
+${calc.secondsToTime(topmap.total_length)} | ${func.separateNum(curmapset.favourite_count)} favourites
+`,
+                            inline: false
+                        });
+                        mapsArrStr.push(
+`**#${offset + 1} | [${curmapset.artist} - ${curmapset.title}](https://osu.ppy.sh/s/${curmapset.id})**
+**${current.count}x plays**
+${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
+${calc.secondsToTime(topmap.total_length)} | ${func.separateNum(curmapset.favourite_count)} favourites`
+);
+                        break;
+                }
+            }
         }
+            // case 'map': {
+
+            // }
             break;
     }
 
     return {
         fields: mapsArr,
+        string: mapsArrStr,
         filter: filterinfo,
-        maxPages: Math.ceil(newData.length / 5),
+        maxPages: Math.ceil(newData.length / usePage),
         isFirstPage: page == 0,
-        isLastPage: page >= Math.ceil(newData.length / 5) - 1
-    }
+        isLastPage: page >= Math.ceil(newData.length / usePage) - 1
+    };
+}
+
+export async function sortScores(input: {
+    scores: osuapitypes.Score[],
+    detailed: boolean,
+    showWeights: boolean,
+    page: number,
+    showMapTitle: boolean,
+    showTruePosition: boolean,
+    sort: scoreSort,
+    truePosType: scoreSort,
+    filteredMapper: string,
+    filteredMods: string,
+    reverse: boolean,
+    mapidOverride?: number,
+    showUserName?: boolean,
+}) {
+
 }
 
 export type mapSort = 'title' | 'artist' |
     'difficulty' | 'status' | 'rating' |
     'fails' | 'plays' |
     'dateadded' | 'favourites' | 'bpm' |
-    'cs' | 'ar' | 'od' | 'hp' | 'length'
+    'cs' | 'ar' | 'od' | 'hp' | 'length';
+
+export function getTotalHits(mode: osuapitypes.GameMode, score: osuapitypes.Score) {
+    let totalHits = 0;
+    const stats = score.statistics;
+    switch (mode) {
+        case 'osu': default:
+            totalHits = stats.count_300 + stats.count_100 + stats.count_50 + stats.count_miss;
+            break;
+        case 'taiko':
+            totalHits = stats.count_300 + stats.count_100 + stats.count_miss;
+            break;
+        case 'fruits':
+            totalHits = stats.count_300 + stats.count_100 + stats.count_50 + stats.count_miss;
+            break;
+        case 'mania':
+            totalHits = stats.count_geki + stats.count_300 + stats.count_katu + stats.count_100 + stats.count_50 + stats.count_miss;
+            break;
+    }
+    return totalHits;
+}

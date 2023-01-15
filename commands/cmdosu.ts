@@ -1,85 +1,97 @@
-import cmdchecks = require('../src/checks');
-import fs = require('fs');
-import calc = require('../src/calc');
-import emojis = require('../src/consts/emojis');
-import colours = require('../src/consts/colours');
-import colourfunc = require('../src/colourcalc');
-import osufunc = require('../src/osufunc');
-import osumodcalc = require('osumodcalculator');
-import osuApiTypes = require('../src/types/osuApiTypes');
-import Discord = require('discord.js');
-import log = require('../src/log');
-import func = require('../src/tools');
-import def = require('../src/consts/defaults');
-import buttonsthing = require('../src/consts/buttons');
-import extypes = require('../src/types/extraTypes');
-import helpinfo = require('../src/consts/helpinfo');
-import msgfunc = require('./msgfunc');
-import embedStuff = require('../src/embed');
-import replayparser = require('osureplayparser');
-import trackfunc = require('../src/trackfunc');
+import * as Discord from 'discord.js';
+import * as fs from 'fs';
+import * as replayparser from 'osureplayparser';
+import {
+    CatchPerformanceAttributes,
+    ManiaPerformanceAttributes, OsuPerformanceAttributes, PerformanceAttributes, TaikoPerformanceAttributes
+} from 'rosu-pp';
+import { filespath, path, precomppath } from '../path.js';
+import * as calc from '../src/calc.js';
+import * as cmdchecks from '../src/checks.js';
+import * as colourfunc from '../src/colourcalc.js';
+import * as buttonsthing from '../src/consts/buttons.js';
+import * as colours from '../src/consts/colours.js';
+import * as def from '../src/consts/defaults.js';
+import * as emojis from '../src/consts/emojis.js';
+import * as errors from '../src/consts/errors.js';
+import * as helpinfo from '../src/consts/helpinfo.js';
+import * as mainconst from '../src/consts/main.js';
+import * as embedStuff from '../src/embed.js';
+import * as log from '../src/log.js';
+import * as osufunc from '../src/osufunc.js';
+import * as osumodcalc from '../src/osumodcalc.js';
+import * as func from '../src/tools.js';
+import * as trackfunc from '../src/trackfunc.js';
+import * as extypes from '../src/types/extraTypes.js';
+import * as osuApiTypes from '../src/types/osuApiTypes.js';
+import * as othertypes from '../src/types/othertypes.js';
+import * as msgfunc from './msgfunc.js';
 
 export async function name(input: extypes.commandInput) {
 }
+
+/**
+ * main command functions at the top
+ * arg handling and other stuff is at the bottom
+ */
+
 
 //user stats
 
 /**
  * badge weight seed
  */
-export async function bws(input: extypes.commandInput) {
+export async function bws(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
     let user;
     let searchid;
+    const embedStyle: extypes.osuCmdStyle = 'A';
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+
+            input.args = cleanArgs(input.args);
+
             user = input.args.join(' ');
             if (!input.args[0] || input.args[0].includes(searchid)) {
-                user = null
+                user = null;
             }
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-            searchid = commanduser.id
-            //@ts-expect-error options property does not exist on message
+            searchid = commanduser.id;
             user = input.obj.options.getString('user');
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
         }
             break;
     }
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('bws', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [{
-            name: 'User',
-            value: user
-        }]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'bws (Badge Weight System)',
+        options: []
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     //if user is null, use searchid
@@ -95,57 +107,85 @@ export async function bws(input: extypes.commandInput) {
     }
 
     if (input.commandType == 'interaction') {
-        //@ts-expect-error
-        //This expression is not callable.
-        //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-        input.obj.reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        }).catch()
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
     }
 
-    const osudata: osuApiTypes.User = await osufunc.apiget('user', `${await user}`, `osu`)
-    osufunc.debug(osudata, 'command', 'bws', input.obj.guildId, 'osuData');
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(user, 'osudata', osufunc.modeValidator('osu')) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator('osu'))) &&
+        input.button != 'Refresh'
+    ) {
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'));
+    } else {
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator('osu')
+            }
+        });
+    }
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'bws', input.obj.guildId, 'osuData');
+
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    //@ts-expect-error editReply does not exist on message
-                    input.obj.editReply({
-                        content: `Error - could not find user \`${user}\``,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                }, 1000);
-            } else {
-                //@ts-expect-error
-                //This expression is not callable.
-                //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-                input.obj.reply({
-                    content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'bws',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
         return;
     }
 
+    const cmdbuttons = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-User-bws-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.user),
+        );
+
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
+
     let badgecount = 0;
     for (const badge of osudata.badges) {
-        badgecount++
+        badgecount++;
     }
     function bwsF(badgenum: number) {
         return badgenum > 0 ?
             osudata.statistics.global_rank ** (0.9937 ** (badgenum ** 2)) :
-            osudata.statistics.global_rank
+            osudata.statistics.global_rank;
 
     }
 
     const embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setAuthor({
-            name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
+            name: `${osudata.username} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
@@ -170,31 +210,42 @@ export async function bws(input: extypes.commandInput) {
                 value: `${Math.floor(bwsF(badgecount + 2))}`,
                 inline: true
             },
-        ])
+        ]);
     //\nFormula: rank^(0.9937^badges^2)
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [embed]
+            embeds: [embed],
+            components: [cmdbuttons]
         }
-    })
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'bws',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'bws',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 }
 
 /**
  * number of #1 scores
  */
-export async function globals(input: extypes.commandInput) {
+export async function globals(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -205,35 +256,41 @@ export async function globals(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-ignore
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+
+            input.args = cleanArgs(input.args);
+
             user = input.args.join(' ');
             if (!input.args[0] || input.args[0].includes(searchid)) {
-                user = null
+                user = null;
             }
-            page = 0
+            page = 0;
         }
             break;
 
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            searchid = commanduser.id;
             user = input.obj.options.getString('user');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
-
-            commanduser = input.obj.member.user;//@ts-ignore
-            user = input.obj.message.embeds[0].title.split('for ')[1]//@ts-ignore
-            mode = cmdchecks.toAlphaNum(input.obj.message.embeds[0].description.split('\n')[1])
+            commanduser = input.obj.member.user;
+            searchid = commanduser.id;
+            user = input.obj.message.embeds[0].title.split('for ')[1];
+            mode = cmdchecks.toAlphaNum(input.obj.message.embeds[0].description.split('\n')[1]);
             page = 0;
 
         }
@@ -241,24 +298,20 @@ export async function globals(input: extypes.commandInput) {
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = input.overrides.page
+            page = input.overrides.page;
         }
     }
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('firsts', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'globals',
+        options: [
             {
                 name: 'User',
                 value: user
@@ -270,18 +323,15 @@ export async function globals(input: extypes.commandInput) {
             {
                 name: 'Mode',
                 value: mode
-            },
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+            }
+        ]
+    });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     //if user is null, use searchid
     if (user == null) {
@@ -298,59 +348,118 @@ export async function globals(input: extypes.commandInput) {
         user = cuser.username;
     }
 
-    const osudata: osuApiTypes.User = await osufunc.apiget('user', `${user}`)
-    osufunc.debug(osudata, 'command', 'globals', input.obj.guildId, 'osuData');
-    if (osudata?.error) {//@ts-ignore
-        if (input.commandType != 'button') input.obj.reply({
-            content: `User not found`,
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
-        }).catch()
+    const osudataReq: osufunc.apiReturn = await osufunc.apiget({
+        type: 'user',
+        params: {
+            username: cmdchecks.toHexadecimal(user),
+            mode: 'osu'
+        }
+    });
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+    osufunc.debug(osudataReq, 'command', 'globals', input.obj.guildId, 'osuData');
+    if (osudata?.error || !osudata.id) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'globals',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
         return;
     }
 
-    if (!osudata.id) {
-        return input.obj.channel.send('Error - no user found')
-            .catch();
+    const cmdbuttons = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-User-globals-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.user),
+        );
 
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
+
+    if (input.commandType == 'interaction') {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
-    if (input.commandType == 'interaction') {//@ts-ignore
-        input.obj.reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
-        }).catch()
-    }
-
-    const scorecount = osudata?.scores_first_count ?? 0;
-
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            console.log(error)
+            log.toOutput(error);
         }
     }
+
+    const baseURL = `https://osustats.respektive.pw/counts/`;
+
+    const data = await func.fetch(baseURL + osudata.id) as othertypes.osustatsType;
+
+    const countsEmbed = new Discord.EmbedBuilder()
+        .setAuthor({
+            name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
+            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
+        })
+        .setTitle(`Top X leaderboard counts for ${osudata.username}`)
+        .setThumbnail(`${osudata.avatar_url ?? def.images.user.url}`)
+        .setDescription(`
+\`Top 1   | ${`${data.top1s}`.padEnd(6, ' ')} | #${`${data.top1s_rank ?? 'null'}`.padEnd(10, ' ')}\`
+\`Top 8   | ${`${data.top8s}`.padEnd(6, ' ')} | #${`${data.top8s_rank ?? 'null'}`.padEnd(10, ' ')}\`
+\`Top 15  | ${`${data.top15s}`.padEnd(6, ' ')} | #${`${data.top15s_rank ?? 'null'}`.padEnd(10, ' ')}\`
+\`Top 25  | ${`${data.top25s}`.padEnd(6, ' ')} | #${`${data.top25s_rank ?? 'null'}`.padEnd(10, ' ')}\`
+\`Top 50  | ${`${data.top50s}`.padEnd(6, ' ')} | #${`${data.top50s_rank ?? 'null'}`.padEnd(10, ' ')}\`
+\`Top 100 | ${`${data.top100s}`.padEnd(6, ' ')} | #${`${data.top100s_rank ?? 'null'}`.padEnd(10, ' ')}\`
+`)
+
+        ;
+
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            content: `${user} has ${scorecount} #1 scores`
+            embeds: [countsEmbed],
+            components: [cmdbuttons]
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'globals',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'globals',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
@@ -360,6 +469,7 @@ ID: ${input.absoluteID}
 export async function lb(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
+    const embedStyle: extypes.osuCmdStyle = 'L';
 
     let page = 0;
     let mode = 'osu';
@@ -367,41 +477,42 @@ export async function lb(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             const gamemode = input.args[0];
             if (!input.args[0] || gamemode == 'osu' || gamemode == 'o' || gamemode == '0' || gamemode == 'standard' || gamemode == 'std') {
-                mode = 'osu'
+                mode = 'osu';
             }
             if (gamemode == 'taiko' || gamemode == 't' || gamemode == '1' || gamemode == 'drums') {
-                mode = 'taiko'
+                mode = 'taiko';
             }
             if (gamemode == 'fruits' || gamemode == 'c' || gamemode == '2' || gamemode == 'catch' || gamemode == 'ctb') {
-                mode = 'fruits'
+                mode = 'fruits';
             }
             if (gamemode == 'mania' || gamemode == 'm' || gamemode == '3' || gamemode == 'piano') {
-                mode = 'mania'
+                mode = 'mania';
             }
+            input.args = cleanArgs(input.args);
         }
             break;
 
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property does not exist on message
             const gamemode = input.obj.options.getString('mode');
             if (!gamemode || gamemode == 'osu' || gamemode == 'o' || gamemode == '0' || gamemode == 'standard' || gamemode == 'std') {
-                mode = 'osu'
+                mode = 'osu';
             }
             if (gamemode == 'taiko' || gamemode == 't' || gamemode == '1' || gamemode == 'drums') {
-                mode = 'taiko'
+                mode = 'taiko';
             }
             if (gamemode == 'fruits' || gamemode == 'c' || gamemode == '2' || gamemode == 'catch' || gamemode == 'ctb') {
-                mode = 'fruits'
+                mode = 'fruits';
             }
             if (gamemode == 'mania' || gamemode == 'm' || gamemode == '3' || gamemode == 'piano') {
-                mode = 'mania'
+                mode = 'mania';
             }
         }
 
@@ -409,7 +520,7 @@ export async function lb(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            //@ts-expect-error message property does not exist on message
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
@@ -423,42 +534,16 @@ export async function lb(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-lb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji(buttonsthing.label.page.first),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-lb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji(buttonsthing.label.page.previous),
-            new Discord.ButtonBuilder()
-                .setCustomId(`Search-lb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji(buttonsthing.label.page.search),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-lb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji(buttonsthing.label.page.next),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-lb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji(buttonsthing.label.page.last),
-        );
+    const pgbuttons: Discord.ActionRowBuilder = await pageButtons('lb', commanduser, input.absoluteID);
 
-    log.logFile(
-        'command',
-        log.commandLog('lb', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'lb (Server Leaderboard)',
+        options: [
             {
                 name: 'Page',
                 value: page
@@ -467,29 +552,34 @@ export async function lb(input: extypes.commandInput) {
                 name: 'Mode',
                 value: mode
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number') {
         page = 1;
     }
-    page--
+    page--;
 
     const serverlb = new Discord.EmbedBuilder()
-        .setColor(colours.embedColour.userlist.dec)
-        .setTitle(`server leaderboard for ${guild.name}`)
+        .setFooter({
+            text: `${embedStyle}`
+        }).setColor(colours.embedColour.userlist.dec)
+        .setTitle(`server leaderboard for ${guild.name}`);
     const userids = await input.userdata.findAll();
     const useridsarraylen = await input.userdata.count();
     let rtxt = `\n`;
     const rarr = [];
 
     if (input.commandType == 'interaction') {
-        //@ts-ignore
-        input.obj.reply('loading...')
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
 
@@ -499,28 +589,28 @@ export async function lb(input: extypes.commandInput) {
         guild.members.cache.forEach(async member => {
             if (`${member.id}` == `${user.userid}`) {
                 if (user != null && !rtxt.includes(`${member.user.id}`)) {
-                    let acc: any;
-                    let pp: any;
-                    let rank: any;
+                    let acc: string | number;
+                    let pp: string | number;
+                    let rank: string | number;
                     switch (mode) {
                         case 'osu':
                         default:
                             {
-                                acc = user.osuacc
+                                acc = user.osuacc;
                                 if (isNaN(acc) || acc == null) {
-                                    acc = 'null '
+                                    acc = 'null ';
                                 } else {
-                                    acc = user.osuacc.toFixed(2)
+                                    acc = user.osuacc.toFixed(2);
                                 }
-                                pp = user.osupp
+                                pp = user.osupp;
                                 if (isNaN(pp) || pp == null) {
-                                    pp = 'null '
+                                    pp = 'null ';
                                 } else {
-                                    pp = Math.floor(user.osupp)
+                                    pp = Math.floor(user.osupp);
                                 }
                                 rank = user.osurank;
                                 if (isNaN(rank) || rank == null) {
-                                    rank = 'null '
+                                    rank = 'null ';
                                 }
                                 rarr.push(
                                     {
@@ -535,22 +625,22 @@ export async function lb(input: extypes.commandInput) {
                                         pp:
                                             (pp.toString() + 'pp').padEnd(9 - 2, ' '),
                                     }
-                                )
+                                );
                             }
                             break;
                         case 'taiko':
                             {
-                                acc = user.taikoacc
+                                acc = user.taikoacc;
                                 if (isNaN(acc) || acc == null) {
-                                    acc = 'null '
+                                    acc = 'null ';
                                 }
-                                pp = user.taikopp
+                                pp = user.taikopp;
                                 if (isNaN(pp) || pp == null) {
-                                    pp = 'null '
+                                    pp = 'null ';
                                 }
                                 rank = user.taikorank;
                                 if (isNaN(rank) || rank == null) {
-                                    rank = 'null '
+                                    rank = 'null ';
                                 }
                                 rarr.push(
                                     {
@@ -565,26 +655,26 @@ export async function lb(input: extypes.commandInput) {
                                         pp:
                                             (pp.toString() + 'pp').padEnd(9 - 2, ' '),
                                     }
-                                )
+                                );
                             }
                             break;
                         case 'fruits':
                             {
-                                acc = user.fruitsacc
+                                acc = user.fruitsacc;
                                 if (isNaN(acc) || acc == null) {
-                                    acc = 'null '
+                                    acc = 'null ';
                                 } else {
-                                    acc = user.fruitsacc.toFixed(2)
+                                    acc = user.fruitsacc.toFixed(2);
                                 }
-                                pp = user.fruitspp
+                                pp = user.fruitspp;
                                 if (isNaN(pp) || pp == null) {
-                                    pp = 'null '
+                                    pp = 'null ';
                                 } else {
-                                    pp = Math.floor(user.fruitspp)
+                                    pp = Math.floor(user.fruitspp);
                                 }
                                 rank = user.fruitsrank;
                                 if (isNaN(rank) || rank == null) {
-                                    rank = 'null '
+                                    rank = 'null ';
                                 }
                                 rarr.push(
                                     {
@@ -599,26 +689,26 @@ export async function lb(input: extypes.commandInput) {
                                         pp:
                                             (pp.toString() + 'pp').padEnd(9 - 2, ' '),
                                     }
-                                )
+                                );
                             }
                             break;
                         case 'mania':
                             {
-                                acc = user.maniaacc
+                                acc = user.maniaacc;
                                 if (isNaN(acc) || acc == null) {
-                                    acc = 'null '
+                                    acc = 'null ';
                                 } else {
-                                    acc = user.maniaacc.toFixed(2)
+                                    acc = user.maniaacc.toFixed(2);
                                 }
-                                pp = user.maniapp
+                                pp = user.maniapp;
                                 if (isNaN(pp) || pp == null) {
-                                    pp = 'null '
+                                    pp = 'null ';
                                 } else {
-                                    pp = Math.floor(user.maniapp)
+                                    pp = Math.floor(user.maniapp);
                                 }
                                 rank = user.maniarank;
                                 if (isNaN(rank) || rank == null) {
-                                    rank = 'null '
+                                    rank = 'null ';
                                 }
                                 rarr.push(
                                     {
@@ -633,47 +723,44 @@ export async function lb(input: extypes.commandInput) {
                                         pp:
                                             (pp.toString() + 'pp').padEnd(9 - 2, ' '),
                                     }
-                                )
+                                );
                             }
                             break;
                     }
                 }
 
             }
-        })
+        });
 
     }
 
     // let iterator = 0;
 
-    const another = rarr.slice().sort((b, a) => b.rank - a.rank) //for some reason this doesn't sort even tho it does in testing
-    rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `
+    const another = rarr.slice().sort((b, a) => b.rank - a.rank); //for some reason this doesn't sort even tho it does in testing
+    rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `;
     for (let i = 0; i < rarr.length && i < 10; i++) {
         if (!another[i]) break;
-        rtxt += `\n#${i + 1 + ')'.padEnd(5, ' ')} ${another[i].discname}   ${another[i].osuname}   ${another[i].rank.toString().padEnd(10 - 2, ' ').substring(0, 8)}   ${another[i].acc}%   ${another[i].pp}  `
+        rtxt += `\n#${i + 1 + ')'.padEnd(5, ' ')} ${another[i].discname}   ${another[i].osuname}   ${another[i].rank.toString().padEnd(10 - 2, ' ').substring(0, 8)}   ${another[i].acc}%   ${another[i].pp}  `;
     }
 
-    rtxt += `\n\``
+    rtxt += `\n\``;
     serverlb.setDescription(rtxt);
     serverlb.setFooter({ text: mode + ` | Page 1/${Math.ceil(rarr.length / 10)}` });
     const endofcommand = new Date().getTime();
     const timeelapsed = endofcommand - input.currentDate.getTime();
 
     if (page <= 1) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (page + 1 >= Math.ceil(rarr.length / 10)) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -681,24 +768,33 @@ export async function lb(input: extypes.commandInput) {
             components: [pgbuttons],
             edit: true
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'lb',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'lb',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
 /**
  * global leaderboards
  */
-export async function ranking(input: extypes.commandInput & { statsCache: any }) {
+export async function ranking(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
     let country = 'ALL';
@@ -707,99 +803,115 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
     let page = 0;
     let spotlight;
 
+    const embedStyle: extypes.osuCmdStyle = 'L';
+
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
+            }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
+            if (input.args.includes('-m')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
+            }
+
+            input.args = cleanArgs(input.args);
+
             input.args[0] && input.args[0].length == 2 ? country = input.args[0].toUpperCase() : country = 'ALL';
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            input.obj.options.getString('country') ? country = input.obj.options.getString('country').toUpperCase() : country = 'ALL';//@ts-ignore
-            input.obj.options.getString('mode') ? mode = input.obj.options.getString('mode').toLowerCase() : mode = 'osu';//@ts-ignore
-            input.obj.options.getString('type') ? type = input.obj.options.getString('type').toLowerCase() : type = 'performance';//@ts-ignore
-            input.obj.options.getInteger('page') ? page = input.obj.options.getInteger('page') - 1 : page = 0;//@ts-ignore
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            input.obj.options.getString('country') ? country = input.obj.options.getString('country').toUpperCase() : country = 'ALL';
+            input.obj.options.getString('mode') ? mode = input.obj.options.getString('mode').toLowerCase() : mode = 'osu';
+            input.obj.options.getString('type') ? type = input.obj.options.getString('type').toLowerCase() as osuApiTypes.RankingType : type = 'performance';
+            input.obj.options.getInteger('page') ? page = input.obj.options.getInteger('page') - 1 : page = 0;
             input.obj.options.getInteger('spotlight') ? spotlight = input.obj.options.getInteger('spotlight') : spotlight = undefined;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
-            const pageParsed =//@ts-ignore
-                parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0])
+            const pageParsed =
+                parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]);
             page = pageParsed;
             switch (input.button) {
                 case 'BigLeftArrow':
-                    page = 1
+                    page = 1;
                     break;
                 case 'LeftArrow':
-                    page = pageParsed - 1
+                    page = pageParsed - 1;
                     break;
                 case 'RightArrow':
-                    page = pageParsed + 1
+                    page = pageParsed + 1;
                     break;
-                case 'BigRightArrow'://@ts-ignore
-                    page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
+                case 'BigRightArrow':
+                    page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
                     break;
                 default:
-                    page = pageParsed
+                    page = pageParsed;
                     break;
-            }//@ts-ignore
+            }
             let base: string = input.obj.message.embeds[0].title;
             if (base.includes('Global')) {
                 base = base.split('Global ')[1];
             }
             if (base.includes('for ')) {
-                base = base.split('for ')[0];//@ts-ignore
+                base = base.split('for ')[0];
                 input.obj.message.embeds[0].footer ? country = input.obj.message.embeds[0].footer.text.split('Country: ')[1] : country = 'ALL';
             }
             mode = base.split(' ')[0].toLowerCase().replaceAll('!', '');
-            //@ts-expect-error - type string not assignable to type RankingType
-            type = base.split(' ')[1].toLowerCase();
-            if (type == 'charts') {//@ts-ignore
+            type = base.split(' ')[1].toLowerCase() as osuApiTypes.RankingType;
+            if (type == 'charts') {
                 spotlight = input.obj.message.embeds[0].description.split('\n')[1].split('?spotlight=')[1].split(')')[0];
             }
         }
@@ -813,168 +925,158 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
 
     //==============================================================================================================================================================================================
 
-    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-ranking-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.first),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-ranking-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.previous),
-            new Discord.ButtonBuilder()
-                .setCustomId(`Search-ranking-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.search),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-ranking-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.next),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-ranking-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.last),
-        );
+    const pgbuttons: Discord.ActionRowBuilder = await pageButtons('ranking', commanduser, input.absoluteID);
+
     const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-ranking-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-ranking-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
         );
 
-    log.logFile(
-        'command',
-        log.commandLog('ranking', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'ranking',
+        options: [
             {
-                name: 'country',
+                name: 'Country',
                 value: country
             },
             {
-                name: 'mode',
+                name: 'Mode',
                 value: mode
             },
             {
-                name: 'type',
+                name: 'Type',
                 value: type
             },
             {
-                name: 'page',
-                value: `${page}`
+                name: 'Page',
+                value: page
             },
             {
-                name: 'spotlight',
-                value: `${spotlight}`
+                name: 'Spotlight',
+                value: spotlight
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     let url = `rankings/${mode}/${type}`;
     if (country != 'ALL') {
         if (type == 'performance') {
-            url += `?country=${country}`
+            url += `?country=${country}`;
         }
     }
     if (type == 'charts' && !isNaN(+spotlight)) {
         url += '?spotlight=' + spotlight;
     }
 
-    let rankingdata: osuApiTypes.Rankings;
+    let rankingdataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'rankingdata') &&
         input.commandType == 'button' &&
         !('error' in func.findFile(input.absoluteID, 'rankingdata')) &&
         input.button != 'Refresh'
     ) {
-        rankingdata = func.findFile(input.absoluteID, 'rankingdata')
+        rankingdataReq = func.findFile(input.absoluteID, 'rankingdata');
     } else {
-        rankingdata = await osufunc.apiget('custom', url, null, 2, 0, true).catch(() => {
-            if (country != 'ALL') {//@ts-ignore
-                input.obj.reply({
-                    content: 'Invalid country code',
-                    embeds: [],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: 'Error',
-                    embeds: [],
-                    files: [],
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
+        rankingdataReq = (await osufunc.apiget({
+            type: 'custom',
+            params: {
+                urlOverride: url
+            },
+            ignoreNonAlphaChar: true,
+            version: 2
+        }).catch(async () => {
+            if (country != 'ALL') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Invalid country code`,
+                        edit: true
+                    }
+                }, input.canReply);
+            } else {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Error`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             return;
-        })
+        })) as osufunc.apiReturn;
     }
-    func.storeFile(rankingdata, input.absoluteID, 'rankingdata')
+    func.storeFile(rankingdataReq, input.absoluteID, 'rankingdata');
+
+    const rankingdata: osuApiTypes.Rankings = rankingdataReq.apiData;
 
     if (rankingdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
-                    input.obj.editReply({
-                        content: 'Error - could not fetch rankings',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }, 1000)
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: 'Error - could not fetch rankings',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.rankings,
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'ranking',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.uErr.osu.rankings
+        });
         return;
     }
 
+
     try {
-        osufunc.debug(rankingdata, 'command', 'ranking', input.obj.guildId, 'rankingData')
+        osufunc.debug(rankingdataReq, 'command', 'ranking', input.obj.guildId, 'rankingData');
     } catch (e) {
         return;
     }
-    if (rankingdata.ranking.length == 0) {//@ts-ignore
-        input.obj.reply({
-            content: 'No data found',
-            embeds: [],
-            files: [],
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        }).catch()
+    if (rankingdata.ranking.length == 0) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `No data found`,
+                edit: true
+            }
+        }, input.canReply);
         return;
     }
 
     let ifchart = '';
     if (type == 'charts') {
-        ifchart = `[${rankingdata.spotlight.name}](https://osu.ppy.sh/rankings/${mode}/charts?spotlight=${rankingdata.spotlight.id})`
+        ifchart = `[${rankingdata.spotlight.name}](https://osu.ppy.sh/rankings/${mode}/charts?spotlight=${rankingdata.spotlight.id})`;
     }
 
     if (country == 'ALL' && input.button == null) {
-        //@ts-ignore
-        osufunc.userStatsCache(rankingdata.ranking, input.statsCache, mode)
+        osufunc.userStatsCache(rankingdata.ranking, input.statsCache, osufunc.modeValidator(mode), 'Stat');
     }
 
     const embed = new Discord.EmbedBuilder()
-        .setTitle(country != 'ALL' ?
+        .setFooter({
+            text: `${embedStyle}`
+        }).setTitle(country != 'ALL' ?
             `${mode == 'osu' ? 'osu!' : calc.toCapital(mode)} ${calc.toCapital(type)} Rankings for ${country}` :
             `Global ${mode == 'osu' ? 'osu!' : calc.toCapital(mode)} ${calc.toCapital(type)} Ranking`)
         .setColor(colours.embedColour.userlist.dec)
@@ -987,7 +1089,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
         : '';
 
     if (page > Math.ceil(rankingdata.ranking.length / 5)) {
-        page = Math.ceil(rankingdata.ranking.length / 5)
+        page = Math.ceil(rankingdata.ranking.length / 5);
     }
 
     for (let i = 0; i < 5 && i + (page * 5) < rankingdata.ranking.length; i++) {
@@ -1003,227 +1105,274 @@ export async function ranking(input: extypes.commandInput & { statsCache: any })
                             '---' :
                             func.separateNum(curuser.global_rank)
                         }
-Score: ${curuser.total_score == null ? '---' : func.separateNum(curuser.total_score)} (${curuser.ranked_score == null ? '---' : func.separateNum(curuser.ranked_score)} ranked)
+Score: ${curuser.total_score == null ? '---' : func.numToLetter(curuser.total_score)} (${curuser.ranked_score == null ? '---' : func.numToLetter(curuser.ranked_score)} ranked)
 ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${curuser.pp == null ? '---' : func.separateNum(curuser.pp)}pp | ${curuser.play_count == null ? '---' : func.separateNum(curuser.play_count)} plays
 `
                     ,
                     inline: false
                 }
             ]
-        )
+        );
     }
     if (page + 1 >= Math.ceil(rankingdata.ranking.length / 5)) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true);
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true);
+
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
     if (page == 0) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true);
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true);
+
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: [embed],
             components: [pgbuttons, buttons]
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'ranking',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'ranking',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
 /**
  * estimate rank from pp or vice versa
  */
-export async function rankpp(input: extypes.commandInput & { statsCache: any }) {
+export async function rankpp(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
     let type: string = 'rank';
     let value;
     let mode: osuApiTypes.GameMode = 'osu';
+
+    const embedStyle: extypes.osuCmdStyle = 'A';
+
+
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
+            }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
+            if (input.args.includes('-m')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
+            }
+
+            input.args = cleanArgs(input.args);
+
             value = input.args[0] ?? 100;
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            value = input.obj.options.getInteger('value') ?? 100;//@ts-ignore
-            mode = input.obj.options.getString('mode') ?? 'osu';
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            value = input.obj.options.getInteger('value') ?? 100;
+            mode = input.obj.options.getString('mode') as osuApiTypes.GameMode ?? 'osu';
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
     }
-    if (input.overrides != null) {//@ts-ignore
-        type = input.overrides.type ?? 'pp';
+    if (input.overrides != null) {
+        type = input?.overrides?.type ?? 'pp';
     }
     //==============================================================================================================================================================================================
 
-
-    log.logFile(
-        'command',
-        log.commandLog('rankpp', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'rank/pp',
+        options: [
+            {
+                name: 'Type',
+                value: type
+            },
+            {
+                name: 'Value',
+                value: value
+            },
+            {
+                name: 'Mode',
+                value: mode
+            }
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const Embed = new Discord.EmbedBuilder()
-        .setTitle('null')
-        .setDescription('null')
+        .setFooter({
+            text: `${embedStyle}`
+        }).setTitle('null')
+        .setDescription('null');
 
     let returnval: string | number;
 
     switch (type) {
         case 'pp': {
-            returnval = await osufunc.getRankPerformance('pp->rank', value, input.userdata, mode, input.statsCache);
+            returnval = await osufunc.getRankPerformance('pp->rank', value, mode, input.statsCache);
             if (typeof returnval == 'number') {
-                returnval = 'approx. rank #' + func.separateNum(Math.ceil(returnval))
+                returnval = 'approx. rank #' + func.separateNum(Math.ceil(returnval));
             } else {
-                returnval = 'null'
+                returnval = 'null';
             }
             Embed
-                .setTitle(`Approximate rank for ${value}pp`)
+                .setTitle(`Approximate rank for ${value}pp`);
         }
             break;
         case 'rank': {
 
-            returnval = await osufunc.getRankPerformance('rank->pp', value, input.userdata, mode, input.statsCache);
+            returnval = await osufunc.getRankPerformance('rank->pp', value, mode, input.statsCache);
 
             if (typeof returnval == 'number') {
-                returnval = 'approx. ' + func.separateNum(returnval) + 'pp'
+                returnval = 'approx. ' + func.separateNum(returnval) + 'pp';
             } else {
-                returnval = 'null'
+                returnval = 'null';
             }
 
             Embed
-                .setTitle(`Approximate performance for rank #${value}`)
+                .setTitle(`Approximate performance for rank #${value}`);
         }
             break;
     }
     Embed
-        .setDescription(`${returnval}\n${emojis.gamemodes[mode]}`)
+        .setDescription(`${returnval}\n${emojis.gamemodes[mode]}`);
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: [Embed]
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'rank/pp',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'rank/pp',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
 /**
  * return osu! profile
  */
-export async function osu(input: extypes.commandInput) {
+export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
     let user = null;
     let mode = null;
     let graphonly = false;
-    let detailed;
+    let detailed: number = 1;
     let searchid;
+
+    let embedStyle: extypes.osuCmdStyle = 'P';
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-details')) {
-                detailed = true;
+                detailed = 2;
                 input.args.splice(input.args.indexOf('-details'), 1);
             }
             if (input.args.includes('-detailed')) {
-                detailed = true;
+                detailed = 2;
                 input.args.splice(input.args.indexOf('-detailed'), 1);
             }
             if (input.args.includes('-detail')) {
-                detailed = true;
+                detailed = 2;
                 input.args.splice(input.args.indexOf('-detail'), 1);
             }
             if (input.args.includes('-d')) {
-                detailed = true;
+                detailed = 2;
                 input.args.splice(input.args.indexOf('-d'), 1);
             }
             if (input.args.includes('-graph')) {
@@ -1234,41 +1383,53 @@ export async function osu(input: extypes.commandInput) {
                 graphonly = true;
                 input.args.splice(input.args.indexOf('-g'), 1);
             }
+
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
+            }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
             }
+            if (input.args.includes('-m')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
+            }
+
+            input.args = cleanArgs(input.args);
+
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
+                user = null;
             }
         }
             break;
@@ -1276,92 +1437,115 @@ export async function osu(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property does not exist on message
-            user = input.obj.options.getString('user');
-            //@ts-expect-error options property does not exist on message
-            detailed = input.obj.options.getBoolean('detailed');
-            //@ts-expect-error options property does not exist on message
-            mode = input.obj.options.getString('mode');
             searchid = input.obj.member.user.id;
+
+            user = input.obj.options.getString('user');
+            detailed = input.obj.options.getBoolean('detailed') ? 2 : 1;
+            mode = input.obj.options.getString('mode');
         }
 
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
-            //@ts-expect-error message property does not exist on interaction
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            //@ts-expect-error message property does not exist on interaction
-            if (input.obj.message.embeds[0].fields[0]) {
-                detailed = true
+            searchid = commanduser.id;
+
+            if (input.obj.message.embeds[0].footer.text.includes('PE')) {
+                detailed = 2;
+            }
+            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
+            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
+
+            switch (input.button) {
+                case 'Detail1':
+                    detailed = 1;
+                    break;
+                case 'Detail2':
+                    detailed = 2;
+                    break;
+                case 'Graph':
+                    graphonly = true;
+                    break;
+                default:
+                    if (input.obj.message.embeds[0].footer.text.includes('E')) {
+                        detailed = 2;
+                    } else {
+                        detailed = 1;
+                    }
+                    break;
             }
 
-
-            //@ts-expect-error message property does not exist on interaction
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
-            //@ts-expect-error message property does not exist on interaction
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
-
-            if (input.button == 'DetailEnable') {
-                detailed = true;
+            if (input.button == 'Detail2') {
+                detailed = 2;
             }
-            if (input.button == 'DetailDisable') {
-                detailed = false;
+            if (input.button == 'Detail1') {
+                detailed = 1;
             }
             if (input.button == 'Refresh') {
-                //@ts-expect-error message property does not exist on interaction
                 if (input.obj.message.embeds[0].fields[0]) {
-                    detailed = true
+                    detailed = 2;
                 } else {
-                    detailed = false
+                    detailed = 1;
                 }
             }
 
-            //@ts-expect-error message property does not exist on interaction
             if (!input.obj.message.embeds[0].title) {
-                graphonly = true
+                graphonly = true;
             }
         }
             break;
         case 'link': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
 
-            //@ts-expect-error mentions property does not exist on interaction
+            const msgnohttp: string = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
+
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            //@ts-expect-error content property does not exist on interaction
-            user = input.obj.content.includes(' ') ? input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '').split('/')[2].split(' ')[0] : input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '').split('/')[2]
+            user = msgnohttp.includes(' ') ? msgnohttp.split('/')[2].split(' ')[0] : msgnohttp.split('/')[2];
+            mode = msgnohttp.includes(' ') ?
+                msgnohttp.split('/')[3] ?
+                    msgnohttp.split('/')[3] : null
+                :
+                msgnohttp.split('/')[3] ?
+                    msgnohttp.split('/')[3] : null;
+            //u
         }
     }
 
-    //==============================================================================================================================================================================================
-
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-osu-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.refresh),
-        )
-
-    log.logFile(
-        'command',
-        log.commandLog('osu', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
+    if (input.overrides != null) {
+        if (input.overrides.mode) {
+            mode = input.overrides.mode;
+        }
+        if (input.overrides.id) {
+            user = input.overrides.id;
+        }
+        if (input.overrides.commandAs) {
+            input.commandType = input.overrides.commandAs;
+        }
+        if (input.overrides.commanduser) {
+            commanduser = input.overrides.commanduser;
+        }
+    }
 
     //OPTIONS==============================================================================================================================================================================================
 
-    log.logFile('command',
-        log.optsLog(
-            input.absoluteID,
-            [{
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'osu',
+        options: [
+            {
                 name: 'User',
                 value: user
             },
@@ -1376,29 +1560,51 @@ export async function osu(input: extypes.commandInput) {
             {
                 name: 'Gamemode',
                 value: mode
+            },
+            {
+                name: 'Graph',
+                value: `${graphonly}`
             }
-            ]
-        ), {
-        guildId: `${input.obj.guildId}`
-    }
-    )
+
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    if (detailed == true) {
-        buttons.addComponents(
+    const buttons = new Discord.ActionRowBuilder()
+        .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`DetailDisable-osu-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailed)
-        )
-    } else {
-        buttons.addComponents(
+                .setEmoji(buttonsthing.label.main.refresh),
             new Discord.ButtonBuilder()
-                .setCustomId(`DetailEnable-osu-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Graph-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailed)
-        )
+                .setEmoji(buttonsthing.label.extras.graph),
+        );
+    if (graphonly != true) {
+        switch (detailed) {
+            case 1: {
+                buttons.addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`${mainconst.version}-Detail2-osu-${commanduser.id}-${input.absoluteID}`)
+                        .setStyle(buttonsthing.type.current)
+                        .setEmoji(buttonsthing.label.main.detailMore),
+                );
+                embedStyle = 'P';
+            }
+                break;
+            case 2: {
+                buttons.addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`${mainconst.version}-Detail1-osu-${commanduser.id}-${input.absoluteID}`)
+                        .setStyle(buttonsthing.type.current)
+                        .setEmoji(buttonsthing.label.main.detailLess),
+                );
+                embedStyle = 'PE';
+            }
+                break;
+        }
     }
 
     //if user is null, use searchid
@@ -1419,69 +1625,89 @@ export async function osu(input: extypes.commandInput) {
     mode = mode ? osufunc.modeValidator(mode) : null;
 
     if (input.commandType == 'interaction') {
-        //@ts-expect-error reply smth smth signature invalid not compatible
-        input.obj.reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
-        }).catch()
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, mode)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        });
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
 
-    osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
+    let osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    //@ts-expect-error reply smth smth signature invalid not compatible
-                    input.obj.editReply({
-                        content: `Error - could not find user \`${user}\``,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                }, 1000);
-            } else {
-                //@ts-expect-error reply smth smth signature invalid not compatible
-                input.obj.reply({
-                    content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'osu',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
         return;
     }
 
+    //check for player's default mode if mode is null
     if ((
-        //@ts-expect-error options property does not exist on message
-        (input.commandType == 'interaction' && !input.obj?.options?.getString('mode'))
-        || input.commandType == 'message'
+
+        (input.commandType == 'interaction' && !(input.obj as Discord.ChatInputCommandInteraction)?.options?.getString('mode'))
+        || input.commandType == 'message' || input.commandType == 'link'
     ) &&
         osudata.playmode != 'osu' &&
         typeof mode != 'undefined') {
-        mode = osudata.playmode
-        osudata = await osufunc.apiget('user', `${user}`, `${mode}`);
-        osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
+        mode = osudata.playmode;
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        });
+        osudata = osudataReq.apiData;
+        osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
+    } else {
+        mode = mode ?? 'osu';
     }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
+            osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
         } catch (error) {
-            console.log(error)
+            log.toOutput(error);
         }
     }
 
@@ -1489,17 +1715,26 @@ export async function osu(input: extypes.commandInput) {
     const grades = osustats.grade_counts;
 
     const playerrank =
-        osudata.statistics.global_rank == null ?
-            '---' :
-            func.separateNum(osudata.statistics.global_rank);
+        osudata.statistics?.global_rank ?
+            func.separateNum(osudata.statistics.global_rank) :
+            '---';
     const countryrank =
-        osudata.statistics.country_rank == null ?
-            '---' :
-            func.separateNum(osudata.statistics.country_rank);
+        osudata.statistics?.country_rank ?
+            func.separateNum(osudata.statistics.country_rank) :
+            '---';
+
+    const rankglobal = ` ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)`;
+
+    const peakRank = osudata?.rank_highest?.rank ?
+        `\n**Peak Rank**: #${func.separateNum(osudata.rank_highest.rank)} (<t:${new Date(osudata.rank_highest.updated_at).getTime() / 1000}:R>)` :
+        '';
 
     const onlinestatus = osudata.is_online == true ?
         `**${emojis.onlinestatus.online} Online**` :
-        `**${emojis.onlinestatus.offline} Offline** | Last online <t:${(new Date(osudata.last_visit)).getTime() / 1000}:R>`
+        (new Date(osudata.last_visit)).getTime() != 0 ?
+            `**${emojis.onlinestatus.offline} Offline** | Last online <t:${(new Date(osudata.last_visit)).getTime() / 1000}:R>`
+            : `**${emojis.onlinestatus.offline} Offline**`
+        ;
 
     const prevnames = osudata.previous_usernames.length > 0 ?
         '**Previous Usernames:** ' + osudata.previous_usernames.join(', ') :
@@ -1514,139 +1749,179 @@ export async function osu(input: extypes.commandInput) {
         osustats.level.progress != null && osustats.level.progress > 0 ?
             `${osustats.level.current}.${Math.floor(osustats.level.progress)}` :
             `${osustats.level.current}` :
-        '---'
+        '---';
 
     const osuEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.user.dec)
-        .setTitle(`${osudata.username}'s ${mode} profile`)
-        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode}`)
-        .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
+        .setTitle(`${osudata.username}'s ${mode ?? 'osu!'} profile`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
+        .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`);
 
     let useEmbeds = [];
-    if (graphonly == true) {
-        const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
-        const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
 
-        const chartplay = await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true);
-        const chartrank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank');
+    async function getGraphs() {
+        let chartplay;
+        let chartrank;
 
+        let nulltext = def.invisbleChar;
+
+        if (
+            (!osudata.monthly_playcounts ||
+                osudata.monthly_playcounts.length == 0) ||
+            (!osudata.rank_history ||
+                osudata.rank_history.length == 0)) {
+            nulltext = 'Error - Missing data';
+            chartplay = def.images.any.url;
+            chartrank = chartplay;
+        } else {
+            const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',');
+            const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',');
+
+            chartplay = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true));
+            chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
+        }
         const ChartsEmbedRank = new Discord.EmbedBuilder()
-            .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
+            .setFooter({
+                text: `${embedStyle}`
+            })
+            .setTitle(`${osudata.username}`)
+            .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
+            .setDescription(nulltext)
             .setImage(`${chartrank}`);
 
         const ChartsEmbedPlay = new Discord.EmbedBuilder()
-            .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
+            .setFooter({
+                text: `${embedStyle}`
+            })
+            .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
             .setImage(`${chartplay}`);
 
-        useEmbeds.push(ChartsEmbedRank, ChartsEmbedPlay);
+        return [ChartsEmbedRank, ChartsEmbedPlay];
+    }
+
+    if (graphonly == true) {
+        embedStyle = 'G';
+        const graphembeds = await getGraphs();
+        useEmbeds = graphembeds;
     } else {
-        if (detailed == true) {
+        if (detailed == 2) {
             const loading = new Discord.EmbedBuilder()
+                .setFooter({
+                    text: `${embedStyle}`
+                })
                 .setColor(colours.embedColour.user.dec)
-                .setTitle(`${osudata.username}'s ${mode} profile`)
-                .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode}`)
+                .setTitle(`${osudata.username}'s ${mode ?? 'osu!'} profile`)
+                .setURL(`https://osu.ppy.sh/users/${osudata.id}/${mode ?? ''}`)
                 .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
                 .setDescription(`Loading...`);
 
             if (input.commandType != 'button') {
                 if (input.commandType == 'interaction') {
                     setTimeout(() => {
-                        //@ts-expect-error reply smth smth signature invalid not compatible
-                        input.obj.editReply({
+
+                        (input.obj as Discord.ChatInputCommandInteraction).editReply({
                             embeds: [loading],
                             allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
                         })
                             .catch();
                     }, 1000);
                 }
             }
-            const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',')
-            const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',')
+            const graphembeds = await getGraphs();
 
-            const chartplay = await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true);
-            const chartrank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank');
+            let osutopdataReq: osufunc.apiReturn;
+            if (func.findFile(input.absoluteID, 'osutopdata') &&
+                input.commandType == 'button' &&
+                !('error' in func.findFile(input.absoluteID, 'osutopdata')) &&
+                input.button != 'Refresh'
+            ) {
+                osutopdataReq = func.findFile(input.absoluteID, 'osutopdata');
+            } else {
+                osutopdataReq = await osufunc.apiget({
+                    type: 'best',
+                    params: {
+                        userid: osudata.id,
+                        mode: mode,
+                        opts: ['limit=100']
+                    }
+                });
+            }
 
-            const ChartsEmbedRank = new Discord.EmbedBuilder()
-                .setDescription('Click on the image to see the full chart')
-                .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
-                .setImage(`${chartrank}`);
-
-            const ChartsEmbedPlay = new Discord.EmbedBuilder()
-                .setURL('https://sbrstrkkdwmdr.github.io/sbr-web/')
-                .setImage(`${chartplay}`);
-
-            const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-            osufunc.debug(osutopdata, 'command', 'osu', input.obj.guildId, 'osuTopData');
+            const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData;
+            osufunc.debug(osutopdataReq, 'command', 'osu', input.obj.guildId, 'osuTopData');
 
             if (osutopdata?.error) {
                 if (input.commandType != 'button' && input.commandType != 'link') {
-                    if (input.commandType == 'interaction') {
-                        setTimeout(() => {
-                            //@ts-expect-error reply smth smth signature invalid not compatible
-                            input.obj.editReply({
-                                content: 'Error - could not fetch user\'s top scores',
-                                allowedMentions: { repliedUser: false },
-                                failIfNotExists: true
-                            }).catch()
-                        }, 1000)
-                    } else {
-                        //@ts-expect-error reply smth smth signature invalid not compatible
-                        input.obj.reply({
-                            content: 'Error - could not fetch user\'s top scores',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: errors.uErr.osu.scores.best.replace('[ID]', user),
+                            edit: true
+                        }
+                    }, input.canReply);
                 }
+                log.logCommand({
+                    event: 'Error',
+                    commandName: 'osu',
+                    commandType: input.commandType,
+                    commandId: input.absoluteID,
+                    object: input.obj,
+                    customString: errors.uErr.osu.scores.best.replace('ID', user)
+                });
                 return;
             }
 
-            const mostplayeddata: osuApiTypes.BeatmapPlaycount[] & osuApiTypes.Error = await osufunc.apiget('most_played', `${osudata.id}`)
-            osufunc.debug(mostplayeddata, 'command', 'osu', input.obj.guildId, 'mostPlayedData');
+            //await osufunc.apiget('most_played', `${osudata.id}`)
+            const mostplayeddataReq: osufunc.apiReturn = await osufunc.apiget({
+                type: 'most_played',
+                params: {
+                    userid: osudata.id,
+                }
+            });
+            const mostplayeddata: osuApiTypes.BeatmapPlaycount[] & osuApiTypes.Error = mostplayeddataReq.apiData;
+            osufunc.debug(mostplayeddataReq, 'command', 'osu', input.obj.guildId, 'mostPlayedData');
 
             if (mostplayeddata?.error) {
                 if (input.commandType != 'button' && input.commandType != 'link') {
-                    if (input.commandType == 'interaction') {
-                        setTimeout(() => {
-                            //@ts-expect-error reply smth smth signature invalid not compatible
-                            input.obj.editReply({
-                                content: 'Error - could not fetch user\'s most played beatmaps',
-                                allowedMentions: { repliedUser: false },
-                                failIfNotExists: true
-                            }).catch()
-                        }, 1000)
-                    } else {
-                        //@ts-expect-error reply smth smth signature invalid not compatible
-                        input.obj.reply({
-                            content: 'Error - could not fetch user\'s most played beatmaps',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: errors.uErr.osu.profile.mostplayed,
+                            edit: true
+                        }
+                    }, input.canReply);
                 }
+                log.logCommand({
+                    event: 'Error',
+                    commandName: 'osu',
+                    commandType: input.commandType,
+                    commandId: input.absoluteID,
+                    object: input.obj,
+                    customString: errors.uErr.osu.profile.mostplayed
+                });
                 return;
             }
-            const secperplay = osudata?.statistics.play_time / parseFloat(playcount.replaceAll(',', ''))
+            const secperplay = osudata?.statistics.play_time / parseFloat(playcount.replaceAll(',', ''));
 
-            const highestcombo = func.separateNum((osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo);
-            const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
-            const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
-            let totalpp = 0;
-            for (let i2 = 0; i2 < osutopdata.length; i2++) {
-                totalpp += osutopdata[i2].pp
-            }
-            const avgpp = (totalpp / osutopdata.length).toFixed(2)
-            let mostplaytxt = ``
+            const combostats = osufunc.Stats(osutopdata.map(x => x?.max_combo ?? 0));
+            const ppstats = osufunc.Stats(osutopdata.map(x => x?.pp ?? 0));
+            const accstats = osufunc.Stats(osutopdata.map(x => (x?.accuracy * 100) ?? 100));
+
+            let mostplaytxt = ``;
             for (let i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
-                const bmpc = mostplayeddata[i2]
-                mostplaytxt += `\`${bmpc.count.toString() + ' plays'.padEnd(15, ' ')}\` | [${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id})\n`
+                const bmpc = mostplayeddata[i2];
+                mostplaytxt += `\`${(bmpc.count.toString() + ' plays').padEnd(15, ' ')}\` | [${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id})\n`;
             }
             osuEmbed.addFields([
                 {
                     name: 'Stats',
                     value:
-                        `**Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)
+                        `**Global Rank:**${rankglobal}${peakRank}
 **pp:** ${osustats.pp}
 **Accuracy:** ${(osustats.hit_accuracy != null ? osustats.hit_accuracy : 0).toFixed(2)}%
 **Play Count:** ${playcount}
@@ -1659,83 +1934,489 @@ export async function osu(input: extypes.commandInput) {
                     value:
                         `**Player joined** <t:${new Date(osudata.join_date).getTime() / 1000}:R>                        
 ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
+**Medals**: ${osudata.user_achievements.length}
 **Followers:** ${osudata.follower_count}
 ${prevnames}
 ${onlinestatus}
 **Avg time per play:** ${calc.secondsToTime(secperplay)}`,
                     inline: true
                 }
-            ])
+            ]);
             osuEmbed.addFields([{
                 name: 'Most Played Beatmaps',
                 value: mostplaytxt != `` ? mostplaytxt : 'No data',
                 inline: false
             }]
-            )
+            );
 
 
             osuEmbed.addFields([
                 {
                     name: 'Top play info',
                     value:
-                        `**Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
-        **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
+                        `**Most common mapper:** ${osufunc.modemappers(osutopdata)?.beatmapset?.creator ?? 'None'}
+        **Most common mods:** ${osufunc.modemods(osutopdata)?.mods?.toString()?.replaceAll(',', '') ?? 'None'}
         **Gamemode:** ${mode}
-        **Highest combo:** ${highestcombo}`,
+        **Highest combo:** ${combostats.highest}`,
                     inline: true
                 },
                 {
                     name: '-',
-                    value: `**Highest pp:** ${maxpp}
-        **Lowest pp:** ${minpp}
-        **Average pp:** ${avgpp}
-        **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
-        **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%`,
+                    value: `**Highest pp:** ${ppstats.highest?.toFixed(2)}
+        **Lowest pp:** ${ppstats.lowest?.toFixed(2)}
+        **Average pp:** ${ppstats.average?.toFixed(2)}
+        **Highest accuracy:** ${accstats.highest?.toFixed(2)}%
+        **Lowest accuracy:** ${accstats.lowest?.toFixed(2)}%`,
                     inline: true
-                }])
+                }]);
 
-            useEmbeds = [osuEmbed, ChartsEmbedRank, ChartsEmbedPlay]
+            useEmbeds = [osuEmbed].concat(graphembeds);
         } else {
             osuEmbed.setDescription(`
-**Global Rank:** ${playerrank} (#${countryrank} ${osudata.country_code} :flag_${osudata.country_code.toLowerCase()}:)
+**Global Rank:**${rankglobal}${peakRank}
 **pp:** ${osustats.pp}
 **Accuracy:** ${(osustats.hit_accuracy != null ? osustats.hit_accuracy : 0).toFixed(2)}%
 **Play Count:** ${playcount}
 **Level:** ${lvl}
+**Medals**: ${osudata.user_achievements.length}
 ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}\n
 **Player joined** <t:${new Date(osudata.join_date).getTime() / 1000}:R>
 **Followers:** ${osudata.follower_count}
 ${prevnames}
 ${onlinestatus}
 **Total Play Time:** ${calc.secondsToTimeReadable(osudata?.statistics.play_time, true, false)}
-        `)
-            useEmbeds = [osuEmbed]
+        `);
+            useEmbeds = [osuEmbed];
         }
     }
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: useEmbeds,
-            components: [buttons],
+            components: graphonly == true ? [] : [buttons],
             edit: true
         }
-    })
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'osu',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'osu',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
+
+}
+
+export async function recent_activity(input: extypes.commandInput & { statsCache: any; }) {
+
+    let commanduser: Discord.User;
+
+    let user = 'SaberStrike';
+    let searchid;
+    let page = 1;
+    let filter;
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+
+            if (input.args.includes('-page')) {
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-p')) {
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-?')) {
+                const temp = func.parseArg(input.args, '-?', 'string', filter, true);
+                filter = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            input.args = cleanArgs(input.args);
+
+            user = input.args.join(' ');
+            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+                user = null;
+            }
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            searchid = commanduser.id;
+            user = input.obj.options.getString('user');
+            page = input.obj.options.getInteger('page');
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
+            commanduser = input.obj.member.user;
+
+            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
+            page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]);
+
+            switch (input.button) {
+                case 'BigLeftArrow':
+                    page = 1;
+                    break;
+                case 'LeftArrow':
+                    page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1;
+                    break;
+                case 'RightArrow':
+                    page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1;
+                    break;
+                case 'BigRightArrow':
+                    page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n')[0]);
+                    break;
+            }
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+        if (input.overrides.page != null) {
+            page = parseInt(`${input.overrides.page}`);
+        }
+    }
+    //==============================================================================================================================================================================================
+
+    const pgbuttons: Discord.ActionRowBuilder = await pageButtons('recentactivity', commanduser, input.absoluteID);
+
+    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Refresh-recentactivity-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.refresh),
+        );
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'recentactivity',
+        options: [
+            {
+                name: 'User',
+                value: user
+            },
+            {
+                name: 'Search ID',
+                value: searchid
+            },
+            {
+                name: 'Page',
+                value: page
+            },
+            {
+                name: 'Filter',
+                value: filter
+            }
+        ]
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    //if user is null, use searchid
+    if (user == null) {
+        const cuser = await osufunc.searchUser(searchid, input.userdata, true);
+        user = cuser.username;
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
+    }
+
+    if (page < 2 || typeof page != 'number') {
+        page = 1;
+    }
+    page--;
+
+    if (input.commandType == 'interaction') {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
+    }
+
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(user, 'osudata', 'osu') &&
+        !('error' in func.findFile(user, 'osudata', 'osu')) &&
+        input.button != 'Refresh'
+    ) {
+        osudataReq = func.findFile(user, 'osudata', 'osu');
+    } else {
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: 'osu'
+            }
+        });
+    }
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'recent_activity', input.obj.guildId, 'osuData');
+
+    if (osudata?.error || !osudata.id) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'osu',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
+        return;
+    }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', 'osu');
+    func.storeFile(osudataReq, user, 'osudata', 'osu');
+
+    if (input.commandType != 'button' || input.button == 'Refresh') {
+        try {
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
+            osufunc.userStatsCache([osudata], input.statsCache, 'osu', 'User');
+        } catch (error) {
+            log.toOutput(error);
+        }
+    }
+    buttons
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-User-recentactivity-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.user),
+        );
+
+    let recentActivityReq: osufunc.apiReturn;
+
+    if (func.findFile(input.absoluteID, 'rsactdata') &&
+        !('error' in func.findFile(input.absoluteID, 'rsactdata')) &&
+        input.button != 'Refresh'
+    ) {
+        recentActivityReq = func.findFile(input.absoluteID, 'rsactdata');
+    } else {
+        recentActivityReq = await osufunc.apiget({
+            type: 'user_recent_activity',
+            params: {
+                userid: osudata.id,
+                opts: ['limit=100']
+            }
+        });
+    }
+
+    const rsactData: osuApiTypes.Event[] & osuApiTypes.Error = recentActivityReq.apiData;
+
+    osufunc.debug(recentActivityReq, 'command', 'recent_activity', input.obj.guildId, 'rsactData');
+
+    if (rsactData?.error) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.profile.rsact,
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'recent_activity',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.uErr.osu.profile.rsact
+        });
+        return;
+    }
+
+    func.storeFile(recentActivityReq, input.absoluteID, 'rsactData', 'osu');
+
+    const pageLength = 10;
+
+    if (page < 1) {
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+
+    }
+    if (page >= Math.ceil(rsactData.length / pageLength) - 1) {
+        page = Math.ceil(rsactData.length / pageLength) - 1;
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
+
+    }
+
+    const curEmbed = new Discord.EmbedBuilder()
+        .setTitle(`Recent Activity for ${osudata.username}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osudata.playmode}#recent`)
+        .setAuthor({
+            name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
+            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
+        })
+        .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
+        .setDescription(`Page: ${page + 1}/${Math.ceil(rsactData.length / pageLength)}`)
+        ;
+
+    let actText = '';
+
+    for (let i = 0; i < rsactData.length && i < pageLength; i++) {
+        const curEv = rsactData[i + (page * pageLength)];
+        if (!curEv) break;
+        const obj = {
+            number: `${i + (page * pageLength) + 1}`,
+            desc: 'null',
+        };
+        switch (curEv.type) {
+            case 'achievement': {
+                const temp = curEv as osuApiTypes.EventAchievement;
+                obj.desc = `Unlocked the **${temp.achievement.name}** medal! <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'beatmapsetApprove': {
+                const temp = curEv as osuApiTypes.EventBeatmapsetApprove;
+                obj.desc = `Approved **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'beatmapPlaycount': {
+                const temp = curEv as osuApiTypes.EventBeatmapPlaycount;
+                obj.desc =
+                    `Achieved ${temp.count} plays on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url}) <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'beatmapsetDelete': {
+                const temp = curEv as osuApiTypes.EventBeatmapsetDelete;
+                obj.desc = `Deleted **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'beatmapsetRevive': {
+                const temp = curEv as osuApiTypes.EventBeatmapsetRevive;
+                obj.desc = `Revived **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'beatmapsetUpdate': {
+                const temp = curEv as osuApiTypes.EventBeatmapsetUpdate;
+                obj.desc = `Updated **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'beatmapsetUpload': {
+                const temp = curEv as osuApiTypes.EventBeatmapsetUpload;
+                obj.desc = `Submitted **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'rank': {
+                const temp = (curEv as osuApiTypes.EventRank);
+                obj.desc =
+                    `Achieved rank **#${temp.rank}** on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url}) (${emojis.gamemodes[temp.mode]}) <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            }
+                break;
+            case 'rankLost': {
+                const temp = curEv as osuApiTypes.EventRankLost;
+                obj.desc = `Lost #1 on **[${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'userSupportAgain': {
+                const temp = curEv as osuApiTypes.EventUserSupportAgain;
+                obj.desc = `Purchased supporter <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'userSupportFirst': {
+                const temp = curEv as osuApiTypes.EventUserSupportFirst;
+                obj.desc = `Purchased supporter for the first time <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'userSupportGift': {
+                const temp = curEv as osuApiTypes.EventUserSupportGift;
+                obj.desc = `Was gifted supporter <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+            } break;
+            case 'usernameChange': {
+                const temp = curEv as osuApiTypes.EventUsernameChange;
+                obj.desc = `Changed their username from ${temp.user.previousUsername} to ${temp.user.username} <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
+                    ;
+            } break;
+        }
+        actText += `**${obj.number})** ${obj.desc}\n\n`;
+    }
+    if (actText.length == 0) {
+        actText = 'No recent activity found';
+    }
+    curEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsactData.length / pageLength)}
+
+    
+${actText}`);
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [curEmbed],
+            components: [pgbuttons, buttons],
+            edit: true
+        },
+    }, input.canReply
+    );
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'recent_activity',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'recent_activity',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
@@ -1744,238 +2425,49 @@ ID: ${input.absoluteID}
 /**
  * list of #1 scores
  */
-export async function firsts(input: extypes.commandInput) {
+export async function firsts(input: extypes.commandInput & { statsCache: any; }) {
 
-    let commanduser: Discord.User;
 
-    let user;
-    let searchid;
-    let page = 0;
+    const parseArgs = await parseArgs_scoreList(input);
+    let commanduser: Discord.User = parseArgs.commanduser;
 
-    let scoredetailed = false;
-    let sort: embedStuff.scoreSort = 'recent';
-    let reverse = false;
-    let mode = 'osu';
-    let filteredMapper = null;
-    let filteredMods = null;
+    let user = parseArgs.user;
+    let searchid = parseArgs.searchid;
+    let page = parseArgs.page ?? 0;
 
-    switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
-            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
-            }
-            if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
-            }
+    let scoredetailed: number = parseArgs.scoredetailed ?? 1;
 
-            if (input.args.includes('-osu')) {
-                mode = 'osu'
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu'
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko'
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko'
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-recent')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-performance')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-pp')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-score')) {
-                sort = 'score';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-acc')) {
-                sort = 'acc';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-combo')) {
-                sort = 'combo';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-miss')) {
-                sort = 'miss';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-rank')) {
-                sort = 'rank';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-r')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            user = input.args.join(' ');
-            if (!input.args[0] || input.args[0].includes(searchid)) {
-                user = null
-            }
-        }
-            break;
+    let sort: embedStuff.scoreSort = parseArgs.sort ?? 'recent';
+    let reverse = parseArgs.reverse ?? false;
+    let mode = parseArgs.mode ?? 'osu';
 
-        //==============================================================================================================================================================================================
+    let filteredMapper = parseArgs.filteredMapper ?? null;
+    let filteredMods = parseArgs.filteredMods ?? null;
+    let filterTitle = parseArgs.filterTitle ?? null;
+    let filterRank = parseArgs.filterRank ?? null;
 
-        case 'interaction': {
-            commanduser = input.obj.member.user;
+    let parseScore = parseArgs.parseScore ?? false;
+    let parseId = parseArgs.parseId ?? null;
 
-            //@ts-ignore
-            user = input.obj.options.getString('user');
-            //@ts-ignore
-            page = input.obj.options.getInteger('page');
-            //@ts-ignore
-            scoredetailed = input.obj.options.getBoolean('detailed');
-            //@ts-ignore
-            sort = input.obj.options.getString('sort');
-            //@ts-ignore
-            reverse = input.obj.options.getBoolean('reverse');
-            //@ts-ignore
-            mode = input.obj.options.getString('mode') ?? 'osu';
-            //@ts-ignore
-            filteredMapper = input.obj.options.getString('mapper');
-            //@ts-ignore
-            filteredMods = input.obj.options.getString('mods');
-        }
+    let reachedMaxCount = false;
+    let embedStyle: extypes.osuCmdStyle = 'L';
 
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            //@ts-ignore
-            if (!input.obj.message.embeds[0]) {
-                return;
-            }
-
-            commanduser = input.obj.member.user;
-            //@ts-ignore
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]
-            //@ts-ignore
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
-            page = 0;
-            //@ts-ignore
-            if (input.obj.message.embeds[0].description) {
-                //@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-ignore
-                    filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-ignore
-                    filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-ignore
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
-                switch (true) {
-                    case sort1.includes('score'):
-                        sort = 'score'
-                        break;
-                    case sort1.includes('acc'):
-                        sort = 'acc'
-                        break;
-                    case sort1.includes('pp'):
-                        sort = 'pp'
-                        break;
-                    case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent'
-                        break;
-                    case sort1.includes('combo'):
-                        sort = 'combo'
-                        break;
-                    case sort1.includes('miss'):
-                        sort = 'miss'
-                        break;
-                    case sort1.includes('rank'):
-                        sort = 'rank'
-                        break;
-
-                }
-
-                //@ts-ignore
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
-                if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
-                    reverse = true
-                } else {
-                    reverse = false
-                }
-                //@ts-ignore
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
-                page = 0
-                switch (input.button) {
-                    case 'BigLeftArrow':
-                        page = 1
-                        break;
-                    case 'LeftArrow':
-                        page = pageParsed - 1
-                        break;
-                    case 'RightArrow':
-                        page = pageParsed + 1
-                        break;
-                    case 'BigRightArrow':
-                        //@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
-                        break;
-                    default:
-                        page = pageParsed
-                        break;
-                }
-            }
-
-        }
-            break;
-    }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            //@ts-ignore
-            page = input.overrides.page
+            page = input.overrides.page;
         }
     }
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('firsts', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'firsts',
+        options: [
             {
                 name: 'User',
                 value: user
@@ -2011,48 +2503,41 @@ export async function firsts(input: extypes.commandInput) {
             {
                 name: 'Detailed',
                 value: scoredetailed
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
+            },
+            {
+                name: 'Filter',
+                value: filterTitle
+            },
+            {
+                name: 'Rank',
+                value: filterRank
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
-    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-firsts-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.first),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-firsts-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.previous),
-            new Discord.ButtonBuilder()
-                .setCustomId(`Search-firsts-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.search),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-firsts-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.next),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-firsts-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.last),
-        );
-    const buttons = new Discord.ActionRowBuilder().addComponents(
+    const pgbuttons: Discord.ActionRowBuilder = await pageButtons('firsts', commanduser, input.absoluteID);
+
+    let buttons = new Discord.ActionRowBuilder().addComponents(
         new Discord.ButtonBuilder()
-            .setCustomId(`Refresh-firsts-${commanduser.id}-${input.absoluteID}`)
+            .setCustomId(`${mainconst.version}-Refresh-firsts-${commanduser.id}-${input.absoluteID}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.main.refresh),
-    )
+    );
+
+    const checkDetails = await buttonsAddDetails('firsts', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle);
+    buttons = checkDetails.buttons;
+    embedStyle = checkDetails.embedStyle;
 
     //if user is null, use searchid
     if (user == null) {
@@ -2066,109 +2551,211 @@ export async function firsts(input: extypes.commandInput) {
     //if user is not found in database, use discord username
     if (user == null) {
         const cuser = input.client.users.cache.get(searchid);
-        user = cuser.username;
+        user = cuser?.username ?? '';
     }
 
     mode = osufunc.modeValidator(mode);
 
 
     if (input.commandType == 'interaction') {
-        //@ts-ignore
-        input.obj.reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
-        }).catch()
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode),
+            }
+        });
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
 
-    osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {
-                    //@ts-ignore
-                    input.obj.reply({
-                        content: `Error - could not find user \`${user}\``,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                }, 1000);
-            } else {
-                //@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'firsts',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
         return;
     }
 
-    let firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-firsts-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
+
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
+
+    let firstscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = [];
     async function getScoreCount(cinitnum) {
-        const fd: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('firsts_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
+        if (cinitnum >= 499) {
+            reachedMaxCount = true;
+            return;
+        }
+
+        const fdReq: osufunc.apiReturn = await osufunc.apiget({
+            type: 'firsts',
+            params: {
+                userid: `${osudata.id}`,
+                opts: [`offset=${cinitnum}`, 'limit=100', `mode=${mode}`],
+            },
+            version: 2,
+
+        });
+        const fd: osuApiTypes.Score[] & osuApiTypes.Error = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
-                        input.obj.editReply({
-                            content: 'Error - could not find user\'s #1 scores',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }, 1000)
-                } else {//@ts-ignore
-                    input.obj.reply({
-                        content: 'Error - could not find user\'s #1 scores',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: errors.uErr.osu.scores.first.replace('[ID]', user) + ` offset by ${cinitnum}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'firsts',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.uErr.osu.scores.first.replace('[ID]', user) + ` offset by ${cinitnum}`
+            });
             return;
         }
         for (let i = 0; i < fd.length; i++) {
             if (!fd[i] || typeof fd[i] == 'undefined') { break; }
 
-            await firstscoresdata.push(fd[i])
+            await firstscoresdata.push(fd[i]);
         }
         if (fd.length == 100) {
-            await getScoreCount(cinitnum + 100)
+            await getScoreCount(cinitnum + 100);
         }
-
+        return;
     }
-    if (func.findFile(input.absoluteID, 'firstscoresdata') &&
-        input.commandType == 'button' &&
-        !('error' in func.findFile(input.absoluteID, 'firstscoresdata')) &&
+    if (func.findFile(osudata.id, 'firstscoresdata') &&
+        !('error' in func.findFile(osudata.id, 'firstscoresdata')) &&
         input.button != 'Refresh'
     ) {
-        firstscoresdata = func.findFile(input.absoluteID, 'firstscoresdata')
+        firstscoresdata = func.findFile(osudata.id, 'firstscoresdata');
     } else {
         await getScoreCount(0);
     }
     osufunc.debug(firstscoresdata, 'command', 'firsts', input.obj.guildId, 'firstsScoresData');
-    func.storeFile(firstscoresdata, input.absoluteID, 'firstscoresdata')
+    func.storeFile(firstscoresdata, osudata.id, 'firstscoresdata');
+
+    if (filterTitle) {
+        firstscoresdata = firstscoresdata.filter((array) =>
+            (
+                array.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmap.version.toLowerCase().replaceAll(' ', '')
+            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
+        );
+    }
+
+    if (filterRank) {
+        firstscoresdata = firstscoresdata.filter(x => x.rank == filterRank);
+    }
+
+    if (parseScore == true) {
+        let pid = parseInt(parseId) - 1;
+        if (pid < 0) {
+            pid = 0;
+        }
+        if (pid > firstscoresdata.length) {
+            pid = firstscoresdata.length - 1;
+        }
+        input.overrides = {
+            mode: firstscoresdata?.[0]?.mode ?? 'osu',
+            id: firstscoresdata?.[pid]?.best_id,
+            commanduser,
+            commandAs: input.commandType
+        };
+        if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `${errors.uErr.osu.score.nf} at index ${pid}`,
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'firsts',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: `${errors.uErr.osu.score.nf} at index ${pid}`
+            });
+            return;
+        }
+        input.commandType = 'other';
+        await scoreparse(input);
+        return;
+    }
 
     const firstsEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`#1 scores for ${osudata.username}`)
-        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${firstscoresdata?.[0]?.mode ?? 'osu'}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${firstscoresdata?.[0]?.mode ?? osufunc.modeValidator(mode)}#top_ranks`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
@@ -2177,7 +2764,7 @@ export async function firsts(input: extypes.commandInput) {
         })
         ;
     if (page >= Math.ceil(firstscoresdata.length / 5)) {
-        page = Math.ceil(firstscoresdata.length / 5) - 1
+        page = Math.ceil(firstscoresdata.length / 5) - 1;
     }
 
     const scoresarg = await embedStuff.scoreList({
@@ -2189,57 +2776,68 @@ export async function firsts(input: extypes.commandInput) {
         showTruePosition: true,
         sort: sort,
         truePosType: 'recent',
-        filteredMapper: filteredMapper,
-        filteredMods: filteredMods,
-        reverse: reverse
-    })
-    firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n`)
+        filteredMapper,
+        filteredMods,
+        filterMapTitle: filterTitle,
+        filterRank,
+        reverse: reverse,
+    }, {
+        useScoreMap: true
+    });
+    firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
 
     if (scoresarg.fields.length == 0) {
         firstsEmbed.addFields([{
             name: 'Error',
             value: 'No scores found',
             inline: false
-        }])
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[2].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        }]);
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
-        for (let i = 0; i < scoresarg.fields.length; i++) {
-            firstsEmbed.addFields([scoresarg.fields[i]])
+        switch (scoredetailed) {
+            case 0: case 2: {
+                let temptxt = '\n';
+                for (let i = 0; i < scoresarg.string.length; i++) {
+                    temptxt += scoresarg.string[i];
+                }
+                firstsEmbed.setDescription(
+                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
+                    + temptxt
+                );
+            }
+                break;
+            case 1: default: {
+                for (let i = 0; i < scoresarg.fields.length; i++) {
+                    firstsEmbed.addFields([scoresarg.fields[i]]);
+                }
+            }
+                break;
         }
     }
 
     if (scoresarg.isFirstPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (scoresarg.isLastPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            console.log(error)
+            log.toOutput(error);
         }
     }
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -2247,84 +2845,122 @@ export async function firsts(input: extypes.commandInput) {
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    }, input.canReply);
 
-
-
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'firsts',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'firsts',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
 /**
  * leaderboard of a map
  */
-export async function maplb(input: extypes.commandInput) {
+export async function maplb(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
     let mapid;
     let mapmods;
     let page;
+    let parseId = null;
+    let parseScore = false;
+    const embedStyle: extypes.osuCmdStyle = 'L';
+    const scoredetailed: number = 1;
+
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            mapid = input.args[0]
-            if (isNaN(mapid)) {
-                mapid = undefined;
+
+            if (input.args.includes('-page')) {
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
             }
+            if (input.args.includes('-p')) {
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.includes('-parse')) {
+                parseScore = true;
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+                parseId = temp.value;
+                input.args = temp.newArgs;
+            }
+
             if (input.args.join(' ').includes('+')) {
                 mapmods = input.args.join(' ').split('+')[1];
+                mapmods.includes(' ') ? mapmods = mapmods.split(' ')[0] : null;
+                input.args = input.args.join(' ').replace('+', '').replace(mapmods, '').split(' ');
             }
+            input.args = cleanArgs(input.args);
+
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map;
         }
             break;
 
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            mapid = input.obj.options.getInteger('id');//@ts-ignore
-            page = input.obj.options.getInteger('page');//@ts-ignore
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            mapid = input.obj.options.getInteger('id');
+            page = input.obj.options.getInteger('page');
             mapmods = input.obj.options.getString('mods');
+            parseId = input.obj.options.getInteger('parse');
+            if (parseId != null) {
+                parseScore = true;
+            }
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
-            commanduser = input.obj.member.user;//@ts-ignore
-            mapid = input.obj.message.embeds[0].url.split('/b/')[1]//@ts-ignore
-            if (input.obj.message.embeds[0].title.includes('+')) {//@ts-ignore
-                mapmods = input.obj.message.embeds[0].title.split('+')[1]
+            commanduser = input.obj.member.user;
+            mapid = input.obj.message.embeds[0].url.split('/b/')[1];
+            if (input.obj.message.embeds[0].title.includes('+')) {
+                mapmods = input.obj.message.embeds[0].title.split('+')[1];
             }
-            page = 0
+            page = 0;
             switch (input.button) {
                 case 'BigLeftArrow':
-                    page = 1
+                    page = 1;
                     break;
-                case 'LeftArrow'://@ts-ignore
-                    page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
+                case 'LeftArrow':
+                    page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1;
                     break;
-                case 'RightArrow'://@ts-ignore
-                    page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
+                case 'RightArrow':
+                    page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1;
                     break;
-                case 'BigRightArrow'://@ts-ignore
-                    page = parseInt((input.obj.message.embeds[0].description).split('/')[1].split('\n')[0])
+                case 'BigRightArrow':
+                    page = parseInt((input.obj.message.embeds[0].description).split('/')[1].split('\n')[0]);
                     break;
-                case 'Refresh'://@ts-ignore
-                    page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1])
+                case 'Refresh':
+                    page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]);
                     break;
             }
         }
@@ -2332,7 +2968,22 @@ export async function maplb(input: extypes.commandInput) {
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = input.overrides.page
+            page = input.overrides.page;
+        }
+        if (input.overrides.id) {
+            mapid = input.overrides.id;
+        }
+        // if(input.overrides.mode){
+        //     mode = input.overrides.mode            
+        // }
+        if (input.overrides.filterMods) {
+            mapmods = input.overrides.filterMods;
+        }
+        if (input.overrides.commandAs) {
+            input.commandType = input.overrides.commandAs;
+        }
+        if (input.overrides.commanduser) {
+            commanduser = input.overrides.commanduser;
         }
     }
 
@@ -2341,46 +2992,21 @@ export async function maplb(input: extypes.commandInput) {
     const buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-leaderboard-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-maplb-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-        )
-    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-maplb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.first),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-maplb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.previous),
-            new Discord.ButtonBuilder()
-                .setCustomId(`Search-maplb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.search),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-maplb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.next),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-maplb-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.last),
         );
+    const pgbuttons: Discord.ActionRowBuilder = await pageButtons('maplb', commanduser, input.absoluteID);
 
-    log.logFile(
-        'command',
-        log.commandLog('maplb', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
 
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'maplb',
+        options: [
             {
                 name: 'Map ID',
                 value: mapid
@@ -2392,64 +3018,78 @@ export async function maplb(input: extypes.commandInput) {
             {
                 name: 'Page',
                 value: page
-            }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
+            },
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number') {
         page = 1;
     }
-    page--
+    page--;
 
     if (!mapid) {
-        mapid = osufunc.getPreviousId('map', input.obj.guildId);
+        const temp = osufunc.getPreviousId('map', input.obj.guildId);
+        mapid = temp.id;
     }
 
     if (input.commandType == 'interaction') {
-        //@ts-ignore
-        input.obj.reply({
-            content: 'Loading...',
-            allowMentions: { repliedUser: false },
-            failIfNotExists: true
-        }).catch()
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
-    let mapdata: osuApiTypes.Beatmap;
+    let mapdataReq: osufunc.apiReturn;
     if (func.findFile(mapid, 'mapdata') &&
         !('error' in func.findFile(mapid, 'mapdata')) &&
         input.button != 'Refresh'
     ) {
-        mapdata = func.findFile(mapid, 'mapdata')
+        mapdataReq = func.findFile(mapid, 'mapdata');
     } else {
-        mapdata = await osufunc.apiget('map', `${mapid}`)
+        mapdataReq = await osufunc.apiget(
+            {
+                type: 'map',
+                params: {
+                    id: mapid
+                }
+            }
+        );
     }
-    func.storeFile(mapdata, mapid, 'mapdata')
-    osufunc.debug(mapdata, 'command', 'maplb', input.obj.guildId, 'mapData');
+    const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
+    osufunc.debug(mapdataReq, 'command', 'maplb', input.obj.guildId, 'mapData');
 
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
-                    input.obj.editReply({
-                        content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }, 1000)
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `${errors.uErr.osu.map.m.replace('[ID]', mapid)}`,
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'maplb',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: `${errors.uErr.osu.map.m.replace('[ID]', mapid)}`
+        });
         return;
     }
+
+    func.storeFile(mapdataReq, mapid, 'mapdata');
 
     let title = 'n';
     let fulltitle = 'n';
@@ -2457,55 +3097,115 @@ export async function maplb(input: extypes.commandInput) {
     try {
         title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
         artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
-    } catch (error) {//@ts-ignore
-        input.obj.reply({ content: 'error - map not found', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-            .catch();
+    } catch (error) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `${errors.uErr.osu.map.m.replace('[ID]', mapid)}`,
+                edit: true
+            }
+        }, input.canReply);
         return;
     }
-    fulltitle = `${artist} - ${title} [${mapdata.version}]`
+    fulltitle = `${artist} - ${title} [${mapdata.version}]`;
 
     let mods;
     if (mapmods) {
-        mods = osumodcalc.OrderMods(mapmods) + ''
+        mods = osumodcalc.OrderMods(mapmods) + '';
     }
     const lbEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        });
 
+    let lbdataReq: osufunc.apiReturn;
     if (mods == null) {
-        let lbdataf: osuApiTypes.BeatmapScores;
         if (func.findFile(input.absoluteID, 'lbdata') &&
             input.commandType == 'button' &&
             !('error' in func.findFile(input.absoluteID, 'lbdata')) &&
             input.button != 'Refresh'
         ) {
-            lbdataf = func.findFile(input.absoluteID, 'lbdata')
+            lbdataReq = func.findFile(input.absoluteID, 'lbdata');
         } else {
-            lbdataf = await osufunc.apiget('scores_get_map', `${mapid}`)
+            lbdataReq = await osufunc.apiget({
+                type: 'scores_get_map',
+                params: {
+                    id: mapid,
+                    mode: mapdata.mode,
+                    opts: [`mods=${mapmods}`]
+                }
+            });
         }
-        func.storeFile(lbdataf, input.absoluteID, 'lbdata')
-        osufunc.debug(lbdataf, 'command', 'maplb', input.obj.guildId, 'lbDataF');
+        const lbdataf: osuApiTypes.BeatmapScores = lbdataReq.apiData;
+
+        osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbDataF');
 
         if (lbdataf?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
-                        input.obj.editReply({
-                            content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }, 1000)
-                } else {//@ts-ignore
-                    input.obj.reply({
-                        content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `${errors.uErr.osu.map.lb.replace('[ID]', mapid)}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'maplb',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: `${errors.uErr.osu.map.lb.replace('[ID]', mapid)} (API V2)`
+            });
+            return;
+        }
+        func.storeFile(lbdataReq, input.absoluteID, 'lbdata');
+
+        const lbdata = lbdataf.scores;
+
+        if (parseScore == true) {
+            let pid = parseInt(parseId) - 1;
+            if (pid < 0) {
+                pid = 0;
+            }
+            if (pid > lbdata.length) {
+                pid = lbdata.length - 1;
+            }
+            input.overrides = {
+                mode: lbdata?.[0]?.mode ?? 'osu',
+                id: lbdata?.[pid]?.best_id,
+                commanduser,
+                commandAs: input.commandType
+            };
+            if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+                if (input.commandType != 'button' && input.commandType != 'link') {
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: `${errors.uErr.osu.score.nf} at index ${pid}`,
+                            edit: true
+                        }
+                    }, input.canReply);
+                }
+                log.logCommand({
+                    event: 'Error',
+                    commandName: 'maplb',
+                    commandType: input.commandType,
+                    commandId: input.absoluteID,
+                    object: input.obj,
+                    customString: `${errors.uErr.osu.score.nf} at index ${pid}`
+                });
+                return;
+            }
+            input.commandType = 'other';
+            await scoreparse(input);
             return;
         }
 
-        const lbdata = lbdataf.scores
         lbEmbed
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`Score leaderboard of ${fulltitle}`)
@@ -2515,21 +3215,21 @@ export async function maplb(input: extypes.commandInput) {
 
         let scoretxt: string;
         if (lbdata.length < 1) {
-            scoretxt = 'Error - no scores found '
+            scoretxt = 'Error - no scores found ';
         }
         if (mapdata.status == 'graveyard' || mapdata.status == 'pending') {
-            scoretxt = 'Error - map is unranked'
+            scoretxt = 'Error - map is unranked';
         }
 
         if (page >= Math.ceil(lbdata.length / 5)) {
-            page = Math.ceil(lbdata.length / 5) - 1
+            page = Math.ceil(lbdata.length / 5) - 1;
         }
 
-        osufunc.debug(lbdata, 'command', 'maplb', input.obj.guildId, 'lbData');
+        osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbData');
 
         const scoresarg = await embedStuff.scoreList({
             scores: lbdata,
-            detailed: false,
+            detailed: 1,
             showWeights: false,
             page: page,
             showMapTitle: false,
@@ -2538,10 +3238,15 @@ export async function maplb(input: extypes.commandInput) {
             truePosType: 'score',
             filteredMapper: null,
             filteredMods: null,
+            filterMapTitle: null,
+            filterRank: null,
             reverse: false,
             mapidOverride: mapdata.id,
             showUserName: true
-        })
+        }, {
+            useScoreMap: false,
+            overrideMapLastDate: mapdata.last_updated
+        });
 
         if (scoresarg.fields.length == 0) {
             lbEmbed.addFields([{
@@ -2549,71 +3254,120 @@ export async function maplb(input: extypes.commandInput) {
                 value: 'No scores found',
                 inline: false
             }]);
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[0].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[1].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[2].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[3].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[4].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
 
         } else {
             for (let i = 0; i < scoresarg.fields.length; i++) {
-                lbEmbed.addFields([scoresarg.fields[i]])
+                lbEmbed.addFields([scoresarg.fields[i]]);
             }
         }
 
-        lbEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(scoresarg.maxPages)}`)
+        lbEmbed.setDescription(`Page: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}`);
 
         if (scoresarg.isFirstPage) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[0].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[1].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
         }
         if (scoresarg.isLastPage) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[3].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[4].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         }
 
-        osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+        osufunc.writePreviousId('map', input.obj.guildId,
+            {
+                id: `${mapdata.id}`,
+                apiData: null,
+                mods: mapmods
+            }
+        );
     } else {
-        let lbdata;
         if (func.findFile(input.absoluteID, 'lbdata') &&
             input.commandType == 'button' &&
             !('error' in func.findFile(input.absoluteID, 'lbdata')) &&
             input.button != 'Refresh'
         ) {
-            lbdata = func.findFile(input.absoluteID, 'lbdata')
+            lbdataReq = func.findFile(input.absoluteID, 'lbdata');
         } else {
-            lbdata = await osufunc.apiget('scores_get_map', `${mapid}`, `${osumodcalc.ModStringToInt(mods)}`, 1)
+            lbdataReq = await osufunc.apiget(
+                {
+                    type: 'scores_get_map',
+                    params: {
+                        id: mapid,
+                        mods: mods //function auto converts to id
+
+                    },
+                    version: 1
+                }
+            );
         }
-        func.storeFile(lbdata, input.absoluteID, 'lbdata')
-        osufunc.debug(lbdata, 'command', 'maplb', input.obj.guildId, 'lbData');
+        const lbdata = lbdataReq.apiData;
+        osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbData');
 
         if (lbdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
-                        input.obj.editReply({
-                            content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }, 1000)
-                } else {//@ts-ignore
-                    input.obj.reply({
-                        content: `Error - could not fetch leaderboard data for map \`${mapid}\`.`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `${errors.uErr.osu.map.lb.replace('[ID]', mapid)}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'maplb',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: `${errors.uErr.osu.map.lb.replace('[ID]', mapid)} (API v1)`
+            });
+            return;
+        }
+
+        func.storeFile(lbdataReq, input.absoluteID, 'lbdata');
+
+        if (parseScore == true) {
+            let pid = parseInt(parseId) - 1;
+            if (pid < 0) {
+                pid = 0;
+            }
+            if (pid > lbdata.length) {
+                pid = lbdata.length - 1;
+            }
+            input.overrides = {
+                mode: lbdata?.[0]?.mode ?? 'osu',
+                id: lbdata?.[pid]?.best_id,
+                commanduser,
+                commandAs: input.commandType
+            };
+            if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+                if (input.commandType != 'button' && input.commandType != 'link') {
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: `${errors.uErr.osu.score.nf} at index ${pid}`,
+                            edit: true
+                        }
+                    }, input.canReply);
+                }
+                log.logCommand({
+                    event: 'Error',
+                    commandName: 'maplb',
+                    commandType: input.commandType,
+                    commandId: input.absoluteID,
+                    object: input.obj,
+                    customString: `${errors.uErr.osu.score.nf} at index ${pid}`
+                });
+                return;
+            }
+            input.commandType = 'other';
+            await scoreparse(input);
             return;
         }
 
@@ -2623,30 +3377,30 @@ export async function maplb(input: extypes.commandInput) {
             .setURL(`https://osu.ppy.sh/b/${mapid}`)
             .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg`);
 
-        let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`
+        let scoretxt = `Page: ${page + 1}/${Math.ceil(lbdata.length / 5)}`;
 
         for (let i = 0; i < (lbdata).length && i < 5; i++) {
             let hitlist;
             let acc;
-            const score = lbdata[i + (page * 5)]
+            const score = lbdata[i + (page * 5)];
             if (!score) break;
-            const mode = mapdata.mode
+            const mode = mapdata.mode;
             switch (mode) {
                 case 'osu':
-                    hitlist = `${score.count300}/${score.count100}/${score.count50}/${score.countmiss}`
-                    acc = osumodcalc.calcgrade(parseInt(score.count300), parseInt(score.count100), parseInt(score.count50), parseInt(score.countmiss)).accuracy
+                    hitlist = `${score.count300}/${score.count100}/${score.count50}/${score.countmiss}`;
+                    acc = osumodcalc.calcgrade(parseInt(score.count300), parseInt(score.count100), parseInt(score.count50), parseInt(score.countmiss)).accuracy;
                     break;
                 case 'taiko':
-                    hitlist = `${score.count300}/${score.count100}/${score.countmiss}`
-                    acc = osumodcalc.calcgradeTaiko(parseInt(score.count300), parseInt(score.count100), parseInt(score.countmiss)).accuracy
+                    hitlist = `${score.count300}/${score.count100}/${score.countmiss}`;
+                    acc = osumodcalc.calcgradeTaiko(parseInt(score.count300), parseInt(score.count100), parseInt(score.countmiss)).accuracy;
                     break;
                 case 'fruits':
-                    hitlist = `${score.count300}/${score.count100}/${score.count50}/${score.countkatu}/${score.countmiss}`
-                    acc = osumodcalc.calcgradeCatch(parseInt(score.count300), parseInt(score.count100), parseInt(score.count50), parseInt(score.countkatu), parseInt(score.countmiss)).accuracy
+                    hitlist = `${score.count300}/${score.count100}/${score.count50}/${score.countkatu}/${score.countmiss}`;
+                    acc = osumodcalc.calcgradeCatch(parseInt(score.count300), parseInt(score.count100), parseInt(score.count50), parseInt(score.countkatu), parseInt(score.countmiss)).accuracy;
                     break;
                 case 'mania':
-                    hitlist = `${score.countgeki}/${score.count300}/${score.countkatu}/${score.count100}/${score.count50}/${score.countmiss}`
-                    acc = osumodcalc.calcgradeMania(parseInt(score.countgeki), parseInt(score.count300), parseInt(score.countkatu), parseInt(score.count100), parseInt(score.count50), parseInt(score.countmiss)).accuracy
+                    hitlist = `${score.countgeki}/${score.count300}/${score.countkatu}/${score.count100}/${score.count50}/${score.countmiss}`;
+                    acc = osumodcalc.calcgradeMania(parseInt(score.countgeki), parseInt(score.count300), parseInt(score.countkatu), parseInt(score.count100), parseInt(score.count50), parseInt(score.countmiss)).accuracy;
                     break;
             }
             scoretxt += `
@@ -2656,35 +3410,44 @@ export async function maplb(input: extypes.commandInput) {
             ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.maxcombo}x/**${mapdata.max_combo}x**
             ${hitlist}
             Has replay: ${score.replay_available == 1 ? '✅' : '❌'}
-            `
+            `;
         }
         if ((lbdata as any).length < 1 || scoretxt.length < 10) {
-            scoretxt = 'Error - no scores found '
+            scoretxt = 'Error - no scores found ';
         }
         if (mapdata.status == 'graveyard' || mapdata.status == 'pending') {
-            scoretxt = 'Error - map is unranked'
+            scoretxt = 'Error - map is unranked';
         }
-        lbEmbed.setDescription(`${scoretxt}`)
+        lbEmbed.setDescription(`${scoretxt}`);
 
-        osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+        osufunc.writePreviousId('map', input.obj.guildId,
+            {
+                id: `${mapdata.id}`,
+                apiData: null,
+                mods: mapmods
+            }
+        );
 
-        if (page <= 1) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[0].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[1].setDisabled(true)
+        if (page <= 0) {
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
         }
 
         if (page >= (lbdata.length / 5) - 1) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[3].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[4].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         }
     }
 
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-Map-maplb-any-${input.absoluteID}-${mapid}${mapmods && mapmods != 'NM' ? '+' + mapmods : ''}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.map)
+    );
+
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -2692,816 +3455,99 @@ export async function maplb(input: extypes.commandInput) {
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
-
-}
-
-/**
- * top plays without misses
- */
-export async function nochokes(input: extypes.commandInput) {
-
-    let commanduser: Discord.User;
-
-    let user;
-    let mode;
-    let sort;
-    let reverse;
-    let page;
-    let mapper;
-    let mods;
-    let searchid
-
-    switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
-            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
-            }
-            if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
-            }
-            mode = null;
-            sort = 'pp';
-            page = 1;
-            mapper = null;
-            mods = null;
-            if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
-            }
-            if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
-            }
-
-            if (input.args.includes('-osu')) {
-                mode = 'osu'
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu'
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko'
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko'
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-recent')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-performance')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-pp')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-score')) {
-                sort = 'score';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-acc')) {
-                sort = 'acc';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-combo')) {
-                sort = 'combo';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-miss')) {
-                sort = 'miss';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-rank')) {
-                sort = 'rank';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-r')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            user = input.args.join(' ');
-            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
-            }
-        }
-            break;
-
-        //==============================================================================================================================================================================================
-
-        case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            user = input.obj.options.getString('user')//@ts-ignore
-            mode = input.obj.options.getString('mode')//@ts-ignore
-            mapper = input.obj.options.getString('mapper')//@ts-ignore
-            mods = input.obj.options.getString('mods')//@ts-ignore
-            sort = input.obj.options.getString('sort')//@ts-ignore
-            page = input.obj.options.getInteger('page')//@ts-ignore
-            reverse = input.obj.options.getBoolean('reverse')
-            searchid = input.obj.member.user.id
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {//@ts-ignore
-            if (!input.obj.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.obj.member.user;
-            //@ts-ignore
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]//obj.message.embeds[0].title.split('Top no choke scores of ')[1]
-            //@ts-ignore
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
-            //@ts-ignore
-            if (input.obj.message.embeds[0].description) {//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-ignore
-                    mapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-ignore
-                    mods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-ignore
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
-                switch (true) {
-                    case sort1.includes('score'):
-                        sort = 'score'
-                        break;
-                    case sort1.includes('acc'):
-                        sort = 'acc'
-                        break;
-                    case sort1.includes('pp'):
-                        sort = 'pp'
-                        break;
-                    case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent'
-                        break;
-                    case sort1.includes('combo'):
-                        sort = 'combo'
-                        break;
-                    case sort1.includes('miss'):
-                        sort = 'miss'
-                        break;
-                    case sort1.includes('rank'):
-                        sort = 'rank'
-                        break;
-
-                }
-
-                //@ts-ignore
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
-                if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
-                    reverse = true
-                } else {
-                    reverse = false
-                }
-                //@ts-ignore
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
-                page = 0
-                switch (input.button) {
-                    case 'BigLeftArrow':
-                        page = 1
-                        break;
-                    case 'LeftArrow':
-                        page = pageParsed - 1
-                        break;
-                    case 'RightArrow':
-                        page = pageParsed + 1
-                        break;
-                    case 'BigRightArrow'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
-                        break;
-                    default:
-                        page = pageParsed
-                        break;
-                }
-            }
-        }
-            break;
-    }
-    if (input.overrides != null) {
-        if (input.overrides.page != null) {
-            page = input.overrides.page
-        }
-        if (input.overrides.sort != null) {
-            sort = input.overrides.sort
-        }
-        if (input.overrides.reverse != null) {
-            reverse = input.overrides.reverse === true;
-        }
-    }
-
-    //==============================================================================================================================================================================================
-
-    log.logFile(
-        'command',
-        log.commandLog('nochokes', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(
-            input.absoluteID,
-            [{
-                name: 'User',
-                value: user
-            },
-            {
-                name: 'Search ID',
-                value: searchid
-            },
-            {
-                name: 'Mode',
-                value: mode
-            },
-            {
-                name: 'Sort',
-                value: sort
-            },
-            {
-                name: 'Reverse',
-                value: reverse
-            },
-            {
-                name: 'Page',
-                value: page
-            },
-            {
-                name: 'Mapper',
-                value: mapper
-            },
-            {
-                name: 'Mods',
-                value: mods
-            }
-            ]
-        ), {
-        guildId: `${input.obj.guildId}`
-    })
-
-    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-    if (page < 2 || typeof page != 'number' || isNaN(page)) {
-        page = 1;
-    }
-    page--
-
-    const buttons = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-nochokes-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.refresh),
-        )
-
-    //if user is null, use searchid
-    if (user == null) {
-        const cuser = await osufunc.searchUser(searchid, input.userdata, true);
-        user = cuser.username;
-        if (mode == null) {
-            mode = cuser.gamemode;
-        }
-    }
-
-    //if user is not found in database, use discord username
-    if (user == null) {
-        const cuser = input.client.users.cache.get(searchid);
-        user = cuser.username;
-    }
-
-    mode = osufunc.modeValidator(mode);
-
-    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-nochokes-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.first),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-nochokes-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.previous),
-            new Discord.ButtonBuilder()
-                .setCustomId(`Search-nochokes-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.search),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-nochokes-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.next),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-nochokes-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.last),
-        );
-
-    if (input.commandType == 'interaction') {//@ts-ignore
-        input.obj.reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
-        }).catch()
-    }
-
-    let osudata: osuApiTypes.User;
-
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
-        input.button != 'Refresh'
-    ) {
-        osudata = func.findFile(user, 'osudata')
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'maplb',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        log.logCommand({
+            event: 'Error',
+            commandName: 'maplb',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
-
-    osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
-
-    if (osudata?.error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
-                    input.obj.reply({
-                        content: `Error - could not find user \`${user}\``,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                }, 1000);
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }
-        }
-        return;
-    }
-
-    let nochokedata: osuApiTypes.Score[] & osuApiTypes.Error
-    if (func.findFile(input.absoluteID, 'nochokedata') &&
-        input.commandType == 'button' &&
-        !('error' in func.findFile(input.absoluteID, 'nochokedata')) &&
-        input.button != 'Refresh'
-    ) {
-        nochokedata = func.findFile(input.absoluteID, 'nochokedata')
-    } else {
-        nochokedata = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-    }
-
-    osufunc.debug(nochokedata, 'command', 'osutop', input.obj.guildId, 'noChokeData');
-    func.storeFile(nochokedata, input.absoluteID, 'nochokedata')
-
-    if (nochokedata?.error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
-                    input.obj.reply({
-                        content: `Error - could not find \`${user}\`'s top scores`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                }, 1000);
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not find \`${user}\`'s top scores`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }
-        }
-        return;
-    }
-
-    try {
-        nochokedata[0].user.username
-    } catch (error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
-                    input.obj.reply({
-                        content: `Error - could not fetch \`${user}\`'s top scores`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-                }, 1000);
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not fetch \`${user}\`'s top scores`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
-            }
-        }
-        return;
-    }
-
-    let showtrue = false;
-    if (sort != 'pp') {
-        showtrue = true;
-    }
-
-    if (page >= Math.ceil(nochokedata.length / 5)) {
-        page = Math.ceil(nochokedata.length / 5) - 1
-    }
-
-    const topEmbed = new Discord.EmbedBuilder()
-        .setColor(colours.embedColour.scorelist.dec)
-        .setTitle(`Top no choke scores of ${nochokedata[0].user.username}`)
-        .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
-        .setURL(`https://osu.ppy.sh/users/${nochokedata[0].user.id}/${nochokedata[0].mode}`)
-        .setAuthor({
-            name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
-            iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
-        })
-    const scoresarg = await embedStuff.scoreList(
-        {
-            scores: nochokedata.filter(a => a.statistics.count_miss == 0),
-            detailed: false,
-            showWeights: true,
-            page: page,
-            showMapTitle: true,
-            showTruePosition: showtrue,
-            sort: sort,
-            truePosType: 'pp',
-            filteredMapper: mapper,
-            filteredMods: mods,
-            reverse: reverse
-        })
-    topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`)
-    if (scoresarg.fields.length == 0) {
-        topEmbed.addFields([{
-            name: 'Error',
-            value: 'No scores found',
-            inline: false
-        }])
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[2].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
-    } else {
-        for (let i = 0; scoresarg.fields.length > i; i++) {
-            topEmbed.addFields(scoresarg.fields[i])
-        }
-    }
-
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
-
-    if (scoresarg.isFirstPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-    }
-    if (scoresarg.isLastPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
-    }
-    if (input.commandType != 'button' || input.button == 'Refresh') {
-        try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    //SEND/EDIT MSG==============================================================================================================================================================================================
-
-    msgfunc.sendMessage({
-        commandType: input.commandType,
-        obj: input.obj,
-        args: {
-            embeds: [topEmbed],
-            components: [pgbuttons, buttons],
-            edit: true
-        }
-    })
-
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
 
 }
 
 /**
  * list of top plays
  */
-export async function osutop(input: extypes.commandInput) {
+export async function osutop(input: extypes.commandInput & { statsCache: any; }) {
 
-    let commanduser: Discord.User;
+    const parseArgs = await parseArgs_scoreList(input);
+    let commanduser: Discord.User = parseArgs.commanduser;
 
-    let user;
-    let mode;
-    let detailed;
-    let sort: embedStuff.scoreSort;
-    let reverse;
-    let page;
-    let mapper;
-    let mods;
-    let searchid
+    let user = parseArgs.user;
+    let searchid = parseArgs.searchid;
+    let page = parseArgs.page ?? 0;
 
-    switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
-            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            mode = null;
-            sort = 'pp';
-            page = 1;
+    let scoredetailed: number = parseArgs.scoredetailed ?? 1;
 
-            mapper = null;
-            mods = null;
-            detailed = false;
-            if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
-            }
-            if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
-            }
-            if (input.args.includes('-mapper')) {
-                mapper = (input.args[input.args.indexOf('-mapper') + 1]);
-                input.args.splice(input.args.indexOf('-mapper'), 2);
-            }
-            if (input.args.includes('-mods')) {
-                mods = (input.args[input.args.indexOf('-mods') + 1]);
-                input.args.splice(input.args.indexOf('-mods'), 2);
-            }
-            if (input.args.includes('-reverse')) {
-                reverse = true
-                input.args.splice(input.args.indexOf('-reverse'), 1);
-            }
+    let sort: embedStuff.scoreSort = parseArgs.sort ?? 'pp';
+    let reverse = parseArgs.reverse ?? false;
+    let mode = parseArgs.mode ?? 'osu';
+    let filteredMapper = parseArgs.filteredMapper ?? null;
+    let filteredMods = parseArgs.filteredMods ?? null;
+    let filterTitle = parseArgs.filterTitle ?? null;
+    let filterRank = parseArgs.filterRank ?? null;
 
-            if (input.args.includes('-osu')) {
-                mode = 'osu'
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu'
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko'
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko'
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-recent')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-performance')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-pp')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-score')) {
-                sort = 'score';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-acc')) {
-                sort = 'acc';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-combo')) {
-                sort = 'combo';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-miss')) {
-                sort = 'miss';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-rank')) {
-                sort = 'rank';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-r')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            user = input.args.join(' ');
-            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
-            }
-        }
-            break;
+    let parseScore = parseArgs.parseScore ?? false;
+    let parseId = parseArgs.parseId ?? null;
 
-        //==============================================================================================================================================================================================
+    let reachedMaxCount = false;
 
-        case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            user = input.obj.options.getString('user')//@ts-ignore
-            mode = input.obj.options.getString('mode')//@ts-ignore
-            mapper = input.obj.options.getString('mapper')//@ts-ignore
-            mods = input.obj.options.getString('mods')//@ts-ignore
-            sort = input.obj.options.getString('sort')//@ts-ignore
-            page = input.obj.options.getInteger('page')//@ts-ignore
-            detailed = input.obj.options.getBoolean('detailed')//@ts-ignore
-            reverse = input.obj.options.getBoolean('reverse')
-            searchid = input.obj.member.user.id
-        }
+    let embedStyle: extypes.osuCmdStyle = 'L';
+    let noMiss = false;
 
-            //==============================================================================================================================================================================================
 
-            break;
-        case 'button': {//@ts-ignore
-            if (!input.obj.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.obj.member.user;
-            //@ts-ignore
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]//obj.message.embeds[0].title.split('Top plays of ')[1]
-            //@ts-ignore
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
-            //@ts-ignore
-            if (input.obj.message.embeds[0].description) {//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-ignore
-                    mapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-ignore
-                    mods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-ignore
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
-                switch (true) {
-                    case sort1.includes('score'):
-                        sort = 'score'
-                        break;
-                    case sort1.includes('acc'):
-                        sort = 'acc'
-                        break;
-                    case sort1.includes('pp'):
-                        sort = 'pp'
-                        break;
-                    case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent'
-                        break;
-                    case sort1.includes('combo'):
-                        sort = 'combo'
-                        break;
-                    case sort1.includes('miss'):
-                        sort = 'miss'
-                        break;
-                    case sort1.includes('rank'):
-                        sort = 'rank'
-                        break;
-
-                }
-
-                //@ts-ignore
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
-                if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
-                    reverse = true
-                } else {
-                    reverse = false
-                }
-                //@ts-ignore
-                if (input.obj.message.embeds[0].fields.length == 7 || input.obj.message.embeds[0].fields.length == 11) {
-                    detailed = true
-                } else {
-                    detailed = false
-                }//@ts-ignore
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
-                page = 0
-                switch (input.button) {
-                    case 'BigLeftArrow':
-                        page = 1
-                        break;
-                    case 'LeftArrow':
-                        page = pageParsed - 1
-                        break;
-                    case 'RightArrow':
-                        page = pageParsed + 1
-                        break;
-                    case 'BigRightArrow'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
-                        break;
-                    default:
-                        page = pageParsed
-                        break;
-                }
-            }
-            if (input.button == 'DetailEnable') {
-                detailed = true;
-            }
-            if (input.button == 'DetailDisable') {
-                detailed = false;
-            }
-        }
-            break;
-    }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = input.overrides.page
+            page = input.overrides.page;
         }
-        if (input.overrides.sort != null) {//@ts-ignore
-            sort = input.overrides.sort
+        if (input.overrides.sort != null) {
+            sort = input.overrides.sort;
         }
         if (input.overrides.reverse != null) {
             reverse = input.overrides.reverse === true;
         }
         if (input.overrides.mode != null) {
-            mode = input.overrides.mode
+            mode = input.overrides.mode;
+        }
+        if (input.overrides.filterMapper != null) {
+            filteredMapper = input.overrides.filterMapper;
+        }
+        if (input.overrides.filterMods != null) {
+            filteredMods = input.overrides.filterMods;
+        }
+        if (input.overrides.miss != null) {
+            noMiss = true;
         }
     }
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('osutop', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
 
-    //OPTIONS==============================================================================================================================================================================================
+    const commandButtonName: 'osutop' | 'nochokes' =
+        noMiss == true ? 'nochokes' : 'osutop';
 
-    log.logFile('command',
-        log.optsLog(
-            input.absoluteID,
-            [{
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: commandButtonName,
+        options: [
+            {
                 name: 'User',
                 value: user
             },
@@ -3527,32 +3573,53 @@ export async function osutop(input: extypes.commandInput) {
             },
             {
                 name: 'Mapper',
-                value: mapper
+                value: filteredMapper
             },
             {
                 name: 'Mods',
-                value: mods
+                value: filteredMods
+            },
+            {
+                name: 'Detailed',
+                value: scoredetailed
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
+            },
+            {
+                name: 'Filter',
+                value: filterTitle
+            },
+            {
+                name: 'No misses',
+                value: noMiss
+            },
+            {
+                name: 'Rank',
+                value: filterRank
             }
-            ],
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
-    const buttons = new Discord.ActionRowBuilder()
+    let buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-osutop-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-${commandButtonName}-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-        )
+        );
+
+    const checkDetails = await buttonsAddDetails(commandButtonName, commanduser, input.absoluteID, buttons, scoredetailed, embedStyle);
+    buttons = checkDetails.buttons;
+    embedStyle = checkDetails.embedStyle;
 
     //if user is null, use searchid
     if (user == null) {
@@ -3571,150 +3638,123 @@ export async function osutop(input: extypes.commandInput) {
 
     mode = osufunc.modeValidator(mode);
 
-    if (detailed == true) {
-        buttons.addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`DetailDisable-osutop-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailed)
-        )
-    } else {
-        buttons.addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`DetailEnable-osutop-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailed)
-        )
+    const pgbuttons: Discord.ActionRowBuilder = await pageButtons(commandButtonName, commanduser, input.absoluteID);
+
+
+    if (input.commandType == 'interaction') {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
-    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-osutop-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.first),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-osutop-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.previous),
-            new Discord.ButtonBuilder()
-                .setCustomId(`Search-osutop-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.search),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-osutop-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.next),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-osutop-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.last),
-        );
+    let osudataReq: osufunc.apiReturn;
 
-    if (input.commandType == 'interaction') {//@ts-ignore
-        input.obj.reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
-        }).catch()
-    }
-
-    let osudata: osuApiTypes.User;
-
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        });
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
 
-    osufunc.debug(osudata, 'command', 'osu', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
-                    input.obj.reply({
-                        content: `Error - could not find user \`${user}\``,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                }, 1000);
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: commandButtonName,
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
         return;
     }
 
-    let osutopdata: osuApiTypes.Score[] & osuApiTypes.Error
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-${commandButtonName}-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
+
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
+
+    let osutopdataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'osutopdata') &&
         input.commandType == 'button' &&
         !('error' in func.findFile(input.absoluteID, 'osutopdata')) &&
         input.button != 'Refresh'
     ) {
-        osutopdata = func.findFile(input.absoluteID, 'osutopdata')
+        osutopdataReq = func.findFile(input.absoluteID, 'osutopdata');
     } else {
-        osutopdata = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
+        osutopdataReq = await osufunc.apiget({
+            type: 'best',
+            params: {
+                userid: osudata.id,
+                mode: osufunc.modeValidator(mode),
+                opts: ['limit=100', 'offset=0']
+            }
+        });
     }
 
-    osufunc.debug(osutopdata, 'command', 'osutop', input.obj.guildId, 'osuTopData');
-    func.storeFile(osutopdata, input.absoluteID, 'osutopdata')
+    let osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData;
 
-    if (osutopdata?.error) {
+    osufunc.debug(osutopdataReq, 'command', 'osutop', input.obj.guildId, 'osuTopData');
+
+    if (osutopdata?.error || !osutopdata[0]?.user?.username) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
-                    input.obj.reply({
-                        content: `Error - could not find \`${user}\`'s top scores`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                }, 1000);
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not find \`${user}\`'s top scores`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `${errors.uErr.osu.scores.best
+                        .replace('[ID]', user)
+                        }`,
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: commandButtonName,
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: `${errors.uErr.osu.scores.best
+                .replace('[ID]', user)
+                }`
+        });
         return;
     }
 
-    try {
-        osutopdata[0].user.username
-    } catch (error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
-                    input.obj.reply({
-                        content: `Error - could not fetch \`${user}\`'s top scores`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
-                }, 1000);
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not fetch \`${user}\`'s top scores`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-                    .catch();
-            }
-        }
-        return;
-    }
-
+    func.storeFile(osutopdataReq, input.absoluteID, 'osutopdata');
 
     let showtrue = false;
     if (sort != 'pp') {
@@ -3722,126 +3762,169 @@ export async function osutop(input: extypes.commandInput) {
     }
 
     if (page >= Math.ceil(osutopdata.length / 5)) {
-        page = Math.ceil(osutopdata.length / 5) - 1
+        page = Math.ceil(osutopdata.length / 5) - 1;
+    }
+
+    if (filterTitle) {
+        osutopdata = osutopdata.filter((array) =>
+            (
+                array.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmap.version.toLowerCase().replaceAll(' ', '')
+            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
+        );
+    }
+
+    if (noMiss) {
+        osutopdata = osutopdata.filter(x => x.statistics.count_miss == 0);
+    }
+
+    if (filterRank) {
+        osutopdata = osutopdata.filter(x => x.rank == filterRank);
+    }
+
+    if (parseScore == true) {
+        let pid = parseInt(parseId) - 1;
+        if (pid < 0) {
+            pid = 0;
+        }
+        if (pid > osutopdata.length) {
+            pid = osutopdata.length - 1;
+        }
+        input.overrides = {
+            mode: osutopdata?.[0]?.mode ?? 'osu',
+            id: osutopdata?.[pid]?.best_id,
+            commanduser,
+            commandAs: input.commandType
+        };
+        if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `${errors.uErr.osu.score.nf} at index ${pid}`,
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: commandButtonName,
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: `${errors.uErr.osu.score.nf} at index ${pid}`
+            });
+            return;
+        }
+        input.commandType = 'other';
+
+        await scoreparse(input);
+        return;
     }
 
     const topEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.scorelist.dec)
-        .setTitle(`Top plays of ${osutopdata[0].user.username}`)
+        .setTitle(`${commandButtonName == 'osutop' ? 'Top' : 'Top no choke'} plays of ${osudata.username}`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
-        .setURL(`https://osu.ppy.sh/users/${osutopdata[0].user.id}/${osutopdata[0].mode}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osutopdata?.[0]?.mode ?? osufunc.modeValidator(mode)}#top_ranks`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
-        })
+        });
     const scoresarg = await embedStuff.scoreList(
         {
             scores: osutopdata,
-            detailed: detailed,
+            detailed: scoredetailed,
             showWeights: true,
-            page: page,
+            page,
             showMapTitle: true,
             showTruePosition: showtrue,
-            sort: sort,
+            sort,
             truePosType: 'pp',
-            filteredMapper: mapper,
-            filteredMods: mods,
-            reverse: reverse
-        })
-    topEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`)
+            filteredMapper,
+            filteredMods,
+            filterMapTitle: filterTitle,
+            filterRank,
+            reverse
+        },
+        {
+            useScoreMap: true
+        }
+    );
+    topEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`);
     if (scoresarg.fields.length == 0) {
         topEmbed.addFields([{
             name: 'Error',
             value: 'No scores found',
             inline: false
-        }])
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[2].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        }]);
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
-        for (let i = 0; scoresarg.fields.length > i; i++) {
-            topEmbed.addFields(scoresarg.fields[i])
+        switch (scoredetailed) {
+            case 0: case 2: {
+                let temptxt = '\n';
+                for (let i = 0; i < scoresarg.string.length; i++) {
+                    temptxt += scoresarg.string[i];
+                }
+                topEmbed.setDescription(
+                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}`
+                    + temptxt
+                );
+            }
+                break;
+            case 1: default: {
+                for (let i = 0; i < scoresarg.fields.length; i++) {
+                    topEmbed.addFields([scoresarg.fields[i]]);
+                }
+            }
+                break;
         }
     }
 
-
-    if (detailed == true) {
-        const highestcombo = func.separateNum((osutopdata.sort((a, b) => b.max_combo - a.max_combo))[0].max_combo);
-        const maxpp = ((osutopdata.sort((a, b) => b.pp - a.pp))[0].pp).toFixed(2)
-        const minpp = ((osutopdata.sort((a, b) => a.pp - b.pp))[0].pp).toFixed(2)
-        let totalpp = 0;
-        for (let i2 = 0; i2 < osutopdata.length; i2++) {
-            totalpp += osutopdata[i2].pp
-        }
-        const avgpp = (totalpp / osutopdata.length).toFixed(2)
-        let hittype: string;
-        if (mode == 'osu') {
-            hittype = `hit300/hit100/hit50/miss`
-        }
-        if (mode == 'taiko') {
-            hittype = `Great(300)/Good(100)/miss`
-        }
-        if (mode == 'fruits' || mode == 'catch') {
-            hittype = `Fruit(300)/Drops(100)/Droplets(50)/miss`
-        }
-        if (mode == 'mania') {
-            hittype = `300+(geki)/300/200(katu)/100/50/miss`
-        }
-        topEmbed.addFields([{
-            name: '-',
-            value: `
-        **Most common mapper:** ${osufunc.modemappers(osutopdata).beatmapset.creator}
-        **Most common mods:** ${osufunc.modemods(osutopdata).mods.toString().replaceAll(',', '')}
-        **Gamemode:** ${mode}
-        **Hits:** ${hittype}
-        **Highest combo:** ${highestcombo}
-    `,
-            inline: true
-        },
-        {
-            name: '-',
-            value: `
-        **Highest pp:** ${maxpp}
-        **Lowest pp:** ${minpp}
-        **Average pp:** ${avgpp}
-        **Highest accuracy:** ${((osutopdata.sort((a, b) => b.accuracy - a.accuracy))[0].accuracy * 100).toFixed(2)}%
-        **Lowest accuracy:** ${((osutopdata.sort((a, b) => a.accuracy - b.accuracy))[0].accuracy * 100).toFixed(2)}%
-    `, inline: true
-        }])
-    }
-
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
     if (scoresarg.isFirstPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (scoresarg.isLastPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            console.log(error)
+            log.toOutput(error);
         }
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -3849,245 +3932,86 @@ export async function osutop(input: extypes.commandInput) {
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: commandButtonName,
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: commandButtonName,
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
 /**
  * list of pinned scores
  */
-export async function pinned(input: extypes.commandInput) {
+export async function pinned(input: extypes.commandInput & { statsCache: any; }) {
 
-    let commanduser: Discord.User;
+    const parseArgs = await parseArgs_scoreList(input);
+    let commanduser: Discord.User = parseArgs.commanduser;
 
-    let user;
-    let searchid;
-    let page = 0;
+    let user = parseArgs.user;
+    let searchid = parseArgs.searchid;
+    let page = parseArgs.page ?? 0;
 
-    let scoredetailed = false;
-    let sort: embedStuff.scoreSort = 'recent';
-    let reverse = false;
-    let mode = 'osu';
-    let filteredMapper = null;
-    let filteredMods = null;
+    let scoredetailed: number = parseArgs.scoredetailed ?? 1;
 
-    switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
-            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
-            }
-            if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
-            }
+    let sort: embedStuff.scoreSort = parseArgs.sort ?? 'recent';
+    let reverse = parseArgs.reverse ?? false;
+    let mode = parseArgs.mode ?? 'osu';
 
-            if (input.args.includes('-osu')) {
-                mode = 'osu'
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu'
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko'
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko'
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits'
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania'
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-recent')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-performance')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-pp')) {
-                sort = 'pp';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-score')) {
-                sort = 'score';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-acc')) {
-                sort = 'acc';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-combo')) {
-                sort = 'combo';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-miss')) {
-                sort = 'miss';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-rank')) {
-                sort = 'rank';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-r')) {
-                sort = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            user = input.args.join(' ');
-            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
-            }
-        }
-            break;
+    let filteredMapper = parseArgs.filteredMapper ?? null;
+    let filteredMods = parseArgs.filteredMods ?? null;
+    let filterTitle = parseArgs.filterTitle ?? null;
+    let filterRank = parseArgs.filterRank ?? null;
 
-        //==============================================================================================================================================================================================
+    let parseScore = parseArgs.parseScore ?? false;
+    let parseId = parseArgs.parseId ?? null;
 
-        case 'interaction': {
-            commanduser = input.obj.member.user;
-            searchid = input.obj.member.user.id;//@ts-ignore
-            user = input.obj.options.getString('user');//@ts-ignore
-            page = input.obj.options.getInteger('page');//@ts-ignore
-            scoredetailed = input.obj.options.getBoolean('detailed');//@ts-ignore
-            sort = input.obj.options.getString('sort');//@ts-ignore
-            reverse = input.obj.options.getBoolean('reverse');//@ts-ignore
-            mode = input.obj.options.getString('mode') ?? 'osu';//@ts-ignore
-            filteredMapper = input.obj.options.getString('mapper');//@ts-ignore
-            filteredMods = input.obj.options.getString('mods');
-        }
+    let reachedMaxCount = false;
+    let embedStyle: extypes.osuCmdStyle = 'L';
 
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {//@ts-ignore
-            if (!input.obj.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.obj.member.user;//@ts-ignore
-            user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0]//@ts-ignore
-            mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1]
-            page = 0;//@ts-ignore
-            if (input.obj.message.embeds[0].description) {//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-ignore
-                    filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-ignore
-                    filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-ignore
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
-                switch (true) {
-                    case sort1.includes('score'):
-                        sort = 'score'
-                        break;
-                    case sort1.includes('acc'):
-                        sort = 'acc'
-                        break;
-                    case sort1.includes('pp'):
-                        sort = 'pp'
-                        break;
-                    case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent'
-                        break;
-                    case sort1.includes('combo'):
-                        sort = 'combo'
-                        break;
-                    case sort1.includes('miss'):
-                        sort = 'miss'
-                        break;
-                    case sort1.includes('rank'):
-                        sort = 'rank'
-                        break;
-
-                }
-
-                //@ts-ignore
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
-                if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
-                    reverse = true
-                } else {
-                    reverse = false
-                }//@ts-ignore
-                const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
-                page = 0
-                switch (input.button) {
-                    case 'BigLeftArrow':
-                        page = 1
-                        break;
-                    case 'LeftArrow':
-                        page = pageParsed - 1
-                        break;
-                    case 'RightArrow':
-                        page = pageParsed + 1
-                        break;
-                    case 'BigRightArrow'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
-                        break;
-                    default:
-                        page = pageParsed
-                        break;
-                }
-            }
-        }
-            break;
-    }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = parseInt(`${input.overrides.page}`)
+            page = parseInt(`${input.overrides.page}`);
         }
     }
 
     //==============================================================================================================================================================================================
 
-    const buttons = new Discord.ActionRowBuilder()
+    let buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-pinned-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-pinned-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-        )
+        );
 
-    log.logFile(
-        'command',
-        log.commandLog('pinned', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
+    const checkDetails = await buttonsAddDetails('pinned', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle);
+    buttons = checkDetails.buttons;
+    embedStyle = checkDetails.embedStyle;
 
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'pinned',
+        options: [
             {
                 name: 'User',
                 value: user
@@ -4123,43 +4047,32 @@ export async function pinned(input: extypes.commandInput) {
             {
                 name: 'Detailed',
                 value: scoredetailed
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
+            },
+            {
+                name: 'Filter',
+                value: filterTitle
+            },
+            {
+                name: 'Rank',
+                value: filterRank
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
-    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-pinned-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.first),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-pinned-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.previous),
-            new Discord.ButtonBuilder()
-                .setCustomId(`Search-pinned-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.search),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-pinned-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.next),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-pinned-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.last),
-        );
+    const pgbuttons: Discord.ActionRowBuilder = await pageButtons('pinned', commanduser, input.absoluteID);
+
 
     //if user is null, use searchid
     if (user == null) {
@@ -4178,76 +4091,113 @@ export async function pinned(input: extypes.commandInput) {
 
     mode = osufunc.modeValidator(mode);
 
-    if (input.commandType == 'interaction') {//@ts-ignore
-        input.obj.reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
-        }).catch()
+    if (input.commandType == 'interaction') {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        });
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
 
-    osufunc.debug(osudata, 'command', 'pinned', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'pinned', input.obj.guildId, 'osuData');
     if (osudata?.error || !osudata.id) {
-        if (input.commandType == 'interaction') {
-            setTimeout(() => {//@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }, 1000);
-        } else {//@ts-ignore
-            input.obj.reply({
-                content: `Error - could not find user \`${user}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'pinned',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
         return;
     }
 
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-pinned-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
+
     let pinnedscoresdata: osuApiTypes.Score[] & osuApiTypes.Error = []; //= await osufunc.apiget('pinned', `${osudata.id}`, `${mode}`)
     async function getScoreCount(cinitnum) {
-        const fd: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('pinned_alt', `${osudata.id}`, `mode=${mode}&offset=${cinitnum}`, 2, 0, true)
+        if (cinitnum >= 499) {
+            reachedMaxCount = true;
+            return;
+        }
+        const fdReq: osufunc.apiReturn = await osufunc.apiget({
+            type: 'pinned',
+            params: {
+                userid: `${osudata.id}`,
+                opts: [`offset=${cinitnum}`, 'limit=100', `mode=${mode}`],
+            },
+            version: 2,
+        });
+        const fd: osuApiTypes.Score[] & osuApiTypes.Error = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
-                        input.obj.editReply({
-                            content: 'Error - could not fetch user\'s pinned scores',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }, 1000)
-                } else {//@ts-ignore
-                    input.obj.reply({
-                        content: 'Error - could not fetch user\'s pinned scores',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `${errors.uErr.osu.scores.pinned.replace('[ID]', user)} offset by ${cinitnum}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'pinned',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: `${errors.uErr.osu.scores.pinned.replace('[ID]', user)} offset by ${cinitnum}`
+            });
             return;
         }
         for (let i = 0; i < fd.length; i++) {
             if (!fd[i] || typeof fd[i] == 'undefined') { break; }
-            await pinnedscoresdata.push(fd[i])
+
+            await pinnedscoresdata.push(fd[i]);
         }
         if (fd.length == 100) {
-            await getScoreCount(cinitnum + 100)
+            await getScoreCount(cinitnum + 100);
         }
 
     }
@@ -4256,7 +4206,7 @@ export async function pinned(input: extypes.commandInput) {
         !('error' in func.findFile(input.absoluteID, 'pinnedscoresdata')) &&
         input.button != 'Refresh'
     ) {
-        pinnedscoresdata = func.findFile(input.absoluteID, 'pinnedscoresdata')
+        pinnedscoresdata = func.findFile(input.absoluteID, 'pinnedscoresdata');
     } else {
         await getScoreCount(0);
     }
@@ -4264,19 +4214,88 @@ export async function pinned(input: extypes.commandInput) {
     func.storeFile(pinnedscoresdata, input.absoluteID, 'pinnedscoresdata');
 
     if (page >= Math.ceil(pinnedscoresdata.length / 5)) {
-        page = Math.ceil(pinnedscoresdata.length / 5) - 1
+        page = Math.ceil(pinnedscoresdata.length / 5) - 1;
+    }
+
+    if (filterTitle) {
+        pinnedscoresdata = pinnedscoresdata.filter((array) =>
+            (
+                array.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmap.version.toLowerCase().replaceAll(' ', '')
+            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
+        );
+    }
+    if (filterRank) {
+        pinnedscoresdata = pinnedscoresdata.filter(x => x.rank == filterRank);
+    }
+    if (parseScore == true) {
+        let pid = parseInt(parseId) - 1;
+        if (pid < 0) {
+            pid = 0;
+        }
+        if (pid > pinnedscoresdata.length) {
+            pid = pinnedscoresdata.length - 1;
+        }
+        input.overrides = {
+            mode: pinnedscoresdata?.[0]?.mode ?? 'osu',
+            id: pinnedscoresdata?.[pid]?.best_id,
+            commanduser,
+            commandAs: input.commandType
+        };
+        if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `${errors.uErr.osu.score.nf} at index ${pid}`,
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'pinned',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: `${errors.uErr.osu.score.nf} at index ${pid}`
+            });
+            return;
+        }
+        input.commandType = 'other';
+        await scoreparse(input);
+        return;
     }
 
     const pinnedEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`Pinned scores for ${osudata.username}`)
-        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${pinnedscoresdata[0].mode}`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${pinnedscoresdata?.[0]?.mode ?? osufunc.modeValidator(mode)}#top_ranks`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
-        })
+        });
 
     const scoresarg = await embedStuff.scoreList(
         {
@@ -4290,53 +4309,67 @@ export async function pinned(input: extypes.commandInput) {
             truePosType: 'recent',
             filteredMapper: filteredMapper,
             filteredMods: filteredMods,
+            filterMapTitle: filterTitle,
+            filterRank,
             reverse: false
+        },
+        {
+            useScoreMap: true
         });
-    pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n`)
+    pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
     if (scoresarg.fields.length == 0) {
         pinnedEmbed.addFields([{
             name: 'Error',
             value: 'No scores found',
             inline: false
-        }])
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[2].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        }]);
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
-        for (let i = 0; i < scoresarg.fields.length; i++) {
-            pinnedEmbed.addFields([scoresarg.fields[i]])
+        switch (scoredetailed) {
+            case 0: case 2: {
+                let temptxt = '\n';
+                for (let i = 0; i < scoresarg.string.length; i++) {
+                    temptxt += scoresarg.string[i];
+                }
+                pinnedEmbed.setDescription(
+                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
+                    + temptxt
+                );
+            }
+                break;
+            case 1: default: {
+                for (let i = 0; i < scoresarg.fields.length; i++) {
+                    pinnedEmbed.addFields([scoresarg.fields[i]]);
+                }
+            }
+                break;
         }
     }
     if (scoresarg.isFirstPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (scoresarg.isLastPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            console.log(error)
+            log.toOutput(error);
         }
     }
 
-    msgfunc.sendMessage({
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -4344,26 +4377,34 @@ export async function pinned(input: extypes.commandInput) {
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    }, input.canReply);
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'pinned',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'pinned',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
 /**
  * most recent score or list of recent scores
  */
-export async function recent(input: extypes.commandInput) {
+export async function recent(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -4371,16 +4412,22 @@ export async function recent(input: extypes.commandInput) {
     let searchid;
     let page = 0;
     let mode = null;
-    let list;
+    let list = false;
+    let sort: embedStuff.scoreSort = 'recent';
+    let showFails = 1;
+    let filterTitle = null;
+    let filterRank: osuApiTypes.Rank = null;
 
-    let isFirstPage = false;
-    let isLastPage = false;
+    let embedStyle: extypes.osuCmdStyle = 'S';
+
+    let scoredetailed = 1;
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
+
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-list')) {
                 list = true;
@@ -4390,56 +4437,72 @@ export async function recent(input: extypes.commandInput) {
                 list = true;
                 input.args.splice(input.args.indexOf('-l'), 1);
             }
-            if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
+            if (input.args.includes('-passes=true')) {
+                showFails = 0;
+                input.args.splice(input.args.indexOf('-passes=true'), 1);
             }
-            if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
+            if (input.args.includes('-passes')) {
+                showFails = 0;
+                input.args.splice(input.args.indexOf('-passes=true'), 1);
             }
-            if (input.args.includes('-mode')) {
-                mode = (input.args[input.args.indexOf('-mode') + 1]);
-                input.args.splice(input.args.indexOf('-mode'), 2);
+            if (input.args.includes('-pass')) {
+                showFails = 0;
+                input.args.splice(input.args.indexOf('-pass'), 1);
             }
-            if (input.args.includes('-m')) {
-                mode = (input.args[input.args.indexOf('-m') + 1]);
-                input.args.splice(input.args.indexOf('-m'), 2);
+            if (input.args.includes('-nofail')) {
+                showFails = 0;
+                input.args.splice(input.args.indexOf('-nofail'), 1);
             }
+            if (input.args.includes('-nf')) {
+                showFails = 0;
+                input.args.splice(input.args.indexOf('-nf'), 1);
+            }
+
+            const temp = await parseArgs_scoreList_message(input);
+
+            page = temp.page;
+            mode = temp.mode;
+            sort = temp.sort;
+            filterTitle = temp.filterTitle;
+            scoredetailed = temp.scoredetailed;
+            filterRank = temp.filterRank;
+
+            input.args = cleanArgs(input.args);
+
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
+                user = null;
             }
-            isFirstPage = true;
-
         }
             break;
 
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-            searchid = input.obj.member.user.id;//@ts-ignore
-            user = input.obj.options.getString('user');//@ts-ignore
-            page = input.obj.options.getNumber('page');//@ts-ignore
-            mode = input.obj.options.getString('mode');//@ts-ignore
+            searchid = commanduser.id;
+            user = input.obj.options.getString('user');
+            page = input.obj.options.getNumber('page');
+            mode = input.obj.options.getString('mode');
             list = input.obj.options.getBoolean('list');
+
+            filterTitle = input.obj.options.getString('filter');
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            user =//@ts-ignore
-                input.obj.message.embeds[0].title.includes('play for') ?//@ts-ignore
-                    input.obj.message.embeds[0].title.split('most recent play for ')[1].split(' | ')[0] ://@ts-ignore
-                    input.obj.message.embeds[0].title.split('plays for ')[1]
-            //@ts-ignore
-            const modething = input.obj.message.embeds[0].footer ? input.obj.message.embeds[0].description.split('\n')[1] : input.obj.message.embeds[0].description.split(' | ')[1].split('\n')[0]
+            searchid = commanduser.id;
+            user = (input.obj.message as Discord.Message).embeds[0].author.url.split('u/')[1];
+            //title.split('for ')[1]
+            const modething = input.obj.message.embeds[0].footer ? input.obj.message.embeds[0].description.split('\n')[1] : input.obj.message.embeds[0].description.split(' | ')[1].split('\n')[0];
             switch (true) {
                 case modething.includes('osu'): {
                     mode = 'osu';
@@ -4458,102 +4521,133 @@ export async function recent(input: extypes.commandInput) {
                 }
             }
 
-            page = 0
+            if (input.obj.message.embeds[0].title.includes('Best')) {
+                sort = 'pp';
+            }
+
+            page = 0;
             if (input.button == 'BigLeftArrow') {
-                page = 1
-                isFirstPage = true
-            }//@ts-ignore
-            if (input.obj.message.embeds[0].title.includes('plays')) {
+                page = 1;
+            }
+            if (input.obj.message.embeds[0].footer.text.includes('L')) {
                 switch (input.button) {
-                    case 'LeftArrow'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1
+                    case 'LeftArrow':
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) - 1;
                         break;
-                    case 'RightArrow'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1
+                    case 'RightArrow':
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) + 1;
                         break;
-                    case 'BigRightArrow'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))
+                    case 'BigRightArrow':
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n')[0]);
                         break;
-                    case 'Refresh'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0])
+                    case 'Refresh':
+                        page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]);
                         break;
                 }
-                list = true//@ts-ignore
-                if (isNaN((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) || ((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) == 'NaN') {
-                    page = 1
-                }
-                if (page < 2) {
-                    isFirstPage = true;
-                }//@ts-ignore
-                if (page == parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n'[0]))) {
-                    isLastPage = true;
+                list = true;
+                if (isNaN(+(input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) || ((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]) == 'NaN') {
+                    page = 1;
                 }
             } else {
                 switch (input.button) {
-                    case 'LeftArrow'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) - 1
+                    case 'LeftArrow':
+                        page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) - 1;
                         break;
-                    case 'RightArrow'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) + 1
+                    case 'RightArrow':
+                        page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) + 1;
                         break;
-                    case 'Refresh'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1])
+                    case 'Refresh':
+                        page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]);
                         break;
                 }
                 if (page < 2) {
-                    page == 1
+                    page == 1;
                 }
             }
+            switch (input.button) {
+                case 'Detail0':
+                    scoredetailed = 0;
+                    break;
+                case 'Detail1':
+                    scoredetailed = 1;
+
+                    break;
+                case 'Detail2':
+                    scoredetailed = 2;
+                    break;
+                default:
+                    if (input.obj.message.embeds[0].footer.text.includes('E')) {
+                        scoredetailed = 2;
+                    }
+                    if (input.obj.message.embeds[0].footer.text.includes('C')) {
+                        scoredetailed = 0;
+                    }
+                    break;
+            }
+
+            if (input.obj.message.embeds[0].title.includes('passes')) {
+                showFails = 0;
+            } else {
+                showFails = 1;
+            }
+
+            if (input.obj.message.embeds[0].description.includes('Filter:')) {
+                filterTitle = input.obj.message.embeds[0].description.split('Filter: ')[1].split('\n')[0];
+            }
+            if (input.obj.message.embeds[0].description.includes('Filter by rank:')) {
+                filterRank = osumodcalc.checkGrade(input.obj.message.embeds[0].description.split('Filter by rank: ')[1].split('\n')[0]);
+            }
+
         }
             break;
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = parseInt(`${input.overrides.page}`)
+            page = parseInt(`${input.overrides.page}`);
         }
         if (input.overrides.type != null) {
             if (input.overrides.type == 'list') {
-                list = true
+                list = true;
             }
             if (input.overrides.type == 'listtaiko') {
-                list = true
-                mode = 'taiko'
+                list = true;
+                mode = 'taiko';
             }
             if (input.overrides.type == 'listfruits') {
-                list = true
-                mode = 'fruits'
+                list = true;
+                mode = 'fruits';
             }
             if (input.overrides.type == 'listmania') {
-                list = true
-                mode = 'mania'
+                list = true;
+                mode = 'mania';
             }
         }
+        if (input?.overrides?.sort != null) {
+            sort = input?.overrides?.sort ?? 'recent';
+        }
         if (input.overrides.mode != null) {
-            mode = input.overrides.mode
+            mode = input.overrides.mode;
         }
     }
 
     //==============================================================================================================================================================================================
 
-    const buttons = new Discord.ActionRowBuilder()
+    let buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-recent-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Refresh-recent-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-        )
-    log.logFile(
-        'command',
-        log.commandLog('recent', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
+        );
 
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'recent',
+        options: [
             {
                 name: 'User',
                 value: user
@@ -4574,11 +4668,22 @@ export async function recent(input: extypes.commandInput) {
                 name: 'List',
                 value: list
             },
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+            {
+                name: 'Filter',
+                value: filterTitle
+            },
+            {
+                name: 'Detailed',
+                value: scoredetailed
+            },
+            {
+                name: 'Rank',
+                value: filterRank
+            }
+
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     //if user is null, use searchid
@@ -4599,181 +4704,253 @@ export async function recent(input: extypes.commandInput) {
     mode = osufunc.modeValidator(mode);
 
     if (page < 2 || typeof page != 'number') {
-        isFirstPage = true;
         page = 1;
     }
-    page--
-    let pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.first)
-                .setDisabled(isFirstPage),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.previous)
-                .setDisabled(isFirstPage),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-recent-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.next)
-                .setDisabled(isLastPage),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-recent-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.last)
-                .setDisabled(isLastPage),
-        );
-    let osudata: osuApiTypes.User;
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    page--;
+
+    if (list) {
+        embedStyle = embedStyle.replace('S', 'L') as extypes.osuCmdStyle;
+    }
+
+    const checkDetails = await buttonsAddDetails('recent', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle);
+    buttons = checkDetails.buttons;
+    embedStyle = checkDetails.embedStyle;
+
+    const pgbuttons: Discord.ActionRowBuilder = await pageButtons('recent', commanduser, input.absoluteID);
+
+
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        });
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
-    osufunc.debug(osudata, 'command', 'recent', input.obj.guildId, 'osuData');
 
-    if (osudata?.error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {//@ts-ignore
-            input.obj.reply({
-                content: `Error - could not fetch user \`${user}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch()
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'recent', input.obj.guildId, 'osuData');
+
+    if (osudata?.error || !osudata.id) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'recent',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
         return;
     }
 
-    if (!osudata.id) {
-        if (input.commandType != 'button' && input.commandType != 'link') {//@ts-ignore
-            input.obj.reply({
-                content: `Error - could not fetch user \`${user}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch()
-        }
-        return;
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-recent-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
+
+    if (input.commandType == 'interaction') {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
-    if (input.commandType == 'interaction') {//@ts-ignore
-        input.obj.reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        })
-            .catch()
-    }
-
-    let rsdata: osuApiTypes.Score[] & osuApiTypes.Error;
+    let rsdataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'rsdata') &&
         input.commandType == 'button' &&
         !('error' in func.findFile(input.absoluteID, 'rsdata')) &&
         input.button != 'Refresh'
     ) {
-        rsdata = func.findFile(input.absoluteID, 'rsdata')
+        rsdataReq = func.findFile(input.absoluteID, 'rsdata');
     } else {
-        rsdata = await osufunc.apiget('recent_alt', `${osudata.id}`, `mode=${mode}&offset=0`, 2, 0, true)
+        rsdataReq = await osufunc.apiget({
+            type: 'recent',
+            params: {
+                userid: osudata.id,
+                mode,
+                opts: [`include_fails=${showFails}`, 'offset=0', 'limit=100']
+            }
+        });
     }
-    osufunc.debug(rsdata, 'command', 'recent', input.obj.guildId, 'rsData');
-    func.storeFile(rsdata, input.absoluteID, 'rsdata')
+
+    let rsdata: osuApiTypes.Score[] & osuApiTypes.Error = rsdataReq.apiData;
+
+    osufunc.debug(rsdataReq, 'command', 'recent', input.obj.guildId, 'rsData');
     if (rsdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
-                    input.obj.editReply({
-                        content: `Error - could not fetch \`${user}\`\'s recent scores`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }, 1000)
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not fetch \`${user}\`\'s recent scores`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
-
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `${errors.uErr.osu.scores.recent.replace('[ID]', user)}`,
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'recent',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: `${errors.uErr.osu.scores.recent.replace('[ID]', user)}`
+        });
         return;
     }
 
+    func.storeFile(rsdataReq, input.absoluteID, 'rsdata');
+
+    if (filterTitle) {
+        rsdata = rsdata.filter((array) =>
+            (
+                array.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                +
+                array.beatmap.version.toLowerCase().replaceAll(' ', '')
+            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            array.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.title.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
+            ||
+            filterTitle.toLowerCase().replaceAll(' ', '').includes(array.beatmap.version.toLowerCase().replaceAll(' ', ''))
+        );
+    }
+
+    if (filterRank) {
+        rsdata = rsdata.filter(x => x.rank == filterRank);
+    }
+
     const rsEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
     if (list != true) {
-        rsEmbed.setColor(colours.embedColour.score.dec)
+        rsEmbed.setColor(colours.embedColour.score.dec);
+
+        page = rsdata[page] ? page : 0;
 
         if (input.button == 'BigRightArrow') {
-            page = rsdata.length - 1
+            page = rsdata.length - 1;
         }
 
-        const curscore = rsdata[0 + page]
+        const curscore = rsdata[0 + page];
         if (!curscore || curscore == undefined || curscore == null) {
+            let err = `${errors.uErr.osu.scores.recent_ms
+                .replace('[ID]', user)
+                .replace('[MODE]', emojis.gamemodes[osufunc.modeValidator(mode)])
+                }`;
+            if (filterTitle) {
+                err = `${errors.uErr.osu.scores.recent_ms
+                    .replace('[ID]', user)
+                    .replace('[MODE]', emojis.gamemodes[osufunc.modeValidator(mode)])
+                    } matching \`${filterTitle}\``;
+            }
+
             if (input.button == null) {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
-                        input.obj.editReply({
-                            content: `Error - \`${user}\` has no recent ${mode ?? 'osu'} scores`,
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }, 1000)
-                } else {//@ts-ignore
-                    input.obj.reply(
-                        {
-                            content: `Error - \`${user}\` has no recent ${emojis.gamemodes[mode ?? 'osu']} scores`,
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        })
-                        .catch();
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: err,
+                        edit: true
+                    }
+                }, input.canReply);
             }
             return;
         }
-        const curbm = curscore.beatmap
-        const curbms = curscore.beatmapset
 
-        let mapdata: osuApiTypes.Beatmap;
+        buttons.addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Map-recent-any-${input.absoluteID}-${curscore.beatmap.id}${curscore.mods ? '+' + curscore.mods.join() : ''}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.map)
+        );
+
+        const curbm = curscore.beatmap;
+        const curbms = curscore.beatmapset;
+
+        let mapdataReq: osufunc.apiReturn;
         if (func.findFile(curbm.id, 'mapdata') &&
             !('error' in func.findFile(curbm.id, 'mapdata')) &&
             input.button != 'Refresh'
         ) {
-            mapdata = func.findFile(curbm.id, 'mapdata')
+            mapdataReq = func.findFile(curbm.id, 'mapdata');
         } else {
-            mapdata = await osufunc.apiget('map', `${curbm.id}`)
+            mapdataReq = await osufunc.apiget({
+                type: 'map',
+                params: {
+                    id: curbm.id
+                }
+            });
         }
-        osufunc.debug(mapdata, 'command', 'recent', input.obj.guildId, 'mapData');
-        func.storeFile(mapdata, curbm.id, 'mapdata')
+        const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
+
+        osufunc.debug(mapdataReq, 'command', 'recent', input.obj.guildId, 'mapData');
         if (mapdata?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
-                        input.obj.editReply({
-                            content: 'Error - could not find beatmap',
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }, 1000)
-                } else {//@ts-ignore
-                    input.obj.reply({
-                        content: 'Error - could not find beatmap',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `${errors.uErr.osu.map.m.replace('[ID]', curbm.id.toString())}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'recent',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: `${errors.uErr.osu.map.m.replace('[ID]', curbm.id.toString())}`
+            });
             return;
         }
+
+        func.storeFile(mapdataReq, curbm.id, 'mapdata');
 
         let accgr;
         let fcaccgr;
@@ -4786,14 +4963,14 @@ export async function recent(input: extypes.commandInput) {
                         gamehits.count_100,
                         gamehits.count_50,
                         gamehits.count_miss
-                    )
+                    );
                 fcaccgr =
                     osumodcalc.calcgrade(
                         gamehits.count_300,
                         gamehits.count_100,
                         gamehits.count_50,
                         0
-                    )
+                    );
                 break;
             case 'taiko':
                 accgr =
@@ -4801,13 +4978,13 @@ export async function recent(input: extypes.commandInput) {
                         gamehits.count_300,
                         gamehits.count_100,
                         gamehits.count_miss
-                    )
+                    );
                 fcaccgr =
                     osumodcalc.calcgradeTaiko(
                         gamehits.count_300,
                         gamehits.count_100,
                         0
-                    )
+                    );
                 break;
             case 'fruits':
                 accgr =
@@ -4817,7 +4994,7 @@ export async function recent(input: extypes.commandInput) {
                         gamehits.count_50,
                         gamehits.count_katu,
                         gamehits.count_miss
-                    )
+                    );
                 fcaccgr =
                     osumodcalc.calcgradeCatch(
                         gamehits.count_300,
@@ -4825,7 +5002,7 @@ export async function recent(input: extypes.commandInput) {
                         gamehits.count_50,
                         gamehits.count_katu,
                         0
-                    )
+                    );
                 break;
             case 'mania':
                 accgr =
@@ -4836,7 +5013,7 @@ export async function recent(input: extypes.commandInput) {
                         gamehits.count_100,
                         gamehits.count_50,
                         gamehits.count_miss
-                    )
+                    );
                 fcaccgr =
                     osumodcalc.calcgradeMania(
                         gamehits.count_geki,
@@ -4845,7 +5022,7 @@ export async function recent(input: extypes.commandInput) {
                         gamehits.count_100,
                         gamehits.count_50,
                         0
-                    )
+                    );
                 break;
         }
         let rspassinfo = '';
@@ -4864,60 +5041,49 @@ export async function recent(input: extypes.commandInput) {
             case 'mania':
                 totalhits = gamehits.count_geki + gamehits.count_300 + gamehits.count_katu + gamehits.count_100 + gamehits.count_50 + gamehits.count_miss;
         }
-        const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
-        const guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
-        const curbmpasstime = Math.floor(guesspasspercentage / 100 * curbm.hit_length);
-
-        let rsgrade;
-        switch (curscore.rank.toUpperCase()) {
-            case 'F':
-                rspassinfo = `\n${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.hit_length)})`
-                rsgrade = emojis.grades.F
-                break;
-            case 'D':
-                rsgrade = emojis.grades.D
-                break;
-            case 'C':
-                rsgrade = emojis.grades.C
-                break;
-            case 'B':
-                rsgrade = emojis.grades.B
-                break;
-            case 'A':
-                rsgrade = emojis.grades.A
-                break;
-            case 'S':
-                rsgrade = emojis.grades.S
-                break;
-            case 'SH':
-                rsgrade = emojis.grades.SH
-                break;
-            case 'X':
-                rsgrade = emojis.grades.X
-                break;
-            case 'XH':
-                rsgrade = emojis.grades.XH
-                break;
-        }
         let totaldiff: string;
         let hitlist: string;
-        switch (curscore.mode) {
-            case 'osu': default:
-                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
+        switch (scoredetailed) {
+            case 0: {
+                switch (curscore.mode) {
+                    case 'osu': default:
+                        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
+                        break;
+                    case 'taiko':
+                        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_miss}`;
+                        break;
+                    case 'fruits':
+                        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
+                        break;
+                    case 'mania':
+                        hitlist = `${gamehits.count_geki}/${gamehits.count_300}/${gamehits.count_katu}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
+                        break;
+                }
+            }
                 break;
-            case 'taiko':
-                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`
-                break;
-            case 'fruits':
-                hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
-                break;
-            case 'mania':
-                hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`
+            default: {
+                switch (curscore.mode) {
+                    case 'osu': default:
+                        hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+                        break;
+                    case 'taiko':
+                        hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`;
+                        break;
+                    case 'fruits':
+                        hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+                        break;
+                    case 'mania':
+                        hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+                        break;
+                }
+            }
                 break;
         }
+
         let rspp: string | number = 0;
         let ppissue: string = '';
-        let ppcalcing
+        let ppcalcing: PerformanceAttributes[];
+        let fcflag = '';
         try {
             ppcalcing = await osufunc.scorecalc({
                 mods: curscore.mods.join('').length > 1 ?
@@ -4929,194 +5095,343 @@ export async function recent(input: extypes.commandInput) {
                 maxcombo: curscore.max_combo,
                 score: curscore.score,
                 calctype: 0,
-                passedObj: 0,
-                failed: false
-            })
-            if (curscore.rank == 'F') {
-                ppcalcing = await osufunc.scorecalc({
-                    mods: curscore.mods.join('').length > 1 ?
-                        curscore.mods.join('') : 'NM',
-                    gamemode: curscore.mode,
-                    mapid: curscore.beatmap.id,
-                    miss: gamehits.count_miss,
-                    acc: curscore.accuracy,
-                    maxcombo: curscore.max_combo,
-                    score: curscore.score,
-                    calctype: 0,
-                    passedObj: totalhits,
-                    failed: true
-                }
-                )
-            }
-            totaldiff = ppcalcing[0].stars.toFixed(2)
+                passedObj: embedStuff.getTotalHits(curscore.mode, curscore),
+            }, new Date(curscore.beatmap.last_updated));
 
+            totaldiff = ppcalcing[1].difficulty.stars.toFixed(2);
 
             rspp =
                 curscore.pp ?
                     curscore.pp.toFixed(2) :
-                    ppcalcing[0].pp.toFixed(2)
+                    ppcalcing[0].pp.toFixed(2);
             osufunc.debug(ppcalcing, 'command', 'recent', input.obj.guildId, 'ppCalcing');
+
+            if (curscore.accuracy < 1 && curscore.perfect == true) {
+                fcflag = `FC\n**${ppcalcing[2].pp.toFixed(2)}**pp IF SS`;
+            }
+            if (curscore.perfect == false) {
+                fcflag =
+                    `\n**${ppcalcing[1].pp.toFixed(2)}**pp IF ${fcaccgr.accuracy.toFixed(2)}% FC
+                **${ppcalcing[2].pp.toFixed(2)}**pp IF SS`;
+            }
+            if (curscore.perfect == true && curscore.accuracy == 1) {
+                fcflag = 'FC';
+            }
+
+
         } catch (error) {
             rspp =
                 curscore.pp ?
                     curscore.pp.toFixed(2) :
-                    NaN
-            ppissue = 'Error - pp calculator could not calculate beatmap'
+                    NaN;
+            ppissue = errors.uErr.osu.performance.crash;
+            log.toOutput(error);
         }
-        let fcflag = 'FC'
-        if (curscore.accuracy != 100) {
-            fcflag += `\n**${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
+
+        const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
+        const msToFail = await osufunc.getFailPoint(totalhits, `${path}\\files\\maps\\${curbm.id}.osu`);
+
+        const curbmpasstime = Math.floor(msToFail / 1000);
+        const guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
+
+        let showFailGraph = false;
+        let FailGraph = '';
+
+        let rsgrade;
+        switch (curscore.rank.toUpperCase()) {
+            case 'F': {
+                rspassinfo = `${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.total_length)})`;
+                rsgrade = emojis.grades.F;
+                // showFailGraph = true;
+                // const strains = await osufunc.straincalc(mapdata.id, curscore.mods.join(''), 0, mapdata.mode, new Date(mapdata.last_updated));
+
+                // FailGraph = await msgfunc.SendFileToChannel(input.graphChannel,
+                //     await osufunc.failGraph(
+                //         {
+                //             x: strains.strainTime,
+                //             y: strains.value,
+                //         },
+                //         {
+                //             time: msToFail,
+                //             objectNumber: totalhits,
+                //         }
+                //     ));
+            }
+                break;
+            case 'D':
+                rsgrade = emojis.grades.D;
+                break;
+            case 'C':
+                rsgrade = emojis.grades.C;
+                break;
+            case 'B':
+                rsgrade = emojis.grades.B;
+                break;
+            case 'A':
+                rsgrade = emojis.grades.A;
+                break;
+            case 'S':
+                rsgrade = emojis.grades.S;
+                break;
+            case 'SH':
+                rsgrade = emojis.grades.SH;
+                break;
+            case 'X':
+                rsgrade = emojis.grades.X;
+                break;
+            case 'XH':
+                rsgrade = emojis.grades.XH;
+                break;
         }
-        if (curscore.perfect == false) {
-            fcflag =
-                `\n**${ppcalcing[1].pp.toFixed(2)}**pp IF ${fcaccgr.accuracy.toFixed(2)}% FC
-            **${ppcalcing[2].pp.toFixed(2)}**pp IF SS`
-        }
+
         const title =
             curbms.title == curbms.title_unicode ?
                 curbms.title :
-                `${curbms.title} (${curbms.title_unicode})`
+                `${curbms.title} (${curbms.title_unicode})`;
         const artist =
             curbms.artist == curbms.artist_unicode ?
                 curbms.artist :
-                `${curbms.artist} (${curbms.artist_unicode})`
-        const fulltitle = `${artist} - ${title} [${curbm.version}]`
-        let trycount = 1
+                `${curbms.artist} (${curbms.artist_unicode})`;
+        const fulltitle = `${artist} - ${title} [${curbm.version}]`;
+        let trycount = 1;
         for (let i = rsdata.length - 1; i > (page); i--) {
             if (curbm.id == rsdata[i].beatmap.id) {
-                trycount++
+                trycount++;
             }
         }
         const trycountstr = `try #${trycount}`;
 
         rsEmbed
-            .setTitle(`#${page + 1} most recent play for ${curscore.user.username} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>`)
+            .setTitle(`#${page + 1} most recent ${showFails == 1 ? 'play' : 'pass'} for ${curscore.user.username} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>`)
             .setURL(`https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}`)
             .setAuthor({
-                name: `${trycountstr}`,
+                name: `${trycountstr} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
                 url: `https://osu.ppy.sh/u/${osudata.id}`,
                 iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
             })
-            .setThumbnail(`${curbms.covers.list}`)
-            .setDescription(`
+            .setThumbnail(`${curbms.covers.list}`);
+        switch (scoredetailed) {
+            case 0: {
+                rsEmbed
+                    .setDescription(`
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
 ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
+${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+${rspassinfo}\n\`${hitlist}\` | ${curscore.max_combo}x/**${mapdata.max_combo}x** combo
+**${rspp}**pp ${fcflag}\n${ppissue}
+`);
+            }
+                break;
+            case 1: default: {
+                rsEmbed
+                    .setDescription(`
+[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
+${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
+${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
+${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}
 `)
-            .addFields([
-                {
-                    name: 'SCORE DETAILS',
-                    value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}` +
-                        `${rspassinfo}\n${hitlist}\n${curscore.max_combo}x combo`,
-                    inline: true
-                },
-                {
-                    name: 'PP',
-                    value: `**${rspp}**pp ${fcflag}\n${ppissue}`,
-                    inline: true
-                }
-            ])
+                    .addFields([
+                        {
+                            name: 'SCORE DETAILS',
+                            value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
+                                `${rspassinfo}\n${hitlist}\n${curscore.max_combo}x/**${mapdata.max_combo}x** combo`,
+                            inline: true
+                        },
+                        {
+                            name: 'PP',
+                            value: `**${rspp}**pp ${fcflag}\n${ppissue}`,
+                            inline: true
+                        }
+                    ]);
+            }
+                break;
+            case 2: {
+                const newValues = osumodcalc.calcValues(
+                    mapdata.cs, mapdata.ar, mapdata.accuracy, mapdata.drain,
+                    mapdata.bpm, mapdata.hit_length,
+                    curscore.mods.join('')
+                );
+                const csStr = mapdata.cs == newValues.cs ?
+                    `CS${mapdata.cs}` :
+                    `CS${mapdata.cs}=>${newValues.cs}`;
+                const arStr = mapdata.ar == newValues.ar ?
+                    `AR${mapdata.ar}` :
+                    `AR${mapdata.ar}=>${newValues.ar}`;
+                const odStr = mapdata.accuracy == newValues.od ?
+                    `OD${mapdata.accuracy}` :
+                    `OD${mapdata.accuracy}=>${newValues.od}`;
+                const hpStr = mapdata.drain == newValues.hp ?
+                    `HP${mapdata.drain}` :
+                    `HP${mapdata.drain}=>${newValues.hp}`;
+                const bpmStr = mapdata.bpm == newValues.bpm ?
+                    `${emojis.mapobjs.bpm}${mapdata.bpm}` :
+                    `${emojis.mapobjs.bpm}${mapdata.bpm}=>${newValues.bpm}`;
+                const lenStr = mapdata.hit_length == newValues.length ?
+                    `${emojis.mapobjs.total_length}${calc.secondsToTime(mapdata.hit_length)}` :
+                    `${emojis.mapobjs.total_length}${calc.secondsToTime(mapdata.hit_length)}=>${calc.secondsToTime(newValues.length)}`;
+                const srStr = mapdata.difficulty_rating.toFixed(2) == (ppcalcing[0]?.difficulty?.stars.toFixed(2) ?? mapdata.difficulty_rating.toFixed(2)) ?
+                    `${mapdata.difficulty_rating.toFixed(2)}⭐` :
+                    `⭐${mapdata.difficulty_rating.toFixed(2)}=>${ppcalcing[0]?.difficulty?.stars?.toFixed(2)}`;
 
-        if (page >= rsdata.length - 1) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[2].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[3].setDisabled(true)
+
+                rsEmbed
+                    .setDescription(`
+[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
+${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
+${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
+${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}`)
+                    .addFields([
+                        {
+                            name: 'SCORE DETAILS',
+                            value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
+                                `${rspassinfo}\n${hitlist}\n${curscore.max_combo}x/**${mapdata.max_combo}x** combo`,
+                            inline: true
+                        },
+                        {
+                            name: 'PP',
+                            value: `**${rspp}**pp ${fcflag}\n${ppissue}`,
+                            inline: true
+                        },
+                        {
+                            name: '-',
+                            value: '-',
+                            inline: true
+                        },
+                        {
+                            name: 'Map details',
+                            value: //CS AR OD HP SR
+                                `
+${csStr} 
+${arStr} 
+${odStr} 
+${hpStr}
+`,
+                            inline: true
+                        },
+                        {
+                            name: '-',
+                            value: //CS AR OD HP SR
+                                `
+${bpmStr}
+${lenStr} 
+${srStr}
+`,
+                            inline: true
+                        }
+                    ]);
+            }
+                break;
         }
 
-        osufunc.writePreviousId('map', input.obj.guildId, `${curbm.id}`)
-        osufunc.writePreviousId('score', input.obj.guildId, JSON.stringify(curscore))
-        osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`)
+        //if first page, disable previous button
+        if (page == 0) {
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        } else {
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(false);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(false);
+        }
+
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+
+        //if last page, disable next button
+        if (page >= rsdata.length - 1) {
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
+        } else {
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(false);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(false);
+        }
+
+
+        osufunc.writePreviousId('map', input.obj.guildId,
+            {
+                id: `${curbm.id}`,
+                apiData: null,
+                mods: curscore.mods.join()
+            });
+        osufunc.writePreviousId('score', input.obj.guildId,
+            {
+                id: `${curscore.id}`,
+                apiData: curscore,
+                mods: curscore.mods.join()
+            });
+        osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
     } else if (list == true) {
-        pgbuttons = new Discord.ActionRowBuilder()
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
-                    .setStyle(buttonsthing.type.current)
-                    .setEmoji(buttonsthing.label.page.first),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-recent-${commanduser.id}-${input.absoluteID}`)
-                    .setStyle(buttonsthing.type.current)
-                    .setEmoji(buttonsthing.label.page.previous),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`Search-recent-${commanduser.id}-${input.absoluteID}`)
-                    .setStyle(buttonsthing.type.current)
-                    .setEmoji(buttonsthing.label.page.search),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-recent-${commanduser.id}-${input.absoluteID}`)
-                    .setStyle(buttonsthing.type.current)
-                    .setEmoji(buttonsthing.label.page.next),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-recent-${commanduser.id}-${input.absoluteID}`)
-                    .setStyle(buttonsthing.type.current)
-                    .setEmoji(buttonsthing.label.page.last),
-            )
         rsEmbed
             .setColor(colours.embedColour.scorelist.dec)
-            .setTitle(`Recent plays for ${osudata.username}`);
+            .setTitle(`Recent ${showFails == 1 ? 'plays' : 'passes'} for ${osudata.username}`)
+            .setThumbnail(`${osudata.avatar_url ?? def.images.any.url}`)
+            ;
+        if (sort == 'pp') {
+            rsEmbed.setTitle(`Best recent ${showFails == 1 ? 'play' : 'passes'} for ${osudata.username}`);
+        }
+
         const scoresarg = await embedStuff.scoreList(
             {
                 scores: rsdata,
-                detailed: false,
+                detailed: scoredetailed,
                 showWeights: false,
                 page: page,
                 showMapTitle: true,
-                showTruePosition: false,
-                sort: 'recent',
+                showTruePosition: (sort != 'recent'),
+                sort: sort,
                 truePosType: 'recent',
                 filteredMapper: null,
                 filteredMods: null,
+                filterMapTitle: filterTitle,
+                filterRank,
                 reverse: false
-            })
+            },
+            {
+                useScoreMap: true
+            });
         if (scoresarg.fields.length == 0) {
             rsEmbed.addFields([{
                 name: 'Error',
                 value: 'No scores found',
                 inline: false
-            }])
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[0].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[1].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[2].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[3].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[4].setDisabled(true)
+            }]);
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         } else {
             for (let i = 0; scoresarg.fields.length > i; i++) {
-                rsEmbed.addFields(scoresarg.fields[i])
+                rsEmbed.addFields(scoresarg.fields[i]);
             }
         }
-        rsEmbed.setDescription(`Page: ${page + 1}/${Math.ceil(rsdata.length / 5)}\n${emojis.gamemodes[mode]}`)
-        rsEmbed.setFooter({ text: `-` })
+        rsEmbed.setDescription(`Page: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
+${emojis.gamemodes[mode]}
+${filterTitle ? `Filter: ${filterTitle}` : ''}
+`);
         if (scoresarg.isFirstPage) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[0].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[1].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
         }
         if (scoresarg.isLastPage) {
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[3].setDisabled(true)
-            //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-            pgbuttons.components[4].setDisabled(true)
+            (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+            (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         }
     }
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
     if (input.commandType != 'button' || input.button == 'Refresh') {
         try {
-            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata)
+            osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            console.log(error)
+            log.toOutput(error);
         }
     }
+
+    rsEmbed.setFooter({ text: `${embedStyle}` });
+
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -5124,17 +5439,27 @@ ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, 
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'recent',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'recent',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
@@ -5144,11 +5469,14 @@ ID: ${input.absoluteID}
 export async function replayparse(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
-    let replay;
+    let replay: extypes.replay;
+
+    const embedStyle: extypes.osuCmdStyle = 'S';
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
         }
             break;
@@ -5156,6 +5484,7 @@ export async function replayparse(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
 
@@ -5163,11 +5492,13 @@ export async function replayparse(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
         case 'link': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
         } break;
     }
@@ -5175,131 +5506,160 @@ export async function replayparse(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('replayparse', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'replay parse',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     try {
-        replay = replayparser.parseReplay('./files/replay.osr')
+        replay = replayparser.parseReplay(`${filespath}\\replays\\${input.absoluteID}.osr`);
     } catch (err) {
+        log.logCommand(
+            {
+                commandName: 'replayparse',
+                event: 'Error',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: 'Could not parse replay\n' + err
+            }
+        );
         return;
     }
     osufunc.debug(replay, 'fileparse', 'replay', input.obj.guildId, 'replayData');
 
-    let mapdata: osuApiTypes.Beatmap;
+    let mapdataReq: osufunc.apiReturn;
+
     if (func.findFile(replay.beatmapMD5, `mapdata`) &&
 
         !('error' in func.findFile(replay.beatmapMD5, `mapdata`)) &&
         input.button != 'Refresh') {
-        mapdata = func.findFile(replay.beatmapMD5, `mapdata`)
+        mapdataReq = func.findFile(replay.beatmapMD5, `mapdata`);
     } else {
-        mapdata = await osufunc.apiget('map_get_md5', replay.beatmapMD5)
+        mapdataReq = await osufunc.apiget(
+            {
+                type: 'map_get_md5',
+                params: {
+                    md5: replay.beatmapMD5
+                }
+            });
     }
-    func.storeFile(mapdata, replay.beatmapMD5, 'mapdata')
+    const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
+    func.storeFile(mapdataReq, replay.beatmapMD5, 'mapdata');
 
-    osufunc.debug(mapdata, 'fileparse', 'replay', input.obj.guildId, 'mapData');
+    osufunc.debug(mapdataReq, 'fileparse', 'replay', input.obj.guildId, 'mapData');
     if (mapdata?.id) {
-        typeof mapdata.id == 'number' ? osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`) : ''
+        typeof mapdata.id == 'number' ? osufunc.writePreviousId('map', input.obj.guildId,
+            {
+                id: `${mapdata.id}`,
+                apiData: null,
+                mods: osumodcalc.ModIntToString(replay.mods)
+            }
+        ) : '';
     }
-    let osudata: osuApiTypes.User;
-    if (func.findFile(replay.playerName, 'osudata') &&
-        !('error' in func.findFile(replay.playerName, 'osudata')) &&
+
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu')) &&
+        !('error' in func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu'))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(replay.playerName, 'osudata')
+        osudataReq = func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu'));
     } else {
-        osudata = await osufunc.apiget('user', `${await replay.playerName}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: replay.playerName,
+                mode: osufunc.modeValidator('osu')
+            }
+        });
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, replay.playerName, 'osudata')
-    osufunc.debug(osudata, 'fileparse', 'replay', input.obj.guildId, 'osuData');
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(replay.gameMode));
+    func.storeFile(osudataReq, replay.playerName, 'osudata', osufunc.modeValidator(replay.gameMode));
+    osufunc.debug(osudataReq, 'fileparse', 'replay', input.obj.guildId, 'osuData');
     let userid: string | number;
     try {
-        userid = osudata.id
+        userid = osudata.id;
     } catch (err) {
-        userid = 0
-        return
+        userid = 0;
+        return;
     }
     let mapbg: string;
     let mapcombo: string | number;
     let fulltitle: string;
     let mapdataid: string;
     try {
-        mapbg = mapdata.beatmapset.covers['list@2x']
-        fulltitle = `${mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist}`
+        mapbg = mapdata.beatmapset.covers['list@2x'];
+        fulltitle = `${mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist}`;
         fulltitle += ` - ${mapdata.beatmapset.title != mapdata.beatmapset.title_unicode ? `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})` : mapdata.beatmapset.title}`
-            + ` [${mapdata.version}]`
-        mapcombo = mapdata.max_combo ? mapdata.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : NaN
-        mapdataid = 'https://osu.ppy.sh/b/' + mapdata.id
+            + ` [${mapdata.version}]`;
+        mapcombo = mapdata.max_combo ? mapdata.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : NaN;
+        mapdataid = 'https://osu.ppy.sh/b/' + mapdata.id;
     } catch (error) {
-        fulltitle = 'Unknown/unavailable map'
+        fulltitle = 'Unknown/unavailable map';
         mapbg = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
-        mapcombo = NaN
-        mapdataid = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png'
+        mapcombo = NaN;
+        mapdataid = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
     }
 
-    const mods = replay.mods
+    const mods = replay.mods;
     let ifmods: string;
     if (mods != 0) {
-        ifmods = `+${osumodcalc.ModIntToString(mods)}`
+        ifmods = `+${osumodcalc.ModIntToString(mods)}`;
     } else {
-        ifmods = ''
+        ifmods = '';
     }
-    const gameMode = replay.gameMode
+    const gameMode = replay.gameMode;
     let accuracy: number;
     let xpp: object;
     let hitlist: string;
     let fcacc: number;
     let ppissue: string;
-    let totalhits = 0
+    let totalhits = 0;
 
     switch (gameMode) {
         case 0:
-            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
-            accuracy = osumodcalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, replay.misses).accuracy
-            fcacc = osumodcalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, 0).accuracy
-            totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.misses
+            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`;
+            accuracy = osumodcalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, replay.misses).accuracy;
+            fcacc = osumodcalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, 0).accuracy;
+            totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.misses;
             break;
         case 1:
 
-            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.misses}`
-            accuracy = osumodcalc.calcgradeTaiko(replay.number_300s, replay.number_100s, replay.misses).accuracy
-            fcacc = osumodcalc.calcgradeTaiko(replay.number_300s, replay.number_100s, 0).accuracy
-            totalhits = replay.number_300s + replay.number_100s + replay.misses
+            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.misses}`;
+            accuracy = osumodcalc.calcgradeTaiko(replay.number_300s, replay.number_100s, replay.misses).accuracy;
+            fcacc = osumodcalc.calcgradeTaiko(replay.number_300s, replay.number_100s, 0).accuracy;
+            totalhits = replay.number_300s + replay.number_100s + replay.misses;
             break;
         case 2:
 
-            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
-            accuracy = osumodcalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, replay.misses).accuracy
-            fcacc = osumodcalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, 0).accuracy
-            totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.katus + replay.misses
+            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`;
+            accuracy = osumodcalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, replay.misses).accuracy;
+            fcacc = osumodcalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, 0).accuracy;
+            totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.katus + replay.misses;
             break;
         case 3:
 
-            hitlist = `${replay.gekis}/${replay.number_300s}/${replay.katus}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`
-            accuracy = osumodcalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, replay.misses).accuracy
-            fcacc = osumodcalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, 0).accuracy
-            totalhits = replay.gekis + replay.number_300s + replay.katus + replay.number_100s + replay.number_50s + replay.misses
+            hitlist = `${replay.gekis}/${replay.number_300s}/${replay.katus}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`;
+            accuracy = osumodcalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, replay.misses).accuracy;
+            fcacc = osumodcalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, 0).accuracy;
+            totalhits = replay.gekis + replay.number_300s + replay.katus + replay.number_100s + replay.number_50s + replay.misses;
             break;
     }
-    const failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true
+    const failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true;
 
     try {
+        if (!mapdata.id) throw new Error('no map');
         xpp = await osufunc.scorecalc({
             mods: osumodcalc.ModIntToString(replay.mods),
             gamemode: osumodcalc.ModeIntToName(replay.gameMode),
@@ -5310,43 +5670,53 @@ export async function replayparse(input: extypes.commandInput) {
             score: replay.score,
             calctype: 0,
             passedObj: totalhits,
-            failed: failed
-        })
-        ppissue = ''
+        }, new Date(mapdata.last_updated));
+        ppissue = '';
     } catch (error) {
         xpp = [{
             pp: 0
         },
         {
             pp: 0
-        }]
-        ppissue = 'Error - could not fetch beatmap'
+        }];
+        ppissue = errors.uErr.osu.performance.mapMissing;
     }
 
-    const lifebar = replay.life_bar.split('|')
-    const lifebarF = []
+    const lifebar = replay.life_bar.split('|');
+    const lifebarF = [];
     for (let i = 0; i < lifebar.length; i++) {
-        lifebarF.push(lifebar[i].split(',')[0])
+        lifebarF.push(lifebar[i].split(',')[0]);
     }
-    lifebarF.shift()
+    lifebarF.shift();
 
-    const dataLabel = ['Start']
+    const dataLabel = ['Start'];
 
     for (let i = 0; i < lifebarF.length; i++) {
-        dataLabel.push('')
+        dataLabel.push('');
 
     }
 
-    dataLabel.push('end')
+    dataLabel.push('end');
 
-    const passper = Math.abs(totalhits / (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners)) * 100
+    const passper = Math.abs(totalhits / (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners)) * 100;
 
     const isfail = failed ?
         `${passper.toFixed(2)}% passed (${calc.secondsToTime(passper / 100 * mapdata.hit_length)}/${calc.secondsToTime(mapdata.hit_length)})`
-        : ''
+        : '';
 
-    const chart = await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay')
+    const chart = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay'));
+
+    const UR =
+        mapdata.id ?
+            await osufunc.calcUr(
+                `${filespath}\\replays\\${input.absoluteID}.osr`,
+                `${path}/files/maps/${mapdata.id}.osu`
+            ) : null;
+
     const Embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.score.dec)
         .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
         .setTitle(`${fulltitle} ${ifmods}`)
@@ -5356,6 +5726,7 @@ export async function replayparse(input: extypes.commandInput) {
             `
 ${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapcombo}x** | ${accuracy.toFixed(2)}%
 \`${hitlist}\`
+${UR ? `${UR.unstablerate.toFixed(2)}UR | ${UR.averageEarly.toFixed(2)}ms - ${UR.averageLate.toFixed(2)}ms` : ''}
 ${xpp[0].pp.toFixed(2)}pp | ${xpp[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC 
 ${ppissue}
 ${isfail}
@@ -5365,31 +5736,39 @@ ${isfail}
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: [Embed]
         }
-    })
+    }, input.canReply);
 
-
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'replayparse',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'replayparse',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
 /**
  * parse score and return data
  */
-export async function scoreparse(input: extypes.commandInput) {
+export async function scoreparse(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -5397,11 +5776,32 @@ export async function scoreparse(input: extypes.commandInput) {
     let scoremode: string;
     let scoreid: number | string;
 
+    let embedStyle: extypes.osuCmdStyle = 'S';
+    let scoredetailed: number = 1;
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
+
+            if (input.args.includes('-detailed')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if (input.args.includes('-d')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if (input.args.includes('-compress')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if (input.args.includes('-c')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
+            }
+
             scorelink = null;
             scoremode = input.args[1] ?? 'osu';
             scoreid = input.args[0];
@@ -5411,6 +5811,7 @@ export async function scoreparse(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
 
@@ -5418,38 +5819,94 @@ export async function scoreparse(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
+
+            //osu.ppy.sh/scores/<mode>/<id>
+            scoremode = input.obj.message.embeds[0].url.split('scores')[1].split('/')[1];
+            scoreid = input.obj.message.embeds[0].url.split('scores')[1].split('/')[2];
+
+            switch (input.button) {
+                case 'Detail0':
+                    scoredetailed = 0;
+                    break;
+                case 'Detail1':
+                    scoredetailed = 1;
+                    break;
+                case 'Detail2':
+                    scoredetailed = 2;
+                    break;
+                default:
+                    if (input.obj.message.embeds[0].footer.text.includes('LE')) {
+                        scoredetailed = 2;
+                    }
+                    if (input.obj.message.embeds[0].footer.text.includes('LC')) {
+                        scoredetailed = 0;
+                    }
+                    break;
+            }
         }
             break;
         case 'link': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-ignore
-            const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
+            input.obj = (input.obj as Discord.Message);
+
+            if (input.args.includes('-detailed')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if (input.args.includes('-d')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if (input.args.includes('-compress')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if (input.args.includes('-c')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
+            }
+
+            commanduser = input.obj.author;
+            const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
             try {
-                scorelink = messagenohttp.split('/scores/')[1]
-                scoremode = scorelink.split('/')[0]
-                scoreid = scorelink.split('/')[1]
+                scorelink = messagenohttp.split('/scores/')[1];
+                scoremode = scorelink.split('/')[0];
+                scoreid = scorelink.split('/')[1];
+                scoreid.includes(' ') ?
+                    scoreid = scoreid.split(' ')[0] : null;
             } catch (error) {
                 return;
             }
         }
     }
 
+    if (input.overrides != null) {
+        if (input.overrides?.id != null) {
+            scoreid = input.overrides.id;
+        }
+        if (input.overrides?.mode != null) {
+            scoremode = input.overrides.mode;
+        }
+        if (input.overrides?.commanduser != null) {
+            commanduser = input.overrides.commanduser;
+        }
+        if (input.overrides?.commandAs != null) {
+            input.commandType = input.overrides.commandAs;
+        }
+    }
+
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('scoreparse', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'score parse',
+        options: [
             {
                 name: 'Score Link',
                 value: `${scorelink}`
@@ -5462,146 +5919,230 @@ export async function scoreparse(input: extypes.commandInput) {
                 name: 'Score ID',
                 value: `${scoreid}`
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let scoredata: osuApiTypes.Score;
+    let scoredataReq: osufunc.apiReturn;
 
     if (func.findFile(scoreid, 'scoredata') &&
         !('error' in func.findFile(scoreid, 'scoredata')) &&
         input.button != 'Refresh'
     ) {
-        scoredata = func.findFile(scoreid, 'scoredata')
+        scoredataReq = func.findFile(scoreid, 'scoredata');
     } else {
-        scoredata = await osufunc.apiget('score', `${scoreid}`, `${scoremode}`)
+        scoredataReq = await osufunc.apiget(
+            {
+                type: 'score',
+                params: {
+                    id: scoreid,
+                    mode: osufunc.modeValidator(scoremode)
+                }
+            });
     }
-    func.storeFile(scoredata, scoreid, 'scoredata')
+
+    const scoredata: osuApiTypes.Score = scoredataReq.apiData;
+
 
     if (scoredata?.error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {//@ts-ignore
-            input.obj.reply({
-                content: 'Error - could not fetch score data',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch()
-
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.score.nd
+                        .replace('[SID]', scoreid.toString())
+                        .replace('[MODE]', scoremode),
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scoreparse',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.uErr.osu.score.nd
+                .replace('[SID]', scoreid.toString())
+                .replace('[MODE]', scoremode)
+        });
         return;
     }
-    try {
-        if (typeof scoredata?.error != 'undefined') {//@ts-ignore
-            input.obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
-                .catch();
-            return;
+    if (typeof scoredata?.error != 'undefined') {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`,
+                    edit: true
+                }
+            }, input.canReply);
         }
-    } catch (error) {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scoreparse',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`
+        });
+        return;
+    }
+    func.storeFile(scoredataReq, scoreid, 'scoredata', osufunc.modeValidator(scoredata.mode));
+
+    let buttons = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Refresh-scoreparse-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.refresh),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Map-scoreparse-any-${input.absoluteID}-${scoredata.beatmap.id}${scoredata.mods ? '+' + scoredata.mods.join() : ''}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.map),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-User-scoreparse-any-${input.absoluteID}-${scoredata.user_id}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.user),
+        );
+
+    const checkDetails = await buttonsAddDetails('scoreparse', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle);
+    buttons = checkDetails.buttons;
+    embedStyle = checkDetails.embedStyle;
+
+    if (input.commandType == 'interaction' && input.overrides == null) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
-    if (input.commandType == 'interaction') {//@ts-ignore
-        input.obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
-            .catch();
-
-    }
-
-    osufunc.debug(scoredata, 'command', 'scoreparse', input.obj.guildId, 'scoreData');
+    osufunc.debug(scoredataReq, 'command', 'scoreparse', input.obj.guildId, 'scoreData');
     try {
         scoredata.rank.toUpperCase();
-    } catch (error) {//@ts-ignore
-        input.obj.reply({ content: 'This score is unsubmitted/failed/invalid and cannot be parsed', allowedMentions: { repliedUser: false } })
-            .catch();
+    } catch (error) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`,
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scoreparse',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`,
+        });
         return;
     }
-    let mapdata: osuApiTypes.Beatmap;
+    let mapdataReq: osufunc.apiReturn;
     if (func.findFile(scoredata.beatmap.id, 'mapdata') &&
         !('error' in func.findFile(scoredata.beatmap.id, 'mapdata')) &&
         input.button != 'Refresh') {
-        mapdata = func.findFile(scoredata.beatmap.id, 'mapdata')
+        mapdataReq = func.findFile(scoredata.beatmap.id, 'mapdata');
     } else {
-        mapdata = await osufunc.apiget('map_get', `${scoredata.beatmap.id}`)
+        mapdataReq = await osufunc.apiget({
+            type: 'map',
+            params: {
+                id: scoredata.beatmap.id,
+            }
+        });
     }
-    func.storeFile(mapdata, scoredata.beatmap.id, 'mapdata')
+
+    const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
 
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
-                    input.obj.editReply({
-                        content: 'Error - could not fetch beatmap data',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }, 1000)
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: 'Error - could not fetch beatmap data',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.map.m.replace('[ID]', scoredata.beatmap.id.toString()),
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scoreparse',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.uErr.osu.map.m.replace('[ID]', scoredata.beatmap.id.toString())
+        });
+        return;
     }
 
-    const ranking = scoredata.rank ? scoredata.rank : 'f'
-    let scoregrade = emojis.grades.F
+    func.storeFile(mapdataReq, scoredata.beatmap.id, 'mapdata');
+
+    const ranking = scoredata.rank ? scoredata.rank : 'f';
+    let scoregrade = emojis.grades.F;
     switch (ranking.toUpperCase()) {
         case 'F':
-            scoregrade = emojis.grades.F
+            scoregrade = emojis.grades.F;
             break;
         case 'D':
-            scoregrade = emojis.grades.D
+            scoregrade = emojis.grades.D;
             break;
         case 'C':
-            scoregrade = emojis.grades.C
+            scoregrade = emojis.grades.C;
             break;
         case 'B':
-            scoregrade = emojis.grades.B
+            scoregrade = emojis.grades.B;
             break;
         case 'A':
-            scoregrade = emojis.grades.A
+            scoregrade = emojis.grades.A;
             break;
         case 'S':
-            scoregrade = emojis.grades.S
+            scoregrade = emojis.grades.S;
             break;
         case 'SH':
-            scoregrade = emojis.grades.SH
+            scoregrade = emojis.grades.SH;
             break;
         case 'X':
-            scoregrade = emojis.grades.X
+            scoregrade = emojis.grades.X;
             break;
         case 'XH':
-            scoregrade = emojis.grades.XH
+            scoregrade = emojis.grades.XH;
 
             break;
     }
-    const gamehits = scoredata.statistics
+    const gamehits = scoredata.statistics;
 
-    const mode = scoredata.mode
+    const mode = scoredata.mode;
     let hitlist: string;
     let fcacc: number;
     let ppissue: string;
 
     if (mode == 'osu') {
-        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
-        fcacc = osumodcalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy
+        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
+        fcacc = osumodcalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy;
     }
     if (mode == 'taiko') {
-        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_miss}`
-        fcacc = osumodcalc.calcgradeTaiko(gamehits.count_300, gamehits.count_100, gamehits.count_miss).accuracy
+        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_miss}`;
+        fcacc = osumodcalc.calcgradeTaiko(gamehits.count_300, gamehits.count_100, gamehits.count_miss).accuracy;
 
     }
     if (mode == 'fruits') {
-        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
-        fcacc = osumodcalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_katu, gamehits.count_miss).accuracy
+        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
+        fcacc = osumodcalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_katu, gamehits.count_miss).accuracy;
     }
     if (mode == 'mania') {
-        hitlist = `${gamehits.count_geki}/${gamehits.count_300}/${gamehits.count_katu}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`
-        fcacc = osumodcalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy
+        hitlist = `${gamehits.count_geki}/${gamehits.count_300}/${gamehits.count_katu}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
+        fcacc = osumodcalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy;
     }
-    let ppcalcing;
+    let ppcalcing: PerformanceAttributes[];
     try {
         ppcalcing = await osufunc.scorecalc({
             mods: scoredata.mods.join('').length > 1 ?
@@ -5613,127 +6154,587 @@ export async function scoreparse(input: extypes.commandInput) {
             maxcombo: scoredata.max_combo,
             score: scoredata.score,
             calctype: 0,
-            passedObj: 0,
-            failed: false
-        })
+            passedObj: embedStuff.getTotalHits(scoredata.mode, scoredata),
+        }, new Date(mapdata.last_updated));
 
         ppissue = '';
         osufunc.debug(ppcalcing, 'command', 'scoreparse', input.obj.guildId, 'ppCalcing');
     } catch (error) {
-        ppcalcing = [{
-            pp: 0.000
-        }, {
-            pp: 0.000
-        }]
-        ppissue = 'Error - pp calculator could not fetch beatmap'
+        const ppComputedTemp: PerformanceAttributes = {
+            mode: mapdata.mode_int,
+            pp: 0,
+            difficulty: {
+                mode: mapdata.mode_int,
+                stars: mapdata.difficulty_rating,
+                maxCombo: mapdata.max_combo,
+                aim: 0,
+                speed: 0,
+                flashlight: 0,
+                sliderFactor: 0,
+                speedNoteCount: 0,
+                ar: mapdata.ar,
+                od: mapdata.accuracy,
+                nCircles: mapdata.count_circles,
+                nSliders: mapdata.count_sliders,
+                nSpinners: mapdata.count_spinners,
+                stamina: 0,
+                rhythm: 0,
+                color: 0,
+                hitWindow: 0,
+                nFruits: mapdata.count_circles,
+                nDroplets: mapdata.count_sliders,
+                nTinyDroplets: mapdata.count_spinners,
+            },
+            ppAcc: 0,
+            ppAim: 0,
+            ppDifficulty: 0,
+            ppFlashlight: 0,
+            ppSpeed: 0,
+            effectiveMissCount: 0,
+
+        };
+        ppcalcing = [
+            ppComputedTemp,
+            ppComputedTemp,
+            ppComputedTemp
+        ];
+        ppissue = 'Error - pp calculator could not fetch beatmap';
 
     }
 
-    let artist = scoredata.beatmapset.artist
-    const artistuni = scoredata.beatmapset.artist_unicode
-    let title = scoredata.beatmapset.title
-    const titleuni = scoredata.beatmapset.title_unicode
+    let artist = scoredata.beatmapset.artist;
+    const artistuni = scoredata.beatmapset.artist_unicode;
+    let title = scoredata.beatmapset.title;
+    const titleuni = scoredata.beatmapset.title_unicode;
 
     if (artist != artistuni) {
-        artist = `${artist} (${artistuni})`
+        artist = `${artist} (${artistuni})`;
     }
 
     if (title != titleuni) {
-        title = `${title} (${titleuni})`
+        title = `${title} (${titleuni})`;
     }
-    let pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`
+    let pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`;
 
     if (scoredata.accuracy == 1) {
         if (scoredata.perfect == true) {
-            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp`
+            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp`;
         } else {
-            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`
+            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`;
         }
     } else {
         if (scoredata.perfect == true) {
-            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[2].pp.toFixed(2)}pp if SS`
+            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[2].pp.toFixed(2)}pp if SS`;
         } else {
-            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC | ${ppcalcing[2].pp.toFixed(2)}pp if SS`
+            pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC | ${ppcalcing[2].pp.toFixed(2)}pp if SS`;
         }
     }
 
-    let osudata: osuApiTypes.User;
-    if (func.findFile(scoredata.user.username, 'osudata') &&
-        !('error' in func.findFile(scoredata.user.username, 'osudata')) &&
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(scoredata.user.username, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(scoredata.user.username, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(scoredata.user.username, 'osudata')
+        osudataReq = func.findFile(scoredata.user.username, 'osudata', osufunc.modeValidator(mode));
     } else {
-        osudata = await osufunc.apiget('user', `${await scoredata.user.username}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: scoredata.user.username,
+                mode: osufunc.modeValidator(mode)
+            }
+        });
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, scoredata.user.username, 'osudata')
-    osufunc.debug(osudata, 'command', 'scoreparse', input.obj.guildId, 'osuData')
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'scoreparse', input.obj.guildId, 'osuData');
     if (osudata?.error) {
-        if (input.commandType == 'interaction') {
-            setTimeout(() => {//@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not find user \`${scoredata?.user?.username}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }, 1000);
-        } else {//@ts-ignore
-            input.obj.reply({
-                content: `Error - could not find user \`${scoredata?.user?.username}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `${errors.uErr.osu.profile.user
+                        .replace('[ID]', scoredata?.user?.username)
+                        }`,
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scoreparse',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: `${errors.uErr.osu.profile.user
+                .replace('[ID]', scoredata?.user?.username)
+                } AKA ${scoredata.user.username}`
+        });
         return;
     }
+
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, scoredata.user.username, 'osudata', osufunc.modeValidator(mode));
+
     const scoreembed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.score.dec)
         .setAuthor({
-            name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
+            name: `${osudata.username} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
         })
         .setTitle(`${artist} - ${title}`)
-        .setURL(`https://osu.ppy.sh/b/${scoredata.beatmap.id}`)
-        .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`)
-        .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + scoredata.mods.join('') : ''}
+        .setURL(`https://osu.ppy.sh/scores/${mode}/${scoreid}`)
+        .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`);
+    switch (scoredetailed) {
+        case 0: {
+            embedStyle = 'LC';
+            scoreembed
+                .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
 ${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
+\`${hitlist}\`
+${scoredata?.pp?.toFixed(2) ?? 'null '}pp
+`);
+        }
+            break;
+        case 1: default: {
+            embedStyle = 'L';
+            scoreembed
+                .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
+${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
+[Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
 \`${hitlist}\`
 ${scoredata.max_combo}x/**${mapdata.max_combo}x**
 ${pptxt}\n${ppissue}
-`)
+`);
+        }
+            break;
+        case 2: {
+            embedStyle = 'LE';
+            switch (scoredata.mode) {
+                case 'osu': default:
+                    hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+                    break;
+                case 'taiko':
+                    hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`;
+                    break;
+                case 'fruits':
+                    hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+                    break;
+                case 'mania':
+                    hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
+                    break;
+            }
 
-    osufunc.writePreviousId('score', input.obj.guildId, JSON.stringify(scoredata, null, 2))
-    osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+            const newValues = osumodcalc.calcValues(
+                mapdata.cs, mapdata.ar, mapdata.accuracy, mapdata.drain,
+                mapdata.bpm, mapdata.hit_length,
+                scoredata.mods.join('')
+            );
+            const csStr = mapdata.cs == newValues.cs ?
+                `CS${mapdata.cs}` :
+                `CS${mapdata.cs}=>${newValues.cs}`;
+            const arStr = mapdata.ar == newValues.ar ?
+                `AR${mapdata.ar}` :
+                `AR${mapdata.ar}=>${newValues.ar}`;
+            const odStr = mapdata.accuracy == newValues.od ?
+                `OD${mapdata.accuracy}` :
+                `OD${mapdata.accuracy}=>${newValues.od}`;
+            const hpStr = mapdata.drain == newValues.hp ?
+                `HP${mapdata.drain}` :
+                `HP${mapdata.drain}=>${newValues.hp}`;
+            const bpmStr = mapdata.bpm == newValues.bpm ?
+                `${emojis.mapobjs.bpm}${mapdata.bpm}` :
+                `${emojis.mapobjs.bpm}${mapdata.bpm}=>${newValues.bpm}`;
+            const lenStr = mapdata.hit_length == newValues.length ?
+                `${emojis.mapobjs.total_length}${calc.secondsToTime(mapdata.hit_length)}` :
+                `${emojis.mapobjs.total_length}${calc.secondsToTime(mapdata.hit_length)}=>${calc.secondsToTime(newValues.length)}`;
+            const srStr = mapdata.difficulty_rating.toFixed(2) == (ppcalcing[0]?.difficulty?.stars.toFixed(2) ?? mapdata.difficulty_rating.toFixed(2)) ?
+                `${mapdata.difficulty_rating.toFixed(2)}⭐` :
+                `⭐${mapdata.difficulty_rating.toFixed(2)}=>${ppcalcing[0]?.difficulty?.stars?.toFixed(2)}`;
+
+            scoreembed
+                .setDescription(`
+${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
+${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
+`)
+                .addFields([
+                    {
+                        name: 'Score details',
+                        value:
+                            `
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
+${hitlist}
+${scoredata.max_combo}x/**${mapdata.max_combo}x**
+`                        ,
+                        inline: true
+                    },
+                    {
+                        name: 'PP',
+                        value:
+                            `**${(scoredata?.pp ?? ppcalcing[0]?.pp ?? NaN).toFixed(2)}**pp
+**${(ppcalcing[1]?.pp ?? NaN).toFixed(2)}**pp if FC
+**${(ppcalcing[2]?.pp ?? NaN).toFixed(2)}**pp if SS
+`,
+                        inline: true
+                    },
+                    {
+                        name: '-',
+                        value: '-',
+                        inline: true
+                    },
+                    {
+                        name: 'Map details',
+                        value: //CS AR OD HP SR
+                            `
+${csStr} 
+${arStr} 
+${odStr} 
+${hpStr}
+                        `,
+                        inline: true
+                    },
+                    {
+                        name: '-',
+                        value: //CS AR OD HP SR
+                            `
+${bpmStr}
+${lenStr} 
+${srStr}
+[Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
+                        `,
+                        inline: true
+                    }
+                ]);
+        }
+            break;
+    }
+
+    osufunc.writePreviousId('score', input.obj.guildId,
+        {
+            id: `${scoredata.id}`,
+            apiData: scoredata,
+            mods: scoredata.mods.join()
+        });
+    osufunc.writePreviousId('map', input.obj.guildId,
+        {
+            id: `${mapdata.id}`,
+            apiData: null,
+            mods: scoredata.mods.join()
+        }
+    );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [scoreembed]
+            embeds: [scoreembed],
+            components: [buttons],
+            edit: true
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'scoreparse',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scoreparse',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
+
+}
+
+/**
+ * generates scorepost thumbnail/title
+ */
+export async function scorepost(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+
+    let scoreId: number;
+    let customString: string;
+    let mode: osuApiTypes.GameMode = 'osu';
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+
+            if (input.args.includes('-osu')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-f')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
+            }
+
+            input.args = cleanArgs(input.args);
+
+            //attempt to fetch score id
+            if (!isNaN(+input.args[0])) {
+                scoreId = +input.args[0];
+                input.args.splice(input.args.indexOf(input.args[0]), 1);
+            }
+            if (!isNaN(+input.args[input.args.length - 1])) {
+                scoreId = +input.args[input.args.length - 1];
+                input.args.splice(input.args.indexOf(input.args[input.args.length - 1]), 1);
+            }
+
+            input.args.length > 0 ? customString = input.args.join(' ') : null;
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+
+            scoreId = input.obj.options.getInteger('id');
+            customString = input.obj.options.getString('custom');
+            mode = input.obj.options.getString('mode') as osuApiTypes.GameMode;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'recentactivity',
+        options: [
+            {
+                name: 'Score ID',
+                value: scoreId
+            },
+            {
+                name: 'Custom String',
+                value: customString
+            }
+        ]
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+
+    let scoredataReq: osufunc.apiReturn;
+
+    if (func.findFile(scoreId, 'scoredata') &&
+        !('error' in func.findFile(scoreId, 'scoredata')) &&
+        input.button != 'Refresh'
+    ) {
+        scoredataReq = func.findFile(scoreId, 'scoredata');
+    } else {
+        scoredataReq = await osufunc.apiget(
+            {
+                type: 'score',
+                params: {
+                    id: scoreId,
+                    mode: osufunc.modeValidator(mode)
+                }
+            });
+    }
+
+    const scoredata: osuApiTypes.Score = scoredataReq.apiData;
+
+    if (scoredata?.error) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `${errors.uErr.osu.score.nf}`,
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        return;
+    }
+
+    let mapdataReq: osufunc.apiReturn;
+    if (func.findFile(scoredata.beatmap.id, 'mapdata') &&
+        !('error' in func.findFile(scoredata.beatmap.id, 'mapdata')) &&
+        input.button != 'Refresh'
+    ) {
+        mapdataReq = func.findFile(scoredata.beatmap.id, 'mapdata');
+    } else {
+        mapdataReq = await osufunc.apiget(
+            {
+                type: 'map',
+                params: {
+                    id: scoredata.beatmap.id
+                }
+            }
+        );
+    }
+    const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
+    osufunc.debug(mapdataReq, 'command', 'maplb', input.obj.guildId, 'mapData');
+
+    if (mapdata?.error) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.map.m.replace('[ID]', scoredata.beatmap.id.toString()),
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scorepost',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.uErr.osu.map.m.replace('[ID]', scoredata.beatmap.id.toString())
+        });
+        return;
+    }
+
+    func.storeFile(mapdataReq, scoredata.beatmap.id, 'mapdata');
+
+    const ppCalc = await osufunc.scorecalc({
+        mods: scoredata.mods.join(''),
+        gamemode: mode,
+        miss: scoredata.statistics.count_miss,
+        acc: scoredata.accuracy,
+        maxcombo: scoredata.max_combo,
+        mapid: scoredata.beatmap.id
+    }, new Date(mapdata.last_updated));
+
+    let pptxt: string;
+
+    if (scoredata.accuracy == 1) {
+        pptxt = `${scoredata.pp}`;
+    } else {
+        if (scoredata.perfect) {
+            pptxt = `${scoredata.pp} (${ppCalc[3].pp} if SS)`;
+        } else {
+            pptxt = `${scoredata.pp} (${ppCalc[2].pp} if FC)`;
+        }
+    }
+
+    let nonFcString: string = '';
+
+    scoredata.statistics.count_miss > 0 ?
+        nonFcString += `${scoredata.statistics.count_miss}❌` : null;
+    scoredata.perfect ? null :
+        nonFcString += ` ${scoredata.max_combo}/${mapdata.max_combo}`;
+
+    if (nonFcString.length < 1) {
+        nonFcString = 'FC';
+    }
+
+    const titleString =
+        `${scoredata.user.username}` + ' | ' +
+        `${scoredata.beatmapset.artist} - ${scoredata.beatmapset.title} [${scoredata.beatmap.version}] ` +
+        `${scoredata.mods.length > 0 ? `+${scoredata.mods.join('')}` : ''} ${(scoredata.accuracy * 100).toFixed(2)}% ` +
+        `${nonFcString} ` +
+        `${pptxt} | ${scoredata.mode}`;
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            content: titleString
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'scorepost',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scorepost',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
 /**
  * list of user's scores on a map
  */
-export async function scores(input: extypes.commandInput) {
+export async function scores(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
 
@@ -5741,144 +6742,186 @@ export async function scores(input: extypes.commandInput) {
     let searchid;
     let mapid;
     let page = 1;
+    let scoredetailed: number = 1;
 
-    const scoredetailed = false;
-    let sort: any = 'recent';
+    let sort: embedStuff.scoreSort = 'recent';
     let reverse = false;
     let mode = 'osu';
     let filteredMapper = null;
     let filteredMods = null;
+    let filterRank = null;
+
+    let parseScore = false;
+    let parseId = null;
+
+    let embedStyle: extypes.osuCmdStyle = 'L';
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-ignore
+            input.obj = (input.obj as Discord.Message);
+
+            commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
-            }
-            if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
-            }
-            user = input.args.join(' ');
-            if (!input.args[0] || input.args.join(' ').includes(searchid) || isNaN(+input.args[0])) {
-                user = null
-            }
-            mapid = null;
-            if (!isNaN(+input.args[0])) {
-                mapid = +input.args[0];
-            }
-            //find if any string in input.args is a number
-            const number = input.args.find(arg => !isNaN(+arg));
-            if (number) {
-                mapid = +number;
+            if (input.args.includes('-parse')) {
+                parseScore = true;
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+                parseId = temp.value;
+                input.args = temp.newArgs;
             }
 
+            if (input.args.includes('-page')) {
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-p')) {
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.includes('-detailed')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if (input.args.includes('-d')) {
+                scoredetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if (input.args.includes('-compress')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if (input.args.includes('-c')) {
+                scoredetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
+            }
+
+            input.args = cleanArgs(input.args);
+
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map;
+            if (mapid != null) {
+                input.args.splice(input.args.indexOf(input.args.find(arg => arg.includes('https://osu.ppy.sh/'))), 1);
+            }
+
+            user = input.args.join(' ');
+
+            if (!input.args[0] || input.args.join(' ').includes(searchid) || user == undefined) {
+                user = null;
+            }
         }
             break;
 
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-            searchid = input.obj.member.user.id;//@ts-ignore
-            user = input.obj.options.getString('username');//@ts-ignore
-            mapid = input.obj.options.getNumber('id');//@ts-ignore
-            sort = input.obj.options.getString('sort');//@ts-ignore
+            searchid = commanduser.id;
+            user = input.obj.options.getString('username');
+            mapid = input.obj.options.getNumber('id');
+            sort = input.obj.options.getString('sort') as embedStuff.scoreSort;
             reverse = input.obj.options.getBoolean('reverse');
+
+            parseId = input.obj.options.getInteger('parse');
+            if (parseId != null) {
+                parseScore = true;
+            }
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            page = 0;//@ts-ignore
-            user = input.obj.message.embeds[0].author.name.split(' (#')[0]//@ts-ignore
-            mapid = input.obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1]//@ts-ignore
-            if (input.obj.message.embeds[0].description) {//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mapper')) {//@ts-ignore
+            searchid = commanduser.id;
+            page = 0;
+            user = input.obj.message.embeds[0].author.url.split('users/')[1].split('/')[0];
+            mode = input.obj.message.embeds[0].author.url.split('users/')[1].split('/')[1];
+            mapid = input.obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1];
+            if (input.obj.message.embeds[0].description) {
+                if (input.obj.message.embeds[0].description.includes('mapper')) {
                     filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }//@ts-ignore
-                if (input.obj.message.embeds[0].description.includes('mods')) {//@ts-ignore
+                }
+                if (input.obj.message.embeds[0].description.includes('mods')) {
                     filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }//@ts-ignore
-                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+                }
+                const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 switch (true) {
                     case sort1.includes('score'):
-                        sort = 'score'
+                        sort = 'score';
                         break;
                     case sort1.includes('acc'):
-                        sort = 'acc'
+                        sort = 'acc';
                         break;
                     case sort1.includes('pp'):
-                        sort = 'pp'
+                        sort = 'pp';
                         break;
                     case sort1.includes('old'): case sort1.includes('recent'):
-                        sort = 'recent'
+                        sort = 'recent';
                         break;
                     case sort1.includes('combo'):
-                        sort = 'combo'
+                        sort = 'combo';
                         break;
                     case sort1.includes('miss'):
-                        sort = 'miss'
+                        sort = 'miss';
                         break;
                     case sort1.includes('rank'):
-                        sort = 'rank'
+                        sort = 'rank';
                         break;
 
                 }
 
-                //@ts-ignore
-                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0]
+
+                const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses')) || (reverse1.includes('worst'))) {
-                    reverse = true
+                    reverse = true;
                 } else {
-                    reverse = false
+                    reverse = false;
                 }
-                page = 0
-                switch (input.button) {
-                    case 'BigLeftArrow':
-                        page = 1
-                        break;
-                    case 'LeftArrow'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) - 1
-                        break;
-                    case 'RightArrow'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1]) + 1
-                        break;
-                    case 'BigRightArrow'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].description).split('/')[1].split('\n')[0])
-                        break;
-                    case 'Refresh'://@ts-ignore
-                        page = parseInt((input.obj.message.embeds[0].description).split('/')[0].split(': ')[1])
-                        break;
-                }//@ts-ignore
-                mode = input.obj.message.embeds[0].description.split('mode: ')[1].split('\n')[0]
-            }//@ts-ignore
-            const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0])
-            page = 0
+                page = 0;
+            }
+            const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
+            page = 0;
             switch (input.button) {
                 case 'BigLeftArrow':
-                    page = 1
+                    page = 1;
                     break;
                 case 'LeftArrow':
-                    page = pageParsed - 1
+                    page = pageParsed - 1;
                     break;
                 case 'RightArrow':
-                    page = pageParsed + 1
+                    page = pageParsed + 1;
                     break;
-                case 'BigRightArrow'://@ts-ignore
-                    page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0])
+                case 'BigRightArrow':
+                    page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
 
                     break;
                 default:
-                    page = pageParsed
+                    page = pageParsed;
+                    break;
+            }
+            switch (input.button) {
+                case 'Detail0':
+                    scoredetailed = 0;
+                    break;
+                case 'Detail1':
+                    scoredetailed = 1;
+                    break;
+                case 'Detail2':
+                    scoredetailed = 2;
+                    break;
+                default:
+                    if (input.obj.message.embeds[0].footer.text.includes('LE')) {
+                        scoredetailed = 2;
+                    }
+                    if (input.obj.message.embeds[0].footer.text.includes('LC')) {
+                        scoredetailed = 0;
+                    }
                     break;
             }
         }
@@ -5886,38 +6929,38 @@ export async function scores(input: extypes.commandInput) {
     }
     if (input.overrides != null) {
         if (input.overrides.page != null) {
-            page = input.overrides.page
+            page = input.overrides.page;
         }
         if (input.overrides.sort != null) {
-            sort = input.overrides.sort
+            sort = input.overrides.sort;
         }
         if (input.overrides.reverse != null) {
-            reverse = input.overrides.reverse
+            reverse = input.overrides.reverse;
         }
     }
 
     //==============================================================================================================================================================================================
 
-    const buttons = new Discord.ActionRowBuilder()
+    let buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-scores-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
+                .setCustomId(`${mainconst.version}-Refresh-scores-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-        )
+        );
 
-    log.logFile(
-        'command',
-        log.commandLog('scores', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
+    const checkDetails = await buttonsAddDetails('scores', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle);
+    buttons = checkDetails.buttons;
+    embedStyle = checkDetails.embedStyle;
 
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'scores',
+        options: [
             {
                 name: 'User',
                 value: user
@@ -5942,42 +6985,31 @@ export async function scores(input: extypes.commandInput) {
                 name: 'Reverse',
                 value: reverse
             },
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+            {
+                name: 'Mode',
+                value: mode
+            },
+            {
+                name: 'Detailed',
+                value: scoredetailed
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
+            }
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-scores-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji(buttonsthing.label.page.first).setDisabled(false),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-scores-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji(buttonsthing.label.page.previous),
-            new Discord.ButtonBuilder()
-                .setCustomId(`Search-scores-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji(buttonsthing.label.page.search),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-scores-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji(buttonsthing.label.page.next),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-scores-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji(buttonsthing.label.page.last),
-        );
+    const pgbuttons: Discord.ActionRowBuilder = await pageButtons('scores', commanduser, input.absoluteID);
+
 
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     //if user is null, use searchid
     if (user == null) {
@@ -5996,152 +7028,234 @@ export async function scores(input: extypes.commandInput) {
 
     mode = osufunc.modeValidator(mode);
 
-    if (!mapid || isNaN(mapid)) {
-        mapid = osufunc.getPreviousId('map', input.obj.guildId);
+    if (!mapid) {
+        const temp = osufunc.getPreviousId('map', input.obj.guildId);
+        mapid = temp.id;
     }
 
-    if (input.commandType == 'interaction') {//@ts-ignore
-        input.obj.reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
-        }).catch()
+    if (input.commandType == 'interaction') {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`, `${mode}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        });
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
 
-    osufunc.debug(osudata, 'command', 'scores', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'scores', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
-        if (input.commandType == 'interaction') {
-            setTimeout(() => {//@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }, 1000);
-        } else {//@ts-ignore
-            input.obj.reply({
-                content: `Error - could not find user \`${user}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scores',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
         return;
 
     }
 
-    let scoredataPresort: osuApiTypes.ScoreArrA;
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-scores-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
+
+    let scoredataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'scores') &&
         input.commandType == 'button' &&
         !('error' in func.findFile(input.absoluteID, 'scores')) &&
         input.button != 'Refresh'
     ) {
-        scoredataPresort = func.findFile(input.absoluteID, 'scores')
+        scoredataReq = func.findFile(input.absoluteID, 'scores');
     } else {
-        scoredataPresort = await osufunc.apiget('user_get_scores_map', `${mapid}`, `${osudata.id}`)
+        scoredataReq = await osufunc.apiget({
+            type: 'user_get_scores_map',
+            params: {
+                userid: osudata.id,
+                id: mapid,
+            }
+        });
     }
-    osufunc.debug(scoredataPresort, 'command', 'scores', input.obj.guildId, 'scoreDataPresort');
-    func.storeFile(scoredataPresort, input.absoluteID, 'scores')
+
+    const scoredataPresort: osuApiTypes.ScoreArrA = scoredataReq.apiData;
+
+    osufunc.debug(scoredataReq, 'command', 'scores', input.obj.guildId, 'scoreDataPresort');
 
     if (scoredataPresort?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
-                    input.obj.editReply({
-                        content: 'Error - could not fetch scores',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }, 1000)
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: 'Error - could not fetch scores',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.scores.map
+                        .replace('[ID]', user)
+                        .replace('[MID', mapid),
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scores',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.uErr.osu.scores.map
+                .replace('[ID]', user)
+                .replace('[MID', mapid)
+        });
         return;
     }
 
-    const scoredata: osuApiTypes.Score[] = scoredataPresort.scores
-    try {
-        scoredata.length < 1
-    } catch (error) {//@ts-ignore
-        return input.obj.reply({
-            content: `Error - no scores found for \`${user}\` on map \`${mapid}\``,
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        })
-            .catch();
-    }
-    osufunc.debug(scoredata, 'command', 'scores', input.obj.guildId, 'scoreData');
+    func.storeFile(scoredataReq, input.absoluteID, 'scores');
 
-    let mapdata: osuApiTypes.Beatmap;
+    const scoredata: osuApiTypes.Score[] = scoredataPresort.scores;
+
+    osufunc.debug(scoredataReq, 'command', 'scores', input.obj.guildId, 'scoreData');
+
+    if (parseScore == true) {
+        let pid = parseInt(parseId) - 1;
+        if (pid < 0) {
+            pid = 0;
+        }
+        if (pid > scoredata.length) {
+            pid = scoredata.length - 1;
+        }
+        input.overrides = {
+            mode: scoredata?.[0]?.mode ?? 'osu',
+            id: scoredata.slice().sort((a, b) =>
+                parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')) - parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
+            )?.[pid]?.best_id,
+            commanduser,
+            commandAs: input.commandType
+        };
+        if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `${errors.uErr.osu.score.nf} at index ${pid}`,
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'scores',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: `${errors.uErr.osu.score.nf} at index ${pid}`
+            });
+            return;
+        }
+        input.commandType = 'other';
+        await scoreparse(input);
+        return;
+    }
+
+    let mapdataReq: osufunc.apiReturn;
     if (func.findFile(mapid, 'mapdata') &&
         !('error' in func.findFile(mapid, 'mapdata')) &&
         input.button != 'Refresh'
     ) {
-        mapdata = func.findFile(mapid, 'mapdata')
+        mapdataReq = func.findFile(mapid, 'mapdata');
     } else {
-        mapdata = await osufunc.apiget('map', `${mapid}`)
+        mapdataReq = await osufunc.apiget({
+            type: 'map',
+            params: {
+                id: mapid
+            }
+        });
     }
-    osufunc.debug(mapdata, 'command', 'scores', input.obj.guildId, 'mapData');
-    func.storeFile(mapdata, mapid, 'mapdata')
+    const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
+
+    osufunc.debug(mapdataReq, 'command', 'scores', input.obj.guildId, 'mapData');
     if (mapdata?.error) {
         if (input.commandType != 'button' && input.commandType != 'link') {
-            if (input.commandType == 'interaction') {
-                setTimeout(() => {//@ts-ignore
-                    input.obj.editReply({
-                        content: 'Error - could not fetch beatmap data',
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }, 1000)
-            } else {//@ts-ignore
-                input.obj.reply({
-                    content: 'Error - could not fetch beatmap data',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-            }
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.map.m.replace('[ID]', mapid),
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scores',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
+        });
         return;
     }
+
+    func.storeFile(mapdataReq, mapid, 'mapdata');
 
     const title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
     const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
 
 
     const scoresEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(colours.embedColour.scorelist.dec)
         .setTitle(`${artist} - ${title} [${mapdata.version}]`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setImage(`${mapdata.beatmapset.covers['cover@2x']}`)
         .setAuthor({
-            name: `${osudata.username} (#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp)`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            name: `${osudata.username} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
+            url: `https://osu.ppy.sh/users/${osudata.id}/${osufunc.modeValidator(mode)}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
-        .setURL(`https://osu.ppy.sh/b/${mapid}`)
-
-    scoresEmbed.setFooter({ text: `Page ${page + 1}/${Math.ceil(scoredata.length / 5)}` })
+        .setURL(`https://osu.ppy.sh/b/${mapid}`);
 
     if (page >= Math.ceil(scoredata.length / 5)) {
-        page = Math.ceil(scoredata.length / 5) - 1
+        page = Math.ceil(scoredata.length / 5) - 1;
     }
 
     const scoresarg = await embedStuff.scoreList(
@@ -6156,52 +7270,71 @@ export async function scores(input: extypes.commandInput) {
             truePosType: sort,
             filteredMapper: filteredMapper,
             filteredMods: filteredMods,
+            filterMapTitle: null,
+            filterRank,
             reverse: reverse,
             mapidOverride: mapdata.id
-        })
-    scoresEmbed.setDescription(`${scoresarg.filter}\nPage: ${page + 1}/${scoresarg.maxPages}\nmode: ${mode}\n`)
+        },
+        {
+            useScoreMap: false,
+            overrideMapLastDate: mapdata.last_updated
+        });
+    scoresEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\nmode: ${mode}\n`);
     if (scoresarg.fields.length == 0) {
         scoresEmbed.addFields([{
             name: 'Error',
             value: 'No scores found',
             inline: false
-        }])
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[2].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        }]);
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
-        for (let i = 0; i < scoresarg.fields.length && i < 5; i++) {
-            scoresEmbed.addFields([scoresarg.fields[i]])
+        switch (scoredetailed) {
+            case 0: case 2: {
+                let temptxt = '\n';
+                for (let i = 0; i < scoresarg.string.length; i++) {
+                    temptxt += scoresarg.string[i];
+                }
+                scoresEmbed.setDescription(
+                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}`
+                    + temptxt
+                );
+            }
+                break;
+            case 1: default: {
+                for (let i = 0; i < scoresarg.fields.length; i++) {
+                    scoresEmbed.addFields([scoresarg.fields[i]]);
+                }
+            }
+                break;
         }
     }
 
 
-    osufunc.writePreviousId('user', input.obj.guildId, `${osudata.id}`);
-    osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+    osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    osufunc.writePreviousId('map', input.obj.guildId,
+        {
+            id: `${mapdata.id}`,
+            apiData: null,
+            mods: filteredMods
+        }
+    );
 
     if (scoresarg.isFirstPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (scoresarg.isLastPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -6209,19 +7342,524 @@ export async function scores(input: extypes.commandInput) {
             components: [pgbuttons, buttons],
             edit: true
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'scores',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scores',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
+
+/**
+ * statistics for scores
+ */
+export async function scorestats(input: extypes.commandInput) {
+
+    let commanduser: Discord.User;
+    type scoretypes = 'firsts' | 'best' | 'recent' | 'pinned';
+    let scoreTypes: scoretypes = 'best';
+    let user = null;
+    let searchid;
+    let mode: osuApiTypes.GameMode;
+
+    let reachedMaxCount = false;
+
+    const embedStyle: extypes.osuCmdStyle = 'A';
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+            if (input.args.includes('-osu')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-f')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
+            }
+
+            if (input.args.includes('-firsts')) {
+                scoreTypes = 'firsts';
+                input.args.splice(input.args.indexOf('-firsts'), 1);
+            }
+            if (input.args.includes('-first')) {
+                scoreTypes = 'firsts';
+                input.args.splice(input.args.indexOf('-first'), 1);
+            }
+            if (input.args.includes('-globals')) {
+                scoreTypes = 'firsts';
+                input.args.splice(input.args.indexOf('-globals'), 1);
+            }
+            if (input.args.includes('-global')) {
+                scoreTypes = 'firsts';
+                input.args.splice(input.args.indexOf('-global'), 1);
+            }
+            if (input.args.includes('-osutop')) {
+                scoreTypes = 'best';
+                input.args.splice(input.args.indexOf('-osutop'), 1);
+            }
+            if (input.args.includes('-top')) {
+                scoreTypes = 'best';
+                input.args.splice(input.args.indexOf('-top'), 1);
+            }
+            if (input.args.includes('-recent')) {
+                scoreTypes = 'recent';
+                input.args.splice(input.args.indexOf('-recent'), 1);
+            }
+            if (input.args.includes('-r')) {
+                scoreTypes = 'recent';
+                input.args.splice(input.args.indexOf('-r'), 1);
+            }
+            if (input.args.includes('-pinned')) {
+                scoreTypes = 'pinned';
+                input.args.splice(input.args.indexOf('-pinned'), 1);
+            }
+            if (input.args.includes('-pins')) {
+                scoreTypes = 'pinned';
+                input.args.splice(input.args.indexOf('-pins'), 1);
+            }
+            if (input.args.includes('-pin')) {
+                scoreTypes = 'pinned';
+                input.args.splice(input.args.indexOf('-pin'), 1);
+            }
+
+            input.args = cleanArgs(input.args);
+
+            user = input.args.join(' ');
+            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+                user = null;
+            }
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            searchid = commanduser.id;
+            input.obj.options.getString('user') ? user = input.obj.options.getString('user') : null;
+            input.obj.options.getString('type') ? scoreTypes = input.obj.options.getString('type') as scoretypes : null;
+            input.obj.options.getString('mode') ? mode = input.obj.options.getString('mode') as osuApiTypes.GameMode : null;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
+            commanduser = input.obj.member.user;
+            searchid = commanduser.id;
+            user = input.obj.message.embeds[0].author.url.split('/u/')[1].split('/')[0];
+            mode = input.obj.message.embeds[0].author.url.split('/u/')[1].split('/')[1] as osuApiTypes.GameMode;
+            //user's {type} scores
+            scoreTypes = input.obj.message.embeds[0].title.split(' scores')[0].split(' ')[0].toLowerCase() as scoretypes;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    //==============================================================================================================================================================================================
+
+    //detailed button
+
+    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Details-scorestats-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.detailed),
+        );
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'score stats',
+        options: [
+            {
+                name: 'Score Type',
+                value: scoreTypes
+            },
+            {
+                name: 'User',
+                value: user
+            },
+            {
+                name: 'Mode',
+                value: mode
+            },
+            {
+                name: 'Search ID',
+                value: searchid
+            }
+        ]
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    //if user is null, use searchid
+    if (user == null) {
+        const cuser = await osufunc.searchUser(searchid, input.userdata, true);
+        user = cuser.username;
+        if (mode == null) {
+            mode = cuser.gamemode;
+        }
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
+    }
+
+    mode = mode ? osufunc.modeValidator(mode) : null;
+
+    if (input.commandType == 'interaction') {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
+    }
+
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
+        input.button != 'Refresh'
+    ) {
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
+    } else {
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        });
+    }
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'scorestats', input.obj.guildId, 'osuData');
+
+    if (osudata?.error || !osudata.id) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scorestats',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
+        return;
+    }
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-scorestats-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
+
+    let scoresdata: osuApiTypes.Score[] & osuApiTypes.Error = [];
+
+    async function getScoreCount(cinitnum) {
+        const req: osufunc.apiReturn = await osufunc.apiget({
+            type: scoreTypes,
+            params: {
+                userid: `${osudata.id}`,
+                opts: [`offset=${cinitnum}`, 'limit=100', `mode=${osufunc.modeValidator(mode)}`],
+            },
+            version: 2,
+
+        });
+        const fd: osuApiTypes.Score[] & osuApiTypes.Error = req.apiData;
+        if (fd?.error) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: errors.noUser(user),
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'scorestats',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: `Could not find user's ${scoreTypes} scores`
+            });
+            return;
+        }
+        for (let i = 0; i < fd.length; i++) {
+            if (!fd[i] || typeof fd[i] == 'undefined') { break; }
+            await scoresdata.push(fd[i]);
+        }
+        if (fd.length == 100 && (scoreTypes == 'firsts' || scoreTypes == 'pinned')) {
+            reachedMaxCount = true;
+        }
+    }
+    if (func.findFile(input.absoluteID, 'reqdata') &&
+        input.commandType == 'button' &&
+        !('error' in func.findFile(input.absoluteID, 'reqdata')) &&
+        input.button != 'Refresh'
+    ) {
+        scoresdata = func.findFile(input.absoluteID, 'reqdata');
+    } else {
+        await getScoreCount(0);
+    }
+    func.storeFile(scoresdata, input.absoluteID, 'reqdata');
+
+    let useFiles: string[] = [];
+
+    const Embed: Discord.EmbedBuilder = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
+        .setTitle(`Statistics for ${osudata.username}'s ${scoreTypes} scores`)
+        .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
+        .setAuthor({
+            name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
+            url: `https://osu.ppy.sh/u/${osudata.id}/${osufunc.modeValidator(mode)}`,
+            iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
+        });
+    if (scoresdata.length == 0) {
+        Embed.setDescription('No scores found');
+    } else {
+        Embed.setDescription(`${func.separateNum(scoresdata.length)} scores found\n${reachedMaxCount ? 'Only first 100 scores are calculated' : ''}`);
+        const mappers = calc.findMode(scoresdata.map(x => x.beatmapset.creator));
+        const mods = calc.findMode(scoresdata.map(x => {
+            return x.mods.length == 0 ?
+                'NM' :
+                x.mods.join('');
+        }));
+        const grades = calc.findMode(scoresdata.map(x => x.rank));
+        const acc = osufunc.Stats(scoresdata.map(x => x.accuracy));
+        const pp = osufunc.Stats(scoresdata.map(x => x.pp));
+        const combo = osufunc.Stats(scoresdata.map(x => x.max_combo));
+
+
+        if (input.commandType == 'button') {
+            let mappersStr = '';
+            for (let i = 0; i < mappers.length; i++) {
+                mappersStr += `#${i + 1}. ${mappers[i].string} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`;
+            }
+            let modsStr = '';
+            for (let i = 0; i < mods.length; i++) {
+                modsStr += `#${i + 1}. ${mods[i].string} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`;
+            }
+            let gradesStr = '';
+            for (let i = 0; i < grades.length; i++) {
+                gradesStr += `#${i + 1}. ${grades[i].string} - ${func.separateNum(grades[i].count)} | ${grades[i].percentage.toFixed(2)}%\n`;
+            }
+
+            const MappersPath = `${path}/cache/commandData/${input.absoluteID}Mappers.txt`;
+            const ModsPath = `${path}/cache/commandData/${input.absoluteID}Mods.txt`;
+            const RanksPath = `${path}/cache/commandData/${input.absoluteID}Ranks.txt`;
+
+            fs.writeFileSync(MappersPath, mappersStr, 'utf-8');
+            fs.writeFileSync(ModsPath, modsStr, 'utf-8');
+            fs.writeFileSync(RanksPath, gradesStr, 'utf-8');
+            useFiles = [MappersPath, ModsPath, RanksPath];
+        } else {
+            let mappersStr = '';
+            for (let i = 0; i < mappers.length && i < 5; i++) {
+                mappersStr += `#${i + 1}. ${mappers[i].string} - ${func.separateNum(mappers[i].count)} | ${mappers[i].percentage.toFixed(2)}%\n`;
+            }
+            let modsStr = '';
+            for (let i = 0; i < mods.length && i < 5; i++) {
+                modsStr += `#${i + 1}. ${mods[i].string} - ${func.separateNum(mods[i].count)} | ${mods[i].percentage.toFixed(2)}%\n`;
+            }
+            let gradesStr = '';
+            for (let i = 0; i < grades.length && i < 5; i++) {
+                gradesStr += `#${i + 1}. ${grades[i].string} - ${func.separateNum(grades[i].count)} | ${grades[i].percentage.toFixed(2)}%\n`;
+            }
+
+
+            Embed.addFields([{
+                name: 'Mappers',
+                value: mappersStr.length == 0 ?
+                    'No data available' :
+                    mappersStr,
+                inline: true,
+            },
+            {
+                name: 'Mods',
+                value: modsStr.length == 0 ?
+                    'No data available' :
+                    modsStr,
+                inline: true
+            },
+            {
+                name: 'Ranks',
+                value: gradesStr.length == 0 ?
+                    'No data available' :
+                    gradesStr,
+                inline: true
+            },
+            {
+                name: 'Accuracy',
+                value: `
+Highest: ${(acc?.highest * 100)?.toFixed(2)}%
+Lowest: ${(acc?.lowest * 100)?.toFixed(2)}%
+Average: ${(acc?.average * 100)?.toFixed(2)}%
+${acc?.ignored > 0 ? `Skipped: ${acc?.ignored}` : ''}
+`,
+                inline: true
+            },
+            {
+                name: 'PP',
+                value: `
+Highest: ${pp?.highest?.toFixed(2)}pp
+Lowest: ${pp?.lowest?.toFixed(2)}pp
+Average: ${pp?.average?.toFixed(2)}pp
+${pp?.ignored > 0 ? `Skipped: ${pp?.ignored}` : ''}
+`,
+                inline: true
+            },
+            {
+                name: 'Combo',
+                value: `
+Highest: ${combo?.highest}
+Lowest: ${combo?.lowest}
+Average: ${combo?.average}
+${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
+`,
+                inline: true
+            }
+            ]);
+        }
+    }
+
+
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    if (input.commandType == 'button') {
+        input.obj = input.obj as Discord.ButtonInteraction;
+        input.obj.reply({
+            files: useFiles,
+            ephemeral: true
+        }).catch(error => {
+            (input.obj as Discord.ButtonInteraction).editReply({
+                files: useFiles,
+            });
+        });
+
+
+    } else {
+        const finalMessage = await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                embeds: [Embed],
+                edit: true,
+                components: [buttons],
+                files: useFiles
+            }
+        }, input.canReply);
+        if (finalMessage == true) {
+            log.logCommand({
+                event: 'Success',
+                commandName: 'scorestats',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+            });
+        } else {
+            log.logCommand({
+                event: 'Error',
+                commandName: 'scorestats',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: 'Message failed to send'
+            });
+        }
+        return;
+    }
+
+    log.logCommand({
+        event: 'Success',
+        commandName: 'scorestats',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        object: input.obj,
+    });
+
+}
+
 
 /**
  * simulate play on a map
@@ -6237,53 +7875,138 @@ export async function simulate(input: extypes.commandInput) {
     let n100 = null;
     let n50 = null;
     let nMiss = null;
+    let overrideSpeed = 1;
+    let overrideBpm: number = null;
+
+    const embedStyle: extypes.osuCmdStyle = 'S';
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-ignore
+            input.obj = (input.obj as Discord.Message);
+
+            commanduser = input.obj.author;
             const ctn = input.obj.content;
-            if (isNaN(+input.args[0])) {
-                mapid = +input.args[0]
+            if (ctn.includes('-mods')) {
+                const temp = func.parseArg(input.args, '-mods', 'string', mods);
+                mods = temp.value;
+                input.args = temp.newArgs;
             }
-            if (ctn.includes('+')) {
-                mods = ctn.split('+')[1].split(' ')[0]
+            if (ctn.includes('-acc')) {
+                const temp = func.parseArg(input.args, '-acc', 'number', acc);
+                acc = temp.value;
+                input.args = temp.newArgs;
+
+            }
+            if (ctn.includes('-accuracy')) {
+                const temp = func.parseArg(input.args, '-accuracy', 'number', acc);
+                acc = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (ctn.includes('-combo')) {
+                const temp = func.parseArg(input.args, '-combo', 'number', combo);
+                combo = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (ctn.includes('-n300')) {
+                const temp = func.parseArg(input.args, '-n300', 'number', n300);
+                n300 = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (ctn.includes('-300s')) {
+                const temp = func.parseArg(input.args, '-300s', 'number', n300);
+                n300 = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (ctn.includes('-n100')) {
+                const temp = func.parseArg(input.args, '-n100', 'number', n100);
+                n100 = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (ctn.includes('-100s')) {
+                const temp = func.parseArg(input.args, '-100s', 'number', n100);
+                n100 = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (ctn.includes('-n50')) {
+                const temp = func.parseArg(input.args, '-n50', 'number', n50);
+                n50 = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (ctn.includes('-50s')) {
+                const temp = func.parseArg(input.args, '-50s', 'number', n50);
+                n50 = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (ctn.includes('-miss')) {
+                const temp = func.parseArg(input.args, '-miss', 'number', nMiss);
+                nMiss = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (ctn.includes('-misses')) {
+                const temp = func.parseArg(input.args, '-misses', 'number', nMiss);
+                nMiss = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-bpm')) {
+                const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
+                overrideBpm = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-speed')) {
+                const temp = func.parseArg(input.args, '-speed', 'number', overrideSpeed);
+                overrideSpeed = temp.value;
+                input.args = temp.newArgs;
             }
             if (ctn.includes('mods=')) {
-                mods = ctn.split('mods=')[1].split(' ')[0]
+                mods = ctn.split('mods=')[1].split(' ')[0];
             }
             if (ctn.includes('acc=')) {
-                acc = parseFloat(ctn.split('acc=')[1].split(' ')[0])
+                acc = parseFloat(ctn.split('acc=')[1].split(' ')[0]);
             }
             if (ctn.includes('accuracy=')) {
-                acc = parseFloat(ctn.split('accuracy=')[1].split(' ')[0])
+                acc = parseFloat(ctn.split('accuracy=')[1].split(' ')[0]);
             }
             if (ctn.includes('combo=')) {
-                combo = parseInt(ctn.split('combo=')[1].split(' ')[0])
+                combo = parseInt(ctn.split('combo=')[1].split(' ')[0]);
             }
             if (ctn.includes('n300=')) {
-                n300 = parseInt(ctn.split('n300=')[1].split(' ')[0])
+                n300 = parseInt(ctn.split('n300=')[1].split(' ')[0]);
             }
             if (ctn.includes('300s=')) {
-                n300 = parseInt(ctn.split('300s=')[1].split(' ')[0])
+                n300 = parseInt(ctn.split('300s=')[1].split(' ')[0]);
             }
             if (ctn.includes('n100=')) {
-                n100 = parseInt(ctn.split('n100=')[1].split(' ')[0])
+                n100 = parseInt(ctn.split('n100=')[1].split(' ')[0]);
             }
             if (ctn.includes('100s=')) {
-                n100 = parseInt(ctn.split('100s=')[1].split(' ')[0])
+                n100 = parseInt(ctn.split('100s=')[1].split(' ')[0]);
             }
             if (ctn.includes('n50=')) {
-                n50 = parseInt(ctn.split('n50=')[1].split(' ')[0])
+                n50 = parseInt(ctn.split('n50=')[1].split(' ')[0]);
             }
             if (ctn.includes('50s=')) {
-                n50 = parseInt(ctn.split('50s=')[1].split(' ')[0])
+                n50 = parseInt(ctn.split('50s=')[1].split(' ')[0]);
             }
             if (ctn.includes('miss=')) {
-                nMiss = parseInt(ctn.split('miss=')[1].split(' ')[0])
+                nMiss = parseInt(ctn.split('miss=')[1].split(' ')[0]);
             }
             if (ctn.includes('misses=')) {
-                nMiss = parseInt(ctn.split('misses=')[1].split(' ')[0])
+                nMiss = parseInt(ctn.split('misses=')[1].split(' ')[0]);
+            }
+            if (input.args.includes('bpm=')) {
+                overrideBpm = parseFloat(ctn.split('bpm=')[1].split(' ')[0]);
+            }
+            if (input.args.includes('speed=')) {
+                overrideSpeed = parseFloat(ctn.split('speed=')[1].split(' ')[0]);
+            }
+
+            input.args = cleanArgs(input.args);
+
+            if (isNaN(+input.args[0])) {
+                mapid = +input.args[0];
+            }
+            if (ctn.includes('+')) {
+                mods = ctn.split('+')[1].split(' ')[0];
             }
         }
             break;
@@ -6291,21 +8014,23 @@ export async function simulate(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            mapid = input.obj.options.getInteger('id')//@ts-ignore
-            mods = input.obj.options.getString('mods')//@ts-ignore
-            acc = input.obj.options.getNumber('accuracy')//@ts-ignore
-            combo = input.obj.options.getInteger('combo')//@ts-ignore
-            n300 = input.obj.options.getInteger('n300')//@ts-ignore
-            n100 = input.obj.options.getInteger('n100')//@ts-ignore
-            n50 = input.obj.options.getInteger('n50')//@ts-ignore
-            nMiss = input.obj.options.getInteger('miss')
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            mapid = input.obj.options.getInteger('id');
+            mods = input.obj.options.getString('mods');
+            acc = input.obj.options.getNumber('accuracy');
+            combo = input.obj.options.getInteger('combo');
+            n300 = input.obj.options.getInteger('n300');
+            n100 = input.obj.options.getInteger('n100');
+            n50 = input.obj.options.getInteger('n50');
+            nMiss = input.obj.options.getInteger('miss');
         }
 
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -6314,18 +8039,14 @@ export async function simulate(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('simulate', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'simulate',
+        options: [
             {
                 name: 'Map ID',
                 value: mapid
@@ -6358,32 +8079,89 @@ export async function simulate(input: extypes.commandInput) {
                 name: 'Misses',
                 value: nMiss
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    if (!mapid || isNaN(mapid)) {
-        mapid = osufunc.getPreviousId('map', input.obj.guildId);
+    if (!mapid) {
+        const temp = osufunc.getPreviousId('map', input.obj.guildId);
+        mapid = temp.id;
     }
 
-    if (input.commandType == 'interaction') {//@ts-ignore
-        input.obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
-            .catch();
-
+    if (input.commandType == 'interaction') {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
-    const mapdata: osuApiTypes.Beatmap = await osufunc.apiget('map', `${mapid}`)
-    osufunc.debug(mapdata, 'command', 'map', input.obj.guildId, 'mapData');
+    let mapdataReq: osufunc.apiReturn;
+
+    if (func.findFile(mapid, 'mapdata') &&
+        !('error' in func.findFile(mapid, 'mapdata')) &&
+        input.button != 'Refresh') {
+        mapdataReq = func.findFile(mapid, 'mapdata');
+    } else {
+        mapdataReq = await osufunc.apiget({
+            type: 'map_get',
+            params: {
+                id: mapid
+            }
+        });
+    }
+
+    const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
+
+    osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
+
+    if (mapdata?.error) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.map.m.replace('[ID]', mapid),
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'simulate',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
+        });
+        return;
+    }
+    func.storeFile(mapdataReq, mapid, 'mapdata');
+
+
 
     if (!mods) {
-        mods = 'NM'
+        mods = 'NM';
     }
     if (!combo) {
-        combo = mapdata.max_combo
+        combo = mapdata.max_combo;
+    }
+
+    if (overrideBpm && !overrideSpeed) {
+        overrideSpeed = overrideBpm / mapdata.bpm;
+    }
+    if (overrideSpeed && !overrideBpm) {
+        overrideBpm = overrideSpeed * mapdata.bpm;
+    }
+
+    if (mods.includes('DT') || mods.includes('NC')) {
+        overrideSpeed = overrideSpeed * 1.5;
+    }
+    if (mods.includes('HT')) {
+        overrideSpeed = overrideSpeed * 0.75;
     }
 
     const score = await osufunc.scorecalc({
@@ -6394,12 +8172,12 @@ export async function simulate(input: extypes.commandInput) {
         hit100: n100,
         hit50: n50,
         miss: nMiss,
-        acc,
+        acc: acc / 100,
         maxcombo: combo,
         score: null,
         calctype: 0,
-        failed: false
-    });
+        clockRate: overrideSpeed
+    }, new Date(mapdata.last_updated));
     osufunc.debug(score, 'command', 'simulate', input.obj.guildId, 'ppCalc');
 
     const fcaccgr =
@@ -6408,27 +8186,31 @@ export async function simulate(input: extypes.commandInput) {
             n100,
             n50,
             0
-        )
+        );
     const specAcc = isNaN(fcaccgr.accuracy) ?
         acc ?
             acc :
             100 :
-        fcaccgr.accuracy
+        fcaccgr.accuracy;
 
     const mapPerf = await osufunc.mapcalc({
         mods,
         gamemode: 'osu',
         mapid,
-        calctype: 0
-    });
+        calctype: 0,
+        clockRate: 1
+    }, new Date(mapdata.last_updated));
 
     const title = mapdata.beatmapset?.title ?
         mapdata.beatmapset?.title != mapdata.beatmapset?.title_unicode ?
             `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title}) [${mapdata.version}]` :
             `${mapdata.beatmapset.title_unicode} [${mapdata.version}]` :
-        'unknown map'
+        'unknown map';
 
     const scoreEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setTitle(`Simulated play on ${title}`)
         .setURL(`https://osu.ppy.sh/b/${mapid}`)
         .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg` || `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
@@ -6440,6 +8222,7 @@ export async function simulate(input: extypes.commandInput) {
 ${combo ?? mapdata.max_combo}x/**${mapdata.max_combo}**x
 ${mods ?? 'No mods'}
 \`${n300}/${n100}/${n50}/${nMiss}\`
+Speed: ${overrideSpeed ?? 1}x (${overrideBpm ?? mapdata.bpm}BPM)
 `,
                 inline: false
             },
@@ -6479,27 +8262,37 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
                 `,
                 inline: true
             },
-        ])
+        ]);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: [scoreEmbed],
             edit: true
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'simulate',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'simulate',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
@@ -6509,125 +8302,165 @@ ID: ${input.absoluteID}
  * parse map and return map data
  */
 export async function map(input: extypes.commandInput) {
-
     let commanduser: Discord.User;
 
     let mapid;
     let mapmods;
-    let maptitleq = null;
-    let detailed = false;
+    let maptitleq: string = null;
+    let detailed: number = 1;
+    const searchRestrict = 'any';
+    let overrideSpeed = 1;
+    let overrideBpm: number = null;
 
     const useComponents = [];
     let overwriteModal = null;
 
+    let customCS: 'current' | number = 'current';
+    let customAR: 'current' | number = 'current';
+    let customOD: 'current' | number = 'current';
+    let customHP: 'current' | number = 'current';
+
+    let embedStyle: extypes.osuCmdStyle = 'M';
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
-            if (!isNaN(+input.args[0])) {
-                mapid = input.args[0];
+
+            if (input.args.includes('-detailed')) {
+                detailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if (input.args.includes('-d')) {
+                detailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if (input.args.includes('-bpm')) {
+                const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
+                overrideBpm = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-speed')) {
+                const temp = func.parseArg(input.args, '-speed', 'number', overrideSpeed);
+                overrideSpeed = temp.value;
+                input.args = temp.newArgs;
             }
 
-            if (input.args.join(' ').includes('+')) {
-                mapmods = input.args.join(' ').split('+')[1]
+            if (input.args.includes('-cs')) {
+                const temp = func.parseArg(input.args, '-cs', 'number', customCS);
+                customCS = temp.value;
+                input.args = temp.newArgs;
             }
+            if (input.args.includes('-ar')) {
+                const temp = func.parseArg(input.args, '-ar', 'number', customAR);
+                customAR = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-od')) {
+                const temp = func.parseArg(input.args, '-od', 'number', customOD);
+                customOD = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-accuracy')) {
+                const temp = func.parseArg(input.args, '-accuracy', 'number', customOD);
+                customOD = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-hp')) {
+                const temp = func.parseArg(input.args, '-hp', 'number', customHP);
+                customHP = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-drain')) {
+                const temp = func.parseArg(input.args, '-drain', 'number', customHP);
+                customHP = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.includes('-?')) {
+                const temp = func.parseArg(input.args, '-?', 'string', maptitleq, true);
+                maptitleq = temp.value;
+                input.args = temp.newArgs;
+            }
+
             if (input.args.join(' ').includes('"')) {
-                maptitleq = input.args.join(' ').split('"')[1]
+                maptitleq = input.args.join(' ').substring(
+                    input.args.join(' ').indexOf('"') + 1,
+                    input.args.join(' ').lastIndexOf('"')
+                );
+                input.args = input.args.join(' ').replace(maptitleq, '').split(' ');
             }
+            if (input.args.join(' ').includes('+')) {
+                mapmods = input.args.join(' ').split('+')[1];
+                mapmods.includes(' ') ? mapmods = mapmods.split(' ')[0] : null;
+                input.args = input.args.join(' ').replace('+', '').replace(mapmods, '').split(' ');
+            }
+            input.args = cleanArgs(input.args);
+
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map;
         }
             break;
 
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-            //@ts-ignore
-            mapid = input.obj.options.getInteger('id');//@ts-ignore
-            mapmods = input.obj.options.getString('mods');//@ts-ignore
-            detailed = input.obj.options.getBoolean('detailed');//@ts-ignore
+
+            mapid = input.obj.options.getInteger('id');
+            mapmods = input.obj.options.getString('mods');
+            detailed = input.obj.options.getBoolean('detailed') ? 2 : 1;
             maptitleq = input.obj.options.getString('query');
+            input.obj.options.getNumber('bpm') ? overrideBpm = input.obj.options.getNumber('bpm') : null;
+            input.obj.options.getNumber('speed') ? overrideSpeed = input.obj.options.getNumber('speed') : null;
         }
 
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {//@ts-ignore
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             if (!input.obj.message.embeds[0]) {
                 return;
             }
-            commanduser = input.obj.member.user;//@ts-ignore
+            commanduser = input.obj.member.user;
             const urlnohttp = input.obj.message.embeds[0].url.split('https://')[1];
             const setid = urlnohttp.split('/')[2].split('#')[0];
             const curid = urlnohttp.split('/')[3];
             mapid = curid;
-            let bmsdata: osuApiTypes.Beatmapset;
-            if (func.findFile(setid, `bmsdata`) &&
-                !('error' in func.findFile(setid, `bmsdata`)) &&
-                input.button != 'Refresh') {
-                bmsdata = func.findFile(setid, `bmsdata`)
-            } else {
-                bmsdata = await osufunc.apiget('mapset_get', `${setid}`)
-            }
-            func.storeFile(bmsdata, setid, `bmsdata`)
 
-            osufunc.debug(bmsdata, 'command', 'map', input.obj.guildId, 'bmsData');
+            if (input.obj.message.embeds[0].footer.text.includes('ME')) {
+                detailed = 2;
+            }
 
-            if (bmsdata?.error) {
-                return;
-            }
-            const bmstosr = bmsdata.beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
-            osufunc.debug(bmstosr, 'command', 'map', input.obj.guildId, 'bmsToSr');
-
-            const curmapindex = bmstosr.findIndex(x => x.id == curid);
-            if (input.button == `RightArrow`) {
-                if (curmapindex == bmstosr.length - 1) {
-                    mapid = curid;
-                } else {
-                    mapid = bmstosr[curmapindex + 1].id;
-                }
-            }
-            if (input.button == `LeftArrow`) {
-                if (curmapindex == 0) {
-                    mapid = curid;
-                } else {
-                    mapid = bmstosr[curmapindex - 1].id;
-                }
-            }
-            if (input.button == `BigRightArrow`) {
-                mapid = bmstosr[bmstosr.length - 1].id;
-            }
-            if (input.button == `BigLeftArrow`) {
-                mapid = bmstosr[0].id;
-            }
-            //@ts-ignore
-            if (input.obj.message.embeds[0].fields[1].value.includes('aim') || input.obj.message.embeds[0].fields[0].value.includes('ms')) {
-                detailed = true
-            }//@ts-ignore
             mapmods = input.obj.message.embeds[0].title.split('+')[1];
             if (input.button == 'DetailEnable') {
-                detailed = true;
+                detailed = 2;
             }
             if (input.button == 'DetailDisable') {
-                detailed = false;
+                detailed = 1;
             }
             if (input.button == 'Refresh') {
-                mapid = curid;//@ts-ignore
-                detailed = input.obj.message.embeds[0].fields[1].value.includes('aim') || input.obj.message.embeds[0].fields[0].value.includes('ms')
+                mapid = curid;
+            }
+            if (input.obj.message.embeds[0].fields[0].value.includes('=>')) {
+                overrideBpm = parseFloat(input.obj.message.embeds[0].fields[0].value.split('=>')[1].split('\n')[0]);
             }
         }
             break;
 
         case 'link': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
-            //@ts-ignore
-            const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '')
-            mapmods =//@ts-ignore
+
+            const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
+            mapmods =
                 input.obj.content.includes('+') ?
                     messagenohttp.split('+')[1] : 'NM';
             if (input.args[0] && input.args[0].startsWith('query')) {
-                maptitleq = input.args[1]
+                maptitleq = input.args[1];
             } else if (
                 (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmapsets/') && messagenohttp.includes('#'))) ||
                 (!messagenohttp.includes('/s/') && (messagenohttp.includes('/b/'))) ||
@@ -6637,24 +8470,27 @@ export async function map(input: extypes.commandInput) {
                 try {
                     if (messagenohttp.includes('beatmapsets')) {
 
-                        idfirst = messagenohttp.split('#')[1].split('/')[1]
+                        idfirst = messagenohttp.split('#')[1].split('/')[1];
                     } else if (messagenohttp.includes('?')) {
-                        idfirst = messagenohttp.split('beatmaps/')[1].split('?')[0]
+                        idfirst = messagenohttp.split('beatmaps/')[1].split('?')[0];
                     }
                     else {
-                        idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1]
+                        idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1];
                     }
                     if (isNaN(+idfirst)) {
-                        mapid = parseInt(idfirst.split(' ')[0])
+                        mapid = parseInt(idfirst.split(' ')[0]);
                     } else {
-                        mapid = parseInt(idfirst)
+                        mapid = parseInt(idfirst);
                     }
-                } catch (error) {//@ts-ignore
-                    input.obj.reply({
-                        content: 'Please enter a valid beatmap link.',
-                        allowedMentions: { repliedUser: false }
-                    })
-                        .catch(error => { });
+                } catch (error) {
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: errors.uErr.osu.map.url,
+                            edit: true
+                        }
+                    }, input.canReply);
                     return;
                 }
             } else if (messagenohttp.includes('q=')) {
@@ -6665,64 +8501,123 @@ export async function map(input: extypes.commandInput) {
             } else {
                 let setid = 910392;
                 if (!messagenohttp.includes('/beatmapsets/')) {
-                    setid = messagenohttp.split('/s/')[1]
+                    setid = +messagenohttp.split('/s/')[1];
 
                     if (isNaN(setid)) {
-                        setid = messagenohttp.split('/s/')[1].split(' ')[0]
+                        setid = +messagenohttp.split('/s/')[1].split(' ')[0];
                     }
                 } else if (!messagenohttp.includes('/s/')) {
-                    setid = messagenohttp.split('/beatmapsets/')[1]
+                    setid = +messagenohttp.split('/beatmapsets/')[1];
 
                     if (isNaN(setid)) {
-                        setid = messagenohttp.split('/s/')[1].split(' ')[0]
+                        setid = +messagenohttp.split('/s/')[1].split(' ')[0];
                     }
                 }
-                const bmsdata: osuApiTypes.Beatmapset = await osufunc.apiget('mapset_get', `${setid}`)
+                let bmsdataReq: osufunc.apiReturn;
+                if (func.findFile(setid, `bmsdata`) &&
+                    !('error' in func.findFile(setid, `bmsdata`)) &&
+                    input.button != 'Refresh') {
+                    bmsdataReq = func.findFile(setid, `bmsdata`);
+                } else {
+                    bmsdataReq = await osufunc.apiget({
+                        type: 'mapset_get',
+                        params: {
+                            id: setid
+                        }
+                    });
+                    // bmsdataReq = await osufunc.apiget('mapset_get', `${setid}`)
+                }
+
+                const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
                 if (bmsdata?.error) {
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: errors.uErr.osu.map.ms.replace('[ID]', mapid),
+                            edit: true
+                        }
+                    }, input.canReply);
+                    log.logCommand({
+                        event: 'Error',
+                        commandName: 'map',
+                        commandType: input.commandType,
+                        commandId: input.absoluteID,
+                        object: input.obj,
+                        customString: errors.uErr.osu.map.ms.replace('[ID]', mapid)
+                    });
                     return;
                 }
                 try {
                     mapid = bmsdata.beatmaps[0].id;
-                } catch (error) {//@ts-ignore
-                    input.obj.reply({
-                        content: 'Please enter a valid beatmap link.',
-                        allowedMentions: {
-                            repliedUser: false
+                } catch (error) {
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: errors.uErr.osu.map.setonly.replace('[ID]', bmsdata.id.toString()),
+                            edit: true
                         }
-                    })
-                        .catch(error => { });
+                    }, input.canReply);
+                    log.logCommand({
+                        event: 'Error',
+                        commandName: 'map',
+                        commandType: input.commandType,
+                        commandId: input.absoluteID,
+                        object: input.obj,
+                        customString: errors.uErr.osu.map.setonly.replace('[ID]', bmsdata.id.toString())
+                    });
                     return;
                 }
+            }
+            if (input.args.includes('-bpm')) {
+                const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
+                overrideBpm = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-speed')) {
+                const temp = func.parseArg(input.args, '-speed', 'number', overrideSpeed);
+                overrideSpeed = temp.value;
+                input.args = temp.newArgs;
             }
         }
             break;
     }
     if (input.overrides != null) {
-        overwriteModal = input.overrides.overwriteModal ?? overwriteModal
-        mapid = input.overrides.id ?? mapid
+        if (input.overrides?.overwriteModal != null) {
+            overwriteModal = input?.overrides?.overwriteModal ?? overwriteModal;
+        }
+        if (input.overrides?.id != null) {
+            mapid = input?.overrides?.id ?? mapid;
+        }
+        if (input.overrides?.commanduser != null) {
+            commanduser = input.overrides.commanduser;
+        }
+        if (input.overrides?.commandAs != null) {
+            input.commandType = input.overrides.commandAs;
+        }
+        if (input.overrides?.filterMods != null) {
+            mapmods = input.overrides.filterMods;
+        }
     }
 
     //==============================================================================================================================================================================================
 
     const buttons = new Discord.ActionRowBuilder().addComponents(
         new Discord.ButtonBuilder()
-            .setCustomId(`Refresh-map-${commanduser.id}-${input.absoluteID}`)
+            .setCustomId(`${mainconst.version}-Refresh-map-${commanduser.id}-${input.absoluteID}`)
             .setStyle(buttonsthing.type.current)
             .setEmoji(buttonsthing.label.main.refresh),
-    )
+    );
 
-    log.logFile(
-        'command',
-        log.commandLog('map', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'map',
+        options: [
             {
                 name: 'Map ID',
                 value: mapid
@@ -6737,141 +8632,266 @@ export async function map(input: extypes.commandInput) {
             },
             {
                 name: 'Detailed',
-                value: detailed
-            }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+                value: `${detailed}`
+            },
+            {
+                name: 'BPM',
+                value: overrideBpm
+            },
+            {
+                name: 'Speed',
+                value: overrideSpeed
+            },
+            {
+                name: 'cs',
+                value: customCS
+            },
+            {
+                name: 'ar',
+                value: customAR
+            },
+            {
+                name: 'od',
+                value: customOD
+            },
+            {
+                name: 'hp',
+                value: customHP
+            },
+        ]
+    });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
 
-    if (!mapid || isNaN(mapid)) {
-        mapid = osufunc.getPreviousId('map', input.obj.guildId);
+    if (!mapid) {
+        const temp = osufunc.getPreviousId('map', input.obj.guildId);
+        mapid = temp.id;
+        if (!mapmods || osumodcalc.OrderMods(mapmods).length == 0) {
+            mapmods = temp.mods;
+        }
     }
-    if (detailed == true) {
+    if (detailed == 2) {
         buttons.addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`DetailDisable-map-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-DetailDisable-map-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailed)
-        )
+                .setEmoji(buttonsthing.label.main.detailLess)
+        );
     } else {
         buttons.addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`DetailEnable-map-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-DetailEnable-map-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailed)
-        )
+                .setEmoji(buttonsthing.label.main.detailMore)
+        );
     }
+    let mapdataReq: osufunc.apiReturn;
     let mapdata: osuApiTypes.Beatmap;
+    let bmsdataReq: osufunc.apiReturn;
+    let bmsdata: osuApiTypes.Beatmapset;
 
-    const inputModal = new Discord.SelectMenuBuilder()
-        .setCustomId(`Select-map-${commanduser.id}-${input.absoluteID}`)
-        .setPlaceholder('Select a map')
+    const inputModal = new Discord.StringSelectMenuBuilder()
+        .setCustomId(`${mainconst.version}-Select-map-${commanduser.id}-${input.absoluteID}`)
+        .setPlaceholder('Select a map');
 
+    //fetch map data and mapset data from id
     if (maptitleq == null) {
         if (func.findFile(mapid, 'mapdata') &&
             !('error' in func.findFile(mapid, 'mapdata')) &&
             input.button != 'Refresh') {
-            mapdata = func.findFile(mapid, 'mapdata')
+            mapdataReq = func.findFile(mapid, 'mapdata');
         } else {
-            mapdata = await osufunc.apiget('map_get', `${mapid}`)
+            mapdataReq = await osufunc.apiget({
+                type: 'map_get',
+                params: {
+                    id: mapid
+                }
+            });
         }
-        func.storeFile(mapdata, mapid, 'mapdata')
 
-        osufunc.debug(mapdata, 'command', 'map', input.obj.guildId, 'mapData');
+        mapdata = mapdataReq.apiData;
 
-        if (mapdata?.error) {
+
+        osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
+
+        if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                //@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
-
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: errors.uErr.osu.map.m.replace('[ID]', mapid),
+                        edit: true
+                    }
+                }, input.canReply);
             }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'map',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
+            });
             return;
         }
-        let bmsdata: osuApiTypes.Beatmapset;
+
+        func.storeFile(mapdataReq, mapid, 'mapdata');
+
         if (func.findFile(mapdata.beatmapset_id, `bmsdata`) &&
             !('error' in func.findFile(mapdata.beatmapset_id, `bmsdata`)) &&
             input.button != 'Refresh') {
-            bmsdata = func.findFile(mapdata.beatmapset_id, `bmsdata`)
+            bmsdataReq = func.findFile(mapdata.beatmapset_id, `bmsdata`);
         } else {
-            bmsdata = await osufunc.apiget('mapset_get', `${mapdata.beatmapset_id}`)
+            bmsdataReq = await osufunc.apiget(
+                {
+                    type: 'mapset_get',
+                    params: {
+                        id: mapdata.beatmapset_id
+                    }
+                });
         }
-        func.storeFile(bmsdata, mapdata.beatmapset_id, `bmsdata`)
+        bmsdata = bmsdataReq.apiData;
 
-        osufunc.debug(bmsdata, 'command', 'map', input.obj.guildId, 'bmsData');
+        osufunc.debug(bmsdataReq, 'command', 'map', input.obj.guildId, 'bmsData');
 
-        if (typeof bmsdata.beatmaps == 'undefined' || bmsdata.beatmaps.length < 2) {
+        if (bmsdata?.error) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: errors.uErr.osu.map.ms.replace('[ID]', mapdata.beatmapset_id.toString()),
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'map',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.uErr.osu.map.ms.replace('[ID]', mapdata.beatmapset_id.toString())
+            });
+            return;
+        }
+
+        func.storeFile(bmsdataReq, mapdata.beatmapset_id, `bmsdata`);
+
+        //options thing to switch to other maps in the mapset
+        if (typeof bmsdata?.beatmaps == 'undefined' || bmsdata?.beatmaps?.length < 2) {
             inputModal.addOptions(
-                new Discord.SelectMenuOptionBuilder()
+                new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
                         mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
                             mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
                                 mapdata.mode_int == 3 ? emojis.gamemodes.mania :
                                     emojis.gamemodes.standard
-                        }`)
+                        }` as Discord.APIMessageComponentEmoji)
                     .setLabel(`#${1}`)
                     .setDescription(`${mapdata.version} ${mapdata.difficulty_rating}⭐`)
                     .setValue(`${mapdata.id}`)
-            )
+            );
         } else {
             for (let i = 0; i < bmsdata.beatmaps.length && i < 25; i++) {
-                const curmap = bmsdata.beatmaps.slice().sort((a, b) => b.difficulty_rating - a.difficulty_rating)[i]
+                const curmap = bmsdata.beatmaps.slice().sort((a, b) => b.difficulty_rating - a.difficulty_rating)[i];
                 if (!curmap) break;
                 inputModal.addOptions(
-                    new Discord.SelectMenuOptionBuilder()
+                    new Discord.StringSelectMenuOptionBuilder()
                         .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
                             mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
                                 mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
                                     mapdata.mode_int == 3 ? emojis.gamemodes.mania :
                                         emojis.gamemodes.standard
-                            }`)
+                            }` as Discord.APIMessageComponentEmoji)
                         .setLabel(`#${i + 1} | ${bmsdata.title}`)
                         .setDescription(`${curmap.version} ${curmap.difficulty_rating}⭐`)
                         .setValue(`${curmap.id}`)
-                )
+                );
             }
         }
     }
 
+    //fetch mapdata and mapset data from title query
     if (maptitleq != null) {
-        const mapidtest = await osufunc.apiget('mapset_search', `${maptitleq}`)
-        osufunc.debug(mapidtest, 'command', 'map', input.obj.guildId, 'mapIdTestData');
+        const mapidtestReq = await osufunc.apiget({
+            type: 'mapset_search',
+            params: {
+                searchString: maptitleq,
+                opts: [`s=${searchRestrict}`]
+            }
+        });
+        const mapidtest = mapidtestReq.apiData;
+        osufunc.debug(mapidtestReq, 'command', 'map', input.obj.guildId, 'mapIdTestData');
 
         if (mapidtest?.error) {
-            if (input.commandType != 'button' && input.commandType != 'link') {//@ts-ignore
-                input.obj.reply({
-                    content: 'Error - could not fetch beatmap search data.',
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                }).catch()
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: errors.uErr.osu.map.search,
+                        edit: true
+                    }
+                }, input.canReply);
             }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'map',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.uErr.osu.map.search
+            });
             return;
         }
 
         let mapidtest2;
 
-        if (mapidtest.length == 0) {//@ts-ignore
-            input.obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                .catch();
-
+        if (mapidtest.length == 0) {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq),
+                    edit: true
+                }
+            }, input.canReply);
+            log.logCommand({
+                event: 'Error',
+                commandName: 'map',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq)
+            });
             return;
         }
         try {
-            mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating)
-        } catch (error) {//@ts-ignore
-            input.obj.reply({ content: 'Error - map not found.\nNo maps found for the parameters: "' + maptitleq + '"', allowedMentions: { repliedUser: false }, failIfNotExists: true })
-                .catch();
+            mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
+        } catch (error) {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - could not sort maps`,
+                    edit: true
+                }
+            }, input.canReply);
+            log.logCommand({
+                event: 'Error',
+                commandName: 'map',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: 'Maps failed to sort'
+            });
             return;
         }
-        const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset }[] = [];
+        const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset; }[] = [];
 
+        //get maps to add to options menu
         for (let i = 0; i < mapidtest.beatmapsets.length; i++) {
             if (!mapidtest.beatmapsets[i]) break;
 
@@ -6881,7 +8901,7 @@ export async function map(input: extypes.commandInput) {
                     mode_int: mapidtest.beatmapsets[i].beatmaps[j].mode_int,
                     map: mapidtest.beatmapsets[i].beatmaps[j],
                     mapset: mapidtest.beatmapsets[i]
-                })
+                });
             }
         }
 
@@ -6889,43 +8909,76 @@ export async function map(input: extypes.commandInput) {
             input.commandType == 'button' &&
             !('error' in func.findFile(mapidtest2[0].id, 'mapdata')) &&
             input.button != 'Refresh') {
-            mapdata = func.findFile(mapidtest2[0].id, 'mapdata')
+            mapdataReq = func.findFile(mapidtest2[0].id, 'mapdata');
         } else {
-            mapdata = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
+            mapdataReq = await osufunc.apiget({
+                type: 'map_get',
+                params: {
+                    id: mapidtest2[0].id
+                }
+            });
+            // mapdataReq = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
         }
-        func.storeFile(mapdata, mapidtest2[0].id, 'mapdata')
 
-        osufunc.debug(mapdata, 'command', 'map', input.obj.guildId, 'mapData');
-        if (mapdata?.error) {
+        mapdata = mapdataReq.apiData;
+
+        osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
+        if (mapdata?.error || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                //@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not fetch beatmap data for map \`${mapid}\`.`,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `${errors.uErr.osu.map.m.replace('[ID]', mapidtest2.id)}`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'map',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: `${errors.uErr.osu.map.m.replace('[ID]', mapidtest2.id)}`
+            });
             return;
         }
 
+        func.storeFile(mapdataReq, mapidtest2[0].id, 'mapdata');
+
+        //options menu to switch to other maps
         for (let i = 0; i < allmaps.length && i < 25; i++) {
-            const curmap = allmaps[i]
+            const curmap = allmaps[i];
             if (!curmap.map) break;
             inputModal.addOptions(
-                new Discord.SelectMenuOptionBuilder()
+                new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(`${curmap.mode_int == 0 ? emojis.gamemodes.standard :
                         curmap.mode_int == 1 ? emojis.gamemodes.taiko :
                             curmap.mode_int == 2 ? emojis.gamemodes.fruits :
                                 curmap.mode_int == 3 ? emojis.gamemodes.mania :
                                     emojis.gamemodes.standard
-                        }`)
+                        }` as Discord.APIMessageComponentEmoji)
                     .setLabel(`#${i + 1} | ${curmap.mapset?.title} // ${curmap.mapset?.creator}`)
                     .setDescription(`[${curmap.map.version}] ${curmap.map.difficulty_rating}⭐`)
                     .setValue(`${curmap.map.id}`)
-            )
+            );
         }
     }
 
+    switch (detailed) {
+        case 0:
+            embedStyle = 'MC';
+            break;
+        case 1: default:
+            embedStyle = 'M';
+            break;
+        case 2:
+            embedStyle = 'ME';
+            break;
+    }
+
+    //parsing maps
     if (mapmods == null || mapmods == '') {
         mapmods = 'NM';
     }
@@ -6933,10 +8986,14 @@ export async function map(input: extypes.commandInput) {
         mapmods = osumodcalc.OrderMods(mapmods.toUpperCase());
     }
     let statusimg = emojis.rankedstatus.graveyard;
-    if (input.commandType == 'interaction') {//@ts-ignore
-        input.obj.reply({ content: "Loading...", allowedMentions: { repliedUser: false } })
-            .catch();
-
+    if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
     switch (mapdata.status) {
         case 'ranked':
@@ -6950,19 +9007,48 @@ export async function map(input: extypes.commandInput) {
             break;
     }
 
-    const allvals = osumodcalc.calcValues(
-        mapdata.cs,
-        mapdata.ar,
-        mapdata.accuracy,
-        mapdata.drain,
-        mapdata.bpm,
-        mapdata.hit_length,
-        mapmods
-    )
-    let modissue = ''
-    if (mapmods.includes('TD')) {
-        modissue = '\ncalculations aren\'t supported for TD'
+    if (customCS == 'current' || isNaN(+customCS)) {
+        customCS = mapdata.cs;
     }
+    if (customAR == 'current' || isNaN(+customAR)) {
+        customAR = mapdata.ar;
+    }
+    if (customOD == 'current' || isNaN(+customOD)) {
+        customOD = mapdata.accuracy;
+    }
+    if (customHP == 'current' || isNaN(+customHP)) {
+        customHP = mapdata.drain;
+    }
+
+    let hitlength = mapdata.hit_length;
+
+    if (overrideBpm != null && isNaN(overrideBpm) == false && (overrideSpeed == null || isNaN(overrideSpeed) == true) && overrideBpm != mapdata.bpm) {
+        overrideSpeed = overrideBpm / mapdata.bpm;
+    }
+    if (overrideSpeed != null && isNaN(overrideSpeed) == false && (overrideBpm == null || isNaN(overrideBpm) == true) && overrideSpeed != 1) {
+        overrideBpm = mapdata.bpm * overrideSpeed;
+    }
+    if (mapmods.includes('DT') || mapmods.includes('NC')) {
+        overrideSpeed *= 1.5;
+        overrideBpm *= 1.5;
+    }
+    if (mapmods.includes('HT')) {
+        overrideSpeed *= 0.75;
+        overrideBpm *= 0.75;
+    }
+    if (overrideSpeed) {
+        hitlength /= overrideSpeed;
+    }
+
+    const allvals = osumodcalc.calcValues(
+        +customCS,
+        +customAR,
+        +customOD,
+        +customHP,
+        overrideBpm ?? mapdata.bpm,
+        hitlength,
+        mapmods
+    );
     let mapimg = emojis.gamemodes.standard;
 
     switch (mapdata.mode) {
@@ -6976,19 +9062,27 @@ export async function map(input: extypes.commandInput) {
             mapimg = emojis.gamemodes.mania;
             break;
     }
-    let ppComputed: object;
+    let ppComputed: PerformanceAttributes[];
     let ppissue: string;
-    let totaldiff = mapdata.difficulty_rating;
+    let totaldiff: string | number = mapdata.difficulty_rating;
+
     try {
         ppComputed = await osufunc.mapcalc({
             mods: mapmods,
             gamemode: mapdata.mode,
             mapid: mapdata.id,
-            calctype: 0
-        })
+            calctype: 0,
+            clockRate: overrideSpeed ?? 1,
+            customCS,
+            customAR,
+            customOD,
+            customHP
+        }, new Date(mapdata.last_updated));
         ppissue = '';
         try {
-            totaldiff = ppComputed[0].stars?.toFixed(2)
+            totaldiff = mapdata.difficulty_rating.toFixed(2) != ppComputed[0].difficulty.stars?.toFixed(2) ?
+                `${mapdata.difficulty_rating.toFixed(2)}=>${ppComputed[0].difficulty.stars?.toFixed(2)}` :
+                `${mapdata.difficulty_rating.toFixed(2)}`;
         } catch (error) {
             totaldiff = mapdata.difficulty_rating;
         }
@@ -7004,25 +9098,38 @@ export async function map(input: extypes.commandInput) {
         if ((tstmods.includes('DT') || tstmods.includes('NC')) && tstmods.includes('HT')) {
             ppissue += '\nInvalid mod combinations: DT/NC + HT';
         }
-        const ppComputedTemp = {
-            "mode": 0,
-            "stars": 1.00,
-            "pp": 0.0,
-            "ppAcc": 0.0,
-            "ppAim": 0.0,
-            "ppFlashlight": 0.0,
-            "ppSpeed": 0.0,
-            "ppStrain": 0.0,
-            "ar": 1,
-            "cs": 1,
-            "hp": 1,
-            "od": 1,
-            "bpm": 1,
-            "clockRate": 1,
-            "timePreempt": null,
-            "greatHitWindow": 0,
-            "nCircles": 0,
-            "nSliders": 0
+        const ppComputedTemp: PerformanceAttributes = {
+            mode: mapdata.mode_int,
+            pp: 0,
+            difficulty: {
+                mode: mapdata.mode_int,
+                stars: mapdata.difficulty_rating,
+                maxCombo: mapdata.max_combo,
+                aim: 0,
+                speed: 0,
+                flashlight: 0,
+                sliderFactor: 0,
+                speedNoteCount: 0,
+                ar: mapdata.ar,
+                od: mapdata.accuracy,
+                nCircles: mapdata.count_circles,
+                nSliders: mapdata.count_sliders,
+                nSpinners: mapdata.count_spinners,
+                stamina: 0,
+                rhythm: 0,
+                color: 0,
+                hitWindow: 0,
+                nFruits: mapdata.count_circles,
+                nDroplets: mapdata.count_sliders,
+                nTinyDroplets: mapdata.count_spinners,
+            },
+            ppAcc: 0,
+            ppAim: 0,
+            ppDifficulty: 0,
+            ppFlashlight: 0,
+            ppSpeed: 0,
+            effectiveMissCount: 0,
+
         };
         ppComputed = [
             ppComputedTemp,
@@ -7031,46 +9138,62 @@ export async function map(input: extypes.commandInput) {
             ppComputedTemp,
             ppComputedTemp,
             ppComputedTemp,
-        ]
+        ];
     }
-    let basicvals = `CS${allvals.cs} AR${allvals.ar} OD${allvals.od} HP${allvals.hp}`;
-    if (detailed == true) {
+    const baseCS = allvals.cs != mapdata.cs ? `${mapdata.cs}=>${allvals.cs}` : allvals.cs;
+    const baseAR = allvals.ar != mapdata.ar ? `${mapdata.ar}=>${allvals.ar}` : allvals.ar;
+    const baseOD = allvals.od != mapdata.accuracy ? `${mapdata.accuracy}=>${allvals.od}` : allvals.od;
+    const baseHP = allvals.hp != mapdata.drain ? `${mapdata.drain}=>${allvals.hp}` : allvals.hp;
+    const baseBPM = mapdata.bpm * (overrideSpeed ?? 1) != mapdata.bpm ? `${mapdata.bpm}=>${mapdata.bpm * (overrideSpeed ?? 1)}` : mapdata.bpm;
+
+    let basicvals = `CS${baseCS}\n AR${baseAR}\n OD${baseOD}\n HP${baseHP}\n`;
+    if (detailed == 2) {
         basicvals =
-            `CS${allvals.cs} (${allvals.details.csRadius?.toFixed(2)}r)
-            AR${allvals.ar}  (${allvals.details.arMs?.toFixed(2)}ms)
-            OD${allvals.od} (300: ${allvals.details.odMs.hitwindow_300?.toFixed(2)}ms 100: ${allvals.details.odMs.hitwindow_100?.toFixed(2)}ms 50:  ${allvals.details.odMs.hitwindow_50?.toFixed(2)}ms)
-            HP${allvals.hp}`
+            `CS${baseCS} (${allvals.details.csRadius?.toFixed(2)}r)
+AR${baseAR}  (${allvals.details.arMs?.toFixed(2)}ms)
+OD${baseOD} (300: ${allvals.details.odMs.hitwindow_300?.toFixed(2)}ms 100: ${allvals.details.odMs.hitwindow_100?.toFixed(2)}ms 50:  ${allvals.details.odMs.hitwindow_50?.toFixed(2)}ms)
+HP${baseHP}`;
     }
 
     const mapname = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
     const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
-    const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`
+    const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`;
 
+    let mapperdataReq: osufunc.apiReturn;
     let mapperdata: osuApiTypes.User;
     if (func.findFile(mapdata.beatmapset.user_id, `osudata`) &&
         !('error' in func.findFile(mapdata.beatmapset.user_id, `osudata`)) &&
         input.button != 'Refresh') {
-        mapperdata = func.findFile(mapdata.beatmapset.user_id, `osudata`)
+        mapperdataReq = func.findFile(mapdata.beatmapset.user_id, `osudata`);
     } else {
-        mapperdata = await osufunc.apiget('user', `${mapdata.beatmapset.user_id}`)
+        mapperdataReq = await osufunc.apiget(
+            {
+                type: 'user',
+                params: {
+                    userid: mapdata.beatmapset.user_id,
+                }
+            });
     }
-    func.storeFile(mapperdata, mapperdata.id, `osudata`)
 
-    osufunc.debug(mapperdata, 'command', 'map', input.obj.guildId, 'mapperData');
+    mapperdata = mapperdataReq.apiData;
+
+
+    osufunc.debug(mapperdataReq, 'command', 'map', input.obj.guildId, 'mapperData');
 
     if (mapperdata?.error) {
-        mapperdata = JSON.parse(fs.readFileSync('./files/defaults/mapper.json', 'utf8'));
-        // if (commandType != 'button' && commandType != 'link') {
-        //     input.obj.reply({
-        //         content: 'Error - could not find mapper',
-        //         allowedMentions: { repliedUser: false },
-        //         failIfNotExists: true
-        //     })
-        // }
-        // return;
+        mapperdata = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
+        log.logCommand({
+            event: 'Error',
+            commandName: 'map',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: `Could not find user ${mapdata.beatmapset.user_id} (map creator).\nUsing default json file`
+        });
     }
+    func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
 
-    const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode)
+    const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode, new Date(mapdata.last_updated));
     try {
         osufunc.debug(strains, 'command', 'map', input.obj.guildId, 'strains');
 
@@ -7079,45 +9202,49 @@ export async function map(input: extypes.commandInput) {
     }
     let mapgraph;
     if (strains) {
-        mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
+        mapgraph = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains'));
     } else {
-        mapgraph = null
+        mapgraph = null;
     }
     let detailedmapdata = '-';
-    if (detailed == true) {
+    if (detailed == 2) {
         switch (mapdata.mode) {
             case 'osu': {
-                detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Aim: ${ppComputed[0].ppAim?.toFixed(2)} | Speed: ${ppComputed[0].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} \n ` +
-                    `**99**: ${ppComputed[1].pp?.toFixed(2)} | Aim: ${ppComputed[1].ppAim?.toFixed(2)} | Speed: ${ppComputed[1].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} \n ` +
-                    `**97**: ${ppComputed[3].pp?.toFixed(2)} | Aim: ${ppComputed[3].ppAim?.toFixed(2)} | Speed: ${ppComputed[3].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} \n ` +
-                    `**95**: ${ppComputed[5].pp?.toFixed(2)} | Aim: ${ppComputed[5].ppAim?.toFixed(2)} | Speed: ${ppComputed[5].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} \n ` +
-                    `${modissue}\n${ppissue}`
+                const curattr = ppComputed as OsuPerformanceAttributes[];
+                detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Aim: ${curattr[0].ppAim?.toFixed(2)} | Speed: ${curattr[0].ppSpeed?.toFixed(2)} | Acc: ${curattr[0].ppAcc?.toFixed(2)} \n ` +
+                    `**99**: ${curattr[1].pp?.toFixed(2)} | Aim: ${curattr[1].ppAim?.toFixed(2)} | Speed: ${curattr[1].ppSpeed?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} \n ` +
+                    `**97**: ${curattr[3].pp?.toFixed(2)} | Aim: ${curattr[3].ppAim?.toFixed(2)} | Speed: ${curattr[3].ppSpeed?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} \n ` +
+                    `**95**: ${curattr[5].pp?.toFixed(2)} | Aim: ${curattr[5].ppAim?.toFixed(2)} | Speed: ${curattr[5].ppSpeed?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} \n ` +
+                    `${ppissue}`;
             }
                 break;
             case 'taiko': {
-                detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} | Strain: ${ppComputed[0].ppStrain?.toFixed(2)} \n ` +
-                    `**99**: ${ppComputed[1].pp?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} | Strain: ${ppComputed[1]?.ppStrain?.toFixed(2)} \n ` +
-                    `**97**: ${ppComputed[3].pp?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} | Strain: ${ppComputed[3]?.ppStrain?.toFixed(2)} \n ` +
-                    `**95**: ${ppComputed[5].pp?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} | Strain: ${ppComputed[5]?.ppStrain?.toFixed(2)} \n ` +
-                    `${modissue}\n${ppissue}`
+                const curattr = ppComputed as TaikoPerformanceAttributes[];
+                detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Acc: ${curattr[0].ppAcc?.toFixed(2)} | Strain: ${curattr[0].ppDifficulty?.toFixed(2)} \n ` +
+                    `**99**: ${curattr[1].pp?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
+                    `**97**: ${curattr[3].pp?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
+                    `**95**: ${curattr[5].pp?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
+                    `${ppissue}`;
             }
                 break;
             case 'fruits': {
-                detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} \n ` +
-                    `**99**: ${ppComputed[1].pp?.toFixed(2)} \n ` +
-                    `**98**: ${ppComputed[2].pp?.toFixed(2)} \n ` +
-                    `**97**: ${ppComputed[3].pp?.toFixed(2)} \n ` +
-                    `**96**: ${ppComputed[4].pp?.toFixed(2)} \n ` +
-                    `**95**: ${ppComputed[5].pp?.toFixed(2)} \n ` +
-                    `${modissue}\n${ppissue}`
+                const curattr = ppComputed as CatchPerformanceAttributes[];
+                detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Strain: ${curattr[0].ppDifficulty?.toFixed(2)} \n ` +
+                    `**99**: ${curattr[1].pp?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
+                    `**97**: ${curattr[3].pp?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
+                    `**95**: ${curattr[5].pp?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
+                    `${ppissue}`;
             }
                 break;
             case 'mania': {
-                detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Acc: ${ppComputed[0].ppAcc?.toFixed(2)} | Strain: ${ppComputed[0].ppStrain?.toFixed(2)} \n ` +
-                    `**99**: ${ppComputed[1].pp?.toFixed(2)} | Acc: ${ppComputed[1].ppAcc?.toFixed(2)} | Strain: ${ppComputed[1].ppStrain?.toFixed(2)} \n ` +
-                    `**97**: ${ppComputed[3].pp?.toFixed(2)} | Acc: ${ppComputed[3].ppAcc?.toFixed(2)} | Strain: ${ppComputed[3].ppStrain?.toFixed(2)} \n ` +
-                    `**95**: ${ppComputed[5].pp?.toFixed(2)} | Acc: ${ppComputed[5].ppAcc?.toFixed(2)} | Strain: ${ppComputed[5].ppStrain?.toFixed(2)} \n ` +
-                    `${modissue}\n${ppissue}`
+                const curattr = ppComputed as ManiaPerformanceAttributes[];
+                detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} \n ` +
+                    `**99**: ${curattr[1].pp?.toFixed(2)} \n ` +
+                    `**98**: ${curattr[2].pp?.toFixed(2)} \n ` +
+                    `**97**: ${curattr[3].pp?.toFixed(2)} \n ` +
+                    `**96**: ${curattr[4].pp?.toFixed(2)} \n ` +
+                    `**95**: ${curattr[5].pp?.toFixed(2)} \n ` +
+                    `${ppissue}`;
             }
                 break;
 
@@ -7133,9 +9260,12 @@ export async function map(input: extypes.commandInput) {
         }${mapdata.status == 'loved' ?
             `Loved <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
         }\n` +
-        `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`
+        `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`;
 
     const Embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setColor(0x91ff9a)
         .setTitle(maptitle)
         .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
@@ -7149,24 +9279,24 @@ export async function map(input: extypes.commandInput) {
             {
                 name: 'MAP VALUES',
                 value:
-                    `${basicvals}\n` +
-                    `${totaldiff}⭐ ${emojis.mapobjs.bpm}${allvals.bpm}\n` +
+                    `${basicvals} ⭐${totaldiff}\n` +
+                    `${emojis.mapobjs.bpm}${baseBPM}\n` +
                     `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
-                    `${emojis.mapobjs.total_length}${allvals.details.lengthFull}\n` +
+                    `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull}\n` +
                     `${mapdata.max_combo}x combo`,
                 inline: true
             },
             {
                 name: 'PP',
                 value:
-                    detailed != true ?
+                    detailed != 2 ?
                         `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
                         `99: ${ppComputed[1].pp?.toFixed(2)} \n ` +
                         `98: ${ppComputed[2].pp?.toFixed(2)} \n ` +
                         `97: ${ppComputed[3].pp?.toFixed(2)} \n ` +
                         `96: ${ppComputed[4].pp?.toFixed(2)} \n ` +
                         `95: ${ppComputed[5].pp?.toFixed(2)} \n ` +
-                        `${modissue}\n${ppissue}` :
+                        `${ppissue}` :
                         detailedmapdata
                 ,
                 inline: true
@@ -7181,86 +9311,162 @@ export async function map(input: extypes.commandInput) {
             {
                 name: 'MAP DETAILS',
                 value: `${statusimg} | ${mapimg} \n ` +
-                    `${detailed == true ?
+                    `${detailed == 2 ?
                         exMapDetails
                         : ''}`
 
                 ,
                 inline: false
             }
-        ])
+        ]);
+
+    if (mapdata.user_id != mapdata.beatmapset.user_id) {
+        let gdReq: osufunc.apiReturn;
+        let gdData: osuApiTypes.User;
+        if (func.findFile(mapdata.user_id, `osudata`) &&
+            !('error' in func.findFile(mapdata.user_id, `osudata`)) &&
+            input.button != 'Refresh') {
+            gdReq = func.findFile(mapdata.user_id, `osudata`);
+        } else {
+            gdReq = await osufunc.apiget(
+                {
+                    type: 'user',
+                    params: {
+                        userid: mapdata.user_id,
+                    }
+                });
+        }
+
+        gdData = gdReq.apiData;
+
+
+        osufunc.debug(gdReq, 'command', 'map', input.obj.guildId, 'guestData');
+
+        if (gdData?.error) {
+            gdData = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
+            log.logCommand({
+                event: 'Error',
+                commandName: 'map',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: `Could not find user ${mapdata.user_id} (guest mapper).\nUsing default json file.`
+            });
+        }
+        func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
+        Embed.setDescription(`Guest difficulty by [${gdData?.username}](https://osu.ppy.sh/u/${mapdata.user_id})`);
+
+        buttons
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-User-map-any-${input.absoluteID}-${gdData.id}+${gdData.playmode}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.extras.user),
+            );
+    } else {
+        buttons
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-User-map-any-${input.absoluteID}-${mapperdata.id}+${mapperdata.playmode}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.extras.user),
+            );
+    }
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-Leaderboard-map-${commanduser.id}-${input.absoluteID}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.leaderboard)
+    );
+
     if (mapgraph) {
-        Embed.setImage(`${mapgraph}`)
+        Embed.setImage(`${mapgraph}`);
     }
     switch (true) {
         case parseFloat(totaldiff.toString()) >= 8:
-            Embed.setColor(colours.diffcolour[7].dec)
+            Embed.setColor(colours.diffcolour[7].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 7:
-            Embed.setColor(colours.diffcolour[6].dec)
+            Embed.setColor(colours.diffcolour[6].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 6:
-            Embed.setColor(colours.diffcolour[5].dec)
+            Embed.setColor(colours.diffcolour[5].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 4.5:
-            Embed.setColor(colours.diffcolour[4].dec)
+            Embed.setColor(colours.diffcolour[4].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 3.25:
-            Embed.setColor(colours.diffcolour[3].dec)
+            Embed.setColor(colours.diffcolour[3].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 2.5:
-            Embed.setColor(colours.diffcolour[2].dec)
+            Embed.setColor(colours.diffcolour[2].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 2:
-            Embed.setColor(colours.diffcolour[1].dec)
+            Embed.setColor(colours.diffcolour[1].dec);
             break;
         case parseFloat(totaldiff.toString()) >= 1.5:
-            Embed.setColor(colours.diffcolour[0].dec)
+            Embed.setColor(colours.diffcolour[0].dec);
             break;
         default:
-            Embed.setColor(colours.diffcolour[0].dec)
+            Embed.setColor(colours.diffcolour[0].dec);
             break;
     }
     const embeds = [Embed];
 
-    if (detailed == true) {
+    if (detailed == 2) {
         const failval = mapdata.failtimes.fail;
         const exitval = mapdata.failtimes.exit;
         const numofval = [];
         for (let i = 0; i < failval.length; i++) {
-            numofval.push(i)
+            numofval.push(i);
         }
 
-        const passurl = await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits');
+        const passurl = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits'));
         const passEmbed = new Discord.EmbedBuilder()
+            .setFooter({
+                text: `${embedStyle}`
+            })
             .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
             .setImage(`${passurl}`);
         await embeds.push(passEmbed);
     }
 
-    osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+    osufunc.writePreviousId('map', input.obj.guildId,
+        {
+            id: `${mapdata.id}`,
+            apiData: null,
+            mods: mapmods
+        }
+    );
 
 
     useComponents.push(buttons);
 
     let frmod = inputModal;
     if (overwriteModal != null) {
-        frmod = overwriteModal
+        frmod = overwriteModal;
     }
 
     const selectrow = new Discord.ActionRowBuilder()
-        .addComponents(frmod)
+        .addComponents(frmod);
 
     if (!(inputModal.options.length < 1)) {
         useComponents.push(selectrow);
     }
 
-    osufunc.writePreviousId('map', input.obj.guildId, `${mapdata.id}`);
+    osufunc.writePreviousId('map', input.obj.guildId,
+        {
+            id: `${mapdata.id}`,
+            apiData: null,
+            mods: mapmods
+        }
+    );
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
@@ -7268,18 +9474,1075 @@ export async function map(input: extypes.commandInput) {
             components: useComponents,
             edit: true
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
 
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'map',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'map',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
+
+}
+
+/**
+ * returns all pp values for a given map
+ */
+export async function ppCalc(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+
+    let mapid;
+    let mapmods;
+    let maptitleq: string = null;
+    const searchRestrict = 'any';
+    let overrideSpeed = 1;
+    let overrideBpm: number = null;
+
+    const useComponents = [];
+    let overwriteModal = null;
+
+    let customCS: 'current' | number = 'current';
+    let customAR: 'current' | number = 'current';
+    let customOD: 'current' | number = 'current';
+    let customHP: 'current' | number = 'current';
+
+    const embedStyle: extypes.osuCmdStyle = 'M';
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message);
+
+            commanduser = input.obj.author;
+
+            if (input.args.includes('-bpm')) {
+                const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
+                overrideBpm = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-speed')) {
+                const temp = func.parseArg(input.args, '-speed', 'number', overrideSpeed);
+                overrideSpeed = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.includes('-cs')) {
+                const temp = func.parseArg(input.args, '-cs', 'number', customCS);
+                customCS = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-ar')) {
+                const temp = func.parseArg(input.args, '-ar', 'number', customAR);
+                customAR = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-od')) {
+                const temp = func.parseArg(input.args, '-od', 'number', customOD);
+                customOD = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-accuracy')) {
+                const temp = func.parseArg(input.args, '-accuracy', 'number', customOD);
+                customOD = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-hp')) {
+                const temp = func.parseArg(input.args, '-hp', 'number', customHP);
+                customHP = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-drain')) {
+                const temp = func.parseArg(input.args, '-drain', 'number', customHP);
+                customHP = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.includes('-?')) {
+                const temp = func.parseArg(input.args, '-?', 'string', maptitleq, true);
+                maptitleq = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.join(' ').includes('"')) {
+                maptitleq = input.args.join(' ').substring(
+                    input.args.join(' ').indexOf('"') + 1,
+                    input.args.join(' ').lastIndexOf('"')
+                );
+                input.args = input.args.join(' ').replace(maptitleq, '').split(' ');
+            }
+            if (input.args.join(' ').includes('+')) {
+                mapmods = input.args.join(' ').split('+')[1];
+                mapmods.includes(' ') ? mapmods = mapmods.split(' ')[0] : null;
+                input.args = input.args.join(' ').replace('+', '').replace(mapmods, '').split(' ');
+            }
+            input.args = cleanArgs(input.args);
+
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map;
+        }
+            break;
+
+        //==============================================================================================================================================================================================
+
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+
+            mapid = input.obj.options.getInteger('id');
+            mapmods = input.obj.options.getString('mods');
+            maptitleq = input.obj.options.getString('query');
+            input.obj.options.getNumber('bpm') ? overrideBpm = input.obj.options.getNumber('bpm') : null;
+            input.obj.options.getNumber('speed') ? overrideSpeed = input.obj.options.getNumber('speed') : null;
+        }
+
+            //==============================================================================================================================================================================================
+
+            break;
+
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
+            if (!input.obj.message.embeds[0]) {
+                return;
+            }
+            commanduser = input.obj.member.user;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+        if (input.overrides?.overwriteModal != null) {
+            overwriteModal = input?.overrides?.overwriteModal ?? overwriteModal;
+        }
+        if (input.overrides?.id != null) {
+            mapid = input?.overrides?.id ?? mapid;
+        }
+        if (input.overrides?.commanduser != null) {
+            commanduser = input.overrides.commanduser;
+        }
+        if (input.overrides?.commandAs != null) {
+            input.commandType = input.overrides.commandAs;
+        }
+    }
+
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'ppcalc',
+        options: [
+            {
+                name: 'Map ID',
+                value: mapid
+            },
+            {
+                name: 'Map Mods',
+                value: mapmods
+            },
+            {
+                name: 'Map Title Query',
+                value: maptitleq
+            },
+            {
+                name: 'BPM',
+                value: overrideBpm
+            },
+            {
+                name: 'Speed',
+                value: overrideSpeed
+            },
+            {
+                name: 'cs',
+                value: customCS
+            },
+            {
+                name: 'ar',
+                value: customAR
+            },
+            {
+                name: 'od',
+                value: customOD
+            },
+            {
+                name: 'hp',
+                value: customHP
+            },
+        ]
+    });
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+
+    if (!mapid) {
+        const temp = osufunc.getPreviousId('map', input.obj.guildId);
+        mapid = temp.id;
+        if (!mapmods || osumodcalc.OrderMods(mapmods).length == 0) {
+            mapmods = temp.mods;
+        }
+    }
+    let mapdataReq: osufunc.apiReturn;
+    let mapdata: osuApiTypes.Beatmap;
+    let bmsdataReq: osufunc.apiReturn;
+    let bmsdata: osuApiTypes.Beatmapset;
+
+    const inputModal = new Discord.StringSelectMenuBuilder()
+        .setCustomId(`${mainconst.version}-Select-ppcalc-${commanduser.id}-${input.absoluteID}`)
+        .setPlaceholder('Select a map');
+
+    //fetch map data and mapset data from id
+    if (maptitleq == null) {
+        if (func.findFile(mapid, 'mapdata') &&
+            !('error' in func.findFile(mapid, 'mapdata')) &&
+            input.button != 'Refresh') {
+            mapdataReq = func.findFile(mapid, 'mapdata');
+        } else {
+            mapdataReq = await osufunc.apiget({
+                type: 'map_get',
+                params: {
+                    id: mapid
+                }
+            });
+        }
+
+        mapdata = mapdataReq.apiData;
+
+
+        osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
+
+        if (mapdata?.error || !mapdata.id) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: errors.uErr.osu.map.m.replace('[ID]', mapid),
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'ppcalc',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
+            });
+            return;
+        }
+
+        func.storeFile(mapdataReq, mapid, 'mapdata');
+
+        if (func.findFile(mapdata.beatmapset_id, `bmsdata`) &&
+            !('error' in func.findFile(mapdata.beatmapset_id, `bmsdata`)) &&
+            input.button != 'Refresh') {
+            bmsdataReq = func.findFile(mapdata.beatmapset_id, `bmsdata`);
+        } else {
+            bmsdataReq = await osufunc.apiget(
+                {
+                    type: 'mapset_get',
+                    params: {
+                        id: mapdata.beatmapset_id
+                    }
+                });
+        }
+        bmsdata = bmsdataReq.apiData;
+
+        osufunc.debug(bmsdataReq, 'command', 'map', input.obj.guildId, 'bmsData');
+
+        if (bmsdata?.error) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: errors.uErr.osu.map.m.replace('[ID]', mapdata.beatmapset_id.toString()),
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'ppcalc',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.uErr.osu.map.m.replace('[ID]', mapdata.beatmapset_id.toString())
+            });
+            return;
+        }
+
+        func.storeFile(bmsdataReq, mapdata.beatmapset_id, `bmsdata`);
+
+        //options thing to switch to other maps in the mapset
+        if (typeof bmsdata?.beatmaps == 'undefined' || bmsdata?.beatmaps?.length < 2) {
+            inputModal.addOptions(
+                new Discord.StringSelectMenuOptionBuilder()
+                    .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
+                        mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
+                            mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
+                                mapdata.mode_int == 3 ? emojis.gamemodes.mania :
+                                    emojis.gamemodes.standard
+                        }` as Discord.APIMessageComponentEmoji)
+                    .setLabel(`#${1}`)
+                    .setDescription(`${mapdata.version} ${mapdata.difficulty_rating}⭐`)
+                    .setValue(`${mapdata.id}`)
+            );
+        } else {
+            for (let i = 0; i < bmsdata.beatmaps.length && i < 25; i++) {
+                const curmap = bmsdata.beatmaps.slice().sort((a, b) => b.difficulty_rating - a.difficulty_rating)[i];
+                if (!curmap) break;
+                inputModal.addOptions(
+                    new Discord.StringSelectMenuOptionBuilder()
+                        .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
+                            mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
+                                mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
+                                    mapdata.mode_int == 3 ? emojis.gamemodes.mania :
+                                        emojis.gamemodes.standard
+                            }` as Discord.APIMessageComponentEmoji)
+                        .setLabel(`#${i + 1} | ${bmsdata.title}`)
+                        .setDescription(`${curmap.version} ${curmap.difficulty_rating}⭐`)
+                        .setValue(`${curmap.id}`)
+                );
+            }
+        }
+    }
+
+    //fetch mapdata and mapset data from title query
+    if (maptitleq != null) {
+        const mapidtestReq = await osufunc.apiget({
+            type: 'mapset_search',
+            params: {
+                searchString: maptitleq,
+                opts: [`s=${searchRestrict}`]
+            }
+        });
+        const mapidtest = mapidtestReq.apiData;
+        osufunc.debug(mapidtestReq, 'command', 'map', input.obj.guildId, 'mapIdTestData');
+
+        if (mapidtest?.error) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq),
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'ppcalc',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq)
+            });
+            return;
+        }
+
+        let mapidtest2;
+
+        if (mapidtest.length == 0) {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq),
+                    edit: true
+                }
+            }, input.canReply);
+            return;
+        }
+        try {
+            mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
+        } catch (error) {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Error - `,
+                    edit: true
+                }
+            }, input.canReply);
+            return;
+        }
+        const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset; }[] = [];
+
+        //get maps to add to options menu
+        for (let i = 0; i < mapidtest.beatmapsets.length; i++) {
+            if (!mapidtest.beatmapsets[i]) break;
+
+            for (let j = 0; j < mapidtest.beatmapsets[i].beatmaps.length; j++) {
+                if (!mapidtest.beatmapsets[i].beatmaps[j]) break;
+                allmaps.push({
+                    mode_int: mapidtest.beatmapsets[i].beatmaps[j].mode_int,
+                    map: mapidtest.beatmapsets[i].beatmaps[j],
+                    mapset: mapidtest.beatmapsets[i]
+                });
+            }
+        }
+
+        if (func.findFile(mapidtest2[0].id, 'mapdata') &&
+            input.commandType == 'button' &&
+            !('error' in func.findFile(mapidtest2[0].id, 'mapdata')) &&
+            input.button != 'Refresh') {
+            mapdataReq = func.findFile(mapidtest2[0].id, 'mapdata');
+        } else {
+            mapdataReq = await osufunc.apiget({
+                type: 'map_get',
+                params: {
+                    id: mapidtest2[0].id
+                }
+            });
+            // mapdataReq = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)
+        }
+
+        mapdata = mapdataReq.apiData;
+
+        osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
+        if (mapdata?.error || !mapdata.id) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: errors.uErr.osu.map.m.replace('[ID]', mapidtest2[0].id),
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'ppcalc',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.uErr.osu.map.m.replace('[ID]', mapidtest2[0].id)
+            });
+            return;
+        }
+
+        func.storeFile(mapdataReq, mapidtest2[0].id, 'mapdata');
+
+        //options menu to switch to other maps
+        for (let i = 0; i < allmaps.length && i < 25; i++) {
+            const curmap = allmaps[i];
+            if (!curmap.map) break;
+            inputModal.addOptions(
+                new Discord.StringSelectMenuOptionBuilder()
+                    .setEmoji(`${curmap.mode_int == 0 ? emojis.gamemodes.standard :
+                        curmap.mode_int == 1 ? emojis.gamemodes.taiko :
+                            curmap.mode_int == 2 ? emojis.gamemodes.fruits :
+                                curmap.mode_int == 3 ? emojis.gamemodes.mania :
+                                    emojis.gamemodes.standard
+                        }` as Discord.APIMessageComponentEmoji)
+                    .setLabel(`#${i + 1} | ${curmap.mapset?.title} // ${curmap.mapset?.creator}`)
+                    .setDescription(`[${curmap.map.version}] ${curmap.map.difficulty_rating}⭐`)
+                    .setValue(`${curmap.map.id}`)
+            );
+        }
+    }
+
+
+    //parsing maps
+    if (mapmods == null || mapmods == '') {
+        mapmods = 'NM';
+    }
+    else {
+        mapmods = osumodcalc.OrderMods(mapmods.toUpperCase());
+    }
+    if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
+    }
+
+    if (customCS == 'current' || isNaN(+customCS)) {
+        customCS = mapdata.cs;
+    }
+    if (customAR == 'current' || isNaN(+customAR)) {
+        customAR = mapdata.ar;
+    }
+    if (customOD == 'current' || isNaN(+customOD)) {
+        customOD = mapdata.accuracy;
+    }
+    if (customHP == 'current' || isNaN(+customHP)) {
+        customHP = mapdata.drain;
+    }
+
+    let hitlength = mapdata.hit_length;
+
+    if (overrideBpm != null && isNaN(overrideBpm) == false && (overrideSpeed == null || isNaN(overrideSpeed) == true) && overrideBpm != mapdata.bpm) {
+        overrideSpeed = overrideBpm / mapdata.bpm;
+    }
+    if (overrideSpeed != null && isNaN(overrideSpeed) == false && (overrideBpm == null || isNaN(overrideBpm) == true) && overrideSpeed != 1) {
+        overrideBpm = mapdata.bpm * overrideSpeed;
+    }
+    if (mapmods.includes('DT') || mapmods.includes('NC')) {
+        overrideSpeed *= 1.5;
+        overrideBpm *= 1.5;
+    }
+    if (mapmods.includes('HT')) {
+        overrideSpeed *= 0.75;
+        overrideBpm *= 0.75;
+    }
+    if (overrideSpeed) {
+        hitlength /= overrideSpeed;
+    }
+
+    const allvals = osumodcalc.calcValues(
+        +customCS,
+        +customAR,
+        +customOD,
+        +customHP,
+        overrideBpm ?? mapdata.bpm,
+        hitlength,
+        mapmods
+    );
+    let mapimg = emojis.gamemodes.standard;
+
+    switch (mapdata.mode) {
+        case 'taiko':
+            mapimg = emojis.gamemodes.taiko;
+            break;
+        case 'fruits':
+            mapimg = emojis.gamemodes.fruits;
+            break;
+        case 'mania':
+            mapimg = emojis.gamemodes.mania;
+            break;
+    }
+    let ppComputed: PerformanceAttributes[];
+    let ppissue: string;
+    let totaldiff: string | number = mapdata.difficulty_rating;
+
+    try {
+        ppComputed = await osufunc.mapcalc({
+            mods: mapmods,
+            gamemode: mapdata.mode,
+            mapid: mapdata.id,
+            calctype: 0,
+            clockRate: overrideSpeed ?? 1,
+            customCS,
+            customAR,
+            customOD,
+            customHP,
+            maxLimit: 21
+        }, new Date(mapdata.last_updated));
+        ppissue = '';
+        try {
+            totaldiff = ppComputed[0].difficulty.stars?.toFixed(2);
+        } catch (error) {
+            totaldiff = mapdata.difficulty_rating;
+        }
+        osufunc.debug(ppComputed, 'command', 'map', input.obj.guildId, 'ppCalc');
+
+    } catch (error) {
+        ppissue = 'Error - pp could not be calculated';
+        const tstmods = mapmods.toUpperCase();
+
+        if (tstmods.includes('EZ') || tstmods.includes('HR')) {
+            ppissue += '\nInvalid mod combinations: EZ + HR';
+        }
+        if ((tstmods.includes('DT') || tstmods.includes('NC')) && tstmods.includes('HT')) {
+            ppissue += '\nInvalid mod combinations: DT/NC + HT';
+        }
+        const ppComputedTemp: PerformanceAttributes = {
+            mode: mapdata.mode_int,
+            pp: 0,
+            difficulty: {
+                mode: mapdata.mode_int,
+                stars: mapdata.difficulty_rating,
+                maxCombo: mapdata.max_combo,
+                aim: 0,
+                speed: 0,
+                flashlight: 0,
+                sliderFactor: 0,
+                speedNoteCount: 0,
+                ar: mapdata.ar,
+                od: mapdata.accuracy,
+                nCircles: mapdata.count_circles,
+                nSliders: mapdata.count_sliders,
+                nSpinners: mapdata.count_spinners,
+                stamina: 0,
+                rhythm: 0,
+                color: 0,
+                hitWindow: 0,
+                nFruits: mapdata.count_circles,
+                nDroplets: mapdata.count_sliders,
+                nTinyDroplets: mapdata.count_spinners,
+            },
+            ppAcc: 0,
+            ppAim: 0,
+            ppDifficulty: 0,
+            ppFlashlight: 0,
+            ppSpeed: 0,
+            effectiveMissCount: 0,
+
+        };
+        ppComputed = [];
+        for (let i = 0; i < 21; i++) {
+            ppComputed.push(ppComputedTemp);
+        }
+    }
+    const baseCS = allvals.cs != mapdata.cs ? `${mapdata.cs}=>${allvals.cs}` : allvals.cs;
+    const baseAR = allvals.ar != mapdata.ar ? `${mapdata.ar}=>${allvals.ar}` : allvals.ar;
+    const baseOD = allvals.od != mapdata.accuracy ? `${mapdata.accuracy}=>${allvals.od}` : allvals.od;
+    const baseHP = allvals.hp != mapdata.drain ? `${mapdata.drain}=>${allvals.hp}` : allvals.hp;
+    const baseBPM = mapdata.bpm * (overrideSpeed ?? 1) != mapdata.bpm ? `${mapdata.bpm}=>${mapdata.bpm * (overrideSpeed ?? 1)}` : mapdata.bpm;
+
+    const mapname = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
+    const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
+    const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`;
+
+    let extras = '';
+
+    switch (mapdata.mode) {
+        case 'osu': {
+            const curattr = ppComputed as OsuPerformanceAttributes[];
+
+            extras = `
+---===SS===---  
+- Aim: ${curattr[0].ppAim}
+- Speed: ${curattr[0].ppSpeed}
+- Acc: ${curattr[0].ppAcc}
+- Flashlight: ${curattr[0].ppFlashlight}
+- Total: ${curattr[0].pp} 
+---===97%===---
+- Aim: ${curattr[3].ppAim}
+- Speed: ${curattr[3].ppSpeed}
+- Acc: ${curattr[3].ppAcc}
+- Flashlight: ${curattr[3].ppFlashlight}
+- Total: ${curattr[3].pp} 
+---===95%===---
+- Aim: ${curattr[5].ppAim}
+- Speed: ${curattr[5].ppSpeed}
+- Acc: ${curattr[5].ppAcc}
+- Flashlight: ${curattr[5].ppFlashlight}
+- Total: ${curattr[5].pp} 
+---===93%===---
+- Aim: ${curattr[7].ppAim}
+- Speed: ${curattr[7].ppSpeed}
+- Acc: ${curattr[7].ppAcc}
+- Flashlight: ${curattr[7].ppFlashlight}
+- Total: ${curattr[7].pp} 
+---===90%===---
+- Aim: ${curattr[10].ppAim}
+- Speed: ${curattr[10].ppSpeed}
+- Acc: ${curattr[10].ppAcc}
+- Flashlight: ${curattr[10].ppFlashlight}
+- Total: ${curattr[10].pp}                 
+`;
+        }
+            break;
+        case 'taiko': {
+            const curattr = ppComputed as TaikoPerformanceAttributes[];
+            extras = `
+---===SS===---  
+- Strain: ${curattr[0].ppDifficulty}
+- Acc: ${curattr[0].ppAcc}
+- Total: ${curattr[0].pp} 
+---===97%===---
+- Strain: ${curattr[3].ppDifficulty}
+- Acc: ${curattr[3].ppAcc}
+- Total: ${curattr[3].pp} 
+---===95%===---
+- Strain: ${curattr[5].ppDifficulty}
+- Acc: ${curattr[5].ppAcc}
+- Total: ${curattr[5].pp} 
+---===93%===---
+- Strain: ${curattr[7].ppDifficulty}
+- Acc: ${curattr[7].ppAcc}
+- Total: ${curattr[7].pp} 
+---===90%===---
+- Strain: ${curattr[10].ppDifficulty}
+- Acc: ${curattr[10].ppAcc}
+- Total: ${curattr[10].pp}                 
+`;
+        }
+            break;
+        case 'fruits': {
+            const curattr = ppComputed as CatchPerformanceAttributes[];
+            extras = `
+---===SS===---  
+- Strain: ${curattr[0].ppDifficulty}
+- Total: ${curattr[0].pp} 
+---===97%===---
+- Strain: ${curattr[3].ppDifficulty}
+- Total: ${curattr[3].pp} 
+---===95%===---
+- Strain: ${curattr[5].ppDifficulty}
+- Total: ${curattr[5].pp} 
+---===93%===---
+- Strain: ${curattr[7].ppDifficulty}
+- Total: ${curattr[7].pp} 
+---===90%===---
+- Strain: ${curattr[10].ppDifficulty}
+- Total: ${curattr[10].pp}                 
+`;
+        }
+            break;
+        case 'mania': {
+            const curattr = ppComputed as ManiaPerformanceAttributes[];
+            extras = `
+---===SS===---  
+- Total: ${curattr[0].pp} 
+---===97%===---
+- Total: ${curattr[3].pp} 
+---===95%===---
+- Total: ${curattr[5].pp} 
+---===93%===---
+- Total: ${curattr[7].pp} 
+---===90%===---
+- Total: ${curattr[10].pp}                 
+`;
+        }
+            break;
+    }
+
+    const Embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
+        .setColor(0x91ff9a)
+        .setTitle(maptitle)
+        .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
+        .setThumbnail(osufunc.getMapImages(mapdata.beatmapset_id).list2x)
+        .addFields([
+            {
+                name: 'MAP VALUES',
+                value:
+                    `CS${baseCS} AR${baseAR} OD${baseOD} HP${baseHP} ${totaldiff}⭐\n` +
+                    `${emojis.mapobjs.bpm}${baseBPM} | ` +
+                    `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull} | ` +
+                    `${mapdata.max_combo}x combo\n ` +
+                    `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n`,
+                inline: false
+            },
+            {
+                name: 'PP',
+                value:
+                    `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
+                    `99%: ${ppComputed[1].pp?.toFixed(2)} \n ` +
+                    `98%: ${ppComputed[2].pp?.toFixed(2)} \n ` +
+                    `97%: ${ppComputed[3].pp?.toFixed(2)} \n ` +
+                    `96%: ${ppComputed[4].pp?.toFixed(2)} \n ` +
+                    `95%: ${ppComputed[5].pp?.toFixed(2)} \n ` +
+                    `94%: ${ppComputed[6].pp?.toFixed(2)} \n ` +
+                    `93%: ${ppComputed[7].pp?.toFixed(2)} \n ` +
+                    `92%: ${ppComputed[8].pp?.toFixed(2)} \n ` +
+                    `91%: ${ppComputed[9].pp?.toFixed(2)} \n ` +
+                    `90%: ${ppComputed[10].pp?.toFixed(2)} \n ` +
+                    `89%: ${ppComputed[11].pp?.toFixed(2)} \n ` +
+                    `88%: ${ppComputed[12].pp?.toFixed(2)} \n ` +
+                    `87%: ${ppComputed[13].pp?.toFixed(2)} \n ` +
+                    `86%: ${ppComputed[14].pp?.toFixed(2)} \n ` +
+                    `85%: ${ppComputed[15].pp?.toFixed(2)} \n ` +
+                    `84%: ${ppComputed[16].pp?.toFixed(2)} \n ` +
+                    `83%: ${ppComputed[17].pp?.toFixed(2)} \n ` +
+                    `82%: ${ppComputed[18].pp?.toFixed(2)} \n ` +
+                    `81%: ${ppComputed[19].pp?.toFixed(2)} \n ` +
+                    `80%: ${ppComputed[20].pp?.toFixed(2)} \n ` +
+                    `\n${ppissue}`
+                ,
+                inline: true
+            },
+            {
+                name: 'Full',
+                value: extras,
+                inline: true
+            }
+        ]);
+
+    switch (true) {
+        case parseFloat(totaldiff.toString()) >= 8:
+            Embed.setColor(colours.diffcolour[7].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 7:
+            Embed.setColor(colours.diffcolour[6].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 6:
+            Embed.setColor(colours.diffcolour[5].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 4.5:
+            Embed.setColor(colours.diffcolour[4].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 3.25:
+            Embed.setColor(colours.diffcolour[3].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 2.5:
+            Embed.setColor(colours.diffcolour[2].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 2:
+            Embed.setColor(colours.diffcolour[1].dec);
+            break;
+        case parseFloat(totaldiff.toString()) >= 1.5:
+            Embed.setColor(colours.diffcolour[0].dec);
+            break;
+        default:
+            Embed.setColor(colours.diffcolour[0].dec);
+            break;
+    }
+    const embeds = [Embed];
+
+    osufunc.writePreviousId('map', input.obj.guildId,
+        {
+            id: `${mapdata.id}`,
+            apiData: null,
+            mods: mapmods
+        }
+    );
+
+
+    let frmod = inputModal;
+    if (overwriteModal != null) {
+        frmod = overwriteModal;
+    }
+
+    const selectrow = new Discord.ActionRowBuilder()
+        .addComponents(frmod);
+
+    if (!(inputModal.options.length < 1)) {
+        useComponents.push(selectrow);
+    }
+
+    osufunc.writePreviousId('map', input.obj.guildId,
+        {
+            id: `${mapdata.id}`,
+            apiData: null,
+            mods: mapmods
+        }
+    );
+
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: embeds,
+            components: useComponents,
+            edit: true
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'ppcalc',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'ppcalc',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
+
+
+}
+
+/**
+ * returns a random map
+ */
+export async function randomMap(input: extypes.commandInput) {
+
+    type thingyFr = 'Ranked' | 'Loved' | 'Approved' | 'Qualified' | 'Pending' | 'WIP' | 'Graveyard';
+    let commanduser: Discord.User;
+    let mapType: thingyFr = null;
+    let useRandomRanked: boolean = false;
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+            if (input.args.includes('-ranked')) {
+                mapType = 'Ranked';
+                input.args.splice(input.args.indexOf('-ranked'), 1);
+            }
+            if (input.args.includes('-rank')) {
+                mapType = 'Ranked';
+                input.args.splice(input.args.indexOf('-rank'), 1);
+            }
+            if (input.args.includes('-leaderboard')) {
+                useRandomRanked = true;
+                input.args.splice(input.args.indexOf('-leaderboard'), 1);
+            }
+            if (input.args.includes('-lb')) {
+                useRandomRanked = true;
+                input.args.splice(input.args.indexOf('-lb'), 1);
+            }
+            if (input.args.includes('-loved')) {
+                mapType = 'Loved';
+                input.args.splice(input.args.indexOf('-loved'), 1);
+            }
+            if (input.args.includes('-love')) {
+                mapType = 'Loved';
+                input.args.splice(input.args.indexOf('-love'), 1);
+            }
+            if (input.args.includes('-approved')) {
+                mapType = 'Approved';
+                input.args.splice(input.args.indexOf('-approved'), 1);
+            }
+            if (input.args.includes('-approve')) {
+                mapType = 'Approved';
+                input.args.splice(input.args.indexOf('-approve'), 1);
+            }
+            if (input.args.includes('-qualified')) {
+                mapType = 'Qualified';
+                input.args.splice(input.args.indexOf('-qualified'), 1);
+            }
+            if (input.args.includes('-qualify')) {
+                mapType = 'Qualified';
+                input.args.splice(input.args.indexOf('-qualify'), 1);
+            }
+            if (input.args.includes('-qual')) {
+                mapType = 'Qualified';
+                input.args.splice(input.args.indexOf('-qual'), 1);
+            }
+            if (input.args.includes('-pending')) {
+                mapType = 'Pending';
+                input.args.splice(input.args.indexOf('-pending'), 1);
+            }
+            if (input.args.includes('-pend')) {
+                mapType = 'Pending';
+                input.args.splice(input.args.indexOf('-pend'), 1);
+            }
+            if (input.args.includes('-wip')) {
+                mapType = 'WIP';
+                input.args.splice(input.args.indexOf('-wip'), 1);
+            }
+            if (input.args.includes('-unfinished')) {
+                mapType = 'WIP';
+                input.args.splice(input.args.indexOf('-unfinished'), 1);
+            }
+            if (input.args.includes('-graveyarded')) {
+                mapType = 'Graveyard';
+                input.args.splice(input.args.indexOf('-graveyarded'), 1);
+            }
+            if (input.args.includes('-graveyard')) {
+                mapType = 'Graveyard';
+                input.args.splice(input.args.indexOf('-graveyard'), 1);
+            }
+            if (input.args.includes('-grave')) {
+                mapType = 'Graveyard';
+                input.args.splice(input.args.indexOf('-grave'), 1);
+            }
+            if (input.args.includes('-unranked')) {
+                mapType = 'Graveyard';
+                input.args.splice(input.args.indexOf('-unranked'), 1);
+            }
+            input.args = cleanArgs(input.args);
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'map (random)',
+        options: [
+            {
+                name: 'Map type',
+                value: mapType
+            },
+            {
+                name: 'Random ranked type',
+                value: `${useRandomRanked}`
+            }
+        ]
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    let txt = '';
+
+    if (useRandomRanked) {
+        const arr: ('Ranked' | 'Loved' | 'Approved')[] = ['Ranked', 'Loved', 'Approved'];
+        mapType = arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    const randomMap = osufunc.randomMap(mapType);
+    if (randomMap.err != null) {
+        txt = randomMap.err;
+    } else {
+        txt = `https://osu.ppy.sh/b/${randomMap.returnId}`;
+    }
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            content: txt
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'map (random)',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'map (random)',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 }
 
 /**
@@ -7289,9 +10552,12 @@ export async function maplocal(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
 
+    const embedStyle: extypes.osuCmdStyle = 'M';
+
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
         }
             break;
@@ -7299,6 +10565,7 @@ export async function maplocal(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
 
@@ -7306,80 +10573,74 @@ export async function maplocal(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
         case 'link': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
         } break;
     }
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('localmapparse', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
-
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'map (file)',
+        options: []
+    });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let map: string = ''
-    if (fs.existsSync('./files/tempdiff.osu')) {
-        map = fs.readFileSync('./files/tempdiff.osu', 'utf-8')
+    let map: string = '';
+    if (fs.existsSync(`${filespath}\\localmaps\\${input.absoluteID}.osu`)) {
+        map = fs.readFileSync(`${filespath}\\localmaps\\${input.absoluteID}.osu`, 'utf-8');
     } else {
         return;
     }
-    const errmap = fs.readFileSync('./files/errmap.osu', 'utf-8')
+    const errmap = fs.readFileSync(`${precomppath}/files/errmap.osu`, 'utf-8');
     let errtxt = '';
-    let mods = 'NM'
-    //@ts-ignore
-    if (input.obj.content.includes('+')) {//@ts-ignore
-        mods = input.obj.content.split('+')[1].split(' ')[0]
+    let mods = 'NM';
+
+    if ((input.obj as Discord.Message).content.includes('+')) {
+        mods = (input.obj as Discord.Message).content.split('+')[1].split(' ')[0];
     }
 
     try {
-        map.split('[HitObjects]')[1].split('\n')
+        map.split('[HitObjects]')[1].split('\n');
     } catch (error) {
-        errtxt += '\nError - invalid section: [HitObjects]'
+        errtxt += '\nError - invalid section: [HitObjects]';
     }
     let metadata;
     try {
-        metadata = map.split('[Metadata]')[1].split('[')[0]
+        metadata = map.split('[Metadata]')[1].split('[')[0];
     } catch (error) {
-        errtxt += '\nError - invalid section: [Metadata]'
-        metadata = errmap.split('[Metadata]')[1].split('[')[0]
+        errtxt += '\nError - invalid section: [Metadata]';
+        metadata = errmap.split('[Metadata]')[1].split('[')[0];
     }
-    let ppcalcing;
+    let ppcalcing: PerformanceAttributes[];
     try {
-        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', null, 0)
+        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', null, 0);
     } catch (error) {
-        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', './files/errmap.osu', 0)
-        errtxt += '\nError - pp calculations failed'
+        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', `${filespath}/errmap.osu`, 0);
+        errtxt += '\nError - pp calculations failed';
     }
 
     let general;
     let diff;
     try {
-        general = map.split('[General]')[1].split('[')[0]
-        diff = map.split('[Difficulty]')[1].split('[')[0]
+        general = map.split('[General]')[1].split('[')[0];
+        diff = map.split('[Difficulty]')[1].split('[')[0];
     } catch (error) {
-        errtxt += '\nError - invalid section: [General] or [Difficulty]'
+        errtxt += '\nError - invalid section: [General] or [Difficulty]';
 
-        general = errmap.split('[General]')[1].split('[')[0]
-        diff = errmap.split('[Difficulty]')[1].split('[')[0]
+        general = errmap.split('[General]')[1].split('[')[0];
+        diff = errmap.split('[Difficulty]')[1].split('[')[0];
     }
     let title;
     let artist;
@@ -7391,65 +10652,65 @@ export async function maplocal(input: extypes.commandInput) {
             metadata.split('Title:')[1].split('\n')[0]
             ?
             metadata.split('TitleUnicode:')[1].split('\n')[0] :
-            `${metadata.split('Title:')[1].split('\n')[0]} (${metadata.split('TitleUnicode:')[1].split('\n')[0]})`
+            `${metadata.split('Title:')[1].split('\n')[0]} (${metadata.split('TitleUnicode:')[1].split('\n')[0]})`;
         artist = metadata.split('Artist:')[1].split('\n')[0]
             ==
             metadata.split('ArtistUnicode:')[1].split('\n')[0]
             ?
             metadata.split('ArtistUnicode:')[1].split('\n')[0] :
-            `${metadata.split('Artist:')[1].split('\n')[0]} (${metadata.split('ArtistUnicode:')[1].split('\n')[0]})`
+            `${metadata.split('Artist:')[1].split('\n')[0]} (${metadata.split('ArtistUnicode:')[1].split('\n')[0]})`;
 
-        creator = metadata.split('Creator:')[1].split('\n')[0]
-        version = metadata.split('Version:')[1].split('\n')[0]
+        creator = metadata.split('Creator:')[1].split('\n')[0];
+        version = metadata.split('Version:')[1].split('\n')[0];
     } catch (error) {
-        errtxt += '\nError - invalid section: [Metadata]'
+        errtxt += '\nError - invalid section: [Metadata]';
 
         title = errmap.split('Title:')[1].split('\n')[0]
             == errmap.split('TitleUnicode:')[1].split('\n')[0] ?
             errmap.split('TitleUnicode:')[1].split('\n')[0] :
-            `${errmap.split('Title:')[1].split('\n')[0]} (${errmap.split('TitleUnicode:')[1].split('\n')[0]})`
+            `${errmap.split('Title:')[1].split('\n')[0]} (${errmap.split('TitleUnicode:')[1].split('\n')[0]})`;
         artist = errmap.split('Artist:')[1].split('\n')[0]
             == errmap.split('ArtistUnicode:')[1].split('\n')[0] ?
             errmap.split('ArtistUnicode:')[1].split('\n')[0] :
-            `${errmap.split('Artist:')[1].split('\n')[0]} (${errmap.split('ArtistUnicode:')[1].split('\n')[0]})`
-        creator = errmap.split('Creator:')[1].split('\n')[0]
-        version = errmap.split('Version:')[1].split('\n')[0]
+            `${errmap.split('Artist:')[1].split('\n')[0]} (${errmap.split('ArtistUnicode:')[1].split('\n')[0]})`;
+        creator = errmap.split('Creator:')[1].split('\n')[0];
+        version = errmap.split('Version:')[1].split('\n')[0];
     }
-    const ftstr = `${artist} - ${title} [${version}] //${creator} ${mods ? `+${mods}` : ''}`
+    const ftstr = `${artist} - ${title} [${version}] //${creator} ${mods ? `+${mods}` : ''}`;
     let hitobjs;
     try {
-        hitobjs = map.split('[HitObjects]')[1].split('\n')
+        hitobjs = map.split('[HitObjects]')[1].split('\n');
     } catch (error) {
-        errtxt += '\nError - invalid section: [HitObjects]'
+        errtxt += '\nError - invalid section: [HitObjects]';
 
-        hitobjs = errmap.split('[HitObjects]')[1].split('\n')
+        hitobjs = errmap.split('[HitObjects]')[1].split('\n');
     }
-    let countcircle = 0
-    let countslider = 0
-    let countspinner = 0
+    let countcircle = 0;
+    let countslider = 0;
+    let countspinner = 0;
     //to get count_circle, get every line without a |
     try {
         for (let i = 0; i < hitobjs.length; i++) {
-            const curobj = hitobjs[i]
+            const curobj = hitobjs[i];
             if (curobj.includes('|')) {
-                countslider++
+                countslider++;
             } else if (curobj.split(',').length > 5) {
-                countspinner++
+                countspinner++;
             } else {
-                countcircle++
+                countcircle++;
             }
         }
     } catch (error) {
-        errtxt += '\nError - invalid section: [HitObjects] (counting objects)'
+        errtxt += '\nError - invalid section: [HitObjects] (counting objects)';
 
         for (let i = 0; i < errmap.split('[HitObjects]')[1].split('\n').length; i++) {
-            const curobj = errmap.split('[HitObjects]')[1].split('\n')[i]
+            const curobj = errmap.split('[HitObjects]')[1].split('\n')[i];
             if (curobj.includes('|')) {
-                countslider++
+                countslider++;
             } else if (curobj.split(',').length > 5) {
-                countspinner++
+                countspinner++;
             } else {
-                countcircle++
+                countcircle++;
             }
         }
     }
@@ -7457,17 +10718,17 @@ export async function maplocal(input: extypes.commandInput) {
     let firsttimep;
     let fintimep;
     try {
-        firsttimep = hitobjs[1].split(',')[2]
-        fintimep = hitobjs[hitobjs.length - 2].split(',')[2] //inaccurate cos of sliders n stuff
+        firsttimep = hitobjs[1].split(',')[2];
+        fintimep = hitobjs[hitobjs.length - 2].split(',')[2]; //inaccurate cos of sliders n stuff
     } catch (error) {
-        errtxt += '\nError - invalid section: [HitObjects] (getting object timings)'
+        errtxt += '\nError - invalid section: [HitObjects] (getting object timings)';
 
-        firsttimep = errmap.split('[HitObjects]')[1].split('\n')[1].split(',')[2]
-        fintimep = errmap.split('[HitObjects]')[1].split('\n')[errmap.split('[HitObjects]').length - 2].split(',')[2] //inaccurate cos of sliders n stuff                                                                            
+        firsttimep = errmap.split('[HitObjects]')[1].split('\n')[1].split(',')[2];
+        fintimep = errmap.split('[HitObjects]')[1].split('\n')[errmap.split('[HitObjects]').length - 2].split(',')[2]; //inaccurate cos of sliders n stuff                                                                            
     }
-    const mslen = parseInt(fintimep) - parseInt(firsttimep)
+    const mslen = parseInt(fintimep) - parseInt(firsttimep);
 
-    const nlength = mslen / 1000
+    const nlength = mslen / 1000;
     const truelen = nlength > 60 ? // if length over 60
         nlength % 60 < 10 ? //if length over 60 and seconds under 10
             Math.floor(nlength / 60) + ':0' + Math.floor(nlength % 60) : //seconds under 10
@@ -7475,83 +10736,89 @@ export async function maplocal(input: extypes.commandInput) {
         : //false
         nlength % 60 < 10 ? //length under 60 and 10
             '00:' + Math.floor(nlength) : //true
-            '00:' + Math.floor(nlength) //false
+            '00:' + Math.floor(nlength); //false
 
-    let bpm = NaN
+    let bpm = NaN;
 
     let timing;
     try {
-        timing = map.split('[TimingPoints]')[1].split('[')[0]
+        timing = map.split('[TimingPoints]')[1].split('[')[0];
     } catch (error) {
-        errtxt += '\nError - invalid section: [TimingPoints]'
+        errtxt += '\nError - invalid section: [TimingPoints]';
 
-        timing = errmap.split('[TimingPoints]')[1].split('[')[0]
+        timing = errmap.split('[TimingPoints]')[1].split('[')[0];
     }
     function pointToBPM(point: string) {
-        const arr = point.split(',')
+        const arr = point.split(',');
         //'a,b,c'
         //b is time in milliseconds between each beat
         //https://osu.ppy.sh/community/forums/topics/59274?n=4
-        const bpm = 60000 / parseInt(arr[1])
+        const bpm = 60000 / parseInt(arr[1]);
         return bpm;
     }
-    let totalpoints = 0
-    let bpmmax = 0
-    let bpmmin = 0
+    let totalpoints = 0;
+    let bpmmax = 0;
+    let bpmmin = 0;
     for (let i = 0; i < timing.split('\n').length; i++) {
-        const curpoint = timing.split('\n')[i]
+        const curpoint = timing.split('\n')[i];
         if (curpoint.includes(',')) {
             if (curpoint.includes('-')) {
                 break;
             }
-            bpm = pointToBPM(curpoint)
-            totalpoints++
+            bpm = pointToBPM(curpoint);
+            totalpoints++;
             if (bpm > bpmmax) {
-                bpmmax = bpm
+                bpmmax = bpm;
             }
             if (bpm < bpmmin || bpmmin == 0) {
-                bpmmin = bpm
+                bpmmin = bpm;
             }
         }
     }
     const bpmavg = bpm / totalpoints
 
         ;
-    let gm = '0'
+    let gm = '0';
     try {
-        gm = general.split('Mode:')[1].split('\n')[0].replaceAll(' ', '')
+        gm = general.split('Mode:')[1].split('\n')[0].replaceAll(' ', '');
     } catch (error) {
-        gm = '0'
+        gm = '0';
     }
     let strains;
-    let mapgraph
+    let mapgraph;
     try {
-        strains = await osufunc.straincalclocal(null, mods, 0, osumodcalc.ModeIntToName(parseInt(gm)))
+        strains = await osufunc.straincalclocal(null, mods, 0, osumodcalc.ModeIntToName(parseInt(gm)));
     } catch (error) {
-        errtxt += '\nError - strains calculation failed'
+        errtxt += '\nError - strains calculation failed';
 
         strains = {
             strainTime: [0, 0],
             value: [0, 0]
-        }
+        };
 
-        strains = await osufunc.straincalclocal('./files/errmap.osu', mods, 0, osumodcalc.ModeIntToName(parseInt(gm)))
+        strains = await osufunc.straincalclocal(`${filespath}/errmap.osu`, mods, 0, osumodcalc.ModeIntToName(parseInt(gm)));
 
     }
 
     osufunc.debug(strains, 'fileparse', 'osu', input.obj.guildId, 'strains');
     try {
-        mapgraph = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains')
-    } catch (error) {//@ts-ignore
-        input.obj.reply({
-            content: 'Error - calculating strain graph.',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        })
+        mapgraph = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains'));
+    } catch (error) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: errors.uErr.osu.map.strains_graph,
+                edit: true
+            }
+        }, input.canReply);
     }
     let osuEmbed;
     try {
         osuEmbed = new Discord.EmbedBuilder()
+            .setFooter({
+                text: `${embedStyle}`
+            })
             .setTitle(`${ftstr}`)
             .addFields([
                 {
@@ -7580,40 +10847,63 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
                     inline: true
                 }
             ])
-            .setImage(`${mapgraph}`)
-    } catch (error) {//@ts-ignore
-        input.obj.reply({
-            content: 'Error - unknown',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        })
+            .setImage(`${mapgraph}`);
+    } catch (error) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Error - `,
+                edit: true
+            }
+        }, input.canReply);
+        console.log(error);
+        log.logCommand({
+            event: 'Error',
+            commandName: 'map (file)',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: error
+        });
+        return;
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: [osuEmbed]
         }
-    })
+    }, input.canReply
+    );
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'map (local)',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'map (local)',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 }
 
 /**
  * list of user's maps
  */
-export async function userBeatmaps(input: extypes.commandInput) {
-    let filter: 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' = 'favourite';
+export async function userBeatmaps(input: extypes.commandInput & { statsCache: any; }) {
+    let filter: 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' | 'nominated' | 'guest' | 'most_played' = 'favourite';
     let sort:
         'title' | 'artist' |
         'difficulty' | 'status' |
@@ -7624,23 +10914,51 @@ export async function userBeatmaps(input: extypes.commandInput) {
     let user;
     let searchid;
     let page = 1;
+    let parseMap = false;
+    let parseId;
+    let filterTitle = null;
 
     let commanduser: Discord.User;
+    let reachedMaxCount = false;
 
+    const mode: osuApiTypes.GameMode = 'osu';
+
+    let embedStyle: extypes.osuCmdStyle = 'L';
+
+    let mapDetailed: number = 1;
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property only exists on message
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
+
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
             if (input.args.includes('-page')) {
-                page = parseInt(input.args[input.args.indexOf('-page') + 1]);
-                input.args.splice(input.args.indexOf('-page'), 2);
+                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
             }
             if (input.args.includes('-p')) {
-                page = parseInt(input.args[input.args.indexOf('-p') + 1]);
-                input.args.splice(input.args.indexOf('-p'), 2);
+                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
+                page = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.includes('-detailed')) {
+                mapDetailed = 2;
+                input.args.splice(input.args.indexOf('-detailed'), 1);
+            }
+            if (input.args.includes('-d')) {
+                mapDetailed = 2;
+                input.args.splice(input.args.indexOf('-d'), 1);
+            }
+            if (input.args.includes('-compress')) {
+                mapDetailed = 0;
+                input.args.splice(input.args.indexOf('-compress'), 1);
+            }
+            if (input.args.includes('-c')) {
+                mapDetailed = 0;
+                input.args.splice(input.args.indexOf('-c'), 1);
             }
 
             if (input.args.includes('-ranked')) {
@@ -7679,64 +10997,141 @@ export async function userBeatmaps(input: extypes.commandInput) {
                 filter = 'pending';
                 input.args.splice(input.args.indexOf('-pending'), 1);
             }
+            if (input.args.includes('-nominated')) {
+                filter = 'nominated';
+                input.args.splice(input.args.indexOf('-nominated'), 1);
+            }
+            if (input.args.includes('-bn')) {
+                filter = 'nominated';
+                input.args.splice(input.args.indexOf('-bn'), 1);
+            }
+            if (input.args.includes('-guest')) {
+                filter = 'guest';
+                input.args.splice(input.args.indexOf('-guest'), 1);
+            }
+            if (input.args.includes('-gd')) {
+                filter = 'guest';
+                input.args.splice(input.args.indexOf('-gd'), 1);
+            }
+            if (input.args.includes('-mostplayed')) {
+                filter = 'most_played';
+                input.args.splice(input.args.indexOf('-mostplayed'), 1);
+            }
+            if (input.args.includes('-most')) {
+                filter = 'most_played';
+                input.args.splice(input.args.indexOf('-most'), 1);
+            }
+            if (input.args.includes('-most_played')) {
+                filter = 'most_played';
+                input.args.splice(input.args.indexOf('-most_played'), 1);
+            }
+            if (input.args.includes('-mp')) {
+                filter = 'most_played';
+                input.args.splice(input.args.indexOf('-mp'), 1);
+            }
             if (input.args.includes('-reverse')) {
                 reverse = true;
                 input.args.splice(input.args.indexOf('-reverse'), 1);
             }
+            if (input.args.includes('-parse')) {
+                parseMap = true;
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+                parseId = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            if (input.args.includes('-?')) {
+                const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
+                filterTitle = temp.value;
+                input.args = temp.newArgs;
+            }
+
+            input.args = cleanArgs(input.args);
 
             user = input.args.join(' ');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
-                user = null
+                user = null;
             }
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
-            //@ts-expect-error options property does not exist on message
+
             user = input.obj.options.getString('user') ?? null;
-            //@ts-expect-error options property does not exist on message
+            //@ts-expect-error string not assignable blah blah
             filter = input.obj.options.getString('type') ?? 'favourite';
-            //@ts-expect-error options property does not exist on message
+            //@ts-expect-error string not assignable blah blah
             sort = input.obj.options.getString('sort') ?? 'dateadded';
-            //@ts-expect-error options property does not exist on message
             reverse = input.obj.options.getBoolean('reverse') ?? false;
+            filterTitle = input.obj.options.getString('filter');
+
+            parseId = input.obj.options.getInteger('parse');
+            if (parseId != null) {
+                parseMap = true;
+            }
 
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
-            //@ts-expect-error messsage property does not exist on message
             const curembed: Discord.Embed = input.obj.message.embeds[0];
             if (!curembed) return;
-            user = curembed.author.url.split('u/')[1]
+            user = curembed.author.url.split('u/')[1];
             sort = 'dateadded';
-            //@ts-ignore
-            filter = curembed.title.split('Maps')[0].split('\'s')[1].toLowerCase().replaceAll(' ', '')
+            //@ts-expect-error string not assignable blah blah
+            filter = curembed.title.split('Maps')[0].split('\'s')[1].toLowerCase().replaceAll(' ', '');
             const curpage = parseInt(
                 curembed.description.split('Page: ')[1].split('/')[0]
-            )
+            );
+
+
+            curembed.description.includes('Filter:') ?
+                filterTitle = curembed.description.split('Filter: ')[1].split('\n')[0] :
+                null;
+
             switch (input.button) {
                 case 'BigLeftArrow':
-                    page = 1
+                    page = 1;
                     break;
                 case 'LeftArrow':
-                    page = curpage - 1
+                    page = curpage - 1;
                     break;
                 case 'RightArrow':
-                    page = curpage + 1
+                    page = curpage + 1;
                     break;
-                case 'BigRightArrow'://@ts-ignore
+                case 'BigRightArrow':
                     page = parseInt(
                         curembed.description.split('Page: ')[1].split('/')[1].split('\n')[0]
-                    )
+                    );
                     break;
                 default:
-                    page = curpage
+                    page = curpage;
+                    break;
+            }
+            switch (input.button) {
+                case 'Detail0':
+                    mapDetailed = 0;
+                    break;
+                case 'Detail1':
+                    mapDetailed = 1;
+                    break;
+                case 'Detail2':
+                    mapDetailed = 2;
+                    break;
+                default:
+                    if (input.obj.message.embeds[0].footer.text.includes('LE')) {
+                        mapDetailed = 2;
+                    }
+                    if (input.obj.message.embeds[0].footer.text.includes('LC')) {
+                        mapDetailed = 0;
+                    }
                     break;
             }
         }
@@ -7746,54 +11141,100 @@ export async function userBeatmaps(input: extypes.commandInput) {
         if (input.overrides.page) {
             page = input.overrides.page;
         }
+        if (input.overrides.ex) {
+            switch (input.overrides.ex) {
+                case 'ranked':
+                    filter = 'ranked';
+                    break;
+                case 'favourite':
+                    filter = 'favourite';
+                    break;
+                case 'graveyard':
+                    filter = 'graveyard';
+                    break;
+                case 'loved':
+                    filter = 'loved';
+                    break;
+                case 'pending':
+                    filter = 'pending';
+                    break;
+                case 'nominated':
+                    filter = 'nominated';
+                    break;
+                case 'guest':
+                    filter = 'guest';
+                    break;
+                case 'most_played':
+                    filter = 'most_played';
+                    break;
+            }
+        }
     }
     //==============================================================================================================================================================================================
 
-    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.first),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.previous),
-            new Discord.ButtonBuilder()
-                .setCustomId(`Search-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.search),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.next),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.page.last),
-        );
+    const pgbuttons: Discord.ActionRowBuilder = await pageButtons('userbeatmaps', commanduser, input.absoluteID);
 
-    log.logFile(
-        'command',
-        log.commandLog('userbeatmaps', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'user beatmaps',
+        options: [
+            {
+                name: 'User',
+                value: user
+            },
+            {
+                name: 'Type',
+                value: filter
+            },
+            {
+                name: 'Reverse',
+                value: `${reverse}`
+            },
+            {
+                name: 'Page',
+                value: `${page}`
+            },
+            {
+                name: 'Sort',
+                value: sort
+            },
+            {
+                name: 'Parse',
+                value: `${parseId}`
+            },
+            {
+                name: 'Filter',
+                value: filterTitle
+            },
+            {
+                name: 'Detailed',
+                value: mapDetailed
+            }
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    let buttons = new Discord.ActionRowBuilder().addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-Refresh-userbeatmaps-${commanduser.id}-${input.absoluteID}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.main.refresh),
+    );
+
+    const checkDetails = await buttonsAddDetails('userbeatmaps', commanduser, input.absoluteID, buttons, mapDetailed, embedStyle);
+    buttons = checkDetails.buttons;
+    embedStyle = checkDetails.embedStyle;
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     //if user is null, use searchid
     if (user == null) {
@@ -7807,99 +11248,227 @@ export async function userBeatmaps(input: extypes.commandInput) {
         user = cuser.username;
     }
 
-    if (input.commandType == 'interaction') {//@ts-ignore
-        input.obj.reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: false,
-        }).catch()
+    if (input.commandType == 'interaction') {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
     }
 
-    let osudata: osuApiTypes.User;
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(user, 'osudata', osufunc.modeValidator('osu')) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator('osu'))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata');
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'));
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`);
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator('osu')
+            }
+        });
     }
-    func.storeFile(osudata, osudata.id, 'osudata');
-    func.storeFile(osudata, user, 'osudata');
 
-    osufunc.debug(osudata, 'command', 'userbeatmaps', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'userbeatmaps', input.obj.guildId, 'osuData');
 
     if (osudata?.error || !osudata.id) {
-        if (input.commandType == 'interaction') {
-            setTimeout(() => {//@ts-ignore
-                input.obj.reply({
-                    content: `Error - could not find user \`${user}\``,
-                    allowedMentions: { repliedUser: false },
-                    failIfNotExists: true
-                })
-            }, 1000);
-        } else {//@ts-ignore
-            input.obj.reply({
-                content: `Error - could not find user \`${user}\``,
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            })
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
         }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'userbeatmaps',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
         return;
     }
 
-    let maplistdata: osuApiTypes.Beatmapset[] & osuApiTypes.Error = []
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator('osu'));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator('osu'));
+
+    buttons.addComponents(
+        new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-User-userbeatmaps-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.user),
+    );
+
+    let maplistdata: (osuApiTypes.Beatmapset[] & osuApiTypes.Error | osuApiTypes.BeatmapPlayCountArr) = [];
 
     async function getScoreCount(cinitnum) {
-        const fd: osuApiTypes.Beatmapset[] & osuApiTypes.Error = await osufunc.apiget('user_get_maps_alt', `${osudata.id}`, `${filter + `?offset=${cinitnum}`}`, 2, 0, true);
+        if (cinitnum >= 499) {
+            reachedMaxCount = true;
+            return;
+        }
+        const fdReq: osufunc.apiReturn = await osufunc.apiget({
+            type: 'user_get_maps',
+            params: {
+                userid: osudata.id,
+                category: filter,
+                opts: [`offset=${cinitnum}`]
+            },
+            version: 2,
+
+        });
+        const fd = fdReq.apiData;
         if (fd?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                if (input.commandType == 'interaction') {
-                    setTimeout(() => {//@ts-ignore
-                        input.obj.editReply({
-                            content: `Error - could not find user\'s ${calc.toCapital(filter)} Maps`,
-                            allowedMentions: { repliedUser: false },
-                            failIfNotExists: true
-                        }).catch()
-                    }, 1000)
-                } else {//@ts-ignore
-                    input.obj.reply({
-                        content: `Error - could not find user\'s ${calc.toCapital(filter)} Maps`,
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    }).catch()
-                }
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: `Could not find user's ${calc.toCapital(filter)} maps`,
+                        edit: true
+                    }
+                }, input.canReply);
             }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'userbeatmaps',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: `Could not find user's ${calc.toCapital(filter)} maps`
+            });
             return;
         }
         for (let i = 0; i < fd.length; i++) {
             if (!fd[i] || typeof fd[i] == 'undefined') { break; }
-            maplistdata.push(fd[i])
+            maplistdata.push(fd[i]);
         }
-        if (fd.length == 100) {
-            await getScoreCount(cinitnum + 100)
+        if (fd.length == 100 && filter != 'most_played') {
+            await getScoreCount(cinitnum + 100);
         }
 
     }
 
-    if (func.findFile(input.absoluteID, 'maplistdata') &&
-        input.commandType == 'button' &&
-        !('error' in func.findFile(input.absoluteID, 'maplistdata')) &&
+    if (func.findFile(osudata.id, 'maplistdata', null, filter) &&
+        !('error' in func.findFile(osudata.id, 'maplistdata', null, filter)) &&
         input.button != 'Refresh'
     ) {
-        maplistdata = func.findFile(input.absoluteID, 'maplistdata')
+        maplistdata = func.findFile(osudata.id, 'maplistdata', null, filter);
     } else {
         await getScoreCount(0);
     }
 
     osufunc.debug(maplistdata, 'command', 'userbeatmaps', input.obj.guildId, 'mapListData');
-    func.storeFile(maplistdata, input.absoluteID, 'maplistdata');
+    func.storeFile(maplistdata, osudata.id, 'maplistdata', null, filter);
 
-    if (page >= Math.ceil(maplistdata.length / 5)) {
-        page = Math.ceil(maplistdata.length / 5) - 1
+    if (filterTitle) {
+        maplistdata =
+            filter == 'most_played' ?
+                (maplistdata as osuApiTypes.BeatmapPlayCountArr).filter((x) =>
+                    fr(x.beatmapset)
+                ) : (maplistdata as osuApiTypes.Beatmapset[]).filter((x) => fr(x));
+        function fr(map) {
+            return (
+                map.title.toLowerCase().replaceAll(' ', '')
+                +
+                map.artist.toLowerCase().replaceAll(' ', '')
+                +
+                map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', '')
+            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                ||
+                map.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                ||
+                map.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                ||
+                map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                ||
+                filterTitle.toLowerCase().replaceAll(' ', '').includes(map.title.toLowerCase().replaceAll(' ', ''))
+                ||
+                filterTitle.toLowerCase().replaceAll(' ', '').includes(map.artist.toLowerCase().replaceAll(' ', ''))
+                ||
+                filterTitle.toLowerCase().replaceAll(' ', '').includes(map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', ''));
+        }
     }
 
+    if (parseMap == true) {
+        let pid = parseInt(parseId) - 1;
+        if (pid < 0) {
+            pid = 0;
+        }
+        if (pid > maplistdata.length) {
+            pid = maplistdata.length - 1;
+        }
+        input.overrides = {
+            id:
+                filter == 'most_played' ?
+                    (maplistdata as osuApiTypes.BeatmapPlayCountArr)[pid]?.beatmap_id :
+                    (maplistdata as osuApiTypes.Beatmapset[])[pid]?.beatmaps[0]?.id,
+            commanduser,
+            commandAs: input.commandType
+        };
+        if (input.overrides.id == null) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: errors.uErr.osu.map.m_uk + `at index ${pid}`,
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'userbeatmaps',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.uErr.osu.map.m_uk + `at index ${pid}`
+            });
+            return;
+        }
+        input.commandType = 'other';
+        await map(input);
+        return;
+    }
+
+    if (page >= Math.ceil(maplistdata.length / 5)) {
+        page = Math.ceil(maplistdata.length / 5) - 1;
+    }
+
+
+
+    let mapsarg;
+
+    mapsarg = await embedStuff.mapList({
+        type:
+            filter == 'most_played' ?
+                'mapsetplays' :
+                'mapset',
+        maps: maplistdata,
+        page: page,
+        sort,
+        reverse,
+        detailed: mapDetailed
+    });
+
     const mapList = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setTitle(`${osudata.username}'s ${calc.toCapital(filter)} Maps`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
@@ -7907,71 +11476,87 @@ export async function userBeatmaps(input: extypes.commandInput) {
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
-        .setColor(colours.embedColour.userlist.dec);
-
-    const mapsarg = await embedStuff.mapList({
-        type: 'mapset',
-        maps: maplistdata,
-        page: page,
-        sort,
-        reverse,
-    })
+        .setURL(`https://osu.ppy.sh/u/${osudata.id}/${osudata.playmode}#beatmaps`)
+        .setColor(colours.embedColour.userlist.dec)
+        .setDescription(`
+        ${mapsarg.filter}
+        Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}
+        ${filterTitle ? `Filter: ${filterTitle}` : ''}
+        ${reachedMaxCount ? 'Only the first 500 mapsets are shown' : ''}
+        `);
 
     if (mapsarg.fields.length == 0) {
         mapList.addFields([{
             name: 'Error',
             value: 'No mapsets found',
             inline: false
-        }])
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[2].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        }]);
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[2].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     } else {
-        for (let i = 0; i < mapsarg.fields.length; i++) {
-            mapList.addFields([mapsarg.fields[i]])
+        switch (mapDetailed) {
+            case 0: case 2: {
+                let temptxt = '\n';
+                for (let i = 0; i < mapsarg.string.length; i++) {
+                    temptxt += mapsarg.string[i];
+                }
+                mapList.setDescription(
+                    `
+${mapsarg.filter}
+Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${filterTitle}` : ''}${reachedMaxCount ? '\nOnly the first 500 mapsets are shown' : ''}`
+                    + temptxt
+                );
+            }
+                break;
+            case 1: default: {
+                for (let i = 0; i < mapsarg.fields.length; i++) {
+                    mapList.addFields([mapsarg.fields[i]]);
+                }
+            }
+                break;
         }
     }
     if (mapsarg.isFirstPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[0].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[1].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
     if (mapsarg.isLastPage) {
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[3].setDisabled(true)
-        //@ts-expect-error - checks for AnyComponentBuilder not just ButtonBuilder
-        pgbuttons.components[4].setDisabled(true)
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
-    mapList.setDescription(`${mapsarg.filter}\nPage: ${page + 1}/${Math.ceil(mapsarg.maxPages)}\n`)
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             edit: true,
             embeds: [mapList],
-            components: [pgbuttons]
+            components: [pgbuttons, buttons]
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'userbeatmaps',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'userbeatmaps',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 
 }
@@ -7987,86 +11572,144 @@ export async function trackadd(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
     let user;
+    let mode: osuApiTypes.GameMode = 'osu';
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;
-            user = input.args[0];
+            input.obj = (input.obj as Discord.Message);
 
+            commanduser = input.obj.author;
+            if (input.args.includes('-osu')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'), 1);
+            }
+            user = input.args[0];
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            user = input.obj.options.getInteger('user');
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            user = input.obj.options.getString('user');
 
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('track add', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'track add',
+        options: [
+            {
+                name: 'User',
+                value: user
+            },
+            {
+                name: 'Mode',
+                value: mode
+            }
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let guildsetting = await input.guildSettings.findOne({
+    const guildsetting = await input.guildSettings.findOne({
         where: { guildId: input.obj.guildId }
-    })
+    });
 
-    if (!guildsetting.dataValues.trackChannel) {//@ts-ignore
-        input.obj.reply({
-            content: 'The current guild does not have a tracking channel',
-            embeds: [],
-            files: [],
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        }).catch()
+    if (!guildsetting.dataValues.trackChannel) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: errors.uErr.osu.tracking.channel_ms,
+                edit: true
+            }
+        }, input.canReply);
         return;
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata'))
+    if (func.findFile(user, 'osudata', mode) &&
+        !('error' in func.findFile(user, 'osudata', mode)) &&
+        input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudataReq = func.findFile(user, 'osudata', mode);
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: mode
+            }
+        });
     }
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
 
     let replymsg;
 
     if (osudata?.error || !osudata.id) {
-        replymsg = `Error - could not find user \`${user}\``
+        replymsg = errors.noUser(user);
+        log.logCommand({
+            event: 'Error',
+            commandName: 'track add',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
     } else {
 
-        replymsg = `Added \`${osudata.username}\` to the tracking list`
+        replymsg = `Added \`${osudata.username}\` to the tracking list\nGamemode: \`${mode}\``;
 
-        func.storeFile(osudata, osudata.id, 'osudata')
-        func.storeFile(osudata, user, 'osudata')
+        func.storeFile(osudataReq, osudata.id, 'osudata', mode);
+        func.storeFile(osudataReq, user, 'osudata', mode);
 
         trackfunc.editTrackUser({
             database: input.trackDb,
@@ -8074,27 +11717,37 @@ export async function trackadd(input: extypes.commandInput) {
             action: 'add',
             guildId: input.obj.guildId,
             guildSettings: input.guildSettings,
-        })
+            mode: mode
+        });
     }
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             content: replymsg,
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'track add',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'track add',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
@@ -8104,84 +11757,127 @@ ID: ${input.absoluteID}
 export async function trackremove(input: extypes.commandInput) {
     let commanduser: Discord.User;
     let user;
+    let mode: osuApiTypes.GameMode = 'osu';
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
+            if (input.args.includes('-osu')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'), 1);
+            }
             user = input.args[0];
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            user = input.obj.options.getInteger('user');
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            user = input.obj.options.getString('user');
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('track remove', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'track remove',
+        options: [
+            {
+                name: 'User',
+                value: user
+            },
+            {
+                name: 'Mode',
+                value: mode
+            }
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let guildsetting = await input.guildSettings.findOne({
-        where: { guildId: input.obj.guildId }
-    })
+    let osudataReq: osufunc.apiReturn;
 
-    // if (!guildsetting.dataValues.trackChannel) {//@ts-ignore
-    //     input.obj.reply({
-    //         content: 'The current guild does not have a tracking channel',
-    //         embeds: [],
-    //         files: [],
-    //         allowedMentions: { repliedUser: false },
-    //         failIfNotExists: true
-    //     }).catch()
-    //     return;
-    // }
-
-    let osudata: osuApiTypes.User;
-
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata'))
+    if (func.findFile(user, 'osudata', mode) &&
+        !('error' in func.findFile(user, 'osudata', mode)) &&
+        input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudataReq = func.findFile(user, 'osudata', mode);
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode
+            }
+        });
     }
+
+    const osudata: osuApiTypes.User = osudataReq.apiData;
 
     let replymsg;
 
     if (osudata?.error || !osudata.id) {
-        replymsg = `Error - could not find user \`${user}\``
+        replymsg = errors.noUser(user);
+        log.logCommand({
+            event: 'Error',
+            commandName: 'track remove',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
     } else {
 
-        replymsg = `Removed \`${osudata.username}\` from the tracking list`
+        replymsg = `Removed \`${osudata.username}\` from the tracking list`;
 
-        func.storeFile(osudata, osudata.id, 'osudata')
-        func.storeFile(osudata, user, 'osudata')
+        func.storeFile(osudataReq, osudata.id, 'osudata', mode);
+        func.storeFile(osudataReq, user, 'osudata', mode);
 
         trackfunc.editTrackUser({
             database: input.trackDb,
@@ -8189,28 +11885,38 @@ export async function trackremove(input: extypes.commandInput) {
             action: 'remove',
             guildId: input.obj.guildId,
             guildSettings: input.guildSettings,
-        })
+            mode
+        });
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             content: replymsg,
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'track remove',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'track remove',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
@@ -8224,46 +11930,46 @@ export async function trackchannel(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
-            channelId = input.args[0];//@ts-ignore
-            if (input.obj.content.includes('<#')) {//@ts-ignore
-                channelId = input.obj.content.split('<#')[1].split('>')[0]
+            channelId = input.args[0];
+            if (input.obj.content.includes('<#')) {
+                channelId = input.obj.content.split('<#')[1].split('>')[0];
             }
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
             channelId = (input.obj.options.getChannel('channel')).id;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('set channel', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'track channel',
+        options: [
+            {
+                name: 'Channel id',
+                value: `${channelId}`
+            }
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -8271,34 +11977,37 @@ export async function trackchannel(input: extypes.commandInput) {
 
     if (!channelId) {
         //the current channel is...
-        if (!guildsetting.dataValues.trackChannel) {//@ts-ignore
-            input.obj.reply({
-                content: 'The current guild does not have a tracking channel',
-                embeds: [],
-                files: [],
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            }).catch()
+        if (!guildsetting.dataValues.trackChannel) {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.tracking.channel_ms,
+                    edit: true
+                }
+            }, input.canReply);
             return;
-        }//@ts-ignore
-        input.obj.reply({
-            content: `The current tracking channel is <#${guildsetting.dataValues.trackChannel}>`,
-            embeds: [],
-            files: [],
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        }).catch()
+        }
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `The current tracking channel is <#${guildsetting.dataValues.trackChannel}>`,
+                edit: true
+            }
+        }, input.canReply);
         return;
     }
 
-    if (!channelId || isNaN(+channelId) || !input.client.channels.cache.get(channelId)) {//@ts-ignore
-        input.obj.reply({
-            content: 'Please provide a valid channel ID',
-            embeds: [],
-            files: [],
-            allowedMentions: { repliedUser: false },
-            failIfNotExists: true
-        }).catch()
+    if (!channelId || isNaN(+channelId) || !input.client.channels.cache.get(channelId)) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: errors.uErr.admin.channel.msid,
+                edit: true
+            }
+        }, input.canReply);
         return;
     }
 
@@ -8307,27 +12016,36 @@ export async function trackchannel(input: extypes.commandInput) {
         trackChannel: channelId
     }, {
         where: { guildid: input.obj.guildId }
-    })
+    });
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             content: `Tracking channel set to <#${channelId}>`,
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'track channel',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'track channel',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
@@ -8335,78 +12053,44 @@ ID: ${input.absoluteID}
  * list of users being tracked
  */
 export async function tracklist(input: extypes.commandInput) {
-
-
     let commanduser: Discord.User;
-
+    const embedStyle: extypes.osuCmdStyle = 'L';
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
 
-    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('⬅')
-            /* .setLabel('Start') */,
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('◀'),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('▶')
-            /* .setLabel('Next') */,
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('➡')
-            /* .setLabel('End') */,
-        );
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`Refresh-COMMANDNAME-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('🔁'),
-        );
+    // const pgbuttons: Discord.ActionRowBuilder = await pageButtons('tracklist', commanduser, input.absoluteID);
 
-    log.logFile(
-        'command',
-        log.commandLog('track list', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'track list',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -8414,15 +12098,16 @@ export async function tracklist(input: extypes.commandInput) {
     const useridsarraylen = await input.trackDb.count();
     // const user: extypes.dbUser = userids[i].dataValues;
 
-    let userList: {
+    const userList: {
         osuid: string,
-        userid: string
+        userid: string,
+        mode: string,
     }[] = [];
 
 
     for (let i = 0; i < useridsarraylen; i++) {
         const user = users[i].dataValues;
-        let guilds
+        let guilds;
         try {
             if (user.guilds.length < 3) throw new Error('no guilds');
             guilds = user.guilds.includes(',')
@@ -8437,35 +12122,48 @@ export async function tracklist(input: extypes.commandInput) {
         if (guilds.includes(input.obj.guildId)) {
             userList.push({
                 osuid: `${user.osuid}`,
-                userid: `${user.userid}`
-            })
+                userid: `${user.userid}`,
+                mode: `${user.mode}`
+            });
         }
     }
     const userListEmbed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setTitle(`All tracked users in ${input.obj.guild.name}`)
         .setColor(colours.embedColour.userlist.dec)
         .setDescription(`There are ${userList.length} users being tracked in this server\n\n` +
-            `${userList.map((user, i) => `${i + 1}. https://osu.ppy.sh/u/${user.osuid}`).join('\n')}`
-        )
+            `${userList.map((user, i) => `${i + 1}. [${user.mode}]https://osu.ppy.sh/u/${user.osuid}`).join('\n')}`
+        );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: [userListEmbed],
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'track list',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'track list',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 }
 
 //other
@@ -8484,18 +12182,20 @@ export async function compare(input: extypes.commandInput) {
     let mode = 'osu';
     let page = 0;
 
+    let embedStyle: extypes.osuCmdStyle = 'P';
+
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-ignore
-            if (input.obj.mentions.users.size > 1) {//@ts-ignore
-                firstsearchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;//@ts-ignore
-                secondsearchid = input.obj.mentions.users.size > 1 ? input.obj.mentions.users.at(1).id : null;//@ts-ignore
-            } else if (input.obj.mentions.users.size == 1) {//@ts-ignore
-                firstsearchid = input.obj.author.id;//@ts-ignore
-                secondsearchid = input.obj.mentions.users.at(0).id
-            } else {//@ts-ignore
-                firstsearchid = input.obj.author.id
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+            if (input.obj.mentions.users.size > 1) {
+                firstsearchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+                secondsearchid = input.obj.mentions.users.size > 1 ? input.obj.mentions.users.at(1).id : null;
+            } else if (input.obj.mentions.users.size == 1) {
+                firstsearchid = input.obj.author.id;
+                secondsearchid = input.obj.mentions.users.at(0).id;
+            } else {
+                firstsearchid = input.obj.author.id;
             }
             first = null;
             second = input.args[0] ?? null;
@@ -8509,12 +12209,15 @@ export async function compare(input: extypes.commandInput) {
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            type = input.obj.options.getString('type') ?? 'profile';//@ts-ignore
-            first = input.obj.options.getString('first');//@ts-ignore
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+
+            commanduser = input.obj.member.user;
+            //@ts-expect-error string not assignable blah blah
+            type = input.obj.options.getString('type') ?? 'profile';
+            first = input.obj.options.getString('first');
             second = input.obj.options.getString('second');
-            firstsearchid = commanduser.id//@ts-ignore
-            mode = input.obj.options.getString('mode') ?? 'osu'
+            firstsearchid = commanduser.id;
+            mode = input.obj.options.getString('mode') ?? 'osu';
             if (second == null && first != null) {
                 second = first;
                 first = null;
@@ -8524,15 +12227,16 @@ export async function compare(input: extypes.commandInput) {
 
             break;
         case 'button': {
-            //@ts-ignore
+            input.obj = (input.obj as Discord.ButtonInteraction);
+
             if (!input.obj.message.embeds[0]) {
                 return;
             }
             commanduser = input.obj.member.user;
-            type = 'top';//@ts-ignore
-            const pawge = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[0])
-            //@ts-ignore
-            const pagefin = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[1])
+            type = 'top';
+            const pawge = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[0]);
+
+            const pagefin = parseInt(input.obj.message.embeds[0].description.split('Page: ')[1].split('/')[1]);
             switch (input.button) {
                 case 'BigLeftArrow': {
                     page = 0;
@@ -8558,9 +12262,9 @@ export async function compare(input: extypes.commandInput) {
 
             if (page > pagefin) page = pagefin;
 
-            //@ts-ignore
-            const firsti = input.obj.message.embeds[0].description.split('and')[0]//@ts-ignore
-            const secondi = input.obj.message.embeds[0].description.split('and')[1].split('have')[0]
+
+            const firsti = input.obj.message.embeds[0].description.split('and')[0];
+            const secondi = input.obj.message.embeds[0].description.split('and')[1].split('have')[0];
 
             //user => [name](url)
             first = firsti.split('u/')[1].split(')')[0];
@@ -8568,21 +12272,20 @@ export async function compare(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {//@ts-ignore
+    if (input.overrides != null) {
+        //@ts-expect-error string not assignable blah blah
         if (input.overrides.type != null) type = input.overrides.type;
     }
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('compare', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'compare',
+        options: [
             {
                 name: 'Type',
                 value: type
@@ -8611,11 +12314,8 @@ export async function compare(input: extypes.commandInput) {
                 name: 'Page',
                 value: page
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -8623,27 +12323,27 @@ export async function compare(input: extypes.commandInput) {
         name: 'First',
         value: 'Loading...',
         inline: true
-    }
+    };
     let fieldSecond: Discord.EmbedField = {
         name: 'Second',
         value: 'Loading...',
         inline: true
-    }
+    };
     let fieldComparison: Discord.EmbedField = {
         name: 'Comparison',
         value: 'Loading...',
         inline: false
-    }
+    };
     let embedTitle: string = 'w';
-    let usefields: Discord.EmbedField[] = []
+    const usefields: Discord.EmbedField[] = [];
 
-    let useComponents: Discord.ActionRowBuilder[] = []
+    const useComponents: Discord.ActionRowBuilder[] = [];
     let embedescription = null;
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
-    page--
+    page--;
 
     try {
         if (second == null) {
@@ -8652,15 +12352,15 @@ export async function compare(input: extypes.commandInput) {
                 second = cuser.username;
                 if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
                     if (input.commandType != 'button') {
-                        throw new Error('Second user not found')
+                        throw new Error('Second user not found');
                     }
                     return;
                 }
             } else {
-                if (osufunc.getPreviousId('user', `${input.obj.guildId}`) == null) {
-                    throw new Error('Second user not found')
+                if (osufunc.getPreviousId('user', `${input.obj.guildId}`).id == null) {
+                    throw new Error('Second user not found');
                 }
-                second = osufunc.getPreviousId('user', `${input.obj.guildId}`)
+                second = osufunc.getPreviousId('user', `${input.obj.guildId}`).id;
             }
         }
         if (first == null) {
@@ -8672,60 +12372,76 @@ export async function compare(input: extypes.commandInput) {
                 }
                 if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
                     if (input.commandType != 'button') {
-                        throw new Error('First user not found')
+                        throw new Error('First user not found');
                     }
                     return;
                 }
             } else {
-                throw new Error('first user not found')
+                throw new Error('first user not found');
             }
         }
 
-        let firstuser: osuApiTypes.User;
+        let firstuserReq: osufunc.apiReturn;
         if (func.findFile(first, 'osudata') &&
             !('error' in func.findFile(first, 'osudata')) &&
             input.button != 'Refresh'
         ) {
-            firstuser = func.findFile(first, 'osudata')
+            firstuserReq = func.findFile(first, 'osudata');
         } else {
-            firstuser = await osufunc.apiget('user', `${await first}`)
+            firstuserReq = await osufunc.apiget(
+                {
+                    type: 'user',
+                    params: {
+                        username: first
+                    }
+                });
         }
+
+        const firstuser = firstuserReq.apiData;
 
         if (firstuser?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                throw new Error('could not fetch first user data')
+                throw new Error('could not fetch first user data');
 
             }
             return;
         }
 
 
-        let seconduser: osuApiTypes.User;
+        let seconduserReq: osufunc.apiReturn;
         if (func.findFile(second, 'osudata') &&
             !('error' in func.findFile(second, 'osudata')) &&
             input.button != 'Refresh'
         ) {
-            seconduser = func.findFile(second, 'osudata')
+            seconduserReq = func.findFile(second, 'osudata');
         } else {
-            seconduser = await osufunc.apiget('user', `${await second}`)
+            seconduserReq = await osufunc.apiget(
+                {
+                    type: 'user',
+                    params: {
+                        username: second
+                    }
+                });
         }
+
+        const seconduser = seconduserReq.apiData;
 
         if (seconduser?.error) {
             if (input.commandType != 'button' && input.commandType != 'link') {
-                throw new Error('could not fetch second user data')
+                throw new Error('could not fetch second user data');
             }
             return;
         }
 
-        func.storeFile(firstuser, firstuser.id, 'osudata')
-        func.storeFile(firstuser, first, 'osudata')
-        func.storeFile(seconduser, seconduser.id, 'osudata')
-        func.storeFile(seconduser, second, 'osudata')
+        func.storeFile(firstuserReq, first, 'osudata');
+        func.storeFile(firstuserReq, firstuser.id, 'osudata');
+        func.storeFile(seconduserReq, seconduser.id, 'osudata');
+        func.storeFile(seconduserReq, second, 'osudata');
 
 
         switch (type) {
             case 'profile': {
-                embedTitle = 'Comparing profiles'
+                embedTitle = 'Comparing profiles';
                 fieldFirst = {
                     name: `**${firstuser.username}**`,
                     value:
@@ -8758,176 +12474,194 @@ export async function compare(input: extypes.commandInput) {
 **Level:** ${func.separateNum(Math.abs(firstuser.statistics.level.current - seconduser.statistics.level.current))}
 `,
                     inline: false
-                }
-                usefields.push(fieldFirst, fieldSecond, fieldComparison)
+                };
+                usefields.push(fieldFirst, fieldSecond, fieldComparison);
             }
                 break;
 
 
 
             case 'top': {
-                page
-                let firsttopdata: osuApiTypes.Score[] & osuApiTypes.Error;
+                embedStyle = 'LC';
+                page;
+                let firsttopdataReq: osufunc.apiReturn;
                 if (func.findFile(input.absoluteID, 'firsttopdata') &&
                     !('error' in func.findFile(input.absoluteID, 'firsttopdata')) &&
                     input.button != 'Refresh'
                 ) {
-                    firsttopdata = func.findFile(input.absoluteID, 'firsttopdata')
+                    firsttopdataReq = func.findFile(input.absoluteID, 'firsttopdata');
                 } else {
-                    firsttopdata = await osufunc.apiget('best', `${firstuser.id}`, `${mode}`)
+                    firsttopdataReq = await osufunc.apiget({
+                        type: 'best',
+                        params: {
+                            userid: firstuser.id,
+                            mode: osufunc.modeValidator(mode),
+                            opts: ['limit=100']
+                        }
+                    });
                 }
+
+                const firsttopdata: osuApiTypes.Score[] & osuApiTypes.Error = firsttopdataReq.apiData;
 
                 if (firsttopdata?.error) {
                     if (input.commandType != 'button' && input.commandType != 'link') {
-                        throw new Error('could not fetch first user\'s top scores')
+                        throw new Error('could not fetch first user\'s top scores');
                     }
                     return;
                 }
 
-                let secondtopdata: osuApiTypes.Score[] & osuApiTypes.Error;
+                let secondtopdataReq: osufunc.apiReturn;
                 if (func.findFile(input.absoluteID, 'secondtopdata') &&
                     !('error' in func.findFile(input.absoluteID, 'secondtopdata')) &&
                     input.button != 'Refresh'
                 ) {
-                    secondtopdata = func.findFile(input.absoluteID, 'secondtopdata')
+                    secondtopdataReq = func.findFile(input.absoluteID, 'secondtopdata');
                 } else {
-                    secondtopdata = await osufunc.apiget('best', `${seconduser.id}`, `${mode}`)
+                    secondtopdataReq = await osufunc.apiget({
+                        type: 'best',
+                        params: {
+                            userid: seconduser.id,
+                            mode: osufunc.modeValidator(mode),
+                            opts: ['limit=100']
+                        }
+                    });
                 }
 
-                func.storeFile(firsttopdata, input.absoluteID, 'firsttopdata')
-                func.storeFile(secondtopdata, input.absoluteID, 'secondtopdata')
+                const secondtopdata: osuApiTypes.Score[] & osuApiTypes.Error = secondtopdataReq.apiData;
 
                 if (secondtopdata?.error) {
                     if (input.commandType != 'button' && input.commandType != 'link') {
-                        throw new Error('could not fetch second user\'s top scores')
+                        throw new Error('could not fetch second user\'s top scores');
                     }
                     return;
                 }
-                let filterfirst = [];
+                func.storeFile(firsttopdataReq, input.absoluteID, 'firsttopdata');
+                func.storeFile(secondtopdataReq, input.absoluteID, 'secondtopdata');
+
+                const filterfirst = [];
                 //filter so that scores that have a shared beatmap id with the second user are kept
                 for (let i = 0; i < firsttopdata.length; i++) {
                     if (secondtopdata.find(score => score.beatmap.id == firsttopdata[i].beatmap.id)) {
-                        filterfirst.push(firsttopdata[i])
+                        filterfirst.push(firsttopdata[i]);
                     }
                 }
-                filterfirst.sort((a, b) => b.pp - a.pp)
-                embedTitle = 'Comparing top scores'
-                let arrscore = [];
+                filterfirst.sort((a, b) => b.pp - a.pp);
+                embedTitle = 'Comparing top scores';
+                const arrscore = [];
 
 
 
                 for (let i = 0; i < filterfirst.length && i < 5; i++) {
                     const firstscore: osuApiTypes.Score = filterfirst[i + (page * 5)];
                     if (!firstscore) break;
-                    const secondscore: osuApiTypes.Score = secondtopdata.find(score => score.beatmap.id == firstscore.beatmap.id)
+                    const secondscore: osuApiTypes.Score = secondtopdata.find(score => score.beatmap.id == firstscore.beatmap.id);
                     if (secondscore == null) break;
                     const firstscorestr =
-                        `\`${firstscore.pp.toFixed(2)}pp | ${(firstscore.accuracy * 100).toFixed(2)}% ${firstscore.mods.length > 0 ? '| +' + firstscore.mods.join('') : ''}`//.padEnd(30, ' ').substring(0, 30)
+                        `\`${firstscore.pp.toFixed(2)}pp | ${(firstscore.accuracy * 100).toFixed(2)}% ${firstscore.mods.length > 0 ? '| +' + firstscore.mods.join('') : ''}`;//.padEnd(30, ' ').substring(0, 30)
                     const secondscorestr =
-                        `${secondscore.pp.toFixed(2)}pp | ${(secondscore.accuracy * 100).toFixed(2)}% ${secondscore.mods.length > 0 ? '| +' + secondscore.mods.join('') : ''}\`\n`//.padEnd(30, ' ').substring(0, 30)
+                        `${secondscore.pp.toFixed(2)}pp | ${(secondscore.accuracy * 100).toFixed(2)}% ${secondscore.mods.length > 0 ? '| +' + secondscore.mods.join('') : ''}\`\n`;//.padEnd(30, ' ').substring(0, 30)
                     arrscore.push(
                         `**[${firstscore.beatmapset.title} [${firstscore.beatmap.version}]](https://osu.ppy.sh/b/${firstscore.beatmap.id})**
 \`${firstuser.username.padEnd(30, ' ').substring(0, 30)} | ${seconduser.username.padEnd(30, ' ').substring(0, 30)}\`
 ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
-                    )
+                    );
                 }
 
-                const scores = arrscore.length > 0 ? arrscore.slice().join('\n') : 'No shared scores'
+                const scores = arrscore.length > 0 ? arrscore.slice().join('\n') : 'No shared scores';
 
                 embedescription = `**[${firstuser.username}](https://osu.ppy.sh/u/${firstuser.id})** and **[${seconduser.username}](https://osu.ppy.sh/u/${seconduser.id})** have ${filterfirst.length} shared scores
-                Page: ${page + 1}/${Math.ceil(filterfirst.length / 5)}`
+                Page: ${page + 1}/${Math.ceil(filterfirst.length / 5)}`;
 
-                fieldFirst.name = '‎ '
-                fieldFirst.value = scores
-                usefields.push(fieldFirst)
+                fieldFirst.name = '‎ ';
+                fieldFirst.value = scores;
+                usefields.push(fieldFirst);
 
 
-                const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-                    .addComponents(
-                        new Discord.ButtonBuilder()
-                            .setCustomId(`BigLeftArrow-compare-${commanduser.id}-${input.absoluteID}`)
-                            .setStyle(buttonsthing.type.current)
-                            .setEmoji(buttonsthing.label.page.first),
-                        new Discord.ButtonBuilder()
-                            .setCustomId(`LeftArrow-compare-${commanduser.id}-${input.absoluteID}`)
-                            .setStyle(buttonsthing.type.current)
-                            .setEmoji(buttonsthing.label.page.previous),
-                        new Discord.ButtonBuilder()
-                            .setCustomId(`Search-compare-${commanduser.id}-${input.absoluteID}`)
-                            .setStyle(buttonsthing.type.current)
-                            .setEmoji(buttonsthing.label.page.search),
-                        new Discord.ButtonBuilder()
-                            .setCustomId(`RightArrow-compare-${commanduser.id}-${input.absoluteID}`)
-                            .setStyle(buttonsthing.type.current)
-                            .setEmoji(buttonsthing.label.page.next),
-                        new Discord.ButtonBuilder()
-                            .setCustomId(`BigRightArrow-compare-${commanduser.id}-${input.absoluteID}`)
-                            .setStyle(buttonsthing.type.current)
-                            .setEmoji(buttonsthing.label.page.last),
-                    );
+                const pgbuttons: Discord.ActionRowBuilder = await pageButtons('compare', commanduser, input.absoluteID);
 
-                useComponents.push(pgbuttons)
+
+                useComponents.push(pgbuttons);
             }
                 break;
 
 
 
             case 'mapscore': {
-                embedTitle = 'Comparing map scores'
+                embedTitle = 'Comparing map scores';
                 fieldFirst = {
                     name: `**${firstuser.username}**`,
                     value: '',
                     inline: true
-                }
+                };
                 fieldSecond = {
                     name: `**${seconduser.username}**`,
                     value: 's',
                     inline: true
-                }
+                };
                 fieldComparison = {
                     name: `**Difference**`,
                     value: 'w',
                     inline: false
-                }
-                usefields.push(fieldFirst, fieldSecond, fieldComparison)
+                };
+                usefields.push(fieldFirst, fieldSecond, fieldComparison);
             }
                 break;
 
         }
-        osufunc.writePreviousId('user', input.obj.guildId, `${seconduser.id}`)
+        osufunc.writePreviousId('user', input.obj.guildId, { id: `${seconduser.id}`, apiData: null, mods: null });
     } catch (error) {
-        embedTitle = 'Error'
+        embedTitle = 'Error';
         usefields.push({
             name: 'Error',
             value: `${error}`,
             inline: false
         })
+        log.logCommand({
+            event: 'Error',
+            commandName: 'compare',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: `${error}`
+        });
     }
 
     const embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setTitle(embedTitle)
-        .addFields(usefields)
-    if (embedescription) embed.setDescription(embedescription)
+        .addFields(usefields);
+    if (embedescription) embed.setDescription(embedescription);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: [embed],
             components: useComponents
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'compare',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'compare',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
@@ -8947,45 +12681,58 @@ export async function osuset(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
             if (input.args.includes('-osu')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-osu'), 1);
             }
             if (input.args.includes('-o')) {
-                mode = 'osu'
+                mode = 'osu';
                 input.args.splice(input.args.indexOf('-o'), 1);
             }
             if (input.args.includes('-taiko')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-taiko'), 1);
             }
             if (input.args.includes('-t')) {
-                mode = 'taiko'
+                mode = 'taiko';
                 input.args.splice(input.args.indexOf('-t'), 1);
             }
             if (input.args.includes('-catch')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-catch'), 1);
             }
             if (input.args.includes('-fruits')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-fruits'), 1);
             }
             if (input.args.includes('-ctb')) {
-                mode = 'fruits'
+                mode = 'fruits';
                 input.args.splice(input.args.indexOf('-ctb'), 1);
             }
+            if (input.args.includes('-f')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
+            }
             if (input.args.includes('-mania')) {
-                mode = 'mania'
+                mode = 'mania';
                 input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
             }
 
             if (input.args.includes('-skin')) {
-                skin = input.args.slice(input.args.indexOf('-skin') + 1).join(' ')
-                input.args.splice(input.args.indexOf('-skin'))
+                const temp = func.parseArg(input.args, '-skin', 'string', skin, true);
+                skin = temp.value;
+                input.args = temp.newArgs;
             }
+
+            input.args = cleanArgs(input.args);
+
             name = input.args.join(' ');
         }
             break;
@@ -8993,9 +12740,10 @@ export async function osuset(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            name = input.obj.options.getString('user');//@ts-ignore
-            mode = input.obj.options.getString('mode');//@ts-ignore
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            name = input.obj.options.getString('user');
+            mode = input.obj.options.getString('mode');
             skin = input.obj.options.getString('skin');
             type = 'interaction';
         }
@@ -9004,6 +12752,7 @@ export async function osuset(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -9013,30 +12762,28 @@ export async function osuset(input: extypes.commandInput) {
         if (input.overrides.type != null) {
             switch (input.overrides.type) {
                 case 'mode':
-                    mode = name
+                    mode = name;
                     break;
                 case 'skin':
-                    skin = name
+                    skin = name;
                     break;
             }
-            name = null
+            name = null;
         }
     }
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('osuset', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
     //OPTIONS==============================================================================================================================================================================================
 
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'osuset',
+        options: [
             {
                 name: 'Name',
                 value: name
@@ -9057,34 +12804,25 @@ export async function osuset(input: extypes.commandInput) {
                 name: 'Value',
                 value: value
             },
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    // if (typeof name == 'undefined' || name == null) {//@ts-ignore
-    //     input.obj.reply({
-    //         content: 'Error - username undefined',
-    //         allowedMentions: { repliedUser: false },
-    //         failIfNotExists: true
-    //     });
-    //     return;
-    // }
-
-    let txt = 'null'
+    let txt = 'null';
 
     if (mode) {
-        const thing = osufunc.modeValidatorAlt(mode)
+        const thing = osufunc.modeValidatorAlt(mode);
         mode = thing.mode;
         if (thing.isincluded == false) {
-            //@ts-ignore
-            input.obj.reply({
-                content: 'Error - invalid mode given',
-                allowedMentions: { repliedUser: false },
-                failIfNotExists: true
-            });
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.set.mode,
+                    edit: true
+                }
+            }, input.canReply);
             return;
         }
     }
@@ -9096,10 +12834,10 @@ export async function osuset(input: extypes.commandInput) {
         skin?: string,
     } = {
         userid: commanduser.id
-    }
+    };
     updateRows = {
         userid: commanduser.id,
-    }
+    };
     if (name != null) {
         updateRows['osuname'] = name;
     }
@@ -9110,7 +12848,7 @@ export async function osuset(input: extypes.commandInput) {
         updateRows['skin'] = skin;
     }
 
-    const findname = await input.userdata.findOne({ where: { userid: commanduser.id } })
+    const findname = await input.userdata.findOne({ where: { userid: commanduser.id } });
     if (findname == null) {
         try {
             await input.userdata.create({
@@ -9118,20 +12856,20 @@ export async function osuset(input: extypes.commandInput) {
                 osuname: name ?? 'undefined',
                 mode: mode ?? 'osu',
                 skin: skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117'
-            })
-            txt = 'Added to database'
+            });
+            txt = 'Added to database';
             if (name) {
-                txt += `\nSet your username to \`${name}\``
+                txt += `\nSet your username to \`${name}\``;
             }
             if (mode) {
-                txt += `\nSet your mode to \`${mode}\``
+                txt += `\nSet your mode to \`${mode}\``;
             }
             if (skin) {
-                txt += `\nSet your skin to \`${skin}\``
+                txt += `\nSet your skin to \`${skin}\``;
             }
         } catch (error) {
-            txt = 'There was an error trying to update your settings'
-            log.errLog('Database error', error, `${input.absoluteID}`)
+            txt = 'There was an error trying to update your settings';
+            log.errLog('Database error', error, `${input.absoluteID}`);
         }
     } else {
         const affectedRows = await input.userdata.update(
@@ -9140,41 +12878,50 @@ export async function osuset(input: extypes.commandInput) {
         );
 
         if (affectedRows.length > 0 || affectedRows[0] > 0) {
-            txt = 'Updated your settings:'
+            txt = 'Updated your settings:';
             if (name) {
-                txt += `\nSet your username to \`${name}\``
+                txt += `\nSet your username to \`${name}\``;
             }
             if (mode) {
-                txt += `\nSet your mode to \`${mode}\``
+                txt += `\nSet your mode to \`${mode}\``;
             }
             if (skin) {
-                txt += `\nSet your skin to \`${skin}\``
+                txt += `\nSet your skin to \`${skin}\``;
             }
         } else {
-            txt = 'There was an error trying to update your settings'
-            log.errLog('Database error', `${affectedRows}`, `${input.absoluteID}`)
+            txt = 'There was an error trying to update your settings';
+            log.errLog('Database error', `${affectedRows}`, `${input.absoluteID}`);
         }
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             content: txt,
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'osuset',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'osuset',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
@@ -9184,227 +12931,177 @@ ID: ${input.absoluteID}
 export async function saved(input: extypes.commandInput) {
     let commanduser: Discord.User;
     let searchid;
+    let user;
+    let show = {
+        name: true,
+        mode: true,
+        skin: true
+    };
+    let overrideTitle;
+
+    const embedStyle: extypes.osuCmdStyle = 'A';
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property only exists on message
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            //@ts-expect-error mentions property does not exist on interaction
+
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+            user = input.args.join(' ');
+            if (!input.args[0] || input.args[0].includes(searchid)) {
+                user = null;
+            }
         }
             break;
         //==============================================================================================================================================================================================
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
     }
-    if (input.overrides != null) {
 
+    if (input.overrides) {
+        if (input?.overrides?.type != null) {
+            switch (input?.overrides?.type) {
+                case 'username':
+                    show = {
+                        name: true,
+                        mode: false,
+                        skin: false
+                    };
+                    break;
+                case 'mode':
+                    show = {
+                        name: false,
+                        mode: true,
+                        skin: false
+                    };
+                    break;
+                case 'skin':
+                    show = {
+                        name: false,
+                        mode: false,
+                        skin: true
+                    };
+                    break;
+            }
+        }
+        if (input?.overrides?.ex != null) {
+            overrideTitle = input?.overrides?.ex;
+        }
     }
+
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'saved',
+        options: [
+            {
+                name: 'User id',
+                value: searchid
+            }
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const user = input.client.users.cache.get(searchid);
+    let cuser: any = {
+        osuname: 'null',
+        mode: 'osu! (Default)',
+        skin: 'osu! classic'
+    };
+
+    let fr;
+    if (user == null) {
+        fr = input.client.users.cache.get(searchid)?.username ?? 'null';
+    }
 
     const Embed = new Discord.EmbedBuilder()
-        .setTitle(`${user.username}'s saved settings`)
+        .setFooter({
+            text: `${embedStyle}`
+        })
+        .setTitle(`${user != null ? user : fr}'s ${overrideTitle ?? 'saved settings'}`);
 
-    const allUsers = await input.userdata.findAll()
+    if (user == null) {
+        cuser = await input.userdata.findOne({ where: { userid: searchid } });
+    } else {
+        const allUsers = await input.userdata.findAll();
 
-    const cuser = allUsers.find(user => user.userid == searchid)
+        cuser = allUsers.filter(x => (`${x.osuname}`.trim().toLowerCase() == `${user}`.trim().toLowerCase()))[0];
+    }
 
     if (cuser) {
-        Embed.addFields([{
-            name: 'Username',
-            value: `${cuser.osuname && cuser.mode.length > 1 ? cuser.osuname : 'undefined'}`,
-            inline: true
-        },
-        {
-            name: 'Mode',
-            value: `${cuser.mode && cuser.mode.length > 1 ? cuser.mode : 'osu (default)'}`,
-        },
-        {
-            name: 'Skin',
-            value: `${cuser.skin && cuser.skin.length > 1 ? cuser.skin : 'None'}`,
+        const fields = [];
+        if (show.name == true) {
+            fields.push({
+                name: 'Username',
+                value: `${cuser.osuname && cuser.mode.length > 1 ? cuser.osuname : 'undefined'}`,
+                inline: true
+            });
         }
-        ]
-
-        )
+        if (show.mode == true) {
+            fields.push({
+                name: 'Mode',
+                value: `${cuser.mode && cuser.mode.length > 1 ? cuser.mode : 'osu (default)'}`,
+            });
+        }
+        if (show.skin == true) {
+            fields.push({
+                name: 'Skin',
+                value: `${cuser.skin && cuser.skin.length > 1 ? cuser.skin : 'None'}`,
+            });
+        }
+        Embed.addFields(fields);
     } else {
-        Embed.setDescription('No saved settings found')
+        Embed.setDescription('No saved settings found');
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: [Embed],
         }
-    })
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
-}
+    }, input.canReply);
 
-/**
- * return skin
- */
-export async function skin(input: extypes.commandInput) {
-
-    let commanduser: Discord.User;
-    let string: string;
-    let searchid: string;
-
-    switch (input.commandType) {
-        case 'message': {
-            //@ts-expect-error author property does not exist on interaction
-            commanduser = input.obj.author;//@ts-ignore
-            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-
-            string = input.args.join(' ')
-
-        }
-            break;
-
-        //==============================================================================================================================================================================================
-
-        case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
-            string = input.obj.options.getString('string')
-            if (!string) {//@ts-ignore
-                string = input.obj.options.getUser('user');
-            }
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            commanduser = input.obj.member.user;
-        }
-            break;
-    }
-
-
-    //==============================================================================================================================================================================================
-
-    log.logFile(
-        'command',
-        log.commandLog('skin', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
-            {
-                name: 'String',
-                value: string
-            },
-            {
-                name: 'Search ID',
-                value: searchid
-            }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
-
-    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-    let userF;
-    let findType: 'string' | 'id'
-    switch (true) {
-        case (searchid != commanduser.id): {
-            findType = 'id'
-        }
-            break;
-        case (string != null || string.length > 0): {
-            findType = 'string'
-        }
-            break;
-        default: {
-            findType = 'id'
-        }
-    }
-
-    const allUsers = await input.userdata.findAll()
-
-    if (findType == 'id') {
-        userF = allUsers.find(user => user.id == searchid)
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'saved',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
     } else {
-        userF = allUsers.find(user => user.osuname.toLowerCase().includes(string.toLowerCase()))
+        log.logCommand({
+            event: 'Error',
+            commandName: 'saved',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
     }
-    let skinstring;
-    if (userF) {
-        skinstring = `${userF.dataValues.skin}`
-    } else {
-        skinstring = `User is not saved in the database`
-    }
-
-    const embed = new Discord.EmbedBuilder()
-        .setTitle(`${userF?.osuname ?? `<@${searchid}>`}'s skin`)
-        .setDescription(skinstring)
-
-
-    //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
-        commandType: input.commandType,
-        obj: input.obj,
-        args: {
-            embeds: [embed],
-        }
-    })
-
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
-
 }
 
 /**
  * estimate stats if x pp score
  */
-export async function whatif(input: extypes.commandInput & { statsCache: any }) {
+export async function whatif(input: extypes.commandInput & { statsCache: any; }) {
 
     let commanduser: Discord.User;
     let user;
@@ -9412,12 +13109,58 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
     let searchid;
     let mode;
 
+    const embedStyle: extypes.osuCmdStyle = 'A';
+
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property does not exist on interaction
+            input.obj = (input.obj as Discord.Message);
+
             commanduser = input.obj.author;
-            //@ts-ignore
+
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+
+            if (input.args.includes('-osu')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-osu'), 1);
+            }
+            if (input.args.includes('-o')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-taiko'), 1);
+            }
+            if (input.args.includes('-t')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-catch'), 1);
+            }
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-f')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
+            }
+            if (input.args.includes('-mania')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
+            }
+
+            input.args = cleanArgs(input.args);
 
             if (!isNaN(+input.args[0])) {
                 pp = +input.args[0];
@@ -9425,9 +13168,9 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
 
             if ((input.args[0] && input.args[1])) {
                 if (input.args[0].includes(searchid)) {
-                    user = null
+                    user = null;
                 } else {
-                    user = input.args[0]
+                    user = input.args[0];
                 }
                 pp = input.args[1] ?? null;
 
@@ -9438,10 +13181,14 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
         //==============================================================================================================================================================================================
 
         case 'interaction': {
-            commanduser = input.obj.member.user;//@ts-ignore
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            searchid = commanduser.id;
+
             user = input.obj.options.getString('user');
-            searchid = input.obj.member.user.id;//@ts-ignore
-            mode = input.obj.options.getString('mode');//@ts-ignore
+
+            mode = input.obj.options.getString('mode');
+
             pp = input.obj.options.getNumber('pp');
         }
 
@@ -9449,7 +13196,9 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
+            searchid = commanduser.id;
         }
             break;
     }
@@ -9457,17 +13206,14 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('whatif', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'what if',
+        options: [
             {
                 name: 'user',
                 value: user
@@ -9484,11 +13230,9 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
                 name: 'searchid',
                 value: searchid
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     //if user is null, use searchid
@@ -9510,29 +13254,101 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
         pp = 100;
     }
 
-    let osudata: osuApiTypes.User;
+    let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(user, 'osudata') &&
-        !('error' in func.findFile(user, 'osudata')) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudata = func.findFile(user, 'osudata')
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
-        osudata = await osufunc.apiget('user', `${await user}`)
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator(mode)
+            }
+        });
     }
-    func.storeFile(osudata, osudata.id, 'osudata')
-    func.storeFile(osudata, user, 'osudata')
 
-    osufunc.debug(osudata, 'command', 'whatif', input.obj.guildId, 'osuData');
+    const osudata: osuApiTypes.User = osudataReq.apiData;
+
+    if (osudata?.error || !osudata.id) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'whatif',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
+        return;
+    }
+
+    const buttons = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-User-whatif-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.user),
+        );
+
+    osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
+
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
+    func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
+
+    osufunc.debug(osudataReq, 'command', 'whatif', input.obj.guildId, 'osuData');
 
     if (mode == null) {
         mode = osudata.playmode;
     }
 
-    const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = await osufunc.apiget('best', `${osudata.id}`, `${mode}`)
-    osufunc.debug(osutopdata, 'command', 'whatif', input.obj.guildId, 'osuTopData');
+    const osutopdataReq: osufunc.apiReturn = await osufunc.apiget({
+        type: 'best',
+        params: {
+            userid: osudata.id,
+            mode: mode,
+            opts: ['limit=100']
+        }
+    });
 
-    let pparr = osutopdata.slice().map(x => x.pp);
+
+    const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData; osufunc.debug(osutopdataReq, 'command', 'whatif', input.obj.guildId, 'osuTopData');
+
+    if (osutopdata?.error) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: `Could not fetch user's top scores`,
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'whatif',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: `Could not find user's top scores`
+        });
+        return;
+    }
+
+    const pparr = osutopdata.slice().map(x => x.pp);
     pparr.push(pp);
     pparr.sort((a, b) => b - a);
     const ppindex = pparr.indexOf(pp);
@@ -9555,9 +13371,12 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
 
     const bonus = osudata.statistics.pp - newBonus.reduce((a, b) => a + b, 0);
 
-    const guessrank = await osufunc.getRankPerformance('pp->rank', (total + bonus), input.userdata, 'osu', input.statsCache)
+    const guessrank = await osufunc.getRankPerformance('pp->rank', (total + bonus), `${osufunc.modeValidator(mode)}`, input.statsCache);
 
     const embed = new Discord.EmbedBuilder()
+        .setFooter({
+            text: `${embedStyle}`
+        })
         .setTitle(`What if ${osudata.username} gained ${pp}pp?`)
         .setColor(colours.embedColour.query.dec)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
@@ -9571,27 +13390,543 @@ export async function whatif(input: extypes.commandInput & { statsCache: any }) 
 Their pp would change by **${Math.abs((total + bonus) - osudata.statistics.pp).toFixed(2)}pp** and their new total pp would be **${(total + bonus).toFixed(2)}pp**.
 Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - guessrank}).
 `
-        )
+        );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [embed]
+            embeds: [embed],
+            components: [buttons]
         }
-    })
+    }, input.canReply);
 
-
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'whatif',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'whatif',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
+//buttons
+async function pageButtons(command: string, commanduser: Discord.User, commandId: string | number) {
+    const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-BigLeftArrow-${command}-${commanduser.id}-${commandId}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.first).setDisabled(false),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-LeftArrow-${command}-${commanduser.id}-${commandId}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.previous),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Search-${command}-${commanduser.id}-${commandId}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.search),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-RightArrow-${command}-${commanduser.id}-${commandId}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.next),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-BigRightArrow-${command}-${commanduser.id}-${commandId}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.page.last),
+        );
+    return pgbuttons;
+}
+
+async function buttonsAddDetails(command: string, commanduser: Discord.User, commandId: string | number, buttons: Discord.ActionRowBuilder, detailed: number, embedStyle: extypes.osuCmdStyle) {
+    switch (detailed) {
+        case 0: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-${command}-${commanduser.id}-${commandId}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = embedStyle.replaceAll('E', '').replaceAll('C', '') + 'C' as extypes.osuCmdStyle;
+        }
+            break;
+        case 1: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail0-${command}-${commanduser.id}-${commandId}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail2-${command}-${commanduser.id}-${commandId}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+            embedStyle = embedStyle.replaceAll('E', '').replaceAll('C', '') as extypes.osuCmdStyle;
+        }
+            break;
+        case 2: {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-${command}-${commanduser.id}-${commandId}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+            );
+            embedStyle = embedStyle.replaceAll('E', '').replaceAll('C', '') + 'E' as extypes.osuCmdStyle;
+        }
+            break;
+    }
+    return { buttons, embedStyle };
+}
+
+//ARG HANDLING
+
+async function parseArgs_scoreList_message(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+
+    let user;
+    let searchid;
+    let page = 0;
+
+    let scoredetailed: number = 1;
+
+    let sort: embedStuff.scoreSort = null;
+    let reverse = false;
+    let mode = 'osu';
+    let filteredMapper = null;
+    let filteredMods = null;
+    let filterTitle = null;
+
+    let parseScore = false;
+    let parseId = null;
+
+    let filterRank: osuApiTypes.Rank = null;
+
+    input.obj = input.obj as Discord.Message;
+
+    searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+    if (input.args.includes('-parse')) {
+        parseScore = true;
+        const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+        parseId = temp.value;
+        input.args = temp.newArgs;
+    }
+
+    if (input.args.includes('-page')) {
+        const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
+        page = temp.value;
+        input.args = temp.newArgs;
+    }
+    if (input.args.includes('-p')) {
+        const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
+        page = temp.value;
+        input.args = temp.newArgs;
+    }
+
+    if (input.args.includes('-detailed')) {
+        scoredetailed = 2;
+        input.args.splice(input.args.indexOf('-detailed'), 1);
+    }
+    if (input.args.includes('-d')) {
+        scoredetailed = 2;
+        input.args.splice(input.args.indexOf('-d'), 1);
+    }
+    if (input.args.includes('-compress')) {
+        scoredetailed = 0;
+        input.args.splice(input.args.indexOf('-compress'), 1);
+    }
+    if (input.args.includes('-c')) {
+        scoredetailed = 0;
+        input.args.splice(input.args.indexOf('-c'), 1);
+    }
+
+    if (input.args.includes('-osu')) {
+        mode = 'osu';
+        input.args.splice(input.args.indexOf('-osu'), 1);
+    }
+    if (input.args.includes('-o')) {
+        mode = 'osu';
+        input.args.splice(input.args.indexOf('-o'), 1);
+    }
+    if (input.args.includes('-taiko')) {
+        mode = 'taiko';
+        input.args.splice(input.args.indexOf('-taiko'), 1);
+    }
+    if (input.args.includes('-t')) {
+        mode = 'taiko';
+        input.args.splice(input.args.indexOf('-t'), 1);
+    }
+    if (input.args.includes('-catch')) {
+        mode = 'fruits';
+        input.args.splice(input.args.indexOf('-catch'), 1);
+    }
+    if (input.args.includes('-fruits')) {
+        mode = 'fruits';
+        input.args.splice(input.args.indexOf('-fruits'), 1);
+    }
+    if (input.args.includes('-ctb')) {
+        mode = 'fruits';
+        input.args.splice(input.args.indexOf('-ctb'), 1);
+    }
+    if (input.args.includes('-f')) {
+        mode = 'fruits';
+        input.args.splice(input.args.indexOf('-f'));
+    }
+    if (input.args.includes('-mania')) {
+        mode = 'mania';
+        input.args.splice(input.args.indexOf('-mania'), 1);
+    }
+    if (input.args.includes('-m')) {
+        mode = 'mania';
+        input.args.splice(input.args.indexOf('-m'));
+    }
+
+    if (input.args.includes('-recent')) {
+        sort = 'recent';
+        input.args.splice(input.args.indexOf('-recent'), 1);
+    }
+    if (input.args.includes('-performance')) {
+        sort = 'pp';
+        input.args.splice(input.args.indexOf('-performance'), 1);
+    }
+    if (input.args.includes('-pp')) {
+        sort = 'pp';
+        input.args.splice(input.args.indexOf('-pp'), 1);
+    }
+    if (input.args.includes('-score')) {
+        sort = 'score';
+        input.args.splice(input.args.indexOf('-score'), 1);
+    }
+    if (input.args.includes('-acc')) {
+        sort = 'acc';
+        input.args.splice(input.args.indexOf('-acc'), 1);
+    }
+    if (input.args.includes('-combo')) {
+        sort = 'combo';
+        input.args.splice(input.args.indexOf('-combo'), 1);
+    }
+    if (input.args.includes('-misses')) {
+        sort = 'miss',
+            input.args.splice(input.args.indexOf('-misses'));
+    }
+    if (input.args.includes('-miss')) {
+        sort = 'miss';
+        input.args.splice(input.args.indexOf('-miss'), 1);
+    }
+    if (input.args.includes('-rank')) {
+        sort = 'rank';
+        input.args.splice(input.args.indexOf('-rank'), 1);
+    }
+    if (input.args.includes('-r')) {
+        sort = 'recent';
+        input.args.splice(input.args.indexOf('-r'), 1);
+    }
+
+    if (input.args.includes('-?')) {
+        const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
+        filterTitle = temp.value;
+        input.args = temp.newArgs;
+    }
+
+    if (input.args.includes('-grade')) {
+        const temp = func.parseArg(input.args, '-grade', 'string', filterRank, false);
+        filterRank = osumodcalc.checkGrade(temp.value);
+        input.args = temp.newArgs;
+    }
+
+    input.args = cleanArgs(input.args);
+
+    user = input.args.join(' ');
+    if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+        user = null;
+    }
+    return {
+        user, searchid, page, scoredetailed,
+        sort, reverse, mode,
+        filteredMapper, filteredMods, filterTitle, filterRank,
+        parseScore, parseId,
+    };
+}
+
+async function parseArgs_scoreList_interaction(input: extypes.commandInput) {
+    input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+
+    const searchid = input.obj.member.user.id;
+
+    const user = input.obj.options.getString('user') ?? undefined;
+    const page = input.obj.options.getInteger('page') ?? 0;
+    const scoredetailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
+    const sort = input.obj.options.getString('sort') as embedStuff.scoreSort ?? null;
+    const reverse = input.obj.options.getBoolean('reverse') ?? false;
+    const mode = input.obj.options.getString('mode') ?? 'osu';
+    const filteredMapper = input.obj.options.getString('mapper') ?? null;
+    const filterTitle = input.obj.options.getString('filter') ?? null;
+    const parseId = input.obj.options.getInteger('parse') ?? null;
+    const parseScore = parseId != null ? true : false;
+    const filteredMods = input.obj.options.getString('mods') ?? null;
+    const filterRank = input.obj.options.getString('filterRank') ? osumodcalc.checkGrade(input.obj.options.getString('filterRank')) : null;
+
+    return {
+        user, searchid, page, scoredetailed,
+        sort, reverse, mode,
+        filteredMapper, filteredMods, filterTitle, filterRank,
+        parseScore, parseId,
+    };
+}
+
+async function parseArgs_scoreList_button(input: extypes.commandInput) {
+    let user;
+    let page = 0;
+
+    let scoredetailed: number = 1;
+
+    let sort: embedStuff.scoreSort = null;
+    let reverse = false;
+    let mode = 'osu';
+
+    let filteredMapper = null;
+    let filteredMods = null;
+    let filterTitle = null;
+    let filterRank: osuApiTypes.Rank = null;
+
+    let parseScore = false;
+    let parseId = null;
+
+    input.obj = (input.obj as Discord.ButtonInteraction);
+
+    if (!input.obj.message.embeds[0]) {
+        return;
+    }
+    const searchid = input.obj.member.user.id;
+
+    user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
+    mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
+    page = 0;
+
+    if (input.obj.message.embeds[0].description) {
+        if (input.obj.message.embeds[0].description.includes('mapper')) {
+            filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
+        }
+
+        if (input.obj.message.embeds[0].description.includes('mods')) {
+            filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
+        }
+
+        if (input.obj.message.embeds[0].description.includes('map')) {
+            filterTitle = input.obj.message.embeds[0].description.split('map: ')[1].split('\n')[0];
+        }
+
+        if (input.obj.message.embeds[0].description.includes('rank')) {
+            filterRank = osumodcalc.checkGrade(input.obj.message.embeds[0].description.split('rank: ')[1].split('\n')[0]);
+        }
+
+
+        const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
+        switch (true) {
+            case sort1.includes('score'):
+                sort = 'score';
+                break;
+            case sort1.includes('acc'):
+                sort = 'acc';
+                break;
+            case sort1.includes('pp'):
+                sort = 'pp';
+                break;
+            case sort1.includes('old'): case sort1.includes('recent'):
+                sort = 'recent';
+                break;
+            case sort1.includes('combo'):
+                sort = 'combo';
+                break;
+            case sort1.includes('miss'):
+                sort = 'miss';
+                break;
+            case sort1.includes('rank'):
+                sort = 'rank';
+                break;
+
+        }
+
+        const reverse1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
+        if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
+            reverse = true;
+        } else {
+            reverse = false;
+        }
+
+        const pageParsed = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[0]);
+        page = 0;
+        switch (input.button) {
+            case 'BigLeftArrow':
+                page = 1;
+                break;
+            case 'LeftArrow':
+                page = pageParsed - 1;
+                break;
+            case 'RightArrow':
+                page = pageParsed + 1;
+                break;
+            case 'BigRightArrow':
+
+                page = parseInt((input.obj.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
+                break;
+            default:
+                page = pageParsed;
+                break;
+        }
+        switch (input.button) {
+            case 'Detail0':
+                scoredetailed = 0;
+                break;
+            case 'Detail1':
+                scoredetailed = 1;
+                break;
+            case 'Detail2':
+                scoredetailed = 2;
+                break;
+            default:
+                if (input.obj.message.embeds[0].footer.text.includes('LE')) {
+                    scoredetailed = 2;
+                }
+                if (input.obj.message.embeds[0].footer.text.includes('LC')) {
+                    scoredetailed = 0;
+                }
+                break;
+        }
+    }
+
+    return {
+        user, searchid, page, scoredetailed,
+        sort, reverse, mode,
+        filteredMapper, filteredMods, filterTitle, filterRank,
+        parseScore, parseId,
+    };
+}
+
+async function parseArgs_scoreList(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+
+    let user;
+    let searchid;
+    let page = 0;
+
+    let scoredetailed: number = 1;
+
+    let sort: embedStuff.scoreSort = null;
+    let reverse = false;
+    let mode = 'osu';
+
+    let filteredMapper = null;
+    let filteredMods = null;
+    let filterTitle = null;
+    let filterRank: osuApiTypes.Rank = null;
+
+    let parseScore = false;
+    let parseId = null;
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+
+            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+            const temp = await parseArgs_scoreList_message(input);
+            user = temp.user;
+            searchid = temp.searchid;
+            page = temp.page;
+            scoredetailed = temp.scoredetailed;
+            sort = temp.sort;
+            reverse = temp.reverse;
+            mode = temp.mode;
+            filteredMapper = temp.filteredMapper;
+            filteredMods = temp.filteredMods;
+            filterTitle = temp.filterTitle;
+            parseScore = temp.parseScore;
+            parseId = temp.parseId;
+            filterRank = temp.filterRank;
+
+        }
+            break;
+
+        //==============================================================================================================================================================================================
+
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            searchid = input.obj.member.user.id;
+            const temp = await parseArgs_scoreList_interaction(input);
+            user = temp.user;
+            searchid = temp.searchid;
+            page = temp.page;
+            scoredetailed = temp.scoredetailed;
+            sort = temp.sort;
+            reverse = temp.reverse;
+            mode = temp.mode;
+            filteredMapper = temp.filteredMapper;
+            filteredMods = temp.filteredMods;
+            filterTitle = temp.filterTitle;
+            parseScore = temp.parseScore;
+            parseId = temp.parseId;
+            filterRank = temp.filterRank;
+        }
+
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
+
+            commanduser = input.obj.member.user;
+            const temp = await parseArgs_scoreList_button(input);
+            user = temp.user;
+            searchid = temp.searchid;
+            page = temp.page;
+            scoredetailed = temp.scoredetailed;
+            sort = temp.sort;
+            reverse = temp.reverse;
+            mode = temp.mode;
+            filteredMapper = temp.filteredMapper;
+            filteredMods = temp.filteredMods;
+            filterTitle = temp.filterTitle;
+            parseScore = temp.parseScore;
+            parseId = temp.parseId;
+            filterRank = temp.filterRank;
+        }
+            break;
+    }
+    return {
+        commanduser,
+        user, searchid, page, scoredetailed,
+        sort, reverse, mode,
+        filteredMapper, filteredMods, filterTitle, filterRank,
+        parseScore, parseId,
+    };
+}
+
+
+/**
+ * 
+ * @param args 
+ * @returns args with 0 length strings and args starting with the - prefix removed
+ */
+export function cleanArgs(args: string[]) {
+    const newArgs: string[] = [];
+    for (let i = 0; i < args.length; i++) {
+        if (args[i] != '' && !args[i].startsWith('-')) {
+            newArgs.push(args[i]);
+        }
+    }
+    return newArgs;
+}

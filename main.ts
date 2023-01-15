@@ -1,22 +1,38 @@
-console.log('Loading...')
+console.log('Loading...');
 const initdate = new Date();
 
-import Discord = require('discord.js');
-const { Client, GatewayIntentBits, Partials } = require('discord.js');
-import fs = require('fs');
-import Sequelize = require('sequelize');
+import Discord, { Client, GatewayIntentBits, Partials } from 'discord.js';
+import fs from 'fs';
 import fetch from 'node-fetch';
-import extypes = require('./src/types/extratypes');
+import Sequelize from 'sequelize';
+import * as extypes from './src/types/extratypes.js';
 
-const commandHandler = require('./commandHandler');
-const linkHandler = require('./linkHandler.ts');
-const buttonHandler = require('./buttonHandler');
-const commandInit = require('./commandInit');
-const exEvents = require('./exEvents');
-const osutrack = require('./src/osutrack');
+import buttonHandler from './buttonHandler.js';
+import commandHandler from './commandHandler.js';
+import commandInit from './commandInit.js';
+import exEvents from './exEvents.js';
+import linkHandler from './linkHandler.js';
+import osutrack from './src/osutrack.js';
 
-const config: extypes.config = require('./config/config.json');
+import * as admincmds from './commands/cmdAdmin.js';
+import * as checkcmds from './commands/cmdChecks.js';
+import * as commands from './commands/cmdGeneral.js';
+import * as misccmds from './commands/cmdMisc.js';
+import * as osucmds from './commands/cmdosu.js';
 
+import https from 'https';
+import tesseract from 'tesseract.js';
+import * as checks from './src/checks.js';
+import * as cmdconfig from './src/consts/commandopts.js';
+import * as cd from './src/consts/cooldown.js';
+import * as mainconst from './src/consts/main.js';
+import * as embedStuff from './src/embed.js';
+import * as osufunc from './src/osufunc.js';
+import * as func from './src/tools.js';
+import * as trackfunc from './src/trackfunc.js';
+
+import config from './config/config.json' assert { type: 'json' };
+import { path } from './path.js';
 
 const client = new Client({
     intents: [
@@ -40,7 +56,7 @@ const client = new Client({
         Partials.Channel,
         Partials.User
     ]
-})
+});
 
 const sequelize = new Sequelize.Sequelize('database', 'username', 'password', {
     host: 'localhost',
@@ -48,8 +64,6 @@ const sequelize = new Sequelize.Sequelize('database', 'username', 'password', {
     logging: false,
     storage: 'database.sqlite',
 });
-
-
 
 const userdata = sequelize.define('userdata', {
     userid: {
@@ -110,8 +124,20 @@ const trackDb = sequelize.define('trackUsers', {
     },
     guilds: {
         type: Sequelize.STRING,
-    }
-})
+    },
+    guildsosu: {
+        type: Sequelize.STRING,
+    },
+    guildstaiko: {
+        type: Sequelize.STRING,
+    },
+    guildsfruits: {
+        type: Sequelize.STRING,
+    },
+    guildsmania: {
+        type: Sequelize.STRING,
+    },
+});
 
 const statsCache = sequelize.define('statsCache', {
     osuid: {
@@ -135,7 +161,7 @@ const statsCache = sequelize.define('statsCache', {
     maniapp: Sequelize.STRING,
     maniarank: Sequelize.STRING,
     maniaacc: Sequelize.STRING,
-})
+});
 
 client.once('ready', () => {
     const currentDate = new Date();
@@ -144,7 +170,7 @@ client.once('ready', () => {
     guildSettings.sync();
     trackDb.sync();
     statsCache.sync();
-    const timetostart = currentDate.getTime() - initdate.getTime()
+    const timetostart = currentDate.getTime() - initdate.getTime();
     const initlog = `
 ====================================================
 BOT IS NOW ONLINE
@@ -156,77 +182,118 @@ Current Time (epoch, ms): ${currentDate.getTime()}
 Current Client:           ${client.user.tag} 
 Current Client ID:        ${client.user.id}
 ====================================================
-`
-    console.log(initlog)
+`;
+    console.log(initlog);
 
     const oncooldown = new Set();
 
-    commandHandler(userdata, client, config, oncooldown, guildSettings, trackDb, statsCache);
-    linkHandler(userdata, client, config, oncooldown, guildSettings);
-    buttonHandler(userdata, client, config, oncooldown, statsCache);
-    commandInit(userdata, client, config, oncooldown);
-    exEvents(userdata, client, config, oncooldown, guildSettings, statsCache);
-    osutrack(userdata, client, config, oncooldown, trackDb, guildSettings);
 
-    if (!fs.existsSync(`./id.txt`)) {
-        console.log(`Creating ./id.txt`);
-        fs.writeFileSync(`./id.txt`, '0', 'utf-8');
+    if (!fs.existsSync(`${path}\\id.txt`)) {
+        console.log(`Creating ${path}\\id.txt`);
+        fs.writeFileSync(`${path}\\id.txt`, '0', 'utf-8');
     }
-    if (!fs.existsSync(`./debug`)) {
-        console.log(`Creating ./debug folder`);
-        fs.mkdirSync(`./debug`);
+    if(!fs.existsSync(`${path}\\trackingFiles`)){
+        console.log(`Creating ${path}\\trackingFiles`);
+        fs.writeFileSync(`${path}\\trackingFiles`, '0', 'utf-8');
     }
-    if (!fs.existsSync(`./logs`)) {
-        console.log(`Creating ./logs folder`);
-        fs.mkdirSync(`./logs`);
-    }
-    if (!fs.existsSync(`./logs/gen`)) {
-        console.log(`Creating ./logs/gen folder`);
-        fs.mkdirSync(`./logs/gen`);
-    }
-    if (!fs.existsSync(`./logs/cmd`)) {
-        console.log(`Creating ./logs/cmd folder`);
-        fs.mkdirSync(`./logs/cmd`);
-    }
-    if (!fs.existsSync(`./logs/moderator`)) {
-        console.log(`Creating ./logs/moderator folder`);
-        fs.mkdirSync(`./logs/moderator`);
-    }
-    if (!fs.existsSync(`./trackingFiles`)) {
-        console.log(`Creating ./trackingFiles folder`);
-        fs.mkdirSync(`./trackingFiles`);
-    }
-    if (!fs.existsSync(`./cache`)) {
-        console.log('Creating ./cache folder');
-        fs.mkdirSync('./cache');
-    }
-    if (!fs.existsSync(`./cache/commandData`)) {
-        console.log('Creating ./cache/commandData folder');
-        fs.mkdirSync('./cache/commandData');
-    }
-    if (!fs.existsSync(`./cache/debug`)) {
-        console.log(`Creating ./cache/debug folder`);
-        fs.mkdirSync(`./cache/debug`);
-    }
-    if (!fs.existsSync(`./cache/previous`)) {
-        console.log(`Creating previous IDs folder (./previous)`);
-        fs.mkdirSync(`./cache/previous`);
-    }
-    (async () => {
-        await client.guilds.cache.forEach(guild => {
-            if (!fs.existsSync(`./logs/moderator/${guild.id}.log`)) {
-                console.log(`Creating moderator log for ${guild.name}`);
-                fs.writeFileSync(`./logs/moderator/${guild.id}.log`, ''
-                )
-            }
 
-        }
-        )
-    })();
+    if (!fs.existsSync(`${path}\\debug`)) {
+        console.log(`Creating ${path}\\debug folder`);
+        fs.mkdirSync(`${path}\\debug`);
+    }
+    if (!fs.existsSync(`${path}\\logs`)) {
+        console.log(`Creating ${path}\\logs folder`);
+        fs.mkdirSync(`${path}\\logs`);
+    }
+    if (!fs.existsSync(`${path}\\logs\\totalcommands.txt`)) {
+        console.log(`Creating ${path}\\logs\\totalcommands.txt`);
+        fs.writeFileSync(`${path}\\logs\\totalcommands.txt`, '0', 'utf-8');
+    }
+    if (!fs.existsSync(`${path}\\logs\\gen`)) {
+        console.log(`Creating ${path}\\logs\\gen folder`);
+        fs.mkdirSync(`${path}\\logs\\gen`);
+    }
+    if (!fs.existsSync(`${path}\\logs\\cmd`)) {
+        console.log(`Creating ${path}\\logs\\cmd folder`);
+        fs.mkdirSync(`${path}\\logs\\cmd`);
+    }
+    if (!fs.existsSync(`${path}\\logs\\moderator`)) {
+        console.log(`Creating ${path}\\logs\\moderator folder`);
+        fs.mkdirSync(`${path}\\logs\\moderator`);
+    }
+    if (!fs.existsSync(`${path}\\trackingFiles`)) {
+        console.log(`Creating ${path}\\trackingFiles folder`);
+        fs.mkdirSync(`${path}\\trackingFiles`);
+    }
+    if (!fs.existsSync(`${path}\\cache`)) {
+        console.log(`Creating ${path}\\cache folder`);
+        fs.mkdirSync(`${path}\\cache`);
+    }
+    if (!fs.existsSync(`${path}\\cache\\commandData`)) {
+        console.log(`Creating ${path}\\cache\\commandData folder`);
+        fs.mkdirSync(`${path}\\cache\\commandData`);
+    }
+    if (!fs.existsSync(`${path}\\cache\\debug`)) {
+        console.log(`Creating ${path}\\cache\\debug folder`);
+        fs.mkdirSync(`${path}\\cache\\debug`);
+    }
+    if (!fs.existsSync(`${path}\\cache\\debug\\command`)) {
+        console.log(`Creating ${path}\\cache\\debug\\command folder`);
+        fs.mkdirSync(`${path}\\cache\\debug\\command`);
+    }
+    if (!fs.existsSync(`${path}\\cache\\previous`)) {
+        console.log(`Creating previous IDs folder (${path}\\previous)`);
+        fs.mkdirSync(`${path}\\cache\\previous`);
+    }
+    if (!fs.existsSync(`${path}\\cache\\graphs`)) {
+        console.log(`Creating ${path}\\cache\\graphs\\ folder`);
+        fs.mkdirSync(`${path}\\cache\\graphs`);
+    }
+    if (!fs.existsSync(`${path}\\cache\\errors`)) {
+        console.log(`Creating ${path}\\cache\\errors\\ folder`);
+        fs.mkdirSync(`${path}\\cache\\errors`);
+    }
+    if (!fs.existsSync(`${path}\\files`)) {
+        console.log(`Creating ${path}\\files folder`);
+        fs.mkdirSync(`${path}\\files`);
+    }
+    if (!fs.existsSync(`${path}\\files\\maps`)) {
+        console.log(`Creating ${path}\\files\\maps folder`);
+        fs.mkdirSync(`${path}\\files\\maps`);
+    }
+    if (!fs.existsSync(`${path}\\files\\replays`)) {
+        console.log(`Creating ${path}\\files\\replays folder`);
+        fs.mkdirSync(`${path}\\files\\replays`);
+    }
+    if (!fs.existsSync(`${path}\\files\\localmaps`)) {
+        console.log(`Creating ${path}\\files\\localmaps folder`);
+        fs.mkdirSync(`${path}\\files\\localmaps`);
+    }
 
-    fs.appendFileSync('logs/general.log', `\n\n\n${initlog}\n\n\n`, 'utf-8');
+    if (!fs.existsSync(`${path}\\logs\\debug.log`)) {
+        fs.writeFileSync(`${path}\\logs\\debug.log`, '');
+    }
+    if (!fs.existsSync(`${path}\\logs\\updates.log`)) {
+        fs.writeFileSync(`${path}\\logs\\updates.log`, '');
+    }
+    if (!fs.existsSync(`${path}\\logs\\err.log`)) {
+        fs.writeFileSync(`${path}\\logs\\err.log`, '');
+    }
+    if (!fs.existsSync(`${path}\\logs\\warn.log`)) {
+        fs.writeFileSync(`${path}\\logs\\warn.log`, '');
+    }
 
-    fs.writeFileSync('debug/starttime.txt', currentDate.toString());
+    //commandHandler(blahblahblah) //loop
+    commandHandler({userdata, client, config, oncooldown, guildSettings, trackDb, statsCache}); //instead of running once, the function should always be active
+    linkHandler({userdata, client, config, oncooldown, guildSettings, statsCache}); //{}
+    buttonHandler({userdata, client, config, oncooldown, statsCache});
+    commandInit({userdata, client, config, oncooldown});
+    exEvents({userdata, client, config, oncooldown, guildSettings, statsCache});
+    osutrack({userdata, client, config, oncooldown, trackDb, guildSettings});
+
+    fs.appendFileSync(`${path}\\logs\\general.log`, `\n\n\n${initlog}\n\n\n`, 'utf-8');
+
+    fs.writeFileSync(`${path}\\debug\\starttime.txt`, currentDate.toString());
     fetch('https://osu.ppy.sh/oauth/token', {
         method: 'POST',
         headers: {
@@ -242,14 +309,14 @@ Current Client ID:        ${client.user.id}
 
     }).then(res => res.json())
         .then(res => {
-            fs.writeFileSync('config/osuauth.json', JSON.stringify(res))
-            fs.appendFileSync('logs/updates.log', '\nosu auth token updated at ' + new Date().toLocaleString() + '\n')
+            fs.writeFileSync(`${path}\\config\\osuauth.json`, JSON.stringify(res));
+            fs.appendFileSync(`${path}\\logs\\updates.log`, '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
 
         }
         )
         .catch(error => {
             const rn = new Date();
-            fs.appendFileSync(`logs/updates.log`,
+            fs.appendFileSync(`${path}\\logs\\updates.log`,
                 `
 ====================================================
 ERROR
@@ -260,10 +327,11 @@ Date (epoch, ms): ${rn.getTime()}
 ----------------------------------------------------
 node-fetch error: ${error}
 ====================================================
-`, 'utf-8')
+`, 'utf-8');
             return;
         });
 });
+
 client.on('debug', (info) => {
     const rn = new Date();
     const text = `
@@ -276,10 +344,14 @@ Date (epoch, ms): ${rn.getTime()}
 ----------------------------------------------------
 ${info}
 ====================================================
-`
-
-
-    fs.appendFileSync(`./logs/debug.log`, text + '\n', 'utf-8');
+`;
+    if (fs.existsSync(`${path}\\logs`)) {
+        if (fs.existsSync(`${path}\\logs\\debug.log`)) {
+            fs.appendFileSync(`${path}\\logs\\debug.log`, text + '\n', 'utf-8');
+        } else {
+            fs.writeFileSync(`${path}\\logs\\debug.log`, text + '\n', 'utf-8');
+        }
+    }
 });
 client.on('warn', (info) => {
     const rn = new Date();
@@ -293,8 +365,14 @@ Date (epoch, ms): ${rn.getTime()}
 ----------------------------------------------------
 ${info}
 ====================================================
-`
-    fs.appendFileSync(`./logs/warn.log`, text + '\n', 'utf-8');
+`;
+    if (fs.existsSync(`${path}\\logs`)) {
+        if (fs.existsSync(`${path}\\logs\\warn.log`)) {
+            fs.appendFileSync(`${path}\\logs\\warn.log`, text + '\n', 'utf-8');
+        } else {
+            fs.writeFileSync(`${path}\\logs\\warn.log`, text + '\n', 'utf-8');
+        }
+    }
 });
 client.on('error', (error) => {
     const rn = new Date();
@@ -308,12 +386,18 @@ Date (epoch, ms): ${rn.getTime()}
 ----------------------------------------------------
 ${error}
 ====================================================
-`
-    fs.appendFileSync(`./logs/err.log`, text + '\n', 'utf-8');
+`;
+    if (fs.existsSync(`${path}\\logs`)) {
+        if (fs.existsSync(`${path}\\logs\\err.log`)) {
+            fs.appendFileSync(`${path}\\logs\\err.log`, text + '\n', 'utf-8');
+        } else {
+            fs.writeFileSync(`${path}\\logs\\err.log`, text + '\n', 'utf-8');
+        }
+    }
 });
 
 
-client.login(config.token)
+client.login(config.token);
 
 export { };
 

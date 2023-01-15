@@ -1,0 +1,177 @@
+[ADD] = addition
+[REM] = removal
+[FIX] = fix
+[QOL] = quality of life
+[MAJ] = major change
+[MIN] = minor change 
+
+0.0.0
+NON EXISTENT
+0.1.0
+discord.js v12
+osu commands didn't work at this point in time
+https://github.com/sbrstrkkdwmdr/sbrbot/tree/discordjs-v12
+0.1.1
+didn't know how to use oauthv2 so osu cmds no work ww
+can't remember what else
+???
+0.2.0
+discord.js v13
+first implementation of slash commands
+osu commands actually work??!?!
+can't remember what else 
+
+0.3.0
+discord.js v13
+switched from booba to rosu-pp
+stopped using `fetch (thing).then(x => {
+    osudata = X
+    blahblahblah
+})` and switched to 
+`osudata = fetch (thing).then(res => res.json())`
+
+stopped using `username = JSON.stringify([osudata], [username]).replace().replace().replace()`
+switched to `username  = osudata.username`
+
+can't remember what else 
+
+
+0.4.0
+2022-09-14 --- 2022-11-07
+discord.js v14
+switched from using ts-node with commonjs to nodenext (all because of this video - https://www.youtube.com/watch?v=H91aqUHn8sE)
+
+[ADD] added command select menu to help
+[FIX] fixed server lb 
+[ADD] added server prefix command 
+[MIN] reworked database 
+[QOL] reworked cooldown to only affect api commands 
+[ADD] added admin commands 
+[QOL] edited debugging 
+[ADD] added pp/rank command(s)
+[ADD] added compare top plays 
+[ADD] added bws command 
+[ADD] added #1 scores count 
+[ADD] added osutrack 
+[ADD] added nochokes command 
+[ADD] added ranking command 
+[ADD] added whatif 
+[FIX] fixed osutrack 
+[FIX] fix pp calculations crashing on non-std gamemodes
+[ADD] added global rank to scoreparse 
+[ADD] added user beatmaps(ets) command
+[FIX] fixed pages on scores
+[QOL] map based commands can now fetch id via links (ie sbr-c osu.ppy.sh/b/4204)
+[QOL] fixed how graphs are stored so they can be seen after more than 3 days
+[ADD] added get avatar commands 
+[QOL] edit debugging 
+
+
+0.4.1
+2022-12-03
+[QOL] updated buttons
+[ADD] firsts, osutop/top, nochokes/nc, sotarks, pinned, recent/rs/rl, scores/c, userbeatmaps/ubm have options to use different "detail" modes (show more or less information)
+[ADD] osu command has an added graph button
+[MAJ] switched from commonjs to nodenext (boot time is faster)
+[ADD] added ppcalc command
+[FIX] fixed links and .osrs not working
+[REM] disabled simulate temporarily (rewriting argument handling)
+[REM] disabled localmapparse temporarily (making separate map parser)
+
+0.4.2
+2022-12-06
+[FIX] fixed map and simulate
+[FIX] fixed page search
+[FIX] fixed recent/rs showing the wrong star rating
+[ADD] added taiko, fruits, and mania aliases for osu (ie sbr-taiko displays taiko profile)
+[ADD] added map selection menu to ppcalc
+[ADD] added buttons to help
+[FIX] fixed permission errors
+[QOL] pp and rank should be more accurate now
+[MIN] general code clean up 
+
+0.4.3
+2022-12-10
+[QOL] fix ppcalc being slow (deleting wrong maps)
+[MIN] general code clean up
+[ADD] add recentactivity/rsact command.
+[FIX] fixed pages for expanded lists 
+
+0.4.4
+2022-12-13
+[FIX] fix medals in recentactivity/rsact displaying as [object Object]
+[FIX] fix rl displaying only one score
+[FIX] fix permissions checker
+[FIX] fix maplb and scores/c crashing when calculating pp (undefined map object)
+[FIX] fix map ids not being stored in the correct path 
+
+0.4.5
+2022-12-16
+[QOL] edit recent activity/rsact formatting
+[FIX] fix osutop sorting by recent instead of pp
+[FIX] edit beatmapsetApprove not being handled 
+[ADD] added medals count to osu
+[FIX] fix last online showing 53+ years ago 
+[FIX] fix spacing on most played count
+[ADD] added a display map button to rs and scoreparse
+[QOL] switched rankings from sbr v11 to osu default
+[FIX] fix stats crashing due to invalid paths
+
+0.4.6 
+2022-12-22
+[QOL] update help info and docs 
+[QOL] map button on rs and scoreparse now uses mod from the score 
+[FIX] fix paths ('./' => `${path}/`)
+[FIX] add missing config properties
+[ADD] unstable rate calculator (WIP - calculations are very off)
+[ADD] map parser (WIP)
+[FIX] fix osutop sorting by recent 
+[QOL] edit ranking grades (again) for readability 
+[FIX] fix rank lost events not using the beatmap url (was using /b/mapid instead of https://osu.ppy.sh/b/mapid)
+[ADD] add user button to bws, firsts, globals, map, nochokes, osutop, pinned, recent, recentactivity, scoreparse, scores, scorestats, ubm, whatif
+
+0.4.7
+2022-12-28
+[ADD] statuses now use maps cached in .\\cache\\commandData\\
+[MIN] reworked statuses
+[FIX] fixed convert not showing the - sign on negative numbers (i didn't know what Math.abs() meant when i first made the command)
+[QOL] rework get/write prev id to store mods.
+[ADD] added a leaderboard button to map cmd (uses map mods)
+[ADD] bug tracker
+[QOL] moved changelog.txt and bugs.txt to changelog\\
+[ADD] added map button to maplb
+[QOL] re-ordered some buttons for clarity
+[REM] maplb no longer uses the last map's mods
+
+0.4.8
+2023-01-04
+[QOL] edited author.name sections
+[QOL] added user info to recent's author.name section
+[ADD] to do list
+[ADD] added counts of maplbs (#1s, #50s etc...)
+[FIX] fixed osu profile command crashing on users with null data
+[QOL] edit buttons to all be the same style
+[FIX] fix maplb page buttons disabling on the second page if mods were selected
+[QOL] all users can access the user, map and maplb buttons even if they didn't send the command
+[ADD] added a warning on buttons that aren't allowed to be used
+[QOL] edited some user-based urls to automatically scroll to certain sections (the osutop url scrolls to top_ranks etc.
+[QOL] change incorrect timezone message to ask for region instead of country
+[ADD] filter by score rank
+[MIN] rework score list handling for readability or smth idk
+[QOL] update helpinfo
+[FIX] fix help command crashing (#7)
+[FIX] fix globals crashing
+
+0.4.9
+2023-01-12
+[QOL] increase accuracy of fail point calculator
+[ADD] graph that shows exact point of fail in rs
+[QOL] reworked time command: uses timezones like CST, AEST and UTC+10 instead of [region]/[city]
+[FIX] fixed time command offset displaying incorrectly (#9)
+[FIX] fixed sorting by cs/ar/od/hp/length not working in ubm
+[ADD] added stats for score grades to scorestats
+[QOL] moved errors to a separate object 
+
+0.4.10
+
+[QOL] time command shows days again

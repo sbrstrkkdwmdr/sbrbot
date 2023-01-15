@@ -1,18 +1,17 @@
-import { ApplicationCommandOptionType } from 'discord.js';
-const Discord = require('discord.js');
+import Discord, { ApplicationCommandOptionType } from 'discord.js';
 /**
  * @info Gamemode options
  */
-const modeopts = [
+const modeopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     { name: 'osu', value: 'osu' },
     { name: 'taiko', value: 'taiko' },
     { name: 'catch', value: 'fruits' },
     { name: 'mania', value: 'mania' }
-]
+];
 /**
  * @info what to sort plays by
  */
-const playsortopts = [
+const playsortopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     { name: 'Performance points', value: 'pp' },
     { name: 'Score', value: 'score' },
     { name: 'Most recent', value: 'recent' },
@@ -20,8 +19,8 @@ const playsortopts = [
     { name: 'Combo', value: 'combo' },
     { name: 'Misses', value: 'miss' },
     { name: 'Rank', value: 'rank' },
-]
-const skincmdopts = [
+];
+const skincmdopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     { name: 'SaberStrikeCustom', value: '1' },
     { name: 'SaberStrikeCustom[v2]', value: '2' },
     { name: '『SaberStrike [Type X]』', value: '3' },
@@ -40,9 +39,9 @@ const skincmdopts = [
     { name: 'SaberStrike『0』_-Levi-_ edit', value: 'b5' },
     { name: 'SaberStrike『Soragaton』', value: 'b6' },
     { name: 'sbr『-hANOJI』', value: 'b7' }
-]
+];
 
-const mathcmdopts = [
+const mathcmdopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     //{ name: 'Help', value: 'help' },
     { name: 'Square root', value: 'sqrt' },
     { name: 'Square', value: 'square' },
@@ -63,9 +62,9 @@ const mathcmdopts = [
     { name: 'Mod integer to string', value: 'modintstring' }
 
 
-]
+];
 
-const conversionopts = [
+const conversionopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     //https://www.ewh.ieee.org/soc/ias/pub-dept/abbreviation.pdf
 
     //help
@@ -112,9 +111,9 @@ const conversionopts = [
     { name: 'Metric Tonne', value: 'ton' }
     //4
 
-]
+];
 
-const gifopts = [
+const gifopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     { name: 'cry about it', value: 'cry about it' },
     { name: 'speaking', value: 'speech bubble' },
     { name: 'chad speaking', value: 'chad speak' },
@@ -130,10 +129,10 @@ const gifopts = [
     { name: 'insult', value: 'insult' },
     { name: 'ratio', value: 'ratio' },
     { name: 'reaction to that information', value: 'reaction to info' }
-]
+];
 
 
-const timezoneopts = [
+const timezoneopts: Discord.ApplicationCommandOptionChoiceData<string>[] = [
     { name: 'Abidjan (Africa, Côte d’Ivoire/Ivory Coast)', value: 'Africa/Abidjan' },
     { name: 'Accra (Africa, Ghana)', value: 'Africa/Accra' },
     { name: 'Algiers (Africa, Algeria)', value: 'Africa/Algiers' },
@@ -509,11 +508,12 @@ const timezoneopts = [
     //
     //
     //
-]
+];
 
 //
 
-const playArrayOpts = [
+const osutopOpts: Discord.ApplicationCommandOptionData[] = [
+
     {
         name: 'user',
         description: 'The user to display the plays of',
@@ -525,7 +525,6 @@ const playArrayOpts = [
         description: 'The mode to display the plays of',
         type: Discord.ApplicationCommandOptionType.String,
         required: false,
-        default: 'osu',
         choices: modeopts
     },
     {
@@ -546,7 +545,6 @@ const playArrayOpts = [
         description: 'The page to display',
         type: Discord.ApplicationCommandOptionType.Integer,
         required: false,
-        default: 1,
         minValue: 1,
         maxValue: 20
     },
@@ -567,11 +565,84 @@ const playArrayOpts = [
         description: 'Show all details',
         type: Discord.ApplicationCommandOptionType.Boolean,
         required: false,
-        default: false
+    },
+    {
+        name: 'parse',
+        description: 'Parse the score with the specified index',
+        type: Discord.ApplicationCommandOptionType.Integer,
+        required: false,
+    },
+    {
+        name: 'filter',
+        description: 'Show scores with maps that match this filter',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
     }
-]
 
-const useridsortopts = [
+];
+
+const playArrayOpts: Discord.ApplicationCommandOptionData[] = [
+    {
+        name: 'user',
+        description: 'The user to display the plays of',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+    },
+    {
+        name: 'mode',
+        description: 'The mode to display the plays of',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+        choices: modeopts
+    },
+    {
+        name: 'sort',
+        description: 'What to sort plays by',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+        choices: playsortopts
+    },
+    {
+        name: 'reverse',
+        description: 'If true, plays will be displayed in reverse',
+        type: Discord.ApplicationCommandOptionType.Boolean,
+        required: false,
+    },
+    {
+        name: 'page',
+        description: 'The page to display',
+        type: Discord.ApplicationCommandOptionType.Integer,
+        required: false,
+        minValue: 1,
+        maxValue: 20
+    },
+    {
+        name: 'mapper',
+        description: 'Filter plays to show maps from this mapper',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+    },
+    {
+        name: 'mods',
+        description: 'Filter plays to show only plays with these mods',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+    },
+    {
+        name: 'parse',
+        description: 'Parse the score with the specified index',
+        type: Discord.ApplicationCommandOptionType.Integer,
+        required: false,
+    },
+    {
+        name: 'filter',
+        description: 'Show scores with maps that match this filter',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
+    }
+];
+
+const useridsortopts: Discord.ApplicationCommandOptionData[] = [
     {
         name: 'user',
         description: 'The user to display the top plays of',
@@ -602,20 +673,18 @@ const useridsortopts = [
         description: 'The page to display the top plays of',
         type: Discord.ApplicationCommandOptionType.Integer,
         required: false,
-        default: 1,
         minValue: 1,
         maxValue: 20
     },
     {
-        name: 'detailed',
-        description: 'Show all details',
-        type: Discord.ApplicationCommandOptionType.Boolean,
+        name: 'parse',
+        description: 'Parse the score with the specified index',
+        type: Discord.ApplicationCommandOptionType.Integer,
         required: false,
-        default: false
-    }
-]
+    },
+];
 
-const useroffsetmodeopts = [
+const useroffsetmodeopts: Discord.ApplicationCommandOptionData[] = [
     {
         name: 'user',
         description: 'the username or id',
@@ -627,7 +696,6 @@ const useroffsetmodeopts = [
         description: 'the page to show',
         required: false,
         type: ApplicationCommandOptionType.Number,
-        default: 1
     },
     {
         name: 'mode',
@@ -636,8 +704,8 @@ const useroffsetmodeopts = [
         type: ApplicationCommandOptionType.String,
         choices: modeopts
     }
-]
-const rsopts = [
+];
+const rsopts :Discord.ApplicationCommandOptionData[]= [
     {
         name: 'user',
         description: 'the username or id',
@@ -649,7 +717,6 @@ const rsopts = [
         description: 'the page to show',
         required: false,
         type: ApplicationCommandOptionType.Number,
-        default: 1
     },
     {
         name: 'mode',
@@ -663,10 +730,15 @@ const rsopts = [
         description: 'Enables list mode',
         required: false,
         type: ApplicationCommandOptionType.Boolean,
-        default: false
+    },
+    {
+        name: 'filter',
+        description: 'Show scores with maps that match this filter',
+        type: Discord.ApplicationCommandOptionType.String,
+        required: false,
     }
-]
+];
 
 
-export { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts, playArrayOpts };
+export { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts, playArrayOpts, osutopOpts };
 

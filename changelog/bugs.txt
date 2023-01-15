@@ -1,0 +1,133 @@
+recorded since 0.4.7
+
+template =>
+status: fixed | wip | intentional
+issue: string 
+cause: string
+author: string 
+found: date 
+fixed: date 
+solution: string 
+additional notes: string 
+
+========================
+
+#1) 
+    status: FIXED
+    issue: custom emojis in interaction replies don't always work (showing :emoji_name: instead of the actual emoji)
+    cause: missing permissions
+    author: sbrstrkkdwmdr
+    found: a while ago?
+    fixed: a while ago?
+    solution: give the @everyone role external emojis permissions
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+#2)
+    status: FIXED
+    issue: maplb page buttons being disabled on page 2
+    cause: incorrect number
+    author: sbrstrkkdwmdr
+    found: 2022-10-30 11:21 AEDT (UTC+11)
+    fixed: 2023-01-01 16:34 AEDT (UTC+11)     
+    solution: change a 1 to a 0
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#3)
+    status: WIP
+    issue: unstable rate calculator is very inaccurate
+    cause: unknown
+    author: sbrstrkkdwmdr
+    found: 2022-12-21 
+    fixed: N/A
+    solution:
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+#4)
+    status: FIXED
+    issue: prev map id searching for [object Object] instead of id
+    cause: using [object] instead of [object].property
+    author: sbrstrkkdwmdr
+    found: 2022-12-28
+    fixed: 2022-12-28
+    solution: replace getpreviousid(); with getpreviousid().id;
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+#5)
+    status: FIXED
+    issue: profiles with missing data cause crashes [/dist/commands/cmdosu.js:1528]
+    cause: missing data
+    author: sbrstrkkdwmdr
+    found: 2022-12-30 22:51 AEDT (UTC+11)
+    fixed: 2022-12-31 10:44 AEDT (UTC+11)
+    solution: 
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#6)
+    status: WIP
+    issue: using buttons sometimes causes an "interaction failed" error
+    cause: interaction.deferUpdate() is put after an await command function so discord's thing times out
+    author: sbrstrkkdwmdr
+    found: 2023-01-03 19:59 AEDT (UTC+11)
+    fixed: 
+    solution: 
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+#7)
+    status: FINISHED
+    issue: help command causing a CombinedPropertyError at ./commands/cmdGeneral.ts:993:14
+    cause: options exceeding embed.field.value character limit of 1024
+    author: sbrstrkkdwmdr
+    found: 2023-01-04 12:16 AEDT (UTC+11)
+    fixed: 2023-01-04 12:32 AEDT (UTC+11)
+    solution: add excess character checker
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#8)
+    status: WIP
+    issue: NaN values on the x-axis of strain graphs
+    cause: 
+    author: sbrstrkkdwmdr
+    found: 2023-01-05 12:46 AEDT (UTC+11)
+    fixed: 
+    solution: 
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+#9)
+    status: WIP
+    issue: incorrect month and offset in time command
+    cause: 
+    author: sbrstrkkdwmdr
+    found: 2023-01-07 13:38 AEDT (UTC+11)
+    fixed: 2023-01-08 00:53 AEDT (UTC+11)
+    solution: 
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#10)
+    status: WIP
+    issue: halftime AR is higher than no mod AR 
+    cause: 
+    author: sbrstrkkdwmdr
+    found: 2023-01-10 20:28 AEDT (UTC+11)
+    fixed: 
+    solution: 
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------

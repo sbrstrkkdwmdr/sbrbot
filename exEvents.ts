@@ -1,15 +1,24 @@
-import fs = require('fs');
-import osumodcalc = require('osumodcalculator');
+import Discord from 'discord.js';
+import fs from 'fs';
 import fetch from 'node-fetch';
-import osuapitypes = require('./src/types/osuApiTypes');
-import extypes = require('./src/types/extraTypes');
-import Discord = require('discord.js');
-import track = require('./src/trackfunc');
-import Sequelize = require('sequelize');
-import osufunc = require('./src/osufunc');
-import osuApiTypes = require('./src/types/osuApiTypes');
+import Sequelize from 'sequelize';
+import { path } from './path.js';
+import * as log from './src/log.js';
+import * as osufunc from './src/osufunc.js';
+import * as osumodcalc from './src/osumodcalc.js';
+import * as track from './src/trackfunc.js';
+import * as extypes from './src/types/extratypes.js';
+import * as osuapitypes from './src/types/osuApiTypes.js';
+import * as osuApiTypes from './src/types/osuApiTypes.js';
 
-module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize.ModelStatic<any>, trackDb, statsCache) => {
+export default (input: {
+    userdata,
+    client: Discord.Client,
+    config: extypes.config,
+    oncooldown,
+    guildSettings: Sequelize.ModelStatic<any>,
+    statsCache;
+}) => {
 
     setInterval(() => {
         clearMapFiles();
@@ -21,130 +30,204 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
 
     setInterval(async () => {
         //rankings
-    }, 1000 * 60 * 60 * 24); 
+    }, 1000 * 60 * 60 * 24);
 
     //status updates
-    const songsarr = [
-        "Yomi Yori kikoyu, Koukoku no hi to Honoo no Shoujo [Kurushimi]",
-        "FREEDOM DiVE [FOUR DiMENSIONS]",
-        "A FOOL MOON NIGHT [Piggey's Destruction]",
-        "Sidetracked Day [Infinity Inside]",
-        "Cirno's Perfect Math Class [TAG4]",
-        "Glorious Crown [FOUR DIMENSIONS]",
-        "Made of Fire [Oni]",
-        "小さな恋のうた (Synth Rock Cover) [Together]",
-        "C18H27NO3(extend) [Pure Darkness]",
-        "BLUE DRAGON [Blue Dragon]",
-        "-ERROR [Drowning]",
-        "Remote Control [Insane] +HDDT",
-        "Usatei 2011 [Ozzy's Extra]",
-        "Chocomint's made of fire hddt 98.54 full combo",
-        "Ascension to Heaven [Death] +HDDTHR",
-        "Can't Defeat Airman [Holy Shit! It's Airman!!!]",
-        "The Big Black [WHO'S AFRAID OF THE BIG BLACK]"
-    ]
+    const activities = [];
 
-    const activityarr = [
-        {
-            name: "240BPM | sbr-help",
-            type: 1,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: songsarr[Math.floor(Math.random() * songsarr.length)] + " | sbr-help",
-            type: 2,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: "dt farm maps | sbr-help",
-            type: 0,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: "nothing in particular | sbr-help",
-            type: 3,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: "no mod farm maps | sbr-help",
-            type: 0,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: "hr | sbr-help",
-            type: 0,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: songsarr[Math.floor(Math.random() * songsarr.length)] + " | sbr-help",
-            type: 0,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
-        },
-        {
-            name: "you | sbr-help",
-            type: 3,
-            url: 'https://twitch.tv/sbrstrkkdwmdr',
+    //get map url
+    function getMap() {
+        const filesPathing = `${path}\\cache\\commandData`;
+        const maps = fs.readdirSync(`${filesPathing}`).filter(x => x.includes('mapdata'));
+        if (maps.length == 0) {
+            return false;
         }
-    ]
+        const mapFile = maps[Math.floor(Math.random() * maps.length)];
+        const map = (JSON.parse(fs.readFileSync(`${filesPathing}\\${mapFile}`, 'utf-8'))).apiData as osuapitypes.Beatmap;
+        return map;
+    }
 
-    client.user.setPresence({
-        activities: [activityarr[0]],
-        status: 'dnd',
-        afk: false
-    });
-    setInterval(() => {
-        client.user.setPresence({
-            activities: [activityarr[Math.floor(Math.random() * activityarr.length)]],
+    function setActivity() {
+        const rdm = Math.floor(Math.random() * 100);
+        let string;
+        let fr = 0;
+        switch (true) {
+            case rdm > 50: {
+                let map = getMap();
+                if (map == false) {
+                    string = `Artist - Title [version]`;
+                } else {
+                    string = `${map.beatmapset.artist} - ${map.beatmapset.title}`;
+                }
+                fr = 2;
+            }
+                break;
+            case rdm > 1: {
+                const gamesList = [
+                    'osu!',
+                    'osu! Lazer',
+                    'McOsu',
+                ];
+                string = gamesList[Math.floor(Math.random() * gamesList.length)];
+                fr = 0;
+            }
+                break;
+            default: {
+                string = 'you';
+                fr = 3;
+            }
+                break;
+        }
+
+        input.client.user.setPresence({
+            activities: [{
+                name: `${string} | ${input.config.prefix}help`,
+                type: fr,
+                url: 'https://twitch.tv/sbrstrkkdwmdr'
+            }],
             status: 'dnd',
             afk: false
         });
+    }
+
+    const activityChristmas = [
+        {
+            name: `Merry Christmas! | ${input.config.prefix}help`,
+            type: 0,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+        {
+            name: `🎄 | ${input.config.prefix}help`,
+            type: 0,
+            url: 'https://twitch.tv/sbrstrkkdwmdr',
+        },
+    ];
+    const activityHalloween = [{
+        name: `Happy Halloween! | ${input.config.prefix}help`,
+        type: 0,
+        url: 'https://twitch.tv/sbrstrkkdwmdr',
+    },
+    {
+        name: `🎃 | ${input.config.prefix}help`,
+        type: 0,
+        url: 'https://twitch.tv/sbrstrkkdwmdr',
+    }
+    ];
+    const activityNewYear = [{
+        name: `Happy New Year! | ${input.config.prefix}help`,
+        type: 0,
+        url: 'https://twitch.tv/sbrstrkkdwmdr',
+    },
+    {
+        name: `Happy New Year!! | ${input.config.prefix}help`,
+        type: 0,
+        url: 'https://twitch.tv/sbrstrkkdwmdr',
+    },
+    {
+        name: `Happy New Year!!! | ${input.config.prefix}help`,
+        type: 0,
+        url: 'https://twitch.tv/sbrstrkkdwmdr',
+    }
+    ];
+
+    //seasonal status updates
+    const Events = ['None', 'New Years', 'Halloween', 'Christmas'];
+
+    let curEvent = Events[0];
+    let activityarr = activities;
+
+    setInterval(() => {
+        updateStatus();
     }, 60 * 1000);
 
+    updateStatus();
 
-    client.on('messageCreate', async (message) => {
+    function updateStatus() {
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        let specialDay = false;
+        if ((month == 12 && day == 31) || (month == 1 && day == 1)) {
+            if (curEvent != Events[1]) {
+                curEvent = Events[1];
+                activityarr = activityNewYear;
+                specialDay = true;
+            }
+        }
+        else if (month == 10 && day == 31) {
+            if (curEvent != Events[2]) {
+                curEvent = Events[2];
+                activityarr = activityHalloween;
+                specialDay = true;
+            }
+        } else if (month == 12 && day == 25) {
+            if (curEvent != Events[3]) {
+                curEvent = Events[3];
+                activityarr = activityChristmas;
+                specialDay = true;
+            }
+        } else {
+            if (curEvent != Events[0]) {
+                curEvent = Events[0];
+                activityarr = activities;
+            }
+        }
+        if (specialDay == true) {
+            input.client.user.setPresence({
+                activities: [activityarr[Math.floor(Math.random() * activityarr.length)]],
+                status: 'dnd',
+                afk: false
+            });
+        } else {
+            setActivity();
+        }
+    }
 
-        const currentGuildId = message.guildId
+    input.client.on('messageCreate', async (message) => {
+
+        const currentGuildId = message.guildId;
         let settings: extypes.guildSettings;
-        let prefix: string = config.prefix;
+        let prefix: string = input.config.prefix;
 
         if (
             typeof prefix === 'undefined' ||
             prefix === null ||
             prefix === ''
         ) {
-            prefix = config.prefix;
+            prefix = input.config.prefix;
         }
 
         //if message mentions bot and no other args given, return prefix
         if (message.mentions.users.size > 0) {
-            if (message.mentions.users.first().id == client.user.id && message.content.replaceAll(' ', '').length == (`<@${client.user.id}>`).length) {
-                let serverPrefix = 'null'
+            if (message.mentions.users.first().id == input.client.user.id && message.content.replaceAll(' ', '').length == (`<@${input.client.user.id}>`).length) {
+                let serverPrefix = 'null';
                 try {
-                    const curGuildSettings = await guildSettings.findOne({ where: { guildid: message.guildId } });
+                    const curGuildSettings = await input.guildSettings.findOne({ where: { guildid: message.guildId } });
                     settings = curGuildSettings.dataValues;
-                    serverPrefix = settings.prefix
+                    serverPrefix = settings.prefix;
                 } catch (error) {
-                    serverPrefix = config.prefix
+                    serverPrefix = input.config.prefix;
                 }
-                return message.reply({ content: `Global prefix is \`${prefix}\`\nServer prefix is \`${serverPrefix}\``, allowedMentions: { repliedUser: false } })
+                message.reply({ content: `Global prefix is \`${prefix}\`\nServer prefix is \`${serverPrefix}\``, allowedMentions: { repliedUser: false } });
+                return;
             }
         }
 
         //if message is a cooldown message, delete it after 3 seconds
-        if (message.content.startsWith('You\'re on cooldown') && message.author.id == client.user.id) {
+        if (message.content.startsWith('You\'re on cooldown') && message.author.id == input.client.user.id) {
             setTimeout(() => {
                 message.delete()
                     .catch(err => {
-                    })
-            }, 3000)
+                    });
+            }, 3000);
         }
-    })
+    });
 
 
     //create settings for new guilds
-    client.on('guildCreate', async (guild) => {
+    input.client.on('guildCreate', async (guild) => {
         createGuildSettings(guild);
-    })
+    });
     setInterval(() => {
         clearUnused();
     }, 10 * 60 * 1000);
@@ -153,21 +236,22 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
 
     async function createGuildSettings(guild: Discord.Guild) {
         try {
-            await guildSettings.create({
+            await input.guildSettings.create({
                 guildid: guild.id ?? null,
                 guildname: guild.name ?? null,
-                prefix: config.prefix,
-            })
+                prefix: input.config.prefix,
+            });
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
 
     function clearUnused() {
+        return;
         (async () => {
-            await guildSettings.destroy({
+            await input.guildSettings.destroy({
                 where: { guildid: null, guildname: null }
-            })
+            });
         })();
     }
 
@@ -176,24 +260,55 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
         'mapdata',
         'osudata',
         'scoredata',
-    ]
+        'maplistdata',
+        'firstscoresdata'
+    ];
+
+    const permanentCache = [
+        'mapdataRanked', 'mapdataLoved', 'mapdataApproved',
+        'bmsdataRanked', 'bmsdataLoved', 'bmsdataApproved',
+    ];
 
     /**
      * removes map files that are older than 1 hour
      */
     function clearMapFiles() {
-        const files = fs.readdirSync('./files/maps')
+        const files = fs.readdirSync(`${path}/files/maps`);
         for (const file of files) {
-            fs.stat('./files/maps/' + file, (err, stat) => {
+            fs.stat(`${path}/files/maps` + file, (err, stat) => {
                 if (err) {
                     return;
                 } else {
-                    if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
-                        fs.unlinkSync('./files/maps/' + file)
+                    if (file.includes('undefined')) {
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
+                            fs.unlinkSync(`${path}/files/maps/` + file);
+                            log.toOutput(`Deleted file ${path}\\files\\maps\\` + file);
+                            // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                        }
+                    }
+                }
+            });
+
+        }
+    }
+
+    /**
+     * clears files in files/replays and files/localmaps
+     */
+    function clearParseFiles() {
+        const files = fs.readdirSync(`${path}/files/maps`);
+        for (const file of files) {
+            fs.stat(`${path}/files/maps/` + file, (err, stat) => {
+                if (err) {
+                    return;
+                } else {
+                    if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
+                        fs.unlinkSync(`${path}/files/maps/` + file);
+                        log.toOutput(`Deleted file ${path}\\files\\maps\\` + file);
                         // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                     }
                 }
-            })
+            });
 
         }
     }
@@ -204,50 +319,55 @@ module.exports = (userdata, client, config, oncooldown, guildSettings: Sequelize
      * maps and users are stored for an hour
      */
     function clearCommandCache() {
-        const files = fs.readdirSync('./cache/commandData')
+        const files = fs.readdirSync(`${path}/cache/commandData`);
         for (const file of files) {
-            fs.stat('./cache/commandData/' + file, (err, stat) => {
+            fs.stat(`${path}/cache/commandData/` + file, (err, stat) => {
                 if (err) {
                     return;
                 } else {
-                    if (cacheById.some(x => file.startsWith(x))) {
-                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60)) {
-                            fs.unlinkSync('./cache/commandData/' + file)
+                    if (permanentCache.some(x => file.startsWith(x))) {
+                        //do nothing
+                    }
+                    else if (cacheById.some(x => file.startsWith(x))) {
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24)) {
+                            fs.unlinkSync(`${path}/cache/commandData/` + file);
+                            log.toOutput(`Deleted file ${path}\\cache\\commandData\\` + file);
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     } else {
-                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 15)) {
-                            fs.unlinkSync('./cache/commandData/' + file)
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 3)) {
+                            fs.unlinkSync(`${path}/cache/commandData/` + file);
+                            log.toOutput(`Deleted file ${path}\\cache\\commandData\\` + file);
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     }
                 }
-            })
+            });
 
         }
     }
 
-    async function rankings(db){
-        osufunc.userStatsCache(
-            await osufunc.apiget('custom', `rankings/osu/performance`, null, 2, 0, true),
-            db,
-            'osu'
-        );
-        osufunc.userStatsCache(
-            await osufunc.apiget('custom', `rankings/taiko/performance`, null, 2, 0, true),
-            db,
-            'taiko'
-        );
-        osufunc.userStatsCache(
-            await osufunc.apiget('custom', `rankings/fruits/performance`, null, 2, 0, true),
-            db,
-            'fruits'
-        );
-        osufunc.userStatsCache(
-            await osufunc.apiget('custom', `rankings/mania/performance`, null, 2, 0, true),
-            db,
-            'mania'
-        );
+    async function rankings(db) {
+        // osufunc.userStatsCache(
+        //     await osufunc.apiget('custom', `rankings/osu/performance`, null, 2, 0, true),
+        //     db,
+        //     'osu'
+        // );
+        // osufunc.userStatsCache(
+        //     await osufunc.apiget('custom', `rankings/taiko/performance`, null, 2, 0, true),
+        //     db,
+        //     'taiko'
+        // );
+        // osufunc.userStatsCache(
+        //     await osufunc.apiget('custom', `rankings/fruits/performance`, null, 2, 0, true),
+        //     db,
+        //     'fruits'
+        // );
+        // osufunc.userStatsCache(
+        //     await osufunc.apiget('custom', `rankings/mania/performance`, null, 2, 0, true),
+        //     db,
+        //     'mania'
+        // );
     }
 
-}
+};

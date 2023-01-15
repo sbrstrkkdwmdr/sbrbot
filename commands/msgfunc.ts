@@ -1,26 +1,33 @@
-import extypes = require('../src/types/extraTypes');
+import * as log from '../src/log.js';
+import * as extypes from '../src/types/extraTypes.js';
 import Discord = require('discord.js');
+import fs = require('fs');
+
 export async function sendMessage(input: {
-    commandType: extypes.commandType
+    commandType: extypes.commandType,
     obj: extypes.commandObject,
     args: {
         content?: string,
         embeds?: Discord.EmbedBuilder[] | Discord.Embed[],
         files?: string[],
-        components?: Discord.ActionRowBuilder[] | Discord.ActionRowComponent[],
+        components?: Discord.ActionRowBuilder<any>[],
         ephemeral?: boolean,
         react?: boolean,
         edit?: boolean,
+    };
+},
+    canReply: boolean
+) {
+
+    if (input.args.files) {
+        input.args.files = checkFileLimit(input.args.files);
     }
-}) {
+
     try {
         if (input.args.react == true) {
             switch (input.commandType) {
                 case 'message': {
-                    //@ts-expect-error
-                    //This expression is not callable.
-                    //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-                    input.obj.react('✅')
+                    (input.obj as Discord.Message<any>).react('✅')
                         .catch();
                 }
                     break;
@@ -28,14 +35,10 @@ export async function sendMessage(input: {
                 //==============================================================================================================================================================================================
 
                 case 'interaction': {
-                    //@ts-expect-error
-                    //This expression is not callable.
-                    //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-                    input.obj.reply({
+                    (input.obj as Discord.CommandInteraction).reply({
                         content: '✅',
                         ephemeral: true,
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                         .catch();
                 }
@@ -44,8 +47,7 @@ export async function sendMessage(input: {
 
                     break;
                 case 'button': {
-                    //@ts-expect-error property 'message' does not exist on 'Message<any>'
-                    input.obj.message.react('✅')
+                    (input.obj as Discord.ButtonInteraction).message.react('✅')
                         .catch();
                 }
                     break;
@@ -53,18 +55,27 @@ export async function sendMessage(input: {
         } else {
             switch (input.commandType) {
                 case 'message': case 'link': {
-                    //@ts-expect-error
-                    //This expression is not callable.
-                    //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-                    input.obj.reply({
-                        content: `${input.args.content ?? ''}`,
-                        embeds: input.args.embeds ?? [],
-                        files: input.args.files ?? [],
-                        components: input.args.components ?? [],
-                        allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
-                    })
-                        .catch();
+                    if (!canReply) {
+                        (input.obj as Discord.Message<any>).channel.send({
+                            content: `${input.args.content ?? ''}`,
+                            embeds: input.args.embeds ?? [],
+                            files: input.args.files ?? [],
+                            components: input.args.components ?? [],
+                        })
+                            .catch(x => console.log(x));
+                    } else {
+                        (input.obj as Discord.Message<any>).reply({
+                            content: `${input.args.content ?? ''}`,
+                            embeds: input.args.embeds ?? [],
+                            files: input.args.files ?? [],
+                            components: input.args.components ?? [],
+                            allowedMentions: { repliedUser: false },
+                            failIfNotExists: true
+                        })
+                            .catch(err => {
+                                sendMessage(input, false);
+                            });
+                    }
                 }
                     break;
 
@@ -73,29 +84,22 @@ export async function sendMessage(input: {
                 case 'interaction': {
                     if (input.args.edit == true) {
                         setTimeout(() => {
-                            //@ts-expect-error property 'editReply' does not exist on 'Message<any>'
-                            input.obj.editReply({
+                            (input.obj as Discord.CommandInteraction<any>).editReply({
                                 content: `${input.args.content ?? ''}`,
                                 embeds: input.args.embeds ?? [],
                                 files: input.args.files ?? [],
                                 components: input.args.components ?? [],
                                 allowedMentions: { repliedUser: false },
-                                failIfNotExists: true,
-                                ephemeral: input.args.ephemeral ?? false
                             })
                                 .catch();
                         }, 1000);
                     } else {
-                        //@ts-expect-error
-                        //This expression is not callable.
-                        //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
-                        input.obj.reply({
+                        (input.obj as Discord.CommandInteraction<any>).reply({
                             content: `${input.args.content ?? ''}`,
                             embeds: input.args.embeds ?? [],
                             files: input.args.files ?? [],
                             components: input.args.components ?? [],
                             allowedMentions: { repliedUser: false },
-                            failIfNotExists: true,
                             ephemeral: input.args.ephemeral ?? false
                         })
                             .catch();
@@ -106,14 +110,12 @@ export async function sendMessage(input: {
 
                     break;
                 case 'button': {
-                    //@ts-expect-error property 'message' does not exist on 'Message<any>'
-                    input.obj.message.edit({
+                    (input.obj as Discord.ButtonInteraction).message.edit({
                         content: `${input.args.content ?? ''}`,
                         embeds: input.args.embeds ?? [],
                         files: input.args.files ?? [],
                         components: input.args.components ?? [],
                         allowedMentions: { repliedUser: false },
-                        failIfNotExists: true
                     })
                         .catch();
                 }
@@ -121,8 +123,36 @@ export async function sendMessage(input: {
             }
         }
     } catch (error) {
+        log.errLog('message error', error);
         return error;
     }
     return true;
 
+}
+
+function checkFileLimit(files: string[]) {
+    if (files.length > 10) {
+        return files.slice(0, 9);
+    } else {
+        return files;
+    }
+}
+
+export async function SendFileToChannel(channel: Discord.GuildTextBasedChannel, filePath: string) {
+    let url = 'https://cdn.discordapp.com/attachments/762455063922737174/1039051414082691112/image.png';
+    await new Promise(async (resolve, reject) => {
+
+        if (!filePath.includes('/') || typeof channel == 'undefined' || !fs.existsSync(filePath)) {
+            reject('invalid/null path');
+        }
+
+        channel.send({
+            files: [filePath]
+        }).then(message => {
+            const attachment = filePath.split('/')[filePath.split('/').length - 1];
+            url = message.attachments.at(0).url;
+            resolve(1);
+        });
+    });
+    return url;
 }

@@ -1,19 +1,20 @@
-import cmdchecks = require('../../src/checks');
-import fs = require('fs');
-import calc = require('../../src/calc');
-import emojis = require('../../src/consts/emojis');
-import colours = require('../../src/consts/colours');
-import colourfunc = require('../../src/colourcalc');
-import osufunc = require('../../src/osufunc');
-import osumodcalc = require('osumodcalculator');
-import osuApiTypes = require('../../src/types/osuApiTypes');
-import Discord = require('discord.js');
-import log = require('../../src/log');
-import func = require('../tools');
-import def = require('../../src/consts/defaults');
-import buttonsthing = require('../../src/consts/buttons');
-import extypes = require('../../src/types/extraTypes');
-import msgfunc = require('../../commands/msgfunc');
+import Discord from 'discord.js';
+import fs from 'fs';
+import * as msgfunc from '../../commands/msgfunc.js';
+import * as calc from '../../src/calc.js';
+import * as cmdchecks from '../../src/checks.js';
+import * as colourfunc from '../../src/colourcalc.js';
+import * as buttonsthing from '../../src/consts/buttons.js';
+import * as colours from '../../src/consts/colours.js';
+import * as def from '../../src/consts/defaults.js';
+import * as emojis from '../../src/consts/emojis.js';
+import * as log from '../../src/log.js';
+import * as osufunc from '../../src/osufunc.js';
+import * as extypes from '../../src/types/extraTypes.js';
+import * as osuApiTypes from '../../src/types/osuApiTypes.js';
+import * as mainconst from '../consts/main.js';
+import * as osumodcalc from '../osumodcalc.js';
+import * as func from '../tools.js';
 
 
 module.exports = {
@@ -29,25 +30,33 @@ module.exports = {
         currentDate: Date,
         overrides: extypes.overrides,
         userdata: extypes.data,
+        canReply: boolean;
     }) {
         let commanduser: Discord.User;
 
 
         switch (input.commandType) {
             case 'message': {
-                //@ts-expect-error author property only exists on message
+                input.obj = (input.obj as Discord.Message<any>);
                 commanduser = input.obj.author;
             }
                 break;
             //==============================================================================================================================================================================================
             case 'interaction': {
+                input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
                 commanduser = input.obj.member.user;
             }
                 //==============================================================================================================================================================================================
 
                 break;
             case 'button': {
+                input.obj = (input.obj as Discord.ButtonInteraction<any>);
                 commanduser = input.obj.member.user;
+            }
+                break;
+            case 'link': {
+                input.obj = (input.obj as Discord.Message<any>);
+                commanduser = input.obj.author;
             }
                 break;
         }
@@ -59,65 +68,69 @@ module.exports = {
         const pgbuttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigLeftArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-BigLeftArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.first),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`LeftArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-LeftArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.previous),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`RightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-RightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.next),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`BigRightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-BigRightArrow-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.page.last),
             );
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`Refresh-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
+                    .setCustomId(`${mainconst.version}-Refresh-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
                     .setStyle(buttonsthing.type.current)
                     .setEmoji(buttonsthing.label.main.refresh),
             );
 
-        log.logFile(
-            'command',
-            log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
-            ),
-            {
-                guildId: `${input.obj.guildId}`
-            })
-        //OPTIONS==============================================================================================================================================================================================
-        log.logFile('command',
-            log.optsLog(input.absoluteID, []),
-            {
-                guildId: `${input.obj.guildId}`
-            }
-        )
+        log.logCommand({
+            event: 'Command',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            commanduser,
+            object: input.obj,
+            commandName: 'COMMANDNAME',
+            options: []
+        });
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
 
 
         //SEND/EDIT MSG==============================================================================================================================================================================================
-        msgfunc.sendMessage({
+        const finalMessage = await msgfunc.sendMessage({
             commandType: input.commandType,
             obj: input.obj,
             args: {
             }
-        })
+        }, input.canReply);
 
-        log.logFile('command',
-            `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-            { guildId: `${input.obj.guildId}` }
-        )
+        if (finalMessage == true) {
+            log.logCommand({
+                event: 'Success',
+                commandName: 'COMMANDNAME',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+            });
+        } else {
+            log.logCommand({
+                event: 'Error',
+                commandName: 'COMMANDNAME',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: 'Message failed to send',
+            });
+        }
     }
-}
+};

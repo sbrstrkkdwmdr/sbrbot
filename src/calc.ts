@@ -4,7 +4,7 @@
  * @param {number} y second number
  * @returns the highest common factor between two numbers
  */
-function findHCF(x: number, y: number) {
+export function findHCF(x: number, y: number) {
     if (isNaN(x) || isNaN(y)) return NaN;
     if (x == 0 || y == 0) return 0;
 
@@ -24,7 +24,7 @@ function findHCF(x: number, y: number) {
  * @param {number} n2 second number
  * @returns the lowest common multiple between two numbers
  */
-function findLCM(n1: number, n2: number) {
+export function findLCM(n1: number, n2: number) {
     if (isNaN(n1) || isNaN(n2)) return NaN;
     if (n1 == 0 || n2 == 0) return 0;
     const lar = Math.max(n1, n2);
@@ -45,11 +45,11 @@ function findLCM(n1: number, n2: number) {
  * @param {number} b second number
  * @returns the length of the hypotenuse (longest side) on a right-angle triange
  */
-function pythag(a: number, b: number) {
+export function pythag(a: number, b: number) {
     if (isNaN(a) || isNaN(b)) return NaN;
     const cp = (a ** 2) + (b ** 2);
-    const c: number = Math.sqrt(cp)
-    return (c)
+    const c: number = Math.sqrt(cp);
+    return (c);
 }
 /**
  * 
@@ -57,21 +57,21 @@ function pythag(a: number, b: number) {
  * @param {number} b number of significant figiures
  * @result converts the number to a significant figure
  */
-function sigfig(a: number, b: number) {
+export function sigfig(a: number, b: number) {
     if (isNaN(a)) return {
         number: a,
         sigfig: NaN,
     };
-    const aAsArr = a.toString().replaceAll('.', '').split('')
-    if (b < 2 || b == null) { b = aAsArr.length }
-    const sigfig = aAsArr.slice(1, b).join('')
-    let mult: number = Math.floor(a / parseFloat(aAsArr[0] + '.' + sigfig))
-    if (mult < 1 && mult != 0) { mult = mult.toString().length - 1 }
-    const answer = aAsArr[0] + '.' + sigfig + '*10^' + mult
+    const aAsArr = `${a}`.replaceAll('.', '').split('');
+    if (b < 2 || b == null) { b = aAsArr.length; }
+    const sigfig = aAsArr.slice(1, b).join('');
+    let mult: number = Math.floor(a / parseFloat(aAsArr[0] + '.' + sigfig));
+    if (mult < 1 && mult != 0) { mult = mult.toString().length - 1; }
+    const answer = aAsArr[0] + '.' + sigfig + '*10^' + mult;
     return {
         number: answer,
         sigfig: sigfig.length + 1,
-    }
+    };
 }
 
 /**
@@ -79,7 +79,7 @@ function sigfig(a: number, b: number) {
  * @param {number} number
  * @returns checks if number is under two decimals, then will return the number with two decimals or less
  */
-function fixtoundertwo(number: number) {
+export function fixtoundertwo(number: number) {
     const truenum = number * 100;
     if (!isNaN(truenum)) return number;
     else return number.toFixed(2);
@@ -89,7 +89,7 @@ function fixtoundertwo(number: number) {
  * @param {*} part1 the number to calculate
  * @returns the factorial of the number. ie 1*2*3...*x
  */
-function factorial(part1: number) {
+export function factorial(part1: number) {
     if (part1 == 0 || part1 == 1) {
         return 1;
     } else {
@@ -101,24 +101,24 @@ function factorial(part1: number) {
  * @param {date} date 
  * @returns to 12 hour time (UTC+00)
  */
-function to12htime(date) {
+export function to12htime(date) {
     let hours = date.getUTCHours();
     let minutes = date.getUTCMinutes();
     let seconds = date.getUTCSeconds();
     let amorpm;
     if (parseInt(hours) >= 12) {
-        amorpm = 'PM'
+        amorpm = 'PM';
     }
     else {
-        amorpm = 'AM'
+        amorpm = 'AM';
     }
     hours = hours % 12;
-    if (hours == 0) hours = 12
+    if (hours == 0) hours = 12;
     if (minutes < 10) {
-        minutes = '0' + minutes
+        minutes = '0' + minutes;
     }
     if (seconds < 10) {
-        seconds = '0' + seconds
+        seconds = '0' + seconds;
     }
     return hours + ':' + minutes + ':' + seconds + amorpm;
 }
@@ -127,24 +127,24 @@ function to12htime(date) {
  * @param {date} date 
  * @returns relative 12 hour time (non UTC)
  */
-function relto12htime(date) { //relative version of above
+export function relto12htime(date) { //relative version of above
     let hours = date.getHours();
     let minutes = date.getMinutes();
     let seconds = date.getSeconds();
     let amorpm;
     if (parseInt(hours) >= 12) {
-        amorpm = 'PM'
+        amorpm = 'PM';
     }
     else {
-        amorpm = 'AM'
+        amorpm = 'AM';
     }
     hours = hours % 12;
-    if (hours == 0) hours = 12
+    if (hours == 0) hours = 12;
     if (minutes < 10) {
-        minutes = '0' + minutes
+        minutes = '0' + minutes;
     }
     if (seconds < 10) {
-        seconds = '0' + seconds
+        seconds = '0' + seconds;
 
     }
     return hours + ':' + minutes + ':' + seconds + amorpm;
@@ -155,32 +155,32 @@ function relto12htime(date) { //relative version of above
  * @param {int} weekdaynum 
  * @returns weekdays to shorthand name i.e 1 -> Mon
  */
-function dayhuman(weekdaynum: number) { //date.getUTCDay returns an int so this is to convert to its name
+export function dayhuman(weekdaynum: number) { //date.getUTCDay returns an int so this is to convert to its name
     let str: string;
     switch (weekdaynum.toString()) {
         case '0':
-            str = 'Sun'
+            str = 'Sun';
             break;
         case '1':
-            str = 'Mon'
+            str = 'Mon';
             break;
         case '2':
-            str = 'Tue'
+            str = 'Tue';
             break;
         case '3':
-            str = 'Wed'
+            str = 'Wed';
             break;
         case '4':
-            str = 'Thu'
+            str = 'Thu';
             break;
         case '5':
-            str = 'Fri'
+            str = 'Fri';
             break;
         case '6':
-            str = 'Sat'
+            str = 'Sat';
             break;
         default:
-            str = 'idk'
+            str = 'idk';
             break;
     }
     return str;
@@ -190,47 +190,47 @@ function dayhuman(weekdaynum: number) { //date.getUTCDay returns an int so this 
  * @param {int} monthnum 
  * @returns name of the month in shorthand i.e 1 -> Feb
  */
-function tomonthname(monthnum: number) {//date.getUTCMonth returns an int so this is to convert to its name
+export function tomonthname(monthnum: number) {//date.getUTCMonth returns an int so this is to convert to its name
     let str: string;
     switch (monthnum.toString()) {
         case '0':
-            str = 'Jan'
+            str = 'Jan';
             break;
         case '1':
-            str = 'Feb'
+            str = 'Feb';
             break;
         case '2':
-            str = 'Mar'
+            str = 'Mar';
             break;
         case '3':
-            str = 'Apr'
+            str = 'Apr';
             break;
         case '4':
-            str = 'May'
+            str = 'May';
             break;
         case '5':
-            str = 'Jun'
+            str = 'Jun';
             break;
         case '6':
-            str = 'Jul'
+            str = 'Jul';
             break;
         case '7':
-            str = 'Aug'
+            str = 'Aug';
             break;
         case '8':
-            str = 'Sep'
+            str = 'Sep';
             break;
         case '9':
-            str = 'Oct'
+            str = 'Oct';
             break;
         case '10':
-            str = 'Nov'
+            str = 'Nov';
             break;
         case '11':
-            str = 'December'
+            str = 'December';
             break;
         default:
-            str = 'idk'
+            str = 'idk';
             break;
     }
     return str;
@@ -241,7 +241,7 @@ function tomonthname(monthnum: number) {//date.getUTCMonth returns an int so thi
  * @param {date} time 
  * @returns fixes offset i.e. +11:00 being returned as -660.
  */
-function fixoffset(time: number) {
+export function fixoffset(time: number) {
     const offsettype = time.toString().includes('-') ?
         '+' : '-';
     const current = Math.abs(time / 60).toFixed(2);
@@ -254,12 +254,12 @@ function fixoffset(time: number) {
  * @param str input string. formatted as hh:mm:ss._ms or ?d?h?m?s
  * @returns string converted to milliseconds
  */
-function timeToMs(str: string) {
+export function timeToMs(str: string) {
     if (str.includes('d') || str.includes('h') || str.includes('m') || str.includes('s')) {
-        let daysstr = '0'
-        let hoursstr = '0'
-        let minutesstr = '0'
-        let secondsstr = '0'
+        let daysstr = '0';
+        let hoursstr = '0';
+        let minutesstr = '0';
+        let secondsstr = '0';
 
         if (str.includes('d')) {
             daysstr = str.split('d')[0];
@@ -352,7 +352,7 @@ function timeToMs(str: string) {
  * @param allowDays whether or not to use days
  * @returns the time in hh:mm:ss format
  */
-function secondsToTime(seconds: number, allowDays?: boolean) {
+export function secondsToTime(seconds: number, allowDays?: boolean) {
     const days = Math.floor(seconds / 60 / 60 / 24).toString();
     const hours =
         allowDays == true ?
@@ -376,7 +376,7 @@ function secondsToTime(seconds: number, allowDays?: boolean) {
     return str;
 }
 
-function secondsToTimeReadable(seconds: number, allowDays?: boolean, showSeconds?: boolean) {
+export function secondsToTimeReadable(seconds: number, allowDays?: boolean, showSeconds?: boolean) {
     const days = Math.floor(seconds / 60 / 60 / 24).toString();
     const hours =
         allowDays == true ?
@@ -420,11 +420,11 @@ function secondsToTimeReadable(seconds: number, allowDays?: boolean, showSeconds
  * @param str the string to convert
  * @returns string with the first letter capitalised
  */
-function toCapital(str: string) {
+export function toCapital(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function toOrdinal(num: number) {
+export function toOrdinal(num: number) {
     let txt;
     if (num.toString().endsWith('1')) {
         txt = num + 'st';
@@ -441,15 +441,74 @@ function toOrdinal(num: number) {
     return txt;
 }
 
+/**
+ * 
+ * @param number number to parse
+ * @param decimal how many decimals to show
+ * @returns shorthand ie 1000 -> 1k, 1254 -> 1.25k
+ */
+export function shorthandNumber(number: number, decimal?: number) {
+    let newNum: string = `0`;
+    if (!decimal) {
+        decimal = 2;
+    }
+    if (number > 10 ** 12) {
+        newNum = (number / 1000).toFixed(decimal) + 'T';
+    }
+    if (number > 10 ** 9) {
+        newNum = (number / 1000).toFixed(decimal) + 'B';
+    }
+    if (number > 10 ** 6) {
+        newNum = (number / 1000).toFixed(decimal) + 'M';
+    }
+    if (number > 10 ** 3) {
+        newNum = (number / 1000).toFixed(decimal) + 'k';
+    }
+    return newNum;
+}
+
+export async function waitPls(func: () => any, seconds: number) {
+    await new Promise(resolve => {
+        setTimeout(() => {
+            func();
+            resolve('success');
+        }, seconds);
+    });
+    return;
+}
+
+export function findMode(input: string[]) {
+    const array: {
+        string: string,
+        count: number,
+        percentage: number;
+    }[] = [];
+    input.forEach(x => {
+        const indx = array.findIndex(y => y.string == x);
+        if (indx == -1) {
+            array.push({
+                string: x,
+                count: 1,
+                percentage: 0
+            });
+        } else {
+            array[indx].count++;
+        }
+    });
+    array.sort((a, b) => b.count - a.count);
+    array.forEach(x => x.percentage = (x.count / input.length) * 100);
+    return array;
+}
+
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
-export {
-    findHCF, findLCM,
-    pythag, sigfig,
-    fixtoundertwo, factorial,
-    to12htime, relto12htime,
-    dayhuman, tomonthname,
-    fixoffset, timeToMs,
-    secondsToTime, secondsToTimeReadable,
-    toCapital, toOrdinal
-};
+// export {
+//     findHCF, findLCM,
+//     pythag, sigfig,
+//     fixtoundertwo, factorial,
+//     to12htime, relto12htime,
+//     dayhuman, tomonthname,
+//     fixoffset, timeToMs,
+//     secondsToTime, secondsToTimeReadable,
+//     toCapital, toOrdinal
+// };
 

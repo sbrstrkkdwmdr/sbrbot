@@ -1,26 +1,32 @@
-import cmdchecks = require('../src/checks');
-import fs = require('fs');
-import calc = require('../src/calc');
-import emojis = require('../src/consts/emojis');
-import colours = require('../src/consts/colours');
-import colourfunc = require('../src/colourcalc');
-import osufunc = require('../src/osufunc');
-import osumodcalc = require('osumodcalculator');
-import osuApiTypes = require('../src/types/osuApiTypes');
-import Discord = require('discord.js');
-import log = require('../src/log');
-import func = require('../src/tools');
-import def = require('../src/consts/defaults');
-import buttonsthing = require('../src/consts/buttons');
-import extypes = require('../src/types/extraTypes');
-import helpinfo = require('../src/consts/helpinfo');
-import msgfunc = require('./msgfunc');
-
+import * as Discord from 'discord.js';
+import * as fs from 'fs';
+import moment from 'moment';
+import * as replayparser from 'osureplayparser';
+import pkgjson from '../package.json' assert { type: 'json' };
+import { path } from '../path.js';
+import * as calc from '../src/calc.js';
+import * as cmdchecks from '../src/checks.js';
+import * as colourfunc from '../src/colourcalc.js';
+import * as buttonsthing from '../src/consts/buttons.js';
+import * as colours from '../src/consts/colours.js';
+import * as def from '../src/consts/defaults.js';
+import * as emojis from '../src/consts/emojis.js';
+import * as helpinfo from '../src/consts/helpinfo.js';
+import * as mainconst from '../src/consts/main.js';
+import * as timezoneList from '../src/consts/timezones.js';
+import * as embedStuff from '../src/embed.js';
+import * as log from '../src/log.js';
+import * as osufunc from '../src/osufunc.js';
+import * as osumodcalc from '../src/osumodcalc.js';
+import * as func from '../src/tools.js';
+import * as extypes from '../src/types/extraTypes.js';
+import * as osuApiTypes from '../src/types/osuApiTypes.js';
+import * as msgfunc from './msgfunc.js';
 
 /**
  * convert a value
  */
-export function convert(input: extypes.commandInput) {
+export async function convert(input: extypes.commandInput) {
 
     let commanduser;
     let cat1;
@@ -29,22 +35,22 @@ export function convert(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property only exists on message
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            cat1 = input.args[0]
-            cat2 = input.args[1]
-            num = parseFloat(input.args[2])
+            cat1 = input.args[0];
+            cat2 = input.args[1];
+            num = parseFloat(input.args[2]);
             if (!input.args[0]) {
-                cat1 = 'help'
+                cat1 = 'help';
             }
             if (!input.args[1]) {
-                cat2 = 'help'
+                cat2 = 'help';
             }
             if (isNaN(parseFloat(num))) {
-                num = 0
+                num = 0;
             }
             if (!input.args[2]) {
-                num = 0
+                num = 0;
             }
         }
             break;
@@ -52,19 +58,21 @@ export function convert(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property only exists on interaction
-            cat1 = input.obj.options.getString('from')
-            //@ts-expect-error options property only exists on interaction
-            cat2 = input.obj.options.getString('to')
-            //@ts-expect-error options property only exists on interaction
-            num = input.obj.options.getNumber('number')
+
+            cat1 = input.obj.options.getString('from');
+
+            cat2 = input.obj.options.getString('to');
+
+            num = input.obj.options.getNumber('number');
         }
 
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -72,18 +80,14 @@ export function convert(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('convert', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'convert',
+        options: [
             {
                 name: 'From',
                 value: cat1
@@ -96,11 +100,8 @@ export function convert(input: extypes.commandInput) {
                 name: 'Number',
                 value: `${num}`
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -195,47 +196,47 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
     switch (true) {
         case (cat1 == cat2):
             conv = 'No conversion';
-            convtype = `${cat1} to ${cat2}`
-            eq = `did you really just convert ${cat1.toLowerCase()} to ${cat2.toLowerCase()}? smh my head`
-            formula = `None. You're stupid.`
+            convtype = `${cat1} to ${cat2}`;
+            eq = `did you really just convert ${cat1.toLowerCase()} to ${cat2.toLowerCase()}? smh my head`;
+            formula = `None. You're stupid.`;
             break;
 
         //temperature
         case (cat1 == 'f' || cat1 == 'fahrenheit') && (cat2 == 'c' || cat2 == 'celsius' || cat2 == 'celcius'):
-            conv = 'Temperature conversion'
-            convtype = 'Farhenheit to Celsius'
-            eq = `${num}f => ${Math.abs((num - 32) * 5 / 9)}c`
-            formula = '`((x)-32)*5/9`'
+            conv = 'Temperature conversion';
+            convtype = 'Farhenheit to Celsius';
+            eq = `${num}f => ${(num - 32) * 5 / 9}c`;
+            formula = '`((x)-32)*5/9`';
             break;
         case (cat1 == 'f' || cat1 == 'fahrenheit') && (cat2 == 'k' || cat2 == 'kelvin'):
-            conv = 'Temperature conversion'
-            convtype = 'Farhenheit to Kelvin'
-            eq = `${num}f => ${Math.abs((num - 32) * 5 / 9 + 273.15)}c`
-            formula = `((x)-32)*5/9 + 273.15`
+            conv = 'Temperature conversion';
+            convtype = 'Farhenheit to Kelvin';
+            eq = `${num}f => ${(num - 32) * 5 / 9 + 273.15}c`;
+            formula = `((x)-32)*5/9 + 273.15`;
             break;
         case (cat1 == 'c' || cat1 == 'celsius' || cat1 == 'celcius') && (cat2 == 'f' || cat2 == 'fahrenheit'):
-            conv = 'Temperature conversion'
-            convtype = 'Celsius to Farhenheit'
-            eq = `${num}c => ${Math.abs(num * 9 / 5 + 32)}f`
-            formula = '`x*9/5+32`'
+            conv = 'Temperature conversion';
+            convtype = 'Celsius to Farhenheit';
+            eq = `${num}c => ${num * 9 / 5 + 32}f`;
+            formula = '`x*9/5+32`';
             break;
         case (cat1 == 'c' || cat1 == 'celsius' || cat1 == 'celcius') && (cat2 == 'k' || cat2 == 'kelvin'):
-            conv = 'Temperature conversion'
-            convtype = 'Celsius to Kelvin'
-            eq = `${num}c => ${Math.abs(num + 273.15)}k`
-            formula = '`x+273.15`'
+            conv = 'Temperature conversion';
+            convtype = 'Celsius to Kelvin';
+            eq = `${num}c => ${num + 273.15}k`;
+            formula = '`x+273.15`';
             break;
         case (cat1 == 'k' || cat1 == 'kelvin') && (cat2 == 'c' || cat2 == 'celsius' || cat2 == 'celcius'):
-            conv = 'Temperature conversion'
-            convtype = 'Kelvin to Celsius'
-            eq = `${num}k => ${Math.abs(num - 273.15)}c`
-            formula = '`x-273.15`'
+            conv = 'Temperature conversion';
+            convtype = 'Kelvin to Celsius';
+            eq = `${num}k => ${num - 273.15}c`;
+            formula = '`x-273.15`';
             break;
         case (cat1 == 'k' || cat1 == 'kelvin') && (cat2 == 'f' || cat2 == 'fahrenheit'):
-            conv = 'Temperature conversion'
-            convtype = 'Kelvin to Farhenheit'
-            eq = `${num}k => ${Math.abs((num - 273.15) * 9 / 5 + 32)}f`
-            formula = '`(x-273.15)*9/5+32`'
+            conv = 'Temperature conversion';
+            convtype = 'Kelvin to Farhenheit';
+            eq = `${num}k => ${(num - 273.15) * 9 / 5 + 32}f`;
+            formula = '`(x-273.15)*9/5+32`';
             break;
 
 
@@ -243,219 +244,217 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
 
         //distance
         case (cat1 == 'in' || cat1 == 'inch') && (cat2 == 'ft' || cat2 == 'feet'):
-            conv = 'Distance conversion'
-            convtype = 'Inches to Feet'
-            eq = `${num}in => ${num / 12}ft`
-            formula = '`x/12`'
+            conv = 'Distance conversion';
+            convtype = 'Inches to Feet';
+            eq = `${num}in => ${num / 12}ft`;
+            formula = '`x/12`';
             break;
         case (cat1 == 'in' || cat1 == 'inch') && (cat2 == 'm' || cat2 == 'metres'):
-            conv = 'Distance conversion'
-            convtype = 'Inches to Metres'
-            eq = `${num}in => ${Math.abs(num / 39.37)}m`
-            formula = '`x/39.37`'
+            conv = 'Distance conversion';
+            convtype = 'Inches to Metres';
+            eq = `${num}in => ${num / 39.37}m`;
+            formula = '`x/39.37`';
             break;
         case (cat1 == 'in' || cat1 == 'inch') && (cat2 == 'mi' || cat2 == 'miles'):
-            conv = 'Distance conversion'
-            convtype = 'Inches to Miles'
-            eq = `${num}in => ${Math.abs(num / 63360)}mi`
-            formula = '`x/63360`'
+            conv = 'Distance conversion';
+            convtype = 'Inches to Miles';
+            eq = `${num}in => ${num / 63360}mi`;
+            formula = '`x/63360`';
             break;
 
         case (cat1 == 'ft' || cat1 == 'feet') && (cat2 == 'in' || cat2 == 'inch'):
-            conv = 'Distance conversion'
-            convtype = 'Feet to Inches'
-            eq = `${num}ft => ${num * 12}in`
-            formula = '`x*12`'
+            conv = 'Distance conversion';
+            convtype = 'Feet to Inches';
+            eq = `${num}ft => ${num * 12}in`;
+            formula = '`x*12`';
             break;
         case (cat1 == 'ft' || cat1 == 'feet') && (cat2 == 'm' || cat2 == 'metres'):
-            conv = 'Distance conversion'
-            convtype = 'Feet to Metres'
-            eq = `${num}ft => ${Math.abs(num / 3.28084)}m`
-            formula = '`x/3.28084` (approx)'
+            conv = 'Distance conversion';
+            convtype = 'Feet to Metres';
+            eq = `${num}ft => ${num / 3.28084}m`;
+            formula = '`x/3.28084` (approx)';
             break;
         case (cat1 == 'ft' || cat1 == 'feet') && (cat2 == 'mi' || cat2 == 'miles'):
-            conv = 'Distance conversion'
-            convtype = 'Feet to Miles'
-            eq = `${num}ft => ${Math.abs(num / 5280)}mi`
-            formula = '`x/5280`'
+            conv = 'Distance conversion';
+            convtype = 'Feet to Miles';
+            eq = `${num}ft => ${num / 5280}mi`;
+            formula = '`x/5280`';
             break;
 
         case (cat1 == 'm' || cat1 == 'metres') && (cat2 == 'in' || cat2 == 'inch'):
-            conv = 'Distance conversion'
-            convtype = 'Metres to Inches'
-            eq = `${num}m => ${num * 39.37}in`
-            formula = '`x*39.37`'
+            conv = 'Distance conversion';
+            convtype = 'Metres to Inches';
+            eq = `${num}m => ${num * 39.37}in`;
+            formula = '`x*39.37`';
             break;
         case (cat1 == 'm' || cat1 == 'metres') && (cat2 == 'ft' || cat2 == 'feet'):
-            conv = 'Distance conversion'
-            convtype = 'Metres to Feet'
-            eq = `${num}m => ${num * 3.28084}ft`
-            formula = '`x*3.28084`'
+            conv = 'Distance conversion';
+            convtype = 'Metres to Feet';
+            eq = `${num}m => ${num * 3.28084}ft`;
+            formula = '`x*3.28084`';
             break;
         case (cat1 == 'm' || cat1 == 'metres') && (cat2 == 'mi' || cat2 == 'miles'):
-            conv = 'Distance conversion'
-            convtype = 'Metres to Miles'
-            eq = `${num}m => ${num / 1609.344}mi`
-            formula = '`x/1609.344`'
+            conv = 'Distance conversion';
+            convtype = 'Metres to Miles';
+            eq = `${num}m => ${num / 1609.344}mi`;
+            formula = '`x/1609.344`';
             break;
 
         case (cat1 == 'mi' || cat1 == 'miles') && (cat2 == 'in' || cat2 == 'inch'):
-            conv = 'Distance conversion'
-            convtype = 'Miles to Inches'
-            eq = `${num}mi => ${num * 63360}in`
-            formula = '`x*63360`'
+            conv = 'Distance conversion';
+            convtype = 'Miles to Inches';
+            eq = `${num}mi => ${num * 63360}in`;
+            formula = '`x*63360`';
             break;
         case (cat1 == 'mi' || cat1 == 'miles') && (cat2 == 'ft' || cat2 == 'feet'):
-            conv = 'Distance conversion'
-            convtype = 'Miles to Feet'
-            eq = `${num}mi => ${num * 5280}ft`
-            formula = '`x*5280`'
+            conv = 'Distance conversion';
+            convtype = 'Miles to Feet';
+            eq = `${num}mi => ${num * 5280}ft`;
+            formula = '`x*5280`';
             break;
         case (cat1 == 'mi' || cat1 == 'miles') && (cat2 == 'm' || cat2 == 'metres'):
-            conv = 'Distance conversion'
-            convtype = 'Miles to Metres'
-            eq = `${num}mi => ${num * 1609.344}m`
-            formula = '`x*1609.344`'
+            conv = 'Distance conversion';
+            convtype = 'Miles to Metres';
+            eq = `${num}mi => ${num * 1609.344}m`;
+            formula = '`x*1609.344`';
             break;
 
 
         //time
         case ((cat1 == 's' || cat1 == 'seconds' || cat1 == 'secs') && cat2 == 'min' || cat2 == 'minutes'):
-            console.log(cat1 == 's')
-            console.log(cat2 == 'min')
-            conv = 'Time conversion'
-            convtype = 'Seconds to Minutes'
-            eq = `${num}s => ${num / 60}min`
-            formula = '`x/60`'
+            conv = 'Time conversion';
+            convtype = 'Seconds to Minutes';
+            eq = `${num}s => ${num / 60}min`;
+            formula = '`x/60`';
             break;
         case ((cat1 == 's' || cat1 == 'seconds' || cat1 == 'secs') && cat2 == 'h' || cat2 == 'hours' || cat2 == 'hr'):
-            conv = 'Time conversion'
-            convtype = 'Seconds to Hours'
-            eq = `${num}s => ${num / 60 / 60}h`
-            formula = '`x/60/60`'
+            conv = 'Time conversion';
+            convtype = 'Seconds to Hours';
+            eq = `${num}s => ${num / 60 / 60}h`;
+            formula = '`x/60/60`';
             break;
         case ((cat1 == 's' || cat1 == 'seconds' || cat1 == 'secs') && cat2 == 'd' || cat2 == 'days'):
-            conv = 'Time conversion'
-            convtype = 'Seconds to Days'
-            eq = `${num}s => ${num / 60 / 60 / 24} days`
-            formula = '`x/60/60/24`'
+            conv = 'Time conversion';
+            convtype = 'Seconds to Days';
+            eq = `${num}s => ${num / 60 / 60 / 24} days`;
+            formula = '`x/60/60/24`';
             break;
 
         case ((cat1 == 's' || cat1 == 'seconds' || cat1 == 'secs') && cat2 == 'y' || cat2 == 'years' || cat2 == 'yr'):
-            conv = 'Time conversion'
-            convtype = 'Seconds to Years'
-            eq = `${num}s => ${num / 60 / 60 / 24 / 365.24}y`
-            formula = '`x/60/60/365.24`'
+            conv = 'Time conversion';
+            convtype = 'Seconds to Years';
+            eq = `${num}s => ${num / 60 / 60 / 24 / 365.24}y`;
+            formula = '`x/60/60/365.24`';
             break;
 
         case (cat1 == 'min' || cat1 == 'minutes') && (cat2 == 's' || cat2 == 'seconds' || cat2 == 'secs'):
-            conv = 'Time conversion'
-            convtype = 'Minutes to Seconds'
-            eq = `${num}min => ${num * 60}s`
-            formula = '`x*60`'
+            conv = 'Time conversion';
+            convtype = 'Minutes to Seconds';
+            eq = `${num}min => ${num * 60}s`;
+            formula = '`x*60`';
             break;
 
         case (cat1 == 'min' || cat1 == 'minutes') && (cat2 == 'h' || cat2 == 'hours' || cat2 == 'hr'):
-            conv = 'Time conversion'
-            convtype = 'Minutes to Hours'
-            eq = `${num}min => ${num / 60}h`
-            formula = '`x/60`'
+            conv = 'Time conversion';
+            convtype = 'Minutes to Hours';
+            eq = `${num}min => ${num / 60}h`;
+            formula = '`x/60`';
             break;
 
         case (cat1 == 'min' || cat1 == 'minutes') && (cat2 == 'd' || cat2 == 'days'):
-            conv = 'Time conversion'
-            convtype = 'Minutes to Days'
-            eq = `${num}min => ${num / 60 / 24} days`
-            formula = '`x/60/24`'
+            conv = 'Time conversion';
+            convtype = 'Minutes to Days';
+            eq = `${num}min => ${num / 60 / 24} days`;
+            formula = '`x/60/24`';
             break;
 
         case (cat1 == 'min' || cat1 == 'minutes') && (cat2 == 'y' || cat2 == 'years' || cat2 == 'yr'):
-            conv = 'Time conversion'
-            convtype = 'Minutes to Years'
-            eq = `${num}min => ${num / 60 / 24 / 365.24}y`
-            formula = '`x/60/24/365.24`'
+            conv = 'Time conversion';
+            convtype = 'Minutes to Years';
+            eq = `${num}min => ${num / 60 / 24 / 365.24}y`;
+            formula = '`x/60/24/365.24`';
             break;
 
 
         case (cat1 == 'h' || cat1 == 'hours' || cat1 == 'hr') && (cat2 == 's' || cat2 == 'seconds' || cat2 == 'secs'):
-            conv = 'Time conversion'
-            convtype = 'Hours to Seconds'
-            eq = `${num}h => ${num * 60 * 60}s`
-            formula = '`x*60*60`'
+            conv = 'Time conversion';
+            convtype = 'Hours to Seconds';
+            eq = `${num}h => ${num * 60 * 60}s`;
+            formula = '`x*60*60`';
             break;
 
         case (cat1 == 'h' || cat1 == 'hours' || cat1 == 'hr') && (cat2 == 'min' || cat2 == 'minutes'):
-            conv = 'Time conversion'
-            convtype = 'Hours to Minutes'
-            eq = `${num}h => ${num * 60}min`
-            formula = '`x*60`'
+            conv = 'Time conversion';
+            convtype = 'Hours to Minutes';
+            eq = `${num}h => ${num * 60}min`;
+            formula = '`x*60`';
             break;
         case (cat1 == 'h' || cat1 == 'hours' || cat1 == 'hr') && (cat2 == 'd' || cat2 == 'days'):
-            conv = 'Time conversion'
-            convtype = 'Hours to Days'
-            eq = `${num}h => ${num / 24} days`
-            formula = '`x/24`'
+            conv = 'Time conversion';
+            convtype = 'Hours to Days';
+            eq = `${num}h => ${num / 24} days`;
+            formula = '`x/24`';
             break;
         case (cat1 == 'h' || cat1 == 'hours' || cat1 == 'hr') && (cat2 == 'y' || cat2 == 'years' || cat2 == 'yr'):
-            conv = 'Time conversion'
-            convtype = 'Hours to Years'
-            eq = `${num}h => ${num / 24 / 365.24}y`
-            formula = '`x/24/365.24`'
+            conv = 'Time conversion';
+            convtype = 'Hours to Years';
+            eq = `${num}h => ${num / 24 / 365.24}y`;
+            formula = '`x/24/365.24`';
             break;
 
 
         case (cat1 == 'd' || cat1 == 'days') && (cat2 == 's' || cat2 == 'seconds' || cat2 == 'secs'):
-            conv = 'Time conversion'
-            convtype = 'Days to Seconds'
-            eq = `${num} days => ${num * 24 * 60 * 60}s`
-            formula = '`x*24*60*60`'
+            conv = 'Time conversion';
+            convtype = 'Days to Seconds';
+            eq = `${num} days => ${num * 24 * 60 * 60}s`;
+            formula = '`x*24*60*60`';
             break;
         case (cat1 == 'd' || cat1 == 'days') && (cat2 == 'min' || cat2 == 'minutes'):
-            conv = 'Time conversion'
-            convtype = 'Days to Minutes'
-            eq = `${num} days => ${num * 24 * 60}min`
-            formula = '`x*24*60`'
+            conv = 'Time conversion';
+            convtype = 'Days to Minutes';
+            eq = `${num} days => ${num * 24 * 60}min`;
+            formula = '`x*24*60`';
 
             break;
         case (cat1 == 'd' || cat1 == 'days') && (cat2 == 'h' || cat2 == 'hours' || cat2 == 'hr'):
-            conv = 'Time conversion'
-            convtype = 'Days to Hours'
-            eq = `${num} days => ${num * 24}h`
-            formula = '`x*24`'
+            conv = 'Time conversion';
+            convtype = 'Days to Hours';
+            eq = `${num} days => ${num * 24}h`;
+            formula = '`x*24`';
 
             break;
         case (cat1 == 'd' || cat1 == 'days') && (cat2 == 'y' || cat2 == 'years' || cat2 == 'yr'):
-            conv = 'Time conversion'
-            convtype = 'Days to Years'
-            eq = `${num} days => ${num / 365.24}y`
-            formula = '`x/365.24`'
+            conv = 'Time conversion';
+            convtype = 'Days to Years';
+            eq = `${num} days => ${num / 365.24}y`;
+            formula = '`x/365.24`';
             break;
 
 
         case (cat1 == 'y' || cat1 == 'years' || cat1 == 'yr') && (cat2 == 's' || cat2 == 'seconds' || cat2 == 'secs'):
-            conv = 'Time conversion'
-            convtype = 'Years to Seconds'
-            eq = `${num}y => ${num * 365.24 * 24 * 60 * 60}s`
-            formula = '`x*365.24*24*60*60`'
+            conv = 'Time conversion';
+            convtype = 'Years to Seconds';
+            eq = `${num}y => ${num * 365.24 * 24 * 60 * 60}s`;
+            formula = '`x*365.24*24*60*60`';
             break;
         case (cat1 == 'y' || cat1 == 'years' || cat1 == 'yr') && (cat2 == 'min' || cat2 == 'minutes'):
-            conv = 'Time conversion'
-            convtype = 'Years to Minutes'
-            eq = `${num}y => ${num * 365.24 * 24 * 60}min`
-            formula = '`x*365.24*24*60`'
+            conv = 'Time conversion';
+            convtype = 'Years to Minutes';
+            eq = `${num}y => ${num * 365.24 * 24 * 60}min`;
+            formula = '`x*365.24*24*60`';
             break;
         case (cat1 == 'y' || cat1 == 'years' || cat1 == 'yr') && (cat2 == 'h' || cat2 == 'hours' || cat1 == 'hr'):
-            conv = 'Time conversion'
-            convtype = 'Years to Hours'
-            eq = `${num}y => ${num * 365.24 * 24}h`
-            formula = '`x*365.24*24`'
+            conv = 'Time conversion';
+            convtype = 'Years to Hours';
+            eq = `${num}y => ${num * 365.24 * 24}h`;
+            formula = '`x*365.24*24`';
 
             break;
         case (cat1 == 'y' || cat1 == 'years' || cat1 == 'yr') && (cat2 == 'd' || cat2 == 'days'):
-            conv = 'Time conversion'
-            convtype = 'Years to Days'
-            eq = `${num}y => ${num * 365.24} days`
-            formula = '`x*365.24`'
+            conv = 'Time conversion';
+            convtype = 'Years to Days';
+            eq = `${num}y => ${num * 365.24} days`;
+            formula = '`x*365.24`';
             break;
 
 
@@ -463,196 +462,196 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
 
         //volume
         case (cat1 == 'floz' || cat1 == 'fluidounces') && (cat2 == 'cup'):
-            conv = 'Volume conversion'
-            convtype = 'Fluid Ounces to Cups'
-            eq = `${num}fl.oz => ${num / 8.11537} cup`
-            formula = '~`x/8.11537'
+            conv = 'Volume conversion';
+            convtype = 'Fluid Ounces to Cups';
+            eq = `${num}fl.oz => ${num / 8.11537} cup`;
+            formula = '~`x/8.11537';
             break;
         case (cat1 == 'floz' || cat1 == 'fluidounces') && (cat2 == 'pt' || cat2 == 'pint'):
-            conv = 'Volume conversion'
-            convtype = 'Fluid Ounces to Pints'
-            eq = `${num}fl.oz => ${num / 16}pt`
-            formula = '`x/16`'
+            conv = 'Volume conversion';
+            convtype = 'Fluid Ounces to Pints';
+            eq = `${num}fl.oz => ${num / 16}pt`;
+            formula = '`x/16`';
             break;
         case (cat1 == 'floz' || cat1 == 'fluidounces') && (cat2 == 'l' || cat2 == 'litres'):
-            conv = 'Volume conversion'
-            convtype = 'Fluid Ounces to Litres'
-            eq = `${num}fl.oz => ${num / 33.814}l`
-            formula = '`x/33.814`'
+            conv = 'Volume conversion';
+            convtype = 'Fluid Ounces to Litres';
+            eq = `${num}fl.oz => ${num / 33.814}l`;
+            formula = '`x/33.814`';
 
             break;
         case (cat1 == 'floz' || cat1 == 'fluidounces') && (cat2 == 'gal' || cat2 == 'gallons'):
-            conv = 'Volume conversion'
-            convtype = 'Fluid Ounces to Gallons'
-            eq = `${num}fl.oz => ${num / 128}gal`
-            formula = 'x/128``'
+            conv = 'Volume conversion';
+            convtype = 'Fluid Ounces to Gallons';
+            eq = `${num}fl.oz => ${num / 128}gal`;
+            formula = 'x/128``';
             break;
         case (cat1 == 'floz' || cat1 == 'fluidounces') && (cat2 == 'm3'):
-            conv = 'Volume conversion'
-            convtype = 'Fluid Ounces to Cubic Metres'
-            eq = `${num}fl.oz => ${num / 33814}m^3`
-            formula = '`x/33814`'
+            conv = 'Volume conversion';
+            convtype = 'Fluid Ounces to Cubic Metres';
+            eq = `${num}fl.oz => ${num / 33814}m^3`;
+            formula = '`x/33814`';
 
             break;
 
 
         case (cat1 == 'cup') && (cat2 == 'floz' || cat2 == 'fluidounces'):
-            conv = 'Volume conversion'
-            convtype = 'Cups to Fluid Ounces'
-            eq = `${num} cup => ${num * 8.11537}fl.oz`
-            formula = '~`x*8.11537`'
+            conv = 'Volume conversion';
+            convtype = 'Cups to Fluid Ounces';
+            eq = `${num} cup => ${num * 8.11537}fl.oz`;
+            formula = '~`x*8.11537`';
             break;
         case (cat1 == 'cup') && (cat2 == 'pt' || cat2 == 'pint'):
-            conv = 'Volume conversion'
-            convtype = 'Cups to Pints'
-            eq = `${num} cup => ${num / 1.972}pt`
-            formula = '~`x/1.972`'
+            conv = 'Volume conversion';
+            convtype = 'Cups to Pints';
+            eq = `${num} cup => ${num / 1.972}pt`;
+            formula = '~`x/1.972`';
             break;
         case (cat1 == 'cup') && (cat2 == 'l' || cat2 == 'litres'):
-            conv = 'Volume conversion'
-            convtype = 'Cups to Litres'
-            eq = `${num} cup => ${num / 4.167}l`
-            formula = '~`x/4.167`'
+            conv = 'Volume conversion';
+            convtype = 'Cups to Litres';
+            eq = `${num} cup => ${num / 4.167}l`;
+            formula = '~`x/4.167`';
             break;
         case (cat1 == 'cup') && (cat2 == 'gal' || cat2 == 'gallons'):
-            conv = 'Volume conversion'
-            convtype = 'Cups to Gallons'
-            eq = `${num} cup => ${num / 15.722}gal`
-            formula = '~`x/15.722`'
+            conv = 'Volume conversion';
+            convtype = 'Cups to Gallons';
+            eq = `${num} cup => ${num / 15.722}gal`;
+            formula = '~`x/15.722`';
             break;
         case (cat1 == 'cup') && (cat2 == 'm3'):
-            conv = 'Volume conversion'
-            convtype = 'Cups to Cubic Metres'
-            eq = `${num} cup => ${num / 4167}m^3`
-            formula = '~`x/4166.67`'
+            conv = 'Volume conversion';
+            convtype = 'Cups to Cubic Metres';
+            eq = `${num} cup => ${num / 4167}m^3`;
+            formula = '~`x/4166.67`';
             break;
 
 
         case (cat1 == 'pt' || cat1 == 'pints') && (cat2 == 'floz' || cat2 == 'fluidounces'):
-            conv = 'Volume conversion'
-            convtype = 'Pints to Fluid Ounces'
-            eq = `${num}pt => ${num * 16}fl.oz`
-            formula = '`x*16`'
+            conv = 'Volume conversion';
+            convtype = 'Pints to Fluid Ounces';
+            eq = `${num}pt => ${num * 16}fl.oz`;
+            formula = '`x*16`';
             break;
         case (cat1 == 'pt' || cat1 == 'pints') && (cat2 == 'cup'):
-            conv = 'Volume conversion'
-            convtype = 'Pints to Cups'
-            eq = `${num}pt => ${num * 1.97157} cup`
-            formula = '~`x*1.97157`'
+            conv = 'Volume conversion';
+            convtype = 'Pints to Cups';
+            eq = `${num}pt => ${num * 1.97157} cup`;
+            formula = '~`x*1.97157`';
             break;
         case (cat1 == 'pt' || cat1 == 'pints') && (cat2 == 'l' || cat2 == 'litres'):
-            conv = 'Volume conversion'
-            convtype = 'Pints to Litres'
-            eq = `${num}pt => ${num / 2.11338}l`
-            formula = '`x/2.11338`'
+            conv = 'Volume conversion';
+            convtype = 'Pints to Litres';
+            eq = `${num}pt => ${num / 2.11338}l`;
+            formula = '`x/2.11338`';
             break;
         case (cat1 == 'pt' || cat1 == 'pints') && (cat2 == 'gal' || cat2 == 'gallons'):
-            conv = 'Volume conversion'
-            convtype = 'Pints to Gallons'
-            eq = `${num}pt => ${num / 8}gal`
-            formula = '`x/8`'
+            conv = 'Volume conversion';
+            convtype = 'Pints to Gallons';
+            eq = `${num}pt => ${num / 8}gal`;
+            formula = '`x/8`';
             break;
         case (cat1 == 'pt' || cat1 == 'pints') && (cat2 == 'm3'):
-            conv = 'Volume conversion'
-            convtype = 'Pints to Cubic Metres'
-            eq = `${num}pt => ${num / 2113.37810957}`
-            formula = '`x/2113.37810957`'
+            conv = 'Volume conversion';
+            convtype = 'Pints to Cubic Metres';
+            eq = `${num}pt => ${num / 2113.37810957}`;
+            formula = '`x/2113.37810957`';
             break;
 
 
         case (cat1 == 'l' || cat1 == 'litres') && (cat2 == 'floz' || cat2 == 'fluidounces'):
-            conv = 'Volume conversion'
-            convtype = 'Litres to Fluid Ounces'
-            eq = `${num}l => ${num * 33.814}fl.oz`
-            formula = '`x*33.814`'
+            conv = 'Volume conversion';
+            convtype = 'Litres to Fluid Ounces';
+            eq = `${num}l => ${num * 33.814}fl.oz`;
+            formula = '`x*33.814`';
             break;
         case (cat1 == 'l' || cat1 == 'litres') && (cat2 == 'cup'):
-            conv = 'Volume conversion'
-            convtype = 'Litres to Cups'
-            eq = `${num}l => ${num * 4.16667} cup`
-            formula = '`x*4.16667`'
+            conv = 'Volume conversion';
+            convtype = 'Litres to Cups';
+            eq = `${num}l => ${num * 4.16667} cup`;
+            formula = '`x*4.16667`';
             break;
         case (cat1 == 'l' || cat1 == 'litres') && (cat2 == 'pt' || cat2 == 'pint'):
-            conv = 'Volume conversion'
-            convtype = 'Litres to Pints'
-            eq = `${num}l => ${num * 2.11338}pt`
-            formula = '`x*2.11338`'
+            conv = 'Volume conversion';
+            convtype = 'Litres to Pints';
+            eq = `${num}l => ${num * 2.11338}pt`;
+            formula = '`x*2.11338`';
             break;
         case (cat1 == 'l' || cat1 == 'litres') && (cat2 == 'gal' || cat2 == 'gallons'):
-            conv = 'Volume conversion'
-            convtype = 'Litres to Gallons'
-            eq = `${num} => ${num / 3.78541}gal`
-            formula = '`x/3.78541`'
+            conv = 'Volume conversion';
+            convtype = 'Litres to Gallons';
+            eq = `${num} => ${num / 3.78541}gal`;
+            formula = '`x/3.78541`';
             break;
         case (cat1 == 'l' || cat1 == 'litres') && (cat2 == 'm3'):
-            conv = 'Volume conversion'
-            convtype = 'Litres to Cubic Metres'
-            eq = `${num}l => ${num / 1000}m^3`
-            formula = '`x/1000`'
+            conv = 'Volume conversion';
+            convtype = 'Litres to Cubic Metres';
+            eq = `${num}l => ${num / 1000}m^3`;
+            formula = '`x/1000`';
             break;
 
 
         case (cat1 == 'gal' || cat1 == 'gallons') && (cat2 == 'floz' || cat2 == 'fluidounces'):
-            conv = 'Volume conversion'
-            convtype = 'Gallons to Fluid Ounces'
-            eq = `${num}gal => ${num * 128}fl.oz`
-            formula = '`x*128`'
+            conv = 'Volume conversion';
+            convtype = 'Gallons to Fluid Ounces';
+            eq = `${num}gal => ${num * 128}fl.oz`;
+            formula = '`x*128`';
             break;
         case (cat1 == 'gal' || cat1 == 'gallons') && (cat2 == 'cup'):
-            conv = 'Volume conversion'
-            convtype = 'Gallons to Cups'
-            eq = `${num}gal => ${num * 15.7725} cup`
-            formula = '`x*15.7725`'
+            conv = 'Volume conversion';
+            convtype = 'Gallons to Cups';
+            eq = `${num}gal => ${num * 15.7725} cup`;
+            formula = '`x*15.7725`';
             break;
         case (cat1 == 'gal' || cat1 == 'gallons') && (cat2 == 'pt' || cat2 == 'pint'):
-            conv = 'Volume conversion'
-            convtype = 'Gallons to Pints'
-            eq = `${num}gal => ${num * 8}pt`
-            formula = '`x*8`'
+            conv = 'Volume conversion';
+            convtype = 'Gallons to Pints';
+            eq = `${num}gal => ${num * 8}pt`;
+            formula = '`x*8`';
             break;
         case (cat1 == 'gal' || cat1 == 'gallons') && (cat2 == 'l' || cat2 == 'litres'):
-            conv = 'Volume conversion'
-            convtype = 'Gallons to Litres'
-            eq = `${num}gal => ${num * 3.78541}l`
-            formula = '`x*3.78541`'
+            conv = 'Volume conversion';
+            convtype = 'Gallons to Litres';
+            eq = `${num}gal => ${num * 3.78541}l`;
+            formula = '`x*3.78541`';
             break;
         case (cat1 == 'gal' || cat1 == 'gallons') && (cat2 == 'm3'):
-            conv = 'Volume conversion'
-            convtype = 'Gallons to Cubic Metres'
-            eq = `${num}gal => ${num / 264.1722636962499564}m^3`
-            formula = '`x/264.1722636962499564`'
+            conv = 'Volume conversion';
+            convtype = 'Gallons to Cubic Metres';
+            eq = `${num}gal => ${num / 264.1722636962499564}m^3`;
+            formula = '`x/264.1722636962499564`';
             break;
 
 
         case (cat1 == 'm3') && (cat2 == 'floz' || cat2 == 'fluidounces'):
-            conv = 'Volume conversion'
-            convtype = 'Cubic Metres to Fluid Ounces'
-            eq = `${num}m^3 => ${num * 33814}fl.oz`
-            formula = '`x*33814`'
+            conv = 'Volume conversion';
+            convtype = 'Cubic Metres to Fluid Ounces';
+            eq = `${num}m^3 => ${num * 33814}fl.oz`;
+            formula = '`x*33814`';
             break;
         case (cat1 == 'm3') && (cat2 == 'cup'):
-            conv = 'Volume conversion'
-            convtype = 'Cubic Metres to Cups'
-            eq = `${num}m^3 => ${num * 4166.67} cup`
-            formula = '`x*4166.67`'
+            conv = 'Volume conversion';
+            convtype = 'Cubic Metres to Cups';
+            eq = `${num}m^3 => ${num * 4166.67} cup`;
+            formula = '`x*4166.67`';
             break;
         case (cat1 == 'm3') && (cat2 == 'pt' || cat2 == 'pint'):
-            conv = 'Volume conversion'
-            convtype = 'Cubic Metres to Pints'
-            eq = `${num}m^3 => ${num * 2113.37810957}pt`
-            formula = '`x*2113.37810957`'
+            conv = 'Volume conversion';
+            convtype = 'Cubic Metres to Pints';
+            eq = `${num}m^3 => ${num * 2113.37810957}pt`;
+            formula = '`x*2113.37810957`';
             break;
         case (cat1 == 'm3') && (cat2 == 'l' || cat2 == 'litres'):
-            conv = 'Volume conversion'
-            convtype = 'Cubic Metres to Litres'
-            eq = `${num}m^3 => ${num * 1000}l`
-            formula = '`x*1000`'
+            conv = 'Volume conversion';
+            convtype = 'Cubic Metres to Litres';
+            eq = `${num}m^3 => ${num * 1000}l`;
+            formula = '`x*1000`';
             break;
         case (cat1 == 'm3') && (cat2 == 'gal' || cat2 == 'gallons'):
-            conv = 'Volume conversion'
-            convtype = 'Cubic Metres to Gallons'
-            eq = `${num}m^3 => ${num * 264.1722636962499564}gal`
-            formula = '`x*264.1722636962499564`'
+            conv = 'Volume conversion';
+            convtype = 'Cubic Metres to Gallons';
+            eq = `${num}m^3 => ${num * 264.1722636962499564}gal`;
+            formula = '`x*264.1722636962499564`';
             break;
 
 
@@ -660,82 +659,82 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
 
         //mass
         case (cat1 == 'g' || cat1 == 'grams') && (cat2 == 'oz' || cat2 == 'ounces'):
-            conv = 'Mass conversion'
-            convtype = 'Grams to Ounces'
-            eq = `${num}g => ${num / 28.3495}oz`
-            formula = '`x/28.3495`'
+            conv = 'Mass conversion';
+            convtype = 'Grams to Ounces';
+            eq = `${num}g => ${num / 28.3495}oz`;
+            formula = '`x/28.3495`';
             break;
         case (cat1 == 'g' || cat1 == 'grams') && (cat2 == 'lb' || cat2 == 'pounds'):
-            conv = 'Mass conversion'
-            convtype = 'Grams to Pounds'
-            eq = `${num}g => ${num / 453.592}lb`
-            formula = '`x/453.592`'
+            conv = 'Mass conversion';
+            convtype = 'Grams to Pounds';
+            eq = `${num}g => ${num / 453.592}lb`;
+            formula = '`x/453.592`';
             break;
         case (cat1 == 'g' || cat1 == 'grams') && (cat2 == 'ton' || cat2 == 'tonnes'):
-            conv = 'Mass conversion'
-            convtype = 'Grams to Tonnes'
-            eq = `${num}g => ${num / (10 ** 6)}ton`
-            formula = '`x/10^6 (1,000,000)'
+            conv = 'Mass conversion';
+            convtype = 'Grams to Tonnes';
+            eq = `${num}g => ${num / (10 ** 6)}ton`;
+            formula = '`x/10^6 (1,000,000)';
             break;
 
 
         case (cat1 == 'oz' || cat1 == 'ounces') && (cat2 == 'g' || cat2 == 'grams'):
-            conv = 'Mass conversion'
-            convtype = 'Ounces to Grams'
-            eq = `${num}oz => ${num * 28.3495}g`
-            formula = '`x*28.3495`'
+            conv = 'Mass conversion';
+            convtype = 'Ounces to Grams';
+            eq = `${num}oz => ${num * 28.3495}g`;
+            formula = '`x*28.3495`';
             break;
         case (cat1 == 'oz' || cat1 == 'ounces') && (cat2 == 'lb' || cat2 == 'pounds'):
-            conv = 'Mass conversion'
-            convtype = 'Ounces to Pounds'
-            eq = `${num}oz => ${num / 16}lb`
-            formula = '`x/16`'
+            conv = 'Mass conversion';
+            convtype = 'Ounces to Pounds';
+            eq = `${num}oz => ${num / 16}lb`;
+            formula = '`x/16`';
             break;
         case (cat1 == 'oz' || cat1 == 'ounces') && (cat2 == 'ton' || cat2 == 'tonnes'):
-            conv = 'Mass conversion'
-            convtype = 'Ounces to Tonnes'
-            eq = `${num}oz => ${num / 35274}ton`
-            formula = '`x/35274`'
+            conv = 'Mass conversion';
+            convtype = 'Ounces to Tonnes';
+            eq = `${num}oz => ${num / 35274}ton`;
+            formula = '`x/35274`';
             break;
 
 
         case (cat1 == 'lb' || cat1 == 'pounds') && (cat2 == 'g' || cat2 == 'grams'):
-            conv = 'Mass conversion'
-            convtype = 'Pounds to Grams'
-            eq = `${num}lb => ${num * 453.592}g`
-            formula = '`x*453.592`'
+            conv = 'Mass conversion';
+            convtype = 'Pounds to Grams';
+            eq = `${num}lb => ${num * 453.592}g`;
+            formula = '`x*453.592`';
             break;
         case (cat1 == 'lb' || cat1 == 'pounds') && (cat2 == 'oz' || cat2 == 'ounces'):
-            conv = 'Mass conversion'
-            convtype = 'Pounds to Ounces'
-            eq = `${num}lb => ${num * 16}oz`
-            formula = '`x*16`'
+            conv = 'Mass conversion';
+            convtype = 'Pounds to Ounces';
+            eq = `${num}lb => ${num * 16}oz`;
+            formula = '`x*16`';
             break;
         case (cat1 == 'lb' || cat1 == 'pounds') && (cat2 == 'ton' || cat2 == 'tonnes'):
-            conv = 'Mass conversion'
-            convtype = 'Pounds to Tonnes'
-            eq = `${num}lb => ${num / 2204.62504693}ton`
-            formula = '`x/2204.62504693`'
+            conv = 'Mass conversion';
+            convtype = 'Pounds to Tonnes';
+            eq = `${num}lb => ${num / 2204.62504693}ton`;
+            formula = '`x/2204.62504693`';
             break;
 
 
         case (cat1 == 'ton' || cat1 == 'tonnes') && (cat2 == 'g' || cat2 == 'grams'):
-            conv = 'Mass conversion'
-            convtype = 'Tonnes to Grams'
-            eq = `${num}ton => ${num * (10 ** 6)}g`
-            formula = '`x*10^6 (1,000,000)`'
+            conv = 'Mass conversion';
+            convtype = 'Tonnes to Grams';
+            eq = `${num}ton => ${num * (10 ** 6)}g`;
+            formula = '`x*10^6 (1,000,000)`';
             break;
         case (cat1 == 'ton' || cat1 == 'tonnes') && (cat2 == 'oz' || cat2 == 'ounces'):
-            conv = 'Mass conversion'
-            convtype = 'Tonnes to Ounces'
-            eq = `${num}ton => ${num * 35274}oz`
-            formula = '`x*35274`'
+            conv = 'Mass conversion';
+            convtype = 'Tonnes to Ounces';
+            eq = `${num}ton => ${num * 35274}oz`;
+            formula = '`x*35274`';
             break;
         case (cat1 == 'ton' || cat1 == 'tonnes') && (cat2 == 'lb' || cat2 == 'pounds'):
-            conv = 'Mass conversion'
-            convtype = 'Tonnes to Pounds'
-            eq = `${num}ton => ${num * 2204.62504693}lb`
-            formula = '`x*2204.62504693`'
+            conv = 'Mass conversion';
+            convtype = 'Tonnes to Pounds';
+            eq = `${num}ton => ${num * 2204.62504693}lb`;
+            formula = '`x*2204.62504693`';
             break;
         //template
         /*
@@ -747,15 +746,21 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
             break;
         */
         default:
-            conv = 'Error'
-            convtype = 'Error'
-            eq = 'Invalid conversion or it hasn\'t been added yet'
-            formula = '`x`'
-            useEmbeds.push(EmbedList)
+            conv = 'Error';
+            convtype = 'Error';
+            eq = 'Invalid conversion or it hasn\'t been added yet';
+            formula = 'null';
+            useEmbeds.push(EmbedList);
+            if (!cat2 || !num) {
+                eq = `Missing arguments: 
+${cat2 ? '' : '[to]'}
+${num ? '' : '[number]'}`;
+            }
+            break;
 
     }
 
-    embedres.setTitle(`${conv}`)
+    embedres.setTitle(`${conv}`);
     embedres.addFields([
         {
             name: `${convtype}`,
@@ -767,8 +772,8 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
             value: formula,
             inline: false
         }
-    ])
-    useEmbeds.push(embedres)
+    ]);
+    useEmbeds.push(embedres);
     if (cat1 == 'help' || cat2 == 'help') {
         useEmbeds = [EmbedList];
     }
@@ -777,35 +782,45 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage(
+    const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
             args: {
                 embeds: useEmbeds
             }
-        }
-    )
+        }, input.canReply
+    );
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'convert',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'convert',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
 /**
  * list all commands or info about a specific command
  */
-export function help(input: extypes.commandInput) {
+export async function help(input: extypes.commandInput) {
 
     let commanduser;
-
+    let rdm = false;
+    let commandfound: boolean = false;
 
     let commandCategory: string = 'default';
     let command: string;
@@ -842,11 +857,11 @@ export function help(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property only exists on message
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             command = input.args[0];
             if (!input.args[0]) {
-                command = null
+                command = null;
             }
         }
             break;
@@ -854,8 +869,8 @@ export function help(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property does not exist on message
             command = input.obj.options.getString('command');
         }
 
@@ -863,133 +878,223 @@ export function help(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
-            command = `${input.overrides.ex}`
+            if (input.button == 'Random') {
+                rdm = true;
+            }
+            switch (input.button) {
+                case 'Random':
+                    rdm = true;
+                    break;
+                case 'Detailed':
+                    command = null;
+                    break;
+            }
         }
             break;
     }
 
+    if (input.overrides != null) {
+        if (input.overrides.ex) {
+            command = `${input.overrides.ex}`;
+        }
+    }
+
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('help', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [{
-            name: 'Command',
-            value: command
-        }]),
-        {
-            guildId: `${input.obj.guildId}`
+    if (rdm == true) {
+        const initrdm = Math.floor(Math.random() * 4);
+        switch (initrdm) {
+            case 1:
+                command = rdmp('cmds');
+                break;
+            case 2:
+                command = rdmp('osucmds');
+                break;
+            case 3:
+                command = rdmp('admincmds');
+                break;
+            case 4:
+                command = rdmp('othercmds');
+                break;
         }
-    )
+    }
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'help',
+        options: [
+            {
+                name: 'Command',
+                value: command
+            },
+            {
+                name: 'Random',
+                value: `${rdm}`
+            }
+        ]
+    });
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const useEmbeds = []
+    const buttons = new Discord.ActionRowBuilder()
+        .setComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Random-help-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.random),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Detailed-help-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.detailed)
+        );
+
+    const useEmbeds = [];
+    const useComponents: any = [buttons];
 
     function commandEmb(command: helpinfo.commandInfo, embed) {
-        let desc = ''
-        desc += command.description + "\n"
+
+        let desc = '';
+        desc += command.description + "\n";
         if (command.usage) {
-            desc += `\nCommand: \`${input.config.prefix}${command.usage}\``
+            desc += `\nCommand: \`${input.config.prefix}${command.usage}\``;
         }
         if (command.slashusage) {
-            desc += `\nSlash Command: \`/${command.slashusage}\``
+            desc += `\nSlash Command: \`/${command.slashusage}\``;
         }
 
-        const opts = command.options
+        let exceedTxt = '';
+        let exceeds = false;
+
+        const opts = command.options;
         let opttxt = '';
         for (let i = 0; i < opts.length; i++) {
-            const reqtxt = opts[i].required ? 'required' : 'optional'
-            opttxt += `\n\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description}\n`
+            const reqtxt = opts[i].required ? 'required' : 'optional';
+            const newtxt = `\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options &&
+                !opts[i].options.includes('N/A') && !opts[i].options.includes('null') && !opts[i].options.includes('true') && !opts[i].options.includes('false')
+                ? `(${opts[i].options.map(x => `\`${x}\``).join('/')})` : ''}\n`;
 
+            if ((opttxt + newtxt).length > 1000) {
+                exceeds = true;
+                exceedTxt += 'Some options are omitted due to character limits. For a full list check [here](https://sbrstrkkdwmdr.github.io/sbrbot/commands.html#osu)';
+                break;
+            }
+
+            opttxt += newtxt;
+        }
+        if (opttxt.length < 1) {
+            opttxt = 'No options';
         }
 
-        let commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none'
+        const commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none';
         // let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
-        let commandexamples = command.examples && command.examples.length > 0 ? command.examples.map(x => x.text).join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
+        const commandexamples = command.examples && command.examples.length > 0 ? command.examples.slice(0, 5).map(x => x.text).join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none';
+
+        const commandbuttons = command.buttons && command.buttons.length > 0 ? command.buttons.map(x => `[${x}]`).join('') : 'none';
 
         embed.setTitle("Command info for: " + command.name)
-        embed.setDescription(desc)
-        embed.addFields([
-            {
-                name: 'Options',
-                value: opttxt,
-                inline: false
-            },
-            {
-                name: 'Aliases',
-                value: commandaliases,
-                inline: false
-            },
-            {
-                name: 'Examples',
-                value: commandexamples,
-                inline: false
-            }
-        ])
+            .setDescription(desc)
+            .addFields([
+                {
+                    name: 'Options',
+                    value: opttxt,
+                    inline: false
+                },
+                {
+                    name: 'Aliases',
+                    value: commandaliases,
+                    inline: false
+                },
+                {
+                    name: 'Examples',
+                    value: commandexamples,
+                    inline: false
+                },
+                {
+                    name: 'Buttons',
+                    value: commandbuttons
+                }
+            ]);
+        if (exceeds) {
+            embed.addFields([
+                {
+                    name: 'Error',
+                    value: exceedTxt,
+                    inline: false
+                }
+            ]);
+        }
     }
     function getemb() {
         if (command != null) {
-            const fetchcmd = command.toString()
+            const fetchcmd = command.toString();
             const commandInfo = new Discord.EmbedBuilder()
-                .setColor(colours.embedColour.info.dec)
-            if (helpinfo.cmds.find(obj => obj.name == fetchcmd)) {
-                commandCategory = 'gen';
-                const res = helpinfo.cmds.find(obj => obj.name == fetchcmd)
-                commandEmb(res, commandInfo)
-            } else if (helpinfo.cmds.find(obj => obj.aliases.includes(fetchcmd))) {
-                commandCategory = 'gen';
-                const res = helpinfo.cmds.find(obj => obj.aliases.includes(fetchcmd))
-                commandEmb(res, commandInfo)
-            }
+                .setColor(colours.embedColour.info.dec);
+            if (command.includes('button')) {
+                commandfound = false;
+                commandCategory = 'default';
+                let desc = 'List of all buttons available';
+                let buttonstxt = '\n';
+                for (let i = 0; i < helpinfo.buttons.length; i++) {
+                    const curbtn = helpinfo.buttons[i];
+                    buttonstxt += `${curbtn.emoji}\`${curbtn.name}\`: ${curbtn.description}\n`;
+                }
+                desc += buttonstxt;
+                commandInfo.setTitle('Buttons')
+                    .setDescription(desc);
 
+            } else if (helpinfo.cmds.find(obj => obj.name == fetchcmd)) {
+                commandfound = true;
+                commandCategory = 'gen';
+                const res = helpinfo.cmds.find(obj => obj.name == fetchcmd);
+                commandEmb(res, commandInfo);
+            } else if (helpinfo.cmds.find(obj => obj.aliases.includes(fetchcmd))) {
+                commandfound = true;
+                commandCategory = 'gen';
+                const res = helpinfo.cmds.find(obj => obj.aliases.includes(fetchcmd));
+                commandEmb(res, commandInfo);
+            }
             else if (helpinfo.othercmds.find(obj => obj.name == fetchcmd)) {
+                commandfound = true;
                 commandCategory = 'misc';
-                const res = helpinfo.othercmds.find(obj => obj.name == fetchcmd)
-                commandEmb(res, commandInfo)
+                const res = helpinfo.othercmds.find(obj => obj.name == fetchcmd);
+                commandEmb(res, commandInfo);
             } else if (helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd))) {
+                commandfound = true;
                 commandCategory = 'misc';
-                const res = helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd))
-                commandEmb(res, commandInfo)
+                const res = helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd));
+                commandEmb(res, commandInfo);
             }
 
             else if (helpinfo.osucmds.find(obj => obj.name == fetchcmd)) {
+                commandfound = true;
                 commandCategory = 'osu';
-                const res = helpinfo.osucmds.find(obj => obj.name == fetchcmd)
-                commandEmb(res, commandInfo)
+                const res = helpinfo.osucmds.find(obj => obj.name == fetchcmd);
+                commandEmb(res, commandInfo);
             } else if (helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd))) {
+                commandfound = true;
                 commandCategory = 'osu';
-                const res = helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd))
-                commandEmb(res, commandInfo)
+                const res = helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd));
+                commandEmb(res, commandInfo);
             }
 
             else if (helpinfo.admincmds.find(obj => obj.name == fetchcmd)) {
+                commandfound = true;
                 commandCategory = 'admin';
-                const res = helpinfo.admincmds.find(obj => obj.name == fetchcmd)
-                commandEmb(res, commandInfo)
+                const res = helpinfo.admincmds.find(obj => obj.name == fetchcmd);
+                commandEmb(res, commandInfo);
             } else if (helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd))) {
+                commandfound = true;
                 commandCategory = 'admin';
-                const res = helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd))
-                commandEmb(res, commandInfo)
+                const res = helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd));
+                commandEmb(res, commandInfo);
             }
-
-            else {
-                command = null
-                getemb()
-                return;
-            }
-
-
-
-            if (command.includes('CategoryMenu')) {
+            else if (command.includes('CategoryMenu')) {
                 switch (true) {
                     case command.includes('gen'): {
                         commandInfo.setTitle("General Commands");
@@ -1002,6 +1107,7 @@ export function help(input: extypes.commandInput) {
                         }
                         commandInfo.setDescription(desctxt);
                         commandCategory = 'gen';
+                        commandfound = true;
                     }
                         break;
                     case command.includes('osu'): {
@@ -1015,6 +1121,7 @@ export function help(input: extypes.commandInput) {
                         }
                         commandInfo.setDescription(desctxt);
                         commandCategory = 'osu';
+                        commandfound = true;
                     }
                         break;
                     case command.includes('admin'): {
@@ -1028,11 +1135,12 @@ export function help(input: extypes.commandInput) {
                         }
                         commandInfo.setDescription(desctxt);
                         commandCategory = 'admin';
+                        commandfound = true;
                     }
                         break;
                     case command.includes('misc'): {
                         commandInfo.setTitle("General Commands");
-                        let desctxt = ''
+                        let desctxt = '';
                         for (let i = 0; i < helpinfo.othercmds.length; i++) {
                             desctxt += `\n\`${helpinfo.othercmds[i].name}\`: ${helpinfo.othercmds[i].description}`;
                         }
@@ -1041,133 +1149,146 @@ export function help(input: extypes.commandInput) {
                         }
                         commandInfo.setDescription(desctxt);
                         commandCategory = 'misc';
+                        commandfound = true;
                     }
                         break;
                 }
             }
-            useEmbeds.push(commandInfo)
+
+            else {
+                command = null;
+                getemb();
+                return;
+            }
+
+            useEmbeds.push(commandInfo);
         } else {
-            useEmbeds.push(fullCommandList)
+            useEmbeds.push(fullCommandList);
             commandCategory = 'default';
         }
     }
+    function rdmp(w: string) {
+        const fullyrando = Math.floor(Math.random() * helpinfo[w].length);
+        return helpinfo[w][fullyrando].name;
+    }
+
     getemb();
-    const inputMenu = new Discord.SelectMenuBuilder()
-        .setCustomId(`SelectMenu-help-${commanduser.id}`)
-        .setPlaceholder('Select a command')
+
+    const inputMenu = new Discord.StringSelectMenuBuilder()
+        .setCustomId(`${mainconst.version}-SelectMenu1-help-${commanduser.id}-${input.absoluteID}`)
+        .setPlaceholder('Select a command');
+
+    const selectCategoryMenu = new Discord.StringSelectMenuBuilder()
+        .setCustomId(`${mainconst.version}-SelectMenu2-help-${commanduser.id}-${input.absoluteID}`)
+        .setPlaceholder('Select a command category')
+        .setOptions(
+            new Discord.StringSelectMenuOptionBuilder()
+                .setEmoji('📜' as Discord.APIMessageComponentEmoji)
+                .setLabel('General')
+                .setValue('CategoryMenu-gen'),
+            new Discord.StringSelectMenuOptionBuilder()
+                .setEmoji(emojis.gamemodes.standard as Discord.APIMessageComponentEmoji)
+                .setLabel('osu!')
+                .setValue('CategoryMenu-osu'),
+            new Discord.StringSelectMenuOptionBuilder()
+                .setEmoji('🤖' as Discord.APIMessageComponentEmoji)
+                .setLabel('Admin')
+                .setValue('CategoryMenu-admin'),
+            new Discord.StringSelectMenuOptionBuilder()
+                .setEmoji('❓' as Discord.APIMessageComponentEmoji)
+                .setLabel('Misc')
+                .setValue('CategoryMenu-misc'),
+        )
+        ;
+    useComponents.push(
+        new Discord.ActionRowBuilder()
+            .setComponents(selectCategoryMenu)
+    );
+    let curpick: any = 'def';
+    const push = [];
+
 
     switch (commandCategory) {
-        case 'gen': {
-            for (let i = 0; i < helpinfo.cmds.length; i++) {
-                inputMenu.addOptions(
-                    new Discord.SelectMenuOptionBuilder()
-                        .setEmoji('📜')
-                        .setLabel(`#${i + 1}`)
-                        .setDescription(helpinfo.cmds[i].name)
-                        .setValue(helpinfo.cmds[i].name)
-                )
-            }
-        }
+        case 'gen':
+            curpick = helpinfo.cmds;
             break;
-        case 'osu': {
-            for (let i = 0; i < helpinfo.osucmds.length; i++) {
-                inputMenu.addOptions(
-                    new Discord.SelectMenuOptionBuilder()
-                        .setEmoji('📜')
-                        .setLabel(`#${i + 1}`)
-                        .setDescription(helpinfo.osucmds[i].name)
-                        .setValue(helpinfo.osucmds[i].name)
-                )
-            }
-        }
+        case 'osu':
+            curpick = helpinfo.osucmds;
             break;
         case 'admin':
-            {
-                for (let i = 0; i < helpinfo.admincmds.length; i++) {
-                    inputMenu.addOptions(
-                        new Discord.SelectMenuOptionBuilder()
-                            .setEmoji('📜')
-                            .setLabel(`#${i + 1}`)
-                            .setDescription(helpinfo.admincmds[i].name)
-                            .setValue(helpinfo.admincmds[i].name)
-                    )
-                }
-            }
+            curpick = helpinfo.admincmds;
             break;
-        case 'misc': {
-            for (let i = 0; i < helpinfo.othercmds.length; i++) {
-                inputMenu.addOptions(
-                    new Discord.SelectMenuOptionBuilder()
-                        .setEmoji('📜')
-                        .setLabel(`#${i + 1}`)
-                        .setDescription(helpinfo.othercmds[i].name)
-                        .setValue(helpinfo.othercmds[i].name)
-                )
-            }
-        }
-            break;
-        default: {
-            inputMenu.addOptions(
-                new Discord.SelectMenuOptionBuilder()
-                    .setEmoji('📜')
-                    .setLabel('General')
-                    .setValue('CategoryMenu-gen'),
-                new Discord.SelectMenuOptionBuilder()
-                    .setEmoji(emojis.gamemodes.standard)
-                    .setLabel('osu!')
-                    .setValue('CategoryMenu-osu'),
-                new Discord.SelectMenuOptionBuilder()
-                    .setEmoji('🤖')
-                    .setLabel('Admin')
-                    .setValue('CategoryMenu-admin'),
-                new Discord.SelectMenuOptionBuilder()
-                    .setEmoji('❓')
-                    .setLabel('Misc')
-                    .setValue('CategoryMenu-misc'),
-            )
-        }
+        case 'misc':
+            curpick = helpinfo.othercmds;
             break;
     }
 
-    const arr = new Discord.ActionRowBuilder()
-        .addComponents(
-            inputMenu
-        )
+    //@ts-expect-error false and true no overlap error
+    if (commandfound == true) {
+        for (let i = 0; i < curpick.length && i < 25; i++) {
+            push.push(
+                new Discord.StringSelectMenuOptionBuilder()
+                    .setEmoji(curpick[i]?.emoji ?? '📜')
+                    .setLabel(curpick[i]?.label ?? `#${i + 1}`)
+                    .setDescription(curpick[i]?.name ?? '_')
+                    .setValue(curpick[i]?.val ?? curpick[i].name)
+            );
+            inputMenu.addOptions(
+                new Discord.StringSelectMenuOptionBuilder()
+                    .setEmoji(curpick[i]?.emoji ?? '📜')
+                    .setLabel(curpick[i]?.label ?? `#${i + 1}`)
+                    .setDescription(curpick[i]?.name ?? '_')
+                    .setValue(curpick[i]?.val ?? curpick[i].name));
+
+        }
+        useComponents.push(
+            new Discord.ActionRowBuilder()
+                .setComponents(inputMenu));
+    }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage(
+    const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
             args: {
                 embeds: useEmbeds,
-                components: [arr]
+                components: useComponents
             }
-        }
-    )
+        }, input.canReply
+    );
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'help',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'help',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
 /**
  * bot info
  */
-export function info(input: extypes.commandInput) {
+export async function info(input: extypes.commandInput) {
 
     let commanduser;
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author is not a property of interaction
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
         }
             break;
@@ -1175,6 +1296,7 @@ export function info(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
 
@@ -1182,6 +1304,7 @@ export function info(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1198,40 +1321,59 @@ export function info(input: extypes.commandInput) {
                 .setStyle(Discord.ButtonStyle.Link)
         );
 
-    log.logFile(
-        'command',
-        log.commandLog('info', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'info',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+    const curGuildSettings = await input.guildSettings.findOne({ where: { guildid: input.obj.guildId } });
+    const serverpfx = curGuildSettings.dataValues.prefix;
+
+    // const starttime = new Date((fs.readFileSync(`${path}\\debug\\starttime.txt`)).toString());
+
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
-        .setTitle('Important links and information')
+        .setTitle('Bot Information')
+        .setFields([
+            {
+                name: 'Dependencies',
+                value:
+                    `
+Typescript: [${pkgjson.dependencies['typescript'].replace('^', '')}](https://www.typescriptlang.org/)
+Discord.js: [${pkgjson.dependencies['discord.js'].replace('^', '')}](https://discord.js.org/#/docs)
+rosu-pp: [${pkgjson.dependencies['rosu-pp'].replace('^', '')}](https://github.com/MaxOhn/rosu-pp-js)
+`,
+                inline: true
+            },
+            {
+                name: 'Statistics',
+                value:
+                    `
+Uptime: ${calc.secondsToTime(input.client.uptime / 1000)}
+Shards: ${input?.client?.shard?.count ?? 1}
+Guilds: ${input.client.guilds.cache.size}
+Users: ${input.client.users.cache.size}`,
+                inline: true
+            }
+        ])
         .setDescription(`
-Prefix: ${input.config.prefix}
-Coded in: TypeScript
-[Github repo](https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts)
-[Creator](https://sbrstrkkdwmdr.github.io/sbr-web/)
+[Created by SaberStrike](https://sbrstrkkdwmdr.github.io/sbr-web/)
 [Commands](https://sbrstrkkdwmdr.github.io/sbrbot/commands)
-PP version: 2022-08-02 (rosu-pp)
-`)
+Global prefix: ${input.config.prefix.includes('`') ? `"${input.config.prefix}"` : `\`${input.config.prefix}\``}
+Server prefix: ${serverpfx.includes('`') ? `"${serverpfx}"` : `\`${serverpfx}\``}
+Bot Version: ${pkgjson.version}
+`);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
-    msgfunc.sendMessage(
+    const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
@@ -1239,26 +1381,110 @@ PP version: 2022-08-02 (rosu-pp)
                 embeds: [Embed],
                 components: [buttons]
             }
+        }, input.canReply
+    );
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'info',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'info',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
+
+}
+
+export async function invite(input: extypes.commandInput) {
+
+    let commanduser: Discord.User;
+
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
         }
-    )
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'COMMANDNAME',
+        options: []
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            content: mainconst.linkInvite
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'invite',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'invite',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
 /**
  * perform basic math operation
  */
-export function math(input: extypes.commandInput) {
+export async function math(input: extypes.commandInput) {
 
     let commanduser;
 
@@ -1269,7 +1495,7 @@ export function math(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author is not a property of interaction
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             type = 'basic';
         }
@@ -1278,12 +1504,10 @@ export function math(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options is not a property of message
-            type = input.obj.options.getString('type')
-            //@ts-expect-error options is not a property of message
-            num1 = parseFloat(input.obj.options.getNumber('num1'))
-            //@ts-expect-error options is not a property of message
+            type = input.obj.options.getString('type');
+            num1 = input.obj.options.getNumber('num1');
             num2 = input.obj.options.getNumber('num2');
         }
 
@@ -1291,6 +1515,7 @@ export function math(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1299,47 +1524,41 @@ export function math(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('math', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [{
-            name: 'Type',
-            value: type
-        },
-        {
-            name: 'Num1',
-            value: num1
-        },
-        {
-            name: 'Num2',
-            value: num2
-        },
-        {
-            name: 'Query',
-            value: `${input?.args?.[0] ? input.args.join(' ') : null}`
-        }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'math',
+        options: [
+            {
+                name: 'Type',
+                value: type
+            },
+            {
+                name: 'Num1',
+                value: num1
+            },
+            {
+                name: 'Num2',
+                value: num2
+            },
+            {
+                name: 'Query',
+                value: `${input?.args?.[0] ? input.args.join(' ') : null}`
+            }
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let equation = 'null';
 
     if (type == 'basic') {
-        const string = input.args.join(' ')
-        const evalstr = eval(cmdchecks.toMath(string).toString().replaceAll('^', '**').replaceAll('pi', 'Math.PI').toString()).toString()
-        equation = evalstr
+        const string = input.args.join(' ');
+        const evalstr = eval(cmdchecks.toMath(string).toString().replaceAll('^', '**').replaceAll('pi', 'Math.PI').toString()).toString();
+        equation = evalstr;
     } else if (type == 'help') {
         equation = `-
 + = add
@@ -1351,117 +1570,123 @@ export function math(input: extypes.commandInput) {
 % = divide and return remainder
 ++ = +1
 -- = -1
-        `
+        `;
     }
     else {
         switch (type) {
             case 'sqrt':
-                equation = (`${Math.sqrt(num1)}`)
+                equation = (`${Math.sqrt(num1)}`);
                 break;
             case 'square':
                 if (num2) {
-                    equation = (`${num1 ** num2}`)
+                    equation = (`${num1 ** num2}`);
                 }
-                equation = (`${num1 * num1}`)
+                equation = (`${num1 * num1}`);
                 break;
             case '!':
-                equation = (`${calc.factorial(num1)}`)
+                equation = (`${calc.factorial(num1)}`);
                 break;
             case 'hcf':
                 if (!num2) {
-                    equation = ('Missing second number.')
+                    equation = ('Missing second number.');
                 }
-                equation = (`${calc.findHCF(num1, num2)}`)
+                equation = (`${calc.findHCF(num1, num2)}`);
                 break;
             case 'lcm':
                 if (!num2) {
-                    equation = ('Missing second number.')
+                    equation = ('Missing second number.');
                 }
-                equation = (`${calc.findLCM(num1, num2)}`)
+                equation = (`${calc.findLCM(num1, num2)}`);
                 break;
             case 'pythag':
                 if (!num2) {
-                    equation = 'Missing second number.'
+                    equation = 'Missing second number.';
                 }
-                equation = (`${calc.pythag(num1, num2)}`)
+                equation = (`${calc.pythag(num1, num2)}`);
                 break;
             case 'sigfig':
                 if (!num2) {
-                    num2 = null
+                    num2 = null;
                 }
                 if (num2 < 2 && num2 != null) {
-                    num2 = 2
+                    num2 = 2;
                 }
-                equation = (`${calc.sigfig(num1, num2).number}\nTo ${calc.sigfig(num1, num2).sigfig} significant figures`)
+                equation = (`${calc.sigfig(num1, num2).number}\nTo ${calc.sigfig(num1, num2).sigfig} significant figures`);
 
                 break;
             case 'ardt':
-                equation = (`AR${osumodcalc.DoubleTimeAR(num1).ar}, ${osumodcalc.DoubleTimeAR(num1).ms}ms`)
+                equation = (`AR${osumodcalc.DoubleTimeAR(num1).ar}, ${osumodcalc.DoubleTimeAR(num1).ms}ms`);
                 break;
             case 'arht':
-                equation = (`AR${osumodcalc.HalfTimeAR(num1).ar}, ${osumodcalc.HalfTimeAR(num1).ms}ms`)
+                equation = (`AR${osumodcalc.HalfTimeAR(num1).ar}, ${osumodcalc.HalfTimeAR(num1).ms}ms`);
                 break;
             case 'oddt':
-                odcalc = osumodcalc.odDT(num1)
-                equation = (`OD${odcalc.od_num}\n300:+-${odcalc.hitwindow_300}\n100:+-${odcalc.hitwindow_100}\n50:+-${odcalc.hitwindow_50}`)
+                odcalc = osumodcalc.odDT(num1);
+                equation = (`OD${odcalc.od_num}\n300:+-${odcalc.hitwindow_300}\n100:+-${odcalc.hitwindow_100}\n50:+-${odcalc.hitwindow_50}`);
                 break;
             case 'odht':
-                odcalc = osumodcalc.odHT(num1)
-                equation = (`OD${odcalc.od_num}\n300:+-${odcalc.hitwindow_300}\n100:+-${odcalc.hitwindow_100}\n50:+-${odcalc.hitwindow_50}`)
+                odcalc = osumodcalc.odHT(num1);
+                equation = (`OD${odcalc.od_num}\n300:+-${odcalc.hitwindow_300}\n100:+-${odcalc.hitwindow_100}\n50:+-${odcalc.hitwindow_50}`);
                 break;
             case 'odms':
-                odcalc = osumodcalc.ODtoms(num1)
-                equation = (`300:+-${odcalc.range300}\n100:+-${odcalc.range100}\n50:+-${odcalc.range50}`)
+                odcalc = osumodcalc.ODtoms(num1);
+                equation = (`300:+-${odcalc.range300}\n100:+-${odcalc.range100}\n50:+-${odcalc.range50}`);
                 break;
             case 'arms':
-                equation = (`${osumodcalc.ARtoms(num1)}ms`)
+                equation = (`${osumodcalc.ARtoms(num1)}ms`);
                 break;
             case 'msar':
-                equation = (`AR${osumodcalc.msToAR(num1)}`)
+                equation = (`AR${osumodcalc.msToAR(num1)}`);
                 break;
             case 'modintstring':
-                equation = (`Mods: ${osumodcalc.ModIntToString(num1)}`)
+                equation = (`Mods: ${osumodcalc.ModIntToString(num1)}`);
                 break;
             default:
-                equation = ('Error - invalid type')
+                equation = ('Error - invalid type');
                 break;
         }
 
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage(
+    const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
             args: {
                 content: equation
             }
-        }
-    )
+        }, input.canReply
+    );
 
-
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
-
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'math',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'math',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 }
 
 /**
  * ping bot
  */
-export function ping(input: extypes.commandInput) {
+export async function ping(input: extypes.commandInput) {
     let commanduser;
-
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property only exists on message
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
         }
             break;
@@ -1469,6 +1694,7 @@ export function ping(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
 
@@ -1476,6 +1702,7 @@ export function ping(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1484,46 +1711,19 @@ export function ping(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigLeftArrow-ping-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('⬅'),
-            new Discord.ButtonBuilder()
-                .setCustomId(`LeftArrow-ping-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('◀'),
-            new Discord.ButtonBuilder()
-                .setCustomId(`RightArrow-ping-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('▶'),
-            new Discord.ButtonBuilder()
-                .setCustomId(`BigRightArrow-ping-${commanduser.id}`)
-                .setStyle(Discord.ButtonStyle.Primary)
-                .setEmoji('➡'),
-        );
-
-    log.logFile(
-        'command',
-        log.commandLog('ping', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'ping',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const trueping = `${calc.toCapital(input.commandType)} latency: ${Math.abs(input.obj.createdAt.getTime() - new Date().getTime())}ms`
+    const trueping = `${calc.toCapital(input.commandType)} latency: ${Math.abs(input.obj.createdAt.getTime() - new Date().getTime())}ms`;
 
     const pingEmbed = new Discord.EmbedBuilder()
         .setTitle('Pong!')
@@ -1534,16 +1734,16 @@ ${trueping}`);
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
 
-    const preEdit = new Date()
-    //@ts-expect-error
+    const preEdit = new Date();
+    //@ts-expect-error aaaaaaaaaa
     //This expression is not callable.
-    //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message<any>>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
+    //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
     input.obj.reply({
         embeds: [pingEmbed],
         allowedMentions: { repliedUser: false },
         failIfNotExists: true
-    }).then((msg: Discord.Message<any> | Discord.CommandInteraction) => {
-        const timeToEdit = new Date().getTime() - preEdit.getTime()
+    }).then((msg: Discord.Message | Discord.CommandInteraction) => {
+        const timeToEdit = new Date().getTime() - preEdit.getTime();
         pingEmbed.setDescription(`
 Client latency: ${input.client.ws.ping}ms
 ${trueping}
@@ -1555,14 +1755,14 @@ ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
                 msg.edit({
                     embeds: [pingEmbed],
                     allowedMentions: { repliedUser: false },
-                })
+                });
                 break;
             case 'interaction':
-                //@ts-expect-error 'editReply' property does not exist on Message<any>
+                //@ts-expect-error 'editReply' property does not exist on Message
                 input.obj.editReply({
                     embeds: [pingEmbed],
                     allowedMentions: { repliedUser: false },
-                })
+                });
                 break;
 
         }
@@ -1572,21 +1772,19 @@ ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
 
 
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    log.logCommand({
+        event: 'Success',
+        commandName: 'ping',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        object: input.obj,
+    });
 }
 
 /**
  * set reminder
  */
-export function remind(input: extypes.commandInput) {
+export async function remind(input: extypes.commandInput) {
 
     let commanduser;
 
@@ -1597,35 +1795,34 @@ export function remind(input: extypes.commandInput) {
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property only exists on message
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            time = input.args[0]
-            remindertxt = input.args.join(' ').replaceAll(input.args[0], '')
+            time = input.args[0];
+            remindertxt = input.args.join(' ').replaceAll(input.args[0], '');
             sendtochannel = false;
-            //@ts-expect-error author property only exists on message
             user = input.obj.author;
 
             if (!input.args[0]) {
-                return msgfunc.sendMessage({
+                return await msgfunc.sendMessage({
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
                         content: 'Please specify a time'
                     }
-                })
+                }, input.canReply);
 
             }
             if (!input.args[1]) {
-                remindertxt = 'null'
+                remindertxt = 'null';
             }
             if (!input.args[0].endsWith('d') && !input.args[0].endsWith('h') && !input.args[0].endsWith('m') && !input.args[0].endsWith('s') && !time.includes(':') && !time.includes('.')) {
-                return msgfunc.sendMessage({
+                return await msgfunc.sendMessage({
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
                         content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`'
                     }
-                })
+                }, input.canReply);
             }
         }
             break;
@@ -1633,27 +1830,28 @@ export function remind(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
 
-            //@ts-expect-error options property only exists on interaction
+
             remindertxt = input.obj.options.getString('reminder');
-            //@ts-expect-error options property only exists on interaction
+
             time = input.obj.options.getString('time').replaceAll(' ', '');
             sendtochannel =
                 (cmdchecks.isOwner(commanduser.id) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)) ?
-                    //@ts-expect-error options property only exists on interaction
+
                     input.obj.options.getBoolean('sendinchannel') : false;
             user = input.obj.member.user;
 
             if (!time.endsWith('d') && !time.endsWith('h') && !time.endsWith('m') && !time.endsWith('s') && !time.includes(':') && !time.includes('.')) {
-                return msgfunc.sendMessage({
+                return await msgfunc.sendMessage({
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
                         content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`',
                         ephemeral: true
                     }
-                })
+                }, input.canReply);
             }
         }
 
@@ -1661,6 +1859,7 @@ export function remind(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1669,18 +1868,14 @@ export function remind(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'remind',
+        options: [
             {
                 name: 'Time',
                 value: time
@@ -1697,11 +1892,8 @@ export function remind(input: extypes.commandInput) {
                 name: 'User',
                 value: user.id
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -1709,61 +1901,68 @@ export function remind(input: extypes.commandInput) {
         try {
             if (sendchannel == true) {
                 setTimeout(() => {
-                    input.obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` })
+                    input.obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` });
 
                 }, calc.timeToMs(time));
             }
             else {
                 setTimeout(() => {
-                    usersent.send({ embeds: [reminder] })
+                    usersent.send({ embeds: [reminder] });
 
                 }, calc.timeToMs(time));
             }
         } catch (error) {
-            console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt)
+            console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt);
         }
     }
     const reminder = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
         .setTitle('REMINDER')
-        .setDescription(`${remindertxt}`)
+        .setDescription(`${remindertxt}`);
 
-    sendremind(reminder, time, input.obj, sendtochannel, remindertxt, user)
+    sendremind(reminder, time, input.obj, sendtochannel, remindertxt, user);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage(
+    const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
             args: {
                 react: true
             }
-        })
+        }, input.canReply);
 
-
-
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'remind',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'remind',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }
 
 /**
  * bot stats
  */
-export function stats(input: extypes.commandInput) {
+export async function stats(input: extypes.commandInput) {
 
     let commanduser;
 
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property only exists on message
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
         }
             break;
@@ -1771,6 +1970,7 @@ export function stats(input: extypes.commandInput) {
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
         }
 
@@ -1778,6 +1978,7 @@ export function stats(input: extypes.commandInput) {
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -1786,38 +1987,31 @@ export function stats(input: extypes.commandInput) {
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('stats', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, []),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'stats',
+        options: []
+    });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const starttime = new Date((fs.readFileSync('debug/starttime.txt')).toString())
-    const trueping = input.obj.createdAt.getTime() - new Date().getTime() + 'ms'
+    const starttime = new Date((fs.readFileSync(`${path}\\debug\\starttime.txt`)).toString());
+    const trueping = input.obj.createdAt.getTime() - new Date().getTime() + 'ms';
 
     const uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
     const uptimehours = Math.floor(uptime / 3600) >= 10 ? Math.floor(uptime / 3600) : '0' + Math.floor(uptime / 3600);
     const uptimeminutes = Math.floor((uptime % 3600) / 60) >= 10 ? Math.floor((uptime % 3600) / 60) : '0' + Math.floor((uptime % 3600) / 60);
     const uptimeseconds = Math.floor(uptime % 60) >= 10 ? Math.floor(uptime % 60) : '0' + Math.floor(uptime % 60);
-    const upandtime = `Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}`
+    const upandtime = `Uptime: ${uptimehours}:${uptimeminutes}:${uptimeseconds}\nTimezone: ${starttime.toString().split('(')[1].split(')')[0]}`;
 
     const totalusers: number = input.client.users.cache.size;
     // let totalusersnobots: Discord.Collection<any, Discord.User>;
     const totalguilds: number = input.client.guilds.cache.size;
-    const commandssent: number = fs.existsSync('logs/totalcommands.txt') ? fs.readFileSync('logs/totalcommands.txt').length : 0;
+    const commandssent: number = fs.existsSync(`${path}/logs/totalcommands.txt`) ? fs.readFileSync(`${path}/logs/totalcommands.txt`).length : 0;
 
     const Embed = new Discord.EmbedBuilder()
         .setTitle(`${input.client.user.username} stats`)
@@ -1830,264 +2024,251 @@ Users: ${totalusers}
 Commands sent: ${commandssent}
 Prefix: \`${input.config.prefix}\`
 Commands: https://sbrstrkkdwmdr.github.io/sbrbot/commands
+Shards:
+Current Shard:
 `
-        )
+        );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
             embeds: [Embed],
         }
-    })
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
 
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'stats',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'stats',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 }
 
 /**
  * get timezone
  */
-export function time(input: extypes.commandInput) {
+export async function time(input: extypes.commandInput) {
 
     let commanduser;
 
     let fetchtimezone;
 
+    let useComponents = [];
+
     switch (input.commandType) {
         case 'message': {
-            //@ts-expect-error author property only exists on message
+            input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            fetchtimezone = input.args.join(' ')
+            fetchtimezone = input.args.join(' ');
         }
             break;
 
         //==============================================================================================================================================================================================
 
         case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-            //@ts-expect-error options property only exists on interaction
-            fetchtimezone = input.obj.options.getString('timezone')
+
+            fetchtimezone = input.obj.options.getString('timezone');
         }
 
             //==============================================================================================================================================================================================
 
             break;
         case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
     }
 
+    if (input?.overrides) {
+        if (input?.overrides?.ex) {
+            fetchtimezone = input?.overrides?.ex;
+        }
+    }
+
 
     //==============================================================================================================================================================================================
 
-    log.logFile(
-        'command',
-        log.commandLog('COMMANDNAME', input.commandType, input.absoluteID, commanduser
-        ),
-        {
-            guildId: `${input.obj.guildId}`
-        })
-
-    //OPTIONS==============================================================================================================================================================================================
-
-    log.logFile('command',
-        log.optsLog(input.absoluteID, [
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'time',
+        options: [
             {
                 name: 'Timezone',
                 value: `${fetchtimezone}`
             }
-        ]),
-        {
-            guildId: `${input.obj.guildId}`
-        }
-    )
+        ]
+    });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const epoch = new Date().getTime()
-    const Datenow = new Date(input.currentDate).toUTCString()
+    const currentDate = new Date();
 
-    const msepochsince = (epoch) - 1640995200000
-    const thedaysthingyiuseonmydiscordstatus = (msepochsince / 1000 / 60 / 60 / 24).toFixed(2)
-
-    const rn = new Date()
-    const datenow12hhours = calc.to12htime(rn)
-    const day = calc.dayhuman(rn.getUTCDay())
-    const date = rn.getUTCDate()
-    const month = calc.tomonthname(rn.getUTCMonth())//tomonthname(rn.getUTCMonth())
-    const year = rn.getUTCFullYear()
-    const datenow12h = `${day}, ${date} ${month} ${year} ${datenow12hhours}`
-    const lasttime = fs.existsSync('debug/timesince.txt') ? (fs.readFileSync('debug/timesince.txt')).toString() :
-        (new Date()).toString()
-
-
-    const lasttimetodateobj = new Date(lasttime)
-    const timetonum = (rn.getTime() - lasttimetodateobj.getTime()) / (1000 * 60)
-
-    const lasvisdays = (Math.trunc(timetonum / 60 / 24));
-    const lastvishours = (Math.trunc(timetonum / 60)) % 24;
-    const lastvisminutes = Math.trunc(timetonum % 60);
-    let minlastvisw = ''
-
-    if (lasvisdays > 0) {
-        minlastvisw += lasvisdays + "d "
-    }
-    if (lastvishours > 0) {
-        minlastvisw += lastvishours + "h "
-    }
-    if (lastvisminutes > 0) {
-        minlastvisw += lastvisminutes + "m " //+ lastvisminutes + "m");
-    }
-    if (minlastvisw == '') {
-        minlastvisw = 'now'
-    }
-
-
-    fs.writeFileSync('debug/timesince.txt', rn.toString())
-
-    let monthnum: number | string = rn.getUTCMonth()
-    let daynum: number | string = rn.getUTCDate()
-    if (monthnum < 10) { monthnum = '0' + monthnum }
-    if (daynum < 10) { daynum = '0' + daynum }
-    const truedate = `${year}/${monthnum}/${daynum}`
-
-    const offsetnum = rn.getTimezoneOffset()
-    const offset = calc.fixoffset(offsetnum)
-
-    const reldatenow12hhours = calc.relto12htime(rn)
-    const relday = calc.dayhuman(rn.getDay())
-    const reldate = rn.getDate()
-    const relmonth = calc.tomonthname(rn.getMonth())//tomonthname(rn.getUTCMonth())
-    const relyear = rn.getFullYear()
-    const reldatenow12h = `${relday}, ${reldate} ${relmonth} ${relyear} ${reldatenow12hhours}`
-
-    let relmonthnum: number | string = rn.getMonth()
-    let reldaynum: number | string = rn.getDate()
-    if (relmonthnum < 10) { relmonthnum = '0' + relmonthnum }
-    if (reldaynum < 10) { reldaynum = '0' + reldaynum }
-    const reltruedate = `${relyear}/${relmonthnum}/${reldaynum}`
-
+    const curTime = moment();
 
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
         .setTitle('Current Time')
-        .addFields([{
-            name: 'UTC/GMT+00:00',
-            value: `\n**Date**: ${truedate}` +
-                `\n**Full Date**: ${datenow12h}` +
-                `\n**Full Date(24h)**: ${Datenow}` +
-                `\n\n**Full Date ISO8601**: ${input.currentDate.toISOString()}` +
-                `\n**EPOCH(ms)**: ${epoch}` +
-                `\n**Days since Jan 1st 2022**: [${thedaysthingyiuseonmydiscordstatus}]`
-            ,
-            inline: false
-        }]
-        )
-        .addFields([{
-            name: `UTC/GMT${offset} (Host's Local Time)`,
-            value: `\n**Date**: ${reltruedate}` +
-                `\n**Full Date**: ${reldatenow12h}` +
-                `\n**Full Date(24h)**: ${`${input.currentDate}`.split('GMT')[0]}` +
-                `\n**Time since command was last used**: ${minlastvisw} `
-            ,
-            inline: false
-        }]
-        )
+        .addFields([
+            {
+                /**
+                 *  value: `\n**Date**: ${reqTime.format("DD/MM/YYYY")}` +
+                        `\n**Full Date**: ${reqTime.format("d, DDD MMM YYYY hh:mm:ssA Z")}` +
+                        `\n**Full Date(24h)**: ${reqTime.format("d, DDD MMM YYYY HH:mm:ss Z")}` +
+                        `\n**Full Date ISO8601**: ${reqTime.format("YYYY-MM-DDTHH:mm:ss.SSS")}`,
+
+                 */
+                name: 'UTC/GMT+00:00',
+                value: `\n**Date**: ${curTime.format("DD/MM/YYYY")}` +
+                    `\n**Full Date**: ${curTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
+                    `\n**Full Date(24h)**: ${curTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
+                    `\n\n**Full Date ISO8601**: ${curTime.toISOString()}` +
+                    `\n**EPOCH(ms)**: ${curTime.valueOf()}`
+                ,
+                inline: false
+            },
+        ]);
     if (fetchtimezone != null && fetchtimezone != '') {
-        if (fetchtimezone.includes('/')) {
-            const timezone = input.args.splice(0, 1000).join(" ");
-            const timeopts = {
-                timeZone: `${timezone}`,
-                hour12: false
+        try {
+            let offset = 0;
+            const found: timezoneList.timezone[] = [];
+            for (let i = 0; i < timezoneList.timezones.length; i++) {
+                const curTimeZone = timezoneList.timezones[i];
+                if (curTimeZone.aliases.includes(fetchtimezone.toUpperCase())) {
+                    found.push(curTimeZone);
+                    offset = curTimeZone.offsetDirection == '+' ?
+                        curTimeZone.offsetHours :
+                        -curTimeZone.offsetHours;
+                }
             }
-            const timeopts2 = {
-                timeZone: `${timezone}`,
-                hour12: true
+
+            if (found.length == 0) {
+                throw new Error("Unrecognised timezone");
             }
-            try {
-                const optionaldatefirst = new Date(new Date().toLocaleString('en-US', timeopts));//).toISOString();
-                const optionaldateISO = new Date(optionaldatefirst).toISOString()
-                const optionaldateDate = new Date(optionaldateISO).toLocaleDateString();
-                const optionaldate = new Date(optionaldateISO)//.toString();
-                const optionaldate12hfirst = new Date(new Date().toLocaleString('en-US', timeopts2));
 
-                const optionaldate2 = `${calc.dayhuman(optionaldate.getDay())}, ${calc.tomonthname(optionaldate.getMonth())} ${optionaldate.getDate()} ${optionaldate.getFullYear()}`
-                const optionaldatetime = calc.relto12htime(new Date(optionaldate12hfirst))
-                const optionaldate12h = `${optionaldate2} ${optionaldatetime}`
+            if (input?.overrides?.overwriteModal) {
+                useComponents = [
+                    new Discord.ActionRowBuilder()
+                        .addComponents(input?.overrides?.overwriteModal as Discord.StringSelectMenuBuilder)
+                ];
+            } else if (found.length > 1) {
+                const buttons = new Discord.ActionRowBuilder();
+                if (input?.overrides?.overwriteModal) {
+                    buttons
+                        .addComponents(input?.overrides?.overwriteModal as Discord.StringSelectMenuBuilder);
+                } else {
+                    const inputModal = new Discord.StringSelectMenuBuilder()
+                        .setCustomId(`${mainconst.version}-Select-time-${commanduser.id}-${input.absoluteID}`)
+                        .setPlaceholder('Select a timezone');
 
-                const optionaldatehours = (optionaldate.getHours())
-                const optionaldateutchours = (new Date().getUTCHours())
-                const optionaldateoffsetNEW = calc.fixoffset((optionaldateutchours - optionaldatehours) * 60) //had to remake another version of offset 
+                    for (let i = 0; i < found.length && i < 10; i++) {
+                        inputModal.addOptions(
+                            new Discord.StringSelectMenuOptionBuilder()
+                                .setLabel(`#${i + 1}`)
+                                .setDescription(`${found[i].aliases[i]}`)
+                                .setValue(`${found[i].aliases[i]}`)
+                        );
+                    }
+                    buttons.addComponents(inputModal);
+                }
+                useComponents = [buttons];
+            }
 
-                Embed
-                    .addFields([{
-                        name: `UTC/GMT ${optionaldateoffsetNEW} (Requested Time)`,
-                        value: `\n**Date**: ${optionaldateDate}` +
-                            `\n**Full Date**: ${optionaldate12h}` +
-                            `\n**Full Date(24h)**: ${`${optionaldate}`.split('GMT')[0]}` +
-                            `\n**Full Date ISO8601**: ${optionaldateISO}`,
-                        inline: false
-                    }])
-            } catch (error) {
+            if (useComponents.length == 0) {
+                if (input?.overrides?.overwriteModal) {
+
+                }
+            }
+
+            const offsetToMinutes = Math.floor(offset * 60);
+
+            const reqTime = moment().utcOffset(offsetToMinutes);
+
+            const Hrs = offset > 0 ?
+                Math.floor(offset).toString().padStart(3, '+0') :
+                Math.floor(offset).toString().replace('-', '').padStart(3, '-0');
+
+            const offsetReadable = `UTC${Hrs}:${(Math.abs(offsetToMinutes % 60)).toString().padStart(2, '0')}`;
+
+            Embed
+                .addFields([{
+                    name: `${fetchtimezone.toUpperCase()}/${offsetReadable} (Requested Time)`,
+                    value: `\n**Date**: ${reqTime.format("DD/MM/YYYY")}` +
+                        `\n**Full Date**: ${reqTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
+                        `\n**Full Date(24h)**: ${reqTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
+                        `\n**Full Date ISO8601**: ${reqTime.toISOString(true)}`,
+                    inline: false
+                }]);
+        } catch (error) {
+            console.log(error);
+            if (error.includes('timezone')) {
                 Embed.addFields([{
                     name: `UTC/GMT +??:?? (Requested Time)`,
                     value: `\nRecived invalid timezone!` +
                         `\n\`${fetchtimezone}\` is not a valid timezone` +
-                        `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid timezones`
+                        `\n Check [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset) for valid timezones`
+                    // `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid timezones`
                     ,
                     inline: false
-                }]
-                )
-                msgfunc.sendMessage({
-                    commandType: input.commandType,
-                    obj: input.obj,
-                    args: {
-                        embeds: [Embed]
-                    }
-                });
-                return;
+                }]);
+            } else {
+                Embed.addFields([{
+                    name: `UTC/GMT +??:?? (Requested Time)`,
+                    value: `There was an error trying to parse the timezone`,
+                    inline: false
+                }]);
             }
-
-        } else {
-            Embed.addFields([{
-                name: `UTC/GMT +??:?? (Requested Time)`,
-                value: `\nRecived invalid timezone!` +
-                    `\nBoth Country and City must be specified` +
-                    `\ni.e **Australia/Melbourne**` +
-                    `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid dates`
-                ,
-                inline: false
-            }])
+            useComponents = [];
         }
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
-    msgfunc.sendMessage({
+    const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [Embed]
+            embeds: [Embed],
+            components: useComponents
         }
-    });
+    }, input.canReply);
 
-    log.logFile('command',
-        `
-----------------------------------------------------
-success
-ID: ${input.absoluteID}
-----------------------------------------------------
-\n\n`,
-        { guildId: `${input.obj.guildId}` }
-    )
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'time',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'time',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
 
 }

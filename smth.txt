@@ -11,3 +11,17 @@ const Discord = require('discord.js')
 const fetch = require('node-fetch')
 
 module.exports { functionA }
+
+
+
+how to calc fail point 
+
+method 1 (less accurate)
+get total hits / total objects = percentage
+work out time from percentage 
+
+method 2 (more accurate)
+get total hits 
+parse .osu file 
+figure out the exact object failed at from total hits 
+find the start time value from the hit object 

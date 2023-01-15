@@ -1,6 +1,9 @@
-import Discord = require('discord.js');
-import Sequelize = require('sequelize');
-type config = {
+import Discord from 'discord.js';
+import Sequelize from 'sequelize';
+import * as embedStuff from '../embed.js';
+import * as osuapitypes from '../types/osuApiTypes.js';
+
+export type config = {
     token: string,
     prefix: string,
     osuClientID: string,
@@ -9,26 +12,30 @@ type config = {
     ownerusers: string[],
     google: {
         apiKey: string,
-        engineId: string
+        engineId: string;
     },
     useScreenshotParse: boolean,
     LogApiCalls: boolean,
-}
+    LogApiCallsToFile: boolean,
+    enableTracking: boolean,
+    graphChannelId: string,
+    storeCommandLogs: boolean,
+};
 
-type guildSettings = {
-    guildid: number,
+export type guildSettings = {
+    guildid: number | string,
     guildname: string,
     prefix: string,
     osuParseLinks: boolean,
     osuParseScreenshots: boolean,
     osuParseReplays: boolean,
-}
+};
 
-type imagesearches = {
+export type imagesearches = {
     kind: string,
     url: {
         type: string,
-        template: string
+        template: string;
     },
     queries: {
         request: {
@@ -40,7 +47,7 @@ type imagesearches = {
             inputEncoding: string,
             outputEncoding: string,
             safe: string,
-            cx: string
+            cx: string;
             searchType: string,
         }[],
         nextPage: {
@@ -52,23 +59,23 @@ type imagesearches = {
             inputEncoding: string,
             outputEncoding: string,
             safe: string,
-            cx: string
+            cx: string;
             searchType: string,
-        }[]
+        }[];
     },
     context: {
-        title: string
+        title: string;
     },
     searchInformation: {
         searchTime: number,
         formattedSearchTime: string,
         totalResults: string,
-        formattedTotalResults: string
+        formattedTotalResults: string;
     },
-    items: googleSearchItem[]
-}
+    items: googleSearchItem[];
+};
 
-type googleSearchItem = {
+export type googleSearchItem = {
     kind: string,
     title: string,
     htmlTitle: string,
@@ -85,11 +92,11 @@ type googleSearchItem = {
         byteSize: number,
         thumbnailLink: string,
         thumbnailHeight: number,
-        thumbnailWidth: number
-    }
-}
+        thumbnailWidth: number;
+    };
+};
 
-type ytSearch = {
+export type ytSearch = {
     all?: ytSearchItem[],
     videos?: ytSearchVideo[],
     live?: ytSearchLive[],
@@ -97,10 +104,10 @@ type ytSearch = {
     lists?: ytSearchList[],
     channels?: ytSearchChannel[],
     accounts?: ytSearchAccount[],
-}
+};
 
-type ytSearchItem = ytSearchVideo | ytSearchChannel
-type ytSearchVideo = {
+export type ytSearchItem = ytSearchVideo | ytSearchChannel;
+export type ytSearchVideo = {
     type: string,
     videoId: string,
     url: string,
@@ -112,21 +119,21 @@ type ytSearchVideo = {
     timestamp: string,
     duration: {
         seconds: number,
-        timestamp: string
+        timestamp: string;
     },
     ago: string,
     views: number,
     author: {
         name: string,
         url: string,
-    }
-}
+    };
+};
 
-type ytSearchPlaylist = {
+export type ytSearchPlaylist = {
     type: string,
-}
+};
 
-type ytSearchChannel = {
+export type ytSearchChannel = {
     type: string,
     name: string,
     url: string,
@@ -137,16 +144,16 @@ type ytSearchChannel = {
     videoCountLabel: string,
     subCount: number,
     subCountLabel: string,
-}
+};
 
-type ytSearchLive = any//{}
+export type ytSearchLive = any;//{}
 
-type ytSearchAccount = any
+export type ytSearchAccount = any;
 
-type ytSearchList = any//{}
+export type ytSearchList = any;//{}
 
 
-type dbUser = {
+export type dbUser = {
     id: number,
     userid: number,
     osuname: string,
@@ -163,51 +170,66 @@ type dbUser = {
     maniaacc: number,
     maniapp: number,
     maniarank: number,
-}
+};
 
-type commandType = 'message' | 'interaction' | 'button' | 'link'
+export type commandType = 'message' | 'interaction' | 'button' | 'link' | 'other';
 
 // type commandObject = any//Discord.Message | Discord.CommandInteraction | Discord.ButtonInteraction
-type commandObject = Discord.Message<any> | Discord.ChatInputCommandInteraction<any> | Discord.ButtonInteraction<any>
+export type commandObject = Discord.Message<any> | Discord.ChatInputCommandInteraction<any> | Discord.ButtonInteraction<any>;
 
-type overrides = {
+export type overrides = {
     user?: any,
     page?: number,
-    mode?: string,
-    sort?: string,
+    mode?: osuapitypes.GameMode,
+    sort?: embedStuff.scoreSort,
     reverse?: boolean,
     ex?: string | number,
     id?: string | number,
     overwriteModal?: Discord.SelectMenuComponent | Discord.SelectMenuBuilder,
     type?: string,
-} | null
+    commanduser?: Discord.User,
+    commandAs?: commandType,
+    filterMapper?: string,
+    filterMods?: string,
+    miss?: true,
+} | null;
 
-type data = Sequelize.ModelStatic<any>
+export type data = Sequelize.ModelStatic<any>;
 
-type commandInput = {
+export type commandInput = {
     commandType: commandType,
     obj: commandObject,
     args: string[],
+    canReply: boolean,
     button?: commandButtonTypes,
     config?: config,
     client?: Discord.Client,
-    absoluteID?: number,
+    absoluteID?: number | string,
     currentDate?: Date,
     overrides?: overrides,
     userdata?: data,
     trackDb?: data,
     guildSettings?: data,
-}
+    graphChannel: Discord.TextChannel;
+};
 
-type commandButtonTypes = 
-'BigLeftArrow' | 'LeftArrow' | 'Search' | 'RightArrow' | 'BigRightArrow' |
-'Refresh' | 'Select' | 
-'DetailEnable' | 'DetailDisable'
+export type commandButtonTypes =
+    'BigLeftArrow' | 'LeftArrow' | 'Search' | 'RightArrow' | 'BigRightArrow' |
+    'Refresh' | 'Select' | 'Random' |
+    'DetailEnable' | 'DetailDisable' | 'Detailed' | 'Details' |
+    'DetailDefault' | 'DetailMore' | 'DetailLess' |
+    'Detail0' | 'Detail1' | 'Detail2' | 'Detail3' |
+    'DetailN1' |
+    'Graph' |
+    'SearchMenu' | 'Sort' | 'SortMenu' |
+    'Map' | 'Leaderboard' |
+    'User'
+    ;
 
-type osustatscache = {
+export type osustatscache = {
     osuid: string,
     country: string,
-    
+
     osupp: string,
     osurank: string,
     osuacc: string,
@@ -223,20 +245,57 @@ type osustatscache = {
     maniapp: string,
     maniarank: string,
     maniaacc: string,
-}
-
-export {
-    config,
-    guildSettings,
-    imagesearches,
-    googleSearchItem,
-    ytSearch,
-    dbUser,
-    commandType,
-    commandObject,
-    overrides,
-    data,
-    commandInput,
-    osustatscache
 };
+
+export type osuCmdStyle =
+    'A' | //default
+    'C' | //compressed    
+    'E' | //expanded
+    'L' | //default list    
+    'LE' | //expanded list   
+    'LC' | //compressed list
+    'S' | //score    
+    'SC' | //score compressed
+    'SE' | //score expanded
+    'M' | //map
+    'MC' | //map compressed
+    'ME' |//map expanded
+    'P' | // profile
+    'PE' | // profile expanded
+    'PC' | // profile compressed
+    'G'; // graph
+
+export type replay = {
+    gameMode: number,
+    gameVersion: number,
+    beatmapMD5: string,
+    playerName: string,
+    replayMD5: string,
+    number_300s: number,
+    number_100s: number,
+    number_50s: number,
+    gekis: number,
+    katus: number,
+    misses: number,
+    score: number,
+    max_combo: number,
+    perfect_combo: number,
+    mods: number,
+    life_bar: string,
+    timestamp: string,
+    replay_length: number,
+    replay_data: {
+        timeSinceLastAction: number,
+        x: number,
+        y: number,
+        keyPressedBitWise: number,
+        keysPressed: {
+            K1: boolean,
+            K2: boolean,
+            M1: boolean,
+            M2: boolean;
+        };
+    }[],
+    raw_replay_data: string;
+}
 
