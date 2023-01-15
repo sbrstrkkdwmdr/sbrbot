@@ -449,8 +449,8 @@ const cmds: commandInfo[] = [
             },
 
             {
-                text: 'PREFIXMSGtime Australia/Melbourne',
-                descriptor: 'Shows the current time in Australia/Melbourne'
+                text: 'PREFIXMSGtime AEST',
+                descriptor: 'Shows the current time in AEST (UTC+10, Australian Eastern Standard Time)'
             },
         ],
         aliases: [],
@@ -459,8 +459,8 @@ const cmds: commandInfo[] = [
                 name: 'timezone',
                 type: 'string',
                 required: false,
-                description: 'The timezone to show the time in (see here - https://stackoverflow.com/a/54500197)',
-                options: ['Formatted as [region][city]'],
+                description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset)',
+                options: ['Formatted as [region]/[city], UTC(+/-)(hours)'],
                 defaultValue: 'UTC',
                 examples: ['Australia/Melbourne', 'Europe/Warsaw'],
                 commandTypes: ['message', 'interaction']

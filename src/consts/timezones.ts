@@ -25,7 +25,14 @@ export const timezones: timezone[] = [
             'GMT-11',
             'GMT-11:00',
             '-11',
-            'SST'
+            'SST',
+            'Pacific/Midway',
+            'Midway Islands',
+            'Pacific/Niue',
+            'Niue',
+            'Pacific/Samoa',
+            'US/Samoa',
+            'Samoa, Midway'
         ]
     },
     {
@@ -37,7 +44,12 @@ export const timezones: timezone[] = [
             'GMT-10',
             'GMT-10:00',
             '-10',
-            'HST'
+            'HST',
+            'America/Adak',
+            'Aleutian Islands',
+            'America/Atka',
+            'Pacific/Honolulu',
+            'Hawaii'
         ]
     },
     {

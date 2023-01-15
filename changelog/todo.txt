@@ -189,3 +189,22 @@ author:
     finish date: 
     author: sbrstrkkdwmdr
 
+-------------------------------------------------------------------------------------------------------------------------
+
+#19)
+    description: add place names etc. to time command
+    type: QOL
+    status: WIP
+    request date: 2023-01-14 17:14 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#20)
+    description: badges command
+    type: new command
+    status: WIP
+    request date: 2023-01-15 10:09 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
