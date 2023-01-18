@@ -9,8 +9,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 12,
         aliases: [
-            'UTC-12',
             'UTC-12:00',
+            'UTC-12',
             'GMT-12',
             'GMT-12:00',
             '-12'
@@ -20,8 +20,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 11,
         aliases: [
-            'UTC-11',
             'UTC-11:00',
+            'UTC-11',
             'GMT-11',
             'GMT-11:00',
             '-11',
@@ -39,8 +39,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 10,
         aliases: [
-            'UTC-10',
             'UTC-10:00',
+            'UTC-10',
             'GMT-10',
             'GMT-10:00',
             '-10',
@@ -56,8 +56,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 9.5,
         aliases: [
-            'UTC-0930',
             'UTC-09:30',
+            'UTC-0930',
             'GMT-0930',
             'GMT-09:30',
             '-0930',
@@ -67,8 +67,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 9,
         aliases: [
-            'UTC-9',
             'UTC-09:00',
+            'UTC-9',
             'GMT-9',
             'GMT-09:00',
             '-09',
@@ -80,8 +80,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 8,
         aliases: [
-            'UTC-8',
             'UTC-08:00',
+            'UTC-8',
             'GMT-8',
             'GMT-08:00',
             '-08',
@@ -93,8 +93,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 7,
         aliases: [
-            'UTC-7',
             'UTC-07:00',
+            'UTC-7',
             'GMT-7',
             'GMT-07:00',
             '-07',
@@ -106,8 +106,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 6,
         aliases: [
-            'UTC-6',
             'UTC-06:00',
+            'UTC-6',
             'GMT-6',
             'GMT-06:00',
             '-06',
@@ -119,8 +119,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 5,
         aliases: [
-            'UTC-5',
             'UTC-05:00',
+            'UTC-5',
             'GMT-5',
             'GMT-05:00',
             '-05',
@@ -132,8 +132,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 4,
         aliases: [
-            'UTC-4',
             'UTC-04:00',
+            'UTC-4',
             'GMT-4',
             'GMT-04:00',
             '-04',
@@ -145,8 +145,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 3.5,
         aliases: [
-            'UTC-330',
             'UTC-03:30',
+            'UTC-330',
             'GMT-330',
             'GMT-03:30',
             '-0330',
@@ -157,8 +157,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 3,
         aliases: [
-            'UTC-3',
             'UTC-03:00',
+            'UTC-3',
             'GMT-3',
             'GMT-03:00',
             '-03',
@@ -169,10 +169,10 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 2.5,
         aliases: [
-            'UTC-2',
-            'UTC-02:00',
-            'GMT-2',
-            'GMT-02:00',
+            'UTC-02:30',
+            'UTC-230',
+            'GMT-230',
+            'GMT-02:30',
             '-0230',
             'NDT'
         ]
@@ -181,8 +181,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 2,
         aliases: [
-            'UTC-2',
             'UTC-02:00',
+            'UTC-2',
             'GMT-2',
             'GMT-02:00',
             '-02'
@@ -192,8 +192,8 @@ export const timezones: timezone[] = [
         offsetDirection: '-',
         offsetHours: 1,
         aliases: [
-            'UTC-1',
             'UTC-01:00',
+            'UTC-1',
             'GMT-1',
             'GMT-01:00',
             '-01'
@@ -203,16 +203,16 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 0,
         aliases: [
-            'UTC',
-            'UTC-0',
-            'UTC-00:00',
-            'UTC+0',
             'UTC+00:00',
+            'UTC+0',
+            'UTC-00:00',
+            'UTC-0',
+            'UTC',
             'GMT',
-            'GMT-0',
             'GMT-00:00',
-            'GMT+0',
+            'GMT-0',
             'GMT+00:00',
+            'GMT+0',
             'WET'
         ]
     },
@@ -220,8 +220,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 1,
         aliases: [
-            'UTC+1',
             'UTC+01:00',
+            'UTC+1',
             'GMT+1',
             'GMT+01:00',
             '+01',
@@ -236,8 +236,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 2,
         aliases: [
-            'UTC+2',
             'UTC+02:00',
+            'UTC+2',
             'GMT+2',
             'GMT+02:00',
             '+02',
@@ -252,8 +252,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 3,
         aliases: [
-            'UTC+3',
             'UTC+03:00',
+            'UTC+3',
             'GMT+3',
             'GMT+03:00',
             '+03',
@@ -267,8 +267,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 3.5,
         aliases: [
-            'UTC+330',
             'UTC+03:30',
+            'UTC+330',
             'GMT+330',
             'GMT+03:30',
             '+0330',
@@ -278,8 +278,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 4,
         aliases: [
-            'UTC+4',
             'UTC+04:00',
+            'UTC+4',
             'GMT+4',
             'GMT+04:00',
             '+04'
@@ -289,8 +289,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 4.5,
         aliases: [
-            'UTC+430',
             'UTC+04:30',
+            'UTC+430',
             'GMT+430',
             'GMT+04:30',
             '+0430'
@@ -300,8 +300,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 5,
         aliases: [
-            'UTC+5',
             'UTC+05:00',
+            'UTC+5',
             'GMT+5',
             'GMT+05:00',
             '+05',
@@ -312,8 +312,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 5.5,
         aliases: [
-            'UTC+530',
             'UTC+05:30',
+            'UTC+530',
             'GMT+530',
             'GMT+05:30',
             '+0530',
@@ -324,8 +324,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 6,
         aliases: [
-            'UTC+6',
             'UTC+06:00',
+            'UTC+6',
             'GMT+6',
             'GMT+06:00',
             '+06'
@@ -335,8 +335,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 6.5,
         aliases: [
-            'UTC+630',
             'UTC+06:30',
+            'UTC+630',
             'GMT+630',
             'GMT+06:30',
             '+0630'
@@ -346,8 +346,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 7,
         aliases: [
-            'UTC+7',
             'UTC+07:00',
+            'UTC+7',
             'GMT+7',
             'GMT+07:00',
             '+07',
@@ -358,8 +358,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 8,
         aliases: [
-            'UTC+8',
             'UTC+08:00',
+            'UTC+8',
             'GMT+8',
             'GMT+08:00',
             '+08',
@@ -374,8 +374,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 8.75,
         aliases: [
-            'UTC+845',
             'UTC+08:45',
+            'UTC+845',
             'GMT+845',
             'GMT+08:45',
             '+0845'
@@ -385,8 +385,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 9,
         aliases: [
-            'UTC+9',
             'UTC+09:00',
+            'UTC+9',
             'GMT+9',
             'GMT+09:00',
             '+09',
@@ -399,8 +399,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 9.5,
         aliases: [
-            'UTC+930',
             'UTC+09:30',
+            'UTC+930',
             'GMT+930',
             'GMT+09:30',
             '+0930',
@@ -411,11 +411,15 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 10,
         aliases: [
-            'UTC+10',
             'UTC+10:00',
+            'UTC+10',
             'GMT+10',
             'GMT+10:00',
             'AEST',
+            'Brisbane',
+            'Sydney',
+            'Melbourne',
+            'Hobart',
             'ChST'
         ]
     },
@@ -423,8 +427,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 10.5,
         aliases: [
-            'UTC+1030',
             'UTC+10:30',
+            'UTC+1030',
             'GMT+1030',
             'GMT+10:30',
             '+1030',
@@ -435,8 +439,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 11,
         aliases: [
-            'UTC+11',
             'UTC+11:00',
+            'UTC+11',
             'GMT+11',
             'GMT+11:00',
             '+11',
@@ -447,8 +451,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 12,
         aliases: [
-            'UTC+12',
             'UTC+12:00',
+            'UTC+12',
             'GMT+12',
             'GMT+12:00',
             '+12',
@@ -459,8 +463,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 12.75,
         aliases: [
-            'UTC+1245',
             'UTC+12:45',
+            'UTC+1245',
             'GMT+1245',
             'GMT+12:45',
             '+1245',
@@ -470,8 +474,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 13,
         aliases: [
-            'UTC+13',
             'UTC+13:00',
+            'UTC+13',
             'GMT+13',
             'GMT+13:00',
             '+13',
@@ -482,8 +486,8 @@ export const timezones: timezone[] = [
         offsetDirection: '+',
         offsetHours: 14,
         aliases: [
-            'UTC+14',
             'UTC+14:00',
+            'UTC+14',
             'GMT+14',
             'GMT+14:00',
             '+14'
