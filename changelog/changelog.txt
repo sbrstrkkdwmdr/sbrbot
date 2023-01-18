@@ -175,3 +175,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 0.4.10
 
 [QOL] time command shows days again
+[ADD] add scores button to rs and scoreparse

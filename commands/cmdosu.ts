@@ -4866,6 +4866,9 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             url: `https://osu.ppy.sh/u/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
+
+    let useComponents = [pgbuttons, buttons];
+
     if (list != true) {
         rsEmbed.setColor(colours.embedColour.score.dec);
 
@@ -4901,15 +4904,15 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             return;
         }
 
+        const curbm = curscore.beatmap;
+        const curbms = curscore.beatmapset;
+
         buttons.addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`${mainconst.version}-Map-recent-any-${input.absoluteID}-${curscore.beatmap.id}${curscore.mods ? '+' + curscore.mods.join() : ''}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.extras.map)
+                .setEmoji(buttonsthing.label.extras.map),
         );
-
-        const curbm = curscore.beatmap;
-        const curbms = curscore.beatmapset;
 
         let mapdataReq: osufunc.apiReturn;
         if (func.findFile(curbm.id, 'mapdata') &&
@@ -5359,6 +5362,25 @@ ${srStr}
             });
         osufunc.writePreviousId('user', input.obj.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
+        if (buttons.toJSON().components.length >= 5) {
+            const xsbuttons = new Discord.ActionRowBuilder()
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`${mainconst.version}-Scores-recent-any-${input.absoluteID}-${curbm.id}+${osudata.id}`)
+                        .setStyle(buttonsthing.type.current)
+                        .setEmoji(buttonsthing.label.extras.leaderboard),
+                );
+            useComponents = [pgbuttons, buttons, xsbuttons];
+        } else {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Scores-recent-any-${input.absoluteID}-${curbm.id}+${osudata.id}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.extras.leaderboard),
+            );
+            useComponents = [pgbuttons, buttons];
+        }
+
     } else if (list == true) {
         rsEmbed
             .setColor(colours.embedColour.scorelist.dec)
@@ -5436,7 +5458,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         obj: input.obj,
         args: {
             embeds: [rsEmbed],
-            components: [pgbuttons, buttons],
+            components: useComponents,
             edit: true
         }
     }, input.canReply);
@@ -6434,6 +6456,19 @@ ${srStr}
         }
     );
 
+    let useComponents = [buttons];
+
+    if (buttons.toJSON().components.length >= 5) {
+        const xsbuttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Scores-scoreparse-any-${input.absoluteID}-${scoredata.beatmap.id}+${osudata.id}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.extras.leaderboard),
+            );
+        useComponents = [buttons, xsbuttons];
+    }
+
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
     const finalMessage = await msgfunc.sendMessage({
@@ -6441,7 +6476,7 @@ ${srStr}
         obj: input.obj,
         args: {
             embeds: [scoreembed],
-            components: [buttons],
+            components: useComponents,
             edit: true
         }
     }, input.canReply);
@@ -6936,6 +6971,18 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         }
         if (input.overrides.reverse != null) {
             reverse = input.overrides.reverse;
+        }
+        if (input.overrides.commandAs) {
+            input.commandType = input.overrides.commandAs;
+        }
+        if (input.overrides.commanduser) {
+            commanduser = input.overrides.commanduser;
+        }
+        if (input.overrides.user) {
+            user = input.overrides.user;
+        }
+        if (input.overrides.id) {
+            mapid = input.overrides.id;
         }
     }
 
@@ -12615,7 +12662,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
             name: 'Error',
             value: `${error}`,
             inline: false
-        })
+        });
         log.logCommand({
             event: 'Error',
             commandName: 'compare',

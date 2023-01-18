@@ -206,6 +206,15 @@ export default (input: {
             }
         }
 
+        if (button == 'Scores') {
+            overrides.id = buttonsplit[5].split('+')[0];
+            overrides.user = buttonsplit[5].split('+')[1];
+            overrides.commandAs = 'interaction';
+            overrides.commanduser = interaction.member.user as Discord.User;
+            await osucmds.scores({ commandType: 'other', obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+            return;
+        }
+
         switch (command) {
             case 'compare':
                 await osucmds.compare({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });

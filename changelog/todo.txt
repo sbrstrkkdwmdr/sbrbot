@@ -208,3 +208,13 @@ author:
     request date: 2023-01-15 10:09 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#21)
+    description: add a "requested by x" on command buttons like scores, map, user etc.
+    type: new command
+    status: WIP
+    request date: 2023-01-18 13:08 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
