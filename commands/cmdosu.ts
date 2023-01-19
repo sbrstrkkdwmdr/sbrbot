@@ -39,6 +39,212 @@ export async function name(input: extypes.commandInput) {
 //user stats
 
 /**
+ * display users badges
+ */
+export async function badges(input: extypes.commandInput & { statsCache: any; }) {
+    {
+
+        let commanduser: Discord.User;
+        let user;
+        let searchid;
+        const embedStyle: extypes.osuCmdStyle = 'A';
+
+        switch (input.commandType) {
+            case 'message': {
+                input.obj = (input.obj as Discord.Message);
+                commanduser = input.obj.author;
+                searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+
+                input.args = cleanArgs(input.args);
+
+                user = input.args.join(' ');
+                if (!input.args[0] || input.args[0].includes(searchid)) {
+                    user = null;
+                }
+            }
+                break;
+            //==============================================================================================================================================================================================
+            case 'interaction': {
+                input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+                commanduser = input.obj.member.user;
+                searchid = commanduser.id;
+                user = input.obj.options.getString('user');
+            }
+                //==============================================================================================================================================================================================
+
+                break;
+            case 'button': {
+                input.obj = (input.obj as Discord.ButtonInteraction);
+                commanduser = input.obj.member.user;
+                searchid = commanduser.id;
+            }
+                break;
+        }
+
+        //==============================================================================================================================================================================================
+
+        log.logCommand({
+            event: 'Command',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            commanduser,
+            object: input.obj,
+            commandName: 'badges',
+            options: []
+        });
+
+        //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+        //if user is null, use searchid
+        if (user == null) {
+            const cuser = await osufunc.searchUser(searchid, input.userdata, true);
+            user = cuser.username;
+        }
+
+        //if user is not found in database, use discord username
+        if (user == null) {
+            const cuser = input.client.users.cache.get(searchid);
+            user = cuser.username;
+        }
+
+        if (input.commandType == 'interaction') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: 'Loading...'
+                }
+            }, input.canReply);
+        }
+
+        let osudataReq: osufunc.apiReturn;
+
+        if (func.findFile(user, 'osudata', osufunc.modeValidator('osu')) &&
+            !('error' in func.findFile(user, 'osudata', osufunc.modeValidator('osu'))) &&
+            input.button != 'Refresh'
+        ) {
+            osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator('osu'));
+        } else {
+            osudataReq = await osufunc.apiget({
+                type: 'user',
+                params: {
+                    username: cmdchecks.toHexadecimal(user),
+                    mode: osufunc.modeValidator('osu')
+                }
+            });
+        }
+
+        const osudata: osuApiTypes.User = osudataReq.apiData;
+
+        osufunc.debug(osudataReq, 'command', 'badges', input.obj.guildId, 'osuData');
+
+        if (osudata?.error || !osudata.id) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: errors.noUser(user),
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'badges',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.noUser(user)
+            });
+            return;
+        }
+
+        const cmdbuttons = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-User-badges-any-${input.absoluteID}-${osudata.id}+${osudata.playmode}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.extras.user),
+            );
+
+        osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
+
+        let badgecount = 0;
+        for (const badge of osudata.badges) {
+            badgecount++;
+        }
+
+        const embed = new Discord.EmbedBuilder()
+            .setFooter({
+                text: `${embedStyle}`
+            })
+            .setAuthor({
+                name: `${osudata.username} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
+                url: `https://osu.ppy.sh/u/${osudata.id}`,
+                iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
+            })
+            .setTitle(`${osudata.username}s Badges`)
+            .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
+            .setDescription(
+                'Current number of badges: ' + badgecount
+            );
+
+        const fields: Discord.EmbedField[] = [];
+
+        for (let i = 0; i < 10 && i < osudata.badges.length; i++) {
+            const badge = osudata?.badges[i];
+            if (!badge) break;
+            fields.push(
+                {
+                    name: badge.description,
+                    value:
+                        `Awarded <t:${new Date(badge.awarded_at).getTime() / 1000}:R>
+${badge.url.length != 0 ? `[Forum post](${badge.url})` : ''}
+${badge.image_url.length != 0 ? `[Image](${badge.image_url})` : ''}`,
+                    inline: false
+                }
+            );
+        }
+
+        if (fields.length > 0) {
+            embed.addFields(fields);
+        }
+
+
+        //SEND/EDIT MSG==============================================================================================================================================================================================
+        const finalMessage = await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                embeds: [embed],
+                components: [cmdbuttons]
+            }
+        }, input.canReply);
+
+        if (finalMessage == true) {
+            log.logCommand({
+                event: 'Success',
+                commandName: 'badges',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+            });
+        } else {
+            log.logCommand({
+                event: 'Error',
+                commandName: 'badges',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: 'Message failed to send'
+            });
+        }
+    }
+}
+
+
+/**
  * badge weight seed
  */
 export async function bws(input: extypes.commandInput & { statsCache: any; }) {

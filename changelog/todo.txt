@@ -5,6 +5,7 @@ template
 description: 
 type: 
 status:
+priority: 
 request date: 
 finish date: 
 author: 
@@ -15,6 +16,7 @@ author:
     description: recommend map command
     type: new command
     status: not yet started 
+    priority: medium
     request date: 2022-09-13 16:01 AEST (UTC+10)
     finish date: 
     author: sbrstrkkdwmdr 
@@ -25,6 +27,7 @@ author:
     description: map recorder
     type: new command
     status: not yet started  
+    priority: low
     request date: 2022-09-15 15:34 AEST (UTC+10)
     finish date: 
     author: sbrstrkkdwmdr 
@@ -35,6 +38,7 @@ author:
     description: fix pages on maplb
     type: bug fix
     status: FINISHED 
+    priority: medium
     request date: 2022-10-30 11:21 AEDT (UTC+11)
     finish date: 2023-01-01 16:34 AEDT (UTC+11)
     author: sbrstrkkdwmdr 
@@ -45,6 +49,7 @@ author:
     description: fix map parser 
     type: bug fix
     status: WIP 
+    priority: medium
     request date: 2022-11-21 14:25 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr 
@@ -55,6 +60,7 @@ author:
     description: score title/thumbnail generator 
     type: new command
     status: WIP - not yet started 
+    priority: medium
     request date: 2022-11-25 11:45 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr 
@@ -65,6 +71,7 @@ author:
     description: unstable rate calculator for replayparse, recent and scoreparse. fixes bug #2
     type: new feature
     status: WIP
+    priority: medium
     request date: 2022-12-07 23:26 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr 
@@ -75,6 +82,7 @@ author:
     description: health and strains graph for recent and scoreparse
     type: new feature
     status: WIP - not yet started  
+    priority: medium
     request date: 2022-12-18 21:50 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr 
@@ -85,6 +93,7 @@ author:
     description: show point of fail on strains graph (recent)
     type: new feature
     status: WIP
+    priority: medium
     request date: 2022-12-27 10:33 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr 
@@ -95,6 +104,7 @@ author:
     description: osu map ranks command (ie counts of #1s, top tens, top 25s etc.)
     type: new command
     status: FINISHED
+    priority: medium
     request date: 2022-12-27 23:36 AEDT (UTC+11)
     finish date: 2022-12-30 22:47 AEDT (UTC+11)
     author: sbrstrkkdwmdr 
@@ -105,6 +115,7 @@ author:
     description: make all button emojis the same theme
     type: quality of life
     status: FINISHED 
+    priority: medium
     request date: 2022-12-28 20:22 AEDT (UTC+11)
     finish date: 2023-01-01 1:19 AEDT (UTC+11)
     author: sbrstrkkdwmdr 
@@ -115,6 +126,7 @@ author:
     description: add profile card command 
     type: new command
     status: WIP - not yet started 
+    priority: medium
     request date: 2022-12-30 22:53 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr
@@ -125,6 +137,7 @@ author:
     description: add score rank filter to score list commands
     type: new feature
     status: FINISHED
+    priority: medium
     request date: 2023-01-03 18:01 AEDT (UTC+11)
     finish date: 2023-01-03 22:39 AEDT (UTC+11)
     author: sbrstrkkdwmdr
@@ -134,9 +147,10 @@ author:
 #13)
     description: edit arg handling in score list commands
     type: new feature
-    status: WIP - not yet started 
+    status: FINISHED
+    priority: medium
     request date: 2023-01-03 18:01 AEDT (UTC+11)
-    finish date: 
+    finish date: i forgor
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
@@ -145,6 +159,7 @@ author:
     description: put command options like filter and sort in a separate embed or section or smth
     type: new feature
     status: WIP - not yet started 
+    priority: medium
     request date: 2023-01-03 22:45 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr
@@ -155,6 +170,7 @@ author:
     description: make most played, ranked, graveyard, loved commands as aliases to ubm
     type: new command (alias)
     status: finished
+    priority: medium
     request date: 2023-01-06 18:10 AEDT (UTC+11)
     finish date: 2023-01-09 15:15 AEDT (UTC+11)
     author: sbrstrkkdwmdr
@@ -165,6 +181,7 @@ author:
     description: add timezone options to time (ie AEDT, CST, UTC+XX)
     type: QOL
     status: finished
+    priority: medium
     request date: 2023-01-07 23:26 AEDT (UTC+11)
     finish date: 2023-01-08 00:53 AEDT (UTC+11)
     author: sbrstrkkdwmdr
@@ -175,6 +192,7 @@ author:
     description: put strains and fail graph on same graph (also divide by top number of each set so they're all on the same scale)
     type: QOL
     status: WIP
+    priority: low
     request date: 2023-01-10 20:35 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr
@@ -185,6 +203,7 @@ author:
     description: add scores button to rs and scoreparse
     type: QOL
     status: finished
+    priority: medium
     request date: 2023-01-10 21:05 AEDT (UTC+11)
     finish date: 2023-01-18 13:08 AEDT (UTC+11)
     author: sbrstrkkdwmdr
@@ -195,18 +214,20 @@ author:
     description: add place names etc. to time command
     type: QOL
     status: WIP
+    priority: low
     request date: 2023-01-14 17:14 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #20)
     description: badges command
     type: new command
-    status: WIP
+    status: FINISHED
+    priority: medium
     request date: 2023-01-15 10:09 AEDT (UTC+11)
-    finish date: 
+    finish date: 2023-01-20 09:28 AEDT (UTC+11)
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
@@ -215,6 +236,7 @@ author:
     description: add a "requested by x" on command buttons [map, user, leaderboard, scores]
     type: QOL
     status: WIP
+    priority: low
     request date: 2023-01-18 13:08 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr

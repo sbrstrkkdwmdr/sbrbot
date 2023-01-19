@@ -177,3 +177,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] time command shows days again
 [ADD] add scores button to rs and scoreparse
 [QOL] fixed README.md and LICENSE
+[ADD] added badges command

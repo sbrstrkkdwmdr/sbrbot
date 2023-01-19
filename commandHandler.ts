@@ -336,6 +336,10 @@ export default (input: {
 
             //osu commands below
 
+            case 'badges':
+                osucmds.badges({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
+                break;
+
             case 'bws': case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':
                 osucmds.bws({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 break;
