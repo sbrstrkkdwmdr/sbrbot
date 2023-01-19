@@ -180,13 +180,13 @@ author:
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #18)
     description: add scores button to rs and scoreparse
     type: QOL
-    status: WIP
+    status: finished
     request date: 2023-01-10 21:05 AEDT (UTC+11)
-    finish date: 
+    finish date: 2023-01-18 13:08 AEDT (UTC+11)
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
@@ -212,8 +212,8 @@ author:
 -------------------------------------------------------------------------------------------------------------------------
 
 #21)
-    description: add a "requested by x" on command buttons like scores, map, user etc.
-    type: new command
+    description: add a "requested by x" on command buttons [map, user, leaderboard, scores]
+    type: QOL
     status: WIP
     request date: 2023-01-18 13:08 AEDT (UTC+11)
     finish date: 
