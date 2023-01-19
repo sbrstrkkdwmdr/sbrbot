@@ -1,4 +1,19 @@
-https://sbrstrkkdwmdr.github.io/sbrbot/
+<div align="center">
+
+[![website](https://img.shields.io/badge/website-FFA41C?style=for-the-badge&logoColor=white)](https://sbrstrkkdwmdr.github.io/sbrbot/)</br>
+![codefactor](https://www.codefactor.io/Content/badges/C.svg)
+[![license](https://img.shields.io/github/license/sbrstrkkdwmdr/sbrbot)](LICENSE)
+[![stars](https://img.shields.io/github/stars/sbrstrkkdwmdr/sbrbot)](https://github.com/sbrstrkkdwmdr/sbrbot)
+[![lastcommit](https://img.shields.io/github/last-commit/sbrstrkkdwmdr/sbrbot)](https://github.com/sbrstrkkdwmdr/sbrbot)
+</br>
+
+[![discordjs](https://img.shields.io/badge/DiscordJS-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.js.org/#/)
+[![typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://github.com/microsoft/TypeScript)
+[![sequelize](https://img.shields.io/badge/Sequelize-02AFEF?style=for-the-badge&logo=sequelize&logoColor=white)](https://sequelize.org/)
+[![nodejs](https://img.shields.io/badge/NodeJS-83CD29?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en/)
+[![chartjs](https://img.shields.io/badge/chartjs-FE777B?style=for-the-badge&logo=chart.js&logoColor=white)](https://www.chartjs.org/)
+
+</div>
 
 ## install/setup
 
