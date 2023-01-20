@@ -71,15 +71,15 @@ additional notes: string
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #6)
-    status: WIP
+    status: FINISHED
     issue: using buttons sometimes causes an "interaction failed" error
     cause: interaction.deferUpdate() is put after an await command function so discord's thing times out
     author: sbrstrkkdwmdr
     found: 2023-01-03 19:59 AEDT (UTC+11)
-    fixed: 
-    solution: 
+    fixed: 2023-01-21 10:53 AEDT (UTC+11)
+    solution: moved interaction.deferUpdate() to before the command switch statement
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
