@@ -49,7 +49,7 @@ author:
     description: fix map parser 
     type: bug fix
     status: WIP 
-    priority: medium
+    priority: low
     request date: 2022-11-21 14:25 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr 
