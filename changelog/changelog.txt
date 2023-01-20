@@ -178,3 +178,6 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [ADD] add scores button to rs and scoreparse
 [QOL] fixed README.md and LICENSE
 [ADD] added badges command
+[FIX] re-add reverse arguments to score list commands
+[QOL] if max combo is reached, the combo is now bold
+[FIX] move interaction.deferUpdate() to fix false interaction failed errors

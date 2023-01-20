@@ -215,102 +215,72 @@ export default (input: {
             return;
         }
 
+        const nopingcommands = ['scorestats']
+
+        if(!nopingcommands.includes(command)){
+            interaction.deferUpdate()
+                .catch(error => { });
+        }
+
+
         switch (command) {
             case 'compare':
                 await osucmds.compare({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'firsts':
                 await osucmds.firsts({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'lb':
                 await osucmds.lb({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'map':
                 await osucmds.map({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'maplb':
                 await osucmds.maplb({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'nochokes':
                 overrides.miss = true;
                 await osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                interaction.deferUpdate()
-                    .catch(error => { console.log(error); });
                 break;
             case 'osu':
                 await osucmds.osu({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'osutop':
                 await osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                interaction.deferUpdate()
-                    .catch(error => { console.log(error); });
                 break;
             case 'pinned':
                 await osucmds.pinned({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'ppcalc':
                 await osucmds.ppCalc({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'ranking':
                 await osucmds.ranking({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache, graphChannel });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'recent':
                 await osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'recentactivity':
                 await osucmds.recent_activity({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'scoreparse':
                 await osucmds.scoreparse({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'scores':
                 await osucmds.scores({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'scorestats':
                 await osucmds.scorestats({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
-
             case 'userbeatmaps':
                 await osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
-
             case 'help':
                 await commands.help({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
             case 'time':
                 await commands.time({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
-                interaction.deferUpdate()
-                    .catch(error => { });
                 break;
         }
         fs.appendFileSync(`${path}/logs/totalcommands.txt`, 'x');
