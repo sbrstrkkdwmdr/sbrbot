@@ -291,13 +291,14 @@ export async function scoreList(
                     name: `#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
                     value: `
 ${showtitle ? '**' + showtitle + '**' : ''}
-\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} ${curscore?.pp ? `| ` + curscore.pp.toFixed(2) + 'pp' : ''}
+\`${hitlist}\` | ${curscore.max_combo == curscore?.beatmap?.max_combo ? `**${func.separateNum(curscore.max_combo)}x**` : `${func.separateNum(curscore.max_combo)}x`} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} ${curscore?.pp ? `| ` + curscore.pp.toFixed(2) + 'pp' : ''}
 `,
                     inline: false
                 });
+
                 scoresAsArrStr.push(`
 ${useTitle}
-\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} ${curscore?.pp ? `| ` + curscore.pp.toFixed(2) + 'pp' : ''}`);
+\`${hitlist}\` | ${curscore.max_combo == curscore?.beatmap?.max_combo ? `**${func.separateNum(curscore.max_combo)}x**` : `${func.separateNum(curscore.max_combo)}x`} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} ${curscore?.pp ? `| ` + curscore.pp.toFixed(2) + 'pp' : ''}`);
             }
                 break;
             default: case 1: {
@@ -305,14 +306,14 @@ ${useTitle}
                     name: `#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
                     value: `
 ${showtitle ? '**' + showtitle + '**\n' : ''} [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+\`${hitlist}\` | ${curscore.max_combo == curscore?.beatmap?.max_combo ? `**${func.separateNum(curscore.max_combo)}x**` : `${func.separateNum(curscore.max_combo)}x`} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 ${pptxt} ${weighted}`,
                     inline: false
                 });
                 scoresAsArrStr.push(
                     `#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
 ${showtitle ? '**' + showtitle + '**\n' : ''} [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-\`${hitlist}\` | ${func.separateNum(curscore.max_combo)}x | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+\`${hitlist}\` | ${curscore.max_combo == curscore?.beatmap?.max_combo ? `**${func.separateNum(curscore.max_combo)}x**` : `${func.separateNum(curscore.max_combo)}x`} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 ${pptxt} ${weighted}
 `
                 );

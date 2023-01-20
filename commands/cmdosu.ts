@@ -5427,7 +5427,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 ${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
 ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${rspassinfo}\n\`${hitlist}\` | ${curscore.max_combo}x/**${mapdata.max_combo}x** combo
+${rspassinfo}\n\`${hitlist}\` | ${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo
 **${rspp}**pp ${fcflag}\n${ppissue}
 `);
             }
@@ -5444,7 +5444,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                         {
                             name: 'SCORE DETAILS',
                             value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
-                                `${rspassinfo}\n${hitlist}\n${curscore.max_combo}x/**${mapdata.max_combo}x** combo`,
+                                `${rspassinfo}\n${hitlist}\n${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo`,
                             inline: true
                         },
                         {
@@ -5494,7 +5494,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                         {
                             name: 'SCORE DETAILS',
                             value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
-                                `${rspassinfo}\n${hitlist}\n${curscore.max_combo}x/**${mapdata.max_combo}x** combo`,
+                                `${rspassinfo}\n${hitlist}\n${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo`,
                             inline: true
                         },
                         {
@@ -6542,7 +6542,7 @@ ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join(
 ${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 [Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
 \`${hitlist}\`
-${scoredata.max_combo}x/**${mapdata.max_combo}x**
+${scoredata.max_combo == mapdata.max_combo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mapdata.max_combo}x**
 ${pptxt}\n${ppissue}
 `);
         }
@@ -6603,7 +6603,7 @@ ${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/,
                             `
 ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
 ${hitlist}
-${scoredata.max_combo}x/**${mapdata.max_combo}x**
+${scoredata.max_combo == mapdata.max_combo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mapdata.max_combo}x**
 `                        ,
                         inline: true
                     },
@@ -13885,6 +13885,14 @@ async function parseArgs_scoreList_message(input: extypes.commandInput) {
     if (input.args.includes('-r')) {
         sort = 'recent';
         input.args.splice(input.args.indexOf('-r'), 1);
+    }
+    if(input.args.includes('-reverse')){
+        reverse = true;
+        input.args.splice(input.args.indexOf('-reverse'), 1)
+    }
+    if(input.args.includes('-rev')){
+        reverse = true;
+        input.args.splice(input.args.indexOf('-rev'), 1)
     }
 
     if (input.args.includes('-?')) {
