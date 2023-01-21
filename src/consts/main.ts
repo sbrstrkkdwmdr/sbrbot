@@ -1,4 +1,4 @@
-export const version = '20230112';
+export const version = '20230121';
 
 export const versionAlt = '0.4.9';
 
