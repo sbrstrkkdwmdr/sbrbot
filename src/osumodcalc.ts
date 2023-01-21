@@ -84,7 +84,7 @@ function HalfTimeAR(ar: number) {
         else {
             ogtoms = 1800 - (((ar) * 10) * 12)
         } */
-    const ogtoms = ar > 5 ? 200 + (11 - ar) * 100 : 800 + (5 - ar) * 80;
+    const ogtoms = ar > 5 ? 1200 - ((ar - 5) * 10 * 15) : 1800 - ((ar * 10) * 12);
     const ms = ogtoms * (4 / 3);
 
     if (ms < 300) {

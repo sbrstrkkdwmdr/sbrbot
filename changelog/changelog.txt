@@ -181,3 +181,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] re-add reverse arguments to score list commands
 [QOL] if max combo is reached, the combo is now bold
 [FIX] move interaction.deferUpdate() to fix false interaction failed errors
+[FIX] fix HT returning the wrong AR

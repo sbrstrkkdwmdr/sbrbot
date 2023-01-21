@@ -119,15 +119,15 @@ additional notes: string
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #10)
     status: WIP
     issue: halftime AR is higher than no mod AR 
-    cause: 
+    cause: was using DT calculations for the milliseconds instead of HT
     author: sbrstrkkdwmdr
     found: 2023-01-10 20:28 AEDT (UTC+11)
-    fixed: 
-    solution: 
+    fixed: 2023-01-21 11:04 AEDT (UTC+11)
+    solution: fix milliseconds calc
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
