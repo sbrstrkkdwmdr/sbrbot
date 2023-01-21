@@ -2126,28 +2126,32 @@ export async function time(input: extypes.commandInput) {
 
     const curTime = moment();
 
+    let showGMT = false;
+
+    const fields: Discord.EmbedField[] = [
+        {
+            /**
+             *  value: `\n**Date**: ${reqTime.format("DD/MM/YYYY")}` +
+                    `\n**Full Date**: ${reqTime.format("d, DDD MMM YYYY hh:mm:ssA Z")}` +
+                    `\n**Full Date(24h)**: ${reqTime.format("d, DDD MMM YYYY HH:mm:ss Z")}` +
+                    `\n**Full Date ISO8601**: ${reqTime.format("YYYY-MM-DDTHH:mm:ss.SSS")}`,
+
+             */
+            name: 'UTC/GMT+00:00',
+            value: `\n**Date**: ${curTime.format("DD/MM/YYYY")}` +
+                `\n**Full Date**: ${curTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
+                `\n**Full Date(24h)**: ${curTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
+                `\n\n**Full Date ISO8601**: ${curTime.toISOString()}` +
+                `\n**EPOCH(ms)**: ${curTime.valueOf()}`
+            ,
+            inline: false
+        },
+    ];
+
+
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
-        .setTitle('Current Time')
-        .addFields([
-            {
-                /**
-                 *  value: `\n**Date**: ${reqTime.format("DD/MM/YYYY")}` +
-                        `\n**Full Date**: ${reqTime.format("d, DDD MMM YYYY hh:mm:ssA Z")}` +
-                        `\n**Full Date(24h)**: ${reqTime.format("d, DDD MMM YYYY HH:mm:ss Z")}` +
-                        `\n**Full Date ISO8601**: ${reqTime.format("YYYY-MM-DDTHH:mm:ss.SSS")}`,
-
-                 */
-                name: 'UTC/GMT+00:00',
-                value: `\n**Date**: ${curTime.format("DD/MM/YYYY")}` +
-                    `\n**Full Date**: ${curTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
-                    `\n**Full Date(24h)**: ${curTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
-                    `\n\n**Full Date ISO8601**: ${curTime.toISOString()}` +
-                    `\n**EPOCH(ms)**: ${curTime.valueOf()}`
-                ,
-                inline: false
-            },
-        ]);
+        .setTitle('Current Time');
     if (fetchtimezone != null && fetchtimezone != '') {
         try {
             let offset = 0;
@@ -2210,19 +2214,19 @@ export async function time(input: extypes.commandInput) {
 
             const offsetReadable = `UTC${Hrs}:${(Math.abs(offsetToMinutes % 60)).toString().padStart(2, '0')}`;
 
-            Embed
-                .addFields([{
-                    name: `${fetchtimezone.toUpperCase()}/${offsetReadable} (Requested Time)`,
-                    value: `\n**Date**: ${reqTime.format("DD/MM/YYYY")}` +
-                        `\n**Full Date**: ${reqTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
-                        `\n**Full Date(24h)**: ${reqTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
-                        `\n**Full Date ISO8601**: ${reqTime.toISOString(true)}`,
-                    inline: false
-                }]);
+            fields.push({
+                name: `${fetchtimezone.toUpperCase()}/${offsetReadable} (Requested Time)`,
+                value: `\n**Date**: ${reqTime.format("DD/MM/YYYY")}` +
+                    `\n**Full Date**: ${reqTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
+                    `\n**Full Date(24h)**: ${reqTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
+                    `\n**Full Date ISO8601**: ${reqTime.toISOString(true)}`,
+                inline: false
+            });
         } catch (error) {
             console.log(error);
+            showGMT = true;
             if (error.includes('timezone')) {
-                Embed.addFields([{
+                fields.push({
                     name: `UTC/GMT +??:?? (Requested Time)`,
                     value: `\nRecived invalid timezone!` +
                         `\n\`${fetchtimezone}\` is not a valid timezone` +
@@ -2230,16 +2234,22 @@ export async function time(input: extypes.commandInput) {
                     // `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid timezones`
                     ,
                     inline: false
-                }]);
+                });
             } else {
-                Embed.addFields([{
+                fields.push({
                     name: `UTC/GMT +??:?? (Requested Time)`,
                     value: `There was an error trying to parse the timezone`,
                     inline: false
-                }]);
+                });
             }
             useComponents = [];
         }
+    } else {
+        showGMT = true;
+    }
+
+    if (!showGMT) {
+        fields.splice(0, 1);
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
