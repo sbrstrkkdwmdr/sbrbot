@@ -183,3 +183,5 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] move interaction.deferUpdate() to fix false interaction failed errors
 [FIX] fix HT returning the wrong AR
 [QOL] time command no longer shows UTC if another timezone is requested
+[QOL] time still displays original timezone on clashing timezones
+[QOL] time is displayed in specific columns for readability

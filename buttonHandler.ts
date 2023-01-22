@@ -136,6 +136,7 @@ export default (input: {
                         if (interaction?.message?.components[0]?.components[0]) {
                             overrides.overwriteModal = interaction.message.components[0].components[0] as any;
                         }
+                        overrides.id = buttonsplit[5];
                     }
             }
         }
@@ -215,9 +216,9 @@ export default (input: {
             return;
         }
 
-        const nopingcommands = ['scorestats']
+        const nopingcommands = ['scorestats'];
 
-        if(!nopingcommands.includes(command)){
+        if (!nopingcommands.includes(command)) {
             interaction.deferUpdate()
                 .catch(error => { });
         }

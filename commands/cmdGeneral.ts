@@ -2067,6 +2067,7 @@ export async function time(input: extypes.commandInput) {
     let commanduser;
 
     let fetchtimezone;
+    let displayedTimezone;
 
     let useComponents = [];
 
@@ -2097,9 +2098,14 @@ export async function time(input: extypes.commandInput) {
             break;
     }
 
+    displayedTimezone = fetchtimezone;
+
     if (input?.overrides) {
         if (input?.overrides?.ex) {
             fetchtimezone = input?.overrides?.ex;
+        }
+        if (input?.overrides?.id) {
+            displayedTimezone = input?.overrides?.id ?? fetchtimezone;
         }
     }
 
@@ -2138,12 +2144,12 @@ export async function time(input: extypes.commandInput) {
 
              */
             name: 'UTC/GMT+00:00',
-            value: `\n**Date**: ${curTime.format("DD/MM/YYYY")}` +
-                `\n**Full Date**: ${curTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
-                `\n**Full Date(24h)**: ${curTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
-                `\n\n**Full Date ISO8601**: ${curTime.toISOString()}` +
-                `\n**EPOCH(ms)**: ${curTime.valueOf()}`
-            ,
+            value:
+                `\n\`Date              | \`${curTime.format("DD/MM/YYYY")}` +
+                `\n\`Full Date         | \`${curTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
+                `\n\`Full Date(24h)    | \`${curTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
+                `\n\`Full Date ISO8601 | \`${curTime.toISOString(true)}` +
+                `\n\`EPOCH(ms)         | \`${curTime.valueOf()}`,
             inline: false
         },
     ];
@@ -2182,7 +2188,7 @@ export async function time(input: extypes.commandInput) {
                         .addComponents(input?.overrides?.overwriteModal as Discord.StringSelectMenuBuilder);
                 } else {
                     const inputModal = new Discord.StringSelectMenuBuilder()
-                        .setCustomId(`${mainconst.version}-Select-time-${commanduser.id}-${input.absoluteID}`)
+                        .setCustomId(`${mainconst.version}-Select-time-${commanduser.id}-${input.absoluteID}-${displayedTimezone}`)
                         .setPlaceholder('Select a timezone');
 
                     for (let i = 0; i < found.length && i < 10; i++) {
@@ -2215,11 +2221,14 @@ export async function time(input: extypes.commandInput) {
             const offsetReadable = `UTC${Hrs}:${(Math.abs(offsetToMinutes % 60)).toString().padStart(2, '0')}`;
 
             fields.push({
-                name: `${fetchtimezone.toUpperCase()}/${offsetReadable} (Requested Time)`,
-                value: `\n**Date**: ${reqTime.format("DD/MM/YYYY")}` +
-                    `\n**Full Date**: ${reqTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
-                    `\n**Full Date(24h)**: ${reqTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
-                    `\n**Full Date ISO8601**: ${reqTime.toISOString(true)}`,
+                name: `${displayedTimezone.toUpperCase()}/${offsetReadable}`,
+                value:
+                    `\n\`Date              | \`${reqTime.format("DD/MM/YYYY")}` +
+                    `\n\`Full Date         | \`${reqTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
+                    `\n\`Full Date(24h)    | \`${reqTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
+                    `\n\`Full Date ISO8601 | \`${reqTime.toISOString(true)}` +
+                    `\n\`EPOCH(ms)         | \`${curTime.valueOf()}`,
+
                 inline: false
             });
         } catch (error) {
@@ -2251,6 +2260,8 @@ export async function time(input: extypes.commandInput) {
     if (!showGMT) {
         fields.splice(0, 1);
     }
+
+    Embed.addFields(fields);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
