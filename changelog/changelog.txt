@@ -173,7 +173,7 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] moved errors to a separate object 
 
 0.4.10
-
+2023-01-22
 [QOL] time command shows days again
 [ADD] add scores button to rs and scoreparse
 [QOL] fixed README.md and LICENSE
