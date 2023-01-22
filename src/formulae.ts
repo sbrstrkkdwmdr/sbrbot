@@ -13,8 +13,6 @@ function recdiff(pp: number) {
 }
 
 /**
- * @param bws - returns badge weight seeding rank
- * @param recdiff - returns recommended difficulty
  */
 export const osu = {
     user: {
