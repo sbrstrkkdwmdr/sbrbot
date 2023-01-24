@@ -2234,23 +2234,23 @@ export async function time(input: extypes.commandInput) {
         } catch (error) {
             console.log(error);
             showGMT = true;
-            if (error.includes('timezone')) {
-                fields.push({
-                    name: `UTC/GMT +??:?? (Requested Time)`,
-                    value: `\nRecived invalid timezone!` +
-                        `\n\`${fetchtimezone}\` is not a valid timezone` +
-                        `\n Check [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset) for valid timezones`
-                    // `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid timezones`
-                    ,
-                    inline: false
-                });
-            } else {
-                fields.push({
-                    name: `UTC/GMT +??:?? (Requested Time)`,
-                    value: `There was an error trying to parse the timezone`,
-                    inline: false
-                });
-            }
+            fields.push({
+                name: `UTC/GMT +??:?? (Requested Time)`,
+                value: `\nRecived invalid timezone!` +
+                    `\n\`${fetchtimezone}\` is not a valid timezone` +
+                    `\n Check [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset) for valid timezones`
+                // `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid timezones`
+                ,
+                inline: false
+            });
+            // if (error.includes('timezone')) {
+            // } else {
+            //     fields.push({
+            //         name: `UTC/GMT +??:?? (Requested Time)`,
+            //         value: `There was an error trying to parse the timezone`,
+            //         inline: false
+            //     });
+            // }
             useComponents = [];
         }
     } else {

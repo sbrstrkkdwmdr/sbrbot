@@ -185,3 +185,7 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] time command no longer shows UTC if another timezone is requested
 [QOL] time still displays original timezone on clashing timezones
 [QOL] time is displayed in specific columns for readability
+
+0.4.11
+
+[FIX] fix time command crashing on invalid timezones
