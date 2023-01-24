@@ -190,3 +190,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 
 [FIX] fix time command crashing on invalid timezones
 [REM] remove UR on replayparse
+[ADD] added more aliases to time command

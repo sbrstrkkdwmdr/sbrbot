@@ -10,6 +10,8 @@ request date:
 finish date: 
 author: 
 
+-------------------------------------------------------------------------------------------------------------------------
+
 ========================
 
 #1) 
@@ -242,12 +244,34 @@ author:
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #22)
     description: put time command times all starting off the same column for readability + keep timezone name when using select menu 
     type: QOL
-    status: WIP
+    status: FINISHED
     priority: low
     request date: 2023-01-22 16:12 AEDT (UTC+11)
     finish date: 2023-01-22 19:10:58 AEDT (UTC+11)
+    author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+        
+#23)
+    description: add every continent and country to the timezone db
+    type: QOL
+    status: WIP
+    priority: low
+    request date: 2023-01-23 09:45 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+        
+#24)
+    description: show timezone map on time command
+    type: QOL
+    status: WIP
+    priority: low
+    request date: 2023-01-23 17:43 AEDT (UTC+11)
+    finish date: 
     author: sbrstrkkdwmdr
