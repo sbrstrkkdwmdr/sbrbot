@@ -259,10 +259,10 @@ author:
 #23)
     description: add every continent and country to the timezone db
     type: QOL
-    status: WIP
+    status: FINISHED
     priority: low
     request date: 2023-01-23 09:45 AEDT (UTC+11)
-    finish date: 
+    finish date: 2023-01-25 12:27 AEDT (UTC+11)
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
