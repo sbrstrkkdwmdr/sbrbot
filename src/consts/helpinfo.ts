@@ -471,6 +471,32 @@ const cmds: commandInfo[] = [
 
 const osucmds: commandInfo[] = [
     {
+        name: 'badges',
+        description: 'Display\'s the user\'s badges',
+        usage: 'badges [user]',
+        slashusage: 'badges [user]',
+        examples: [
+            {
+                text: 'PREFIXMSGbadges cookiezi',
+                descriptor: 'Shows cookiezi\'s badges'
+            }
+        ],
+        aliases: [],
+        buttons: [buttonsObjs.label.extras.user],
+        options: [
+            {
+                name: 'user',
+                type: 'string/ integer/ user mention',
+                required: false,
+                description: 'The user to show the badge weighting of',
+                options: ['N/A'],
+                defaultValue: 'The user who ran the command',
+                examples: ['DigitalHypno', 'fieryrage'],
+                commandTypes: ['message', 'interaction']
+            }
+        ]
+    },
+    {
         name: 'bws',
         description: 'Shows the badge weighted rank of a user',
         usage: 'bws [user]',
@@ -577,7 +603,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'firsts',
         description: 'Shows the #1 global scores of a user',
-        usage: 'firsts [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)] [-grade]',
+        usage: 'firsts [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)] [-grade] [-reverse]',
         slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter] [grade]',
         examples: [
             {
@@ -877,7 +903,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'nochokes',
         description: 'Shows the user\'s top plays without misses',
-        usage: 'nochokes [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)] [-grade]',
+        usage: 'nochokes [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)] [-grade] [-reverse]',
         slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter] [grade]',
         examples: [
             {
@@ -1085,7 +1111,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'pinned',
         description: 'Shows the pinned scores of a user',
-        usage: 'pinned [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)] [-grade]',
+        usage: 'pinned [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)] [-grade] [-reverse]',
         slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter] [grade]',
         examples: [
             {
@@ -1478,7 +1504,7 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'render',
-        description: 'Renders the last requested beatmap',
+        description: 'Renders the last requested beatmap. WIP',
         usage: 'render [-(comboColour)] [+(mods)] [-start] [-end] [-speed]',
         slashusage: 'render [comboColour] [mods] [start] [end] [speed]',
         examples: [
@@ -1616,7 +1642,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'scores',
         description: 'Shows the scores of a user on a beatmap',
-        usage: 'scores [user] [id] [-page/-p] [-parse] [-grade]',
+        usage: 'scores [user] [id] [-page/-p] [-parse] [-grade] [-reverse]',
         slashusage: 'scores [user] [id] [sort] [reverse] [page] [detailed] [parse] [grade]',
         examples: [
             {
