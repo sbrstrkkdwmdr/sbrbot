@@ -2086,31 +2086,31 @@ const othercmds: commandInfo[] = [
         aliases: ['ask'],
         options: [],
     },
-    {
-        name: 'gif',
-        description: 'Sends a gif',
-        usage: 'gif [type]',
-        slashusage: 'gif [type]',
-        examples: [
-            {
-                text: '/gif type:cry about it',
-                descriptor: 'Sends a random gif in the category "cry about it"'
-            }
-        ],
-        aliases: [],
-        options: [
-            {
-                name: 'type',
-                type: 'string',
-                required: true,
-                description: 'The type of gif to send',
-                options: [],
-                defaultValue: 'N/A',
-                examples: [''],
-                commandTypes: ['message', 'interaction']
-            }
-        ]
-    },
+    // {
+    //     name: 'gif',
+    //     description: 'Sends a gif',
+    //     usage: 'gif [type]',
+    //     slashusage: 'gif [type]',
+    //     examples: [
+    //         {
+    //             text: '/gif type:cry about it',
+    //             descriptor: 'Sends a random gif in the category "cry about it"'
+    //         }
+    //     ],
+    //     aliases: [],
+    //     options: [
+    //         {
+    //             name: 'type',
+    //             type: 'string',
+    //             required: true,
+    //             description: 'The type of gif to send',
+    //             options: [],
+    //             defaultValue: 'N/A',
+    //             examples: [''],
+    //             commandTypes: ['message', 'interaction']
+    //         }
+    //     ]
+    // },
     {
         name: 'image',
         description: 'Sends an image',
