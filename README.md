@@ -82,16 +82,15 @@ copy the key and paste it into the google.apiKey field </br>
 
 ## config properties
 
-</br>token: bot token. go to https://discord.com/developers/applications, create a new app, and create a new bot under the bot section. copy the token from there
-</br>prefix: a string at the start of each message to detect if a message is a command. ie `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't.
-</br>osuClientID: the client id of an osu! api v2 app
-</br>osuClientSecret: the secret/token of an osu! api v2 app
-</br>ownerusers: an array of user ids stored as strings. users with these ids can use any command
-</br>google.apiKey: the api key of a google programmable search engine
-</br>google.engineId: the search engine id of a google programmable search engine
-</br>useScreenshotParse: enables/disables the detection of maps in screenshots. Can cause crashes due to high CPU and memory usage
-</br>LogApiCalls: enables/disables logging output to the console
-</br>LogApiCallsToFile: enables/disable console output being logged to `logs/console.log`. Still saves logs even if `LogApiCalls` is false
-</br>enableTracking: enables/disables osutrack. Users can still be added/removed.
-</br>graphChannelId: sends all graphs to this channel (profile rank history, map strains etc.)
-
+</br></br>token: bot token. go to https://discord.com/developers/applications, create a new app, and create a new bot under the bot section. copy the token from there
+</br></br>prefix: a string at the start of each message to detect if a message is a command. ie `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't.
+</br></br>osuClientID: the client id of an osu! api v2 app
+</br></br>osuClientSecret: the secret/token of an osu! api v2 app
+</br></br>ownerusers: an array of user ids stored as strings. users with these ids can use any command
+</br></br>google.apiKey: the api key of a google programmable search engine
+</br></br>google.engineId: the search engine id of a google programmable search engine
+</br></br>useScreenshotParse: enables/disables the detection of maps in screenshots. Can cause crashes due to high CPU and memory usage
+</br></br>LogApiCalls: enables/disables logging output to the console
+</br></br>LogApiCallsToFile: enables/disable console output being logged to `logs/console.log`. Still saves logs even if `LogApiCalls` is false
+</br></br>enableTracking: enables/disables osutrack. Users can still be added/removed but scores won't be updated.
+</br></br>graphChannelId: sends all graphs to this channel (profile rank history, map strains etc.)

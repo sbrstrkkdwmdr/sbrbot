@@ -4918,7 +4918,12 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         embedStyle = embedStyle.replace('S', 'L') as extypes.osuCmdStyle;
     }
 
-    const checkDetails = await buttonsAddDetails('recent', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle);
+    const checkDetails = await buttonsAddDetails('recent', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle, {
+        compact: false,
+        compact_rem: true,
+        detailed: true,
+        detailed_rem: false
+    });
     buttons = checkDetails.buttons;
     embedStyle = checkDetails.embedStyle;
 
@@ -5252,39 +5257,16 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         }
         let totaldiff: string;
         let hitlist: string;
+
+        const getHits = osufunc.returnHits(gamehits, curscore.mode);
+
         switch (scoredetailed) {
-            case 0: {
-                switch (curscore.mode) {
-                    case 'osu': default:
-                        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
-                        break;
-                    case 'taiko':
-                        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_miss}`;
-                        break;
-                    case 'fruits':
-                        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
-                        break;
-                    case 'mania':
-                        hitlist = `${gamehits.count_geki}/${gamehits.count_300}/${gamehits.count_katu}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
-                        break;
-                }
+            default: {
+                hitlist = getHits.short;
             }
                 break;
-            default: {
-                switch (curscore.mode) {
-                    case 'osu': default:
-                        hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
-                        break;
-                    case 'taiko':
-                        hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **Miss:** ${gamehits.count_miss}`;
-                        break;
-                    case 'fruits':
-                        hitlist = `**300:** ${gamehits.count_300} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
-                        break;
-                    case 'mania':
-                        hitlist = `**300+:** ${gamehits.count_geki} \n **300:** ${gamehits.count_300} \n **200:** ${gamehits.count_katu} \n **100:** ${gamehits.count_100} \n **50:** ${gamehits.count_50} \n **Miss:** ${gamehits.count_miss}`;
-                        break;
-                }
+            case 2: {
+                hitlist = getHits.long;
             }
                 break;
         }
@@ -5427,7 +5409,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 ${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
 ${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${rspassinfo}\n\`${hitlist}\` | ${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo
+${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\` | ${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo
 **${rspp}**pp ${fcflag}\n${ppissue}
 `);
             }
@@ -5444,7 +5426,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                         {
                             name: 'SCORE DETAILS',
                             value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
-                                `${rspassinfo}\n${hitlist}\n${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo`,
+                                `${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\`\n${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo`,
                             inline: true
                         },
                         {
@@ -5494,7 +5476,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                         {
                             name: 'SCORE DETAILS',
                             value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
-                                `${rspassinfo}\n${hitlist}\n${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo`,
+                                `${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}${hitlist}\n${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo`,
                             inline: true
                         },
                         {
@@ -6352,23 +6334,34 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     let fcacc: number;
     let ppissue: string;
 
-    if (mode == 'osu') {
-        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
-        fcacc = osumodcalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy;
-    }
-    if (mode == 'taiko') {
-        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_miss}`;
-        fcacc = osumodcalc.calcgradeTaiko(gamehits.count_300, gamehits.count_100, gamehits.count_miss).accuracy;
+    const getHits = osufunc.returnHits(gamehits, scoredata.mode);
 
+    switch (scoredetailed) {
+        default: {
+            hitlist = getHits.short;
+        }
+            break;
+        case 2: {
+            hitlist = getHits.long;
+        }
+            break;
     }
-    if (mode == 'fruits') {
-        hitlist = `${gamehits.count_300}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
-        fcacc = osumodcalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_katu, gamehits.count_miss).accuracy;
+
+    switch (mode) {
+        case 'osu':
+            fcacc = osumodcalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy;
+            break;
+        case 'taiko':
+            fcacc = osumodcalc.calcgradeTaiko(gamehits.count_300, gamehits.count_100, gamehits.count_miss).accuracy;
+            break;
+        case 'fruits':
+            fcacc = osumodcalc.calcgradeCatch(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_katu, gamehits.count_miss).accuracy;
+            break;
+        case 'mania':
+            fcacc = osumodcalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy;
+            break;
     }
-    if (mode == 'mania') {
-        hitlist = `${gamehits.count_geki}/${gamehits.count_300}/${gamehits.count_katu}/${gamehits.count_100}/${gamehits.count_50}/${gamehits.count_miss}`;
-        fcacc = osumodcalc.calcgradeMania(gamehits.count_geki, gamehits.count_300, gamehits.count_katu, gamehits.count_100, gamehits.count_50, gamehits.count_miss).accuracy;
-    }
+
     let ppcalcing: PerformanceAttributes[];
     try {
         ppcalcing = await osufunc.scorecalc({
@@ -13703,7 +13696,14 @@ async function pageButtons(command: string, commanduser: Discord.User, commandId
     return pgbuttons;
 }
 
-async function buttonsAddDetails(command: string, commanduser: Discord.User, commandId: string | number, buttons: Discord.ActionRowBuilder, detailed: number, embedStyle: extypes.osuCmdStyle) {
+async function buttonsAddDetails(command: string, commanduser: Discord.User, commandId: string | number, buttons: Discord.ActionRowBuilder, detailed: number, embedStyle: extypes.osuCmdStyle,
+    disabled?: {
+        compact: boolean,
+        compact_rem: boolean,
+        detailed: boolean,
+        detailed_rem: boolean,
+    }
+) {
     switch (detailed) {
         case 0: {
             buttons.addComponents(
@@ -13716,16 +13716,39 @@ async function buttonsAddDetails(command: string, commanduser: Discord.User, com
         }
             break;
         case 1: {
-            buttons.addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`${mainconst.version}-Detail0-${command}-${commanduser.id}-${commandId}`)
-                    .setStyle(buttonsthing.type.current)
-                    .setEmoji(buttonsthing.label.main.detailLess),
-                new Discord.ButtonBuilder()
-                    .setCustomId(`${mainconst.version}-Detail2-${command}-${commanduser.id}-${commandId}`)
-                    .setStyle(buttonsthing.type.current)
-                    .setEmoji(buttonsthing.label.main.detailMore),
-            );
+            const temp: Discord.RestOrArray<Discord.AnyComponentBuilder> = [];
+
+            const set0 = new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Detail0-${command}-${commanduser.id}-${commandId}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.detailLess);
+            const set2 = new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Detail2-${command}-${commanduser.id}-${commandId}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.main.detailMore);
+
+            if (disabled) {
+                if (disabled.compact == false) {
+                    disabled.compact_rem ?
+                        null :
+                        temp.push(set0.setDisabled(true));
+                } else {
+                    temp.push(set0);
+                }
+                if (disabled.detailed == false) {
+                    disabled.compact_rem ?
+                        null :
+                        temp.push(set2.setDisabled(true));
+                } else {
+                    temp.push(set2);
+                }
+            } else {
+                temp.push(set0, set2);
+            }
+
+
+
+            buttons.addComponents(temp);
             embedStyle = embedStyle.replaceAll('E', '').replaceAll('C', '') as extypes.osuCmdStyle;
         }
             break;
@@ -13885,13 +13908,13 @@ async function parseArgs_scoreList_message(input: extypes.commandInput) {
         sort = 'recent';
         input.args.splice(input.args.indexOf('-r'), 1);
     }
-    if(input.args.includes('-reverse')){
+    if (input.args.includes('-reverse')) {
         reverse = true;
-        input.args.splice(input.args.indexOf('-reverse'), 1)
+        input.args.splice(input.args.indexOf('-reverse'), 1);
     }
-    if(input.args.includes('-rev')){
+    if (input.args.includes('-rev')) {
         reverse = true;
-        input.args.splice(input.args.indexOf('-rev'), 1)
+        input.args.splice(input.args.indexOf('-rev'), 1);
     }
 
     if (input.args.includes('-?')) {

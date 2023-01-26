@@ -2315,3 +2315,119 @@ export async function getFailPoint(
     }
     return time;
 }
+
+/**
+ * @param hits score statistics (api v2)
+ * @param mode osu, taiko, fruits (ctb), mania
+ * @returns 
+ */
+export function returnHits(hits: osuApiTypes.Score['statistics'], mode: osuApiTypes.GameMode) {
+    const object: {
+        short: string,
+        long: string,
+        ex: { name: string, value: string | number; }[];
+    } = {
+        short: '',
+        long: '',
+        ex: []
+    };
+    switch (mode) {
+        case 'osu':
+            object.short = `${hits.count_300}/${hits.count_100}/${hits.count_50}/${hits.count_miss}`;
+            object.long = `**300:** ${hits.count_300} \n **100:** ${hits.count_100} \n **50:** ${hits.count_50} \n **Miss:** ${hits.count_miss}`;
+            object.ex = [
+                {
+                    name: '300',
+                    value: hits.count_300
+                },
+                {
+                    name: '100',
+                    value: hits.count_100
+                },
+                {
+                    name: '50',
+                    value: hits.count_50
+                },
+                {
+                    name: 'Miss',
+                    value: hits.count_miss
+                }
+            ]
+            break;
+        case 'taiko':
+            object.short = `${hits.count_300}/${hits.count_100}/${hits.count_miss}`;
+            object.long = `**Great:** ${hits.count_300} \n **Good:** ${hits.count_100} \n **Miss:** ${hits.count_miss}`;
+            object.ex = [
+                {
+                    name: 'Great',
+                    value: hits.count_300
+                },
+                {
+                    name: 'Good',
+                    value: hits.count_100
+                },
+                {
+                    name: 'Miss',
+                    value: hits.count_miss
+                }
+            ]
+            break;
+        case 'fruits':
+            object.short = `${hits.count_300}/${hits.count_100}/${hits.count_50}/${hits.count_miss}/${hits.count_katu}`;
+            object.long = `**Fruits:** ${hits.count_300} \n **Drops:** ${hits.count_100} \n **Droplets:** ${hits.count_50} \n **Miss:** ${hits.count_miss} \n **Miss(droplets):** ${hits.count_katu}`;
+            object.ex = [
+                {
+                    name: 'Fruits',
+                    value: hits.count_300
+                },
+                {
+                    name: 'Drops',
+                    value: hits.count_100
+                },
+                {
+                    name: 'Droplets',
+                    value: hits.count_50
+                },
+                {
+                    name: 'Miss',
+                    value: hits.count_miss
+                },
+                {
+                    name: 'Miss(droplets)',
+                    value: hits.count_katu
+                },
+            ];
+            break;
+        case 'mania':
+            object.short = `${hits.count_geki}/${hits.count_300}/${hits.count_katu}/${hits.count_100}/${hits.count_50}/${hits.count_miss}`;
+            object.long = `**300+:** ${hits.count_geki} \n **300:** ${hits.count_300} \n **200:** ${hits.count_katu} \n **100:** ${hits.count_100} \n **50:** ${hits.count_50} \n **Miss:** ${hits.count_miss}`;
+            object.ex = [
+                {
+                    name: '300+',
+                    value: hits.count_geki
+                },
+                {
+                    name: '300',
+                    value: hits.count_300
+                },
+                {
+                    name: '200',
+                    value: hits.count_katu
+                },
+                {
+                    name: '100',
+                    value: hits.count_100
+                },
+                {
+                    name: '50',
+                    value: hits.count_50
+                },
+                {
+                    name: 'Miss',
+                    value: hits.count_miss
+                }
+            ];
+            break;
+    }
+    return object;
+}
