@@ -196,3 +196,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [REM] remove redundant "compact" mode from rs
 [FIX] remove excess new line between score hits and score rank/fail info
 [REM] remove gif command from helpinfo.ts
+[ADD] added coin flip command

@@ -321,6 +321,9 @@ export default (input: {
             case '8ball': case 'ask':
                 misccmds._8ball({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
+            case 'coin':
+                misccmds.coin({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
+                break;
             case 'image': case 'imagesearch':
                 misccmds.image({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
@@ -590,61 +593,58 @@ export default (input: {
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
                 break;
             case 'ranked': {
-                console.log('hi')
                 overrides = {
                     ex: 'ranked'
-                }
-                console.log('hi2')
+                };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
-                console.log('hi3')
             }
                 break;
             case 'favourite': case 'favourites': {
                 overrides = {
                     ex: 'favourite'
-                }
+                };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
             }
                 break;
             case 'graveyard': case 'unranked': {
                 overrides = {
                     ex: 'graveyard'
-                }
+                };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
             }
                 break;
             case 'loved': {
                 overrides = {
                     ex: 'loved'
-                }
+                };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
             }
                 break;
             case 'most_played': case 'mostplayed': case 'mp': {
                 overrides = {
                     ex: 'most_played'
-                }
+                };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
             }
                 break;
             case 'pending': case 'wip': {
                 overrides = {
                     ex: 'pending'
-                }
+                };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
             }
                 break;
             case 'nominated': case 'bn': {
                 overrides = {
                     ex: 'nominated'
-                }
+                };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
             }
                 break;
             case 'guest': case 'gd': {
                 overrides = {
                     ex: 'guest'
-                }
+                };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel, statsCache: input.statsCache });
             }
                 break;
