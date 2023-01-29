@@ -2162,8 +2162,24 @@ export async function time(input: extypes.commandInput) {
         try {
             let offset = 0;
             const found: timezoneList.timezone[] = [];
+
+            let timezones = [];
+
+            // converts all timezone aliases to caps to remove case sensitivity
+            for (let i = 0; i < timezoneList.timezones.length; i++) {
+                const curtim = timezoneList.timezones[i];
+                const newAl: string[] = [];
+                for (let j = 0; j < curtim.aliases.length; j++) {
+                    newAl.push(curtim.aliases[i].toUpperCase());
+                }
+                curtim.aliases = newAl;
+                timezones.push(curtim);
+            }
+
+
             for (let i = 0; i < timezoneList.timezones.length; i++) {
                 const curTimeZone = timezoneList.timezones[i];
+                //converts search to caps to remove case sensitivity
                 if (curTimeZone.aliases.includes(fetchtimezone.toUpperCase())) {
                     found.push(curTimeZone);
                     offset = curTimeZone.offsetDirection == '+' ?
