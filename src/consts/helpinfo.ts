@@ -439,7 +439,7 @@ const cmds: commandInfo[] = [
     },
     {
         name: 'time',
-        description: 'Shows the current time in a specific timezone as well as UTC and the bot\'s timezone',
+        description: 'Shows the current time in a specific timezone. ',
         usage: 'time [timezone]',
         slashusage: 'time [timezone]',
         examples: [
@@ -460,7 +460,7 @@ const cmds: commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset)',
-                options: ['Formatted as [region]/[city], UTC(+/-)(hours)'],
+                options: ['Formatted as [region]/[city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
                 defaultValue: 'UTC',
                 examples: ['Australia/Melbourne', 'Europe/Warsaw'],
                 commandTypes: ['message', 'interaction']

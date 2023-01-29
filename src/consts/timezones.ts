@@ -45,7 +45,7 @@ export const timezones: timezone[] = [
             'GMT-11:00',
             '-11',
             'SST',
-            'American Samoa', 'Amerika Samoa',
+            'American Samoa', 'Amerika Samoa', 'AS', 'ASM',
             'Pago Pago', //^ capital
             'Jarvis Island',
             'Kingman Reef',
@@ -188,7 +188,7 @@ export const timezones: timezone[] = [
             '-06',
             'CST',
             'MDT',
-            'Belize',
+            'Belize', 'BZ', 'BLZ',
             'Canada',
             'Manitoba',//^ 
             'Saskatchewan',//^ 
@@ -234,8 +234,8 @@ export const timezones: timezone[] = [
             '-05',
             'CDT',
             'EST',
-            'Bahamas',
-            'Brazil', 'Brasil',
+            'Bahamas', 'BS', 'BHS',
+            'Brazil', 'Brasil', 'BR', 'BRA',
             'Acre', //^ 
             'Canada',
             'Nunavut',//^ 
@@ -287,13 +287,13 @@ export const timezones: timezone[] = [
             '-04',
             'EDT',
             'AST',
-            'Anguilla',
-            'Antigua', 'Barbuda', 'Antigua and Barbuda',
-            'Aruba',
-            'Barbados',
-            'Bermuda',
-            'Bolivia', 'Buliwya', 'Wuliwya', 'Volívia',
-            'Brazil', 'Brasil',
+            'Anguilla', 'AI', 'AIA',
+            'Antigua', 'Barbuda', 'Antigua and Barbuda', 'AG', 'ATG',
+            'Aruba', 'AW', 'ABW',
+            'Barbados', 'BB', 'BRB',
+            'Bermuda', 'BM', 'BMU',
+            'Bolivia', 'Buliwya', 'Wuliwya', 'Volívia', 'BO', 'BOL',
+            'Brazil', 'Brasil', 'BR', 'BRA',
             'Boa Vista',//^ 
             'Campo Grande',//^ 
             'Manaus',//^ 
@@ -349,8 +349,8 @@ export const timezones: timezone[] = [
             'GMT-03:00',
             '-03',
             'ADT',
-            'Argentina',
-            'Brazil', 'Brasil',
+            'Argentina', 'AR', 'ARG',
+            'Brazil', 'Brasil', 'BR', 'BRA',
             'Brasilia',//^ 
             'Rio',//^ 
             'Sao Paulo', 'São Paulo',//^ 
@@ -387,7 +387,7 @@ export const timezones: timezone[] = [
             'GMT-2',
             'GMT-02:00',
             '-02',
-            'Brazil', 'Brasil',
+            'Brazil', 'Brasil', 'BR', 'BRA',
             'Fernandoi de Noronha', //^ 
             'South Georgia and the South Sandwich Islands', 'South Sandwich Islands',
             'Trindade and Martim Vaz'
@@ -422,7 +422,7 @@ export const timezones: timezone[] = [
             'GMT+00:00',
             'GMT+0',
             'WET',
-            'Burkina Faso',
+            'Burkina Faso', 'BF', 'BFA',
             'Bouvet Island',
             'Canary Islands',
             'Cote d\'Ivoire', 'Ivory Coast',
@@ -468,14 +468,14 @@ export const timezones: timezone[] = [
             'CET',
             'WAT',
             'IST',
-            'Albania', 'Shqipëria', 'Shqiperia',
-            'Andorra',
-            'Algeria', 'Dzayer', 'ⴷⵣⴰⵢⴻⵔ', 'Al-Jazā\'ir', 'الجزائر',
-            'Angola',
-            'Austria', 'Österreich', 'Osterreich',
-            'Belgium', 'België', 'Belgique', 'Belgien',
-            'Benin', 'Bénin',
-            'Bosnia And Herzegovina', 'Bosnia', 'Herzegovina', 'Bosna i Hercegovina', 'Босна и Херцеговина',
+            'Albania', 'Shqipëria', 'Shqiperia', 'AL', 'ALB',
+            'Andorra', 'AD', 'AND',
+            'Algeria', 'Dzayer', 'ⴷⵣⴰⵢⴻⵔ', 'Al-Jazā\'ir', 'الجزائر', 'DZ', 'DZA',
+            'Angola', 'AO', 'AGO',
+            'Austria', 'Österreich', 'Osterreich', 'AT', 'AUT',
+            'Belgium', 'België', 'Belgique', 'Belgien', 'BE', 'BEL',
+            'Benin', 'Bénin', 'BJ', 'BN',
+            'Bosnia And Herzegovina', 'Bosnia', 'Herzegovina', 'Bosna i Hercegovina', 'Босна и Херцеговина', 'BA', 'BIH',
             'Cameroon', 'Cameroun',
             'Central African Republic', 'CAR', 'Centrafrique', 'Bêafrîka',
             'Chad', 'Tchad', 'Tšād', 'تشاد',
@@ -529,10 +529,10 @@ export const timezones: timezone[] = [
             'EET',
             'SAST',
             'IST',
-            'Belarus', 'Bielaruś', 'Беларусь',
-            'Botswana',
-            'Bulgaria', 'Bălgariya', 'Bălgarija', 'България',
-            'Burundi', 'Uburundi',
+            'Belarus', 'Bielaruś', 'Беларусь', 'BY', 'BLR',
+            'Botswana', 'BW', 'BWA',
+            'Bulgaria', 'Bălgariya', 'Bălgarija', 'България', 'BG', 'BGR',
+            'Burundi', 'Uburundi', 'BI', 'BDI',
             'Democratic Republic  of the Congo', 'DRC', //E
             'Cyprus', 'Kypros', 'Κύπρος', 'Kıbrıs',
             'Egypt', 'Misr', 'Masr', 'مصر',
@@ -577,7 +577,7 @@ export const timezones: timezone[] = [
             'IDT',
             'EAT',
             'MSK',
-            'Bahrain', 'Al-Baḥrayn', 'البحرين',
+            'Bahrain', 'Al-Baḥrayn', 'البحرين', 'BH', 'BHR',
             'Comoros', 'Komori', 'Juzur al-Qamar', 'جزر القمر', 'Comores',
             'Djibouti', 'Jībūtī', 'جيبوتي', 'Djibouti', 'Jabuuti', 'Gabuuti',
             'Eritrea', 'Iritriya', 'إرتريا', 'Ertra', 'ኤርትራ',
@@ -619,8 +619,8 @@ export const timezones: timezone[] = [
             'GMT+4',
             'GMT+04:00',
             '+04',
-            'Armenia', 'Hayastan', 'Hayastán', 'Հայաստան',
-            'Azerbaijan', 'Azərbaycan',
+            'Armenia', 'Hayastan', 'Hayastán', 'Հայաստան', 'AM', 'ARM',
+            'Azerbaijan', 'Azərbaycan', 'AZ', 'AZE',
             'Georgia', 'Sak\'art\'velo', 'საქართველო',
             'Mauritius', 'Maurice', 'Moris',
             'Oman', '‘Umān', 'عُمان',
@@ -639,7 +639,7 @@ export const timezones: timezone[] = [
             'GMT+430',
             'GMT+04:30',
             '+0430',
-            'Afghanistan', 'Afghanestan', 'افغانستان',
+            'Afghanistan', 'Afghanestan', 'افغانستان', 'AF', 'AFG'
 
         ]
     },
@@ -653,7 +653,7 @@ export const timezones: timezone[] = [
             'GMT+05:00',
             '+05',
             'PKT',
-            'British Indian Ocean Territory', //NAO
+            'British Indian Ocean Territory', 'IO', 'IOT', //NAO
             'French Southern and Antarctic Lands',
             'Heard Island and McDonald Islands',
             'Kazakhstan', 'Qazaqstan', 'Қазақстан', 'Kazakhstán', 'Казахстан',            //W
@@ -705,12 +705,12 @@ export const timezones: timezone[] = [
             'GMT+6',
             'GMT+06:00',
             '+06',
-            'Bhutan', 'Druk Yul', 'འབྲུག་ཡུལ',
-            'British Indian Ocean Territory', //CIA
+            'Bhutan', 'Druk Yul', 'འབྲུག་ཡུལ', 'BT', 'BTN',
+            'British Indian Ocean Territory', 'IO', 'IOT', //CIA
             'Kazakhstan', 'Qazaqstan', 'Қазақстан', 'Kazakhstán', 'Казахстан', //E
             'Kyrgyzstan', 'Кыргызстан',
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
-            'Bangladesh', 'বাংলাদেশ'
+            'Bangladesh', 'বাংলাদেশ', 'BD', 'BGD',
         ]
     },
     {
@@ -764,11 +764,11 @@ export const timezones: timezone[] = [
             'CST',
             'HKT',
             'WITA',
-            'PST',
+            'PHST',
             'AWST',
-            'Australia',
+            'Australia', 'AU', 'AUS',
             'Western Australia', 'WA',
-            'Brunei', 'بروني',
+            'Brunei', 'بروني', 'BN', 'BRN',
             'China', 'Zhōngguó', 'Zhōnghuá Rénmín Gònghéguó', '中国', '中华人民共和国', 'PRC', 'People\'s Republic of China',
             'Hong Kong', 'Heung Gong', '香港',
             'Indonesia', //C
@@ -827,7 +827,7 @@ export const timezones: timezone[] = [
             'GMT+09:30',
             '+0930',
             'ACST',
-            'Australia',
+            'Australia', 'AU', 'AUS',
             'Northern Territory', 'NT',
             'South Australia',
             'Broken Hill' //NSW
@@ -843,7 +843,7 @@ export const timezones: timezone[] = [
             'GMT+10:00',
             'AEST',
             'ChST',
-            'Australia',
+            'Australia', 'AU', 'AUS',
             'Australian Capital Territory', 'ACT',
             'New South Wales', 'NSW',
             'Sydney',
@@ -884,7 +884,7 @@ export const timezones: timezone[] = [
             'GMT+11:00',
             '+11',
             'AEDT',
-            'Australia',
+            'Australia', 'AU', 'AUS',
             'Norfolk Island', ' Norf\'k Ailen',
             'Federated States of Micronesia', 'Micronesia',
             'Kosrae',
