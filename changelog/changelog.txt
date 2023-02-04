@@ -187,7 +187,7 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] time is displayed in specific columns for readability
 
 0.4.11
-
+2023-02-05
 [FIX] fix time command crashing on invalid timezones
 [REM] remove UR on replayparse
 [ADD] added more aliases to time command (endyonyms and iso codes)
