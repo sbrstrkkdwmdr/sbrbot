@@ -315,10 +315,13 @@ const cmds: commandInfo[] = [
                 required: 'true (if using message command)',
                 description: 'The math problem to solve',
                 options: [
-                    'non numerical characters are ignored (excluding pi)',
+`Supports:
+integers (0-9), floats/decimals (.5, 1.34), negatives (-727), exponential notation (6.022e+23)
+operators: *, /, +, -, (, )
+`,
                 ],
                 defaultValue: 'N/A',
-                examples: ['8/2(2+2)', '2^32'],
+                examples: ['8/2(2+2)', '2^32', '2e-2 + .5'],
                 commandTypes: ['message']
             },
             {

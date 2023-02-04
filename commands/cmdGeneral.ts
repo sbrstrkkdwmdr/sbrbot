@@ -2,6 +2,8 @@ import * as Discord from 'discord.js';
 import * as fs from 'fs';
 import moment from 'moment';
 import * as replayparser from 'osureplayparser';
+// import strmath from 'string-math';
+// import strmath from 'math-from-string';
 import pkgjson from '../package.json' assert { type: 'json' };
 import { path } from '../path.js';
 import * as calc from '../src/calc.js';
@@ -1553,14 +1555,7 @@ export async function math(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let equation = 'null';
-
-    if (type == 'basic') {
-        const string = input.args.join(' ');
-        const evalstr = eval(cmdchecks.toMath(string).toString().replaceAll('^', '**').replaceAll('pi', 'Math.PI').toString()).toString();
-        equation = evalstr;
-    } else if (type == 'help') {
-        equation = `-
+    const eqHelp = `-
 + = add
 - = subtract
 / = divide
@@ -1571,6 +1566,23 @@ export async function math(input: extypes.commandInput) {
 ++ = +1
 -- = -1
         `;
+
+    let equation = 'null';
+
+    if (type == 'basic') {
+        const string = input.args.join(' ')
+            .replaceAll('^', '**')
+            .trim()
+            ;
+        let isErr = false;
+        let evalstr: string = await calc.stringMath(string)
+            .catch(x => {
+                isErr = true;
+                return x;
+            });//  + '';
+        equation = `${evalstr}` //+ isErr ? eqHelp : '';
+    } else if (type == 'help') {
+        equation = eqHelp;
     }
     else {
         switch (type) {

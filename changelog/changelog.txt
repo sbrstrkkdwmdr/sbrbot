@@ -198,3 +198,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [REM] remove gif command from helpinfo.ts
 [ADD] added coin flip command
 [QOL] fix time command being case sensitive
+[FIX] math command uses string-math instead of eval();
