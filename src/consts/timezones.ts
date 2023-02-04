@@ -12,7 +12,7 @@ export type timezone = {
  * @source https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_and_their_capitals_in_native_languages
  * @source https://countrycode.org/ 
  * finished country codes: A, B, C, D, E, F, G, H, I, J, K, L, M,
- * up to: reoybkuc if tge congo
+ * up to: republic of the congo
  */
 
 //UTC+/-HH:mm
@@ -79,7 +79,7 @@ export const timezones: timezone[] = [
             'Johnston Atoll',
             'Tokelau',
             'Nukunonu', //^ capital
-            'USA', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
+            'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
             'Aleutian Islands',
             'Adak', //^ capital
             'Hawaii',
@@ -110,7 +110,7 @@ export const timezones: timezone[] = [
             '-09',
             'HDT',
             'AKST',
-            'USA', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
+            'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
             'Alaska', //^ 
             'Juneau', //^ capital
             'French Polynesia', 'Polynésie française', 'PF', 'PYF',
@@ -135,7 +135,7 @@ export const timezones: timezone[] = [
             'Mexico', 'México', 'Mēxihco', 'MX', 'MEX',
             'Baja Calirfornia Norte', //^ 
             'Pitcairn Islands', ' Pitkern Ailen', 'PN', 'PCN',
-            'USA', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
+            'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
             'Washington',//^ 
             'Idaho', //^ //north
             'Oregon',//^ 
@@ -164,7 +164,7 @@ export const timezones: timezone[] = [
             'Nayarit',//^ 
             'Sinaloa',//^ 
             'Sonora',//^ 
-            'USA', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
+            'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
             'North Dakota', //^ //SW
             'South Dakota', //^ //W
             'Nebraska', //^ //W
@@ -204,7 +204,7 @@ export const timezones: timezone[] = [
             'Honduras', 'HN', 'HND',
             'Mexico', 'México', 'Mēxihco', 'MX', 'MEX',
             'Nicaragua', 'NI', 'NIC',
-            'USA', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
+            'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
             'Wisconsin',//^ 
             'Illinois',//^ 
             'Indiana', //^ //SW and NW corners
@@ -253,7 +253,7 @@ export const timezones: timezone[] = [
             'Navassa Island',
             'Panama', 'Panamá', 'PA', 'PAN',
             'Peru', 'Perú', 'Piruw', 'PE', 'PER',
-            'USA', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
+            'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
             'Maine',//^ 
             'New Hampshire',//^ 
             'Vermont',//^ 
@@ -319,13 +319,13 @@ export const timezones: timezone[] = [
             'Netherlands Antilles', 'Antilles', 'AN', 'ANT',
             'Paraguay', 'Paraguái', 'PY', 'PRY',
             'Puerto Rico', 'PR', 'PRI',
-            'Saint Kitts and Nevis',
-            'Saint Lucia',
-            'Saint Vincent and the Grenadines',
-            'Trinidad and Tobago',
-            'Turks and Caicos Islands',
-            'U.S. Virgin Islands', 'US Virgin Islands', 'Virgin Islands',
-            'Venezuela',
+            'Saint Kitts and Nevis', 'KN', 'KNA',
+            'Saint Lucia', 'LC', 'LCA',
+            'Saint Vincent and the Grenadines', 'VC', 'VCT',
+            'Trinidad and Tobago', 'TT', 'TTO',
+            'Turks and Caicos Islands', 'TC', 'TCA',
+            'U.S. Virgin Islands', 'US Virgin Islands', 'Virgin Islands', 'VI', 'VIR',
+            'Venezuela', 'VE', 'VEN',
         ]
     },
     {
@@ -364,9 +364,9 @@ export const timezones: timezone[] = [
             'French Guiana', 'Guyane',
             'Greenland', 'Kalaallit Nunaat', 'Grønland', 'GL', 'GRL',//central
             'Guyana',
-            'Saint Pierre and Miquelon',
-            'Suriname',
-            'Uruguay'
+            'Saint Pierre and Miquelon', 'PM', 'SPM',
+            'Suriname', 'SR', 'SUR',
+            'Uruguay', 'UY', 'URY'
         ]
     },
     {
@@ -429,7 +429,6 @@ export const timezones: timezone[] = [
             'Bouvet Island',
             'Canary Islands',
             'Cote d\'Ivoire', 'Ivory Coast', 'CI', 'CIV',
-            'England',
             'Faroe Islands', 'Føroyar', 'Færøerne', 'FO', 'FRO',
             'Gambia', 'The Gambia', 'GM', 'GMB',
             'Ghana', 'Gaana', 'Gana', 'GH', 'GHA',
@@ -437,7 +436,7 @@ export const timezones: timezone[] = [
             'Guernsey', 'GG', 'GGY',
             'Guinea', 'Guinée', 'Gine', 'GN', 'GIN',
             'Guinea-Bissau', 'Guiné-Bissau', 'GW', 'GNB',
-            'Iceland', 'Ísland',
+            'Iceland', 'Ísland', 'IS', 'ISL',
             'Ireland', 'Éire', 'IE', 'IRL',
             'Isle of Man', 'Ellan Vannin', 'IM', 'IMN',
             'Jersey', 'Jèrri', 'JE', 'JEY',
@@ -446,15 +445,16 @@ export const timezones: timezone[] = [
             'Mauritania', 'MR', 'MRT',
             'Northern Ireland',
             'Portugal', 'PT', 'PRT',
-            'Saint Helena',
-            'Sao Tome and Principe', 'São Tomé and Príncipe', 'São Tomé e Príncipe',
-            'Senegal', 'Sénégal', 'Senegaal',
-            'Sierra Leone',
+            'Saint Helena', 'SH', 'SHN',
+            'Sao Tome and Principe', 'São Tomé and Príncipe', 'São Tomé e Príncipe', 'ST', 'STP',
+            'Senegal', 'Sénégal', 'Senegaal', 'SN', 'SEN',
+            'Sierra Leone', 'SL', 'SLE',
+            'Togo', 'TG', 'TGO',
+            'United Kingdom', 'UK', 'U.K.', 'Britain', 'Great Britain', 'Y Deyrnas Unedig', 'Unitit Kinrick', 'Rìoghachd Aonaichte', 'Ríocht Aontaithe', 'An Rywvaneth Unys', 'GB', 'GBR',
+            'England',
             'Scotland',
-            'Togo',
-            'United Kingdom', 'UK', 'U.K.', 'Britain', 'Great Britain', 'Y Deyrnas Unedig', 'Unitit Kinrick', 'Rìoghachd Aonaichte', 'Ríocht Aontaithe', 'An Rywvaneth Unys',
             'Wales',
-            'Western Sahara'
+            'Western Sahara', 'EH', 'ESH'
         ]
     },
     {
@@ -507,15 +507,15 @@ export const timezones: timezone[] = [
             'North Macedonia', 'Severna Makedonija', 'Северна Македонија', 'Maqedonia e Veriut', 'MK', 'MKD',
             'Norway', 'Norge', 'Noreg', 'Norga', 'Vuodna', 'Nöörje', 'NO', 'NOR',
             'Poland', 'Polska', 'PL', 'POL',
-            'San Marino',
-            'Serbia', 'Srbija', 'Србија',
-            'Slovakia', 'Slovensko',
-            'Slovenia', 'Slovenija',
-            'Spain', 'España', 'Espanya', 'Espainia', 'Espanha',
-            'Sweden', 'Sverige',
-            'Switzerland', 'Schweiz', 'Suisse', 'Svizzera', 'Svizra', 'IS', 'ISL',
-            'Tunisia', 'Tunes', 'ⵜⵓⵏⵙ', 'Tūns', 'تونس',
-            'Vatican City', 'Civitas Vaticana', 'Città del Vaticano'
+            'San Marino', 'SM', 'SMR',
+            'Serbia', 'Srbija', 'Србија', 'RS', 'SRB',
+            'Slovakia', 'Slovensko', 'SK', 'SVK',
+            'Slovenia', 'Slovenija', 'SI', 'SVN',
+            'Spain', 'España', 'Espanya', 'Espainia', 'Espanha', 'ES', 'ESP',
+            'Sweden', 'Sverige', 'SZ', 'SWZ',
+            'Switzerland', 'Schweiz', 'Suisse', 'Svizzera', 'Svizra', 'SE', 'SWE',
+            'Tunisia', 'Tunes', 'ⵜⵓⵏⵙ', 'Tūns', 'تونس', 'TN', 'TUN',
+            'Vatican City', 'Civitas Vaticana', 'Città del Vaticano', 'VA', 'VAT'
         ]
     },
     {
@@ -555,16 +555,16 @@ export const timezones: timezone[] = [
             'Mozambique', 'Moçambique', 'MZ', 'MOZ',
             'Namibia', 'Namibië', 'NA', 'NAM',
             'Palestine', 'Filasṭīn', 'فلسطين', 'PS', 'PSE',
-            'Romania', 'România',
-            'Russia', 'Rossiya', 'Rossiâ', 'Россия',
+            'Romania', 'România', 'RO', 'ROU',
+            'Russia', 'Rossiya', 'Rossiâ', 'Россия', 'RU', 'RUS',
             'Kaliningrad', 'Kaliningrad Oblast',
-            'Rwanda',
-            'South Africa', 'Suid-Afrika', 'iNingizimu Afrika', 'uMzantsi Afrika', 'Afrika-Borwa', 'Afrika Borwa', 'Aforika Borwa', 'Afurika Tshipembe', 'Afrika Dzonga', 'iNingizimu Afrika', 'iSewula Afrika',
-            'Sudan', 'As-Sudan', 'السودان',
-            'Syria', 'Suriyah', 'سورية',
-            'Ukraine', 'Ukrajina', 'Україна',
-            'Zambia',
-            'Zimbabwe'
+            'Rwanda', 'RW', 'RWA',
+            'South Africa', 'Suid-Afrika', 'iNingizimu Afrika', 'uMzantsi Afrika', 'Afrika-Borwa', 'Afrika Borwa', 'Aforika Borwa', 'Afurika Tshipembe', 'Afrika Dzonga', 'iNingizimu Afrika', 'iSewula Afrika', 'ZA', 'ZAF',
+            'Sudan', 'As-Sudan', 'السودان', 'SD', 'SDN',
+            'Syria', 'Suriyah', 'سورية', 'SY', 'SYR',
+            'Ukraine', 'Ukrajina', 'Україна', 'UA', 'UKR',
+            'Zambia', 'ZM', 'ZMB',
+            'Zimbabwe', 'ZW', 'ZWE'
         ]
     },
     {
@@ -592,13 +592,13 @@ export const timezones: timezone[] = [
             'Mayotte', 'YT', 'MYT',
             'Qatar', 'Qaṭar', 'قطر', 'QA', 'QAT',
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
-            'Saudi Arabia', 'Al-Mamlaka Al-‘Arabiyyah as Sa‘ūdiyyah', 'المملكة العربية السعودية',
-            'Somalia', 'Soomaaliya', 'aş-Şūmāl', 'الصومال',
-            'South Sudan', 'Sudan Kusini', 'Paguot Thudän',
-            'Tanzania',
-            'Turkey', 'Türkiye',
-            'Uganda',
-            'Yemen', 'Al-Yaman', 'اليمن'
+            'Saudi Arabia', 'Al-Mamlaka Al-‘Arabiyyah as Sa‘ūdiyyah', 'المملكة العربية السعودية', 'SA', 'SAU',
+            'Somalia', 'Soomaaliya', 'aş-Şūmāl', 'الصومال', 'SO', 'SOM',
+            'South Sudan', 'Sudan Kusini', 'Paguot Thudän', 'SS', 'SSD',
+            'Tanzania', 'TZ', 'TZA',
+            'Turkey', 'Türkiye', 'TR', 'TUR',
+            'Uganda', 'UG', 'UGA',
+            'Yemen', 'Al-Yaman', 'اليمن', 'YE', 'YEM'
         ]
     },
     {
@@ -627,10 +627,10 @@ export const timezones: timezone[] = [
             'Georgia', 'Sak\'art\'velo', 'საქართველო', 'GE', 'GEO',
             'Mauritius', 'Maurice', 'Moris', 'MU', 'MUS',
             'Oman', '‘Umān', 'عُمان', 'OM', 'OMN',
-            'Reunion', 'Réunion', 'La Réunion',
+            'Reunion', 'Réunion', 'La Réunion', 'RE', 'REU',
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
-            'Seychelles', 'Sesel',
-            'United Arab Emirates', 'UAE', 'Al-’Imārat Al-‘Arabiyyah Al-Muttaḥidah', 'الإمارات العربيّة المتّحدة'
+            'Seychelles', 'Sesel', 'SC', 'SYC',
+            'United Arab Emirates', 'UAE', 'Al-’Imārat Al-‘Arabiyyah Al-Muttaḥidah', 'الإمارات العربيّة المتّحدة', 'AE', 'ARE',
         ]
     },
     {
@@ -663,9 +663,9 @@ export const timezones: timezone[] = [
             'Maldives', 'Dhivehi Raajje', 'ދިވެހިރާއްޖެ', 'MV', 'MDV',
             'Pakistan', 'Pākistān', 'پاکستان', 'PK', 'PAK',
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
-            'Tajikstan', 'Tojikistan', 'Тоҷикистон',
-            'Turkmenistan', 'Türkmenistan',
-            'Uzbekistan', 'O‘zbekiston', 'Ўзбекистон'
+            'Tajikstan', 'Tojikistan', 'Тоҷикистон', 'TJ', 'TJK',
+            'Turkmenistan', 'Türkmenistan', 'TK', 'TKM',
+            'Uzbekistan', 'O‘zbekiston', 'Ўзбекистон', 'UZ', 'UZB'
         ]
     },
     {
@@ -685,7 +685,7 @@ export const timezones: timezone[] = [
             'ভারত',
             'India', 'Bhārat', 'ભારત', 'Bhārat', 'भारत', 'Bhārata', 'ಭಾರತ', 'Bhārat', 'भारत', 'Bhāratam', 'ഭാരതം', 'Bhārat', 'भारत', 'Bhārat', 'भारत', 'Bhārata', 'ଭାରତ', 'Bhārat', 'ਭਾਰਤ', 'Bhāratam', 'भारतम्', 'Bārata', 'பாரதம்', 'Bhāratadēsam', 'భారత దేశం',
             'IN', 'IND',//^
-            'Sri Lanka', 'Sri Lankā', 'ශ්‍රී ලංකාව', 'இலங்கை'
+            'Sri Lanka', 'Sri Lankā', 'ශ්‍රී ලංකාව', 'இலங்கை', 'LK', 'LKA',
         ]
     },
     {
@@ -752,8 +752,8 @@ export const timezones: timezone[] = [
             'Uvs',
             'Bayan-Ölgii',
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
-            'Thailand', 'Thai', 'Prathet Thai', 'Ratcha-anachak Thai', 'ไทย', 'ประเทศไทย', 'าชอาณาจักรไทย',
-            'Vietnam', 'Việt Nam'
+            'Thailand', 'Thai', 'Prathet Thai', 'Ratcha-anachak Thai', 'ไทย', 'ประเทศไทย', 'าชอาณาจักรไทย', 'TH', 'THAI',
+            'Vietnam', 'Việt Nam', 'VN', 'VNM'
         ]
     },
     {
@@ -782,8 +782,8 @@ export const timezones: timezone[] = [
             'Malaysia', 'MY', 'MYS',
             'Mongolia', 'Mongol Uls', 'Монгол Улс', 'ᠮᠤᠩᠭᠤᠯ ᠤᠯᠤᠰ', 'MN', 'MNG', //most of
             'Philippines', 'Pilipinas', 'PH', 'PHL',
-            'Singapore', 'Singapura', 'Xīnjiāpō', '新加坡', 'Singapur', 'சிங்கப்பூர்',
-            'Taiwan', 'Zhōnghuá Mínguó', 'Táiwān', '中華民國', '臺灣', '台灣',
+            'Singapore', 'Singapura', 'Xīnjiāpō', '新加坡', 'Singapur', 'சிங்கப்பூர்', 'SG', 'SGP',
+            'Taiwan', 'Zhōnghuá Mínguó', 'Táiwān', '中華民國', '臺灣', '台灣', 'TW', 'TWN',
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
         ]
     },
@@ -816,7 +816,7 @@ export const timezones: timezone[] = [
             'Western New Guinea', 'Papua Niugini', 'Papua Niu Gini', 'PG', 'PNG',
             'Japan', 'Nihon', 'Nippon', '日本', 'JP', 'JPN',
             'North Korea', 'Chosŏn', '조선', '朝鮮', 'Bukchosŏn', '북조선', 'KP', 'PRK',
-            'South Korea', 'Hanguk', '한국', '韓國', 'Namhan', '남한',
+            'South Korea', 'Hanguk', '한국', '韓國', 'Namhan', '남한', 'KR', 'KOR',
             'Palau', 'Belau', 'PW', 'PLW',
             'Russia'
         ]
@@ -895,8 +895,8 @@ export const timezones: timezone[] = [
             'Pohnpei',
             'New Caledonia', 'Nouvelle-Calédonie', 'NC', 'NCL',
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
-            'Solomon Islands', 'Solomon Aelan',
-            'Vanuatu'
+            'Solomon Islands', 'Solomon Aelan', 'SB', 'SLB',
+            'Vanuatu', 'VU', 'VUT'
         ]
     },
     {
@@ -917,9 +917,9 @@ export const timezones: timezone[] = [
             'New Zealand', 'Aotearoa', 'NZ', 'NZL',
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
             'South Pole',
-            'Tuvalu',
+            'Tuvalu', 'TV', 'TUV',
             'Wake Island',
-            'Wallis and Futuna'
+            'Wallis and Futuna', 'WF', 'WLF'
         ]
     },
     {
@@ -947,11 +947,11 @@ export const timezones: timezone[] = [
             'NZDT',
             'Kiribati',
             'Phoenix Islands',
-            'Samoa', 'Sāmoa',
+            'Samoa', 'Sāmoa', 'WS', 'WSM',
             'Apia', //^
             'New Zealand',
-            'Tokelau',
-            'Tonga'
+            'Tokelau', 'TK', 'TKL',
+            'Tonga', 'TO', 'TON'
         ]
     },
     {
