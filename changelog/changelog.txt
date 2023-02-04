@@ -190,10 +190,11 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 
 [FIX] fix time command crashing on invalid timezones
 [REM] remove UR on replayparse
-[ADD] added more aliases to time command
+[ADD] added more aliases to time command (endyonyms and iso codes)
 [QOL] edit hitlist
 [QOL] change 'fcacc' from using if statements to a switch statement
 [REM] remove redundant "compact" mode from rs
 [FIX] remove excess new line between score hits and score rank/fail info
 [REM] remove gif command from helpinfo.ts
 [ADD] added coin flip command
+[QOL] fix time command being case sensitive

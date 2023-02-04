@@ -2066,8 +2066,8 @@ export async function time(input: extypes.commandInput) {
 
     let commanduser;
 
-    let fetchtimezone;
-    let displayedTimezone;
+    let fetchtimezone: string;
+    let displayedTimezone: string;
 
     let useComponents = [];
 
@@ -2102,10 +2102,10 @@ export async function time(input: extypes.commandInput) {
 
     if (input?.overrides) {
         if (input?.overrides?.ex) {
-            fetchtimezone = input?.overrides?.ex;
+            fetchtimezone = input?.overrides?.ex as string;
         }
         if (input?.overrides?.id) {
-            displayedTimezone = input?.overrides?.id ?? fetchtimezone;
+            displayedTimezone = (input?.overrides?.id ?? fetchtimezone) as string;
         }
     }
 
@@ -2127,8 +2127,6 @@ export async function time(input: extypes.commandInput) {
         ]
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-    const currentDate = new Date();
 
     const curTime = moment();
 
@@ -2163,24 +2161,9 @@ export async function time(input: extypes.commandInput) {
             let offset = 0;
             const found: timezoneList.timezone[] = [];
 
-            let timezones = [];
-
-            // converts all timezone aliases to caps to remove case sensitivity
-            for (let i = 0; i < timezoneList.timezones.length; i++) {
-                const curtim = timezoneList.timezones[i];
-                const newAl: string[] = [];
-                for (let j = 0; j < curtim.aliases.length; j++) {
-                    newAl.push(curtim.aliases[i].toUpperCase());
-                }
-                curtim.aliases = newAl;
-                timezones.push(curtim);
-            }
-
-
             for (let i = 0; i < timezoneList.timezones.length; i++) {
                 const curTimeZone = timezoneList.timezones[i];
-                //converts search to caps to remove case sensitivity
-                if (curTimeZone.aliases.includes(fetchtimezone.toUpperCase())) {
+                if (curTimeZone.aliases.slice().map(x => x.trim().toUpperCase()).includes(fetchtimezone.trim().toUpperCase())) {
                     found.push(curTimeZone);
                     offset = curTimeZone.offsetDirection == '+' ?
                         curTimeZone.offsetHours :
@@ -2237,7 +2220,7 @@ export async function time(input: extypes.commandInput) {
             const offsetReadable = `UTC${Hrs}:${(Math.abs(offsetToMinutes % 60)).toString().padStart(2, '0')}`;
 
             fields.push({
-                name: `${displayedTimezone.toUpperCase()}/${offsetReadable}`,
+                name: `${calc.toCapital(displayedTimezone)}/${offsetReadable}`,
                 value:
                     `\n\`Date              | \`${reqTime.format("DD/MM/YYYY")}` +
                     `\n\`Full Date         | \`${reqTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
