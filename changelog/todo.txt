@@ -286,3 +286,14 @@ author:
     request date: 2023-01-26 14:31 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+        
+#26)
+    description: add button version and current version to command outdated message
+    type: QOL
+    status: WIP
+    priority: low
+    request date: 2023-02-07 07:57 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr

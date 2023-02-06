@@ -199,3 +199,5 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [ADD] added coin flip command
 [QOL] fix time command being case sensitive
 [FIX] math command uses string-math instead of eval();
+
+0.4.12
