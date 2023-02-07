@@ -48,7 +48,7 @@ export default (input: {
         const absoluteID = buttonsplit[4];
 
         if (buttonVer != mainconst.version) {
-            checkcmds.outdated('button', interaction, 'command');
+            checkcmds.outdated('button', interaction, 'command', buttonVer);
             return;
         }
 

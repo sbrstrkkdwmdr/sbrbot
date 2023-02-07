@@ -201,3 +201,5 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [FIX] math command uses string-math instead of eval();
 
 0.4.12
+
+[QOL] outdated messages show bot and disabled command version

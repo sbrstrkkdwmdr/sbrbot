@@ -1,6 +1,7 @@
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
 import * as replayparser from 'osureplayparser';
+import pkgjson from '../package.json' assert { type: 'json' };
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
 import * as colourfunc from '../src/colourcalc.js';
@@ -58,13 +59,24 @@ export function noperms(commandType, obj, type: 'bot' | 'user', canReply, missin
 
 }
 
-export function outdated(commandType, obj, type: 'command') {
+export function outdated(commandType, obj, type: 'command', commandVer: string) {
+    const findcommand = mainconst.versions.find(x =>
+        x.name == commandVer ||
+        x.releaseDate.toString() == commandVer ||
+        x.releaseDateFormatted == commandVer
+    ) ?? false;
+
+    const content =
+        `This command is disabled and cannot be used.
+Bot version: ${mainconst.version} (${mainconst.versionAlt})
+Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name})` : 'INVALID'}
+`;
     switch (type) {
         case 'command': {
             switch (commandType) {
                 case 'button':
                     obj.reply({
-                        content: 'This command is outdated and cannot be used.',
+                        content: content,
                         ephemeral: true,
                         allowedMentions: { repliedUser: false },
                         failIfNotExists: true
