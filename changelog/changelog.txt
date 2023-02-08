@@ -203,3 +203,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 0.4.12
 
 [QOL] outdated messages show bot and disabled command version
+[QOL] changed required options to be listed as <arg> and optional as [arg]
