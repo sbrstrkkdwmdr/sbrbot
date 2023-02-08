@@ -75,6 +75,15 @@ const mods = [
     'MR'
 ];
 
+
+'&lt';
+'&gt';
+
+/**
+ * <> is required
+ * [] is optional
+ */
+
 const scoreListCommandOptions: commandInfoOptions[] = [
     {
         name: 'user',
@@ -196,8 +205,8 @@ const cmds: commandInfo[] = [
     {
         name: 'convert',
         description: 'Converts a number from one unit to another',
-        usage: 'convert [from] [to] [number]',
-        slashusage: 'convert [from] [to] [number]',
+        usage: 'convert <from> <to> <number>',
+        slashusage: 'convert <from> <to> <number>',
         examples: [
             {
                 text: 'PREFIXMSGconvert km mi 10',
@@ -295,8 +304,8 @@ const cmds: commandInfo[] = [
     {
         name: 'math',
         description: 'Solves a math problem',
-        usage: 'math [problem]',
-        slashusage: 'math [type] [num1] [num2]',
+        usage: 'math <problem>',
+        slashusage: 'math <type> <num1> [num2]',
         examples: [
             {
                 text: 'PREFIXMSGmath 2+2',
@@ -315,7 +324,7 @@ const cmds: commandInfo[] = [
                 required: 'true (if using message command)',
                 description: 'The math problem to solve',
                 options: [
-`Supports:
+                    `Supports:
 integers (0-9), floats/decimals (.5, 1.34), negatives (-727), exponential notation (6.022e+23)
 operators: *, /, +, -, (, )
 `,
@@ -378,8 +387,8 @@ operators: *, /, +, -, (, )
     {
         name: 'remind',
         description: 'Sets a reminder',
-        usage: 'reminder [time] [reminder]',
-        slashusage: 'reminder [time] [reminder] [sendinchannel]',
+        usage: 'remind <time> [reminder]',
+        slashusage: 'remind <time> <reminder> [sendinchannel]',
         examples: [
             {
                 text: 'PREFIXMSGremind 1h30m30s reminder',
@@ -1005,8 +1014,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'osuset',
         description: 'Sets your osu! username/mode/skin',
-        usage: 'osuset [username] [-(mode)] [-skin]',
-        slashusage: 'osuset [username] [mode] [skin]',
+        usage: 'osuset <username> [-(mode)] [-skin]',
+        slashusage: 'osuset <username> [mode] [skin]',
         examples: [
             {
                 text: 'PREFIXMSGosuset SaberStrike',
@@ -1256,8 +1265,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'pp',
         description: 'Estimates the rank of a user from the pp given',
-        usage: 'pp [value] [-(mode)]',
-        slashusage: 'pp [value] [mode]',
+        usage: 'pp <value> [-(mode)]',
+        slashusage: 'pp <value> [mode]',
         examples: [
             {
                 text: 'PREFIXMSGpp 100000',
@@ -1295,8 +1304,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'rank',
         description: 'Estimates the performance points of a user from the rank given',
-        usage: 'rank [value] [-(mode)]',
-        slashusage: 'rank [value] [mode]',
+        usage: 'rank <value> [-(mode)]',
+        slashusage: 'rank <value> [mode]',
         examples: [
             {
                 text: 'PREFIXMSGrank 1',
@@ -1601,7 +1610,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'scoreparse',
         description: 'Returns information about a score',
-        usage: 'scoreparse [id] [mode]',
+        usage: 'scoreparse <id> [mode]',
         slashusage: 'null',
         examples: [
             {
@@ -1863,8 +1872,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'trackadd',
         description: 'Adds a user to the tracklist',
-        usage: 'trackadd [user]',
-        slashusage: 'trackadd [user]',
+        usage: 'trackadd <user>',
+        slashusage: 'trackadd <user>',
         examples: [
             {
                 text: 'PREFIXMSGtrackadd 15222484',
@@ -1892,8 +1901,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'trackchannel',
         description: 'Sets the channel to send tracklist updates to',
-        usage: 'trackchannel [channel]',
-        slashusage: 'trackchannel [channel]',
+        usage: 'trackchannel <channel>',
+        slashusage: 'trackchannel <channel>',
         examples: [
             {
                 text: 'PREFIXMSGtrackchannel #tracklist',
@@ -1931,8 +1940,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'trackremove',
         description: 'Removes a user from the tracklist',
-        usage: 'trackremove [user]',
-        slashusage: 'trackremove [id]',
+        usage: 'trackremove <user>',
+        slashusage: 'trackremove <user>',
         examples: [
             {
                 text: 'PREFIXMSGtrackremove 15222484',
@@ -2051,8 +2060,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'whatif',
         description: 'Estimates user stats if they gain a certain amount of raw pp',
-        usage: 'whatif [user] [pp]',
-        slashusage: 'whatif [user] [pp]',
+        usage: 'whatif [user] <pp>',
+        slashusage: 'whatif [user] <pp>',
         examples: [
             {
                 text: 'PREFIXMSGwhatif 1000',
@@ -2143,8 +2152,8 @@ const othercmds: commandInfo[] = [
     {
         name: 'image',
         description: 'Sends an image',
-        usage: 'image [query]',
-        slashusage: 'image [query]',
+        usage: 'image <query>',
+        slashusage: 'image <query>',
         examples: [
             {
                 text: 'PREFIXMSGimage cat',
@@ -2168,8 +2177,8 @@ const othercmds: commandInfo[] = [
     {
         name: 'poll',
         description: 'Creates a poll',
-        usage: 'poll [question]',
-        slashusage: 'poll [question] [options]',
+        usage: 'poll <question>',
+        slashusage: 'poll <question> [options]',
         examples: [
             {
                 text: 'PREFIXMSGpoll djkfhgfbdkgbkfhdjgdkgd',
@@ -2246,8 +2255,8 @@ const othercmds: commandInfo[] = [
     {
         name: 'say',
         description: 'Sends a message',
-        usage: 'say [message]',
-        slashusage: 'say [message] [channel]',
+        usage: 'say <message>',
+        slashusage: 'say <message> [channel]',
         examples: [
             {
                 text: 'PREFIXMSGsay hello',
@@ -2281,8 +2290,8 @@ const othercmds: commandInfo[] = [
     {
         name: 'ytsearch',
         description: 'Searches youtube for a video',
-        usage: 'ytsearch [query]',
-        slashusage: 'ytsearch [query]',
+        usage: 'ytsearch <query>',
+        slashusage: 'ytsearch <query>',
         examples: [
             {
                 text: 'PREFIXMSGytsearch never gonna give you up',
@@ -2417,8 +2426,8 @@ const admincmds: commandInfo[] = [
     {
         name: 'prefix',
         description: 'Set\'s the prefix of the current server',
-        usage: 'prefix [prefix]',
-        slashusage: 'prefix [prefix]',
+        usage: 'prefix <prefix>',
+        slashusage: 'prefix <prefix>',
         examples: [
             {
                 text: 'PREFIXMSGprefix !',

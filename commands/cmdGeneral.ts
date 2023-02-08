@@ -961,7 +961,7 @@ export async function help(input: extypes.commandInput) {
 
     function commandEmb(command: helpinfo.commandInfo, embed) {
 
-        let desc = '';
+        let desc = '<required arg> [optional arg]';
         desc += command.description + "\n";
         if (command.usage) {
             desc += `\nCommand: \`${input.config.prefix}${command.usage}\``;
