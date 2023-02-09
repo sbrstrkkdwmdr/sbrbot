@@ -322,3 +322,27 @@ export async function fetch(url: string) {
     }).then(res => res.json());
     return data;
 }
+
+export function appendUrlParams(url: string, params: { name: string, value: string; }[]) {
+    let temp = url;
+    for (let i = 0; i < params.length; i++) {
+        const cur = params[i];
+        if (!cur) { break; }
+        temp.includes('?') ?
+            temp += `&${cur.name}=${cur.value}` :
+            `?${cur.name}=${cur.value}`;
+    }
+    return temp;
+}
+
+export function appendUrlParamsString(url: string, params: string[]) {
+    let temp = url;
+    for (let i = 0; i < params.length; i++) {
+        const cur = params[i];
+        if (!cur) { break; }
+        temp.includes('?') ?
+            temp += `&${cur}` :
+            `?${cur}`;
+    }
+    return temp;
+}

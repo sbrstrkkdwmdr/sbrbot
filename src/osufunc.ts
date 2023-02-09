@@ -17,6 +17,7 @@ import config from '../config/config.json' assert { type: 'json' };
 import { path, precomppath } from '../path.js';
 import * as log from './log.js';
 import * as mapParser from './mapParser.js';
+import * as tools from './tools.js';
 import * as osuparsertypes from './types/osuparsertypes.js';
 
 /* module.exports = {
@@ -856,12 +857,14 @@ export async function apiget(input: apiInput) {
     }
 
     if (input.params.opts) {
-        const urlSplit = url.split('/')[url.split('/').length - 1];
-        if (urlSplit.includes('?')) {
-            url += `&${input.params.opts.join('&')}`;
-        } else {
-            url += `?${input.params.opts.join('&')}`;
-        }
+        url = tools.appendUrlParamsString(url, input.params.opts);
+        // const urlSplit = url.split('/')[url.split('/').length - 1];
+
+        // if (urlSplit.includes('?')) {
+        //     url += `&${input.params.opts.join('&')}`;
+        // } else {
+        //     url += `?${input.params.opts.join('&')}`;
+        // }
     }
 
     if (input.callNum > 3) {
@@ -2352,7 +2355,7 @@ export function returnHits(hits: osuApiTypes.Score['statistics'], mode: osuApiTy
                     name: 'Miss',
                     value: hits.count_miss
                 }
-            ]
+            ];
             break;
         case 'taiko':
             object.short = `${hits.count_300}/${hits.count_100}/${hits.count_miss}`;
@@ -2370,7 +2373,7 @@ export function returnHits(hits: osuApiTypes.Score['statistics'], mode: osuApiTy
                     name: 'Miss',
                     value: hits.count_miss
                 }
-            ]
+            ];
             break;
         case 'fruits':
             object.short = `${hits.count_300}/${hits.count_100}/${hits.count_50}/${hits.count_miss}/${hits.count_katu}`;
