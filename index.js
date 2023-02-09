@@ -11,6 +11,10 @@ function generateCommands() {
     toList(admincommands, admincmddiv, 'admincmd');
     toListButtons(buttons, buttondiv, 'buttons');
 
+    function arrToAscii(string) {
+        return string.replaceAll('<', '&lt').replaceAll('>', '&gt');
+    }
+
     function toList(commands, div, name) {
         // console.log('Generating command list for ' + name ?? 'null name');
         for (let i = 0; i < commands.length; i++) {
@@ -27,8 +31,8 @@ function generateCommands() {
         </p>
     
         <pre>
-        <div>Command:</div> <div class="codeblock">sbr-${cmd.usage}</div>
-                            <div class="codeblock">/${cmd.slashusage}</div>
+        <div>Command:</div> <div class="codeblock">sbr-${arrToAscii(cmd.usage)}</div>
+                            <div class="codeblock">/${arrToAscii(cmd.slashusage)}</div>
     
         ${cmd.aliases.length > 0 ? `<div>Aliases:</div> ${cmd.aliases.map(x => `<div class="codeblock">${x}</div>`).join('\n')}` : ''}
     
@@ -119,8 +123,8 @@ function toListButtons(commands, div, name) {
     </pre>
     ${cmd.imagesrc.length > 0 ? `<img src="${cmd.imagesrc}" alt="${cmd.name}" style="height:10%;width:10%">` : ''}
     ${cmd.emojisrc.length > 0 ?
-    `<p style="font-size:50px">${cmd.emojisrc}</p>` : ''
-    }
+                `<p style="font-size:50px">${cmd.emojisrc}</p>` : ''
+            }
     </div>
 
 
