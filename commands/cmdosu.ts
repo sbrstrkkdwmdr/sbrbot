@@ -1924,6 +1924,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         osudata.statistics?.global_rank ?
             func.separateNum(osudata.statistics.global_rank) :
             '---';
+
     const countryrank =
         osudata.statistics?.country_rank ?
             func.separateNum(osudata.statistics.country_rank) :

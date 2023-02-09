@@ -277,18 +277,18 @@ author:
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-        
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #25)
     description: make optional options more distinct in helpinfo
     type: QOL
-    status: WIP
+    status: FINISHED
     priority: low
     request date: 2023-01-26 14:31 AEDT (UTC+11)
     finish date: 2023-02-08 11:36 AEDT (UTC+11)
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-        
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #26)
     description: add button version and current version to command outdated message
     type: QOL
@@ -296,4 +296,15 @@ author:
     priority: low
     request date: 2023-02-07 07:57 AEDT (UTC+11)
     finish date: 2023-02-07 17:40 AEDT (UTC+11)
+    author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+        
+#27)
+    description: estimate rank if null
+    type: QOL
+    status: WIP
+    priority: low
+    request date: 2023-02-09 17:11 AEDT (UTC+11)
+    finish date: 
     author: sbrstrkkdwmdr
