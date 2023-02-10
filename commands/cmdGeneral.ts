@@ -2156,8 +2156,8 @@ export async function time(input: extypes.commandInput) {
             name: 'UTC/GMT+00:00',
             value:
                 `\n\`Date              | \`${curTime.format("DD/MM/YYYY")}` +
-                `\n\`Full Date         | \`${curTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
-                `\n\`Full Date(24h)    | \`${curTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
+                `\n\`Full Date         | \`${curTime.format("ddd, DD MMM YYYY hh:mm:ssA Z")}` +
+                `\n\`Full Date(24h)    | \`${curTime.format("ddd, DD MMM YYYY HH:mm:ss Z")}` +
                 `\n\`Full Date ISO8601 | \`${curTime.toISOString(true)}` +
                 `\n\`EPOCH(ms)         | \`${curTime.valueOf()}`,
             inline: false
@@ -2235,8 +2235,8 @@ export async function time(input: extypes.commandInput) {
                 name: `${calc.toCapital(displayedTimezone)}/${offsetReadable}`,
                 value:
                     `\n\`Date              | \`${reqTime.format("DD/MM/YYYY")}` +
-                    `\n\`Full Date         | \`${reqTime.format("ddd, DDD MMM YYYY hh:mm:ssA Z")}` +
-                    `\n\`Full Date(24h)    | \`${reqTime.format("ddd, DDD MMM YYYY HH:mm:ss Z")}` +
+                    `\n\`Full Date         | \`${reqTime.format("ddd, DD MMM YYYY hh:mm:ssA Z")}` +
+                    `\n\`Full Date(24h)    | \`${reqTime.format("ddd, DD MMM YYYY HH:mm:ss Z")}` +
                     `\n\`Full Date ISO8601 | \`${reqTime.toISOString(true)}` +
                     `\n\`EPOCH(ms)         | \`${curTime.valueOf()}`,
 
