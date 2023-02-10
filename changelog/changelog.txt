@@ -204,3 +204,5 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 
 [QOL] outdated messages show bot and disabled command version
 [QOL] changed required options to be listed as <arg> and optional as [arg]
+[ADD] added heads or tails images to coin flip
+[QOL] fixed using locally stored images in embeds

@@ -429,7 +429,7 @@ export async function straincalclocal(path: string | null, mods: string, calctyp
  * @param displayLegend whether or not to display the legend
  * @param secondY second set of data
  * @param secondYlabel label for second set of data
- * @returns graph url
+ * @returns path to the graph
  */
 export async function graph(x: number[] | string[], y: number[], label: string, startzero?: boolean | null, reverse?: boolean | null, showlabelx?: boolean | null, showlabely?: boolean | null, fill?: boolean | null, settingsoverride?: overrideGraph | null, displayLegend?: boolean, secondY?: number[], secondLabel?: string) {
 
@@ -551,11 +551,15 @@ export async function graph(x: number[] | string[], y: number[], label: string, 
         });
     chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250);
 
-    const curt = `${path}/cache/graphs/${(new Date).getTime()}.jpg`;
+    const filename = `${(new Date).getTime()}`
+    const curt = `${path}/cache/graphs/${filename}.jpg`;
 
     await chart.toFile(curt);
 
-    return curt;
+    return {
+        path: curt,
+        filename
+    };
 }
 
 export async function failGraph(

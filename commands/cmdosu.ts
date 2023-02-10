@@ -1968,6 +1968,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`);
 
     let useEmbeds = [];
+    let useFiles = [];
 
     async function getGraphs() {
         let chartplay;
@@ -1987,8 +1988,16 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',');
             const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',');
 
-            chartplay = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true));
-            chartrank = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true));
+            const play = await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true);
+            const rank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true);
+
+            const fileplay = new Discord.AttachmentBuilder(`${play.path}`);
+            const filerank = new Discord.AttachmentBuilder(`${rank.path}`);
+
+            useFiles.push(fileplay, filerank);
+
+            chartplay = `attachment://${play.filename}.jpg`;
+            chartrank = `attachment://${rank.filename}.jpg`;
         }
         const ChartsEmbedRank = new Discord.EmbedBuilder()
             .setFooter({
@@ -2206,6 +2215,7 @@ ${onlinestatus}
         args: {
             embeds: useEmbeds,
             components: graphonly == true ? [] : [buttons],
+            files: useFiles,
             edit: true
         }
     }, input.canReply);
@@ -5915,7 +5925,11 @@ export async function replayparse(input: extypes.commandInput) {
         `${passper.toFixed(2)}% passed (${calc.secondsToTime(passper / 100 * mapdata.hit_length)}/${calc.secondsToTime(mapdata.hit_length)})`
         : '';
 
-    const chart = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay'));
+    const chartInit = await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay');
+
+    const chartFile = new Discord.AttachmentBuilder(chartInit.path);
+
+    const chart = chartInit.filename;
 
     // const UR =
     //     mapdata.id ?
@@ -5942,7 +5956,7 @@ ${ppissue}
 ${isfail}
 `
         )
-        .setImage(`${chart}`);
+        .setImage(`attachment://${chart}.jpg`);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
@@ -5950,7 +5964,8 @@ ${isfail}
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [Embed]
+            embeds: [Embed],
+            files: [chartFile]
         }
     }, input.canReply);
 
@@ -8559,6 +8574,7 @@ export async function map(input: extypes.commandInput) {
     let overrideBpm: number = null;
 
     const useComponents = [];
+    const useFiles = [];
     let overwriteModal = null;
 
     let customCS: 'current' | number = 'current';
@@ -9448,7 +9464,10 @@ HP${baseHP}`;
     }
     let mapgraph;
     if (strains) {
-        mapgraph = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains'));
+        const mapgraphInit = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains');
+        useFiles.push(mapgraphInit.path);
+
+        mapgraph = mapgraphInit.filename;
     } else {
         mapgraph = null;
     }
@@ -9627,7 +9646,7 @@ HP${baseHP}`;
     );
 
     if (mapgraph) {
-        Embed.setImage(`${mapgraph}`);
+        Embed.setImage(`attachment://${mapgraph}.jpg`);
     }
     switch (true) {
         case parseFloat(totaldiff.toString()) >= 8:
@@ -9668,13 +9687,16 @@ HP${baseHP}`;
             numofval.push(i);
         }
 
-        const passurl = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits'));
+        const passInit = await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits');
+        useFiles.push(passInit.path);
+
+        const passurl = passInit.filename;
         const passEmbed = new Discord.EmbedBuilder()
             .setFooter({
                 text: `${embedStyle}`
             })
             .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
-            .setImage(`${passurl}`);
+            .setImage(`attachment://${passurl}.jpg`);
         await embeds.push(passEmbed);
     }
 
@@ -9718,6 +9740,7 @@ HP${baseHP}`;
         args: {
             embeds: embeds,
             components: useComponents,
+            files: useFiles,
             edit: true
         }
     }, input.canReply);
@@ -10799,6 +10822,7 @@ export async function maplocal(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
     const embedStyle: extypes.osuCmdStyle = 'M';
+    const useFiles = []
 
     switch (input.commandType) {
         case 'message': {
@@ -11048,7 +11072,10 @@ export async function maplocal(input: extypes.commandInput) {
 
     osufunc.debug(strains, 'fileparse', 'osu', input.obj.guildId, 'strains');
     try {
-        mapgraph = await msgfunc.SendFileToChannel(input.graphChannel, await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains'));
+        const mapgraphInit = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains');
+        useFiles.push(mapgraphInit.path);
+
+        mapgraph = mapgraphInit.filename;
     } catch (error) {
         await msgfunc.sendMessage({
             commandType: input.commandType,
@@ -11093,7 +11120,7 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
                     inline: true
                 }
             ])
-            .setImage(`${mapgraph}`);
+            .setImage(`attachment://${mapgraph}.jpg`);
     } catch (error) {
         await msgfunc.sendMessage({
             commandType: input.commandType,
@@ -11120,7 +11147,8 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [osuEmbed]
+            embeds: [osuEmbed],
+            files: useFiles
         }
     }, input.canReply
     );
