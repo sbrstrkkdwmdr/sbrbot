@@ -321,7 +321,7 @@ export default (input: {
             case '8ball': case 'ask':
                 misccmds._8ball({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
-            case 'coin':
+            case 'coin':case 'coinflip': case 'flip':
                 misccmds.coin({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, graphChannel });
                 break;
             case 'image': case 'imagesearch':

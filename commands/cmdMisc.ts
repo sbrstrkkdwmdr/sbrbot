@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import fetch from 'node-fetch';
 import * as replayparser from 'osureplayparser';
 import yts from 'yt-search';
+import { path, precomppath } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
 import * as colourfunc from '../src/colourcalc.js';
@@ -108,7 +109,6 @@ export async function _8ball(input: extypes.commandInput) {
  * flips a coin and returns heads or tails
  */
 export async function coin(input: extypes.commandInput) {
-
     let commanduser: Discord.User;
 
 
@@ -138,14 +138,6 @@ export async function coin(input: extypes.commandInput) {
             break;
     }
     //==============================================================================================================================================================================================
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-Refresh-COMMANDNAME-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.refresh),
-        );
-
     log.logCommand({
         event: 'Command',
         commandType: input.commandType,
@@ -162,19 +154,28 @@ export async function coin(input: extypes.commandInput) {
 
     const msg = arr[Math.floor(Math.random() * arr.length)];
 
+    const file = new Discord.AttachmentBuilder(`${precomppath}\\files\\img\\coin\\${msg}.png`)
+
+    const embed = new Discord.EmbedBuilder()
+        .setTitle(msg)
+        .setImage(`attachment://${msg}.png`)
+        
+        ;
+
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            content: msg
+            embeds: [embed],
+            files: [file]
         }
     }, input.canReply);
 
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: 'COMMANDNAME',
+            commandName: 'coin',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -182,7 +183,7 @@ export async function coin(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: 'COMMANDNAME',
+            commandName: 'coin',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,

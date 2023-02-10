@@ -9,7 +9,7 @@ export async function sendMessage(input: {
     args: {
         content?: string,
         embeds?: Discord.EmbedBuilder[] | Discord.Embed[],
-        files?: string[],
+        files?: string[] | Discord.AttachmentBuilder[] | Discord.Attachment[],
         components?: Discord.ActionRowBuilder<any>[],
         ephemeral?: boolean,
         react?: boolean,
@@ -130,7 +130,7 @@ export async function sendMessage(input: {
 
 }
 
-function checkFileLimit(files: string[]) {
+function checkFileLimit(files: any[]) {
     if (files.length > 10) {
         return files.slice(0, 9);
     } else {

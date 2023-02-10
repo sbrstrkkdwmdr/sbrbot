@@ -2124,6 +2124,15 @@ const othercmds: commandInfo[] = [
         aliases: ['ask'],
         options: [],
     },
+    {
+        name: 'coin',
+        description: 'Flips a coin',
+        usage: 'coin',
+        slashusage: 'coin',
+        examples: [],
+        aliases: ['coinflip', 'flip'],
+        options: []
+    },
     // {
     //     name: 'gif',
     //     description: 'Sends a gif',
