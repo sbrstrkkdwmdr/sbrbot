@@ -209,7 +209,6 @@ export type commandInput = {
     userdata?: data,
     trackDb?: data,
     guildSettings?: data,
-    graphChannel: Discord.TextChannel;
 };
 
 export type commandButtonTypes =
