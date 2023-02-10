@@ -15,7 +15,6 @@ const defaultClientConfig: extypes.config = {
     LogApiCalls: false,
     LogApiCallsToFile: true,
     enableTracking: true,
-    graphChannelId: null,
     storeCommandLogs: true,
 };
 

@@ -43,7 +43,7 @@ create a `./config/` folder and put `config.json` inside it
   "LogApiCalls": false,
   "LogApiCallsToFile": true,
   "enableTracking": true,
-  "graphChannelId": "channel ID"
+  "storeCommandLogs": true
 }
 ```
 
@@ -93,4 +93,4 @@ copy the key and paste it into the google.apiKey field </br>
 </br></br>LogApiCalls: enables/disables logging output to the console
 </br></br>LogApiCallsToFile: enables/disable console output being logged to `logs/console.log`. Still saves logs even if `LogApiCalls` is false
 </br></br>enableTracking: enables/disables osutrack. Users can still be added/removed but scores won't be updated.
-</br></br>graphChannelId: sends all graphs to this channel (profile rank history, map strains etc.)
+</br></br>storeCommandLogs: enables/disables logs being stored locally

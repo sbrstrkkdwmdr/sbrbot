@@ -18,7 +18,6 @@ export type config = {
     LogApiCalls: boolean,
     LogApiCallsToFile: boolean,
     enableTracking: boolean,
-    graphChannelId: string,
     storeCommandLogs: boolean,
 };
 
