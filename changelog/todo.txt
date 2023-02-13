@@ -308,3 +308,14 @@ author:
     request date: 2023-02-09 17:11 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#28)
+    description: time command can parse time at (x) like in x hours or when time in timezone x == y
+    type: feature
+    status: WIP
+    priority: low
+    request date: 2023-02-13 11:36 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
