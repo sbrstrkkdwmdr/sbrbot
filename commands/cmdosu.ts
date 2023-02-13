@@ -1559,6 +1559,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
     let searchid;
 
     let embedStyle: extypes.osuCmdStyle = 'P';
+    let useContent: string = null;
 
     switch (input.commandType) {
         case 'message': {
@@ -1738,6 +1739,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         }
         if (input.overrides.commanduser) {
             commanduser = input.overrides.commanduser;
+            useContent = `Requested by <@${commanduser.id}>`;
         }
     }
 
@@ -2213,6 +2215,7 @@ ${onlinestatus}
         commandType: input.commandType,
         obj: input.obj,
         args: {
+            content: useContent,
             embeds: useEmbeds,
             components: graphonly == true ? [] : [buttons],
             files: useFiles,
@@ -3100,6 +3103,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     const embedStyle: extypes.osuCmdStyle = 'L';
     const scoredetailed: number = 1;
 
+    let useContent: string = null;
 
     switch (input.commandType) {
         case 'message': {
@@ -3198,6 +3202,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         }
         if (input.overrides.commandAs) {
             input.commandType = input.overrides.commandAs;
+            useContent = `Requested by <@${commanduser.id}>`;
         }
         if (input.overrides.commanduser) {
             commanduser = input.overrides.commanduser;
@@ -3621,13 +3626,13 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                     break;
             }
             scoretxt += `
-            **[Score #${i + (page * 5) + 1}](https://osu.ppy.sh/scores/${mode}/${score.score_id}) | [${score.username}](https://osu.ppy.sh/u/${score.user_id})**
-            Score set on ${score.date}
-            ${(acc).toFixed(2)}% | ${score.rank} | ${score.pp}
-            ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.maxcombo}x/**${mapdata.max_combo}x**
-            ${hitlist}
-            Has replay: ${score.replay_available == 1 ? '✅' : '❌'}
-            `;
+**[Score #${i + (page * 5) + 1}](https://osu.ppy.sh/scores/${mode}/${score.score_id}) | [${score.username}](https://osu.ppy.sh/u/${score.user_id})**
+Score set on ${score.date}
+${(acc).toFixed(2)}% | ${score.rank} | ${score.pp}
+${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.maxcombo}x/**${mapdata.max_combo}x**
+${hitlist}
+Has replay: ${score.replay_available == 1 ? '✅' : '❌'}
+`;
         }
         if ((lbdata as any).length < 1 || scoretxt.length < 10) {
             scoretxt = 'Error - no scores found ';
@@ -3668,6 +3673,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         commandType: input.commandType,
         obj: input.obj,
         args: {
+            content: useContent,
             embeds: [lbEmbed],
             components: [pgbuttons, buttons],
             edit: true
@@ -7003,6 +7009,8 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     let parseScore = false;
     let parseId = null;
 
+    let useContent:string = null;
+
     let embedStyle: extypes.osuCmdStyle = 'L';
 
     switch (input.commandType) {
@@ -7191,6 +7199,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         }
         if (input.overrides.commanduser) {
             commanduser = input.overrides.commanduser;
+            useContent = `Requested by <@${commanduser.id}>`
         }
         if (input.overrides.user) {
             user = input.overrides.user;
@@ -7599,6 +7608,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         commandType: input.commandType,
         obj: input.obj,
         args: {
+            content: useContent,
             embeds: [scoresEmbed],
             components: [pgbuttons, buttons],
             edit: true
@@ -8582,6 +8592,8 @@ export async function map(input: extypes.commandInput) {
     let customOD: 'current' | number = 'current';
     let customHP: 'current' | number = 'current';
 
+    let useContent: string = null;
+
     let embedStyle: extypes.osuCmdStyle = 'M';
 
     switch (input.commandType) {
@@ -8854,6 +8866,7 @@ export async function map(input: extypes.commandInput) {
         }
         if (input.overrides?.commanduser != null) {
             commanduser = input.overrides.commanduser;
+            useContent = `Requested by <@${commanduser.id}>`;
         }
         if (input.overrides?.commandAs != null) {
             input.commandType = input.overrides.commandAs;
@@ -9738,6 +9751,7 @@ HP${baseHP}`;
         commandType: input.commandType,
         obj: input.obj,
         args: {
+            content: useContent,
             embeds: embeds,
             components: useComponents,
             files: useFiles,
@@ -10822,7 +10836,7 @@ export async function maplocal(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
     const embedStyle: extypes.osuCmdStyle = 'M';
-    const useFiles = []
+    const useFiles = [];
 
     switch (input.commandType) {
         case 'message': {
