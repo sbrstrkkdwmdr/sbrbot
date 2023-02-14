@@ -208,3 +208,9 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] fixed using locally stored images in embeds
 [REM] removed graphChannelId property from config
 [FIX] fixed time command showing day of year instead of day of month
+
+0.4.13
+
+[QOL] reworked convert command
+[ADD] added pressure conversions to convert command
+[ADD] convert command now parses SI prefixes
