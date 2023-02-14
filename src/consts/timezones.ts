@@ -982,3 +982,24 @@ export const timezones: timezone[] = [
         ]
     },
 ];
+
+export const hasDaylight:{
+    offset_normal: number,
+    offset_dst: number,
+    start: `${number}-${number}`, 
+    finish: `${number}-${number}`
+    includes: string[],
+}[] = [
+    {
+        offset_normal: 10,
+        offset_dst: 11,
+        includes: [
+            'Victoria', 'VIC',
+            'Melbourne',
+            'New South Wales', 'NSW',
+            'Sydney'
+        ],
+        start: `10-06`,
+        finish: `0-0`
+    }
+]

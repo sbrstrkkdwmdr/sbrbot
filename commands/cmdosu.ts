@@ -1560,6 +1560,8 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
     let embedStyle: extypes.osuCmdStyle = 'P';
 
+    let content = null;
+
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
@@ -1738,6 +1740,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         }
         if (input.overrides.commanduser) {
             commanduser = input.overrides.commanduser;
+            content = `[Requested by <@${commanduser?.id}>]`
         }
     }
 
@@ -2213,6 +2216,7 @@ ${onlinestatus}
         commandType: input.commandType,
         obj: input.obj,
         args: {
+            content,
             embeds: useEmbeds,
             components: graphonly == true ? [] : [buttons],
             files: useFiles,

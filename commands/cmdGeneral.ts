@@ -1580,7 +1580,7 @@ export async function math(input: extypes.commandInput) {
                 isErr = true;
                 return x;
             });//  + '';
-        equation = `${evalstr}` //+ isErr ? eqHelp : '';
+        equation = `${evalstr}`; //+ isErr ? eqHelp : '';
     } else if (type == 'help') {
         equation = eqHelp;
     }
@@ -2249,19 +2249,9 @@ export async function time(input: extypes.commandInput) {
                 name: `UTC/GMT +??:?? (Requested Time)`,
                 value: `\nRecived invalid timezone!` +
                     `\n\`${fetchtimezone}\` is not a valid timezone` +
-                    `\n Check [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset) for valid timezones`
-                // `\nCheck [here](https://www.iana.org/time-zones) or [here](https://stackoverflow.com/a/54500197) for valid timezones`
-                ,
+                    `\n Check [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset) for valid timezones`,
                 inline: false
             });
-            // if (error.includes('timezone')) {
-            // } else {
-            //     fields.push({
-            //         name: `UTC/GMT +??:?? (Requested Time)`,
-            //         value: `There was an error trying to parse the timezone`,
-            //         inline: false
-            //     });
-            // }
             useComponents = [];
         }
     } else {
