@@ -885,104 +885,586 @@ export const values: convVal[] = [
     },
     // Volume
     {
-        name: 'Fluid Ounces',
-        names: ['eee', 'EEE'],
+        name: 'Teaspoon',
+        names: ['Teaspoon', 'tsp'],
         type: 'Volume',
         system: 'Metric',
         calc: [
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'Teaspoon',
+                names: ['Teaspoon', 'tsp',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'x'
+            },
+            {
+                to: 'Tablespoon',
+                names: ['Tablespoon', 'tbp',],
                 func: (x) => {
                     return (x);
                 },
                 text: 'xxx'
-            }
+            },
+            {
+                to: 'Fluid Ounce',
+                names: ['Fluid Ounce', 'floz',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cup',
+                names: ['Cup', 'C',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Pint',
+                names: ['Pint', 'pt',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Litre',
+                names: ['Litre', 'Liter', 'L'],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Gallon',
+                names: ['Galloon', 'gal',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cubic Metre',
+                names: ['Cubic Metre', 'm3', 'm^3'],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
         ]
     },
     {
-        name: 'Cups',
-        names: ['eee', 'EEE'],
+        name: 'Tablespoon',
+        names: ['Tablespoon', 'tbp'],
         type: 'Volume',
         system: 'Metric',
         calc: [
+
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'Teaspoon',
+                names: ['Teaspoon', 'tsp',],
                 func: (x) => {
                     return (x);
                 },
                 text: 'xxx'
-            }
+            },
+            {
+                to: 'Tablespoon',
+                names: ['Tablespoon', 'tbp',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Fluid Ounce',
+                names: ['Fluid Ounce', 'floz',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cup',
+                names: ['Cup', 'C',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Pint',
+                names: ['Pint', 'pt',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Litre',
+                names: ['Litre', 'Liter', 'L'],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Gallon',
+                names: ['Galloon', 'gal',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cubic Metre',
+                names: ['Cubic Metre', 'm3', 'm^3'],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+
         ]
     },
     {
-        name: 'Pints',
-        names: ['eee', 'EEE'],
+        name: 'Fluid Ounce',
+        names: ['Fluid Ounce', 'floz'],
         type: 'Volume',
         system: 'Metric',
         calc: [
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'Teaspoon',
+                names: ['Teaspoon', 'tsp',],
                 func: (x) => {
                     return (x);
                 },
                 text: 'xxx'
-            }
+            },
+            {
+                to: 'Tablespoon',
+                names: ['Tablespoon', 'tbp',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Fluid Ounce',
+                names: ['Fluid Ounce', 'floz',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cup',
+                names: ['Cup', 'C',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Pint',
+                names: ['Pint', 'pt',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Litre',
+                names: ['Litre', 'Liter', 'L'],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Gallon',
+                names: ['Galloon', 'gal',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cubic Metre',
+                names: ['Cubic Metre', 'm3', 'm^3'],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
         ]
     },
     {
-        name: 'Litres',
-        names: ['eee', 'EEE'],
+        name: 'Cup',
+        names: ['Cup', 'C'],
         type: 'Volume',
         system: 'Metric',
         calc: [
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'Teaspoon',
+                names: ['Teaspoon', 'tsp',],
                 func: (x) => {
                     return (x);
                 },
                 text: 'xxx'
-            }
+            },
+            {
+                to: 'Tablespoon',
+                names: ['Tablespoon', 'tbp',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Fluid Ounce',
+                names: ['Fluid Ounce', 'floz',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cup',
+                names: ['Cup', 'C',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Pint',
+                names: ['Pint', 'pt',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Litre',
+                names: ['Litre', 'Liter', 'L'],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Gallon',
+                names: ['Galloon', 'gal',],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cubic Metre',
+                names: ['Cubic Metre', 'm3', 'm^3'],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
         ]
     },
     {
-        name: 'Gallons',
-        names: ['eee', 'EEE'],
+        name: 'Pint',
+        names: ['Pint', 'pt'],
         type: 'Volume',
         system: 'Metric',
         calc: [
-            {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                        {
+                to: 'Teaspoon',
+                names: ['Teaspoon', 'tsp', ],
                 func: (x) => {
                     return (x);
                 },
                 text: 'xxx'
-            }
+            },
+            {
+                to: 'Tablespoon',
+                names: ['Tablespoon', 'tbp', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Fluid Ounce',
+                names: ['Fluid Ounce', 'floz', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cup',
+                names: ['Cup', 'C', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Pint',
+                names: ['Pint', 'pt', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Litre',
+                names: ['Litre', 'Liter', 'L' ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Gallon',
+                names: ['Galloon', 'gal', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cubic Metre',
+                names: ['Cubic Metre', 'm3', 'm^3' ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
         ]
     },
     {
-        name: 'Cubic Metres',
-        names: ['eee', 'EEE'],
+        name: 'Litre',
+        names: ['Litre', 'Liter', 'L'],
         type: 'Volume',
         system: 'Metric',
         calc: [
-            {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                        {
+                to: 'Teaspoon',
+                names: ['Teaspoon', 'tsp', ],
                 func: (x) => {
                     return (x);
                 },
                 text: 'xxx'
-            }
+            },
+            {
+                to: 'Tablespoon',
+                names: ['Tablespoon', 'tbp', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Fluid Ounce',
+                names: ['Fluid Ounce', 'floz', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cup',
+                names: ['Cup', 'C', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Pint',
+                names: ['Pint', 'pt', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Litre',
+                names: ['Litre', 'Liter', 'L' ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Gallon',
+                names: ['Galloon', 'gal', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cubic Metre',
+                names: ['Cubic Metre', 'm3', 'm^3' ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+        ]
+    },
+    {
+        name: 'Gallon',
+        names: ['Gallon', 'gal'],
+        type: 'Volume',
+        system: 'Metric',
+        calc: [
+                        {
+                to: 'Teaspoon',
+                names: ['Teaspoon', 'tsp', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Tablespoon',
+                names: ['Tablespoon', 'tbp', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Fluid Ounce',
+                names: ['Fluid Ounce', 'floz', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cup',
+                names: ['Cup', 'C', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Pint',
+                names: ['Pint', 'pt', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Litre',
+                names: ['Litre', 'Liter', 'L' ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Gallon',
+                names: ['Galloon', 'gal', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cubic Metre',
+                names: ['Cubic Metre', 'm3', 'm^3' ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+        ]
+    },
+    {
+        name: 'Cubic Metre',
+        names: ['Cubic Metre', 'm3', 'm^3'],
+        type: 'Volume',
+        system: 'Metric',
+        calc: [
+                        {
+                to: 'Teaspoon',
+                names: ['Teaspoon', 'tsp', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Tablespoon',
+                names: ['Tablespoon', 'tbp', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Fluid Ounce',
+                names: ['Fluid Ounce', 'floz', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cup',
+                names: ['Cup', 'C', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Pint',
+                names: ['Pint', 'pt', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Litre',
+                names: ['Litre', 'Liter', 'L' ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Gallon',
+                names: ['Galloon', 'gal', ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
+            {
+                to: 'Cubic Metre',
+                names: ['Cubic Metre', 'm3', 'm^3' ],
+                func: (x) => {
+                    return (x);
+                },
+                text: 'xxx'
+            },
         ]
     },
     // Mass
     {
-        name: 'eee',
+        name: 'gram',
         names: ['eee', 'EEE'],
         type: 'Mass',
         system: 'Metric',
@@ -998,7 +1480,7 @@ export const values: convVal[] = [
         ]
     },
     {
-        name: 'eee',
+        name: 'ounce',
         names: ['eee', 'EEE'],
         type: 'Mass',
         system: 'Metric',
@@ -1014,7 +1496,7 @@ export const values: convVal[] = [
         ]
     },
     {
-        name: 'eee',
+        name: 'ton',
         names: ['eee', 'EEE'],
         type: 'Mass',
         system: 'Metric',
@@ -1030,7 +1512,7 @@ export const values: convVal[] = [
         ]
     },
     {
-        name: 'eee',
+        name: 'metric',
         names: ['eee', 'EEE'],
         type: 'Mass',
         system: 'Metric',
