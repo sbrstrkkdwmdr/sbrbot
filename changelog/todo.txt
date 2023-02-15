@@ -309,3 +309,16 @@ author:
     finish date: 
     author: sbrstrkkdwmdr
     author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#28)
+    description: 
+    add conversions for - energy, area, angle
+    type: feature
+    status: WIP
+    priority: medium
+    request date: 2023-02-15 18:35 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
+    author: sbrstrkkdwmdr
