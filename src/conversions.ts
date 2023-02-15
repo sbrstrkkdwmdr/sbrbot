@@ -888,13 +888,13 @@ export const values: convVal[] = [
         name: 'Teaspoon',
         names: ['Teaspoon', 'tsp'],
         type: 'Volume',
-        system: 'Metric',
+        system: 'Imperial',
         calc: [
             {
                 to: 'Teaspoon',
                 names: ['Teaspoon', 'tsp',],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x'
             },
@@ -902,57 +902,57 @@ export const values: convVal[] = [
                 to: 'Tablespoon',
                 names: ['Tablespoon', 'tbp',],
                 func: (x) => {
-                    return (x);
+                    return x / 3;
                 },
-                text: 'xxx'
+                text: 'x/3'
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz',],
+                names: ['Fluid Ounce', 'floz', 'oz'],
                 func: (x) => {
                     return (x);
                 },
-                text: 'xxx'
+                text: 'x/6'
             },
             {
                 to: 'Cup',
                 names: ['Cup', 'C',],
                 func: (x) => {
-                    return (x);
+                    return x / 48.692;
                 },
-                text: 'xxx'
+                text: 'x/48.692'
             },
             {
                 to: 'Pint',
                 names: ['Pint', 'pt',],
                 func: (x) => {
-                    return (x);
+                    return x / 96;
                 },
-                text: 'xxx'
+                text: 'x/96'
             },
             {
                 to: 'Litre',
                 names: ['Litre', 'Liter', 'L'],
                 func: (x) => {
-                    return (x);
+                    return x / 202.884;
                 },
-                text: 'xxx'
+                text: 'x/202.884'
             },
             {
                 to: 'Gallon',
                 names: ['Galloon', 'gal',],
                 func: (x) => {
-                    return (x);
+                    return x / 768;
                 },
-                text: 'xxx'
+                text: 'x/768'
             },
             {
                 to: 'Cubic Metre',
                 names: ['Cubic Metre', 'm3', 'm^3'],
                 func: (x) => {
-                    return (x);
+                    return x / 202884.2;
                 },
-                text: 'xxx'
+                text: 'x/202884.2'
             },
         ]
     },
@@ -960,145 +960,143 @@ export const values: convVal[] = [
         name: 'Tablespoon',
         names: ['Tablespoon', 'tbp'],
         type: 'Volume',
-        system: 'Metric',
+        system: 'Imperial',
         calc: [
-
             {
                 to: 'Teaspoon',
                 names: ['Teaspoon', 'tsp',],
                 func: (x) => {
-                    return (x);
+                    return x * 3;
                 },
-                text: 'xxx'
+                text: 'x*3'
             },
             {
                 to: 'Tablespoon',
                 names: ['Tablespoon', 'tbp',],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
-                text: 'xxx'
+                text: 'x'
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz',],
+                names: ['Fluid Ounce', 'floz', 'oz'],
                 func: (x) => {
                     return (x);
                 },
-                text: 'xxx'
+                text: 'x/2'
             },
             {
                 to: 'Cup',
                 names: ['Cup', 'C',],
                 func: (x) => {
-                    return (x);
+                    return x / 16.231;
                 },
-                text: 'xxx'
+                text: 'x/16.231'
             },
             {
                 to: 'Pint',
                 names: ['Pint', 'pt',],
                 func: (x) => {
-                    return (x);
+                    return x / 32;
                 },
-                text: 'xxx'
+                text: 'x/32'
             },
             {
                 to: 'Litre',
                 names: ['Litre', 'Liter', 'L'],
                 func: (x) => {
-                    return (x);
+                    return x / 67.628;
                 },
-                text: 'xxx'
+                text: 'x/67.628'
             },
             {
                 to: 'Gallon',
                 names: ['Galloon', 'gal',],
                 func: (x) => {
-                    return (x);
+                    return x / 256;
                 },
-                text: 'xxx'
+                text: 'x/256'
             },
             {
                 to: 'Cubic Metre',
                 names: ['Cubic Metre', 'm3', 'm^3'],
                 func: (x) => {
-                    return (x);
+                    return x / 67628.05;
                 },
-                text: 'xxx'
+                text: 'x/67628.05'
             },
-
         ]
     },
     {
         name: 'Fluid Ounce',
         names: ['Fluid Ounce', 'floz'],
         type: 'Volume',
-        system: 'Metric',
+        system: 'Imperial',
         calc: [
             {
                 to: 'Teaspoon',
                 names: ['Teaspoon', 'tsp',],
                 func: (x) => {
-                    return (x);
+                    return x * 6;
                 },
-                text: 'xxx'
+                text: 'x*6'
             },
             {
                 to: 'Tablespoon',
                 names: ['Tablespoon', 'tbp',],
                 func: (x) => {
-                    return (x);
+                    return x * 2;
                 },
-                text: 'xxx'
+                text: 'x*2'
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz',],
+                names: ['Fluid Ounce', 'floz', 'oz'],
                 func: (x) => {
                     return (x);
                 },
-                text: 'xxx'
+                text: 'x'
             },
             {
                 to: 'Cup',
                 names: ['Cup', 'C',],
                 func: (x) => {
-                    return (x);
+                    return x / 8.115;
                 },
-                text: 'xxx'
+                text: 'x/8.115'
             },
             {
                 to: 'Pint',
                 names: ['Pint', 'pt',],
                 func: (x) => {
-                    return (x);
+                    return x / 16;
                 },
-                text: 'xxx'
+                text: 'x/16'
             },
             {
                 to: 'Litre',
                 names: ['Litre', 'Liter', 'L'],
                 func: (x) => {
-                    return (x);
+                    return x / 33.814;
                 },
-                text: 'xxx'
+                text: 'x/33.814'
             },
             {
                 to: 'Gallon',
                 names: ['Galloon', 'gal',],
                 func: (x) => {
-                    return (x);
+                    return x / 128;
                 },
-                text: 'xxx'
+                text: 'x/128'
             },
             {
                 to: 'Cubic Metre',
                 names: ['Cubic Metre', 'm3', 'm^3'],
                 func: (x) => {
-                    return (x);
+                    return x / 33814;
                 },
-                text: 'xxx'
+                text: 'x/33814'
             },
         ]
     },
@@ -1106,71 +1104,71 @@ export const values: convVal[] = [
         name: 'Cup',
         names: ['Cup', 'C'],
         type: 'Volume',
-        system: 'Metric',
+        system: 'Imperial',
         calc: [
             {
                 to: 'Teaspoon',
                 names: ['Teaspoon', 'tsp',],
                 func: (x) => {
-                    return (x);
+                    return x * 48.692;
                 },
-                text: 'xxx'
+                text: 'x*48.692'
             },
             {
                 to: 'Tablespoon',
                 names: ['Tablespoon', 'tbp',],
                 func: (x) => {
-                    return (x);
+                    return x * 16.231;
                 },
-                text: 'xxx'
+                text: 'x*16.231'
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz',],
+                names: ['Fluid Ounce', 'floz', 'oz'],
                 func: (x) => {
-                    return (x);
+                    return x * 8.115;
                 },
-                text: 'xxx'
+                text: 'x*8.115'
             },
             {
                 to: 'Cup',
                 names: ['Cup', 'C',],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
-                text: 'xxx'
+                text: 'x'
             },
             {
                 to: 'Pint',
                 names: ['Pint', 'pt',],
                 func: (x) => {
-                    return (x);
+                    return x / 1.972;
                 },
-                text: 'xxx'
+                text: 'x/1.972'
             },
             {
                 to: 'Litre',
                 names: ['Litre', 'Liter', 'L'],
                 func: (x) => {
-                    return (x);
+                    return x / 4.167;
                 },
-                text: 'xxx'
+                text: 'x/4.167'
             },
             {
                 to: 'Gallon',
                 names: ['Galloon', 'gal',],
                 func: (x) => {
-                    return (x);
+                    return x / 15.772;
                 },
-                text: 'xxx'
+                text: 'x/15.772'
             },
             {
                 to: 'Cubic Metre',
                 names: ['Cubic Metre', 'm3', 'm^3'],
                 func: (x) => {
-                    return (x);
+                    return x / 4167;
                 },
-                text: 'xxx'
+                text: 'x/4167'
             },
         ]
     },
@@ -1178,71 +1176,71 @@ export const values: convVal[] = [
         name: 'Pint',
         names: ['Pint', 'pt'],
         type: 'Volume',
-        system: 'Metric',
+        system: 'Imperial',
         calc: [
-                        {
+            {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp', ],
+                names: ['Teaspoon', 'tsp',],
                 func: (x) => {
-                    return (x);
+                    return x * 96;
                 },
-                text: 'xxx'
+                text: 'x*96'
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp', ],
+                names: ['Tablespoon', 'tbp',],
                 func: (x) => {
-                    return (x);
+                    return x * 32;
                 },
-                text: 'xxx'
+                text: 'x*32'
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', ],
+                names: ['Fluid Ounce', 'floz', 'oz'],
                 func: (x) => {
-                    return (x);
+                    return x * 16;
                 },
-                text: 'xxx'
+                text: 'x*16'
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C', ],
+                names: ['Cup', 'C',],
                 func: (x) => {
-                    return (x);
+                    return x * 1.972;
                 },
-                text: 'xxx'
+                text: 'x*1.972'
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt', ],
+                names: ['Pint', 'pt',],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
-                text: 'xxx'
+                text: 'x'
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L' ],
+                names: ['Litre', 'Liter', 'L'],
                 func: (x) => {
-                    return (x);
+                    return x / 2.113;
                 },
-                text: 'xxx'
+                text: 'x/2.113'
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal', ],
+                names: ['Galloon', 'gal',],
                 func: (x) => {
-                    return (x);
+                    return x / 8;
                 },
-                text: 'xxx'
+                text: 'x/9'
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3' ],
+                names: ['Cubic Metre', 'm3', 'm^3'],
                 func: (x) => {
-                    return (x);
+                    return x / 33814;
                 },
-                text: 'xxx'
+                text: 'x/33814'
             },
         ]
     },
@@ -1252,69 +1250,69 @@ export const values: convVal[] = [
         type: 'Volume',
         system: 'Metric',
         calc: [
-                        {
+            {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp', ],
+                names: ['Teaspoon', 'tsp',],
                 func: (x) => {
-                    return (x);
+                    return x * 202.884;
                 },
-                text: 'xxx'
+                text: 'x*202.884'
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp', ],
+                names: ['Tablespoon', 'tbp',],
                 func: (x) => {
-                    return (x);
+                    return x * 67.628;
                 },
-                text: 'xxx'
+                text: 'x*67.628'
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', ],
+                names: ['Fluid Ounce', 'floz', 'oz'],
                 func: (x) => {
-                    return (x);
+                    return x * 33.814;
                 },
-                text: 'xxx'
+                text: 'x*33.814'
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C', ],
+                names: ['Cup', 'C',],
                 func: (x) => {
-                    return (x);
+                    return x * 33.814 / 8.115;
                 },
-                text: 'xxx'
+                text: 'x*33.814/8.115'
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt', ],
+                names: ['Pint', 'pt',],
                 func: (x) => {
-                    return (x);
+                    return x * 33.814 / 16;
                 },
-                text: 'xxx'
+                text: 'x*33.814/16'
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L' ],
+                names: ['Litre', 'Liter', 'L'],
                 func: (x) => {
                     return (x);
                 },
-                text: 'xxx'
+                text: 'x'
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal', ],
+                names: ['Galloon', 'gal',],
                 func: (x) => {
-                    return (x);
+                    return x * 33.814 / 128;
                 },
-                text: 'xxx'
+                text: 'x*33.814/128'
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3' ],
+                names: ['Cubic Metre', 'm3', 'm^3'],
                 func: (x) => {
-                    return (x);
+                    return x / 1000;
                 },
-                text: 'xxx'
+                text: 'x/1000'
             },
         ]
     },
@@ -1322,71 +1320,71 @@ export const values: convVal[] = [
         name: 'Gallon',
         names: ['Gallon', 'gal'],
         type: 'Volume',
-        system: 'Metric',
+        system: 'Imperial',
         calc: [
-                        {
+            {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp', ],
+                names: ['Teaspoon', 'tsp',],
                 func: (x) => {
-                    return (x);
+                    return x * 768;
                 },
-                text: 'xxx'
+                text: 'x*768'
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp', ],
+                names: ['Tablespoon', 'tbp',],
                 func: (x) => {
-                    return (x);
+                    return x * 256;
                 },
-                text: 'xxx'
+                text: 'x*256'
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', ],
+                names: ['Fluid Ounce', 'floz', 'oz'],
                 func: (x) => {
-                    return (x);
+                    return x * 128;
                 },
-                text: 'xxx'
+                text: 'x*128'
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C', ],
+                names: ['Cup', 'C',],
                 func: (x) => {
-                    return (x);
+                    return x * 15.7725;
                 },
-                text: 'xxx'
+                text: 'x*15.7725'
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt', ],
+                names: ['Pint', 'pt',],
                 func: (x) => {
-                    return (x);
+                    return x * 8;
                 },
-                text: 'xxx'
+                text: 'x*8'
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L' ],
+                names: ['Litre', 'Liter', 'L'],
                 func: (x) => {
-                    return (x);
+                    return x * 3.785;
                 },
-                text: 'xxx'
+                text: 'x*3.785'
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal', ],
+                names: ['Galloon', 'gal',],
                 func: (x) => {
                     return (x);
                 },
-                text: 'xxx'
+                text: 'x'
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3' ],
+                names: ['Cubic Metre', 'm3', 'm^3'],
                 func: (x) => {
-                    return (x);
+                    return x / 264.2;
                 },
-                text: 'xxx'
+                text: 'x/264.2'
             },
         ]
     },
@@ -1396,185 +1394,602 @@ export const values: convVal[] = [
         type: 'Volume',
         system: 'Metric',
         calc: [
-                        {
+            {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp', ],
+                names: ['Teaspoon', 'tsp',],
                 func: (x) => {
-                    return (x);
+                    return x * 202884;
                 },
-                text: 'xxx'
+                text: 'x*202884'
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp', ],
+                names: ['Tablespoon', 'tbp',],
                 func: (x) => {
-                    return (x);
+                    return x * 67628;
                 },
-                text: 'xxx'
+                text: 'x*67628'
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', ],
+                names: ['Fluid Ounce', 'floz', 'oz'],
                 func: (x) => {
-                    return (x);
+                    return x * 33814;
                 },
-                text: 'xxx'
+                text: 'x*33814'
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C', ],
+                names: ['Cup', 'C',],
                 func: (x) => {
-                    return (x);
+                    return x * 33814 / 8.115;
                 },
-                text: 'xxx'
+                text: 'x*33814/8.115'
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt', ],
+                names: ['Pint', 'pt',],
                 func: (x) => {
-                    return (x);
+                    return x * 33814 / 16;
                 },
-                text: 'xxx'
+                text: 'x*33814/16'
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L' ],
+                names: ['Litre', 'Liter', 'L'],
                 func: (x) => {
-                    return (x);
+                    return (x * 1000);
                 },
-                text: 'xxx'
+                text: 'x*1000'
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal', ],
+                names: ['Galloon', 'gal',],
                 func: (x) => {
-                    return (x);
+                    return x * 33814 / 128;
                 },
-                text: 'xxx'
+                text: 'x*33814/128'
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3' ],
+                names: ['Cubic Metre', 'm3', 'm^3'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
-                text: 'xxx'
+                text: 'x'
             },
         ]
     },
+
     // Mass
     {
-        name: 'gram',
-        names: ['eee', 'EEE'],
+        name: 'Gram',
+        names: ['Gram', 'g'],
         type: 'Mass',
         system: 'Metric',
         calc: [
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'Gram',
+                names: ['Gram', 'g'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
-                text: 'xxx'
-            }
+                text: 'x'
+            },
+            {
+                to: 'Ounce',
+                names: ['Ounce', 'oz'],
+                func: (x) => {
+                    return x / 28.35;
+                },
+                text: 'x/28.35'
+            },
+            {
+                to: 'Pound',
+                names: ['Pound', 'lb'],
+                func: (x) => {
+                    return x / 453.592;
+                },
+                text: 'x/453.592'
+            },
+            {
+                to: 'Stone',
+                names: ['Stone', 'st'],
+                func: (x) => {
+                    return x / 6350.29;
+                },
+                text: 'x/6350.29'
+            },
+            {
+                to: 'US Ton',
+                names: ['Ton', 't', 'US Ton'],
+                func: (x) => {
+                    return x / 907185;
+                },
+                text: 'x/907185'
+            },
+            {
+                to: 'Metric Tonne',
+                names: ['Tonne', 'mt', 'Metric Tonne'],
+                func: (x) => {
+                    return x / (10 ** 6);
+                },
+                text: 'x/10^6'
+            },
         ]
     },
     {
-        name: 'ounce',
-        names: ['eee', 'EEE'],
+        name: 'Ounce',
+        names: ['Ounce', 'oz'],
         type: 'Mass',
-        system: 'Metric',
+        system: 'Imperial',
         calc: [
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'Gram',
+                names: ['Gram', 'g'],
                 func: (x) => {
-                    return (x);
+                    return x * 28.35;
                 },
-                text: 'xxx'
-            }
+                text: 'x*28.35'
+            },
+            {
+                to: 'Ounce',
+                names: ['Ounce', 'oz'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Pound',
+                names: ['Pound', 'lb'],
+                func: (x) => {
+                    return x / 16;
+                },
+                text: 'x/16'
+            },
+            {
+                to: 'Stone',
+                names: ['Stone', 'st'],
+                func: (x) => {
+                    return x / 224;
+                },
+                text: 'x/224'
+            },
+            {
+                to: 'US Ton',
+                names: ['Ton', 't', 'US Ton'],
+                func: (x) => {
+                    return x / 32000;
+                },
+                text: 'x/32000'
+            },
+            {
+                to: 'Metric Tonne',
+                names: ['Tonne', 'mt', 'Metric Tonne'],
+                func: (x) => {
+                    return x / 35274;
+                },
+                text: 'x/35274'
+            },
         ]
     },
     {
-        name: 'ton',
-        names: ['eee', 'EEE'],
+        name: 'Pound',
+        names: ['Pound', 'lb'],
         type: 'Mass',
         system: 'Metric',
         calc: [
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'Gram',
+                names: ['Gram', 'g'],
                 func: (x) => {
-                    return (x);
+                    return x * 453.592;
                 },
-                text: 'xxx'
-            }
+                text: 'x*453.592'
+            },
+            {
+                to: 'Ounce',
+                names: ['Ounce', 'oz'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x*16'
+            },
+            {
+                to: 'Pound',
+                names: ['Pound', 'lb'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Stone',
+                names: ['Stone', 'st'],
+                func: (x) => {
+                    return x / 14;
+                },
+                text: 'x/14'
+            },
+            {
+                to: 'US Ton',
+                names: ['Ton', 't', 'US Ton'],
+                func: (x) => {
+                    return x / 2000;
+                },
+                text: 'x/2000'
+            },
+            {
+                to: 'Metric Tonne',
+                names: ['Tonne', 'mt', 'Metric Tonne'],
+                func: (x) => {
+                    return x / 2205;
+                },
+                text: 'x/2205'
+            },
         ]
     },
     {
-        name: 'metric',
-        names: ['eee', 'EEE'],
+        name: 'Stone',
+        names: ['Stone', 'st'],
         type: 'Mass',
         system: 'Metric',
         calc: [
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'Gram',
+                names: ['Gram', 'g'],
                 func: (x) => {
-                    return (x);
+                    return x * 6350.29;
                 },
-                text: 'xxx'
-            }
+                text: 'x*6350.29'
+            },
+            {
+                to: 'Ounce',
+                names: ['Ounce', 'oz'],
+                func: (x) => {
+                    return x * 224;
+                },
+                text: 'x*224'
+            },
+            {
+                to: 'Pound',
+                names: ['Pound', 'lb'],
+                func: (x) => {
+                    return x * 14;
+                },
+                text: 'x*14'
+            },
+            {
+                to: 'Stone',
+                names: ['Stone', 'st'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'US Ton',
+                names: ['Ton', 't', 'US Ton'],
+                func: (x) => {
+                    return x * 0.007;
+                },
+                text: 'x*0.007'
+            },
+            {
+                to: 'Metric Tonne',
+                names: ['Tonne', 'mt', 'Metric Tonne'],
+                func: (x) => {
+                    return x / 157.473;
+                },
+                text: 'x/157.473'
+            },
         ]
     },
     {
-        name: 'eee',
-        names: ['eee', 'EEE'],
+        name: 'US Ton',
+        names: ['Ton', 't', 'US Ton'],
+        type: 'Mass',
+        system: 'Imperial',
+        calc: [
+            {
+                to: 'Gram',
+                names: ['Gram', 'g'],
+                func: (x) => {
+                    return x * 907185;
+                },
+                text: 'x*907185'
+            },
+            {
+                to: 'Ounce',
+                names: ['Ounce', 'oz'],
+                func: (x) => {
+                    return x * 32000;
+                },
+                text: 'x*32000'
+            },
+            {
+                to: 'Pound',
+                names: ['Pound', 'lb'],
+                func: (x) => {
+                    return x * 2000;
+                },
+                text: 'x*2000'
+            },
+            {
+                to: 'Stone',
+                names: ['Stone', 'st'],
+                func: (x) => {
+                    return x / 0.007;
+                },
+                text: 'x/0.007'
+            },
+            {
+                to: 'US Ton',
+                names: ['Ton', 't', 'US Ton'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Metric Tonne',
+                names: ['Tonne', 'mt', 'Metric Tonne'],
+                func: (x) => {
+                    return x / 1.102;
+                },
+                text: 'x/1.102'
+            },
+        ]
+    },
+    {
+        name: 'Metric Tonne',
+        names: ['Tonne', 'mt', 'Metric Tonne'],
         type: 'Mass',
         system: 'Metric',
         calc: [
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'Gram',
+                names: ['Gram', 'g'],
                 func: (x) => {
-                    return (x);
+                    return x * (10 ** 6);
                 },
-                text: 'xxx'
-            }
+                text: 'x*10^6'
+            },
+            {
+                to: 'Ounce',
+                names: ['Ounce', 'oz'],
+                func: (x) => {
+                    return x * 35274;
+                },
+                text: 'x*35274'
+            },
+            {
+                to: 'Pound',
+                names: ['Pound', 'lb'],
+                func: (x) => {
+                    return x * 2204.62;
+                },
+                text: 'x*2204.62'
+            },
+            {
+                to: 'Stone',
+                names: ['Stone', 'st'],
+                func: (x) => {
+                    return x * 157.473;
+                },
+                text: 'x*157.473'
+            },
+            {
+                to: 'US Ton',
+                names: ['Ton', 't', 'US Ton'],
+                func: (x) => {
+                    return x * 1.102;
+                },
+                text: 'x*1.102'
+            },
+            {
+                to: 'Metric Tonne',
+                names: ['Tonne', 'mt', 'Metric Tonne'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
         ]
     },
 
     // Pressure
     {
         name: 'Pascal',
-        names: ['eee', 'EEE'],
+        names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
         type: 'Pressure',
         system: 'Metric',
         calc: [
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'Pascal',
+                names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
-                text: 'xxx'
-            }
+                text: 'x'
+            },
+            {
+                to: 'mmHg',
+                names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+                func: (x) => {
+                    return x / 133.322;
+                },
+                text: 'x/133.322'
+            },
+            {
+                to: 'psi',
+                names: ['Pounds per square inch', 'psi'],
+                func: (x) => {
+                    return x / 6894.76;
+                },
+                text: 'x/6894.76'
+            },
+            {
+                to: 'Bar',
+                names: ['Bar'],
+                func: (x) => {
+                    return x / 100000;
+                },
+                text: 'x/100000'
+            },
+            {
+                to: 'Atmosphere',
+                names: ['Atmosphere', 'atm'],
+                func: (x) => {
+                    return x / 101325;
+                },
+                text: 'x/101325'
+            },
         ]
     },
     {
-        name: 'bar',
-        names: ['eee', 'EEE'],
+        name: 'mmHg',
+        names: ['millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+        type: 'Mass',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Pascal',
+                names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
+                func: (x) => {
+                    return x * 133.322;
+                },
+                text: 'x*133.322'
+            },
+            {
+                to: 'mmHg',
+                names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'psi',
+                names: ['Pounds per square inch', 'psi'],
+                func: (x) => {
+                    return x / 51.7149;
+                },
+                text: 'x/51.7149'
+            },
+            {
+                to: 'Bar',
+                names: ['Bar'],
+                func: (x) => {
+                    return x / 750.062;
+                },
+                text: 'x/750.062'
+            },
+            {
+                to: 'Atmosphere',
+                names: ['Atmosphere', 'atm'],
+                func: (x) => {
+                    return x / 760;
+                },
+                text: 'x/760'
+            },
+        ]
+    },
+    {
+        name: 'psi',
+        names: ['Pounds per square inch', 'psi'],
+        type: 'Pressure',
+        system: 'Imperial',
+        calc: [
+            {
+                to: 'Pascal',
+                names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
+                func: (x) => {
+                    return x * 6894.76;
+                },
+                text: 'x*6894.76'
+            },
+            {
+                to: 'mmHg',
+                names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+                func: (x) => {
+                    return x * 51.7149;
+                },
+                text: 'x*51.7149'
+            },
+            {
+                to: 'psi',
+                names: ['Pounds per square inch', 'psi'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Bar',
+                names: ['Bar'],
+                func: (x) => {
+                    return x / 14.504;
+                },
+                text: 'x/14.504'
+            },
+            {
+                to: 'Atmosphere',
+                names: ['Atmosphere', 'atm'],
+                func: (x) => {
+                    return x / 14.696;
+                },
+                text: 'x/14.696'
+            },
+        ]
+    },
+    {
+        name: 'Bar',
+        names: ['Bar'],
         type: 'Mass',
         system: 'Metric',
         calc: [
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'Pascal',
+                names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
                 func: (x) => {
-                    return (x);
+                    return x*100000;
                 },
-                text: 'xxx'
-            }
+                text: 'x*100000'
+            },
+            {
+                to: 'mmHg',
+                names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+                func: (x) => {
+                    return x*750.062;
+                },
+                text: 'x*750.062'
+            },
+            {
+                to: 'psi',
+                names: ['Pounds per square inch', 'psi'],
+                func: (x) => {
+                    return x*14.504;
+                },
+                text: 'x*14.504'
+            },
+            {
+                to: 'Bar',
+                names: ['Bar'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Atmosphere',
+                names: ['Atmosphere', 'atm'],
+                func: (x) => {
+                    return x/1.013;
+                },
+                text: 'x/1.013'
+            },
         ]
     },
     {
@@ -1584,45 +1999,45 @@ export const values: convVal[] = [
         system: 'Metric',
         calc: [
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'Pascal',
+                names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
                 func: (x) => {
-                    return (x);
+                    return x*101325;
                 },
-                text: 'xxx'
-            }
-        ]
-    },
-    {
-        name: 'mmHg',
-        names: ['Torr', 'millimetre of Mercury', 'mmHg'],
-        type: 'Mass',
-        system: 'Metric',
-        calc: [
+                text: 'x*101325'
+            },
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'mmHg',
+                names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
                 func: (x) => {
-                    return (x);
+                    return x*760;
                 },
-                text: 'xxx'
-            }
-        ]
-    },
-    {
-        name: 'psi',
-        names: ['eee', 'EEE'],
-        type: 'Pressure',
-        system: 'Metric',
-        calc: [
+                text: 'x*760'
+            },
             {
-                to: 'eee',
-                names: ['eee', 'EEE'],
+                to: 'psi',
+                names: ['Pounds per square inch', 'psi'],
                 func: (x) => {
-                    return (x);
+                    return x*14.696;
                 },
-                text: 'xxx'
-            }
+                text: 'x*14.696'
+            },
+            {
+                to: 'Bar',
+                names: ['Bar'],
+                func: (x) => {
+                    return x*1.013;
+                },
+                text: 'x*1.013'
+            },
+            {
+                to: 'Atmosphere',
+                names: ['Atmosphere', 'atm'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
         ]
     },
 ];
