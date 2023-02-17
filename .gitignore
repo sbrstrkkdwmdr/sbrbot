@@ -5,7 +5,7 @@ config/
 *.log
 config/config.json
 test/
-*.sqlite
+database*.sqlite
 replay.osr
 files/maps/
 *.js

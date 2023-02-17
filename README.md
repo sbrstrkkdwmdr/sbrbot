@@ -47,11 +47,11 @@ create a `./config/` folder and put `config.json` inside it
 }
 ```
 
-to compile the bot the bot run `tsc` or `npm run build`
-to run the compiled code run `npm run run` 
+rename `TEMPLATE.sqlite` to `database.sqlite`</br>
+to compile the bot the bot run `tsc` or `npm run build`</br>
+to run the compiled code run `npm run run` </br>
 
-to run the bot without checking for errors (or for other debugging purposes) use `npm run test`
-
+to run the bot without checking for errors (or for other debugging purposes) use `npm run test`</br>
 
 ## image search setup
 
@@ -78,7 +78,6 @@ copy the key and paste it into the google.apiKey field </br>
 - [osu!stats api](https://github.com/respektive/osustats)</br>
 - [node-fetch](https://www.npmjs.com/package/node-fetch)</br>
 - [osureplayparser](https://www.npmjs.com/package/osureplayparser)</br>
-
 
 ## config properties
 
