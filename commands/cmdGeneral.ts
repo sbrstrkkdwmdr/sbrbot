@@ -34,7 +34,7 @@ export async function convert(input: extypes.commandInput) {
     let commanduser;
     let cat1: string;
     let cat2: string;
-    let num: number;
+    let num: number = 1;
 
     switch (input.commandType) {
         case 'message': {
@@ -42,7 +42,7 @@ export async function convert(input: extypes.commandInput) {
             commanduser = input.obj.author;
             cat1 = input.args[0];
             cat2 = input.args[1];
-            num = parseFloat(input.args[2]);
+            num = parseFloat(input.args[2]) ?? 1;
             if (!input.args[0]) {
                 cat1 = 'help';
             }

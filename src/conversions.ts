@@ -1,7 +1,7 @@
 type convVal = {
     name: string,
     names: string[],
-    type: 'Temperature' | 'Distance' | 'Volume' | 'Time' | 'Mass' | 'Pressure',
+    type: 'Temperature' | 'Distance' | 'Volume' | 'Time' | 'Mass' | 'Pressure' | 'Energy' | 'Angle',
     system: 'Metric' | 'Imperial' | 'N/A',
     calc: {
         to: string,
@@ -22,7 +22,7 @@ const template: convVal[] = [
                 to: 'eee',
                 names: ['eee', 'EEE'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'xxx'
             }
@@ -31,13 +31,17 @@ const template: convVal[] = [
 ];
 
 /**
- * measurements are converted to a base b4 converting to the actual result ie
- * temperature - celsius
- * distance - metres
- * time - seconds
- * volume - litres
- * mass - grams
- * pressure - pascals
+ * measurements are smallest to largest (excluding temp cos it rlly doesn't matter)
+ * temperature - celsius(c), fahrenheit(f), kelvin(k)
+ * distance - inch(in), feet(ft), metre(m), mile(mi), astronomical unit(au), light year(ly)
+ * time - second(s), minute(min), hour(hr), day(d), week(wk), month(mth), year(y)
+ * volume - teaspoon(tsp), tablespoon(tbp), fluid ounce(floz), cup(c), pint(pt), litre(l), gallon(gal), cubic metre(m3)
+ * mass - gram(g), ounce(oz), pound (lb), stone(st), us ton/ton (t), metric tonne/tonne (mt)
+ * pressure - pascal (Pa), millimetre of mercury/torr (mmHg), pounds per square inch (psi), bar, standard atmosphere (atm)
+ * energy - electronvolt (eV), joule (J), calories,
+ * area - square metre (m2), square kilometre (km2), square mile (mi2), hectare(ha), acre(ac)
+ * angle - revolution(r), degree(deg), radian(rad)
+ * speed - metres per second (ms), kilometres per hour (kmh),  miles per hour (mph), knots (kt)
  */
 export const values: convVal[] = [
     // Temperature
@@ -154,7 +158,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'in'],
+                names: ['Astronomical Unit', 'au'],
                 func: (x) => {
                     return x * 0.0254 / 149597870700;
                 },
@@ -188,7 +192,7 @@ export const values: convVal[] = [
                 to: 'Feet',
                 names: ['Feet', 'ft'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x'
             },
@@ -210,7 +214,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'in'],
+                names: ['Astronomical Unit', 'au'],
                 func: (x) => {
                     return x * 0.3048 / 149597870700;
                 },
@@ -258,7 +262,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'in'],
+                names: ['Astronomical Unit', 'au'],
                 func: (x) => {
                     return x / 149597870700;
                 },
@@ -306,9 +310,9 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'in'],
+                names: ['Astronomical Unit', 'au'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x*1609.344/149597870700'
             },
@@ -316,7 +320,7 @@ export const values: convVal[] = [
                 to: 'Light Year',
                 names: ['Light Year', 'LY'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x*1609.344/9460730472580800'
             },
@@ -362,9 +366,9 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'in'],
+                names: ['Astronomical Unit', 'au'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x'
             },
@@ -418,7 +422,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'in'],
+                names: ['Astronomical Unit', 'au'],
                 func: (x) => {
                     return x * 9460730472580800 / 149597870700;
                 },
@@ -428,7 +432,7 @@ export const values: convVal[] = [
                 to: 'Light Year',
                 names: ['Light Year', 'LY'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x'
             },
@@ -445,7 +449,7 @@ export const values: convVal[] = [
                 to: 'Second',
                 names: ['Second', 'sec', 's'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x'
             },
@@ -517,7 +521,7 @@ export const values: convVal[] = [
                 to: 'Minute',
                 names: ['Minute', 'min'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x'
             },
@@ -910,7 +914,7 @@ export const values: convVal[] = [
                 to: 'Fluid Ounce',
                 names: ['Fluid Ounce', 'floz', 'oz'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x/6'
             },
@@ -982,7 +986,7 @@ export const values: convVal[] = [
                 to: 'Fluid Ounce',
                 names: ['Fluid Ounce', 'floz', 'oz'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x/2'
             },
@@ -1054,7 +1058,7 @@ export const values: convVal[] = [
                 to: 'Fluid Ounce',
                 names: ['Fluid Ounce', 'floz', 'oz'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x'
             },
@@ -1294,7 +1298,7 @@ export const values: convVal[] = [
                 to: 'Litre',
                 names: ['Litre', 'Liter', 'L'],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x'
             },
@@ -1374,7 +1378,7 @@ export const values: convVal[] = [
                 to: 'Gallon',
                 names: ['Galloon', 'gal',],
                 func: (x) => {
-                    return (x);
+                    return x;
                 },
                 text: 'x'
             },
@@ -1798,7 +1802,6 @@ export const values: convVal[] = [
             },
         ]
     },
-
     // Pressure
     {
         name: 'Pascal',
@@ -1839,8 +1842,8 @@ export const values: convVal[] = [
                 text: 'x/100000'
             },
             {
-                to: 'Atmosphere',
-                names: ['Atmosphere', 'atm'],
+                to: 'Standard Atmosphere',
+                names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
                 func: (x) => {
                     return x / 101325;
                 },
@@ -1851,7 +1854,7 @@ export const values: convVal[] = [
     {
         name: 'mmHg',
         names: ['millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
-        type: 'Mass',
+        type: 'Pressure',
         system: 'N/A',
         calc: [
             {
@@ -1887,8 +1890,8 @@ export const values: convVal[] = [
                 text: 'x/750.062'
             },
             {
-                to: 'Atmosphere',
-                names: ['Atmosphere', 'atm'],
+                to: 'Standard Atmosphere',
+                names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
                 func: (x) => {
                     return x / 760;
                 },
@@ -1935,8 +1938,8 @@ export const values: convVal[] = [
                 text: 'x/14.504'
             },
             {
-                to: 'Atmosphere',
-                names: ['Atmosphere', 'atm'],
+                to: 'Standard Atmosphere',
+                names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
                 func: (x) => {
                     return x / 14.696;
                 },
@@ -1947,14 +1950,14 @@ export const values: convVal[] = [
     {
         name: 'Bar',
         names: ['Bar'],
-        type: 'Mass',
+        type: 'Pressure',
         system: 'Metric',
         calc: [
             {
                 to: 'Pascal',
                 names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
                 func: (x) => {
-                    return x*100000;
+                    return x * 100000;
                 },
                 text: 'x*100000'
             },
@@ -1962,7 +1965,7 @@ export const values: convVal[] = [
                 to: 'mmHg',
                 names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
                 func: (x) => {
-                    return x*750.062;
+                    return x * 750.062;
                 },
                 text: 'x*750.062'
             },
@@ -1970,7 +1973,7 @@ export const values: convVal[] = [
                 to: 'psi',
                 names: ['Pounds per square inch', 'psi'],
                 func: (x) => {
-                    return x*14.504;
+                    return x * 14.504;
                 },
                 text: 'x*14.504'
             },
@@ -1983,26 +1986,26 @@ export const values: convVal[] = [
                 text: 'x'
             },
             {
-                to: 'Atmosphere',
-                names: ['Atmosphere', 'atm'],
+                to: 'Standard Atmosphere',
+                names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
                 func: (x) => {
-                    return x/1.013;
+                    return x / 1.013;
                 },
                 text: 'x/1.013'
             },
         ]
     },
     {
-        name: 'Atmosphere',
-        names: ['Atmosphere', 'atm'],
-        type: 'Mass',
+        name: 'Standard Atmosphere',
+        names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
+        type: 'Pressure',
         system: 'Metric',
         calc: [
             {
                 to: 'Pascal',
                 names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
                 func: (x) => {
-                    return x*101325;
+                    return x * 101325;
                 },
                 text: 'x*101325'
             },
@@ -2010,7 +2013,7 @@ export const values: convVal[] = [
                 to: 'mmHg',
                 names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
                 func: (x) => {
-                    return x*760;
+                    return x * 760;
                 },
                 text: 'x*760'
             },
@@ -2018,7 +2021,7 @@ export const values: convVal[] = [
                 to: 'psi',
                 names: ['Pounds per square inch', 'psi'],
                 func: (x) => {
-                    return x*14.696;
+                    return x * 14.696;
                 },
                 text: 'x*14.696'
             },
@@ -2026,13 +2029,13 @@ export const values: convVal[] = [
                 to: 'Bar',
                 names: ['Bar'],
                 func: (x) => {
-                    return x*1.013;
+                    return x * 1.013;
                 },
                 text: 'x*1.013'
             },
             {
-                to: 'Atmosphere',
-                names: ['Atmosphere', 'atm'],
+                to: 'Standard Atmosphere',
+                names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
                 func: (x) => {
                     return x;
                 },
@@ -2040,4 +2043,696 @@ export const values: convVal[] = [
             },
         ]
     },
+    //energy
+    {
+        name: 'Electron Volt',
+        names: ['Electron Volt', 'eV', 'Electronvolt'],
+        type: 'Energy',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Electron Volt',
+                names: ['Electron Volt', 'eV', 'Electronvolt'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Joule',
+                names: ['Joule', 'j'],
+                func: (x) => {
+                    return x / (6.242 * 10 ** 18);
+                },
+                text: 'x/(6.242*10^18)'
+            },
+            {
+                to: 'Calorie',
+                names: ['Calorie', 'cal'],
+                func: (x) => {
+                    return x / (2.611 * 10 ** 19);
+                },
+                text: 'x/(2.611*10^19)'
+            },
+        ]
+    },
+    {
+        name: 'Joule',
+        names: ['Joule', 'j'],
+        type: 'Energy',
+        system: 'Metric',
+        calc: [
+            {
+                to: 'Electron Volt',
+                names: ['Electron Volt', 'eV', 'Electronvolt'],
+                func: (x) => {
+                    return x * (6.242 * 10 ** 18);
+                },
+                text: 'x*(6.242*10^18)'
+            },
+            {
+                to: 'Joule',
+                names: ['Joule', 'j'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Calorie',
+                names: ['Calorie', 'cal'],
+                func: (x) => {
+                    return x / 4.184;
+                },
+                text: 'x/4.184'
+            },
+        ]
+    },
+    {
+        name: 'Calorie',
+        names: ['Calorie', 'cal'],
+        type: 'Energy',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Electron Volt',
+                names: ['Electron Volt', 'eV', 'Electronvolt'],
+                func: (x) => {
+                    return x / (2.611 * 10 ** 19);
+                },
+                text: 'x/(2.611*10^19)'
+            },
+            {
+                to: 'Joule',
+                names: ['Joule', 'j'],
+                func: (x) => {
+                    return x * 4.184;
+                },
+                text: 'x*4.184'
+            },
+            {
+                to: 'Calorie',
+                names: ['Calorie', 'cal'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+        ]
+    },
+    //area
+    {
+        name: 'Square foot',
+        names: ['Square foot', 'ft2'],
+        type: 'Distance',
+        system: 'Imperial',
+        calc: [
+            {
+                to: 'Square foot',
+                names: ['Square foot', 'ft2'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Square metre',
+                names: ['Square metre', 'm2'],
+                func: (x) => {
+                    return x / 10.764;
+                },
+                text: 'x/10.764'
+            },
+            {
+                to: 'Acre',
+                names: ['Acre', 'ac'],
+                func: (x) => {
+                    return x / 43560;
+                },
+                text: 'x/43560'
+            },
+            {
+                to: 'Hectare',
+                names: ['Hectare', 'Ha'],
+                func: (x) => {
+                    return x / 107600;
+                },
+                text: 'x/107600'
+            },
+            {
+                to: 'Square kilometre',
+                names: ['Square kilometre', 'km2'],
+                func: (x) => {
+                    return x / 10764000;
+                },
+                text: 'x/1.0764e+7'
+            },
+            {
+                to: 'Square mile',
+                names: ['Square mile', 'mi2'],
+                func: (x) => {
+                    return x / 27880000;
+                },
+                text: 'x/2.788e+7'
+            },
+        ]
+    },
+    {
+        name: 'Square metre',
+        names: ['Square metre', 'm2'],
+        type: 'Distance',
+        system: 'Metric',
+        calc: [
+            {
+                to: 'Square foot',
+                names: ['Square foot', 'ft2'],
+                func: (x) => {
+                    return x * 10.764;
+                },
+                text: 'x*10.764'
+            },
+            {
+                to: 'Square metre',
+                names: ['Square metre', 'm2'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Acre',
+                names: ['Acre', 'ac'],
+                func: (x) => {
+                    return x / 4047;
+                },
+                text: 'x/4047'
+            },
+            {
+                to: 'Hectare',
+                names: ['Hectare', 'Ha'],
+                func: (x) => {
+                    return x / 10000;
+                },
+                text: 'x/10000'
+            },
+            {
+                to: 'Square kilometre',
+                names: ['Square kilometre', 'km2'],
+                func: (x) => {
+                    return x / 1e+6;
+                },
+                text: 'x/1e+6'
+            },
+            {
+                to: 'Square mile',
+                names: ['Square mile', 'mi2'],
+                func: (x) => {
+                    return x / 2.59e+6;
+                },
+                text: 'x/2.59e+6'
+            },
+        ]
+    },
+    {
+        name: 'Acre',
+        names: ['Acre', 'ac'],
+        type: 'Distance',
+        system: 'Imperial',
+        calc: [
+            {
+                to: 'Square foot',
+                names: ['Square foot', 'ft2'],
+                func: (x) => {
+                    return x * 43560;
+                },
+                text: 'x*43560'
+            },
+            {
+                to: 'Square metre',
+                names: ['Square metre', 'm2'],
+                func: (x) => {
+                    return x * 4046.86;
+                },
+                text: 'x*4046.86'
+            },
+            {
+                to: 'Acre',
+                names: ['Acre', 'ac'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Hectare',
+                names: ['Hectare', 'Ha'],
+                func: (x) => {
+                    return x / 2.471;
+                },
+                text: 'x/2.471'
+            },
+            {
+                to: 'Square kilometre',
+                names: ['Square kilometre', 'km2'],
+                func: (x) => {
+                    return x / 247.1;
+                },
+                text: 'x/247.1'
+            },
+            {
+                to: 'Square mile',
+                names: ['Square mile', 'mi2'],
+                func: (x) => {
+                    return x / 640;
+                },
+                text: 'x/640'
+            },
+        ]
+    },
+    {
+        name: 'Hectare',
+        names: ['Hectare', 'ha'],
+        type: 'Distance',
+        system: 'Metric',
+        calc: [
+            {
+                to: 'Square foot',
+                names: ['Square foot', 'ft2'],
+                func: (x) => {
+                    return x * 107639;
+                },
+                text: 'x*107639'
+            },
+            {
+                to: 'Square metre',
+                names: ['Square metre', 'm2'],
+                func: (x) => {
+                    return x * 10000;
+                },
+                text: 'x*10000'
+            },
+            {
+                to: 'Acre',
+                names: ['Acre', 'ac'],
+                func: (x) => {
+                    return x * 2.471;
+                },
+                text: 'x*2.471'
+            },
+            {
+                to: 'Hectare',
+                names: ['Hectare', 'Ha'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Square kilometre',
+                names: ['Square kilometre', 'km2'],
+                func: (x) => {
+                    return x / 100;
+                },
+                text: 'x/100'
+            },
+            {
+                to: 'Square mile',
+                names: ['Square mile', 'mi2'],
+                func: (x) => {
+                    return x / 258.999;
+                },
+                text: 'x/258.999'
+            },
+        ]
+    },
+    {
+        name: 'Square kilometre',
+        names: ['Square kilometre', 'km2'],
+        type: 'Distance',
+        system: 'Metric',
+        calc: [
+            {
+                to: 'Square foot',
+                names: ['Square foot', 'ft2'],
+                func: (x) => {
+                    return x * 1.076e+7;
+                },
+                text: 'x*1.076e+7'
+            },
+            {
+                to: 'Square metre',
+                names: ['Square metre', 'm2'],
+                func: (x) => {
+                    return x * 1e+6;
+                },
+                text: 'x*1e+6'
+            },
+            {
+                to: 'Acre',
+                names: ['Acre', 'ac'],
+                func: (x) => {
+                    return x * 247.105;
+                },
+                text: 'x*247.105'
+            },
+            {
+                to: 'Hectare',
+                names: ['Hectare', 'Ha'],
+                func: (x) => {
+                    return x * 100;
+                },
+                text: 'x*100'
+            },
+            {
+                to: 'Square kilometre',
+                names: ['Square kilometre', 'km2'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Square mile',
+                names: ['Square mile', 'mi2'],
+                func: (x) => {
+                    return x / 2.59;
+                },
+                text: 'x/2.59'
+            },
+        ]
+    },
+    {
+        name: 'Square mile',
+        names: ['Square mile', 'mi2'],
+        type: 'Distance',
+        system: 'Imperial',
+        calc: [
+            {
+                to: 'Square foot',
+                names: ['Square foot', 'ft2'],
+                func: (x) => {
+                    return x * 2.788e+7;
+                },
+                text: 'x*2.788e+7'
+            },
+            {
+                to: 'Square metre',
+                names: ['Square metre', 'm2'],
+                func: (x) => {
+                    return x * 2.59e+6;
+                },
+                text: 'x*2.59e+6'
+            },
+            {
+                to: 'Acre',
+                names: ['Acre', 'ac'],
+                func: (x) => {
+                    return x * 640;
+                },
+                text: 'x*640'
+            },
+            {
+                to: 'Hectare',
+                names: ['Hectare', 'Ha'],
+                func: (x) => {
+                    return x * 258.999;
+                },
+                text: 'x*258.999'
+            },
+            {
+                to: 'Square kilometre',
+                names: ['Square kilometre', 'km2'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x*2.59'
+            },
+            {
+                to: 'Square mile',
+                names: ['Square mile', 'mi2'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+        ]
+    },
+    //angle
+    {
+        name: 'Gradian',
+        names: ['Gradian', 'grad'],
+        type: 'Angle',
+        system: 'Metric',
+        calc: [
+            {
+                to: 'Gradian',
+                names: ['Gradian', 'grad'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Degree',
+                names: ['Degree', 'deg'],
+                func: (x) => {
+                    return x * 0.9;
+                },
+                text: 'x*0.9'
+            },
+            {
+                to: 'Radian',
+                names: ['Radian', 'rad'],
+                func: (x) => {
+                    return (x * Math.PI) / 200;
+                },
+                text: '(x*π)/200'
+            },
+        ]
+    },
+    {
+        name: 'Degree',
+        names: ['Degree', 'deg'],
+        type: 'Angle',
+        system: 'Metric',
+        calc: [
+            {
+                to: 'Gradian',
+                names: ['Gradian', 'grad'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x/0.9'
+            },
+            {
+                to: 'Degree',
+                names: ['Degree', 'deg'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Radian',
+                names: ['Radian', 'rad'],
+                func: (x) => {
+                    return (x * Math.PI) / 180;
+                },
+                text: '(x*π)/180'
+            },
+        ]
+    },
+    {
+        name: 'Radian',
+        names: ['Radian', 'rad'],
+        type: 'Angle',
+        system: 'Metric',
+        calc: [
+            {
+                to: 'Gradian',
+                names: ['Gradian', 'grad'],
+                func: (x) => {
+                    return (x * 200) / Math.PI;
+                },
+                text: '(x*200)/π'
+            },
+            {
+                to: 'Degree',
+                names: ['Degree', 'deg'],
+                func: (x) => {
+                    return (x * 180) / Math.PI;
+                },
+                text: '(x*180)/π'
+            },
+            {
+                to: 'Radian',
+                names: ['Radian', 'rad'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+        ]
+    },
+    //speed
+    {
+        name: 'Kilometres per hour',
+        names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+        type: 'Distance',
+        system: 'Metric',
+        calc: [
+            {
+                to: 'Kilometres per hour',
+                names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Miles per hour',
+                names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+                func: (x) => {
+                    return x / 1.609;
+                },
+                text: 'x/1.609'
+            },
+            {
+                to: 'Knot',
+                names: ['Knot', 'kt', 'nmih', 'nmh'],
+                func: (x) => {
+                    return x / 1.852;
+                },
+                text: 'x/1.852'
+            },
+            {
+                to: 'Metres per second',
+                names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                func: (x) => {
+                    return x / 3.6;
+                },
+                text: 'x/3.6'
+            },
+        ]
+    },
+    {
+        name: 'Miles per hour',
+        names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+        type: 'Distance',
+        system: 'Imperial',
+        calc: [
+            {
+                to: 'Kilometres per hour',
+                names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+                func: (x) => {
+                    return x * 1.609;
+                },
+                text: 'x*1.609'
+            },
+            {
+                to: 'Miles per hour',
+                names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Knot',
+                names: ['Knot', 'kt', 'nmih', 'nmh'],
+                func: (x) => {
+                    return x / 1.151;
+                },
+                text: 'x/1.151'
+            },
+            {
+                to: 'Metres per second',
+                names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                func: (x) => {
+                    return x / 2.237;
+                },
+                text: 'x/2.237'
+            },
+        ]
+    },
+    {
+        name: 'Knots',
+        names: ['Knots', 'kt', 'nmih', 'nmh'],
+        type: 'Distance',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Kilometres per hour',
+                names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+                func: (x) => {
+                    return x * 1.852;
+                },
+                text: 'x*1.852'
+            },
+            {
+                to: 'Miles per hour',
+                names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+                func: (x) => {
+                    return x * 1.151;
+                },
+                text: 'x*1.151'
+            },
+            {
+                to: 'Knot',
+                names: ['Knot', 'kt', 'nmih', 'nmh'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Metres per second',
+                names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                func: (x) => {
+                    return x / 1.944;
+                },
+                text: 'x/1.944'
+            },
+        ]
+    },
+    {
+        name: 'Metres per second',
+        names: ['Metres per second', 'ms', 'mps', 'm/s',],
+        type: 'Distance',
+        system: 'Metric',
+        calc: [
+            {
+                to: 'Kilometres per hour',
+                names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+                func: (x) => {
+                    return x * 3.6;
+                },
+                text: 'x*3.6'
+            },
+            {
+                to: 'Miles per hour',
+                names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+                func: (x) => {
+                    return x * 2.237;
+                },
+                text: 'x*2.237'
+            },
+            {
+                to: 'Knot',
+                names: ['Knot', 'kt', 'nmih', 'nmh'],
+                func: (x) => {
+                    return x * 1.944;
+                },
+                text: 'x*1.944'
+            },
+            {
+                to: 'Metres per second',
+                names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+        ]
+    }
 ];
