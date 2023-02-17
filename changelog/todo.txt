@@ -314,11 +314,28 @@ author:
 
 #28)
     description: 
-    add conversions for - energy, area, angle
+    add conversions for - energy, area, angle, speed (km/h, mph, m/s, kt)
     type: feature
     status: WIP
     priority: medium
     request date: 2023-02-15 18:35 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
+    author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#29)
+    description: add calculation command for
+        PV=nRT
+        n=m/M
+        suvat
+        other stuff
+        COULD DELEGATE TO A NEW BOT
+    type: feature
+    status: WIP
+    priority: medium
+    request date: 2023-02-17 18:36 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr
     author: sbrstrkkdwmdr
