@@ -7009,7 +7009,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     let parseScore = false;
     let parseId = null;
 
-    let useContent:string = null;
+    let useContent: string = null;
 
     let embedStyle: extypes.osuCmdStyle = 'L';
 
@@ -7199,7 +7199,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         }
         if (input.overrides.commanduser) {
             commanduser = input.overrides.commanduser;
-            useContent = `Requested by <@${commanduser.id}>`
+            useContent = `Requested by <@${commanduser.id}>`;
         }
         if (input.overrides.user) {
             user = input.overrides.user;
@@ -9557,11 +9557,14 @@ HP${baseHP}`;
             {
                 name: 'MAP VALUES',
                 value:
-                    `${basicvals} ⭐${totaldiff}\n` +
-                    `${emojis.mapobjs.bpm}${baseBPM}\n` +
-                    `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
-                    `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull}\n` +
-                    `${mapdata.max_combo}x combo`,
+                    `${basicvals} ⭐${totaldiff}\n`,
+                inline: true
+            },
+            {
+                name: def.invisbleChar,
+                value: `${emojis.mapobjs.bpm}${baseBPM}\n` +
+                `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
+                `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull}\n`,
                 inline: true
             },
             {
@@ -9577,18 +9580,17 @@ HP${baseHP}`;
                         `${ppissue}` :
                         detailedmapdata
                 ,
-                inline: true
+                inline: detailed != 2
             },
             {
                 name: 'DOWNLOAD',
-                value:
-                    `[osu!](https://osu.ppy.sh/b/${mapdata.id}) | [Chimu](https://api.chimu.moe/v1/download${mapdata.beatmapset_id}) | [Beatconnect](https://beatconnect.io/b/${mapdata.beatmapset_id}) | [Kitsu](https://kitsu.io/d/${mapdata.beatmapset_id})\n` +
-                    `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapdata.id})`,
-                inline: true
+                value: `[osu!](https://osu.ppy.sh/b/${mapdata.id}) | [Chimu](https://api.chimu.moe/v1/download${mapdata.beatmapset_id}) | [Beatconnect](https://beatconnect.io/b/${mapdata.beatmapset_id}) | [Kitsu](https://kitsu.io/d/${mapdata.beatmapset_id})\n` +
+                `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapdata.id})`,
+                inline: false
             },
             {
                 name: 'MAP DETAILS',
-                value: `${statusimg} | ${mapimg} \n ` +
+                value: `${statusimg} | ${mapimg} | ${mapdata.max_combo}x combo \n ` +
                     `${detailed == 2 ?
                         exMapDetails
                         : ''}`

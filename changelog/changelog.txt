@@ -216,3 +216,4 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [ADD] convert command now parses SI prefixes
 [ADD] buttons that call commands (like the user button) will now say "Requested by <user>"
 [ADD] added energy, area, angle and speed to convert command
+[QOL] modified the layout in the map command
