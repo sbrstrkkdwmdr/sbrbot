@@ -233,14 +233,14 @@ author:
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #21)
     description: add a "requested by x" on command buttons [map, user, leaderboard, scores]
     type: QOL
-    status: WIP
+    status: FINISHED
     priority: low
     request date: 2023-01-18 13:08 AEDT (UTC+11)
-    finish date: 
+    finish date: 2023-02-18 11:29 AEDT (UTC+11)
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
@@ -311,15 +311,15 @@ author:
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #28)
     description: 
     add conversions for - energy, area, angle, speed (km/h, mph, m/s, kt)
     type: feature
-    status: WIP
+    status: FINISHED
     priority: medium
     request date: 2023-02-15 18:35 AEDT (UTC+11)
-    finish date: 
+    finish date: 2023-02-18 11:49 AEDT (UTC+11)
     author: sbrstrkkdwmdr
     author: sbrstrkkdwmdr
 
