@@ -288,7 +288,7 @@ export default (input: {
         canReply: boolean,
     ) {
         switch (command) {
-            case 'convert':
+            case 'convert':case 'conv':
                 commands.convert({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata  });
                 break;
             case 'help':
