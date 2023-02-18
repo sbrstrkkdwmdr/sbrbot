@@ -235,8 +235,8 @@ commit: 363487d632d7f51df11f18ee255faa015651f528
 [FIX] fixed time command showing day of year instead of day of month
 
 0.4.13
-
-commit:
+2023-02-19
+commit: ad076f1511dc8fefad7369bb97b49f68101249fa
 [QOL] reworked convert command
 [ADD] added pressure conversions to convert command
 [ADD] convert command now parses SI prefixes
