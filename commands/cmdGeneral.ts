@@ -112,28 +112,73 @@ export async function convert(input: extypes.commandInput) {
         .addFields([
             {
                 name: 'Temperature',
-                value: 'c (celcius) | f (fahrenheit) | k (kelvin)',
-                inline: false
+                value: [
+                    'celsius (c)', 'fahrenheit (f)', 'kelvin (k)'
+                ].join(' | '),
+                inline: true
             },
             {
                 name: 'Distance',
-                value: 'in (inch) | fe (feet) | m (metres) | mi (miles)',
-                inline: false
+                value: [
+                    'inch (in)', 'foot (ft)', 'metre (m)', 'mile (mi)', 'astronomical unit (au)', 'light year (ly)',
+                ].join(' | '),
+                inline: true
             },
             {
                 name: 'Time',
-                value: 'ms (milliseconds) | s (seconds) | min (minutes) | h (hours) | d (days) | y (years)',
-                inline: false
+                value: [
+                    'second (s)', 'minute (min)', 'hour (h)', 'day (d)', 'week (wk)', 'month (mth)', 'year (y)',
+                ].join(' | '),
+                inline: true
             },
             {
                 name: 'Volume',
-                value: 'l (litres) | floz (fluid ounces) | cup | pt (pint) | gal (gallons)',
-                inline: false
+                value: [
+                    'teaspoon (tsp)', 'tablespoon (tbp)', 'fluid ounce (floz)', 'cup (c)', 'pint (pt)', 'litre (l)', 'gallon (gal)', 'cubic metres (m3)',
+                ].join(' | '),
+                inline: true
             },
             {
                 name: 'Mass',
-                value: 'g (grams) | oz (ounces) | lb (pounds) | ton (metric tonnes)',
-                inline: false
+                value: [
+                    'gram (g)', 'ounce (oz)', 'pound (lb)', 'stone (st)', 'us ton (t)', 'metric tonne (mt)',
+                ].join(' | '),
+                inline: true
+            },
+            {
+                name: 'Pressure',
+                value: [
+                    'pascal (Pa)', 'millimetre of mercury/torr (mmHg)', 'pounds per square inch (psi)', 'bar', 'standard atmosphere (atm)',
+                ].join(' | '),
+                inline: true
+            },
+            {
+                name: 'Energy',
+                value: [
+                    'electronvolt (eV)', 'joule (j)', 'calorie (cal)',
+                ].join(' | '),
+                inline: true
+            },
+            {
+                name: 'Area',
+                value: [
+                    'square metre (m2)', 'square kilometre (km2)', 'square mile (mi2)', 'hectare (ha)', 'acre (ac)',
+                ].join(' | '),
+                inline: true
+            },
+            {
+                name: 'Angle',
+                value: [
+                    'degree (deg)', 'gradian (grad)', 'radian (rad)',
+                ].join(' | '),
+                inline: true
+            },
+            {
+                name: 'Speed',
+                value: [
+                    'metres per second (ms)', 'kilometres per hour (kmh)', 'miles per hour (mph)', 'knot/nautical miles per hour (kt)',
+                ].join(' | '),
+                inline: true
             },
             {
                 name: 'Non-measurements',

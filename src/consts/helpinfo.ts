@@ -205,19 +205,19 @@ const cmds: commandInfo[] = [
     {
         name: 'convert',
         description: 'Converts a number from one unit to another',
-        usage: 'convert <from> <to> <number>',
-        slashusage: 'convert <from> <to> <number>',
+        usage: 'convert <from> [to] [number]',
+        slashusage: 'convert <from> [to] [number]',
         examples: [
             {
-                text: 'PREFIXMSGconvert km mi 10',
-                descriptor: 'Converts 10 kilometers to miles'
+                text: 'PREFIXMSGconvert kilometre mi 10',
+                descriptor: 'Converts 10 kilometres to miles'
             },
             {
                 text: 'PREFIXMSGconvert k c 273.15',
                 descriptor: 'Converts 273.15 kelvin to celsius'
             },
         ],
-        aliases: [],
+        aliases: ['conv'],
         options: [
             {
                 name: 'from',
@@ -235,12 +235,17 @@ const cmds: commandInfo[] = [
                 required: true,
                 description: 'The unit to convert to',
                 options: [
-                    'celsius', 'fahrenheit', 'kelvin',
-                    'inches', 'feet', 'metres', 'miles',
-                    'seconds', 'minutes', 'hours', 'days', 'years',
-                    'fluid ounces', 'cups', 'pints', 'litres', 'gallons', 'cubic metres',
-                    'grams', 'Newtons(WIP)', 'kilograms(WIP)', 'ounces', 'pounds', 'metric tonnes',
-                    'help', 'SI units'
+                    'celsius (c)', 'fahrenheit (f)', 'kelvin (k)',
+                    'inch (in)', 'foot (ft)', 'metre (m)', 'mile (mi)', 'astronomical unit (au)', 'light year (ly)',
+                    'second (s)', 'minute (min)', 'hour (h)', 'day (d)', 'week (wk)', 'month (mth)', 'year (y)',
+                    'teaspoon (tsp)', 'tablespoon (tbp)',  'fluid ounce (floz)', 'cup (c)', 'pint (pt)', 'litre (l)', 'gallon (gal)', 'cubic metres (m3)',
+                    'gram (g)', 'ounce (oz)', 'pound (lb)', 'stone (st)', 'us ton (t)', 'metric tonne (mt)',
+                    'pascal (Pa)', 'millimetre of mercury/torr (mmHg)', 'pounds per square inch (psi)', 'bar', 'standard atmosphere (atm)',
+                    'electronvolt (eV)', 'joule (j)', 'calorie (cal)',
+                    'square metre (m2)', 'square kilometre (km2)', 'square mile (mi2)', 'hectare (ha)', 'acre (ac)',
+                    'degree (deg)', 'gradian (grad)', 'radian (rad)',
+                    'metres per second (ms)', 'kilometres per hour (kmh)', 'miles per hour (mph)', 'knot/nautical miles per hour (kt)',
+                    'help', 'SI units',
                 ],
                 defaultValue: 'N/A',
                 examples: ['c', 'to:celsius'],
