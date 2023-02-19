@@ -52,6 +52,14 @@ export const values: convVal[] = [
         system: 'Metric',
         calc: [
             {
+                to: 'Celsius',
+                names: ['Celsius', 'Celcius', 'Centigrade', 'C'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
                 to: 'Fahrenheit',
                 names: ['Fahrenheit', 'F'],
                 func: (x) => {
@@ -84,6 +92,14 @@ export const values: convVal[] = [
                 text: '((x)-32)*5/9'
             },
             {
+                to: 'Fahrenheit',
+                names: ['Fahrenheit', 'F'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
                 to: 'Kelvin',
                 names: ['Kelvin', 'K'],
                 func: (x) => {
@@ -114,6 +130,14 @@ export const values: convVal[] = [
                     return (x - 273.15) * 9 / 5 + 32;
                 },
                 text: '(x-273.15)*9/5+32'
+            },
+            {
+                to: 'Kelvin',
+                names: ['Kelvin', 'K'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
             }
         ]
     },
@@ -208,7 +232,7 @@ export const values: convVal[] = [
                 to: 'Mile',
                 names: ['Mile', 'mi'],
                 func: (x) => {
-                    return x * 5280;
+                    return x / 5280;
                 },
                 text: 'x/5280'
             },
@@ -251,6 +275,14 @@ export const values: convVal[] = [
                     return x / 0.3048;
                 },
                 text: 'x/0.3048'
+            },
+            {
+                to: 'Metre',
+                names: ['Metre', 'm', 'Meter'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
             },
             {
                 to: 'Mile',
@@ -309,10 +341,18 @@ export const values: convVal[] = [
                 text: 'x*1609.344'
             },
             {
+                to: 'Mile',
+                names: ['Mile', 'mi'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
                 to: 'Astronomical Unit',
                 names: ['Astronomical Unit', 'au'],
                 func: (x) => {
-                    return x;
+                    return x * 1609.344 / 149597870700;
                 },
                 text: 'x*1609.344/149597870700'
             },
