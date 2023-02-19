@@ -243,3 +243,9 @@ commit: ad076f1511dc8fefad7369bb97b49f68101249fa
 [ADD] buttons that call commands (like the user button) will now say "Requested by <user>"
 [ADD] added energy, area, angle and speed to convert command
 [QOL] modified the layout in the map command
+
+0.4.14
+
+commit: 
+[FIX] fix SI prefixed values not dividing/multiplying properly
+[QOL] formula now shows SI prefix (ie km = 10e3*x)

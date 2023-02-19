@@ -274,6 +274,9 @@ OR
 
     let foundOne = false;
 
+    let formStart = '';
+    let formEnd = '';
+
     if (converting == true) {
         //find
         for (let i = 0; i < conversions.values.length; i++) {
@@ -307,101 +310,121 @@ OR
                                 .startsWith('yotta'):
                                 num *= 10 ** 24;
                                 cat1Pre = 'Yotta';
+                                formStart = '10e24';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('zetta'):
                                 num *= 10 ** 21;
                                 cat1Pre = 'Zetta';
+                                formStart = '10e21';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('exa'):
                                 num *= 10 ** 18;
                                 cat1Pre = 'Exa';
+                                formStart = '10e18';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('peta'):
                                 num *= 10 ** 15;
                                 cat1Pre = 'Peta';
+                                formStart = '10e15';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('tera'):
                                 num *= 10 ** 12;
                                 cat1Pre = 'Tera';
+                                formStart = '10e12';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('giga'):
                                 num *= 10 ** 9;
                                 cat1Pre = 'Giga';
+                                formStart = '10e9';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('mega'):
                                 num *= 10 ** 6;
                                 cat1Pre = 'Mega';
+                                formStart = '10e6';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('kilo'):
                                 num *= 10 ** 3;
                                 cat1Pre = 'Kilo';
+                                formStart = '10e3';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('hecto'):
                                 num *= 10 ** 2;
                                 cat1Pre = 'Hecto';
+                                formStart = '10e2';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('deca'):
                                 num *= 10 ** 1;
                                 cat1Pre = 'Deca';
+                                formStart = '10';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('deci'):
                                 num /= 10 ** 1;
                                 cat1Pre = 'Deci';
+                                formStart = '10';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('centi'):
                                 num /= 10 ** 2;
                                 cat1Pre = 'Centi';
+                                formStart = '10e-2';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('milli'):
                                 num /= 10 ** 3;
                                 cat1Pre = 'Milli';
+                                formStart = '10e-3';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('micro'):
                                 num /= 10 ** 6;
                                 cat1Pre = 'Micro';
+                                formStart = '10e-6';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('nano'):
                                 num /= 10 ** 9;
                                 cat1Pre = 'Nano';
+                                formStart = '10e-9';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('pico'):
                                 num /= 10 ** 12;
                                 cat1Pre = 'Pico';
+                                formStart = '10e-12';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('femto'):
                                 num /= 10 ** 15;
                                 cat1Pre = 'Femto';
+                                formStart = '10e-15';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('atto'):
                                 num /= 10 ** 18;
                                 cat1Pre = 'Atto';
+                                formStart = '10e-18';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('zepto'):
                                 num /= 10 ** 21;
                                 cat1Pre = 'Zepto';
+                                formStart = '10e-21';
                                 break;
                             case cat1.toLowerCase()
                                 .startsWith('yocto'):
                                 num /= 10 ** 24;
                                 cat1Pre = 'Yocto';
+                                formStart = '10e-24';
                                 break;
                         }
 
@@ -409,103 +432,123 @@ OR
                         switch (true) {
                             case cat2.toLowerCase()
                                 .startsWith('yotta'):
-                                finNum *= 10 ** 24;
+                                finNum /= 10 ** 24;
                                 cat2Pre = 'Yotta';
+                                formEnd = '10e24';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('zetta'):
-                                finNum *= 10 ** 21;
+                                finNum /= 10 ** 21;
                                 cat2Pre = 'Zetta';
+                                formEnd = '10e21';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('exa'):
-                                finNum *= 10 ** 18;
+                                finNum /= 10 ** 18;
                                 cat2Pre = 'Exa';
+                                formEnd = '10e18';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('peta'):
-                                finNum *= 10 ** 15;
+                                finNum /= 10 ** 15;
                                 cat2Pre = 'Peta';
+                                formEnd = '10e15';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('tera'):
-                                finNum *= 10 ** 12;
+                                finNum /= 10 ** 12;
                                 cat2Pre = 'Tera';
+                                formEnd = '10e12';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('giga'):
-                                finNum *= 10 ** 9;
+                                finNum /= 10 ** 9;
                                 cat2Pre = 'Giga';
+                                formEnd = '10e9';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('mega'):
-                                finNum *= 10 ** 6;
+                                finNum /= 10 ** 6;
                                 cat2Pre = 'Mega';
+                                formEnd = '10e6';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('kilo'):
-                                finNum *= 10 ** 3;
+                                finNum /= 10 ** 3;
                                 cat2Pre = 'Kilo';
+                                formEnd = '10e3';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('hecto'):
-                                finNum *= 10 ** 2;
+                                finNum /= 10 ** 2;
                                 cat2Pre = 'Hecto';
+                                formEnd = '10e2';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('deca'):
-                                finNum *= 10 ** 1;
+                                finNum /= 10 ** 1;
                                 cat2Pre = 'Deca';
+                                formEnd = '10';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('deci'):
-                                finNum /= 10 ** 1;
+                                finNum *= 10 ** 1;
                                 cat2Pre = 'Deci';
+                                formEnd = '10';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('centi'):
-                                finNum /= 10 ** 2;
+                                finNum *= 10 ** 2;
                                 cat2Pre = 'Centi';
+                                formEnd = '10e-2';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('milli'):
-                                finNum /= 10 ** 3;
+                                finNum *= 10 ** 3;
                                 cat2Pre = 'Milli';
+                                formEnd = '10e-3';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('micro'):
-                                finNum /= 10 ** 6;
+                                finNum *= 10 ** 6;
                                 cat2Pre = 'Micro';
+                                formEnd = '10e-6';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('nano'):
-                                finNum /= 10 ** 9;
+                                finNum *= 10 ** 9;
                                 cat2Pre = 'Nano';
+                                formEnd = '10e-9';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('pico'):
-                                finNum /= 10 ** 12;
+                                finNum *= 10 ** 12;
                                 cat2Pre = 'Pico';
+                                formEnd = '10e-12';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('femto'):
-                                finNum /= 10 ** 15;
+                                finNum *= 10 ** 15;
                                 cat2Pre = 'Femto';
+                                formEnd = '10e-15';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('atto'):
-                                finNum /= 10 ** 18;
+                                finNum *= 10 ** 18;
                                 cat2Pre = 'Atto';
+                                formEnd = '10e-18';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('zepto'):
-                                finNum /= 10 ** 21;
+                                finNum *= 10 ** 21;
                                 cat2Pre = 'Zepto';
+                                formEnd = '10e-21';
                                 break;
                             case cat2.toLowerCase()
                                 .startsWith('yocto'):
-                                finNum /= 10 ** 24;
+                                finNum *= 10 ** 24;
                                 cat2Pre = 'Yocto';
+                                formEnd = '10e-24';
                                 break;
                         }
 
@@ -533,9 +576,16 @@ OR
                 }
             }
         }
-        const formulaNote = cat1Pre.length > 0 || cat2Pre.length > 0 ?
-            '\n(Prefixes are ignored in the formula)'
-            : '';
+        // const formulaNote = cat1Pre.length > 0 || cat2Pre.length > 0 ?
+        //     '\n(Prefixes are ignored in the formula)'
+        //     : '';
+
+        if (cat1Pre.length > 0) {
+            formula = `${formStart}*(${formula})`;
+        }
+        if (cat2Pre.length > 0) {
+            formula = `(${formula})/${formEnd}`;
+        }
 
         if (foundOne && eq == 'Unknown') {
             error('invalid');
@@ -552,7 +602,7 @@ OR
             },
             {
                 name: 'Formula',
-                value: `\`${formula}\` ${formulaNote}`,
+                value: `\`${formula}\``,
                 inline: false
             }
         ]);
