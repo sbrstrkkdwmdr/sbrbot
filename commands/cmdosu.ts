@@ -6971,9 +6971,9 @@ export async function scorepost(input: extypes.commandInput) {
     switch (type) {
         case 0: {
             titleString = `${order.name} | ${order.fullTitle} [${order.version}] ${order.mods.length > 1 ? '+' + order.mods : ''}`
-            + `${order.acc}% ${order.diff}⭐ `
-            + `| ${order.pp} ${null} | ${customString}`
-            ;
+                + `${order.acc}% ${order.diff}⭐ `
+                + `| ${order.pp} ${null} | ${customString}`
+                ;
         } break;
     }
 
@@ -11702,8 +11702,48 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         maplistdata =
             filter == 'most_played' ?
                 (maplistdata as osuApiTypes.BeatmapPlayCountArr).filter((x) =>
-                    fr(x.beatmapset)
-                ) : (maplistdata as osuApiTypes.Beatmapset[]).filter((x) => fr(x));
+                    (
+                        x.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                        +
+                        x.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                        +
+                        x.beatmap.version.toLowerCase().replaceAll(' ', '')
+                    ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                    ||
+                    x.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                    ||
+                    x.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                    ||
+                    x.beatmap.version.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                    ||
+                    filterTitle.toLowerCase().replaceAll(' ', '').includes(x.beatmapset.title.toLowerCase().replaceAll(' ', ''))
+                    ||
+                    filterTitle.toLowerCase().replaceAll(' ', '').includes(x.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
+                    ||
+                    filterTitle.toLowerCase().replaceAll(' ', '').includes(x.beatmap.version.toLowerCase().replaceAll(' ', ''))
+                ) : (maplistdata as osuApiTypes.Beatmapset[]).filter((x) =>
+                    (
+                        x.title.toLowerCase().replaceAll(' ', '')
+                        +
+                        x.artist.toLowerCase().replaceAll(' ', '')
+                        +
+                        x.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', '')
+                    ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                    ||
+                    x.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                    ||
+                    x.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                    ||
+                    x.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
+                    ||
+                    filterTitle.toLowerCase().replaceAll(' ', '').includes(x.title.toLowerCase().replaceAll(' ', ''))
+                    ||
+                    filterTitle.toLowerCase().replaceAll(' ', '').includes(x.artist.toLowerCase().replaceAll(' ', ''))
+                    ||
+                    filterTitle.toLowerCase().replaceAll(' ', '').includes(x.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', ''))
+                );
+
+
         function fr(map) {
             return (
                 map.title.toLowerCase().replaceAll(' ', '')

@@ -645,7 +645,7 @@ ${topmap.status == 'ranked' ?
                         });
                         mapsArrStr.push(
                             `
-**#${offset + 1} | [${curmapset.artist} - ${curmapset.title}](https://osu.ppy.sh/s/${curmapset.id})**
+**#${offset + 1} | [${curmapset.artist} - ${curmapset.title} [${current.beatmap.version}]](https://osu.ppy.sh/s/${curmapset.id})**
 **${current.count}x plays**
 `
                         );
@@ -655,7 +655,7 @@ ${topmap.status == 'ranked' ?
                             name: `${offset + 1}`,
                             value:
                                 `
-[**${curmapset.artist} - ${curmapset.title}**](https://osu.ppy.sh/s/${curmapset.id})
+[**${curmapset.artist} - ${curmapset.title} [${current.beatmap.version}]**](https://osu.ppy.sh/s/${curmapset.id})
 **${current.count}x plays**
 ${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
 ${calc.secondsToTime(topmap.total_length)} | ${func.separateNum(curmapset.favourite_count)} favourites
@@ -663,7 +663,7 @@ ${calc.secondsToTime(topmap.total_length)} | ${func.separateNum(curmapset.favour
                             inline: false
                         });
                         mapsArrStr.push(
-`**#${offset + 1} | [${curmapset.artist} - ${curmapset.title}](https://osu.ppy.sh/s/${curmapset.id})**
+`**#${offset + 1} | [${curmapset.artist} - ${curmapset.title} [${current.beatmap.version}]](https://osu.ppy.sh/s/${curmapset.id})**
 **${current.count}x plays**
 ${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
 ${calc.secondsToTime(topmap.total_length)} | ${func.separateNum(curmapset.favourite_count)} favourites`
