@@ -6732,6 +6732,8 @@ export async function scorepost(input: extypes.commandInput) {
     let customString: string;
     let mode: osuApiTypes.GameMode = 'osu';
 
+    let type: number = 0;
+
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
@@ -6960,16 +6962,27 @@ export async function scorepost(input: extypes.commandInput) {
         comboMin: scoredata.max_combo,
         comboMax: mapdata.max_combo,
         isFullCombo: null,
-        pp: '',
+        pp: ppCalc[0].pp,
         unranked: true,
+    };
+
+    let titleString = 'null';
+
+    switch (type) {
+        case 0: {
+            titleString = `${order.name} | ${order.fullTitle} [${order.version}] ${order.mods.length > 1 ? '+' + order.mods : ''}`
+            + `${order.acc}% ${order.diff}⭐ `
+            + `| ${order.pp} ${null} | ${customString}`
+            ;
+        } break;
     }
 
-    const titleString =
-        `${scoredata.user.username}` + ' | ' +
-        `${scoredata.beatmapset.artist} - ${scoredata.beatmapset.title} [${scoredata.beatmap.version}] ` +
-        `${scoredata.mods.length > 0 ? `+${scoredata.mods.join('')}` : ''} ${(scoredata.accuracy * 100).toFixed(2)}% ` +
-        `${nonFcString} ` +
-        `${pptxt} | ${scoredata.mode}`;
+    // const titleString =
+    // `${scoredata.user.username}` + ' | ' +
+    // `${scoredata.beatmapset.artist} - ${scoredata.beatmapset.title} [${scoredata.beatmap.version}] ` +
+    // `${scoredata.mods.length > 0 ? `+${scoredata.mods.join('')}` : ''} ${(scoredata.accuracy * 100).toFixed(2)}% ` +
+    // `${nonFcString} ` +
+    // `${pptxt} | ${scoredata.mode}`;
 
     /**
      * formatted as
@@ -9584,8 +9597,8 @@ HP${baseHP}`;
             {
                 name: def.invisbleChar,
                 value: `${emojis.mapobjs.bpm}${baseBPM}\n` +
-                `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
-                `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull}\n`,
+                    `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
+                    `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull}\n`,
                 inline: true
             },
             {
@@ -9606,7 +9619,7 @@ HP${baseHP}`;
             {
                 name: 'DOWNLOAD',
                 value: `[osu!](https://osu.ppy.sh/b/${mapdata.id}) | [Chimu](https://api.chimu.moe/v1/download${mapdata.beatmapset_id}) | [Beatconnect](https://beatconnect.io/b/${mapdata.beatmapset_id}) | [Kitsu](https://kitsu.io/d/${mapdata.beatmapset_id})\n` +
-                `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapdata.id})`,
+                    `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapdata.id})`,
                 inline: false
             },
             {
