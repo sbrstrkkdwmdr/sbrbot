@@ -6949,12 +6949,33 @@ export async function scorepost(input: extypes.commandInput) {
         nonFcString = 'FC';
     }
 
+    const order = {
+        name: scoredata.user.username,
+        fullTitle: '',
+        version: scoredata.beatmap.version,
+        mods: osumodcalc.OrderMods(scoredata.mods.join('')),
+        acc: scoredata.accuracy * 100,
+        diff: ppCalc[0].difficulty.stars,
+        mapper: mapdata.beatmapset.creator,
+        comboMin: scoredata.max_combo,
+        comboMax: mapdata.max_combo,
+        isFullCombo: null,
+        pp: '',
+        unranked: true,
+    }
+
     const titleString =
         `${scoredata.user.username}` + ' | ' +
         `${scoredata.beatmapset.artist} - ${scoredata.beatmapset.title} [${scoredata.beatmap.version}] ` +
         `${scoredata.mods.length > 0 ? `+${scoredata.mods.join('')}` : ''} ${(scoredata.accuracy * 100).toFixed(2)}% ` +
         `${nonFcString} ` +
         `${pptxt} | ${scoredata.mode}`;
+
+    /**
+     * formatted as
+     * name | artist - title [version] +mods acc% sr | pp mode | custom
+     * name | artist - title [version] +mods (sr, mapper) acc% minCombo/maxCombo | pp (if ranked, if fc)
+     */
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
