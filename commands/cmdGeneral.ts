@@ -32,16 +32,16 @@ import * as msgfunc from './msgfunc.js';
 export async function convert(input: extypes.commandInput) {
 
     let commanduser;
-    let cat1: string;
-    let cat2: string;
+    let cat1: string = '';
+    let cat2: string = '';
     let num: number = 1;
 
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            cat1 = input.args[0];
-            cat2 = input.args[1];
+            cat1 = input.args[0] ?? '';
+            cat2 = input.args[1] ?? '';
             num = parseFloat(input.args[2]) ?? 1;
             if (!input.args[0]) {
                 cat1 = 'help';
@@ -63,8 +63,8 @@ export async function convert(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-            cat1 = input.obj.options.getString('from');
-            cat2 = input.obj.options.getString('to');
+            cat1 = input.obj.options.getString('from') ?? '';
+            cat2 = input.obj.options.getString('to') ?? '';
             num = input.obj.options.getNumber('number');
         }
 
@@ -230,18 +230,20 @@ y | yocto | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
 
     const EmbedSLC = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
-        .setTitle('SLC')
+        .setTitle('Standard Laboratory Conditions')
         .addFields([
             {
-                name: 'SLC',
+                name: '25 C (298.15 K) and 1.000 atm (101.325 kPa)',
                 value:
-                    `
-25 C (298.15 K) and 1.000 atm (101.325 kPa)
-OR
-25 C (298.15 K) and 100 kPa (0.986923 atm)
-`,
+                    `100mL H₂O = 100g H₂O`,
                 inline: false
             },
+            {
+                name: '25 C (298.15 K) and 100 kPa (0.986923 atm)',
+                value:
+                    `100mL H₂O = 99.7g H₂O`,
+                inline: false
+            }
         ]);
     const embedres = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
@@ -259,15 +261,22 @@ OR
 
     let converting = true;
 
-    if (cat1 == 'help' || cat2 == 'help') {
+    const reqHelp: string[] = ['help', 'units'];
+    const reqSlc: string[] = ['slc'];
+    const reqprefix: string[] = ['si', 'metricprefixes', 'prefix'];
+
+    if ((reqHelp.includes(cat1.toLowerCase()) || cat2 == '')
+        && !reqSlc.includes(cat1.toLowerCase())
+        && !reqprefix.includes(cat1.toLowerCase())
+    ) {
         useEmbeds = [EmbedList];
         converting = false;
     }
-    if (cat1 == 'slc' || cat2 == '') {
+    if (reqSlc.includes(cat1.toLowerCase())) {
         useEmbeds = [EmbedSLC];
         converting = false;
     }
-    if (cat1 == 'metricprefixes' || cat2 == 'metricprefixes') {
+    if (reqprefix.includes(cat1.toLowerCase())) {
         useEmbeds = [siEmbed];
         converting = false;
     }

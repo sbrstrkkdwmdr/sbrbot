@@ -250,3 +250,4 @@ commit:
 [FIX] fix SI prefixed values not dividing/multiplying properly
 [QOL] formula now shows SI prefix (ie km = 10e3*x)
 [FIX] fix [optional arg] <required arg> not being on a separate line
+[QOL] update args to retrieve help menu and si prefixes in convert
