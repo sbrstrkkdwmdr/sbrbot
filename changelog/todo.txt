@@ -351,3 +351,15 @@ author:
     finish date: 
     author: sbrstrkkdwmdr
     author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#31)
+    description: random string gen recursive function 
+    type: feature
+    status: WIP
+    priority: medium
+    request date: 2023-02-24 09:29 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
+    author: sbrstrkkdwmdr

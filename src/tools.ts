@@ -346,3 +346,38 @@ export function appendUrlParamsString(url: string, params: string[]) {
     }
     return temp;
 }
+
+export function randomString(useSymbols: boolean, length?: number, string?: string) {
+    if (!string) {
+        string = '';
+    }
+    if (!useSymbols) {
+        useSymbols = false;
+    }
+    if (length == 0) {
+        return string;
+    }
+    if (!length) {
+        length = 10;
+    }
+
+    const list = [
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    ];
+
+    if (useSymbols) {
+        const symbols = [
+            '`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+',
+            '{', '}', '[', ']', '|', '\\', ';', ':', '\'', '"', ',', '.', '<', '>', '/', '?'
+        ];
+        symbols.forEach(x =>
+            list.push(x)
+        );
+    }
+
+    string += list[Math.floor(Math.random() * list.length)];
+
+    randomString(useSymbols, length--, string);
+}
