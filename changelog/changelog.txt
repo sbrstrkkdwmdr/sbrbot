@@ -253,3 +253,4 @@ commit:
 [QOL] update args to retrieve help menu and si prefixes in convert
 [FIX] fix filtering most played crashing the bot
 [QOL] most played now shows map difficulty
+[ADD] added -bg arg to only show background url
