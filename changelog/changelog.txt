@@ -246,7 +246,7 @@ commit: ad076f1511dc8fefad7369bb97b49f68101249fa
 
 0.4.14
 2023-02-26
-commit: 
+commit: d9151bbb43245b46b0a16047ebc125c2a1b8a23f
 [FIX] fix SI prefixed values not dividing/multiplying properly
 [QOL] formula now shows SI prefix (ie km = 10e3*x)
 [FIX] fix [optional arg] <required arg> not being on a separate line
