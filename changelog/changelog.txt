@@ -245,7 +245,7 @@ commit: ad076f1511dc8fefad7369bb97b49f68101249fa
 [QOL] modified the layout in the map command
 
 0.4.14
-
+2023-02-26
 commit: 
 [FIX] fix SI prefixed values not dividing/multiplying properly
 [QOL] formula now shows SI prefix (ie km = 10e3*x)
