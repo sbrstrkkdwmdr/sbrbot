@@ -363,3 +363,15 @@ author:
     finish date: 
     author: sbrstrkkdwmdr
     author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#32)
+    description: set time command
+    type: feature
+    status: WIP
+    priority: medium
+    request date: 2023-03-03 07:58 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
+    author: sbrstrkkdwmdr
