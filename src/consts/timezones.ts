@@ -11,8 +11,12 @@ export type timezone = {
  * @source https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset
  * @source https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_and_their_capitals_in_native_languages
  * @source https://countrycode.org/ 
- * finished country codes: A, B, C, D, E, F, G, H, I, J, K, L, M,
- * up to: republic of the congo
+ * @source https://en.wikipedia.org/wiki/List_of_capitals_in_the_United_States 
+ * @source https://en.wikipedia.org/wiki/Provinces_and_territories_of_Canada
+ */
+
+/**
+ * //^ indicates its related to the one directly above itself
  */
 
 //UTC+/-HH:mm
@@ -70,6 +74,7 @@ export const timezones: timezone[] = [
             '-10',
             'HST',
             'Cook Islands', 'CK', 'COK',
+            'Avarua', //^ capital
             'Avarua District', //^
             'French Polynesia', 'Polynésie française', 'PF', 'PYF',
             'Papeete', //^ capital
@@ -82,8 +87,8 @@ export const timezones: timezone[] = [
             'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
             'Aleutian Islands',
             'Adak', //^ capital
-            'Hawaii',
-            'Honolulu', //^ capital
+            'Hawaii', //^ state
+            'Honolulu', //^ state capital
         ]
     },
     {
@@ -111,8 +116,8 @@ export const timezones: timezone[] = [
             'HDT',
             'AKST',
             'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
-            'Alaska', //^ 
-            'Juneau', //^ capital
+            'Alaska', //^ state
+            'Juneau', //^ state capital
             'French Polynesia', 'Polynésie française', 'PF', 'PYF',
             'Gambier Islands', //^ 
         ]
@@ -129,18 +134,29 @@ export const timezones: timezone[] = [
             'AKDT',
             'PST',
             'Canada', 'CA', 'CAN',
-            'British Columbia', //^ //most of
-            'Yukon', //^ 
+            'British Columbia', //^ province/territory //most of
+            'Victoria', //^ province/territory capital
+            'Vancouver', //^ major city
+            'Yukon', //^ province/territory
             'Clipperton Island',
             'Mexico', 'México', 'Mēxihco', 'MX', 'MEX',
             'Baja Calirfornia Norte', //^ 
             'Pitcairn Islands', ' Pitkern Ailen', 'PN', 'PCN',
+            'Adamstown', //^ capital
             'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
-            'Washington',//^ 
-            'Idaho', //^ //north
-            'Oregon',//^ 
-            'California',//^ 
-            'Nevada'//^ 
+            'Washington',//^ state
+            'Olympia', //^ state capital
+            'Idaho', //^ state //north
+            'Oregon',//^ state
+            'Salem', //^ state capital
+            'California',//^ state
+            'Sacramento', //^ state capital
+            'Los Angeles', //^ major city
+            'San Francisco', //^ major city
+            'Silicon Valley', //^ part of san francisco
+            'Nevada', //^ state
+            'Carson City', //^ state capital
+            'Las Vegas', //^ major city
         ]
     },
     {
@@ -155,8 +171,10 @@ export const timezones: timezone[] = [
             'PDT',
             'MST',
             'Canada',
-            'Alberta',//^ 
-            'British Columbia',//^ 
+            'Alberta',//^ province/territory
+            'Edmonton', //^ province/territory capital
+            'Calgary', //^ major city
+            'British Columbia',//^ province/territory
             'Lloydminster',//^ 
             'Mexico', 'México', 'Mēxihco', 'MX', 'MEX',
             'Baja California Sur',//^ 
@@ -165,19 +183,27 @@ export const timezones: timezone[] = [
             'Sinaloa',//^ 
             'Sonora',//^ 
             'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
-            'North Dakota', //^ //SW
-            'South Dakota', //^ //W
-            'Nebraska', //^ //W
-            'Kansas', //^ //small bit
-            'Montana',//^ 
-            'Oregon', //^ //small bit
-            'Idaho', //^ //southern
-            'Wyoming',//^ 
-            'Utah',//^ 
-            'Colorado',//^ 
-            'Arizona',//^ 
-            'New Mexico',//^ 
-            'Texas' //^ //El Paso area
+            'North Dakota', //^state //SW
+            'South Dakota', //^state //W
+            'Nebraska', //^ state//W
+            'Kansas', //^ state//small bit
+            'Montana',//^ state
+            'Helena', //^ state capital
+            'Oregon', //^ state//small bit
+            'Idaho', //^state //southern
+            'Boise', //^ state capital
+            'Wyoming',//^ state
+            'Cheyenne', //^ state capital
+            'Utah',//^ state
+            'Salt Lake', 'Salt Lake City', //^ state capital
+            'Colorado',//^ state
+            'Denver', //^ state capital
+            'Arizona',//^ state
+            'Phoenix', //^ state capital
+            'New Mexico',//^ state
+            'Santa Fe', //^ state capital
+            'Albuquerque', //^ major city
+            'Texas' //^ state //El Paso area
         ]
     },
     {
@@ -192,38 +218,63 @@ export const timezones: timezone[] = [
             'CST',
             'MDT',
             'Belize', 'BZ', 'BLZ',
+            'Belmopan', //^
             'Canada',
-            'Manitoba',//^ 
-            'Saskatchewan',//^ 
-            'Ontario', //^ //NW
+            'Manitoba',//^ province/territory
+            'Winnipeg', //^ province/territory capital
+            'Saskatchewan',//^ province/territory
+            'Regina', //^ province/territory capital
+            'Saskatoom', //^ major city
+            'Ontario', //^ provincce //NW
+            'Ottawa', //^ capital
             'Costa Rica', 'CR', 'CRI',
             'Easter Island',
             'El Salvador', 'SV', 'SLV',
             'Galapagos Islands',
             'Guatemala', 'GT', 'GTH',
+            'Guatemala City', 'Ciudad de Guatemala', //^ capital
             'Honduras', 'HN', 'HND',
+            'Tegucigalpa', //^ capital
             'Mexico', 'México', 'Mēxihco', 'MX', 'MEX',
+            'Mexico City', 'Ciudad de México', 'Āltepētl Mēxihco', //^ capital
             'Nicaragua', 'NI', 'NIC',
+            'Managua', //^ capital
             'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
-            'Wisconsin',//^ 
-            'Illinois',//^ 
-            'Indiana', //^ //SW and NW corners
-            'Kentucky',//^  //W
-            'Tennessee',//^  //W and central
-            'Mississippi',//^ 
-            'Alabama',//^ 
-            'Minnesota',//^ 
-            'Iowa',//^ 
-            'Missouri',//^ 
-            'Arkansas',//^ 
-            'Louisiana',//^ 
-            'North Dakota',//^  //N and E
-            'South Dakota',//^ //E
-            'Nebraska', //^ //E and central
-            'Kansas',//^  //most of
-            'Oklahoma',//^ 
-            'Texas', //^ //most of
-            'Florida', //^ //W
+            'Wisconsin',//^ state
+            'Madison', //^ state capital
+            'Illinois',//^ state
+            'Springfield', //^ state capital
+            'Indiana', //^ state//SW and NW corners
+            'Kentucky',//^  state//W
+            'Tennessee',//^  state//W and central
+            'Mississippi',//^ state
+            'Jackson', //^ state capital
+            'Alabama',//^ state
+            'Montgomery', //^ state capital
+            'Minnesota',//^ state
+            'Saint Paul', //^ state capital
+            'Iowa',//^ state
+            'Des Moines', //^ state capital
+            'Missouri',//^ state
+            'Jefferson City', //^ state capital
+            'Arkansas',//^ state
+            'Little Rock', //^ state capital
+            'Louisiana',//^ state
+            'Baton Rouge', //^ state capital
+            'North Dakota',//^  state//N and E
+            'Bismark', //^ state capital
+            'South Dakota',//^state //E
+            'Pierre', //^ state capital
+            'Nebraska', //^ state//E and central
+            'Lincoln', //^ state capital
+            'Kansas',//^ state //most of
+            'Topeka', //^ state capital
+            'Oklahoma',//^ state
+            'Oklahoma City', //^ state capital
+            'Texas', //^ state//most of
+            'Austin', //^ state capital
+            'Houston', //^ major city
+            'Florida', //^ state //W
         ]
     },
     {
@@ -238,45 +289,81 @@ export const timezones: timezone[] = [
             'CDT',
             'EST',
             'Bahamas', 'BS', 'BHS',
+            'Nassau', //^ capital
             'Brazil', 'Brasil', 'BR', 'BRA',
             'Acre', //^ 
             'Canada',
             'Nunavut',//^ 
             'Ontario', //^ //most of
-            'Quebec', //^ //most of
+            'Toronto', //^ province/territory capital
+            'Quebec', //^ province/territory //most of
+            'Quebec City', //^ province/territory capital
+            'Montreal', //^ major city
             'Cayman Islands', 'KY', 'CYM',
+            'George Town', //^ capital
             'Colombia', 'CO', 'COL',
+            'Bogota', 'Bogotá', //^ capital
             'Cuba', 'CU', 'CUB',
+            'Havana', 'La Habana', //^ capital
             'Ecuador', 'EC', 'ECU',
+            'Quito', //^ capital
             'Haiti', 'Haïti', 'Ayiti', 'HT', 'HTI',
+            'Port-au-Prince', 'Pòtoprens', //^ capital
             'Jamaica', 'JM', 'JAM',
+            'Kingston', //^ capital
             'Navassa Island',
             'Panama', 'Panamá', 'PA', 'PAN',
+            'Panama City', 'Ciudad de Panamá', //^ capital
             'Peru', 'Perú', 'Piruw', 'PE', 'PER',
+            'Lima', //^ capital
             'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
-            'Maine',//^ 
-            'New Hampshire',//^ 
-            'Vermont',//^ 
-            'New York',//^ 
-            'Massachusetts',//^ 
-            'Connecticut',//^ 
-            'Rhode Island',//^ 
-            'Michigan', //^ //excl. few north west
-            'Indiana', //^ //excl. NW and SW corners
-            'Ohio',//^ 
-            'Pennsylvania',//^ 
-            'New Jersey',//^ 
-            'Kentucky', //^ //E
-            'West Virginia',//^ 
-            'Virginia',//^ 
-            'Washington D.C.', 'Washington, D.C.', 'Washington DC',//^ 
-            'Maryland',//^ 
-            'Delaware',//^ 
-            'Tennessee', //^ //E
-            'North Carolina',//^ 
-            'Georgia',//^ 
-            'South Carolina',//^ 
-            'Florida',//^  //excl. W panhandle
+            'Maine',//^ state 
+            'Augusta', //^ state capital
+            'New Hampshire',//^ state 
+            'Concord', //^ state capital
+            'Vermont',//^ state 
+            'Montpelier', //^ state capital
+            'New York', //^ state 
+            'Albany', //^ state capital
+            'NYC', 'New York City', //^ major city
+            'Massachusetts',//^ state 
+            'Boston', //^ state capital
+            'Connecticut',//^ state 
+            'Hartford', //^ state capital
+            'Rhode Island',//^ state 
+            'Providence', //^ state capital
+            'Michigan', //^state  //excl. few north west
+            'Lansing', //^ state capital  
+            'Indiana', //^ state //excl. NW and SW corners
+            'Indianapolis', //^ state capital            
+            'Ohio',//^ state 
+            'Columbus', //^ state capital
+            'Pennsylvania',//^ state 
+            'Harrisburg', //^ state capital
+            'New Jersey',//^ state
+            'Trenton', //^ state capital
+            'Kentucky', //^state //E
+            'Frankfort', //^ state capital
+            'West Virginia',//^ state
+            'Charleston', //^ state capital
+            'Virginia',//^ state
+            'Richmond', //^ state capital
+            'Washington D.C.', 'Washington, D.C.', 'Washington DC',//^ capital
+            'Maryland',//^ state
+            'Annapolis', //^ state capital
+            'Delaware',//^ state
+            'Dover', //^ state capital
+            'Tennessee', //^state //E
+            'Nashville', //^ state capital
+            'North Carolina',//^ state
+            'Raleigh', //^ state capital
+            'Georgia',//^ state
+            'Atlanta', //^ state capital
+            'South Carolina',//^ state
+            'Columbia', //^ state capital
+            'Florida',//^ state //excl. W panhandle
+            'Tallahassee', //^ state capital
+            'Miami', //^ major city
         ]
     },
     {
@@ -292,40 +379,70 @@ export const timezones: timezone[] = [
             'AST',
             'Anguilla', 'AI', 'AIA',
             'Antigua', 'Barbuda', 'Antigua and Barbuda', 'AG', 'ATG',
+            'Saint John\'s', 'St. John\'s', //^ capital
             'Aruba', 'AW', 'ABW',
+            'Oranjestad', // ^ capital
             'Barbados', 'BB', 'BRB',
+            'Bridgetown', //^ capital
             'Bermuda', 'BM', 'BMU',
+            'Hamilton', //^ capital
             'Bolivia', 'Buliwya', 'Wuliwya', 'Volívia', 'BO', 'BOL',
+            'La Paz', 'Chuqiyapu', //^ capital
             'Brazil', 'Brasil', 'BR', 'BRA',
             'Boa Vista',//^ 
             'Campo Grande',//^ 
             'Manaus',//^ 
             'Canada',
-            'Labrador',
-            'New Brunswick',
-            'Nova Scotia',
-            'Prince Edward Island',
-            'Quebec', //E
+            'Labrador',//^
+            'New Brunswick',//^ province/territory
+            'Fredericton', //^ province/territory capital
+            'Moncton', //^ major city
+            'Nova Scotia',//^ province/territory
+            'Halifax', //^ province/territory capital
+            'Prince Edward Island',//^ province/territory
+            'Charlottetown', //^ province/territory capital
+            'Quebec', //^ province/territory //E
             'Chile', 'CL', 'CHL',
+            'Santiago', //^ capital
+            'Curaçao', 'Curacao', 'Kòrsou',
+            'Willemstad', //^ capital
             'Dominica', 'DM', 'DMA',
+            'Roseau', //^ capital
             'Dominican Republic', 'República Dominicana', 'DO', 'DOM',
+            'Santo Domingo', //^ capital
             'Falkland Islands', 'FK', 'FLK',
+            'Stanley', //^ capital
             'Greenland', 'Kalaallit Nunaat', 'Grønland', 'GL', 'GRL', //W
+            'Nuuk', 'Godthåb', //^ capital
             'Grenada', 'GD', 'GRD',
+            'St. George\'s', //^ capital
             'Guadeloupe',
+            'Basse-Terre', //^ capital
             'Guyana', 'GY', 'GUY',
+            'Georgetown', //^ capital
             'Martinique',
+            'Fort-de-France', //^ capital
             'Monsterrat',
+            'Brades Estate', //^ capital
             'Netherlands Antilles', 'Antilles', 'AN', 'ANT',
             'Paraguay', 'Paraguái', 'PY', 'PRY',
+            'Asuncion', 'Asunción', //^ capital
             'Puerto Rico', 'PR', 'PRI',
+            'San Juan', //^ capital
             'Saint Kitts and Nevis', 'KN', 'KNA',
+            'Basseterre', //^ capital
             'Saint Lucia', 'LC', 'LCA',
+            'Castries', //^ capital
             'Saint Vincent and the Grenadines', 'VC', 'VCT',
+            'Kingstown', //^ capital
             'Trinidad and Tobago', 'TT', 'TTO',
+            'Port of Spain', //^ capital
             'Turks and Caicos Islands', 'TC', 'TCA',
+            'Cockburn Town', //^ capital
             'U.S. Virgin Islands', 'US Virgin Islands', 'Virgin Islands', 'VI', 'VIR',
+            'Charlotte Amalie', //^ capital
             'Venezuela', 'VE', 'VEN',
+            'Caracas', //^ capital
         ]
     },
     {
@@ -340,6 +457,7 @@ export const timezones: timezone[] = [
             'NST',
             'Canada',
             'Newfoundland and Labrador', 'Newfoundland',
+            'St. John\'s', //^ province/territory capital
         ]
     },
     {
@@ -353,8 +471,9 @@ export const timezones: timezone[] = [
             '-03',
             'ADT',
             'Argentina', 'AR', 'ARG',
+            'Buenos Aires', //^ capital
             'Brazil', 'Brasil', 'BR', 'BRA',
-            'Brasilia',//^ 
+            'Brasilia',//^ capital
             'Rio',//^ 
             'Sao Paulo', 'São Paulo',//^ 
             'Fortaleza',
@@ -362,11 +481,14 @@ export const timezones: timezone[] = [
             'Recife',
             'Salvador',
             'French Guiana', 'Guyane',
+            'Cayenne', //^ capital
             'Greenland', 'Kalaallit Nunaat', 'Grønland', 'GL', 'GRL',//central
-            'Guyana',
             'Saint Pierre and Miquelon', 'PM', 'SPM',
+            'Saint-Pierre', 'Saint Pierre', //^ capital
             'Suriname', 'SR', 'SUR',
-            'Uruguay', 'UY', 'URY'
+            'Paramaribo', //^ capital
+            'Uruguay', 'UY', 'URY',
+            'Montevideo', //^ capital
         ]
     },
     {
@@ -407,6 +529,7 @@ export const timezones: timezone[] = [
             '-01',
             'Azores',
             'Cape Verde', 'Cabo Verde', 'CV', 'CPV',
+            'Praia', //^ capital
             'Greenland', 'Kalaallit Nunaat', 'Grønland', 'GL', 'GRL',//E
         ]
     },
@@ -426,34 +549,56 @@ export const timezones: timezone[] = [
             'GMT+0',
             'WET',
             'Burkina Faso', 'BF', 'BFA',
+            'Ouagadougou', //^ capital
             'Bouvet Island',
             'Canary Islands',
             'Cote d\'Ivoire', 'Ivory Coast', 'CI', 'CIV',
+            'Yamoussoukro', //^ capital
             'Faroe Islands', 'Føroyar', 'Færøerne', 'FO', 'FRO',
+            'Torshavn', 'Thorshavn', 'Tórshavn', //^ capital
             'Gambia', 'The Gambia', 'GM', 'GMB',
+            'Banjul', //^ capital
             'Ghana', 'Gaana', 'Gana', 'GH', 'GHA',
+            'Accra', 'Nkran', //^ capital
             'Greenland', 'Kalaallit Nunaat', 'Grønland', 'GL', 'GRL',//NE
             'Guernsey', 'GG', 'GGY',
+            'Saint Peter Port', //^ capital
             'Guinea', 'Guinée', 'Gine', 'GN', 'GIN',
+            'Conakry', 'Konakiri', //^ capital
             'Guinea-Bissau', 'Guiné-Bissau', 'GW', 'GNB',
+            'Bissau', //^ capital
             'Iceland', 'Ísland', 'IS', 'ISL',
+            'Reykjavik', 'Reykjavík', //^ capital
             'Ireland', 'Éire', 'IE', 'IRL',
+            'Dublin', 'Baile Átha Cliath', //^ capital
             'Isle of Man', 'Ellan Vannin', 'IM', 'IMN',
+            'Douglas', 'Doolish', //^ capital
             'Jersey', 'Jèrri', 'JE', 'JEY',
+            'St. Helier', 'Saint Hélier', 'Saint Hélyi', //^ capital
             'Liberia', 'LR', 'LBR',
+            'Monrovia', //^ capital
             'Mali', 'ML', 'MLI',
+            'Bamako', 'Bamakɔ', //^ capital
             'Mauritania', 'MR', 'MRT',
+            'Nouakchott', 'Nwakcuṭ', 'anu ukcuḍ', 'ⵏⵡⴰⴽⵛⵓⵟ', 'ⴰⵏⵓ ⵓⴽⵛⵓⴹ', 'nwakšūṭ', 'أنو ؤكشوض', 'نواكشوط', //^ capital
             'Northern Ireland',
             'Portugal', 'PT', 'PRT',
-            'Saint Helena', 'SH', 'SHN',
+            'Lisbon', 'Lisboa', //^ capital
+            'Saint Helena', 'SH', 'SHN', 'Ascension', 'Tristan da Cunha', 'Saint Helena, Ascension and Tristan da Cunha',
+            'Jamestown', //^ capital
             'Sao Tome and Principe', 'São Tomé and Príncipe', 'São Tomé e Príncipe', 'ST', 'STP',
+            'São Tomé', 'Sao Tome', //^ capital
             'Senegal', 'Sénégal', 'Senegaal', 'SN', 'SEN',
+            'Dakar', 'Ndakaaru', //^ capital
             'Sierra Leone', 'SL', 'SLE',
+            'Freetown', //^ capital
             'Togo', 'TG', 'TGO',
+            'Lome', 'Lomé', 'Loma', //^ capital
             'United Kingdom', 'UK', 'U.K.', 'Britain', 'Great Britain', 'Y Deyrnas Unedig', 'Unitit Kinrick', 'Rìoghachd Aonaichte', 'Ríocht Aontaithe', 'An Rywvaneth Unys', 'GB', 'GBR',
-            'England',
-            'Scotland',
-            'Wales',
+            'London', 'Llundain', 'Lunnon', 'Lunnainn', 'Londain', 'Loundres', //^ capital
+            'England', //^ 
+            'Scotland', //^ 
+            'Wales', //^ 
             'Western Sahara', 'EH', 'ESH'
         ]
     },
@@ -472,49 +617,89 @@ export const timezones: timezone[] = [
             'WAT',
             'IST',
             'Albania', 'Shqipëria', 'Shqiperia', 'AL', 'ALB',
+            'Tirana', //^ capital
             'Andorra', 'AD', 'AND',
+            'Andorra la Vella', //^ capital
             'Algeria', 'Dzayer', 'ⴷⵣⴰⵢⴻⵔ', 'Al-Jazā\'ir', 'الجزائر', 'DZ', 'DZA',
+            'Algiers', //^ capital
             'Angola', 'AO', 'AGO',
+            'Luanda', 'Lwanda', //^ capital
             'Austria', 'Österreich', 'Osterreich', 'AT', 'AUT',
+            'Vienna', 'Wien', //^ capital
             'Belgium', 'België', 'Belgique', 'Belgien', 'BE', 'BEL',
+            'Brussels', 'Bruxelles', 'Brüssel', //^ capital
             'Benin', 'Bénin', 'BJ', 'BN',
+            'Porto-Novo', //^ capital
             'Bosnia And Herzegovina', 'Bosnia', 'Herzegovina', 'Bosna i Hercegovina', 'Босна и Херцеговина', 'BA', 'BIH',
+            'Sarajevo', 'Сарајево', //^ capital
             'Cameroon', 'Cameroun', 'CM', 'CMR',
+            'Yaounde', 'Yaoundé', //^ capital
             'Central African Republic', 'CAR', 'Centrafrique', 'Bêafrîka', 'CF', 'CAF',
+            'Bangui', //^ capital
             'Chad', 'Tchad', 'Tšād', 'تشاد', 'TD', 'TCD',
+            'N\'Djamena', 'Ndjjamena', 'Nijāmīnā', 'نجامينا', //^ capital
             'Republic of the Congo', 'République du Congo', 'Repubilika ya Kôngo', 'Republíki ya Kongó', 'CG', 'COG',
+            'Brazzaville', 'Balazavile', //^ capital
             'Democratic Republic of the Congo', 'DRC', 'République démocratique du Congo', 'Republíki ya Kongó Demokratíki', 'Repubilika ya Kôngo ya Dimokalasi', 'Jamhuri ya Kidemokrasia ya Kongo', 'CD', 'COD', //W
+            'Kinsasha', 'Kinsasa', 'Kinsásá', //^ capital
             'Croatia', 'Hrvatska', 'HR', 'HRV',
+            'Zagreb', //^ capital
             'Czech Republic', 'Česká republika', 'Česko', 'CZ', 'CZE',
+            'Prague', 'Praha', //^ capital
             'Denmark', 'Danmark', 'DK', 'DNK',
+            'Copenhagen', 'København', //^ capital
             'Equatorial Guinea', 'Guinea Ecuatorial', 'Guinée équatoriale', 'Guiné Equatorial', 'GQ', 'GNQ',
+            'Malabo', //^ capital
             'France', 'FR', 'FRA',
+            'Paris', //^ capital
             'Gabon', 'République gabonaise', 'GA', 'GAB',
+            'Libreville', //^ capital
             'Germany', 'Deutschland', 'DE', 'DEU',
+            'Berlin', //^ capital
             'Gibraltar', 'GI', 'GIB',
             'Hungary', 'Magyarország', 'HU', 'HUN',
+            'Budapest', //^ capital
             'Italy', 'Italia', 'IT', 'ITA',
+            'Rome', 'Roma', //^ capital
             'Kosovo', 'Косово', 'Kosova', 'XK', 'XKX',
+            'Pristina', 'Prishtinë', 'Priština', 'Приштина',
             'Liechtenstein', 'LI', 'LIE',
+            'Vaduz', //^ capital
             'Luxembourg', 'Lëtzebuerg', 'Luxemburg', 'LU', 'LUX',
             'Malta', 'MT', 'MLT',
+            'Valletta', 'Il-Belt Valletta', //^ capital
             'Monaco', 'Múnegu', 'MC', 'MCO',
             'Montenegro', 'Crna Gora', 'Црна Гора', 'ME', 'MNE',
+            'Podgorica', 'Подгорица', //^ capital
             'Morocco', 'Amerruk', 'Elmeɣrib', 'ⴰⵎⵔⵔⵓⴽ', 'ⵍⵎⵖⵔⵉⴱ', 'Al-maɣréb', 'المغرب', 'MA', 'MAR',
+            'Rabat', 'Errbaṭ', 'ⵔⵔⴱⴰⵟ', 'Ar-ribaaṭ', 'الرباط',
             'Netherlands', 'Nederland', 'Nederlân', 'NL', 'NLD',
+            'Amsterdam', //^ capital
             'Niger', 'NE', 'NER',
+            'Niamey', //^ capital
             'Nigeria', ' Nijeriya', 'Naìjíríyà', 'Nàìjíríà', 'NG', 'NGA',
+            'Abuja', 'Àbújá', //^ capital
             'North Macedonia', 'Severna Makedonija', 'Северна Македонија', 'Maqedonia e Veriut', 'MK', 'MKD',
+            'Skopje', 'Скопје', 'Shkup', //^ capital
             'Norway', 'Norge', 'Noreg', 'Norga', 'Vuodna', 'Nöörje', 'NO', 'NOR',
+            'Oslo', //^ capital
             'Poland', 'Polska', 'PL', 'POL',
+            'Warsaw', 'Warszawa', //^ capital
             'San Marino', 'SM', 'SMR',
             'Serbia', 'Srbija', 'Србија', 'RS', 'SRB',
+            'Belgrade', 'Beograd', 'Београд', //^ capital
             'Slovakia', 'Slovensko', 'SK', 'SVK',
+            'Philipsburg', //^ capital
             'Slovenia', 'Slovenija', 'SI', 'SVN',
+            'Ljubljana', //^ capital
             'Spain', 'España', 'Espanya', 'Espainia', 'Espanha', 'ES', 'ESP',
+            'Madrid', 'Madril', //^ capital
             'Sweden', 'Sverige', 'SZ', 'SWZ',
+            'Stockholm', //^ capital
             'Switzerland', 'Schweiz', 'Suisse', 'Svizzera', 'Svizra', 'SE', 'SWE',
+            'Bern', 'Berne', 'Berna', //^ capital
             'Tunisia', 'Tunes', 'ⵜⵓⵏⵙ', 'Tūns', 'تونس', 'TN', 'TUN',
+            'Tunis', //^ capital
             'Vatican City', 'Civitas Vaticana', 'Città del Vaticano', 'VA', 'VAT'
         ]
     },
@@ -533,38 +718,72 @@ export const timezones: timezone[] = [
             'SAST',
             'IST',
             'Belarus', 'Bielaruś', 'Беларусь', 'BY', 'BLR',
+            'Minsk', 'Мінск', 'Минск', //^ capital
             'Botswana', 'BW', 'BWA',
+            'Gaborone', //^
             'Bulgaria', 'Bălgariya', 'Bălgarija', 'България', 'BG', 'BGR',
+            'Sofia', 'Sofiya', 'Sofija', 'София', //^ capital
             'Burundi', 'Uburundi', 'BI', 'BDI',
             'Democratic Republic  of the Congo', 'DRC', //E
             'Cyprus', 'Kypros', 'Κύπρος', 'Kıbrıs', 'CY', 'CYP',
+            'Nicosia', 'Lefkosia', 'Λευκωσία', 'Lefkoşa', //^ capital
             'Egypt', 'Misr', 'Masr', 'مصر', 'EG', 'EGY',
+            'Cairo', 'Al-Qāhirah', 'القاهرة', //^ capital
             'Estonia', 'Eesti', 'EE', 'EST',
-            'Eswatini', 'eSwatini',
+            'Tallinn', //^ capital
+            'Eswatini', 'eSwatini', 'Swaziland',//(former name)
+            'Mbabane', //^ capital
             'Finland', 'Suomi', 'FI', 'FIN',
+            'Helsinki', 'Helsingfors', //^ capital
+            'Aland', 'Åland', 'Ahvenanmaa', //^ (autonomous region)
+            'Mariehamn', 'Maarianhamina', //^ capital
             'Greece', 'Hellas', 'Ellada', 'Ελλάς', 'Ελλάδα', 'GR', 'GRC',
+            'Athens', 'Athinai', 'Athina', 'Αθήναι', 'Αθήνα',
             'Israel', 'Yisra\'el', 'ישראל', 'Israʼiyl', 'إسرائيل', 'IL', 'ISR',
+            'Jerusalem', 'Yerushalayim', 'ירושלים', 'Al-Quds', 'القُدس', //^ capital
             'Jordan', 'Al-’Urdun', 'الأردن', 'JO', 'JOR',
+            'Amman', '‘Ammān', 'عمان', //^ capital
             'Latvia', 'Latvija', 'LV', 'LVA',
+            'Riga', 'Rīga', //^ capital
             'Lebanon', 'Lubnān', 'لبنان ', 'Liban', 'LB', 'LBN',
+            'Beirut', 'Bayrut', 'Bayrūt', 'بيروت', 'Beyrouth', //^ capital
             'Lesotho', 'LS', 'LSO',
+            'Maseru', //^ capital
             'Libya', 'ⵍⵉⴱⵢⴰ', 'Lībiyā', 'ليبيا', 'LY', 'LBY',
+            'Tripoli', 'Ṭrables', 'ⵟⵔⴰⴱⵍⴻⵙ', 'Tarabulus', 'طرابلس', //^ capital
             'Lithuania', 'Lietuva', 'LT', 'LTU',
+            'Vilnius', //^ capital
             'Malawi', 'Malaŵi', 'MW', 'MWI',
+            'Lilongwe', //^ capital
             'Moldova', 'MD', 'MDA',
+            'Chisinau', 'Chișinău', //^ capital
             'Mozambique', 'Moçambique', 'MZ', 'MOZ',
+            'Maputo', //^ capital
             'Namibia', 'Namibië', 'NA', 'NAM',
+            'Windhoek', 'Windhuk', '/Ae-//Gams', 'Otjomuise', //^ capital
             'Palestine', 'Filasṭīn', 'فلسطين', 'PS', 'PSE',
+            'East Jerusalem', 'Al-Quds Al-Sharqit', 'القدس الشرقية', //^ declared capital
+            'Ramallah', 'Rāmallāh', 'رام الله', //^ administrative capital
             'Romania', 'România', 'RO', 'ROU',
+            'Bucharest', 'București', //^ capital
             'Russia', 'Rossiya', 'Rossiâ', 'Россия', 'RU', 'RUS',
-            'Kaliningrad', 'Kaliningrad Oblast',
+            'Kaliningrad', 'Kaliningrad Oblast', 'KALT', //^
             'Rwanda', 'RW', 'RWA',
+            'Kigali', //^ capital
             'South Africa', 'Suid-Afrika', 'iNingizimu Afrika', 'uMzantsi Afrika', 'Afrika-Borwa', 'Afrika Borwa', 'Aforika Borwa', 'Afurika Tshipembe', 'Afrika Dzonga', 'iNingizimu Afrika', 'iSewula Afrika', 'ZA', 'ZAF',
+            'Pretoria', 'iPitoli', 'ePitoli', 'Pitoli', 'Pritoriya', 'Tshwane', //^ administrative capital
+            'Cape Town', 'Kappstad', 'iKapa', //^ legislative capital
+            'Bloemfontein', 'ǀʼAuxa ǃXās', 'Mangaung', //^ judicial capital
             'Sudan', 'As-Sudan', 'السودان', 'SD', 'SDN',
+            'Khartoum', 'Al-Khartûm', 'الخرطوم', //^ capital
             'Syria', 'Suriyah', 'سورية', 'SY', 'SYR',
+            'Damascus', 'Dimashq', 'Ash-Sham', 'دمشق', 'الشام ', //^ capital
             'Ukraine', 'Ukrajina', 'Україна', 'UA', 'UKR',
+            'Kyiv', 'Kyjiv', 'Київ', //^ capital
             'Zambia', 'ZM', 'ZMB',
-            'Zimbabwe', 'ZW', 'ZWE'
+            'Lusaka', //^ capital
+            'Zimbabwe', 'ZW', 'ZWE',
+            'Harare', //^ capital
         ]
     },
     {
@@ -581,24 +800,43 @@ export const timezones: timezone[] = [
             'EAT',
             'MSK',
             'Bahrain', 'Al-Baḥrayn', 'البحرين', 'BH', 'BHR',
+            'Manama', 'Al-Manāmah', 'المنامة', //^ capital
             'Comoros', 'Komori', 'Juzur al-Qamar', 'جزر القمر', 'Comores', 'KM', 'COM',
+            'Moroni', 'موروني', //^ capital
             'Djibouti', 'Jībūtī', 'جيبوتي', 'Djibouti', 'Jabuuti', 'Gabuuti', 'DJ', 'DJI',
             'Eritrea', 'Iritriya', 'إرتريا', 'Ertra', 'ኤርትራ', 'ER', 'ERI',
+            'Asmara', 'Asmaraa', 'أسمرا', 'Asmära', 'አሥመራ', //^ capital
             'Ethiopia', 'Ityop\'ia', 'ኢትዮጵያ', 'ET', 'ETH',
+            'Addis Ababa', 'Addis Abäba', 'አዲስ አበ', //^ capital
             'Iraq', 'Al-\'Iraq', 'العراق', 'Êraq', 'عێراق', 'IQ', 'IRQ',
+            'Baghdad', 'بغداد', 'Bexda', 'بەغدا',
             'Kenya', 'KE', 'KEN',
+            'Nairobi', //^ capital
             'Kuwait', 'Dawlat ul-Kuwayt', 'دولة الكويت', 'il-ikwet', 'الكويت', 'KW', 'KWT',
+            'Kuwait City', 'Madiinat ul-Kuwayt', 'مدينة الكويت', 'id-diira', 'الديرة', //^ capital
             'Madagascar', 'Madagasikara', 'MG', 'MDG',
+            'Antananarivo', 'Tananarive', //^ capital
             'Mayotte', 'YT', 'MYT',
+            'Mamoudzou', 'Momoju', //^ capital
             'Qatar', 'Qaṭar', 'قطر', 'QA', 'QAT',
+            'Doha', 'Ad-Dawḥah', 'الدوحة', //^ capital
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
+            'MSK', 'Moscow', 'Москва', 'Moskva', //^ capital
             'Saudi Arabia', 'Al-Mamlaka Al-‘Arabiyyah as Sa‘ūdiyyah', 'المملكة العربية السعودية', 'SA', 'SAU',
+            'Riyadh', 'Ar-Riyāḍ', 'الرياض', //^ capital
             'Somalia', 'Soomaaliya', 'aş-Şūmāl', 'الصومال', 'SO', 'SOM',
+            'Mogadishu', 'Maqadīshū', 'مقديشو', //^ capital
             'South Sudan', 'Sudan Kusini', 'Paguot Thudän', 'SS', 'SSD',
+            'Juba', //^ capital
             'Tanzania', 'TZ', 'TZA',
+            'Dodoma', //^ capital
             'Turkey', 'Türkiye', 'TR', 'TUR',
+            'Ankara', //^ capital
+            'Istanbul', 'Constantinople', //old name //^ major city
             'Uganda', 'UG', 'UGA',
-            'Yemen', 'Al-Yaman', 'اليمن', 'YE', 'YEM'
+            'Kampala', //^ capital
+            'Yemen', 'Al-Yaman', 'اليمن', 'YE', 'YEM',
+            'Sana\'a', 'Ṣan‘ā’', 'ﺻﻨﻌﺎﺀ', //^ capital
         ]
     },
     {
@@ -610,7 +848,8 @@ export const timezones: timezone[] = [
             'GMT+330',
             'GMT+03:30',
             '+0330',
-            'Iran', 'Īrān', 'ایران', 'IR', 'IRN'
+            'Iran', 'Īrān', 'ایران', 'IR', 'IRN',
+            'Tehran', 'Tehrān', 'تهران' //^ capital
         ]
     },
     {
@@ -623,14 +862,23 @@ export const timezones: timezone[] = [
             'GMT+04:00',
             '+04',
             'Armenia', 'Hayastan', 'Hayastán', 'Հայաստան', 'AM', 'ARM',
+            'Yerevan', 'Երևան', //^ capital
             'Azerbaijan', 'Azərbaycan', 'AZ', 'AZE',
+            'Baku', 'Bakı', //^ capital
             'Georgia', 'Sak\'art\'velo', 'საქართველო', 'GE', 'GEO',
+            'Tbilisi', 'თბილისი', //^ capital
             'Mauritius', 'Maurice', 'Moris', 'MU', 'MUS',
+            'Port Louis', 'Port-Louis', 'Porlwi', //^ capital
             'Oman', '‘Umān', 'عُمان', 'OM', 'OMN',
+            'Muscat', 'Masqaṭ', 'مسقط', //^ capital
             'Reunion', 'Réunion', 'La Réunion', 'RE', 'REU',
+            'Saint-Denis', 'Saint Denis', //^ capital
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
+            'SAMT', 'Samara', //^
             'Seychelles', 'Sesel', 'SC', 'SYC',
+            'Victoria', 'Port Victoria', //^ capital
             'United Arab Emirates', 'UAE', 'Al-’Imārat Al-‘Arabiyyah Al-Muttaḥidah', 'الإمارات العربيّة المتّحدة', 'AE', 'ARE',
+            'Abu Dhabi', '‘Abū ẓabī', 'أبوظبي', //^ capital
         ]
     },
     {
@@ -642,7 +890,8 @@ export const timezones: timezone[] = [
             'GMT+430',
             'GMT+04:30',
             '+0430',
-            'Afghanistan', 'Afghanestan', 'افغانستان', 'AF', 'AFG'
+            'Afghanistan', 'Afghanestan', 'افغانستان', 'AF', 'AFG',
+            'Kabul', 'كابل', //^ capital
 
         ]
     },
@@ -661,11 +910,17 @@ export const timezones: timezone[] = [
             'Heard Island and McDonald Islands',
             'Kazakhstan', 'Qazaqstan', 'Қазақстан', 'Kazakhstán', 'Казахстан', 'KZ', 'KAZ',           //W
             'Maldives', 'Dhivehi Raajje', 'ދިވެހިރާއްޖެ', 'MV', 'MDV',
+            'Male', 'Malé', 'މާލެ', //^ capital
             'Pakistan', 'Pākistān', 'پاکستان', 'PK', 'PAK',
+            'Islamabad', 'Islāmabād', 'اسلام‌اباد', //^ capital
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
+            'YEKT', 'Yekaterinburg', //^
             'Tajikstan', 'Tojikistan', 'Тоҷикистон', 'TJ', 'TJK',
+            'Dushanbe', 'Душанбе', //^ capital
             'Turkmenistan', 'Türkmenistan', 'TK', 'TKM',
-            'Uzbekistan', 'O‘zbekiston', 'Ўзбекистон', 'UZ', 'UZB'
+            'Ashgabat', 'Aşgabat', //^ capital
+            'Uzbekistan', 'O‘zbekiston', 'Ўзбекистон', 'UZ', 'UZB',
+            'Tashkent', 'Toshkent', 'Тошкент', //^ capital
         ]
     },
     {
@@ -685,7 +940,9 @@ export const timezones: timezone[] = [
             'ভারত',
             'India', 'Bhārat', 'ભારત', 'Bhārat', 'भारत', 'Bhārata', 'ಭಾರತ', 'Bhārat', 'भारत', 'Bhāratam', 'ഭാരതം', 'Bhārat', 'भारत', 'Bhārat', 'भारत', 'Bhārata', 'ଭାରତ', 'Bhārat', 'ਭਾਰਤ', 'Bhāratam', 'भारतम्', 'Bārata', 'பாரதம்', 'Bhāratadēsam', 'భారత దేశం',
             'IN', 'IND',//^
+            'New Delhi', 'Nôtun Dillī', 'নতুন দিল্লী', 'Navī Dilhī', 'નવી દિલ્હી', 'Naī Dillī', 'नई दिल्ली', 'Navadehalī', 'ನವದೆಹಲಿ', 'Navī Dillī', 'नवी दिल्ली', 'Nyūḍalhi', 'ന്യൂഡല്ഹി', 'नवी दिल्ली', 'Nayã Dillī', 'नयाँ दिल्ली', 'Nūā Dillī', 'ନୂଆ ଦିଲ୍ଲୀ', 'Navĩ Dillī', 'ਨਵੀਂ ਦਿੱਲੀ', 'Navadehalī', 'नवदेहली', 'Pududilli', 'புது தில்லி', 'Krottaḍhillī', 'క్రొత్తఢిల్లీ', //^ capital
             'Sri Lanka', 'Sri Lankā', 'ශ්‍රී ලංකාව', 'இலங்கை', 'LK', 'LKA',
+            'Sri Jayawardenapura Kotte', 'ශ්‍රී ජයවර්ධනපුර කෝට්ටේ', 'ஶ்ரீ ஜெயவர்த்தனபுரம் கோட்டை', //^ capital
         ]
     },
     {
@@ -698,6 +955,7 @@ export const timezones: timezone[] = [
             'GMT+05:45',
             '+0545',
             'Nepal', 'Nepāl', 'नेपाल', 'NP', 'NPL',
+            'Kathmandu', 'Kāṭhamāṇḍaũ', 'काठमाण्डौं', //^ capital
         ]
     },
     {
@@ -710,11 +968,16 @@ export const timezones: timezone[] = [
             'GMT+06:00',
             '+06',
             'Bhutan', 'Druk Yul', 'འབྲུག་ཡུལ', 'BT', 'BTN',
+            'Thimphu', 'ཐིམ་ཕུ', //^ capital
             'British Indian Ocean Territory', 'IO', 'IOT', //CIA
             'Kazakhstan', 'Qazaqstan', 'Қазақстан', 'Kazakhstán', 'Казахстан', 'KZ', 'KAZ', //E
+            'Astana', 'Астана', //^ capital
             'Kyrgyzstan', 'Кыргызстан', 'KG', 'KGZ',
+            'Bishkek', 'Бишкек', //^ capital
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
+            'OMSK', 'Omsk', //^
             'Bangladesh', 'বাংলাদেশ', 'BD', 'BGD',
+            'Dhaka', 'Dhākā', 'ঢাকা' //^ capital
         ]
     },
     {
@@ -727,7 +990,9 @@ export const timezones: timezone[] = [
             'GMT+06:30',
             '+0630',
             'Cocos Islands', 'CC', 'CCK',
-            'Myanmar', 'Burma', 'Myanma', 'မြန်မာ', 'MM', 'MMR'
+            'West Island', //^ capital
+            'Myanmar', 'Burma', 'Myanma', 'မြန်မာ', 'MM', 'MMR',
+            'Nay Pyi Taw', 'နေပြည်တော်' //^ capital
         ]
     },
     {
@@ -742,18 +1007,26 @@ export const timezones: timezone[] = [
             'WIB',
             'Bangladesh',
             'Cambodia', 'Kămpŭchéa', 'កម្ពុជា', 'KH', 'KHM',
+            'Phnom Penh', 'Phnum Pénh', 'ភ្នំពេញ',
             'Christmas Island', 'CX', 'CXR',
+            'Flying Fish Cove', //^ capital
             'Indonesia', 'ID', 'IDN', //W
-            'Java',
-            'Sumatra',
+            'Jakarta', //^ capital
+            'Java', //^
+            'Sumatra', //^
             'Laos', 'Lao', 'ປະເທດລາວ', 'LA', 'LAO',
+            'Vientiane', 'Vieng Chan', 'Wiang Chan', 'Wīang Chan', 'ວຽງຈັນ', //^ capital
             'Mongolia', 'Mongol Uls', 'Монгол Улс', 'ᠮᠤᠩᠭᠤᠯ ᠤᠯᠤᠰ', 'MN', 'MNG',
             'Hovd',
             'Uvs',
             'Bayan-Ölgii',
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
+            'KRAT', 'Krasnoyarsk', //^
             'Thailand', 'Thai', 'Prathet Thai', 'Ratcha-anachak Thai', 'ไทย', 'ประเทศไทย', 'าชอาณาจักรไทย', 'TH', 'THAI',
-            'Vietnam', 'Việt Nam', 'VN', 'VNM'
+            'Bangkok', 'Krung Thep', 'Krung Thep Maha Nakhon', 'กรุงเทพฯ', 'กรุงเทพมหานคร', //^ capital
+            'Vietnam', 'Việt Nam', 'VN', 'VNM',
+            'Hanoi', 'Hà Nội', //^ capital
+            'Ho Chi Minh', //^ major city
         ]
     },
     {
@@ -771,20 +1044,28 @@ export const timezones: timezone[] = [
             'PHST',
             'AWST',
             'Australia', 'AU', 'AUS',
-            'Western Australia', 'WA',
+            'Western Australia', 'WA', //^ state
+            'Perth', //^ state capital (WA)
             'Brunei', 'بروني', 'BN', 'BRN',
+            'Bandar Seri Begawan', 'Bandar', 'باندر سري بڬاون', //^
             'China', 'Zhōngguó', 'Zhōnghuá Rénmín Gònghéguó', '中国', '中华人民共和国', 'PRC', 'People\'s Republic of China', 'CN', 'CHN',
+            'Beijing', 'Běijīng', '北京', //^ capital
             'Hong Kong', 'Heung Gong', '香港', 'HK', 'HKG',
             'Indonesia', 'ID', 'IDN', //C
             'Bali',
             'Borneo',
             'Macau', 'Oumún', '澳門', 'Macau', 'MO', 'MAC',
             'Malaysia', 'MY', 'MYS',
+            'Kuala Lumpur', //^ capital
             'Mongolia', 'Mongol Uls', 'Монгол Улс', 'ᠮᠤᠩᠭᠤᠯ ᠤᠯᠤᠰ', 'MN', 'MNG', //most of
+            'Ulaanbaatar', 'Улаанбаатар', 'ᠤᠯᠠᠭᠠᠨᠪᠠᠭᠠᠲᠤᠷ', //^ capital
             'Philippines', 'Pilipinas', 'PH', 'PHL',
+            'Manila', 'Maynila', //^ capital
             'Singapore', 'Singapura', 'Xīnjiāpō', '新加坡', 'Singapur', 'சிங்கப்பூர்', 'SG', 'SGP',
-            'Taiwan', 'Zhōnghuá Mínguó', 'Táiwān', '中華民國', '臺灣', '台灣', 'TW', 'TWN',
+            'Taiwan', 'Republic of China', 'Zhōnghuá Mínguó', 'Táiwān', '中華民國', '臺灣', '台灣', 'TW', 'TWN',
+            'Taipei', 'Táiběi', '臺北', '台北', //^ capital
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
+            'IRKT', 'Irkutsk', //^
         ]
     },
     {
@@ -811,14 +1092,20 @@ export const timezones: timezone[] = [
             'KST',
             'JST',
             'East Timor', 'Timor-Leste', 'Timor Lorosa\'e', 'TL', 'TLS',
+            'Dili', 'Díli', //^ capital
             'Indonesia', 'ID', 'IDN', //E
             'Malaku',
             'Western New Guinea', 'Papua Niugini', 'Papua Niu Gini', 'PG', 'PNG',
             'Japan', 'Nihon', 'Nippon', '日本', 'JP', 'JPN',
+            'Tokyo', '東京', 'とうきょう', 'toukyou', //^ capital
             'North Korea', 'Chosŏn', '조선', '朝鮮', 'Bukchosŏn', '북조선', 'KP', 'PRK',
+            'Pyongyang', 'P\'yŏngyang', '평양', '平壌', //^ capital
             'South Korea', 'Hanguk', '한국', '韓國', 'Namhan', '남한', 'KR', 'KOR',
+            'Seoul', '서울', //^ capital
             'Palau', 'Belau', 'PW', 'PLW',
-            'Russia'
+            'Ngerulmud', //^ capital
+            'Russia', 'Rossiya', 'Rossiâ', 'Россия',
+            'YAKT', 'Yakutsk', //^
         ]
     },
     {
@@ -832,9 +1119,11 @@ export const timezones: timezone[] = [
             '+0930',
             'ACST',
             'Australia', 'AU', 'AUS',
-            'Northern Territory', 'NT',
-            'South Australia',
-            'Broken Hill' //NSW
+            'Northern Territory', 'NT', //^ territory
+            'Darwin', //^ territory capital (NT)
+            'South Australia', 'SA', //^ state
+            'Adelaide', //^ state capital (SA)
+            'Broken Hill', //^ NSW
         ]
     },
     {
@@ -848,22 +1137,28 @@ export const timezones: timezone[] = [
             'AEST',
             'ChST',
             'Australia', 'AU', 'AUS',
-            'Australian Capital Territory', 'ACT',
-            'New South Wales', 'NSW',
-            'Sydney',
-            'Queensland', 'QLD',
-            'Brisbane',
-            'Tasmania', 'TAS',
-            'Hobart',
-            'Victoria', 'VIC',
-            'Melbourne',
+            'Australian Capital Territory', 'ACT', //^ territory
+            'Canberra', //^ capital 
+            'New South Wales', 'NSW', //^ state
+            'Sydney', //^ state capital (NSW)
+            'Queensland', 'QLD', //^ state
+            'Brisbane', //^ state capital (QLD)
+            'Gold Coast', //^ major city
+            'Tasmania', 'TAS', //^ state
+            'Hobart', //^ state capital (TAS)
+            'Victoria', 'VIC', //^ state
+            'Melbourne', //^ state capital (VIC)
             'Federated States of Micronesia', 'Micronesia', 'FM', 'FSM',
             'Chuuk',
             'Yap',
             'Guam', 'Guåhån', 'GU', ' GUM',
+            'Hagatna', 'Agana', 'Hagåtña', 'Agaña', //^ capital
             'Northern Mariana Islands', 'Notte Mariånas', 'MP', 'MNP',
-            'Papua New Guinea',
-            'Russia'
+            'Saipan', //^ capital
+            'Papua New Guinea', 'Papua Niugini', 'Papua Niu Gini',
+            'Port Moresby', 'Pot Mosbi', //^ capital
+            'Russia', 'Rossiya', 'Rossiâ', 'Россия',
+            'VLAT', 'Vladivostok', //^
         ]
     },
     {
@@ -889,14 +1184,20 @@ export const timezones: timezone[] = [
             '+11',
             'AEDT',
             'Australia', 'AU', 'AUS',
-            'Norfolk Island', ' Norf\'k Ailen',
+            'Norfolk Island', ' Norf\'k Ailen', //^
+            'Kingston', //^ capital
             'Federated States of Micronesia', 'Micronesia', 'FM', 'FSM',
+            'Palikir', //^ capital
             'Kosrae',
             'Pohnpei',
             'New Caledonia', 'Nouvelle-Calédonie', 'NC', 'NCL',
+            'Noumea', 'Nouméa', //^ capital
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
+            'MAGT', 'Magadan', //^
             'Solomon Islands', 'Solomon Aelan', 'SB', 'SLB',
-            'Vanuatu', 'VU', 'VUT'
+            'Honiara', 'Honiala', //^ capital
+            'Vanuatu', 'VU', 'VUT',
+            'Port Vila', 'Port-Vila', //^ capital
         ]
     },
     {
@@ -910,16 +1211,25 @@ export const timezones: timezone[] = [
             '+12',
             'NZST',
             'Fiji', 'Viti', 'फ़िजी', 'FJ', 'FJI',
+            'Suva', //^ capital
             'Kiribati', 'KI', 'KIR',
+            'Tarawa', //^ capital
             'Gilbert Islands',
             'Marshall Islands', 'Aorōkin Ṃajeḷ', 'MH', 'MHL',
+            'Majuro', 'Mājro', //^ capital
             'Nauru', 'Naoero', 'NR', 'NRU',
+            'Yaren', //^ capital
             'New Zealand', 'Aotearoa', 'NZ', 'NZL',
+            'Wellington', 'Ponoeke', 'Te Whanganui-a-Tara', //^ capital
+            'Auckland', //^ major city
             'Russia', 'Rossiya', 'Rossiâ', 'Россия',
+            'PETT', 'Kamchatka', //^
             'South Pole',
             'Tuvalu', 'TV', 'TUV',
+            'Fungafale', //^ capital
             'Wake Island',
-            'Wallis and Futuna', 'WF', 'WLF'
+            'Wallis and Futuna', 'WF', 'WLF',
+            'Mata Utu', 'Matāʻutu' //^ capital
         ]
     },
     {
@@ -948,10 +1258,11 @@ export const timezones: timezone[] = [
             'Kiribati',
             'Phoenix Islands',
             'Samoa', 'Sāmoa', 'WS', 'WSM',
-            'Apia', //^
+            'Apia', //^ capital
             'New Zealand',
             'Tokelau', 'TK', 'TKL',
-            'Tonga', 'TO', 'TON'
+            'Tonga', 'TO', 'TON',
+            'Nukuʻalofa', //^ capital
         ]
     },
     {
@@ -983,23 +1294,23 @@ export const timezones: timezone[] = [
     },
 ];
 
-export const hasDaylight:{
+export const hasDaylight: {
     offset_normal: number,
     offset_dst: number,
-    start: `${number}-${number}`, 
-    finish: `${number}-${number}`
+    start: `${number}-${number}`,
+    finish: `${number}-${number}`;
     includes: string[],
 }[] = [
-    {
-        offset_normal: 10,
-        offset_dst: 11,
-        includes: [
-            'Victoria', 'VIC',
-            'Melbourne',
-            'New South Wales', 'NSW',
-            'Sydney'
-        ],
-        start: `10-06`,
-        finish: `0-0`
-    }
-]
+        {
+            offset_normal: 10,
+            offset_dst: 11,
+            includes: [
+                'Victoria', 'VIC',
+                'Melbourne',
+                'New South Wales', 'NSW',
+                'Sydney'
+            ],
+            start: `10-06`,
+            finish: `0-0`
+        }
+    ];

@@ -254,3 +254,8 @@ commit: d9151bbb43245b46b0a16047ebc125c2a1b8a23f
 [FIX] fix filtering most played crashing the bot
 [QOL] most played now shows map difficulty
 [ADD] added -bg arg to only show background url
+
+0.4.15
+date_time
+commit: 
+[ADD] add more timezones
