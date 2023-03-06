@@ -90,7 +90,11 @@ const userdata = sequelize.define('userdata', {
     skin: {
         type: Sequelize.STRING,
         defaultValue: 'https://osu.ppy.sh/community/forums/topics/129191',
-    }
+    },
+    timezone: {
+        type: Sequelize.STRING,
+        defaultValue: 'GMT',
+    },
 });
 
 const guildSettings = sequelize.define('guildSettings', {
@@ -192,7 +196,7 @@ Current Client ID:        ${client.user.id}
         console.log(`Creating ${path}\\id.txt`);
         fs.writeFileSync(`${path}\\id.txt`, '0', 'utf-8');
     }
-    if(!fs.existsSync(`${path}\\trackingFiles`)){
+    if (!fs.existsSync(`${path}\\trackingFiles`)) {
         console.log(`Creating ${path}\\trackingFiles`);
         fs.writeFileSync(`${path}\\trackingFiles`, '0', 'utf-8');
     }
@@ -284,12 +288,12 @@ Current Client ID:        ${client.user.id}
     }
 
     //commandHandler(blahblahblah) //loop
-    commandHandler({userdata, client, config, oncooldown, guildSettings, trackDb, statsCache}); //instead of running once, the function should always be active
-    linkHandler({userdata, client, config, oncooldown, guildSettings, statsCache}); //{}
-    buttonHandler({userdata, client, config, oncooldown, statsCache});
-    commandInit({userdata, client, config, oncooldown});
-    exEvents({userdata, client, config, oncooldown, guildSettings, statsCache});
-    osutrack({userdata, client, config, oncooldown, trackDb, guildSettings});
+    commandHandler({ userdata, client, config, oncooldown, guildSettings, trackDb, statsCache }); //instead of running once, the function should always be active
+    linkHandler({ userdata, client, config, oncooldown, guildSettings, statsCache }); //{}
+    buttonHandler({ userdata, client, config, oncooldown, statsCache });
+    commandInit({ userdata, client, config, oncooldown });
+    exEvents({ userdata, client, config, oncooldown, guildSettings, statsCache });
+    osutrack({ userdata, client, config, oncooldown, trackDb, guildSettings });
 
     fs.appendFileSync(`${path}\\logs\\general.log`, `\n\n\n${initlog}\n\n\n`, 'utf-8');
 
