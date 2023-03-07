@@ -260,3 +260,4 @@ date_time
 commit: 
 [ADD] add more timezones
 [ADD] add set timezone command
+[QOL] update coin flip images
