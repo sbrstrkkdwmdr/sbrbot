@@ -259,3 +259,4 @@ commit: d9151bbb43245b46b0a16047ebc125c2a1b8a23f
 date_time
 commit: 
 [ADD] add more timezones
+[ADD] add set timezone command

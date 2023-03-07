@@ -1988,7 +1988,6 @@ export async function time(input: extypes.commandInput) {
     }
 
     displayedTimezone = fetchtimezone;
-
     if (input?.overrides) {
         if (input?.overrides?.ex) {
             fetchtimezone = input?.overrides?.ex as string;
@@ -2163,6 +2162,211 @@ export async function time(input: extypes.commandInput) {
         log.logCommand({
             event: 'Error',
             commandName: 'time',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
+
+}
+
+export async function timeset(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+    let fetchtimezone: string;
+    let displayedTimezone: string;
+
+    let useComponents = [];
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+            fetchtimezone = input.args.join(' ');
+        }
+            break;
+
+        //==============================================================================================================================================================================================
+
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+
+            fetchtimezone = input.obj.options.getString('timezone');
+        }
+
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
+            commanduser = input.obj.member.user;
+        }
+            break;
+    }
+
+
+    displayedTimezone = fetchtimezone;
+    if (input?.overrides) {
+        if (input?.overrides?.ex) {
+            fetchtimezone = input?.overrides?.ex as string;
+        }
+        if (input?.overrides?.id) {
+            displayedTimezone = (input?.overrides?.id ?? fetchtimezone) as string;
+        }
+    }
+
+
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'settime',
+        options: [
+            {
+                name: 'Timezone',
+                value: `${fetchtimezone}`
+            }
+        ]
+    });
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    let txt = 'null';
+    const fields: Discord.EmbedField[] = [];
+
+    const Embed = new Discord.EmbedBuilder()
+        .setColor(colours.embedColour.info.dec)
+        .setTitle('New timezone');
+
+    if (fetchtimezone != null && fetchtimezone != '') {
+        try {
+            let offset = 0;
+            const found: timezoneList.timezone[] = [];
+
+            for (let i = 0; i < timezoneList.timezones.length; i++) {
+                const curTimeZone = timezoneList.timezones[i];
+                if (curTimeZone.aliases.slice().map(x => x.trim().toUpperCase()).includes(fetchtimezone.trim().toUpperCase())) {
+                    found.push(curTimeZone);
+                    offset = curTimeZone.offsetDirection == '+' ?
+                        curTimeZone.offsetHours :
+                        -curTimeZone.offsetHours;
+                }
+            }
+
+            if (found.length == 0) {
+                throw new Error("Unrecognised timezone");
+            }
+
+            if (input?.overrides?.overwriteModal) {
+                useComponents = [
+                    new Discord.ActionRowBuilder()
+                        .addComponents(input?.overrides?.overwriteModal as Discord.StringSelectMenuBuilder)
+                ];
+            } else if (found.length > 1) {
+                const buttons = new Discord.ActionRowBuilder();
+                if (input?.overrides?.overwriteModal) {
+                    buttons
+                        .addComponents(input?.overrides?.overwriteModal as Discord.StringSelectMenuBuilder);
+                } else {
+                    const inputModal = new Discord.StringSelectMenuBuilder()
+                        .setCustomId(`${mainconst.version}-Select-time-${commanduser.id}-${input.absoluteID}-${displayedTimezone}`)
+                        .setPlaceholder('Select a timezone');
+
+                    for (let i = 0; i < found.length && i < 10; i++) {
+                        inputModal.addOptions(
+                            new Discord.StringSelectMenuOptionBuilder()
+                                .setLabel(`#${i + 1}`)
+                                .setDescription(`${found[i].aliases[i]}`)
+                                .setValue(`${found[i].aliases[i]}`)
+                        );
+                    }
+                    buttons.addComponents(inputModal);
+                }
+                useComponents = [buttons];
+            }
+
+            if (useComponents.length == 0) {
+                if (input?.overrides?.overwriteModal) {
+
+                }
+            }
+
+            let updateRows: {
+                userid: string | number,
+                timezone: string;
+            } = {
+                userid: commanduser.id,
+                timezone: displayedTimezone,
+            };
+            const findname = await input.userdata.findOne({ where: { userid: commanduser.id } });
+            let fieldText = 'null';
+            if (findname == null) {
+                try {
+                    await input.userdata.create({
+                        userid: commanduser.id,
+                        timezone: displayedTimezone
+                    });
+                    fieldText = `Changed timezone to: \`${displayedTimezone}\``
+                } catch (error) {
+                    fieldText = `There was an error trying to create user settings`;
+
+                }
+            } else {
+                const affectedRows = await input.userdata.update(updateRows,
+                    { where: { userid: commanduser.id } }
+                );
+                if (affectedRows.length > 0 || affectedRows[0] > 0) {
+                    fieldText = `Changed timezone to: \`${displayedTimezone}\``;
+                } else {
+                    fieldText = `There was an error trying to update your settings.`;
+                    log.errLog('Database error', `${affectedRows}`, `${input.absoluteID}`);
+                }
+            }
+
+            fields.push({
+                name: `Updated settings`,
+                value: fieldText,
+                inline: false
+            });
+        } catch (error) {
+            console.log(error);
+            fields.push({
+                name: `UTC/GMT +??:?? (Requested Time)`,
+                value: `\nRecived invalid timezone!` +
+                    `\n\`${fetchtimezone}\` is not a valid timezone` +
+                    `\n Check [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset) for valid timezones`,
+                inline: false
+            });
+            useComponents = [];
+        }
+    } else {
+    }
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [Embed],
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'osuset',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'osuset',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
