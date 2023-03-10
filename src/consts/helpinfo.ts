@@ -462,7 +462,7 @@ operators: *, /, +, -, (, )
         examples: [
             {
                 text: 'PREFIXMSGtime',
-                descriptor: 'Shows the current time in UTC and the bot\'s timezone'
+                descriptor: 'Shows the user\'s current time. If unset, it displays GMT.'
             },
 
             {
@@ -477,7 +477,32 @@ operators: *, /, +, -, (, )
                 type: 'string',
                 required: false,
                 description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset)',
-                options: ['Formatted as [region]/[city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
+                options: ['Formatted as [city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
+                defaultValue: 'UTC',
+                examples: ['Australia/Melbourne', 'Europe/Warsaw'],
+                commandTypes: ['message', 'interaction']
+            }
+        ]
+    },
+    {
+        name: 'settime',
+        description: 'Shows the current time in a specific timezone. ',
+        usage: 'settime <timezone>',
+        slashusage: 'settime <timezone>',
+        examples: [
+            {
+                text: 'PREFIXMSGtime AEST',
+                descriptor: 'Set\'s the user\'s timezone to Australian Eastern Standard Time'
+            },
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'timezone',
+                type: 'string',
+                required: false,
+                description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset)',
+                options: ['Formatted as [city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
                 defaultValue: 'UTC',
                 examples: ['Australia/Melbourne', 'Europe/Warsaw'],
                 commandTypes: ['message', 'interaction']
