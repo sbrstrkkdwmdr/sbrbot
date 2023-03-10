@@ -261,3 +261,4 @@ commit:
 [ADD] add more timezones
 [ADD] add set timezone command
 [QOL] update coin flip images
+[QOL] added a search bar thing if invalid timezone

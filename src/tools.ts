@@ -381,3 +381,12 @@ export function randomString(useSymbols: boolean, length?: number, string?: stri
 
     randomString(useSymbols, length--, string);
 }
+
+/**
+ * filters array by search. 
+ * 
+ * returns array with items that include the search string
+ */
+export function filterSearchArray(arr:string[], search:string){
+    return arr.filter((el) => el.toLowerCase().includes(search.toLowerCase()));
+}

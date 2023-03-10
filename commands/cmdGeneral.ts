@@ -2119,7 +2119,6 @@ export async function time(input: extypes.commandInput) {
                 inline: false
             });
         } catch (error) {
-            console.log(error);
             showGMT = true;
             fields.push({
                 name: `UTC/GMT +??:?? (Requested Time)`,
@@ -2128,7 +2127,36 @@ export async function time(input: extypes.commandInput) {
                     `\n Check [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset) for valid timezones`,
                 inline: false
             });
-            useComponents = [];
+            const allTimezones: string[] = [];
+            for (let i = 0; i < timezoneList.timezones.length; i++) {
+                const curTimeZone = timezoneList.timezones[i];
+                for (let j = 0; j < curTimeZone.aliases.length; j++) {
+                    if (!allTimezones.includes(curTimeZone.aliases[j])) {
+                        allTimezones.push(curTimeZone.aliases[j]);
+                    }
+                }
+            }
+
+            const filteredtz = func.filterSearchArray(allTimezones, fetchtimezone);
+            if (filteredtz.length == 0) {
+                useComponents = [];
+            } else {
+                const inputModal = new Discord.StringSelectMenuBuilder()
+                    .setCustomId(`${mainconst.version}-Select-time-${commanduser.id}-${input.absoluteID}-${displayedTimezone}`)
+                    .setPlaceholder('Select a timezone');
+                for (let i = 0; i < filteredtz.length && i < 25; i++) {
+                    inputModal.addOptions(
+                        new Discord.StringSelectMenuOptionBuilder()
+                            .setLabel(`#${i + 1}`)
+                            .setDescription(`${filteredtz[i]}`)
+                            .setValue(`${filteredtz[i]}`)
+                    );
+                }
+                const buttons = new Discord.ActionRowBuilder();
+                buttons.addComponents(inputModal);
+                useComponents = [buttons];
+            }
+
         }
     } else {
         showGMT = true;
@@ -2309,7 +2337,7 @@ export async function timeset(input: extypes.commandInput) {
                         userid: commanduser.id,
                         timezone: displayedTimezone
                     });
-                    fieldText = `Changed timezone to: \`${displayedTimezone}\``
+                    fieldText = `Changed timezone to: \`${displayedTimezone}\``;
                 } catch (error) {
                     fieldText = `There was an error trying to create user settings`;
 
