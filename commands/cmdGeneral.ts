@@ -2044,6 +2044,13 @@ export async function time(input: extypes.commandInput) {
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
         .setTitle('Current Time');
+
+    if (fetchtimezone == null || fetchtimezone == '') {
+        const cuser = await osufunc.searchUserFull(commanduser.id, input.userdata);
+        fetchtimezone = cuser.tz;
+        displayedTimezone = cuser.tz;
+    }
+
     if (fetchtimezone != null && fetchtimezone != '') {
         try {
             let offset = 0;
@@ -2267,7 +2274,7 @@ export async function timeset(input: extypes.commandInput) {
 
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
-        .setTitle('New timezone');
+        .setTitle('Set timezone');
 
     if (fetchtimezone != null && fetchtimezone != '') {
         try {
@@ -2300,7 +2307,7 @@ export async function timeset(input: extypes.commandInput) {
                         .addComponents(input?.overrides?.overwriteModal as Discord.StringSelectMenuBuilder);
                 } else {
                     const inputModal = new Discord.StringSelectMenuBuilder()
-                        .setCustomId(`${mainconst.version}-Select-time-${commanduser.id}-${input.absoluteID}-${displayedTimezone}`)
+                        .setCustomId(`${mainconst.version}-Select-settime-${commanduser.id}-${input.absoluteID}-${displayedTimezone}`)
                         .setPlaceholder('Select a timezone');
 
                     for (let i = 0; i < found.length && i < 10; i++) {
@@ -2331,31 +2338,39 @@ export async function timeset(input: extypes.commandInput) {
             };
             const findname = await input.userdata.findOne({ where: { userid: commanduser.id } });
             let fieldText = 'null';
-            if (findname == null) {
-                try {
-                    await input.userdata.create({
-                        userid: commanduser.id,
-                        timezone: displayedTimezone
-                    });
-                    fieldText = `Changed timezone to: \`${displayedTimezone}\``;
-                } catch (error) {
-                    fieldText = `There was an error trying to create user settings`;
-
-                }
+            let fieldTitle = 'Updated settings';
+            if (found.length > 1) {
+                fieldTitle = 'There are multiple timezones matching this query';
+                fieldText =
+                    `Please try again with one of the options below:
+${found.map(x => `UTC${x.offsetDirection}${x.offsetHours}\n`).join()}`;
             } else {
-                const affectedRows = await input.userdata.update(updateRows,
-                    { where: { userid: commanduser.id } }
-                );
-                if (affectedRows.length > 0 || affectedRows[0] > 0) {
-                    fieldText = `Changed timezone to: \`${displayedTimezone}\``;
+                if (findname == null) {
+                    try {
+                        await input.userdata.create({
+                            userid: commanduser.id,
+                            timezone: displayedTimezone
+                        });
+                        fieldText = `Changed timezone to: \`${displayedTimezone}\``;
+                    } catch (error) {
+                        fieldText = `There was an error trying to create user settings`;
+
+                    }
                 } else {
-                    fieldText = `There was an error trying to update your settings.`;
-                    log.errLog('Database error', `${affectedRows}`, `${input.absoluteID}`);
+                    const affectedRows = await input.userdata.update(updateRows,
+                        { where: { userid: commanduser.id } }
+                    );
+                    if (affectedRows.length > 0 || affectedRows[0] > 0) {
+                        fieldText = `Changed timezone to: \`${displayedTimezone}\``;
+                    } else {
+                        fieldText = `There was an error trying to update your settings.`;
+                        log.errLog('Database error', `${affectedRows}`, `${input.absoluteID}`);
+                    }
                 }
             }
 
             fields.push({
-                name: `Updated settings`,
+                name: fieldTitle,
                 value: fieldText,
                 inline: false
             });
@@ -2368,10 +2383,40 @@ export async function timeset(input: extypes.commandInput) {
                     `\n Check [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset) for valid timezones`,
                 inline: false
             });
-            useComponents = [];
+            const allTimezones: string[] = [];
+            for (let i = 0; i < timezoneList.timezones.length; i++) {
+                const curTimeZone = timezoneList.timezones[i];
+                for (let j = 0; j < curTimeZone.aliases.length; j++) {
+                    if (!allTimezones.includes(curTimeZone.aliases[j])) {
+                        allTimezones.push(curTimeZone.aliases[j]);
+                    }
+                }
+            }
+
+            const filteredtz = func.filterSearchArray(allTimezones, fetchtimezone);
+            if (filteredtz.length == 0) {
+                useComponents = [];
+            } else {
+                const inputModal = new Discord.StringSelectMenuBuilder()
+                    .setCustomId(`${mainconst.version}-Select-settime-${commanduser.id}-${input.absoluteID}-${displayedTimezone}`)
+                    .setPlaceholder('Select a timezone');
+                for (let i = 0; i < filteredtz.length && i < 25; i++) {
+                    inputModal.addOptions(
+                        new Discord.StringSelectMenuOptionBuilder()
+                            .setLabel(`#${i + 1}`)
+                            .setDescription(`${filteredtz[i]}`)
+                            .setValue(`${filteredtz[i]}`)
+                    );
+                }
+                const buttons = new Discord.ActionRowBuilder();
+                buttons.addComponents(inputModal);
+                useComponents = [buttons];
+            }
         }
     } else {
     }
+
+    Embed.addFields(fields);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
@@ -2386,7 +2431,7 @@ export async function timeset(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: 'osuset',
+            commandName: 'settime',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -2394,7 +2439,7 @@ export async function timeset(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: 'osuset',
+            commandName: 'settime',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,

@@ -551,7 +551,7 @@ export async function graph(x: number[] | string[], y: number[], label: string, 
         });
     chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250);
 
-    const filename = `${(new Date).getTime()}`
+    const filename = `${(new Date).getTime()}`;
     const curt = `${path}/cache/graphs/${filename}.jpg`;
 
     await chart.toFile(curt);
@@ -1341,6 +1341,45 @@ export async function searchUser(searchid: string, userdata: any, findMode: bool
     const object = {
         username: user,
         gamemode: mode,
+        error: errorValue,
+    };
+    return object;
+}
+
+/**
+ * similar to searchUser, but it returns ALL data values (excluding pp,acc,rank)
+ */
+export async function searchUserFull(searchid: string, userdata: any) {
+    const findname = await userdata.findOne({ where: { userid: searchid ?? '0' } });
+    let user;
+    let mode;
+    let tz;
+    let skin;
+    let errorValue;
+    if (findname != null) {
+        user = findname.get('osuname');
+        errorValue = null;
+        mode = findname.get('mode');
+        tz = findname.get('timezone');
+        skin = findname.get('skin');
+        if (mode.length < 1 || mode == null) {
+            mode = 'osu';
+        }
+        if (typeof user != 'string') {
+            errorValue = 'Username is incorrect type';
+        }
+    } else {
+        user = null;
+        mode = 'osu';
+        tz = null;
+        skin = null;
+        errorValue = `no user found with id ${searchid}`;
+    }
+    const object = {
+        username: user,
+        gamemode: mode,
+        tz,
+        skin,
         error: errorValue,
     };
     return object;
