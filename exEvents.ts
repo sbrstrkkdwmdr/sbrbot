@@ -67,6 +67,7 @@ export default (input: {
                     'osu!',
                     'osu! Lazer',
                     'McOsu',
+                    'danser'
                 ];
                 string = gamesList[Math.floor(Math.random() * gamesList.length)];
                 fr = 0;
