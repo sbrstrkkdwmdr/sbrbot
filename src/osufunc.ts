@@ -312,7 +312,7 @@ export async function scorecalc(
  * @param mode 
  * @returns the strains of a beatmap. times given in milliseconds
  */
-export async function straincalc(mapid: number, mods: string, calctype: number, mode: string, lastUpdated: Date) {
+export async function straincalc(mapid: number, mods: string, calctype: number, mode: osuApiTypes.GameMode, lastUpdated: Date) {
     let strains;
     switch (calctype) {
         case 0: default: {
@@ -321,28 +321,25 @@ export async function straincalc(mapid: number, mods: string, calctype: number, 
             if (!(typeof mapPath == 'string')) {
                 return mapPath;
             }
+
+            let strains1 =
+                new rosu.Calculator({
+                    mods: osumodcalc.ModStringToInt(mods)
+                }).strains(new rosu.Beatmap({ path: mapPath }));
+
             switch (mode) {
                 case 'osu': {
-                    const strains1 = JSON.parse(JSON.stringify(
-                        new rosu.Calculator({
-                            mods: osumodcalc.ModStringToInt(mods)
-                        }).strains(new rosu.Beatmap({ path: mapPath })),
-                        null, 2
-                    ));
-                    const aimval = strains1.aim;
-                    const aimnoslideval = strains1.aimNoSliders;
-                    const speedval = strains1.speed;
-                    const flashlightval = strains1.flashlight;
+                    strains1 = strains1 as rosu.OsuStrains;
                     const straintimes = [];
                     const totalval = [];
 
-                    for (let i = 0; i < aimval.length; i++) {
+                    for (let i = 0; i < strains1.aim.length; i++) {
                         const offset = i;
-                        const curval = aimval[offset] + aimnoslideval[offset] + speedval[offset] + flashlightval[offset];
+                        const curval = strains1.aim[offset] + strains1.aimNoSliders[offset] + strains1.speed[offset] + strains1.flashlight[offset];
                         totalval.push(curval);
 
-                        const curtime = ((strains1.section_length / 1000) * (i + 1));
-                        const curtimestr = Math.floor(curtime / 60) + ':' + `${(curtime % 60) < 10 ? '0' + (curtime % 60).toFixed(2) : (curtime % 60).toFixed(2)}`;
+                        const curtime = ((strains1.sectionLength / 1000) * (i + 1));
+                        const curtimestr = Math.floor(curtime / 60) + ':' + `${(curtime % 60) < 10 ? '0' + Math.floor(curtime % 60) : Math.floor(curtime % 60)}`;
                         straintimes.push(curtimestr);
                     }
                     strains = {
@@ -350,6 +347,67 @@ export async function straincalc(mapid: number, mods: string, calctype: number, 
                         value: totalval,
                     };
                 }
+                    break;
+                case 'taiko': {
+                    strains1 = strains1 as rosu.TaikoStrains;
+                    const straintimes = [];
+                    const totalval = [];
+
+                    for (let i = 0; i < strains1.stamina.length; i++) {
+                        const offset = i;
+                        const curval = strains1.color[offset] + strains1.rhythm[offset] + strains1.stamina[offset];
+                        totalval.push(curval);
+
+                        const curtime = ((strains1.sectionLength / 1000) * (i + 1));
+                        const curtimestr = Math.floor(curtime / 60) + ':' + `${(curtime % 60) < 10 ? '0' + Math.floor(curtime % 60) : Math.floor(curtime % 60)}`;
+                        straintimes.push(curtimestr);
+                    }
+                    strains = {
+                        strainTime: straintimes,
+                        value: totalval,
+                    };
+                }
+                    break;
+                case 'fruits': {
+                    strains1 = strains1 as rosu.CatchStrains;
+                    const straintimes = [];
+                    const totalval = [];
+
+                    for (let i = 0; i < strains1.movement.length; i++) {
+                        const offset = i;
+                        const curval = strains1.movement[offset]
+                        totalval.push(curval);
+
+                        const curtime = ((strains1.sectionLength / 1000) * (i + 1));
+                        const curtimestr = Math.floor(curtime / 60) + ':' + `${(curtime % 60) < 10 ? '0' + Math.floor(curtime % 60) : Math.floor(curtime % 60)}`;
+                        straintimes.push(curtimestr);
+                    }
+                    strains = {
+                        strainTime: straintimes,
+                        value: totalval,
+                    };
+                }
+                    break;
+                case 'mania': {
+                    strains1 = strains1 as rosu.ManiaStrains;
+                    const straintimes = [];
+                    const totalval = [];
+
+                    for (let i = 0; i < strains1.strains.length; i++) {
+                        const offset = i;
+                        const curval = strains1.strains[offset]
+                        totalval.push(curval);
+
+                        const curtime = ((strains1.sectionLength / 1000) * (i + 1));
+                        const curtimestr = Math.floor(curtime / 60) + ':' + `${(curtime % 60) < 10 ? '0' + Math.floor(curtime % 60) : Math.floor(curtime % 60)}`;
+                        straintimes.push(curtimestr);
+                    }
+                    strains = {
+                        strainTime: straintimes,
+                        value: totalval,
+                    };
+                }
+                    break;
             }
             break;
         }

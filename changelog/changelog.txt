@@ -264,3 +264,5 @@ commit:
 [QOL] added a search bar thing if invalid timezone
 [ADD] added command to set your own timezone
 [FIX] fixed local map file parse
+[FIX] fix strains with NaN times
+[QOL] added strains to other modes
