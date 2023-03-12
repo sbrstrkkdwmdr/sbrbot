@@ -256,8 +256,8 @@ commit: d9151bbb43245b46b0a16047ebc125c2a1b8a23f
 [ADD] added -bg arg to only show background url
 
 0.4.15
-date_time
-commit: 
+2023-03-12
+commit: 3fc799cc5c28c4d6c88e7d6a8e1bdb750df0504c
 [ADD] add more timezones
 [ADD] add set timezone command
 [QOL] update coin flip images
