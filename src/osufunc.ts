@@ -1447,7 +1447,10 @@ export function debug(data: any, type: string, name: string, serverId: string | 
     if (!fs.existsSync(`${path}/cache/debug/${type}/${name}/`)) {
         fs.mkdirSync(`${path}/cache/debug/${type}/${name}`);
     }
-    fs.writeFileSync(`${path}/cache/debug/${type}/${name}/${pars}_${serverId}.json`, JSON.stringify(data, null, 2));
+    try {
+        fs.writeFileSync(`${path}/cache/debug/${type}/${name}/${pars}_${serverId}.json`, JSON.stringify(data, null, 2));
+    } catch (error) {
+    }
     return;
 }
 

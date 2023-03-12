@@ -173,7 +173,7 @@ progress: ${m.progress ? m.progress : 'none'}
         if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
             osucmds.scoreparse({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
         }
-        if (false && message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osu'))) {
+        if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osu'))) {
             // return;
             if (absoluteID == null) {
                 absoluteID = func.generateId();

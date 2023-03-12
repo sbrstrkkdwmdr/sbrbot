@@ -1,5 +1,7 @@
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
+import * as osuclasses from 'osu-classes';
+import * as osuparsers from 'osu-parsers';
 import * as replayparser from 'osureplayparser';
 import {
     CatchPerformanceAttributes,
@@ -10947,12 +10949,16 @@ export async function maplocal(input: extypes.commandInput) {
 
     const embedStyle: extypes.osuCmdStyle = 'M';
     const useFiles = [];
+    let mods = 'NM';
 
     switch (input.commandType) {
-        case 'message': {
+        case 'message': case 'link': {
             input.obj = (input.obj as Discord.Message);
-
             commanduser = input.obj.author;
+            if (input.obj.content.includes('+')) {
+                mods = input.obj.content.split('+')[1];
+                mods.includes(' ') ? mods = mods.split(' ')[0] : null;
+            }
         }
             break;
 
@@ -10971,11 +10977,6 @@ export async function maplocal(input: extypes.commandInput) {
             commanduser = input.obj.member.user;
         }
             break;
-        case 'link': {
-            input.obj = (input.obj as Discord.Message);
-
-            commanduser = input.obj.author;
-        } break;
     }
 
     //==============================================================================================================================================================================================
@@ -10991,197 +10992,51 @@ export async function maplocal(input: extypes.commandInput) {
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let map: string = '';
+    let mapPath: string = '';
     if (fs.existsSync(`${filespath}\\localmaps\\${input.absoluteID}.osu`)) {
-        map = fs.readFileSync(`${filespath}\\localmaps\\${input.absoluteID}.osu`, 'utf-8');
+        mapPath = `${filespath}\\localmaps\\${input.absoluteID}.osu`;
     } else {
         return;
     }
-    const errmap = fs.readFileSync(`${precomppath}/files/errmap.osu`, 'utf-8');
+
     let errtxt = '';
-    let mods = 'NM';
 
-    if ((input.obj as Discord.Message).content.includes('+')) {
-        mods = (input.obj as Discord.Message).content.split('+')[1].split(' ')[0];
-    }
+    const decoder = new osuparsers.BeatmapDecoder();
 
-    try {
-        map.split('[HitObjects]')[1].split('\n');
-    } catch (error) {
-        errtxt += '\nError - invalid section: [HitObjects]';
+    let mapParsed: osuclasses.Beatmap = await decoder.decodeFromPath(mapPath, true);
+
+    osufunc.debug(mapParsed, 'fileparse', 'map (file)', input.obj.guildId, 'map');
+    console.log(mapParsed.totalLength);
+    console.log(mapParsed.difficulty);
+
+
+    const bpm = {
+        min: mapParsed?.bpmMin,
+        max: mapParsed?.bpmMax,
+        mode: mapParsed?.bpmMode,
+    };
+    let clockRate = 1;
+    if (mods.includes('DT') || mods.includes('NC')) {
+        clockRate = 1.5;
+    } else if (mods.includes('HT') || mods.includes('DC')) {
+        clockRate = 0.75;
     }
-    let metadata;
-    try {
-        metadata = map.split('[Metadata]')[1].split('[')[0];
-    } catch (error) {
-        errtxt += '\nError - invalid section: [Metadata]';
-        metadata = errmap.split('[Metadata]')[1].split('[')[0];
-    }
+    let bpmTxt = bpm.min == bpm.max ?
+        `${(bpm.mode * clockRate)?.toFixed(2)}` :
+        `${(bpm.min * clockRate)?.toFixed(2)}-${(bpm.max * clockRate)?.toFixed(2)}(${(bpm.mode * clockRate)?.toFixed(2)})`;
+
+
     let ppcalcing: PerformanceAttributes[];
     try {
-        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', null, 0);
+        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', mapPath, 0);
     } catch (error) {
         ppcalcing = await osufunc.mapcalclocal(mods, 'osu', `${filespath}/errmap.osu`, 0);
         errtxt += '\nError - pp calculations failed';
     }
-
-    let general;
-    let diff;
-    try {
-        general = map.split('[General]')[1].split('[')[0];
-        diff = map.split('[Difficulty]')[1].split('[')[0];
-    } catch (error) {
-        errtxt += '\nError - invalid section: [General] or [Difficulty]';
-
-        general = errmap.split('[General]')[1].split('[')[0];
-        diff = errmap.split('[Difficulty]')[1].split('[')[0];
-    }
-    let title;
-    let artist;
-    let creator;
-    let version;
-    try {
-        title = metadata.split('Title:')[1].split('\n')[0]
-            ==
-            metadata.split('Title:')[1].split('\n')[0]
-            ?
-            metadata.split('TitleUnicode:')[1].split('\n')[0] :
-            `${metadata.split('Title:')[1].split('\n')[0]} (${metadata.split('TitleUnicode:')[1].split('\n')[0]})`;
-        artist = metadata.split('Artist:')[1].split('\n')[0]
-            ==
-            metadata.split('ArtistUnicode:')[1].split('\n')[0]
-            ?
-            metadata.split('ArtistUnicode:')[1].split('\n')[0] :
-            `${metadata.split('Artist:')[1].split('\n')[0]} (${metadata.split('ArtistUnicode:')[1].split('\n')[0]})`;
-
-        creator = metadata.split('Creator:')[1].split('\n')[0];
-        version = metadata.split('Version:')[1].split('\n')[0];
-    } catch (error) {
-        errtxt += '\nError - invalid section: [Metadata]';
-
-        title = errmap.split('Title:')[1].split('\n')[0]
-            == errmap.split('TitleUnicode:')[1].split('\n')[0] ?
-            errmap.split('TitleUnicode:')[1].split('\n')[0] :
-            `${errmap.split('Title:')[1].split('\n')[0]} (${errmap.split('TitleUnicode:')[1].split('\n')[0]})`;
-        artist = errmap.split('Artist:')[1].split('\n')[0]
-            == errmap.split('ArtistUnicode:')[1].split('\n')[0] ?
-            errmap.split('ArtistUnicode:')[1].split('\n')[0] :
-            `${errmap.split('Artist:')[1].split('\n')[0]} (${errmap.split('ArtistUnicode:')[1].split('\n')[0]})`;
-        creator = errmap.split('Creator:')[1].split('\n')[0];
-        version = errmap.split('Version:')[1].split('\n')[0];
-    }
-    const ftstr = `${artist} - ${title} [${version}] //${creator} ${mods ? `+${mods}` : ''}`;
-    let hitobjs;
-    try {
-        hitobjs = map.split('[HitObjects]')[1].split('\n');
-    } catch (error) {
-        errtxt += '\nError - invalid section: [HitObjects]';
-
-        hitobjs = errmap.split('[HitObjects]')[1].split('\n');
-    }
-    let countcircle = 0;
-    let countslider = 0;
-    let countspinner = 0;
-    //to get count_circle, get every line without a |
-    try {
-        for (let i = 0; i < hitobjs.length; i++) {
-            const curobj = hitobjs[i];
-            if (curobj.includes('|')) {
-                countslider++;
-            } else if (curobj.split(',').length > 5) {
-                countspinner++;
-            } else {
-                countcircle++;
-            }
-        }
-    } catch (error) {
-        errtxt += '\nError - invalid section: [HitObjects] (counting objects)';
-
-        for (let i = 0; i < errmap.split('[HitObjects]')[1].split('\n').length; i++) {
-            const curobj = errmap.split('[HitObjects]')[1].split('\n')[i];
-            if (curobj.includes('|')) {
-                countslider++;
-            } else if (curobj.split(',').length > 5) {
-                countspinner++;
-            } else {
-                countcircle++;
-            }
-        }
-    }
-
-    let firsttimep;
-    let fintimep;
-    try {
-        firsttimep = hitobjs[1].split(',')[2];
-        fintimep = hitobjs[hitobjs.length - 2].split(',')[2]; //inaccurate cos of sliders n stuff
-    } catch (error) {
-        errtxt += '\nError - invalid section: [HitObjects] (getting object timings)';
-
-        firsttimep = errmap.split('[HitObjects]')[1].split('\n')[1].split(',')[2];
-        fintimep = errmap.split('[HitObjects]')[1].split('\n')[errmap.split('[HitObjects]').length - 2].split(',')[2]; //inaccurate cos of sliders n stuff                                                                            
-    }
-    const mslen = parseInt(fintimep) - parseInt(firsttimep);
-
-    const nlength = mslen / 1000;
-    const truelen = nlength > 60 ? // if length over 60
-        nlength % 60 < 10 ? //if length over 60 and seconds under 10
-            Math.floor(nlength / 60) + ':0' + Math.floor(nlength % 60) : //seconds under 10
-            Math.floor(nlength / 60) + ':' + Math.floor(nlength % 60) //seconds over 10
-        : //false
-        nlength % 60 < 10 ? //length under 60 and 10
-            '00:' + Math.floor(nlength) : //true
-            '00:' + Math.floor(nlength); //false
-
-    let bpm = NaN;
-
-    let timing;
-    try {
-        timing = map.split('[TimingPoints]')[1].split('[')[0];
-    } catch (error) {
-        errtxt += '\nError - invalid section: [TimingPoints]';
-
-        timing = errmap.split('[TimingPoints]')[1].split('[')[0];
-    }
-    function pointToBPM(point: string) {
-        const arr = point.split(',');
-        //'a,b,c'
-        //b is time in milliseconds between each beat
-        //https://osu.ppy.sh/community/forums/topics/59274?n=4
-        const bpm = 60000 / parseInt(arr[1]);
-        return bpm;
-    }
-    let totalpoints = 0;
-    let bpmmax = 0;
-    let bpmmin = 0;
-    for (let i = 0; i < timing.split('\n').length; i++) {
-        const curpoint = timing.split('\n')[i];
-        if (curpoint.includes(',')) {
-            if (curpoint.includes('-')) {
-                break;
-            }
-            bpm = pointToBPM(curpoint);
-            totalpoints++;
-            if (bpm > bpmmax) {
-                bpmmax = bpm;
-            }
-            if (bpm < bpmmin || bpmmin == 0) {
-                bpmmin = bpm;
-            }
-        }
-    }
-    const bpmavg = bpm / totalpoints
-
-        ;
-    let gm = '0';
-    try {
-        gm = general.split('Mode:')[1].split('\n')[0].replaceAll(' ', '');
-    } catch (error) {
-        gm = '0';
-    }
     let strains;
     let mapgraph;
     try {
-        strains = await osufunc.straincalclocal(null, mods, 0, osumodcalc.ModeIntToName(parseInt(gm)));
+        strains = await osufunc.straincalclocal(mapPath, mods, 0, osumodcalc.ModeIntToName(mapParsed?.mode));
     } catch (error) {
         errtxt += '\nError - strains calculation failed';
 
@@ -11190,11 +11045,10 @@ export async function maplocal(input: extypes.commandInput) {
             value: [0, 0]
         };
 
-        strains = await osufunc.straincalclocal(`${filespath}/errmap.osu`, mods, 0, osumodcalc.ModeIntToName(parseInt(gm)));
-
+        strains = await osufunc.straincalclocal(`${filespath}/errmap.osu`, mods, 0, osumodcalc.ModeIntToName(mapParsed?.mode));
     }
 
-    osufunc.debug(strains, 'fileparse', 'osu', input.obj.guildId, 'strains');
+    osufunc.debug(strains, 'fileparse', 'map (file)', input.obj.guildId, 'strains');
     try {
         const mapgraphInit = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains');
         useFiles.push(mapgraphInit.path);
@@ -11216,19 +11070,28 @@ export async function maplocal(input: extypes.commandInput) {
             .setFooter({
                 text: `${embedStyle}`
             })
-            .setTitle(`${ftstr}`)
+            .setTitle(`${mapParsed?.metadata.artist} - ${mapParsed?.metadata.title}`)
             .addFields([
                 {
                     name: 'MAP VALUES',
                     value:
                         `
-CS${diff.split('CircleSize:')[1].split('\n')[0]} AR${diff.split('ApproachRate:')[1].split('\n')[0]} OD${diff.split('OverallDifficulty:')[1].split('\n')[0]} HP${diff.split('HPDrainRate:')[1].split('\n')[0]}
-${emojis.mapobjs.circle}${countcircle}
-${emojis.mapobjs.slider}${countslider}
-${emojis.mapobjs.spinner}${countspinner}
-${emojis.mapobjs.total_length}${truelen}
-${emojis.mapobjs.bpm}${bpmmax.toFixed(2)} - ${bpmmin.toFixed(2)} (${bpmavg.toFixed(2)})
-${errtxt.length > 0 ? `${errtxt}` : ''}
+CS${mapParsed?.difficulty?._CS ?? mapParsed?.difficulty?._OD}
+AR${mapParsed?.difficulty?._AR ?? mapParsed?.difficulty?._OD} 
+OD${mapParsed?.difficulty?._OD} 
+HP${mapParsed?.difficulty?._HP ?? mapParsed?.difficulty?._OD}
+⭐${ppcalcing[0]?.difficulty?.stars?.toFixed(2)}
+`,
+                    inline: true
+                },
+                {
+                    name: def.invisbleChar,
+                    value: `
+${emojis.mapobjs.circle}${NaN}
+${emojis.mapobjs.slider}${NaN}
+${emojis.mapobjs.spinner}${NaN}
+${emojis.mapobjs.total_length}${calc.secondsToTime((mapParsed?.totalLength/1000) / clockRate)}
+${emojis.mapobjs.bpm}${bpmTxt}
 `,
                     inline: true
                 },
@@ -11244,6 +11107,13 @@ ${errtxt.length > 0 ? `${errtxt}` : ''}
                     inline: true
                 }
             ])
+            .setDescription(`
+Mode: ${emojis.gamemodes[osumodcalc.ModeIntToName(mapParsed.mode)]}
+File format: ${mapParsed.fileFormat}
+Map Creator: ${mapParsed.metadata.creator}
+Last Updated: <t:${Math.floor((new Date(mapParsed?.fileUpdateDate)).getTime() / 1000)}:R>
+HitObjects: ${mapParsed.hitObjects?.length}
+`)
             .setImage(`attachment://${mapgraph}.jpg`);
     } catch (error) {
         await msgfunc.sendMessage({
