@@ -6963,8 +6963,8 @@ export async function scorepost(input: extypes.commandInput) {
         mapper: mapdata.beatmapset.creator,
         comboMin: scoredata.max_combo,
         comboMax: mapdata.max_combo,
-        isFullCombo: null,
         pp: ppCalc[0].pp,
+        isFullCombo: null,
         unranked: true,
     };
 
@@ -6972,19 +6972,16 @@ export async function scorepost(input: extypes.commandInput) {
 
     switch (type) {
         case 0: {
-            titleString = `${order.name} | ${order.fullTitle} [${order.version}] ${order.mods.length > 1 ? '+' + order.mods : ''}`
+            titleString = `${order.name} | ${order.fullTitle} [${order.version}] ${order.mods.length > 1 ? '+' + order.mods : ''} `
                 + `${order.acc}% ${order.diff}⭐ `
                 + `| ${order.pp} ${null} | ${customString}`
                 ;
         } break;
+        case 1: {
+            titleString = `${order.name} | ${order.fullTitle} [${order.version}] + ${order.mods.length > 1 ? '+' + order.mods : ''} `
+            + `(${order.diff}, ${order.mapper}) ${order.acc} ${order.comboMin}/${order.comboMax} | ${order.pp}`
+        }
     }
-
-    // const titleString =
-    // `${scoredata.user.username}` + ' | ' +
-    // `${scoredata.beatmapset.artist} - ${scoredata.beatmapset.title} [${scoredata.beatmap.version}] ` +
-    // `${scoredata.mods.length > 0 ? `+${scoredata.mods.join('')}` : ''} ${(scoredata.accuracy * 100).toFixed(2)}% ` +
-    // `${nonFcString} ` +
-    // `${pptxt} | ${scoredata.mode}`;
 
     /**
      * formatted as
@@ -11090,7 +11087,7 @@ HP${mapParsed?.difficulty?._HP ?? mapParsed?.difficulty?._OD}
 ${emojis.mapobjs.circle}${NaN}
 ${emojis.mapobjs.slider}${NaN}
 ${emojis.mapobjs.spinner}${NaN}
-${emojis.mapobjs.total_length}${calc.secondsToTime((mapParsed?.totalLength/1000) / clockRate)}
+${emojis.mapobjs.total_length}${calc.secondsToTime((mapParsed?.totalLength / 1000) / clockRate)}
 ${emojis.mapobjs.bpm}${bpmTxt}
 `,
                     inline: true
