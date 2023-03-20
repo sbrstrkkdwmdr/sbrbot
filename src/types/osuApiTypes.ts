@@ -532,7 +532,7 @@ export type Score = {
     rank_country?: string,
     rank_global?: string | number,
     rank: Rank,
-    replay: string,
+    replay: boolean,
     score: number,
     statistics: Statistics,
     user_id: number,

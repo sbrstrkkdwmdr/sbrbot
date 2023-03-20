@@ -5098,6 +5098,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         });
 
     let useComponents = [pgbuttons, buttons];
+    let useFiles = []
 
     if (list != true) {
         rsEmbed.setColor(colours.embedColour.score.dec);
@@ -5132,6 +5133,10 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 }, input.canReply);
             }
             return;
+        }
+
+        if(curscore.replay){
+            curscore.replay
         }
 
         const curbm = curscore.beatmap;
