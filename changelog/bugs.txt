@@ -121,13 +121,25 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
         ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #10)
-    status: WIP
+    status: FINISHED
     issue: halftime AR is higher than no mod AR 
     cause: was using DT calculations for the milliseconds instead of HT
     author: sbrstrkkdwmdr
     found: 2023-01-10 20:28 AEDT (UTC+11)
     fixed: 2023-01-21 11:04 AEDT (UTC+11)
     solution: fix milliseconds calc
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+        ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+#11)
+    status: FINISHED
+    issue: tracking causing crashes
+    cause: null properties used in apiget() were null causing crashes
+    author: sbrstrkkdwmdr
+    found: 2023-03-20 07:50 AEDT (UTC+11)
+    fixed: 2023-03-20 13:50 AEDT (UTC+11)
+    solution: change obj.prop to obj?.prop
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------

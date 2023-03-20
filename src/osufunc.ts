@@ -996,8 +996,8 @@ export async function apiget(input: apiInput) {
     }
     log.toOutput(url);
 
-    if (data.apiData.apiData) {
-        data = data.apiData;
+    if (data?.apiData?.apiData) {
+        data = data?.apiData;
     }
     return data;
 }
