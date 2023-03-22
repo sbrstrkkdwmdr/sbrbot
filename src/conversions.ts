@@ -2653,6 +2653,14 @@ export const values: convVal[] = [
                 },
                 text: 'x/3.6'
             },
+            {
+                to: 'Light',
+                names: ['Light', 'c', 'lightspeed'],
+                func: (x) => {
+                    return x/1079252848.8;
+                },
+                text: 'x/1079252848.8'
+            },
         ]
     },
     {
@@ -2692,6 +2700,14 @@ export const values: convVal[] = [
                     return x / 2.237;
                 },
                 text: 'x/2.237'
+            },
+            {
+                to: 'Light',
+                names: ['Light', 'c', 'lightspeed'],
+                func: (x) => {
+                    return x/670635728.546;
+                },
+                text: 'x/670635728.546'
             },
         ]
     },
@@ -2733,6 +2749,14 @@ export const values: convVal[] = [
                 },
                 text: 'x/1.944'
             },
+            {
+                to: 'Light',
+                names: ['Light', 'c', 'lightspeed'],
+                func: (x) => {
+                    return x/582796538.352;
+                },
+                text: 'x/582796538.352'
+            },
         ]
     },
     {
@@ -2747,7 +2771,7 @@ export const values: convVal[] = [
                 func: (x) => {
                     return x * 3.6;
                 },
-                text: 'x*3.6'
+                text: 'x*3.6*299792458'
             },
             {
                 to: 'Miles per hour',
@@ -2768,6 +2792,62 @@ export const values: convVal[] = [
             {
                 to: 'Metres per second',
                 names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Light',
+                names: ['Light', 'c', 'lightspeed'],
+                func: (x) => {
+                    return x / 299792458;
+                },
+                text: 'x/299792458'
+            },
+        ]
+    },
+    {
+        name: 'Light',
+        names: ['Light', 'c', 'lightspeed'],
+        type: 'Distance',
+        system: 'Metric',
+        calc: [
+            {
+                to: 'Kilometres per hour',
+                names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+                func: (x) => {
+                    return x * 3.6 * 299792458;
+                },
+                text: 'x*3.6*299792458'
+            },
+            {
+                to: 'Miles per hour',
+                names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+                func: (x) => {
+                    return x * 2.237 * 299792458;
+                },
+                text: 'x*2.237*299792458'
+            },
+            {
+                to: 'Knot',
+                names: ['Knot', 'kt', 'nmih', 'nmh'],
+                func: (x) => {
+                    return x * 1.944 * 299792458;
+                },
+                text: 'x*1.944*299792458'
+            },
+            {
+                to: 'Metres per second',
+                names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                func: (x) => {
+                    return x * 299792458;
+                },
+                text: 'x*299792458'
+            },
+            {
+                to: 'Light',
+                names: ['Light', 'c', 'lightspeed'],
                 func: (x) => {
                     return x;
                 },

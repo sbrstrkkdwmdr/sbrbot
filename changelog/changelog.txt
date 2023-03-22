@@ -272,3 +272,4 @@ date_time
 commit:
 [FIX] fix null property in apiget causing crashes
 [QOL] update dependencies
+[ADD] add lightspeed to convert

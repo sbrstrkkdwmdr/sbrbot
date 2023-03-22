@@ -244,7 +244,7 @@ const cmds: commandInfo[] = [
                     'electronvolt (eV)', 'joule (j)', 'calorie (cal)',
                     'square metre (m2)', 'square kilometre (km2)', 'square mile (mi2)', 'hectare (ha)', 'acre (ac)',
                     'degree (deg)', 'gradian (grad)', 'radian (rad)',
-                    'metres per second (ms)', 'kilometres per hour (kmh)', 'miles per hour (mph)', 'knot/nautical miles per hour (kt)',
+                    'metres per second (ms)', 'kilometres per hour (kmh)', 'miles per hour (mph)', 'knot/nautical miles per hour (kt)', 'lightspeed (c)',
                     'help', 'SI units',
                 ],
                 defaultValue: 'N/A',

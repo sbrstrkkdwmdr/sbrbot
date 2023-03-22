@@ -176,7 +176,7 @@ export async function convert(input: extypes.commandInput) {
             {
                 name: 'Speed',
                 value: [
-                    'metres per second (ms)', 'kilometres per hour (kmh)', 'miles per hour (mph)', 'knot/nautical miles per hour (kt)',
+                    'metres per second (ms)', 'kilometres per hour (kmh)', 'miles per hour (mph)', 'knot/nautical miles per hour (kt)', 'lightspeed (c)'
                 ].join(' | '),
                 inline: true
             },
