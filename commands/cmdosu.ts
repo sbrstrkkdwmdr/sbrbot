@@ -19,6 +19,7 @@ import * as errors from '../src/consts/errors.js';
 import * as helpinfo from '../src/consts/helpinfo.js';
 import * as mainconst from '../src/consts/main.js';
 import * as embedStuff from '../src/embed.js';
+import * as formula from '../src/formulae.js';
 import * as log from '../src/log.js';
 import * as osufunc from '../src/osufunc.js';
 import * as osumodcalc from '../src/osumodcalc.js';
@@ -5098,7 +5099,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         });
 
     let useComponents = [pgbuttons, buttons];
-    let useFiles = []
+    let useFiles = [];
 
     if (list != true) {
         rsEmbed.setColor(colours.embedColour.score.dec);
@@ -5135,8 +5136,8 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             return;
         }
 
-        if(curscore.replay){
-            curscore.replay
+        if (curscore.replay) {
+            curscore.replay;
         }
 
         const curbm = curscore.beatmap;
@@ -6984,7 +6985,7 @@ export async function scorepost(input: extypes.commandInput) {
         } break;
         case 1: {
             titleString = `${order.name} | ${order.fullTitle} [${order.version}] + ${order.mods.length > 1 ? '+' + order.mods : ''} `
-            + `(${order.diff}, ${order.mapper}) ${order.acc} ${order.comboMin}/${order.comboMax} | ${order.pp}`
+                + `(${order.diff}, ${order.mapper}) ${order.acc} ${order.comboMin}/${order.comboMax} | ${order.pp}`;
         }
     }
 
@@ -10934,6 +10935,148 @@ export async function randomMap(input: extypes.commandInput) {
         log.logCommand({
             event: 'Error',
             commandName: 'map (random)',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
+}
+
+export async function recMap(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+    let searchid: string;
+    let user: string;
+    let baseDegree: number = 1;
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+            input.args = cleanArgs(input.args);
+            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+            searchid = input.obj.member.user.id;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
+            commanduser = input.obj.member.user;
+            searchid = input.obj.member.user.id;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+            searchid = input.obj.member.user.id;
+        }
+            break;
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'map (random)',
+        options: [
+            {
+                name: 'User',
+                value: user
+            },
+            {
+                name: 'Search ID',
+                value: searchid
+            }
+        ]
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    let txt = '';
+
+    let osudataReq: osufunc.apiReturn;
+
+    if (func.findFile(user, 'osudata', osufunc.modeValidator('')) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(''))) &&
+        input.button != 'Refresh'
+    ) {
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(''));
+    } else {
+        osudataReq = await osufunc.apiget({
+            type: 'user',
+            params: {
+                username: cmdchecks.toHexadecimal(user),
+                mode: osufunc.modeValidator('')
+            }
+        });
+    }
+
+    let osudata: osuApiTypes.User = osudataReq.apiData;
+
+    osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
+
+    if (osudata?.error || !osudata.id) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.noUser(user),
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'map (recommend)',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.noUser(user)
+        });
+        return;
+    }
+
+
+
+    const randomMap = osufunc.recommendMap(formula.recdiff(osudata.statistics.pp), baseDegree);
+    if (randomMap.err != null) {
+        txt = randomMap.err;
+    } else {
+        txt = `https://osu.ppy.sh/b/${randomMap.returnId}`;
+    }
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            content: txt
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'map (recommend)',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'map (recommend)',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,

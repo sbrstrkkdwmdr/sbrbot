@@ -375,7 +375,7 @@ export async function straincalc(mapid: number, mods: string, calctype: number, 
 
                     for (let i = 0; i < strains1.movement.length; i++) {
                         const offset = i;
-                        const curval = strains1.movement[offset]
+                        const curval = strains1.movement[offset];
                         totalval.push(curval);
 
                         const curtime = ((strains1.sectionLength / 1000) * (i + 1));
@@ -395,7 +395,7 @@ export async function straincalc(mapid: number, mods: string, calctype: number, 
 
                     for (let i = 0; i < strains1.strains.length; i++) {
                         const offset = i;
-                        const curval = strains1.strains[offset]
+                        const curval = strains1.strains[offset];
                         totalval.push(curval);
 
                         const curtime = ((strains1.sectionLength / 1000) * (i + 1));
@@ -2168,20 +2168,52 @@ export function randomMap(type?: 'Ranked' | 'Loved' | 'Approved' | 'Qualified' |
     let returnId = 4204;
     let errormsg = null;
     //check if cache exists
-    const cache = fs.existsSync('cache/commandData');
+    const cache = fs.existsSync(`${path}\\cache\\commandData`);
     if (cache) {
-        let mapsExist = fs.readdirSync('cache/commandData').filter(x => x.includes('mapdata'));
+        let mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
         if (type) {
             mapsExist = mapsExist.filter(x => x.includes(type));
         }
         if (mapsExist.length > 0) {
-            const curmap = JSON.parse(fs.readFileSync(`cache/commandData/${mapsExist[Math.floor(Math.random() * mapsExist.length)]}`, 'utf-8')) as apiReturn;
+            const curmap = JSON.parse(fs.readFileSync(`${path}\\commandData\\${mapsExist[Math.floor(Math.random() * mapsExist.length)]}`, 'utf-8')) as apiReturn;
             returnId = curmap?.apiData?.id ?? 4204;
         } else {
             errormsg = `No ${type ?? ''} maps found`;
         }
     } else {
-        errormsg = ' ';
+        errormsg = 'No maps found';
+    }
+    return {
+        returnId,
+        err: errormsg
+    };
+}
+
+export function recommendMap(baseRating: number, maxDifference: number) {
+    let returnId = 4204;
+    let errormsg = null;
+    //check if cache exists
+    const cache = fs.existsSync(`${path}\\cache\\commandData`);
+    if (cache) {
+        let mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
+        let maps: apiReturn[] = [];
+
+        for (const map in mapsExist) {
+            if (map.includes('.osu')) {
+                const dataAsStr = fs.readFileSync(`${path}\\cache\\commandData\\${map}`, 'utf-8');
+                maps.push(JSON.parse(dataAsStr) as apiReturn);
+            }
+        }
+
+        let filteredMaps = maps.filter(x => (x?.apiData?.difficulty_rating > baseRating - maxDifference && x?.apiData?.difficulty_rating < baseRating + maxDifference));
+        if (filteredMaps.length < 1) {
+            errormsg = `No maps within ${maxDifference}⭐ of ${baseRating}⭐ were found`;
+        } else {
+            const curmap = filteredMaps[Math.floor(Math.random() * filteredMaps.length)];
+            returnId = curmap?.apiData?.id;
+        }
+    } else {
+        errormsg = 'No maps were found';
     }
     return {
         returnId,
