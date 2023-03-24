@@ -1,6 +1,6 @@
 {
     "name": "sbrbot",
-    "version": "0.4.14",
+    "version": "0.4.16",
     "description": "",
     "main": "dist/main.js",
     "type": "module",
