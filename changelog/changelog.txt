@@ -268,7 +268,7 @@ commit: 3fc799cc5c28c4d6c88e7d6a8e1bdb750df0504c
 [QOL] added strains to other modes
 
 0.4.16
-date_time
+2023-03-24
 commit:
 [FIX] fix null property in apiget causing crashes
 [QOL] update dependencies
