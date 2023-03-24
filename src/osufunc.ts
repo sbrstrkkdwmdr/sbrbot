@@ -2198,16 +2198,18 @@ export function recommendMap(baseRating: number, maxDifference: number) {
         let mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
         let maps: apiReturn[] = [];
 
-        for (const map in mapsExist) {
-            if (map.includes('.osu')) {
-                const dataAsStr = fs.readFileSync(`${path}\\cache\\commandData\\${map}`, 'utf-8');
+        for (let i = 0; i < mapsExist.length; i++) {
+            if (mapsExist[i].includes('.json')) {
+                const dataAsStr = fs.readFileSync(`${path}\\cache\\commandData\\${mapsExist[i]}`, 'utf-8');
                 maps.push(JSON.parse(dataAsStr) as apiReturn);
             }
         }
 
         let filteredMaps = maps.filter(x => (x?.apiData?.difficulty_rating > baseRating - maxDifference && x?.apiData?.difficulty_rating < baseRating + maxDifference));
         if (filteredMaps.length < 1) {
-            errormsg = `No maps within ${maxDifference}⭐ of ${baseRating}⭐ were found`;
+            errormsg =
+                `No maps within ${maxDifference}⭐ of ${baseRating}⭐ were found
+total maps: ${maps.length}`;
         } else {
             const curmap = filteredMaps[Math.floor(Math.random() * filteredMaps.length)];
             returnId = curmap?.apiData?.id;

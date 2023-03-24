@@ -10947,13 +10947,32 @@ export async function recMap(input: extypes.commandInput) {
     let commanduser: Discord.User;
     let searchid: string;
     let user: string;
-    let baseDegree: number = 1;
+    let maxRange: number = 1;
 
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
+            if (input.args.includes('-range')) {
+                const temp = func.parseArg(input.args, '-range', 'number', maxRange, null, true);
+                maxRange = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-diff')) {
+                const temp = func.parseArg(input.args, '-diff', 'number', maxRange, null, true);
+                maxRange = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-r')) {
+                const temp = func.parseArg(input.args, '-r', 'number', maxRange, null, true);
+                maxRange = temp.value;
+                input.args = temp.newArgs;
+            }
             input.args = cleanArgs(input.args);
+            user = input.args.join(' ');
+            if (!input.args[0] || input.args[0].includes(searchid)) {
+                user = null;
+            }
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
         }
             break;
@@ -10996,6 +11015,10 @@ export async function recMap(input: extypes.commandInput) {
             {
                 name: 'Search ID',
                 value: searchid
+            },
+            {
+                name: 'Range',
+                value: maxRange
             }
         ]
     });
@@ -11003,6 +11026,22 @@ export async function recMap(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let txt = '';
+
+    //if user is null, use searchid
+    if (user == null) {
+        const cuser = await osufunc.searchUser(searchid, input.userdata, true);
+        user = cuser.username;
+    }
+
+    //if user is not found in database, use discord username
+    if (user == null) {
+        const cuser = input.client.users.cache.get(searchid);
+        user = cuser.username;
+    }
+
+    if(maxRange < 0.5){
+        maxRange = 0.5
+    }
 
     let osudataReq: osufunc.apiReturn;
 
@@ -11049,7 +11088,7 @@ export async function recMap(input: extypes.commandInput) {
 
 
 
-    const randomMap = osufunc.recommendMap(formula.recdiff(osudata.statistics.pp), baseDegree);
+    const randomMap = osufunc.recommendMap(JSON.parse((formula.osu.user.recdiff(osudata.statistics.pp)).toFixed(2)), maxRange ?? 1);
     if (randomMap.err != null) {
         txt = randomMap.err;
     } else {
@@ -13668,19 +13707,19 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         commandName: 'what if',
         options: [
             {
-                name: 'user',
+                name: 'User',
                 value: user
             },
             {
-                name: 'pp',
+                name: 'Performance Points',
                 value: pp
             },
             {
-                name: 'mode',
+                name: 'Mode',
                 value: mode
             },
             {
-                name: 'searchid',
+                name: 'Search ID',
                 value: searchid
             }
         ]

@@ -273,3 +273,4 @@ commit:
 [FIX] fix null property in apiget causing crashes
 [QOL] update dependencies
 [ADD] add lightspeed to convert
+[ADD] added recommend map

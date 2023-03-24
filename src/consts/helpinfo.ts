@@ -930,7 +930,7 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Returns a random ranked beatmap'
             }
         ],
-        aliases: ['f2', 'maprand', 'mapsuggest', 'randommap', 'randmap'],
+        aliases: ['f2', 'maprand', 'randommap', 'randmap'],
         options: [{
             name: 'Type',
             type: 'string',
@@ -941,6 +941,41 @@ const osucmds: commandInfo[] = [
             examples: ['-ranked', '-wip'],
             commandTypes: ['message', 'interaction']
         }]
+    },
+    {
+        name: 'maprecommend',
+        description: 'Recommends a random map based off of your total performance',
+        usage: 'maprecommend [-range] [user]',
+        slashusage: 'maprecommend [range] [user]',
+        examples: [
+            {
+                text: 'PREFIXMSGmaprec -range 2 SaberStrike',
+                descriptor: 'Recommends a random map for SaberStrike with a maximum star rating difference of 2'
+            }
+        ],
+        aliases: ['recmap', 'recommendmap', 'maprec', 'mapsuggest', 'suggestmap'],
+        options: [
+            {
+                name: 'user',
+                type: 'string/ integer/ user mention',
+                required: false,
+                description: 'The user to check the performance of',
+                options: ['N/A'],
+                defaultValue: 'The user who ran the command',
+                examples: ['SaberStrike', 'user:15222484'],
+                commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'range',
+                type: 'float',
+                required: false,
+                description: 'The maximum difference in star rating the recommended map can be',
+                options: ['range', 'r', 'diff'],
+                defaultValue: '1',
+                examples: ['-range 0.5'],
+                commandTypes: ['message', 'interaction']
+            },
+        ]
     },
     {
         name: 'nochokes',
