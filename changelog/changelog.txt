@@ -269,7 +269,7 @@ commit: 3fc799cc5c28c4d6c88e7d6a8e1bdb750df0504c
 
 0.4.16
 2023-03-24
-commit:
+commit: ddf104c2d6954e726f9662ad2dc2220db561af12
 [FIX] fix null property in apiget causing crashes
 [QOL] update dependencies
 [ADD] add lightspeed to convert
