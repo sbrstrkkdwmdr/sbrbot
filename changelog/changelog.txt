@@ -279,3 +279,4 @@ commit: ddf104c2d6954e726f9662ad2dc2220db561af12
 date_time
 commit:
 [FIX] fix get fail point crashing
+[FIX] fix compare freezing/crashing when comparing scores

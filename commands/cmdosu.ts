@@ -205,7 +205,7 @@ export async function badges(input: extypes.commandInput & { statsCache: any; })
                         `Awarded <t:${new Date(badge.awarded_at).getTime() / 1000}:R>
 ${badge.url.length != 0 ? `[Forum post](${badge.url})` : ''}
 ${badge.image_url.length != 0 ? `[Image](${badge.image_url})` : ''}`,
-                    inline: false
+                    inline: true
                 }
             );
         }
@@ -11039,8 +11039,8 @@ export async function recMap(input: extypes.commandInput) {
         user = cuser.username;
     }
 
-    if(maxRange < 0.5){
-        maxRange = 0.5
+    if (maxRange < 0.5) {
+        maxRange = 0.5;
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -12830,7 +12830,7 @@ export async function compare(input: extypes.commandInput) {
     const usefields: Discord.EmbedField[] = [];
 
     const useComponents: Discord.ActionRowBuilder[] = [];
-    let embedescription = null;
+    let embedescription: string = null;
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
@@ -13041,8 +13041,6 @@ export async function compare(input: extypes.commandInput) {
                 embedTitle = 'Comparing top scores';
                 const arrscore = [];
 
-
-
                 for (let i = 0; i < filterfirst.length && i < 5; i++) {
                     const firstscore: osuApiTypes.Score = filterfirst[i + (page * 5)];
                     if (!firstscore) break;
@@ -13059,15 +13057,15 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                     );
                 }
 
-                const scores = arrscore.length > 0 ? arrscore.slice().join('\n') : 'No shared scores';
-
                 embedescription = `**[${firstuser.username}](https://osu.ppy.sh/u/${firstuser.id})** and **[${seconduser.username}](https://osu.ppy.sh/u/${seconduser.id})** have ${filterfirst.length} shared scores
                 Page: ${page + 1}/${Math.ceil(filterfirst.length / 5)}`;
-
-                fieldFirst.name = '‎ ';
-                fieldFirst.value = scores;
-                usefields.push(fieldFirst);
-
+                for (const score of arrscore) {
+                    usefields.push({
+                        name: def.invisbleChar,
+                        value: score,
+                        inline: false
+                    });
+                }
 
                 const pgbuttons: Discord.ActionRowBuilder = await pageButtons('compare', commanduser, input.absoluteID);
 
@@ -13123,8 +13121,8 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
             text: `${embedStyle}`
         })
         .setTitle(embedTitle)
-        .addFields(usefields);
-    if (embedescription) embed.setDescription(embedescription);
+        .setFields(usefields);
+    if (embedescription != null && embedescription.length > 0) { embed.setDescription(embedescription); }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({

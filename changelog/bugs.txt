@@ -147,11 +147,11 @@ additional notes: string
 #12)
     status: WIP
     issue: page buttons in common command dont' work
-    cause: const embed = new Discord.EmbedBuilder() freezing
+    cause: const embed = new Discord.EmbedBuilder() freezing (embed field value overflow error)
     author: sbrstrkkdwmdr
     found: 2023-03-25 12:18 AEDT (UTC+11)
-    fixed: 
-    solution: 
+    fixed: 2023-03-25 14:41 AEDT (UTC+11)
+    solution: change scores to be multiple fields rather than one
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
