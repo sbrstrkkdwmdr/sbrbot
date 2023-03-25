@@ -274,3 +274,8 @@ commit: ddf104c2d6954e726f9662ad2dc2220db561af12
 [QOL] update dependencies
 [ADD] add lightspeed to convert
 [ADD] added recommend map
+
+0.4.17
+date_time
+commit:
+[FIX] fix get fail point crashing

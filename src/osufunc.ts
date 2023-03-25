@@ -2449,10 +2449,16 @@ export async function getFailPoint(
 ) {
     let time = 1000;
     if (fs.existsSync(mapPath)) {
-        const decoder = new osuparsers.BeatmapDecoder();
-        const beatmap = decoder.decodeFromPath(mapPath, false) as osuparsertypes.Beatmap;
-        const objectOfFail = beatmap.hitObjects[objectsPassed - 1];
-        time = objectOfFail.startTime;
+        try {
+            const decoder = new osuparsers.BeatmapDecoder();
+            const beatmap = decoder.decodeFromPath(mapPath, false) as osuparsertypes.Beatmap;
+            if (objectsPassed == null || objectsPassed < 1) {
+                objectsPassed = 1;
+            }
+            const objectOfFail = beatmap.hitObjects[objectsPassed - 1];
+            time = objectOfFail.startTime;
+        } catch (error) {
+        }
     }
     return time;
 }
