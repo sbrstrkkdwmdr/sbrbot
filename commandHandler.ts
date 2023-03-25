@@ -187,7 +187,7 @@ export default (input: {
             'bws', 'badgeweightsystem', 'badgeweight', 'badgeweightseed', 'badgerank',
             'compare', 'common',
             'firsts', 'firstplaceranks', 'fpr', 'fp', '#1s', 'first', '#1', '1s',
-            'globals',
+            'globals', 'osc', 'osustatscount',
             'leaderboard', 'maplb', 'mapleaderboard',
             'lb',
             'map', 'm',
@@ -247,6 +247,10 @@ export default (input: {
             'crash', 'debug', 'servers'
         ];
 
+        const disabled = [
+            'globals', 'osc', 'osustatscount',
+        ];
+
         let allowed = true;
         let missingPermsBot: string[] = [];
         let missingPermsUser: string[] = [];
@@ -279,6 +283,10 @@ export default (input: {
         ) {
             checkcmds.noperms(commandType, obj, 'user', canReply, missingPermsUser.join(', '));
             allowed = false;
+        }
+
+        if(disabled.includes(command)){
+            checkcmds.disabled(commandType, obj, 'command');
         }
 
         return allowed;

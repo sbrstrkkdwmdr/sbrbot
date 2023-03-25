@@ -280,3 +280,4 @@ date_time
 commit:
 [FIX] fix get fail point crashing
 [FIX] fix compare freezing/crashing when comparing scores
+[FIX] disabled osc (respektive api is offline)

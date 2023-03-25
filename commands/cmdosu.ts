@@ -617,9 +617,26 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         }
     }
 
-    const baseURL = `https://osustats.respektive.pw/counts/`;
+    const baseURL = `NULL`;
+    // `https://osustats.respektive.pw/counts/`;
+    // ^^^ offline as of 2023-03-24
+    const data =
+    {
+        top1s: 0,
+        top8s: 0,
+        top15s: 0,
+        top25s: 0,
+        top50s: 0,
+        top100s: 0,
+        top1s_rank: NaN,
+        top8s_rank: NaN,
+        top15s_rank: NaN,
+        top25s_rank: NaN,
+        top50s_rank: NaN,
+        top100s_rank: NaN,
 
-    const data = await func.fetch(baseURL + osudata.id) as othertypes.osustatsType;
+    };
+    //await func.fetch(baseURL + osudata.id) as othertypes.osustatsType;
 
     const countsEmbed = new Discord.EmbedBuilder()
         .setAuthor({
