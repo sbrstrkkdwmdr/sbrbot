@@ -143,3 +143,15 @@ additional notes: string
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
+        
+#12)
+    status: WIP
+    issue: page buttons in common command dont' work
+    cause: const embed = new Discord.EmbedBuilder() freezing
+    author: sbrstrkkdwmdr
+    found: 2023-03-25 12:18 AEDT (UTC+11)
+    fixed: 
+    solution: 
+    additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
