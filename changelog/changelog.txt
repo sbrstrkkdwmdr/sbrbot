@@ -277,7 +277,7 @@ commit: ddf104c2d6954e726f9662ad2dc2220db561af12
 
 0.4.17
 2023-03-26
-commit: 01e89aaa5dd696b955f3ce6c3d5ddfae4aae90cd
+commit: 687aa84a0698b1a77ea78b3f5d4331a075b6d043
 [FIX] fix get fail point crashing
 [FIX] fix compare freezing/crashing when comparing scores
 [FIX] disabled osc (respektive api is offline)
