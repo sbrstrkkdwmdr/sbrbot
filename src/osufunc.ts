@@ -2451,14 +2451,19 @@ export async function getFailPoint(
     if (fs.existsSync(mapPath)) {
         try {
             const decoder = new osuparsers.BeatmapDecoder();
-            const beatmap = decoder.decodeFromPath(mapPath, false) as osuparsertypes.Beatmap;
+            const beatmap = await decoder.decodeFromPath(mapPath, false) as osuparsertypes.Beatmap;
             if (objectsPassed == null || objectsPassed < 1) {
                 objectsPassed = 1;
             }
             const objectOfFail = beatmap.hitObjects[objectsPassed - 1];
             time = objectOfFail.startTime;
         } catch (error) {
+            console.log("passed: " + objectsPassed);
+            console.log("path: " + mapPath);
+            console.log(error);
         }
+    } else {
+        console.log("Path does not exist:" + mapPath);
     }
     return time;
 }
