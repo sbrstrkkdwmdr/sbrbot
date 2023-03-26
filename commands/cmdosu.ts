@@ -5449,7 +5449,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                     .setDescription(`
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
-${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
+<t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 ${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\` | ${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo
 **${rspp}**pp ${fcflag}\n${ppissue}
@@ -5461,7 +5461,7 @@ ${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\` | ${curscore.max
                     .setDescription(`
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
-${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
+<t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}
 `)
                     .addFields([
@@ -5512,7 +5512,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                     .setDescription(`
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
-${new Date(curscore.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')}
+<t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}`)
                     .addFields([
                         {
@@ -6567,7 +6567,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             scoreembed
                 .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
 ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
-${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
+<t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 \`${hitlist}\`
 ${scoredata?.pp?.toFixed(2) ?? 'null '}pp
 `);
@@ -6578,7 +6578,7 @@ ${scoredata?.pp?.toFixed(2) ?? 'null '}pp
             scoreembed
                 .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
 ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
-${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
+<t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 [Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
 \`${hitlist}\`
 ${scoredata.max_combo == mapdata.max_combo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mapdata.max_combo}x**
@@ -6633,7 +6633,7 @@ ${pptxt}\n${ppissue}
             scoreembed
                 .setDescription(`
 ${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
-${new Date(scoredata.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '')} | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
+<t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 `)
                 .addFields([
                     {

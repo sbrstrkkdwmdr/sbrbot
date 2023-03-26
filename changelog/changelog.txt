@@ -282,3 +282,4 @@ commit:
 [FIX] fix compare freezing/crashing when comparing scores
 [FIX] disabled osc (respektive api is offline)
 [FIX] fix get fail point showing wrong fail time
+[QOL] score dates use discord timestamps - time/date now matches the user rather than just using UTC+0 (ie an australian will see 18:16 instead of 07:16)
