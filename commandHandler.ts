@@ -287,6 +287,7 @@ export default (input: {
 
         if(disabled.includes(command)){
             checkcmds.disabled(commandType, obj, 'command');
+            allowed = false;
         }
 
         return allowed;
