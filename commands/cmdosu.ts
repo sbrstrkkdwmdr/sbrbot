@@ -11112,6 +11112,23 @@ export async function recMap(input: extypes.commandInput) {
         txt = `https://osu.ppy.sh/b/${randomMap.returnId}`;
     }
 
+    const embed = new Discord.EmbedBuilder()
+        .setTitle('Map recommendation')
+        .setDescription(`
+Random map within ${maxRange}⭐ of ${formula.osu.user.recdiff(osudata.statistics.pp)}
+${txt}
+`);
+    if (randomMap.err == null) {
+        input.overrides = {
+            id: randomMap.returnId,
+            commanduser,
+            commandAs: input.commandType
+        };
+
+        await map(input);
+    }
+
+
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
