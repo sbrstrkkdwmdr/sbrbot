@@ -8651,7 +8651,7 @@ export async function map(input: extypes.commandInput) {
     let customOD: 'current' | number = 'current';
     let customHP: 'current' | number = 'current';
 
-    let useContent: string = null;
+    let useContent: string = '';
 
     let showBg = false;
 
@@ -8939,6 +8939,9 @@ export async function map(input: extypes.commandInput) {
         }
         if (input.overrides?.filterMods != null) {
             mapmods = input.overrides.filterMods;
+        }
+        if (input.overrides?.ex != null) {
+            useContent += input.overrides?.ex;
         }
     }
 
@@ -10933,13 +10936,27 @@ export async function randomMap(input: extypes.commandInput) {
     } else {
         txt = `https://osu.ppy.sh/b/${randomMap.returnId}`;
     }
+    const embed = new Discord.EmbedBuilder()
+        .setTitle('Random map')
+        .setDescription(txt);
+
+    if (randomMap.err == null) {
+        input.overrides = {
+            id: randomMap.returnId,
+            commanduser,
+            commandAs: input.commandType
+        };
+
+        await map(input);
+        return;
+    }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            content: txt
+            embeds: [embed]
         }
     }, input.canReply);
 
@@ -11125,10 +11142,12 @@ ${txt}
         input.overrides = {
             id: randomMap.returnId,
             commanduser,
-            commandAs: input.commandType
+            commandAs: input.commandType,
+            ex: `\nRandom map within ${maxRange}⭐ of ${formula.osu.user.recdiff(osudata.statistics.pp)} `
         };
-
+        
         await map(input);
+        return;
     }
 
 
@@ -11137,7 +11156,7 @@ ${txt}
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            content: txt
+            embeds: [embed]
         }
     }, input.canReply);
 
@@ -11214,8 +11233,8 @@ export async function maplocal(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let mapPath: string = '';
-    if (fs.existsSync(`${filespath}\\localmaps\\${input.absoluteID}.osu`)) {
-        mapPath = `${filespath}\\localmaps\\${input.absoluteID}.osu`;
+    if (fs.existsSync(`${ filespath; } \\localmaps\\${ input.absoluteID; }.osu`)) {
+        mapPath = `${ filespath; } \\localmaps\\${ input.absoluteID; }.osu`;
     } else {
         return;
     }
@@ -11243,15 +11262,15 @@ export async function maplocal(input: extypes.commandInput) {
         clockRate = 0.75;
     }
     let bpmTxt = bpm.min == bpm.max ?
-        `${(bpm.mode * clockRate)?.toFixed(2)}` :
-        `${(bpm.min * clockRate)?.toFixed(2)}-${(bpm.max * clockRate)?.toFixed(2)}(${(bpm.mode * clockRate)?.toFixed(2)})`;
+        `${ (bpm.mode * clockRate)?.toFixed(2); } ` :
+        `${ (bpm.min * clockRate)?.toFixed(2); } -${ (bpm.max * clockRate)?.toFixed(2); } (${ (bpm.mode * clockRate)?.toFixed(2); })`;
 
 
     let ppcalcing: PerformanceAttributes[];
     try {
         ppcalcing = await osufunc.mapcalclocal(mods, 'osu', mapPath, 0);
     } catch (error) {
-        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', `${filespath}/errmap.osu`, 0);
+        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', `${ filespath; } /errmap.osu`, 0);;
         errtxt += '\nError - pp calculations failed';
     }
     let strains;
