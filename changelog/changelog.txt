@@ -284,3 +284,8 @@ commit: 687aa84a0698b1a77ea78b3f5d4331a075b6d043
 [FIX] fix get fail point showing wrong fail time
 [QOL] score dates use discord timestamps - time/date now matches the user rather than just using UTC+0 (ie an australian will see 18:16 instead of 07:16)
 [FIX] disabled commands still running
+
+0.4.18
+date_time
+commit:
+[QOL] added median to scorestats

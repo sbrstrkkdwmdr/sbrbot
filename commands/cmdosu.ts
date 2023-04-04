@@ -8102,6 +8102,7 @@ export async function scorestats(input: extypes.commandInput) {
 Highest: ${(acc?.highest * 100)?.toFixed(2)}%
 Lowest: ${(acc?.lowest * 100)?.toFixed(2)}%
 Average: ${(acc?.average * 100)?.toFixed(2)}%
+Median: ${(acc?.median * 100)?.toFixed(2)}%
 ${acc?.ignored > 0 ? `Skipped: ${acc?.ignored}` : ''}
 `,
                 inline: true
@@ -8112,6 +8113,7 @@ ${acc?.ignored > 0 ? `Skipped: ${acc?.ignored}` : ''}
 Highest: ${pp?.highest?.toFixed(2)}pp
 Lowest: ${pp?.lowest?.toFixed(2)}pp
 Average: ${pp?.average?.toFixed(2)}pp
+Median: ${pp?.median?.toFixed(2)}pp
 ${pp?.ignored > 0 ? `Skipped: ${pp?.ignored}` : ''}
 `,
                 inline: true
@@ -8121,7 +8123,8 @@ ${pp?.ignored > 0 ? `Skipped: ${pp?.ignored}` : ''}
                 value: `
 Highest: ${combo?.highest}
 Lowest: ${combo?.lowest}
-Average: ${combo?.average}
+Average: ${Math.floor(combo?.average)}
+Median: ${combo?.median}
 ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
 `,
                 inline: true

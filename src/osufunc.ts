@@ -2075,6 +2075,7 @@ type stat = {
     highest: number,
     average: number,
     lowest: number,
+    median: number,
     ignored?: number,
 };
 
@@ -2087,10 +2088,21 @@ export function Stats(arr: number[]) {
     const init = arr.slice();
     arr = arr.filter(x => x != null);
     arr.sort((a, b) => b - a);
+    let median = 0;
+    //if even, else
+    if (arr.length % 2 == 1) {
+        median = arr[Math.floor(arr.length / 2)];
+    } else {
+        let temp1 = arr[arr.length / 2];
+        let temp2 = arr[(arr.length / 2) + 1];
+        median = (temp1 + temp2) / 2;
+    }
+
     const stats: stat = {
         highest: arr[0],
         average: arr.reduce((b, a) => b + a, 0) / arr.length,
         lowest: arr[arr.length - 1],
+        median: median,
         ignored: init.length - arr.length
     };
     return stats;
