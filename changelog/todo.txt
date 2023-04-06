@@ -308,7 +308,6 @@ author:
     request date: 2023-02-13 11:36 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr
-    author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
 ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
@@ -320,7 +319,6 @@ author:
     priority: medium
     request date: 2023-02-15 18:35 AEDT (UTC+11)
     finish date: 2023-02-18 11:49 AEDT (UTC+11)
-    author: sbrstrkkdwmdr
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
@@ -338,7 +336,6 @@ author:
     request date: 2023-02-17 18:36 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr
-    author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
 ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
@@ -349,7 +346,6 @@ author:
     priority: medium
     request date: 2023-02-19 10:07 AEDT (UTC+11)
     finish date: ehh
-    author: sbrstrkkdwmdr
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
@@ -362,7 +358,6 @@ author:
     request date: 2023-02-24 09:29 AEDT (UTC+11)
     finish date: 2023-02-24 10:33 AEDT (UTC+11)
     author: sbrstrkkdwmdr
-    author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
 ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
@@ -373,7 +368,6 @@ author:
     priority: medium
     request date: 2023-03-03 07:58 AEDT (UTC+11)
     finish date: 2023-03-10 12:04 AEDT (UTC+11)
-    author: sbrstrkkdwmdr
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
@@ -386,4 +380,14 @@ author:
     request date: 2023-03-11 20:59 AEDT (UTC+11)
     finish date: 2023-03-12 11:28 AEDT (UTC+11)
     author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#34)
+    description: add commands - hug, kiss, slap, urban
+    type: new command
+    status: WIP
+    priority: medium
+    request date: 2023-04-06 09:30 AEDT (UTC+11)
+    finish date: 
     author: sbrstrkkdwmdr

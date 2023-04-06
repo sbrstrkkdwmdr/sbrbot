@@ -154,12 +154,12 @@ export async function coin(input: extypes.commandInput) {
 
     const msg = arr[Math.floor(Math.random() * arr.length)];
 
-    const file = new Discord.AttachmentBuilder(`${precomppath}\\files\\img\\coin\\${msg}.png`)
+    const file = new Discord.AttachmentBuilder(`${precomppath}\\files\\img\\coin\\${msg}.png`);
 
     const embed = new Discord.EmbedBuilder()
         .setTitle(msg)
         .setImage(`attachment://${msg}.png`)
-        
+
         ;
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -191,6 +191,92 @@ export async function coin(input: extypes.commandInput) {
         });
     }
 
+}
+
+export async function duckify(input: extypes.commandInput) {
+
+    let commanduser: Discord.User;
+    let string: string = '';
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+            string = input.args.join(' ');
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+            string = input.obj.options.getString('text');
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'duckify',
+        options: [{
+            name: 'text',
+            value: string
+        }]
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    const frStr = string.split(' ');
+    let returnString:string ='';
+    for(const string in frStr){
+        returnString += 'quack '
+    }
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'COMMANDNAME',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'COMMANDNAME',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send',
+        });
+    }
 }
 
 /**
