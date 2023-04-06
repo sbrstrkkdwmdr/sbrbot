@@ -184,7 +184,7 @@ export async function badges(input: extypes.commandInput & { statsCache: any; })
             })
             .setAuthor({
                 name: `${osudata.username} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-                url: `https://osu.ppy.sh/u/${osudata.id}`,
+                url: `https://osu.ppy.sh/users/${osudata.id}`,
                 iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
             })
             .setTitle(`${osudata.username}s Badges`)
@@ -395,7 +395,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
         })
         .setAuthor({
             name: `${osudata.username} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
         .setTitle(`Badge weighting for ${osudata.username}`)
@@ -641,7 +641,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
     const countsEmbed = new Discord.EmbedBuilder()
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
         .setTitle(`Top X leaderboard counts for ${osudata.username}`)
@@ -1326,7 +1326,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
                 {
                     name: `${i + 1 + (page * 5)}`,
                     value:
-                        `:flag_${curuser.user.country_code.toLowerCase()}: [${curuser.user.username}](https://osu.ppy.sh/u/${curuser.user.id}/${mode})
+                        `:flag_${curuser.user.country_code.toLowerCase()}: [${curuser.user.username}](https://osu.ppy.sh/users/${curuser.user.id}/${mode})
 #${curuser.global_rank == null ?
                             '---' :
                             func.separateNum(curuser.global_rank)
@@ -2542,7 +2542,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
         .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osudata.playmode}#recent`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
@@ -2999,7 +2999,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
         ;
@@ -3646,7 +3646,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                     break;
             }
             scoretxt += `
-**[Score #${i + (page * 5) + 1}](https://osu.ppy.sh/scores/${mode}/${score.score_id}) | [${score.username}](https://osu.ppy.sh/u/${score.user_id})**
+**[Score #${i + (page * 5) + 1}](https://osu.ppy.sh/scores/${mode}/${score.score_id}) | [${score.username}](https://osu.ppy.sh/users/${score.user_id})**
 Score set on ${score.date}
 ${(acc).toFixed(2)}% | ${score.rank} | ${score.pp}
 ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${score.maxcombo}x/**${mapdata.max_combo}x**
@@ -4091,7 +4091,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osutopdata?.[0]?.mode ?? osufunc.modeValidator(mode)}#top_ranks`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
     const scoresarg = await embedStuff.scoreList(
@@ -4536,7 +4536,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
 
@@ -5111,7 +5111,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         })
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
 
@@ -5439,7 +5439,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             .setURL(`https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}`)
             .setAuthor({
                 name: `${trycountstr} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-                url: `https://osu.ppy.sh/u/${osudata.id}`,
+                url: `https://osu.ppy.sh/users/${osudata.id}`,
                 iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
             })
             .setThumbnail(`${curbms.covers.list}`);
@@ -6555,7 +6555,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         .setColor(colours.embedColour.score.dec)
         .setAuthor({
             name: `${osudata.username} | #${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
         })
         .setTitle(`${artist} - ${title}`)
@@ -7823,8 +7823,8 @@ export async function scorestats(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
             searchid = commanduser.id;
-            user = input.obj.message.embeds[0].author.url.split('/u/')[1].split('/')[0];
-            mode = input.obj.message.embeds[0].author.url.split('/u/')[1].split('/')[1] as osuApiTypes.GameMode;
+            user = input.obj.message.embeds[0].author.url.split('/users/')[1].split('/')[0];
+            mode = input.obj.message.embeds[0].author.url.split('/users/')[1].split('/')[1] as osuApiTypes.GameMode;
             //user's {type} scores
             scoreTypes = input.obj.message.embeds[0].title.split(' scores')[0].split(' ')[0].toLowerCase() as scoretypes;
         }
@@ -8019,7 +8019,7 @@ export async function scorestats(input: extypes.commandInput) {
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}/${osufunc.modeValidator(mode)}`,
+            url: `https://osu.ppy.sh/users/${osudata.id}/${osufunc.modeValidator(mode)}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
     if (scoresdata.length == 0) {
@@ -9675,7 +9675,7 @@ HP${baseHP}`;
             .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
             .setAuthor({
                 name: `${mapdata.beatmapset.creator}`,
-                url: `https://osu.ppy.sh/u/${mapperdata.id}`,
+                url: `https://osu.ppy.sh/users/${mapperdata.id}`,
                 iconURL: `${mapperdata?.avatar_url ?? def.images.any.url}`,
             })
             .setThumbnail(osufunc.getMapImages(mapdata.beatmapset_id).list2x)
@@ -9760,7 +9760,7 @@ HP${baseHP}`;
                 });
             }
             func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
-            Embed.setDescription(`Guest difficulty by [${gdData?.username}](https://osu.ppy.sh/u/${mapdata.user_id})`);
+            Embed.setDescription(`Guest difficulty by [${gdData?.username}](https://osu.ppy.sh/users/${mapdata.user_id})`);
 
             buttons
                 .addComponents(
@@ -11145,7 +11145,7 @@ ${txt}
             commandAs: input.commandType,
             ex: `\nRandom map within ${maxRange}⭐ of ${formula.osu.user.recdiff(osudata.statistics.pp)} `
         };
-        
+
         await map(input);
         return;
     }
@@ -11233,8 +11233,8 @@ export async function maplocal(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let mapPath: string = '';
-    if (fs.existsSync(`${ filespath; } \\localmaps\\${ input.absoluteID; }.osu`)) {
-        mapPath = `${ filespath; } \\localmaps\\${ input.absoluteID; }.osu`;
+    if (fs.existsSync(`${filespath} \\localmaps\\${input.absoluteID}.osu`)) {
+        mapPath = `${filespath} \\localmaps\\${input.absoluteID}.osu`;
     } else {
         return;
     }
@@ -11262,15 +11262,15 @@ export async function maplocal(input: extypes.commandInput) {
         clockRate = 0.75;
     }
     let bpmTxt = bpm.min == bpm.max ?
-        `${ (bpm.mode * clockRate)?.toFixed(2); } ` :
-        `${ (bpm.min * clockRate)?.toFixed(2); } -${ (bpm.max * clockRate)?.toFixed(2); } (${ (bpm.mode * clockRate)?.toFixed(2); })`;
+        `${(bpm.mode * clockRate)?.toFixed(2)} ` :
+        `${(bpm.min * clockRate)?.toFixed(2)} -${(bpm.max * clockRate)?.toFixed(2)} (${(bpm.mode * clockRate)?.toFixed(2)})`;
 
 
     let ppcalcing: PerformanceAttributes[];
     try {
         ppcalcing = await osufunc.mapcalclocal(mods, 'osu', mapPath, 0);
     } catch (error) {
-        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', `${ filespath; } /errmap.osu`, 0);;
+        ppcalcing = await osufunc.mapcalclocal(mods, 'osu', `${filespath}/errmap.osu`, 0);
         errtxt += '\nError - pp calculations failed';
     }
     let strains;
@@ -12021,10 +12021,10 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
-        .setURL(`https://osu.ppy.sh/u/${osudata.id}/${osudata.playmode}#beatmaps`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osudata.playmode}#beatmaps`)
         .setColor(colours.embedColour.userlist.dec)
         .setDescription(`
         ${mapsarg.filter}
@@ -12682,7 +12682,7 @@ export async function tracklist(input: extypes.commandInput) {
         .setTitle(`All tracked users in ${input.obj.guild.name}`)
         .setColor(colours.embedColour.userlist.dec)
         .setDescription(`There are ${userList.length} users being tracked in this server\n\n` +
-            `${userList.map((user, i) => `${i + 1}. [${user.mode}]https://osu.ppy.sh/u/${user.osuid}`).join('\n')}`
+            `${userList.map((user, i) => `${i + 1}. [${user.mode}]https://osu.ppy.sh/users/${user.osuid}`).join('\n')}`
         );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -13113,7 +13113,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                     );
                 }
 
-                embedescription = `**[${firstuser.username}](https://osu.ppy.sh/u/${firstuser.id})** and **[${seconduser.username}](https://osu.ppy.sh/u/${seconduser.id})** have ${filterfirst.length} shared scores
+                embedescription = `**[${firstuser.username}](https://osu.ppy.sh/users/${firstuser.id})** and **[${seconduser.username}](https://osu.ppy.sh/users/${seconduser.id})** have ${filterfirst.length} shared scores
                 Page: ${page + 1}/${Math.ceil(filterfirst.length / 5)}`;
                 for (const score of arrscore) {
                     usefields.push({
@@ -13928,7 +13928,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setAuthor({
             name: `#${func.separateNum(osudata?.statistics?.global_rank)} | #${func.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${func.separateNum(osudata?.statistics?.pp)}pp`,
-            url: `https://osu.ppy.sh/u/${osudata.id}`,
+            url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         })
         .setDescription(
