@@ -238,7 +238,7 @@ const cmds: commandInfo[] = [
                     'celsius (c)', 'fahrenheit (f)', 'kelvin (k)',
                     'inch (in)', 'foot (ft)', 'metre (m)', 'mile (mi)', 'astronomical unit (au)', 'light year (ly)',
                     'second (s)', 'minute (min)', 'hour (h)', 'day (d)', 'week (wk)', 'month (mth)', 'year (y)',
-                    'teaspoon (tsp)', 'tablespoon (tbp)',  'fluid ounce (floz)', 'cup (c)', 'pint (pt)', 'litre (l)', 'gallon (gal)', 'cubic metres (m3)',
+                    'teaspoon (tsp)', 'tablespoon (tbp)', 'fluid ounce (floz)', 'cup (c)', 'pint (pt)', 'litre (l)', 'gallon (gal)', 'cubic metres (m3)',
                     'gram (g)', 'ounce (oz)', 'pound (lb)', 'stone (st)', 'us ton (t)', 'metric tonne (mt)',
                     'pascal (Pa)', 'millimetre of mercury/torr (mmHg)', 'pounds per square inch (psi)', 'bar', 'standard atmosphere (atm)',
                     'electronvolt (eV)', 'joule (j)', 'calorie (cal)',
@@ -2198,31 +2198,41 @@ const othercmds: commandInfo[] = [
         aliases: ['coinflip', 'flip'],
         options: []
     },
-    // {
-    //     name: 'gif',
-    //     description: 'Sends a gif',
-    //     usage: 'gif [type]',
-    //     slashusage: 'gif [type]',
-    //     examples: [
-    //         {
-    //             text: '/gif type:cry about it',
-    //             descriptor: 'Sends a random gif in the category "cry about it"'
-    //         }
-    //     ],
-    //     aliases: [],
-    //     options: [
-    //         {
-    //             name: 'type',
-    //             type: 'string',
-    //             required: true,
-    //             description: 'The type of gif to send',
-    //             options: [],
-    //             defaultValue: 'N/A',
-    //             examples: [''],
-    //             commandTypes: ['message', 'interaction']
-    //         }
-    //     ]
-    // },
+    {
+        name: 'gif',
+        description: 'Sends a gif',
+        usage: '<type> [target]',
+        slashusage: '<type> <target>',
+        examples: [
+            {
+                text: '/slap @SaberStrike',
+                descriptor: 'Sends a random gif matching "slap"'
+            }
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'type',
+                type: 'string',
+                required: true,
+                description: 'The type of gif to send',
+                options: ['hug', 'kiss', 'lick', 'pet', 'punch', 'slap'],
+                defaultValue: 'N/A',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'target',
+                type: 'user mention',
+                required: true,
+                description: 'The user to target',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            }
+        ]
+    },
     {
         name: 'image',
         description: 'Sends an image',

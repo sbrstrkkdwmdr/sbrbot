@@ -382,12 +382,12 @@ author:
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-
+✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #34)
     description: add commands - hug, kiss, slap, urban
     type: new command
-    status: WIP
+    status: FINISHED
     priority: medium
     request date: 2023-04-06 09:30 AEDT (UTC+11)
-    finish date: 
+    finish date: 2023-04-09 14:30 AEDT (UTC+11)
     author: sbrstrkkdwmdr

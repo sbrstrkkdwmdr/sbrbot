@@ -285,7 +285,7 @@ export default (input: {
             allowed = false;
         }
 
-        if(disabled.includes(command)){
+        if (disabled.includes(command)) {
             checkcmds.disabled(commandType, obj, 'command');
             allowed = false;
         }
@@ -335,6 +335,43 @@ export default (input: {
             case 'coin': case 'coinflip': case 'flip':
                 misccmds.coin({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
+            case 'hug':
+                overrides = {
+                    ex: 'hug'
+                };
+                misccmds.gif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
+            case 'kiss':
+                overrides = {
+                    ex: 'kiss'
+                };
+                misccmds.gif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
+            case 'lick':
+                overrides = {
+                    ex: 'lick'
+                };
+                misccmds.gif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
+            case 'pet':
+                overrides = {
+                    ex: 'pet'
+                };
+                misccmds.gif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
+            case 'punch':
+                overrides = {
+                    ex: 'punch'
+                };
+                misccmds.gif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
+            case 'slap':
+                overrides = {
+                    ex: 'slap'
+                };
+                misccmds.gif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
+
             case 'image': case 'imagesearch':
                 misccmds.image({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;

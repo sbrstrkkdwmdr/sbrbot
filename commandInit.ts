@@ -946,6 +946,84 @@ export default (input: {
         //     ]
         // },
         {
+            name: 'hug',
+            description: 'Sends a gif',
+            dmPermission: false,
+            options: [
+                {
+                    name: 'target',
+                    description: 'The user to target',
+                    type: Discord.ApplicationCommandOptionType.User,
+                    required: true
+                }
+            ]
+        },
+        {
+            name: 'kiss',
+            description: 'Sends a gif',
+            dmPermission: false,
+            options: [
+                {
+                    name: 'target',
+                    description: 'The user to target',
+                    type: Discord.ApplicationCommandOptionType.User,
+                    required: true
+                }
+            ]
+        },
+        {
+            name: 'lick',
+            description: 'Sends a gif',
+            dmPermission: false,
+            options: [
+                {
+                    name: 'target',
+                    description: 'The user to target',
+                    type: Discord.ApplicationCommandOptionType.User,
+                    required: true
+                }
+            ]
+        },
+        {
+            name: 'pet',
+            description: 'Sends a gif',
+            dmPermission: false,
+            options: [
+                {
+                    name: 'target',
+                    description: 'The user to target',
+                    type: Discord.ApplicationCommandOptionType.User,
+                    required: true
+                }
+            ]
+        },
+        {
+            name: 'punch',
+            description: 'Sends a gif',
+            dmPermission: false,
+            options: [
+                {
+                    name: 'target',
+                    description: 'The user to target',
+                    type: Discord.ApplicationCommandOptionType.User,
+                    required: true
+                }
+            ]
+        },
+        {
+            name: 'slap',
+            description: 'Sends a gif',
+            dmPermission: false,
+            options: [
+                {
+                    name: 'target',
+                    description: 'The user to target',
+                    type: Discord.ApplicationCommandOptionType.User,
+                    required: true
+                }
+            ]
+        },
+        {
             name: 'image',
             description: 'Searches the Google API and returns the first five results',
             dmPermission: false,
