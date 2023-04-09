@@ -2595,3 +2595,66 @@ export function returnHits(hits: osuApiTypes.Score['statistics'], mode: osuApiTy
     }
     return object;
 }
+
+/**
+ * parses a string that has a unicode and "romanised" version
+ * @style 1 artist title (artist title). uses style 2 if only title or artist is different
+ * @style 2 artist (artist) title (title)
+ */
+export function parseUnicodeStrings(
+    input: {
+        title: string,
+        artist: string,
+        title_unicode: string,
+        artist_unicode: string,
+        ignore: {
+            artist: boolean,
+            title: boolean,
+        };
+    },
+    style?: 1 | 2
+) {
+    let fullTitle: string;
+    switch (style) {
+        case 1: default: {
+            console.log(input.artist)
+            console.log(input.artist_unicode)
+            console.log((input.title != input.title_unicode && input.artist == input.artist_unicode));
+            console.log((input.title == input.title_unicode && input.artist != input.artist_unicode));
+            console.log((input.title == input.title_unicode && input.artist == input.artist_unicode));
+            console.log((input.ignore.artist == true || input.ignore.title == true));
+
+
+            if (
+                (input.title != input.title_unicode && input.artist == input.artist_unicode)
+                ||
+                (input.title == input.title_unicode && input.artist != input.artist_unicode)
+                ||
+                (input.title == input.title_unicode && input.artist == input.artist_unicode)
+                ||
+                (input.ignore.artist == true || input.ignore.title == true)
+            ) {
+                return parseUnicodeStrings(input, 2);
+            } else {
+                fullTitle =
+                    `${input.artist} - ${input.title}
+${input.artist_unicode} - ${input.title_unicode}`;
+            }
+        }
+            break;
+        case 2: {
+            let title = input.title == input.title_unicode ? input.title : `${input.title_unicode} (${input.title})`;
+            let artist = input.artist == input.artist_unicode ? input.artist : `${input.artist_unicode} (${input.artist})`;
+            if (input.ignore.artist) {
+                fullTitle = `${title}`;
+            } else if (input.ignore.title) {
+                fullTitle = `${artist}`;
+            } else {
+                fullTitle = `${artist} - ${title}`;
+            }
+        }
+            break;
+    }
+
+    return fullTitle;
+}

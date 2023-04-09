@@ -293,3 +293,4 @@ commit:
 [QOL] recommend and random map call map command directly (old ver sends a link, then bot parses its own message)
 [QOL] added recommand and random map separate err embed
 [ADD] re-add gif command back
+[QOL] edit how non-latin map titles are shown

@@ -3333,24 +3333,16 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
     func.storeFile(mapdataReq, mapid, 'mapdata');
 
-    let title = 'n';
-    let fulltitle = 'n';
-    let artist = 'n';
-    try {
-        title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
-        artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
-    } catch (error) {
-        await msgfunc.sendMessage({
-            commandType: input.commandType,
-            obj: input.obj,
-            args: {
-                content: `${errors.uErr.osu.map.m.replace('[ID]', mapid)}`,
-                edit: true
-            }
-        }, input.canReply);
-        return;
-    }
-    fulltitle = `${artist} - ${title} [${mapdata.version}]`;
+    let fulltitle = osufunc.parseUnicodeStrings({
+        title: mapdata.beatmapset.title,
+        artist: mapdata.beatmapset.artist,
+        title_unicode: mapdata.beatmapset.title_unicode,
+        artist_unicode: mapdata.beatmapset.artist_unicode,
+        ignore: {
+            artist: false,
+            title: false
+        }
+    }, 1) + ` [${mapdata.version}]`;
 
     let mods;
     if (mapmods) {
@@ -5417,15 +5409,16 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 break;
         }
 
-        const title =
-            curbms.title == curbms.title_unicode ?
-                curbms.title :
-                `${curbms.title} (${curbms.title_unicode})`;
-        const artist =
-            curbms.artist == curbms.artist_unicode ?
-                curbms.artist :
-                `${curbms.artist} (${curbms.artist_unicode})`;
-        const fulltitle = `${artist} - ${title} [${curbm.version}]`;
+        const fulltitle = `${osufunc.parseUnicodeStrings({
+            title: mapdata.beatmapset.title,
+            artist: mapdata.beatmapset.artist,
+            title_unicode: mapdata.beatmapset.title_unicode,
+            artist_unicode: mapdata.beatmapset.artist_unicode,
+            ignore: {
+                artist: false,
+                title: false
+            }
+        }, 1)} [${curbm.version}]`;
         let trycount = 1;
         for (let i = rsdata.length - 1; i > (page); i--) {
             if (curbm.id == rsdata[i].beatmap.id) {
@@ -5848,17 +5841,22 @@ export async function replayparse(input: extypes.commandInput) {
     }
     let mapbg: string;
     let mapcombo: string | number;
-    let fulltitle: string;
+    let fulltitle: string = osufunc.parseUnicodeStrings({
+        title: mapdata.beatmapset.title,
+        artist: mapdata.beatmapset.artist,
+        title_unicode: mapdata.beatmapset.title_unicode,
+        artist_unicode: mapdata.beatmapset.artist_unicode,
+        ignore: {
+            artist: false,
+            title: false
+        }
+    }, 1) + ` [${mapdata.version}]`;
     let mapdataid: string;
     try {
         mapbg = mapdata.beatmapset.covers['list@2x'];
-        fulltitle = `${mapdata.beatmapset.artist != mapdata.beatmapset.artist_unicode ? `${mapdata.beatmapset.artist} (${mapdata.beatmapset.artist_unicode})` : mapdata.beatmapset.artist}`;
-        fulltitle += ` - ${mapdata.beatmapset.title != mapdata.beatmapset.title_unicode ? `${mapdata.beatmapset.title} (${mapdata.beatmapset.title_unicode})` : mapdata.beatmapset.title}`
-            + ` [${mapdata.version}]`;
         mapcombo = mapdata.max_combo ? mapdata.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : NaN;
         mapdataid = 'https://osu.ppy.sh/b/' + mapdata.id;
     } catch (error) {
-        fulltitle = 'Unknown/unavailable map';
         mapbg = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
         mapcombo = NaN;
         mapdataid = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
@@ -6469,18 +6467,17 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
 
     }
 
-    let artist = scoredata.beatmapset.artist;
-    const artistuni = scoredata.beatmapset.artist_unicode;
-    let title = scoredata.beatmapset.title;
-    const titleuni = scoredata.beatmapset.title_unicode;
+    const title = osufunc.parseUnicodeStrings({
+        title: mapdata.beatmapset.title,
+        artist: mapdata.beatmapset.artist,
+        title_unicode: mapdata.beatmapset.title_unicode,
+        artist_unicode: mapdata.beatmapset.artist_unicode,
+        ignore: {
+            artist: false,
+            title: false
+        }
+    }, 1);
 
-    if (artist != artistuni) {
-        artist = `${artist} (${artistuni})`;
-    }
-
-    if (title != titleuni) {
-        title = `${title} (${titleuni})`;
-    }
     let pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`;
 
     if (scoredata.accuracy == 1) {
@@ -6558,7 +6555,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
         })
-        .setTitle(`${artist} - ${title}`)
+        .setTitle(`${title} [${mapdata.version}]`)
         .setURL(`https://osu.ppy.sh/scores/${mode}/${scoreid}`)
         .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`);
     switch (scoredetailed) {
@@ -7561,16 +7558,23 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
     func.storeFile(mapdataReq, mapid, 'mapdata');
 
-    const title = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
-    const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
-
+    const title = osufunc.parseUnicodeStrings({
+        title: mapdata.beatmapset.title,
+        artist: mapdata.beatmapset.artist,
+        title_unicode: mapdata.beatmapset.title_unicode,
+        artist_unicode: mapdata.beatmapset.artist_unicode,
+        ignore: {
+            artist: false,
+            title: false
+        }
+    }, 1);
 
     const scoresEmbed = new Discord.EmbedBuilder()
         .setFooter({
             text: `${embedStyle}`
         })
         .setColor(colours.embedColour.scorelist.dec)
-        .setTitle(`${artist} - ${title} [${mapdata.version}]`)
+        .setTitle(`${title} \n[${mapdata.version}]`)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setImage(`${mapdata.beatmapset.covers['cover@2x']}`)
         .setAuthor({
@@ -8531,17 +8535,22 @@ export async function simulate(input: extypes.commandInput) {
         clockRate: 1
     }, new Date(mapdata.last_updated));
 
-    const title = mapdata.beatmapset?.title ?
-        mapdata.beatmapset?.title != mapdata.beatmapset?.title_unicode ?
-            `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title}) [${mapdata.version}]` :
-            `${mapdata.beatmapset.title_unicode} [${mapdata.version}]` :
-        'unknown map';
+    const title = osufunc.parseUnicodeStrings({
+        title: mapdata.beatmapset.title,
+        artist: mapdata.beatmapset.artist,
+        title_unicode: mapdata.beatmapset.title_unicode,
+        artist_unicode: mapdata.beatmapset.artist_unicode,
+        ignore: {
+            artist: true,
+            title: false
+        }
+    }, 1) + ` [${mapdata.version}]`;
 
     const scoreEmbed = new Discord.EmbedBuilder()
         .setFooter({
             text: `${embedStyle}`
         })
-        .setTitle(`Simulated play on ${title}`)
+        .setTitle(`Simulated play on \n${title}`)
         .setURL(`https://osu.ppy.sh/b/${mapid}`)
         .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg` || `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
         .addFields([
@@ -9556,9 +9565,17 @@ OD${baseOD} (300: ${allvals.details.odMs.hitwindow_300?.toFixed(2)}ms 100: ${all
 HP${baseHP}`;
         }
 
-        const mapname = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
-        const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
-        const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`;
+        const mapname = osufunc.parseUnicodeStrings({
+            title: mapdata.beatmapset.title,
+            artist: mapdata.beatmapset.artist,
+            title_unicode: mapdata.beatmapset.title_unicode,
+            artist_unicode: mapdata.beatmapset.artist_unicode,
+            ignore: {
+                artist: false,
+                title: false
+            }
+        }, 1);
+        const maptitle: string = mapmods ? `${mapname} [${mapdata.version}] +${mapmods}` : `${mapname} [${mapdata.version}]`;
 
         let mapperdataReq: osufunc.apiReturn;
         let mapperdata: osuApiTypes.User;
@@ -10530,9 +10547,17 @@ export async function ppCalc(input: extypes.commandInput) {
     const baseHP = allvals.hp != mapdata.drain ? `${mapdata.drain}=>${allvals.hp}` : allvals.hp;
     const baseBPM = mapdata.bpm * (overrideSpeed ?? 1) != mapdata.bpm ? `${mapdata.bpm}=>${mapdata.bpm * (overrideSpeed ?? 1)}` : mapdata.bpm;
 
-    const mapname = mapdata.beatmapset.title == mapdata.beatmapset.title_unicode ? mapdata.beatmapset.title : `${mapdata.beatmapset.title_unicode} (${mapdata.beatmapset.title})`;
-    const artist = mapdata.beatmapset.artist == mapdata.beatmapset.artist_unicode ? mapdata.beatmapset.artist : `${mapdata.beatmapset.artist_unicode} (${mapdata.beatmapset.artist})`;
-    const maptitle: string = mapmods ? `${artist} - ${mapname} [${mapdata.version}] +${mapmods}` : `${artist} - ${mapname} [${mapdata.version}]`;
+    const mapname = osufunc.parseUnicodeStrings({
+        title: mapdata.beatmapset.title,
+        artist: mapdata.beatmapset.artist,
+        title_unicode: mapdata.beatmapset.title_unicode,
+        artist_unicode: mapdata.beatmapset.artist_unicode,
+        ignore: {
+            artist: false,
+            title: false
+        }
+    }, 1);
+    const maptitle: string = mapmods ? `${mapname} [${mapdata.version}] +${mapmods}` : `${mapname} [${mapdata.version}]`;
 
     let extras = '';
 

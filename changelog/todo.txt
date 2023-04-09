@@ -388,6 +388,17 @@ author:
     type: new command
     status: FINISHED
     priority: medium
-    request date: 2023-04-06 09:30 AEDT (UTC+11)
-    finish date: 2023-04-09 14:30 AEDT (UTC+11)
+    request date: 2023-04-06 09:30 AEST (UTC+10)
+    finish date: 2023-04-08 14:30 AEST (UTC+10)
+    author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#35)
+    description: redo how commands show unicode titles
+    type: qol
+    status: WIP
+    priority: medium
+    request date: 2023-04-09 11:52 AEST (UTC+10)
+    finish date: 2023-04-09 19:09 AEST (UTC+10)
     author: sbrstrkkdwmdr
