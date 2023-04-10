@@ -286,7 +286,7 @@ commit: 687aa84a0698b1a77ea78b3f5d4331a075b6d043
 [FIX] disabled commands still running
 
 0.4.18
-date_time
+2023-04-10
 commit:
 [QOL] changed recommend map design
 [QOL] added median to scorestats
@@ -294,3 +294,4 @@ commit:
 [QOL] added recommand and random map separate err embed
 [ADD] re-add gif command back
 [QOL] edit how non-latin map titles are shown
+[QOL] updated dependencies

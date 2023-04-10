@@ -21,20 +21,20 @@
     },
     "homepage": "https://github.com/sbrstrkkdwmdr/sbrbot#readme",
     "dependencies": {
-        "@types/node": "^18.15.5",
+        "@types/node": "^18.15.11",
         "chartjs-to-image": "^1.1.0",
-        "discord.js": "^14.8.0",
+        "discord.js": "^14.9.0",
         "moment": "^2.29.4",
         "node-fetch": "2.6.7",
-        "osu-classes": "^2.2.0",
+        "osu-classes": "^2.2.1",
         "osu-parsers": "^4.0.0",
         "osureplayparser": "^1.0.1",
         "rosu-pp": "^0.9.4",
-        "sequelize": "^6.29.3",
+        "sequelize": "^6.31.0",
         "sqlite3": "^5.1.6",
-        "tesseract.js": "^4.0.2",
+        "tesseract.js": "^4.0.3",
         "tslib": "^2.5.0",
-        "typescript": "^5.0.2",
+        "typescript": "^5.0.4",
         "yt-search": "^2.10.4"
     }
 }
