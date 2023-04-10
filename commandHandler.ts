@@ -558,28 +558,32 @@ export default (input: {
             } break;
             case 'recentlist': case 'rl': {
                 overrides = {
-                    type: 'list'
+                    type: 'list',
+                    sort: 'recent'
                 };
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             } break;
             case 'recentlisttaiko': case 'rlt': {
                 overrides = {
                     type: 'list',
-                    mode: 'taiko'
+                    mode: 'taiko',
+                    sort: 'recent'
                 };
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             } break;
             case 'recentlistfruits': case 'rlf': case 'rlctb': case 'rlc': {
                 overrides = {
                     type: 'list',
-                    mode: 'fruits'
+                    mode: 'fruits',
+                    sort: 'recent'
                 };
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             } break;
             case 'recentlistmania': case 'rlm': {
                 overrides = {
                     type: 'list',
-                    mode: 'mania'
+                    mode: 'mania',
+                    sort: 'recent'
                 };
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             } break;
