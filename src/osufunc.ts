@@ -2183,12 +2183,24 @@ export function randomMap(type?: 'Ranked' | 'Loved' | 'Approved' | 'Qualified' |
     const cache = fs.existsSync(`${path}\\cache\\commandData`);
     if (cache) {
         let mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
+        let maps: apiReturn[] = [];
         if (type) {
             mapsExist = mapsExist.filter(x => x.includes(type));
         }
-        if (mapsExist.length > 0) {
-            const curmap = JSON.parse(fs.readFileSync(`${path}\\commandData\\${mapsExist[Math.floor(Math.random() * mapsExist.length)]}`, 'utf-8')) as apiReturn;
-            returnId = curmap?.apiData?.id ?? 4204;
+
+        for (let i = 0; i < mapsExist.length; i++) {
+            if (mapsExist[i].includes('.json')) {
+                const dataAsStr = fs.readFileSync(`${path}\\cache\\commandData\\${mapsExist[i]}`, 'utf-8');
+                maps.push(JSON.parse(dataAsStr) as apiReturn);
+            }
+        }
+        if (maps.length > 0) {
+            try {
+                const curmap = maps[Math.floor(Math.random() * maps.length)];
+                returnId = curmap?.apiData?.id ?? 4204;
+            } catch (error) {
+                errormsg = `There was an error while trying to parse the map ID`;
+            }
         } else {
             errormsg = `No ${type ?? ''} maps found`;
         }
@@ -2220,11 +2232,15 @@ export function recommendMap(baseRating: number, maxDifference: number) {
         let filteredMaps = maps.filter(x => (x?.apiData?.difficulty_rating > baseRating - maxDifference && x?.apiData?.difficulty_rating < baseRating + maxDifference));
         if (filteredMaps.length < 1) {
             errormsg =
-                `No maps within ${maxDifference}⭐ of ${baseRating}⭐ were found
+                `No maps within ${maxDifference?.toFixed(2)}⭐ of ${baseRating}⭐ were found
 total maps: ${maps.length}`;
         } else {
-            const curmap = filteredMaps[Math.floor(Math.random() * filteredMaps.length)];
-            returnId = curmap?.apiData?.id;
+            try {
+                const curmap = filteredMaps[Math.floor(Math.random() * filteredMaps.length)];
+                returnId = curmap?.apiData?.id;
+            } catch (error) {
+                errormsg = `There was an error while trying to parse the map ID`;
+            }
         }
     } else {
         errormsg = 'No maps were found';
@@ -2617,13 +2633,6 @@ export function parseUnicodeStrings(
     let fullTitle: string;
     switch (style) {
         case 1: default: {
-            console.log(input.artist)
-            console.log(input.artist_unicode)
-            console.log((input.title != input.title_unicode && input.artist == input.artist_unicode));
-            console.log((input.title == input.title_unicode && input.artist != input.artist_unicode));
-            console.log((input.title == input.title_unicode && input.artist == input.artist_unicode));
-            console.log((input.ignore.artist == true || input.ignore.title == true));
-
 
             if (
                 (input.title != input.title_unicode && input.artist == input.artist_unicode)

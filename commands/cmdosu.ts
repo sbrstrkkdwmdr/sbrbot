@@ -11271,9 +11271,6 @@ export async function maplocal(input: extypes.commandInput) {
     let mapParsed: osuclasses.Beatmap = await decoder.decodeFromPath(mapPath, true);
 
     osufunc.debug(mapParsed, 'fileparse', 'map (file)', input.obj.guildId, 'map');
-    console.log(mapParsed.totalLength);
-    console.log(mapParsed.difficulty);
-
 
     const bpm = {
         min: mapParsed?.bpmMin,
