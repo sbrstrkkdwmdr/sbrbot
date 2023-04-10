@@ -287,7 +287,7 @@ commit: 687aa84a0698b1a77ea78b3f5d4331a075b6d043
 
 0.4.18
 2023-04-10
-commit:
+commit: c328732d575b4aae819ec07d35d5c0cf99de912a
 [QOL] changed recommend map design
 [QOL] added median to scorestats
 [QOL] recommend and random map call map command directly (old ver sends a link, then bot parses its own message)
