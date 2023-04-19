@@ -13,6 +13,7 @@ import * as misccmds from './commands/cmdMisc.js';
 import * as osucmds from './commands/cmdosu.js';
 import * as mainconst from './src/consts/main.js';
 import * as embedStuff from './src/embed.js';
+import * as log from './src/log.js';
 import * as extypes from './src/types/extratypes.js';
 
 export default (input: {
@@ -299,175 +300,217 @@ export default (input: {
         switch (command) {
             case 'convert': case 'conv':
                 commands.convert({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'help':
                 commands.help({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'info':
                 commands.info({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, guildSettings: input.guildSettings });
+                startType(obj);
                 break;
             case 'invite':
                 commands.invite({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'math':
                 commands.math({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'ping':
                 commands.ping({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'remind':
                 commands.remind({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'stats':
                 commands.stats({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'settime':
                 commands.timeset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'time':
                 commands.time({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
 
             //misc
             case '8ball': case 'ask':
                 misccmds._8ball({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'coin': case 'coinflip': case 'flip':
                 misccmds.coin({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'hug':
                 overrides = {
                     ex: 'hug'
                 };
                 misccmds.gif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'kiss':
                 overrides = {
                     ex: 'kiss'
                 };
                 misccmds.gif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'lick':
                 overrides = {
                     ex: 'lick'
                 };
                 misccmds.gif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'pet':
                 overrides = {
                     ex: 'pet'
                 };
                 misccmds.gif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'punch':
                 overrides = {
                     ex: 'punch'
                 };
                 misccmds.gif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'slap':
                 overrides = {
                     ex: 'slap'
                 };
                 misccmds.gif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
 
             case 'image': case 'imagesearch':
                 misccmds.image({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'poll': case 'vote':
                 misccmds.poll({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'roll':
                 misccmds.roll({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'ytsearch': case 'yt': case 'yts':
                 misccmds.ytsearch({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
 
             //osu commands below
 
             case 'badges':
                 osucmds.badges({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
 
             case 'bws': case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':
                 osucmds.bws({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
             case 'compare':
                 osucmds.compare({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'common': {
                 overrides = {
                     type: 'top'
                 };
                 osucmds.compare({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
-            } break;
+            } startType(obj);
+                break;
             case 'firsts': case 'firstplaceranks': case 'fpr': case 'fp': case '#1s': case 'first': case '#1': case '1s':
                 osucmds.firsts({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
             case 'globals': case 'osc': case 'osustatscount':
                 osucmds.globals({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
             case 'leaderboard': case 'maplb': case 'mapleaderboard':
                 osucmds.maplb({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
             case 'lb':
                 osucmds.lb({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'map': case 'm':
                 osucmds.map({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'maprandom': case 'f2': case 'maprand': case 'randommap': case 'randmap':
                 osucmds.randomMap({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'recommendmap': case 'recmap': case 'maprec': case 'mapsuggest': case 'suggestmap': case 'maprecommend':
                 osucmds.recMap({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'osu': case 'profile': case 'o': case 'user':
                 osucmds.osu({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
             case 'taiko': case 'drums': {
                 overrides = {
                     mode: 'taiko'
                 };
                 osucmds.osu({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'fruits': case 'ctb': case 'catch': {
                 overrides = {
                     mode: 'fruits'
                 };
                 osucmds.osu({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'mania': {
                 overrides = {
                     mode: 'mania'
                 };
                 osucmds.osu({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'osuset': case 'setuser': case 'set':
                 osucmds.osuset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'setmode': {
                 overrides = {
                     type: 'mode'
                 };
                 osucmds.osuset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
-            } break;
+            } startType(obj);
+                break;
             case 'setskin': {
                 overrides = {
                     type: 'skin'
                 };
                 osucmds.osuset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
-            } break;
+            } startType(obj);
+                break;
             case 'nochokes': case 'nc': {
                 overrides = {
                     miss: true
                 };
                 osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'osutop': case 'top': case 't': case 'ot': case 'toposu': case 'topo':
                 osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
             case 'taikotop': case 'toptaiko': case 'tt': case 'topt':
                 {
@@ -475,28 +518,32 @@ export default (input: {
                         mode: 'taiko'
                     };
                     osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-                } break;
+                } startType(obj);
+                break;
             case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tctb': case 'tf': case 'topf': case 'topc':
                 {
                     overrides = {
                         mode: 'fruits'
                     };
                     osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-                } break;
+                } startType(obj);
+                break;
             case 'maniatop': case 'topmania': case 'tm': case 'topm':
                 {
                     overrides = {
                         mode: 'mania'
                     };
                     osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-                } break;
+                } startType(obj);
+                break;
             case 'sotarks': case 'sotarksosu':
                 {
                     overrides = {
                         filterMapper: 'Sotarks'
                     };
                     osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-                } break;
+                } startType(obj);
+                break;
             case 'sotarkstaiko': case 'taikosotarks': case 'sotarkst': case 'tsotarks':
                 {
                     overrides = {
@@ -504,7 +551,8 @@ export default (input: {
                         mode: 'taiko'
                     };
                     osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-                } break;
+                } startType(obj);
+                break;
             case 'sotarksfruits': case 'fruitssotarks': case 'fruitsotarks': case 'sotarksfruit': case 'sotarkscatch': case 'catchsotarks':
             case 'sotarksctb': case 'ctbsotarks': case 'fsotarks': case 'sotarksf': case 'csotarks': case 'sotarksc':
                 {
@@ -513,40 +561,48 @@ export default (input: {
                         mode: 'fruits'
                     };
                     osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-                } break;
+                } startType(obj);
+                break;
             case 'sotarksmania': case 'maniasottarks': case 'sotarksm': case 'msotarks': {
                 overrides = {
                     filterMapper: 'Sotarks',
                     mode: 'mania'
                 };
                 osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
 
             case 'pinned': {
                 osucmds.pinned({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'ppcalc': case 'mapcalc': case 'mapperf': case 'maperf': case 'mappp': {
                 osucmds.ppCalc({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
-            } break;
+            } startType(obj);
+                break;
             case 'pp': {
                 overrides = {
                     type: 'pp',
                     commandAs: commandType
                 };
                 osucmds.rankpp({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'rank': {
                 overrides = {
                     type: 'rank',
                     commandAs: commandType
                 };
                 osucmds.rankpp({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'ranking': case 'rankings':
                 osucmds.ranking({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
             case 'rs': case 'recent': case 'r':
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
             case 'rs best': case 'recent best':
             case 'rsbest': case 'recentbest': case 'rb': {
@@ -555,14 +611,16 @@ export default (input: {
                     sort: 'pp'
                 };
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'recentlist': case 'rl': {
                 overrides = {
                     type: 'list',
                     sort: 'recent'
                 };
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'recentlisttaiko': case 'rlt': {
                 overrides = {
                     type: 'list',
@@ -570,7 +628,8 @@ export default (input: {
                     sort: 'recent'
                 };
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'recentlistfruits': case 'rlf': case 'rlctb': case 'rlc': {
                 overrides = {
                     type: 'list',
@@ -578,7 +637,8 @@ export default (input: {
                     sort: 'recent'
                 };
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'recentlistmania': case 'rlm': {
                 overrides = {
                     type: 'list',
@@ -586,43 +646,53 @@ export default (input: {
                     sort: 'recent'
                 };
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'recenttaiko': case 'rt': {
                 overrides = {
                     mode: 'taiko'
                 };
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'recentfruits': case 'rf': case 'rctb': {
                 overrides = {
                     mode: 'fruits'
                 };
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'recentmania': case 'rm': {
                 overrides = {
                     mode: 'mania'
                 };
                 osucmds.recent({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            } break;
+            } startType(obj);
+                break;
             case 'recentactivity': case 'recentact': case 'rsact':
                 osucmds.recent_activity({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
             case 'saved':
                 osucmds.saved({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
 
             case 'scoreparse': case 'score': case 'sp':
                 osucmds.scoreparse({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
             case 'scores': case 'c':
                 osucmds.scores({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
             case 'scorestats': case 'ss':
                 osucmds.scorestats({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'simplay': case 'simulate': case 'sim':
                 osucmds.simulate({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'skin': {
                 overrides = {
@@ -631,21 +701,27 @@ export default (input: {
                     commandAs: commandType
                 };
                 osucmds.saved({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
-            } break;
+            } startType(obj);
+                break;
             case 'trackadd': case 'track': case 'ta':
                 osucmds.trackadd({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings });
+                startType(obj);
                 break;
             case 'trackremove': case 'trackrm': case 'tr': case 'untrack':
                 osucmds.trackremove({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings });
+                startType(obj);
                 break;
             case 'trackchannel': case 'tc':
                 osucmds.trackchannel({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings });
+                startType(obj);
                 break;
             case 'tracklist': case 'tl':
                 osucmds.tracklist({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings });
+                startType(obj);
                 break;
             case 'userbeatmaps': case 'ub': case 'userb': case 'ubm': case 'um': case 'usermaps':
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
             case 'ranked': {
                 overrides = {
@@ -653,6 +729,7 @@ export default (input: {
                 };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             }
+                startType(obj);
                 break;
             case 'favourite': case 'favourites': {
                 overrides = {
@@ -660,6 +737,7 @@ export default (input: {
                 };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             }
+                startType(obj);
                 break;
             case 'graveyard': case 'unranked': {
                 overrides = {
@@ -667,6 +745,7 @@ export default (input: {
                 };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             }
+                startType(obj);
                 break;
             case 'loved': {
                 overrides = {
@@ -674,6 +753,7 @@ export default (input: {
                 };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             }
+                startType(obj);
                 break;
             case 'most_played': case 'mostplayed': case 'mp': {
                 overrides = {
@@ -681,6 +761,7 @@ export default (input: {
                 };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             }
+                startType(obj);
                 break;
             case 'pending': case 'wip': {
                 overrides = {
@@ -688,6 +769,7 @@ export default (input: {
                 };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             }
+                startType(obj);
                 break;
             case 'nominated': case 'bn': {
                 overrides = {
@@ -695,6 +777,7 @@ export default (input: {
                 };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             }
+                startType(obj);
                 break;
             case 'guest': case 'gd': {
                 overrides = {
@@ -702,22 +785,27 @@ export default (input: {
                 };
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             }
+                startType(obj);
                 break;
 
 
             case 'whatif': case 'wi':
                 osucmds.whatif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
+                startType(obj);
                 break;
 
             //admincmds below
             case 'avatar': case 'av': case 'pfp':
                 admincmds.getUserAv({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
                 admincmds.checkperms({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'crash':
                 admincmds.crash({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'debug':
                 admincmds.debug({
@@ -726,21 +814,37 @@ export default (input: {
                     absoluteID, currentDate, overrides,
                     userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings
                 });
+                startType(obj);
                 break;
             case 'leaveguild': case 'leave':
                 admincmds.leaveguild({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             case 'prefix':
                 admincmds.prefix({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, guildSettings: input.guildSettings });
+                startType(obj);
                 break;
             case 'servers':
                 admincmds.servers({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
             /* case 'user': */ case 'userinfo':
                 admincmds.getUser({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                startType(obj);
                 break;
         }
         return;
+    }
+
+    function startType(object: Discord.Message | Discord.Interaction) {
+        try {
+            object.channel.sendTyping();
+        } catch (error) {
+            console.log('typing error');
+            log.logFile('',
+                log.errLog('typing', error)
+            );
+        }
     }
 }
 
