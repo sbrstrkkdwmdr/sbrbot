@@ -286,6 +286,9 @@ Current Client ID:        ${client.user.id}
     if (!fs.existsSync(`${path}\\logs\\warn.log`)) {
         fs.writeFileSync(`${path}\\logs\\warn.log`, '');
     }
+    if (!fs.existsSync(`${path}\\logs\\general.log`)) {
+        fs.writeFileSync(`${path}\\logs\\general.log`, '');
+    }
 
     //commandHandler(blahblahblah) //loop
     commandHandler({ userdata, client, config, oncooldown, guildSettings, trackDb, statsCache }); //instead of running once, the function should always be active
