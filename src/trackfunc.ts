@@ -192,7 +192,7 @@ export async function getEmbed(
     return embed;
 }
 
-export async function trackUsers(db, client, guildSettings) {
+export async function trackUsers(db, client, guildSettings, totalTime: number) {
     if (!db || !client || !guildSettings) {
         log.toOutput(`Error - Missing object`);
         log.toOutput(`Database: ${db != null}`);
@@ -202,7 +202,7 @@ export async function trackUsers(db, client, guildSettings) {
     }
 
     const allUsers = await db.findAll();
-    const WaitTime = 1000 * 60 * 60;
+    const WaitTime = totalTime;
     for (let i = 0; i < allUsers.length; i++) {
         const user = allUsers[i];
 

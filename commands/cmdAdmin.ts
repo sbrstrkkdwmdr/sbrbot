@@ -682,7 +682,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             break;
         //force osutrack to update
         case 'forcetrack': {
-            trackfunc.trackUsers(input.trackDb, input.client, input.guildSettings);
+            trackfunc.trackUsers(input.trackDb, input.client, input.guildSettings, 60 * 1000);
             usemsgArgs = {
                 content: `Running osu!track...`
             };

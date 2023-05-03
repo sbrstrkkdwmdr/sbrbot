@@ -19,23 +19,23 @@ export default (input: {
 }) => {
     // trackUsers(trackDb)
     let enableTrack = input.config.enableTracking;
-
+    let totalTime = 60 * 1000 * 60 //requests every 60 min
     if (enableTrack == true) {
         a();
         setInterval(() => {
             a();
-        }, 60 * 1000 * 60); //requests every 60 min
+        }, totalTime); 
     }
     function a() {
         try {
-            trackfunc.trackUsers(input.trackDb, input.client, input.guildSettings);
+            trackfunc.trackUsers(input.trackDb, input.client, input.guildSettings, totalTime);
         } catch (err) {
             console.log(err);
             console.log('temporarily disabling tracking for an hour');
             enableTrack = false;
             setTimeout(() => {
                 enableTrack = true;
-            }, 1000 * 60 * 60);
+            }, totalTime);
         }
     }
 };
