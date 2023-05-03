@@ -1936,7 +1936,7 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'trackadd',
-        description: 'Adds a user to the tracklist',
+        description: 'Adds a user to the tracklist. Only works in the guild\'s set tracking channel.',
         usage: 'trackadd <user>',
         slashusage: 'trackadd <user>',
         examples: [
@@ -2004,7 +2004,7 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'trackremove',
-        description: 'Removes a user from the tracklist',
+        description: 'Removes a user from the tracklist. Only works in the guild\'s set tracking channel.',
         usage: 'trackremove <user>',
         slashusage: 'trackremove <user>',
         examples: [
