@@ -2168,7 +2168,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     inline: true
                 },
                 {
-                    name: '-',
+                    name: def.invisbleChar,
                     value:
                         `**Player joined** <t:${new Date(osudata.join_date).getTime() / 1000}:R>                        
 ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
@@ -2199,7 +2199,7 @@ ${onlinestatus}
                     inline: true
                 },
                 {
-                    name: '-',
+                    name: def.invisbleChar,
                     value: `**Highest pp:** ${ppstats.highest?.toFixed(2)}
         **Lowest pp:** ${ppstats.lowest?.toFixed(2)}
         **Average pp:** ${ppstats.average?.toFixed(2)}
@@ -5520,8 +5520,8 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                             inline: true
                         },
                         {
-                            name: '-',
-                            value: '-',
+                            name: def.invisbleChar,
+                            value: def.invisbleChar,
                             inline: true
                         },
                         {
@@ -5536,7 +5536,7 @@ ${hpStr}
                             inline: true
                         },
                         {
-                            name: '-',
+                            name: def.invisbleChar,
                             value: //CS AR OD HP SR
                                 `
 ${bpmStr}
@@ -6653,8 +6653,8 @@ ${scoredata.max_combo == mapdata.max_combo ? `**${scoredata.max_combo}x**` : `${
                         inline: true
                     },
                     {
-                        name: '-',
-                        value: '-',
+                        name: def.invisbleChar,
+                        value: def.invisbleChar,
                         inline: true
                     },
                     {
@@ -6669,7 +6669,7 @@ ${hpStr}
                         inline: true
                     },
                     {
-                        name: '-',
+                        name: def.invisbleChar,
                         value: //CS AR OD HP SR
                             `
 ${bpmStr}
@@ -8591,7 +8591,7 @@ ${emojis.mapobjs.total_length}${calc.secondsToTime(mapdata.total_length)}
                 inline: true
             },
             {
-                name: '-',
+                name: def.invisbleChar,
                 value:
                     `
 ${emojis.mapobjs.circle}${mapdata.count_circles}
