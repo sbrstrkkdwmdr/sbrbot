@@ -24,7 +24,8 @@ export async function editTrackUser(fr: {
         try {
             await fr.database.create({
                 osuid: fr.userid,
-                [`guilds${fr.mode}`]: fr.guildId
+                [`guilds${fr.mode}`]: fr.guildId,
+                [`guilds`]: fr.guildId
             });
 
         } catch (error) {
@@ -38,12 +39,13 @@ export async function editTrackUser(fr: {
 
             await fr.database.update({
                 osuid: fr.userid,
-                [`guilds${fr.mode}`]: prevchannels.join(',')
+                [`guilds${fr.mode}`]: prevchannels.join(','),
+                [`guilds`]: prevchannels.join(',')
             }, {
                 where: {
                     osuid: fr.userid,
                 }
-            });
+            })
         }
     } else {
         const curuser = await fr.database.findOne({ where: { osuid: fr.userid } });
