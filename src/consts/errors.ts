@@ -72,6 +72,8 @@ export const uErr = {
         },
         tracking: {
             channel_ms: 'The current server/guild does not have a tracking channel',
+            nullUser: 'Missing <user> argument',
+            channel_wrong: 'You can only use this command in <#[CHID]>',
         }
     },
     admin: {

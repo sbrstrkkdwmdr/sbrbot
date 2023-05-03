@@ -12227,20 +12227,41 @@ export async function trackadd(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const guildsetting = await input.guildSettings.findOne({
-        where: { guildId: input.obj.guildId }
-    });
-
-    if (!guildsetting.dataValues.trackChannel) {
+    if(user == null || !user || user.length < 1){
         await msgfunc.sendMessage({
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.uErr.osu.tracking.channel_ms,
+                content: errors.uErr.osu.tracking.nullUser,
                 edit: true
             }
-        }, input.canReply);
+        }, input.canReply);  
         return;
+    }
+    const guildsetting = await input.guildSettings.findOne({ where: { guildid: input.obj.guildId } });
+
+    if (!guildsetting?.dataValues?.trackChannel) {
+        await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.tracking.channel_ms,
+                    edit: true
+                }
+            }, input.canReply);
+            return;
+    } else {
+        if(guildsetting?.dataValues?.trackChannel != input.obj.channelId){
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.tracking.channel_wrong.replace('[CHID]', guildsetting?.dataValues?.trackChannel),
+                    edit: true
+                }
+            }, input.canReply);
+            return;
+        }
     }
 
     let osudataReq: osufunc.apiReturn;
@@ -12411,6 +12432,43 @@ export async function trackremove(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+    if(user == null || !user || user.length < 1){
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: errors.uErr.osu.tracking.nullUser,
+                edit: true
+            }
+        }, input.canReply);  
+        return;
+    }
+    const guildsetting = await input.guildSettings.findOne({ where: { guildid: input.obj.guildId } });
+
+    if (!guildsetting?.dataValues?.trackChannel) {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.tracking.channel_ms,
+                    edit: true
+                }
+            }, input.canReply);
+            return;
+    } else {
+        if(guildsetting?.dataValues?.trackChannel != input.obj.channelId){
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.tracking.channel_wrong.replace('[CHID]', guildsetting?.dataValues?.trackChannel),
+                    edit: true
+                }
+            }, input.canReply);
+            return;
+        }
+    }
+
     let osudataReq: osufunc.apiReturn;
 
     if (func.findFile(user, 'osudata', mode) &&
@@ -12546,7 +12604,6 @@ export async function trackchannel(input: extypes.commandInput) {
     const guildsetting = await input.guildSettings.findOne({ where: { guildid: input.obj.guildId } });
 
     if (!channelId) {
-        //the current channel is...
         if (!guildsetting.dataValues.trackChannel) {
             await msgfunc.sendMessage({
                 commandType: input.commandType,

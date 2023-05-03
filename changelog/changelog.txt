@@ -310,3 +310,5 @@ commit:
 [QOL] changed empty fields on embeds from "-" to "⠀" (U+2800)
 [FIX] fixed users not showing in "tracklist"
 [FIX] fixed tracklist showing "undefined" as gamemode
+[FIX] added error checkers for missing perms to trackadd/remove
+[ADD] prevent trackadd/remove from being used outside the guild's trackchannel
