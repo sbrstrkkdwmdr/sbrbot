@@ -12704,7 +12704,7 @@ export async function tracklist(input: extypes.commandInput) {
         .setTitle(`All tracked users in ${input.obj.guild.name}`)
         .setColor(colours.embedColour.userlist.dec)
         .setDescription(`There are ${userList.length} users being tracked in this server\n\n` +
-            `${userList.map((user, i) => `${i + 1}. [${user.mode}]https://osu.ppy.sh/users/${user.osuid}`).join('\n')}`
+            `${userList.map((user, i) => `${i + 1}. ${emojis.gamemodes[user.mode == 'undefined' ? 'osu' : user.mode]} https://osu.ppy.sh/users/${user.osuid}`).join('\n')}`
         );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================

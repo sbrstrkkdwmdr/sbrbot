@@ -309,3 +309,4 @@ commit:
 [QOL] err logtofile logs to err
 [QOL] changed empty fields on embeds from "-" to "⠀" (U+2800)
 [FIX] fixed users not showing in "tracklist"
+[FIX] fixed tracklist showing "undefined" as gamemode
