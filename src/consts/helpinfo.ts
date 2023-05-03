@@ -307,6 +307,15 @@ const cmds: commandInfo[] = [
         options: []
     },
     {
+        name: 'invite',
+        description: 'Sends the bot\'s public invite',
+        usage: 'invite',
+        slashusage: 'null',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
         name: 'math',
         description: 'Solves a math problem',
         usage: 'math <problem>',
