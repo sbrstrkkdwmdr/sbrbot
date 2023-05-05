@@ -145,7 +145,7 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
         
 #12)
-    status: WIP
+    status: FINISHED
     issue: page buttons in common command dont' work
     cause: const embed = new Discord.EmbedBuilder() freezing (embed field value overflow error)
     author: sbrstrkkdwmdr
@@ -153,5 +153,18 @@ additional notes: string
     fixed: 2023-03-25 14:41 AEDT (UTC+11)
     solution: change scores to be multiple fields rather than one
     additional notes:
+
+-------------------------------------------------------------------------------------------------------------------------
+
+        
+#13)
+    status: WIP
+    issue: links in score list commands aren't embedding properly
+    cause: <t:number:type> can no longer be used as hyperlinks (idk why)
+    author: sbrstrkkdwmdr
+    found: 2023-05-04 17:09 (UTC+10 AEST)
+    fixed: 2023-05-05 18:37
+    solution: change scores to be multiple fields rather than one
+    additional notes: not FULLY fixed but eh its whatever
 
 -------------------------------------------------------------------------------------------------------------------------

@@ -305,14 +305,14 @@ ${useTitle}
                 scoresAsFields.push({
                     name: `#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
                     value: `
-${showtitle ? '**' + showtitle + '**\n' : ''} [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+${showtitle ? '**' + showtitle + '**\n' : ''} **<t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>** | [Score](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${curscore.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 \`${hitlist}\` | ${curscore.max_combo == curscore?.beatmap?.max_combo ? `**${func.separateNum(curscore.max_combo)}x**` : `${func.separateNum(curscore.max_combo)}x`} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 ${pptxt} ${weighted}`,
                     inline: false
                 });
                 scoresAsArrStr.push(
                     `#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
-${showtitle ? '**' + showtitle + '**\n' : ''} [**Score set** <t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+${showtitle ? '**' + showtitle + '**\n' : ''} **<t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>** | [Score](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${curscore.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 \`${hitlist}\` | ${curscore.max_combo == curscore?.beatmap?.max_combo ? `**${func.separateNum(curscore.max_combo)}x**` : `${func.separateNum(curscore.max_combo)}x`} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 ${pptxt} ${weighted}
 `

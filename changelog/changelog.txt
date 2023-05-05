@@ -313,3 +313,4 @@ commit:
 [FIX] added error checkers for missing perms to trackadd/remove
 [ADD] prevent trackadd/remove from being used outside the guild's trackchannel
 [QOL] edit osu!track timer to make debugging easier
+[FIX] fixed score hyperlinks on scorelists not working
