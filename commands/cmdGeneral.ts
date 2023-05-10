@@ -289,6 +289,8 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
 
     const tcat1 = func.removeSIPrefix(cat1);
     const tcat2 = func.removeSIPrefix(cat2);
+    let usePre1 = true;
+    let usePre2 = true;
 
     if (converting == true) {
         //find
@@ -304,8 +306,11 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
                 names.push(x.toUpperCase())
             );
 
-            if (names.includes(tcat1.originalValue.toUpperCase())) {
+            if (names.includes(tcat1.originalValue.toUpperCase()) || names.includes(cat1.toUpperCase())) {
                 foundOne = true;
+                if (names.includes(cat1.toUpperCase()) && !names.includes(tcat1.originalValue.toUpperCase())) {
+                    usePre1 = false;
+                }
                 for (let j = 0; j < curObject.calc.length; j++) {
                     const curCalc = curObject.calc[j];
                     if (!curCalc) {
@@ -317,9 +322,13 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
                     curCalc.names.forEach(x =>
                         calcNames.push(x.toUpperCase())
                     );
-                    if (calcNames.includes(tcat2.originalValue.toUpperCase())) {
+                    if (calcNames.includes(tcat2.originalValue.toUpperCase()) || calcNames.includes(cat2.toUpperCase())) {
                         let secondaryMetric = false;
                         formula = curCalc.text;
+
+                        if (calcNames.includes(cat2.toUpperCase()) && !calcNames.includes(tcat2.originalValue.toUpperCase())) {
+                            usePre2 = false;
+                        }
 
                         for (let i = 0; i < conversions.values.length; i++) {
                             const curObject2 = conversions.values[i];
@@ -333,7 +342,6 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
                             );
                             if (names2.includes(tcat2.originalValue.toUpperCase()) && curObject2.system == 'Metric') {
                                 secondaryMetric = true;
-                                console.log(curObject2)
                             }
                         }
 
@@ -341,15 +349,7 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
 
                         let toType = curCalc.to;
 
-                        // if (cat1Pre.length > 0) {
-                        //     formula = `${formStart}*(${formula})`;
-                        // }
-                        // if (cat2Pre.length > 0) {
-                        //     formula = `(${formula})/${formEnd}`;
-                        // }
-
-                        if (curObject.system == 'Metric') {
-                            console.log('c1 m');
+                        if (curObject.system == 'Metric' && tcat1.prefix.removed.length > 0 && usePre1) {
                             num *= tcat1.power;
                             fromType = tcat1.prefix?.long?.length > 0 ? calc.toCapital(tcat1.prefix.long) + curObject.name.toLowerCase() : curObject.name;
                             formStart = `${tcat1.power}`;
@@ -358,8 +358,7 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
 
                         let finNum = curCalc.func(num);
 
-                        if (secondaryMetric) {
-                            console.log('c2 m');
+                        if (secondaryMetric && tcat2.prefix.removed.length > 0 && usePre2) {
                             finNum *= tcat2.power;
                             toType = tcat2.prefix?.long?.length > 0 ? calc.toCapital(tcat2.prefix.long) + curCalc.to.toLowerCase() : curCalc.to;
                             formStart = `${tcat2.power}`;

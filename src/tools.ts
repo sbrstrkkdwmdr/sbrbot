@@ -426,7 +426,6 @@ export function removeSIPrefix(str: string) {
 
     if (isNaN(value)) {
         foundPrefix = SIPrefixes.find(p => str.startsWith(p.name) || str.startsWith(p.prefix));
-        console.log(foundPrefix);
         if (foundPrefix) {
             power = foundPrefix.value;
             removedPrefix = str.startsWith(foundPrefix.name) ?
@@ -435,12 +434,6 @@ export function removeSIPrefix(str: string) {
             value = parseFloat(str);
         }
     }
-
-    console.log({
-        removedPrefix,
-        power,
-        originalValue: str.replace(removedPrefix, ''),
-    });
 
     return {
         prefix: {
