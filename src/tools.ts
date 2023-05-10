@@ -387,6 +387,68 @@ export function randomString(useSymbols: boolean, length?: number, string?: stri
  * 
  * returns array with items that include the search string
  */
-export function filterSearchArray(arr:string[], search:string){
+export function filterSearchArray(arr: string[], search: string) {
     return arr.filter((el) => el.toLowerCase().includes(search.toLowerCase()));
+}
+
+export function removeSIPrefix(str: string) {
+    const SIPrefixes = [
+        { prefix: 'Q', name: 'quetta', value: 1e27 },
+        { prefix: 'R', name: 'ronna', value: 1e27 },
+        { prefix: 'Y', name: 'yotta', value: 1e24 },
+        { prefix: 'Z', name: 'zetta', value: 1e21 },
+        { prefix: 'E', name: 'exa', value: 1e18 },
+        { prefix: 'P', name: 'peta', value: 1e15 },
+        { prefix: 'T', name: 'tera', value: 1e12 },
+        { prefix: 'G', name: 'giga', value: 1e9 },
+        { prefix: 'M', name: 'mega', value: 1e6 },
+        { prefix: 'k', name: 'kilo', value: 1e3 },
+        { prefix: 'h', name: 'hecto', value: 1e2 },
+        { prefix: 'da', name: 'deca', value: 1e1 },
+        { prefix: 'd', name: 'deci', value: 1e-1 },
+        { prefix: 'c', name: 'centi', value: 1e-2 },
+        { prefix: 'm', name: 'milli', value: 1e-3 },
+        { prefix: 'µ', name: 'micro', value: 1e-6 },
+        { prefix: 'n', name: 'nano', value: 1e-9 },
+        { prefix: 'p', name: 'pico', value: 1e-12 },
+        { prefix: 'f', name: 'femto', value: 1e-15 },
+        { prefix: 'a', name: 'atto', value: 1e-18 },
+        { prefix: 'z', name: 'zepto', value: 1e-21 },
+        { prefix: 'y', name: 'yocto', value: 1e-24 },
+        { prefix: 'r', name: 'ronto', value: 1e27 },
+        { prefix: 'q', name: 'quecto', value: 1e27 },
+    ];
+
+    let removedPrefix = '';
+    let value = parseFloat(str);
+    let power = 1;
+    let foundPrefix = { prefix: '', name: '', value: 1e0 };
+
+    if (isNaN(value)) {
+        foundPrefix = SIPrefixes.find(p => str.startsWith(p.name) || str.startsWith(p.prefix));
+        console.log(foundPrefix);
+        if (foundPrefix) {
+            power = foundPrefix.value;
+            removedPrefix = str.startsWith(foundPrefix.name) ?
+                foundPrefix.name : foundPrefix.prefix;
+        } else {
+            value = parseFloat(str);
+        }
+    }
+
+    console.log({
+        removedPrefix,
+        power,
+        originalValue: str.replace(removedPrefix, ''),
+    });
+
+    return {
+        prefix: {
+            removed: removedPrefix,
+            short: foundPrefix?.prefix,
+            long: foundPrefix?.name,
+        },
+        power,
+        originalValue: str.replace(removedPrefix, ''),
+    };
 }
