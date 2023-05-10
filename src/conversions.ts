@@ -1622,7 +1622,7 @@ export const values: convVal[] = [
         name: 'Pound',
         names: ['Pound', 'lb'],
         type: 'Mass',
-        system: 'Metric',
+        system: 'Imperial',
         calc: [
             {
                 to: 'Gram',
@@ -1678,7 +1678,7 @@ export const values: convVal[] = [
         name: 'Stone',
         names: ['Stone', 'st'],
         type: 'Mass',
-        system: 'Metric',
+        system: 'Imperial',
         calc: [
             {
                 to: 'Gram',
@@ -2039,7 +2039,7 @@ export const values: convVal[] = [
         name: 'Standard Atmosphere',
         names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
         type: 'Pressure',
-        system: 'Metric',
+        system: 'N/A',
         calc: [
             {
                 to: 'Pascal',
@@ -2522,7 +2522,7 @@ export const values: convVal[] = [
         name: 'Gradian',
         names: ['Gradian', 'grad'],
         type: 'Angle',
-        system: 'Metric',
+        system: 'N/A',
         calc: [
             {
                 to: 'Gradian',
@@ -2554,7 +2554,7 @@ export const values: convVal[] = [
         name: 'Degree',
         names: ['Degree', 'deg'],
         type: 'Angle',
-        system: 'Metric',
+        system: 'N/A',
         calc: [
             {
                 to: 'Gradian',
@@ -2586,7 +2586,7 @@ export const values: convVal[] = [
         name: 'Radian',
         names: ['Radian', 'rad'],
         type: 'Angle',
-        system: 'Metric',
+        system: 'N/A',
         calc: [
             {
                 to: 'Gradian',
