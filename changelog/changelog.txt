@@ -314,3 +314,6 @@ commit:
 [ADD] prevent trackadd/remove from being used outside the guild's trackchannel
 [QOL] edit osu!track timer to make debugging easier
 [FIX] fixed score hyperlinks on scorelists not working
+[QOL] convert now accepts shorthand SI prefixes (ie kg, instead of kilogram)
+[FIX] SI prefixes no longer work on imperial measurements
+[QOL] added new SI prefixes - quetta, ronna, ronto, quecto
