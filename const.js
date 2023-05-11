@@ -205,19 +205,19 @@ const generalcommands = [
     {
         name: 'convert',
         description: 'Converts a number from one unit to another',
-        usage: 'convert <from> <to> <number>',
-        slashusage: 'convert <from> <to> <number>',
+        usage: 'convert <from> [to] [number]',
+        slashusage: 'convert <from> [to] [number]',
         examples: [
             {
-                text: 'PREFIXMSGconvert km mi 10',
-                descriptor: 'Converts 10 kilometers to miles'
+                text: 'PREFIXMSGconvert kilometre mi 10',
+                descriptor: 'Converts 10 kilometres to miles'
             },
             {
                 text: 'PREFIXMSGconvert k c 273.15',
                 descriptor: 'Converts 273.15 kelvin to celsius'
             },
         ],
-        aliases: [],
+        aliases: ['conv'],
         options: [
             {
                 name: 'from',
@@ -235,12 +235,17 @@ const generalcommands = [
                 required: true,
                 description: 'The unit to convert to',
                 options: [
-                    'celsius', 'fahrenheit', 'kelvin',
-                    'inches', 'feet', 'metres', 'miles',
-                    'seconds', 'minutes', 'hours', 'days', 'years',
-                    'fluid ounces', 'cups', 'pints', 'litres', 'gallons', 'cubic metres',
-                    'grams', 'Newtons(WIP)', 'kilograms(WIP)', 'ounces', 'pounds', 'metric tonnes',
-                    'help', 'SI units'
+                    'celsius (c)', 'fahrenheit (f)', 'kelvin (k)',
+                    'inch (in)', 'foot (ft)', 'metre (m)', 'mile (mi)', 'astronomical unit (au)', 'light year (ly)',
+                    'second (s)', 'minute (min)', 'hour (h)', 'day (d)', 'week (wk)', 'month (mth)', 'year (y)',
+                    'teaspoon (tsp)', 'tablespoon (tbp)', 'fluid ounce (floz)', 'cup (c)', 'pint (pt)', 'litre (l)', 'gallon (gal)', 'cubic metres (m3)',
+                    'gram (g)', 'ounce (oz)', 'pound (lb)', 'stone (st)', 'us ton (t)', 'metric tonne (mt)',
+                    'pascal (Pa)', 'millimetre of mercury/torr (mmHg)', 'pounds per square inch (psi)', 'bar', 'standard atmosphere (atm)',
+                    'electronvolt (eV)', 'joule (j)', 'calorie (cal)',
+                    'square metre (m2)', 'square kilometre (km2)', 'square mile (mi2)', 'hectare (ha)', 'acre (ac)',
+                    'degree (deg)', 'gradian (grad)', 'radian (rad)',
+                    'metres per second (ms)', 'kilometres per hour (kmh)', 'miles per hour (mph)', 'knot/nautical miles per hour (kt)', 'lightspeed (c)',
+                    'help', 'SI units',
                 ],
                 defaultValue: 'N/A',
                 examples: ['c', 'to:celsius'],
@@ -296,6 +301,15 @@ const generalcommands = [
         name: 'info',
         description: 'Shows information about the bot',
         usage: 'info',
+        slashusage: 'null',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'invite',
+        description: 'Sends the bot\'s public invite',
+        usage: 'invite',
         slashusage: 'null',
         examples: [],
         aliases: [],
@@ -457,7 +471,7 @@ operators: *, /, +, -, (, )
         examples: [
             {
                 text: 'PREFIXMSGtime',
-                descriptor: 'Shows the current time in UTC and the bot\'s timezone'
+                descriptor: 'Shows the user\'s current time. If unset, it displays GMT.'
             },
 
             {
@@ -472,14 +486,39 @@ operators: *, /, +, -, (, )
                 type: 'string',
                 required: false,
                 description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset)',
-                options: ['Formatted as [region]/[city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
+                options: ['Formatted as [city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
+                defaultValue: 'UTC',
+                examples: ['Australia/Melbourne', 'Europe/Warsaw'],
+                commandTypes: ['message', 'interaction']
+            }
+        ]
+    },
+    {
+        name: 'settime',
+        description: 'Shows the current time in a specific timezone. ',
+        usage: 'settime <timezone>',
+        slashusage: 'settime <timezone>',
+        examples: [
+            {
+                text: 'PREFIXMSGtime AEST',
+                descriptor: 'Set\'s the user\'s timezone to Australian Eastern Standard Time'
+            },
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'timezone',
+                type: 'string',
+                required: false,
+                description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset)',
+                options: ['Formatted as [city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
                 defaultValue: 'UTC',
                 examples: ['Australia/Melbourne', 'Europe/Warsaw'],
                 commandTypes: ['message', 'interaction']
             }
         ]
     }
-]
+];
 
 const osucommands = [
     {
@@ -900,7 +939,7 @@ const osucommands = [
                 descriptor: 'Returns a random ranked beatmap'
             }
         ],
-        aliases: ['f2', 'maprand', 'mapsuggest', 'randommap', 'randmap'],
+        aliases: ['f2', 'maprand', 'randommap', 'randmap'],
         options: [{
             name: 'Type',
             type: 'string',
@@ -911,6 +950,41 @@ const osucommands = [
             examples: ['-ranked', '-wip'],
             commandTypes: ['message', 'interaction']
         }]
+    },
+    {
+        name: 'maprecommend',
+        description: 'Recommends a random map based off of your total performance',
+        usage: 'maprecommend [-range] [user]',
+        slashusage: 'maprecommend [range] [user]',
+        examples: [
+            {
+                text: 'PREFIXMSGmaprec -range 2 SaberStrike',
+                descriptor: 'Recommends a random map for SaberStrike with a maximum star rating difference of 2'
+            }
+        ],
+        aliases: ['recmap', 'recommendmap', 'maprec', 'mapsuggest', 'suggestmap'],
+        options: [
+            {
+                name: 'user',
+                type: 'string/ integer/ user mention',
+                required: false,
+                description: 'The user to check the performance of',
+                options: ['N/A'],
+                defaultValue: 'The user who ran the command',
+                examples: ['SaberStrike', 'user:15222484'],
+                commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'range',
+                type: 'float',
+                required: false,
+                description: 'The maximum difference in star rating the recommended map can be',
+                options: ['range', 'r', 'diff'],
+                defaultValue: '1',
+                examples: ['-range 0.5'],
+                commandTypes: ['message', 'interaction']
+            },
+        ]
     },
     {
         name: 'nochokes',
@@ -1871,7 +1945,7 @@ const osucommands = [
     },
     {
         name: 'trackadd',
-        description: 'Adds a user to the tracklist',
+        description: 'Adds a user to the tracklist. Only works in the guild\'s set tracking channel.',
         usage: 'trackadd <user>',
         slashusage: 'trackadd <user>',
         examples: [
@@ -1939,7 +2013,7 @@ const osucommands = [
     },
     {
         name: 'trackremove',
-        description: 'Removes a user from the tracklist',
+        description: 'Removes a user from the tracklist. Only works in the guild\'s set tracking channel.',
         usage: 'trackremove <user>',
         slashusage: 'trackremove <user>',
         examples: [
@@ -2133,31 +2207,41 @@ const misccommands = [
         aliases: ['coinflip', 'flip'],
         options: []
     },
-    // {
-    //     name: 'gif',
-    //     description: 'Sends a gif',
-    //     usage: 'gif [type]',
-    //     slashusage: 'gif [type]',
-    //     examples: [
-    //         {
-    //             text: '/gif type:cry about it',
-    //             descriptor: 'Sends a random gif in the category "cry about it"'
-    //         }
-    //     ],
-    //     aliases: [],
-    //     options: [
-    //         {
-    //             name: 'type',
-    //             type: 'string',
-    //             required: true,
-    //             description: 'The type of gif to send',
-    //             options: [],
-    //             defaultValue: 'N/A',
-    //             examples: [''],
-    //             commandTypes: ['message', 'interaction']
-    //         }
-    //     ]
-    // },
+    {
+        name: 'gif',
+        description: 'Sends a gif',
+        usage: '<type> [target]',
+        slashusage: '<type> <target>',
+        examples: [
+            {
+                text: '/slap @SaberStrike',
+                descriptor: 'Sends a random gif matching "slap"'
+            }
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'type',
+                type: 'string',
+                required: true,
+                description: 'The type of gif to send',
+                options: ['hug', 'kiss', 'lick', 'pet', 'punch', 'slap'],
+                defaultValue: 'N/A',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'target',
+                type: 'user mention',
+                required: true,
+                description: 'The user to target',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            }
+        ]
+    },
     {
         name: 'image',
         description: 'Sends an image',
@@ -2499,7 +2583,7 @@ const buttons = [
     {
         name: 'Search',
         description: 'Enter a page number to go to',
-        imagesrc: '',
+        imagesrc: './img/buttons/page_select.png',
         emojisrc: '🔍',
         examples: [{
             text: '2',
@@ -2538,7 +2622,7 @@ const buttons = [
     {
         name: 'detailLess',
         description: 'Collapses the details of the current embed',
-        imagesrc: './img/buttons/details_less',
+        imagesrc: './img/buttons/details_less.png',
         emojisrc: '',
         examples: [],
         aliases: [],
@@ -2556,8 +2640,44 @@ const buttons = [
     {
         name: 'Random',
         description: 'Picks a random value from a list',
-        imagesrc: '',
-        emojisrc: '🎲',
+        imagesrc: './img/buttons/random.png',
+        emojisrc: '',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'Graph',
+        description: 'Switches to the graph view of the current embed',
+        imagesrc: './img/buttons/random.png',
+        emojisrc: '',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'Leaderboard',
+        description: 'Shows the leaderboard of the current map',
+        imagesrc: './img/buttons/random.png',
+        emojisrc: '',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'Map',
+        description: 'Shows the map of the current score/scoreboard',
+        imagesrc: './img/buttons/random.png',
+        emojisrc: '',
+        examples: [],
+        aliases: [],
+        options: []
+    },
+    {
+        name: 'User',
+        description: 'Shows the user/mapper of the current score/scoreboard/map',
+        imagesrc: './img/buttons/random.png',
+        emojisrc: '',
         examples: [],
         aliases: [],
         options: []
