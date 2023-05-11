@@ -2649,7 +2649,7 @@ const buttons = [
     {
         name: 'Graph',
         description: 'Switches to the graph view of the current embed',
-        imagesrc: './img/buttons/random.png',
+        imagesrc: './img/buttons/graph.png',
         emojisrc: '',
         examples: [],
         aliases: [],
@@ -2658,7 +2658,7 @@ const buttons = [
     {
         name: 'Leaderboard',
         description: 'Shows the leaderboard of the current map',
-        imagesrc: './img/buttons/random.png',
+        imagesrc: './img/buttons/leaderboard.png',
         emojisrc: '',
         examples: [],
         aliases: [],
@@ -2667,7 +2667,7 @@ const buttons = [
     {
         name: 'Map',
         description: 'Shows the map of the current score/scoreboard',
-        imagesrc: './img/buttons/random.png',
+        imagesrc: './img/buttons/map.png',
         emojisrc: '',
         examples: [],
         aliases: [],
@@ -2676,7 +2676,7 @@ const buttons = [
     {
         name: 'User',
         description: 'Shows the user/mapper of the current score/scoreboard/map',
-        imagesrc: './img/buttons/random.png',
+        imagesrc: './img/buttons/user.png',
         emojisrc: '',
         examples: [],
         aliases: [],
