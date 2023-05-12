@@ -1446,52 +1446,66 @@ export async function searchUserFull(searchid: string, userdata: any) {
 export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) {
     try {
         const init = JSON.parse(fs.readFileSync(`${path}/cache/previous/${type}${serverId}.json`, 'utf-8')) as {
-            id: string,
-            apiData: osuApiTypes.Score,
+            id: string | false,
+            apiData: object,
             mods: string,
+            default: boolean,
         };
         return init;
     } catch (error) {
-        let data: {
-            id: string,
+        const data: {
+            id: string | false,
             apiData: object,
             mods: string;
+            default: boolean,
+        } = {
+            id: false,
+            apiData: null,
+            mods: null,
+            default: true,
         };
-        switch (type) {
-            case 'map':
-                data = {
-                    id: '4204',
-                    apiData: null,
-                    mods: 'EZHDFL'
-                };
-                break;
-            case 'user':
-                data = {
-                    id: '2',
-                    apiData: null,
-                    mods: null,
-                };
-                break;
-            case 'score':
-                data = {
-                    id: null,
-                    apiData: JSON.parse(fs.readFileSync(`${precomppath}\\src\\template\\score.json`, 'utf-8')),
-                    mods: null,
-                };
-                break;
-        }
+
+        /*         switch (type) {
+                    case 'map':
+                        data = {
+                            id: '4204',
+                            apiData: null,
+                            mods: 'EZHDFL',
+                            default: true,
+                        };
+                        break;
+                    case 'user':
+                        data = {
+                            id: '2',
+                            apiData: null,
+                            mods: null,
+                            default: true,
+                        };
+                        break;
+                    case 'score':
+                        data = {
+                            id: null,
+                            apiData: JSON.parse(fs.readFileSync(`${precomppath}\\src\\template\\score.json`, 'utf-8')),
+                            mods: null,
+                            default: true,
+                        };
+                        break;
+                } */
+
         fs.writeFileSync(`${path}/cache/previous/${type}${serverId}.json`, JSON.stringify(data, null, 2));
         return data;
     }
 }
 export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string, data: {
     id: string,
-    apiData:object,
+    apiData: object,
     mods: string,
+    default?: boolean;
 }) {
     if (!data.mods || data.mods.length == 0) {
         data.mods = 'NM';
     }
+    data['default'] = false;
 
     fs.writeFileSync(`${path}/cache/previous/${type}${serverId}.json`, JSON.stringify(data, null, 2));
     return;

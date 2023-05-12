@@ -28,6 +28,7 @@ export const uErr = {
     osu: {
         profile: {
             user: 'Could not find user [ID]', 
+            user_msp: 'No previous user id found in this guild',
             mostplayed: 'Could not find the user\'s most played beatmaps',
             rsact: 'Could not find the user\'s recent activity'
         },
@@ -36,6 +37,7 @@ export const uErr = {
         map: {
             lb: 'Could not find leaderboards for [ID]',
             m: 'Could not find beatmap [ID]',
+            m_msp: 'No previous map id found in this guild',
             m_uk: 'Could not find the requested beatmap',
             ms: 'Could not find beatmapset [ID]',
             search: 'Beatmap search failed',
@@ -49,7 +51,8 @@ export const uErr = {
         score: {
             nf: 'Could not find the requested score',
             wrong: 'Score is invalid/unsubmitted and cannot be parsed',
-            nd: 'Could not find score data for [SID] in [MODE]'
+            nd: 'Could not find score data for [SID] in [MODE]',
+            msp: 'No previous score id found in this guild'
         },
         scores: {
             pinned: 'Could not find the [ID]\'s pinned scores',

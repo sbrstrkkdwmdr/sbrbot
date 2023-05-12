@@ -141,7 +141,7 @@ export async function badges(input: extypes.commandInput & { statsCache: any; })
 
         osufunc.debug(osudataReq, 'command', 'badges', input.obj.guildId, 'osuData');
 
-        if (osudata?.error || !osudata.id) {
+        if (osudata?.hasOwnProperty('error') || !osudata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -346,7 +346,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
 
     osufunc.debug(osudataReq, 'command', 'bws', input.obj.guildId, 'osuData');
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -566,7 +566,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
     });
     const osudata: osuApiTypes.User = osudataReq.apiData;
     osufunc.debug(osudataReq, 'command', 'globals', input.obj.guildId, 'osuData');
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -1250,7 +1250,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
 
     const rankingdata: osuApiTypes.Rankings = rankingdataReq.apiData;
 
-    if (rankingdata?.error) {
+    if (rankingdata?.hasOwnProperty('error')) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -1883,7 +1883,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -2091,7 +2091,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData;
             osufunc.debug(osutopdataReq, 'command', 'osu', input.obj.guildId, 'osuTopData');
 
-            if (osutopdata?.error) {
+            if (osutopdata?.hasOwnProperty('error')) {
                 if (input.commandType != 'button' && input.commandType != 'link') {
                     await msgfunc.sendMessage({
                         commandType: input.commandType,
@@ -2123,7 +2123,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             const mostplayeddata: osuApiTypes.BeatmapPlaycount[] & osuApiTypes.Error = mostplayeddataReq.apiData;
             osufunc.debug(mostplayeddataReq, 'command', 'osu', input.obj.guildId, 'mostPlayedData');
 
-            if (mostplayeddata?.error) {
+            if (mostplayeddata?.hasOwnProperty('error')) {
                 if (input.commandType != 'button' && input.commandType != 'link') {
                     await msgfunc.sendMessage({
                         commandType: input.commandType,
@@ -2437,7 +2437,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
 
     osufunc.debug(osudataReq, 'command', 'recent_activity', input.obj.guildId, 'osuData');
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -2499,7 +2499,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
 
     osufunc.debug(recentActivityReq, 'command', 'recent_activity', input.obj.guildId, 'rsactData');
 
-    if (rsactData?.error) {
+    if (rsactData?.hasOwnProperty('error')) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -2828,7 +2828,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -2879,7 +2879,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
         });
         const fd: osuApiTypes.Score[] & osuApiTypes.Error = fdReq.apiData;
-        if (fd?.error) {
+        if (fd?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -3279,6 +3279,10 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         const temp = osufunc.getPreviousId('map', input.obj.guildId);
         mapid = temp.id;
     }
+    if (mapid == false) {
+        missingPrevID_map(input);
+        return;
+    }
 
     if (input.commandType == 'interaction') {
         await msgfunc.sendMessage({
@@ -3309,13 +3313,13 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
     osufunc.debug(mapdataReq, 'command', 'maplb', input.obj.guildId, 'mapData');
 
-    if (mapdata?.error) {
+    if (mapdata?.hasOwnProperty('error')) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: `${errors.uErr.osu.map.m.replace('[ID]', mapid)}`,
+                    content: errors.uErr.osu.map.m.replace('[ID]', mapid),
                     edit: true
                 }
             }, input.canReply);
@@ -3375,7 +3379,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
         osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbDataF');
 
-        if (lbdataf?.error) {
+        if (lbdataf?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -3541,7 +3545,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         const lbdata = lbdataReq.apiData;
         osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbData');
 
-        if (lbdata?.error) {
+        if (lbdata?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -3907,7 +3911,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -3963,7 +3967,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 
     osufunc.debug(osutopdataReq, 'command', 'osutop', input.obj.guildId, 'osuTopData');
 
-    if (osutopdata?.error || !osutopdata[0]?.user?.username) {
+    if (osutopdata?.hasOwnProperty('error') || !osutopdata[0]?.user?.username) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -4356,7 +4360,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
     osufunc.debug(osudataReq, 'command', 'pinned', input.obj.guildId, 'osuData');
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -4405,7 +4409,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             version: 2,
         });
         const fd: osuApiTypes.Score[] & osuApiTypes.Error = fdReq.apiData;
-        if (fd?.error) {
+        if (fd?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -4980,7 +4984,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 
     osufunc.debug(osudataReq, 'command', 'recent', input.obj.guildId, 'osuData');
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -5045,7 +5049,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
     let rsdata: osuApiTypes.Score[] & osuApiTypes.Error = rsdataReq.apiData;
 
     osufunc.debug(rsdataReq, 'command', 'recent', input.obj.guildId, 'rsData');
-    if (rsdata?.error) {
+    if (rsdata?.hasOwnProperty('error')) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -5176,7 +5180,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
 
         osufunc.debug(mapdataReq, 'command', 'recent', input.obj.guildId, 'mapData');
-        if (mapdata?.error) {
+        if (mapdata?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -6198,7 +6202,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     const scoredata: osuApiTypes.Score = scoredataReq.apiData;
 
 
-    if (scoredata?.error) {
+    if (scoredata?.hasOwnProperty('error')) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -6223,7 +6227,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         });
         return;
     }
-    if (typeof scoredata?.error != 'undefined') {
+    if (typeof scoredata?.hasOwnProperty('error') != 'undefined') {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -6316,7 +6320,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
 
     const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
 
-    if (mapdata?.error) {
+    if (mapdata?.hasOwnProperty('error')) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -6514,7 +6518,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
     osufunc.debug(osudataReq, 'command', 'scoreparse', input.obj.guildId, 'osuData');
-    if (osudata?.error) {
+    if (osudata?.hasOwnProperty('error')) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -6884,7 +6888,7 @@ export async function scorepost(input: extypes.commandInput) {
 
     const scoredata: osuApiTypes.Score = scoredataReq.apiData;
 
-    if (scoredata?.error) {
+    if (scoredata?.hasOwnProperty('error')) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -6917,7 +6921,7 @@ export async function scorepost(input: extypes.commandInput) {
     const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
     osufunc.debug(mapdataReq, 'command', 'maplb', input.obj.guildId, 'mapData');
 
-    if (mapdata?.error) {
+    if (mapdata?.hasOwnProperty('error')) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -7355,6 +7359,10 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         const temp = osufunc.getPreviousId('map', input.obj.guildId);
         mapid = temp.id;
     }
+    if (mapid == false) {
+        missingPrevID_map(input);
+        return;
+    }
 
     if (input.commandType == 'interaction') {
         await msgfunc.sendMessage({
@@ -7387,7 +7395,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
     osufunc.debug(osudataReq, 'command', 'scores', input.obj.guildId, 'osuData');
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -7422,6 +7430,45 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             .setEmoji(buttonsthing.label.extras.user),
     );
 
+    let mapdataReq: osufunc.apiReturn;
+    if (func.findFile(mapid, 'mapdata') &&
+        !('error' in func.findFile(mapid, 'mapdata')) &&
+        input.button != 'Refresh'
+    ) {
+        mapdataReq = func.findFile(mapid, 'mapdata');
+    } else {
+        mapdataReq = await osufunc.apiget({
+            type: 'map',
+            params: {
+                id: mapid
+            }
+        });
+    }
+    const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
+
+    osufunc.debug(mapdataReq, 'command', 'scores', input.obj.guildId, 'mapData');
+    if (mapdata?.hasOwnProperty('error')) {
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.map.m.replace('[ID]', mapid),
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scores',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
+        });
+        return;
+    }
+
     let scoredataReq: osufunc.apiReturn;
     if (func.findFile(input.absoluteID, 'scores') &&
         input.commandType == 'button' &&
@@ -7443,7 +7490,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
     osufunc.debug(scoredataReq, 'command', 'scores', input.obj.guildId, 'scoreDataPresort');
 
-    if (scoredataPresort?.error) {
+    if (scoredataPresort?.hasOwnProperty('error')) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -7514,45 +7561,6 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         }
         input.commandType = 'other';
         await scoreparse(input);
-        return;
-    }
-
-    let mapdataReq: osufunc.apiReturn;
-    if (func.findFile(mapid, 'mapdata') &&
-        !('error' in func.findFile(mapid, 'mapdata')) &&
-        input.button != 'Refresh'
-    ) {
-        mapdataReq = func.findFile(mapid, 'mapdata');
-    } else {
-        mapdataReq = await osufunc.apiget({
-            type: 'map',
-            params: {
-                id: mapid
-            }
-        });
-    }
-    const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
-
-    osufunc.debug(mapdataReq, 'command', 'scores', input.obj.guildId, 'mapData');
-    if (mapdata?.error) {
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            await msgfunc.sendMessage({
-                commandType: input.commandType,
-                obj: input.obj,
-                args: {
-                    content: errors.uErr.osu.map.m.replace('[ID]', mapid),
-                    edit: true
-                }
-            }, input.canReply);
-        }
-        log.logCommand({
-            event: 'Error',
-            commandName: 'scores',
-            commandType: input.commandType,
-            commandId: input.absoluteID,
-            object: input.obj,
-            customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
-        });
         return;
     }
 
@@ -7928,7 +7936,7 @@ export async function scorestats(input: extypes.commandInput) {
 
     osufunc.debug(osudataReq, 'command', 'scorestats', input.obj.guildId, 'osuData');
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -7973,7 +7981,7 @@ export async function scorestats(input: extypes.commandInput) {
 
         });
         const fd: osuApiTypes.Score[] & osuApiTypes.Error = req.apiData;
-        if (fd?.error) {
+        if (fd?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -8422,6 +8430,10 @@ export async function simulate(input: extypes.commandInput) {
         const temp = osufunc.getPreviousId('map', input.obj.guildId);
         mapid = temp.id;
     }
+    if (mapid == false) {
+        missingPrevID_map(input);
+        return;
+    }
 
     if (input.commandType == 'interaction') {
         await msgfunc.sendMessage({
@@ -8452,7 +8464,7 @@ export async function simulate(input: extypes.commandInput) {
 
     osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
 
-    if (mapdata?.error) {
+    if (mapdata?.hasOwnProperty('error')) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -8878,7 +8890,7 @@ export async function map(input: extypes.commandInput) {
                 }
 
                 const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
-                if (bmsdata?.error) {
+                if (bmsdata?.hasOwnProperty('error')) {
                     await msgfunc.sendMessage({
                         commandType: input.commandType,
                         obj: input.obj,
@@ -9023,6 +9035,10 @@ export async function map(input: extypes.commandInput) {
             mapmods = temp.mods;
         }
     }
+    if (mapid == false) {
+        missingPrevID_map(input);
+        return;
+    }
     if (detailed == 2) {
         buttons.addComponents(
             new Discord.ButtonBuilder()
@@ -9067,13 +9083,17 @@ export async function map(input: extypes.commandInput) {
 
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
 
-        if (mapdata?.error || !mapdata.id) {
+        if (mapdata?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: errors.uErr.osu.map.m.replace('[ID]', mapid),
+                        content:
+                            mapid == false ?
+                                errors.uErr.osu.map.m_msp :
+                                errors.uErr.osu.map.m.replace('[ID]', mapid)
+                        ,
                         edit: true
                     }
                 }, input.canReply);
@@ -9108,7 +9128,7 @@ export async function map(input: extypes.commandInput) {
 
         osufunc.debug(bmsdataReq, 'command', 'map', input.obj.guildId, 'bmsData');
 
-        if (bmsdata?.error) {
+        if (bmsdata?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -9178,7 +9198,7 @@ export async function map(input: extypes.commandInput) {
         const mapidtest = mapidtestReq.apiData;
         osufunc.debug(mapidtestReq, 'command', 'map', input.obj.guildId, 'mapIdTestData');
 
-        if (mapidtest?.error) {
+        if (mapidtest?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -9276,7 +9296,7 @@ export async function map(input: extypes.commandInput) {
         mapdata = mapdataReq.apiData;
 
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
-        if (mapdata?.error || !mapdata.id) {
+        if (mapdata?.hasOwnProperty('error') || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -9598,7 +9618,7 @@ HP${baseHP}`;
 
         osufunc.debug(mapperdataReq, 'command', 'map', input.obj.guildId, 'mapperData');
 
-        if (mapperdata?.error) {
+        if (mapperdata?.hasOwnProperty('error')) {
             mapperdata = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
             log.logCommand({
                 event: 'Error',
@@ -9765,7 +9785,7 @@ HP${baseHP}`;
 
             osufunc.debug(gdReq, 'command', 'map', input.obj.guildId, 'guestData');
 
-            if (gdData?.error) {
+            if (gdData?.hasOwnProperty('error')) {
                 gdData = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
                 log.logCommand({
                     event: 'Error',
@@ -10130,6 +10150,10 @@ export async function ppCalc(input: extypes.commandInput) {
             mapmods = temp.mods;
         }
     }
+    if (mapid == false) {
+        missingPrevID_map(input);
+        return;
+    }
     let mapdataReq: osufunc.apiReturn;
     let mapdata: osuApiTypes.Beatmap;
     let bmsdataReq: osufunc.apiReturn;
@@ -10159,7 +10183,7 @@ export async function ppCalc(input: extypes.commandInput) {
 
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
 
-        if (mapdata?.error || !mapdata.id) {
+        if (mapdata?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -10200,7 +10224,7 @@ export async function ppCalc(input: extypes.commandInput) {
 
         osufunc.debug(bmsdataReq, 'command', 'map', input.obj.guildId, 'bmsData');
 
-        if (bmsdata?.error) {
+        if (bmsdata?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -10270,7 +10294,7 @@ export async function ppCalc(input: extypes.commandInput) {
         const mapidtest = mapidtestReq.apiData;
         osufunc.debug(mapidtestReq, 'command', 'map', input.obj.guildId, 'mapIdTestData');
 
-        if (mapidtest?.error) {
+        if (mapidtest?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -10352,7 +10376,7 @@ export async function ppCalc(input: extypes.commandInput) {
         mapdata = mapdataReq.apiData;
 
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
-        if (mapdata?.error || !mapdata.id) {
+        if (mapdata?.hasOwnProperty('error') || !mapdata.id) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -11126,7 +11150,7 @@ export async function recMap(input: extypes.commandInput) {
 
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -11809,7 +11833,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
 
     osufunc.debug(osudataReq, 'command', 'userbeatmaps', input.obj.guildId, 'osuData');
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -11861,7 +11885,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
 
         });
         const fd = fdReq.apiData;
-        if (fd?.error) {
+        if (fd?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -12202,7 +12226,7 @@ export async function trackadd(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    if(user == null || !user || user.length < 1){
+    if (user == null || !user || user.length < 1) {
         await msgfunc.sendMessage({
             commandType: input.commandType,
             obj: input.obj,
@@ -12210,23 +12234,23 @@ export async function trackadd(input: extypes.commandInput) {
                 content: errors.uErr.osu.tracking.nullUser,
                 edit: true
             }
-        }, input.canReply);  
+        }, input.canReply);
         return;
     }
     const guildsetting = await input.guildSettings.findOne({ where: { guildid: input.obj.guildId } });
 
     if (!guildsetting?.dataValues?.trackChannel) {
         await msgfunc.sendMessage({
-                commandType: input.commandType,
-                obj: input.obj,
-                args: {
-                    content: errors.uErr.osu.tracking.channel_ms,
-                    edit: true
-                }
-            }, input.canReply);
-            return;
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: errors.uErr.osu.tracking.channel_ms,
+                edit: true
+            }
+        }, input.canReply);
+        return;
     } else {
-        if(guildsetting?.dataValues?.trackChannel != input.obj.channelId){
+        if (guildsetting?.dataValues?.trackChannel != input.obj.channelId) {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
                 obj: input.obj,
@@ -12260,7 +12284,7 @@ export async function trackadd(input: extypes.commandInput) {
 
     let replymsg;
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         replymsg = errors.noUser(user);
         log.logCommand({
             event: 'Error',
@@ -12407,7 +12431,7 @@ export async function trackremove(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    if(user == null || !user || user.length < 1){
+    if (user == null || !user || user.length < 1) {
         await msgfunc.sendMessage({
             commandType: input.commandType,
             obj: input.obj,
@@ -12415,23 +12439,23 @@ export async function trackremove(input: extypes.commandInput) {
                 content: errors.uErr.osu.tracking.nullUser,
                 edit: true
             }
-        }, input.canReply);  
+        }, input.canReply);
         return;
     }
     const guildsetting = await input.guildSettings.findOne({ where: { guildid: input.obj.guildId } });
 
     if (!guildsetting?.dataValues?.trackChannel) {
-            await msgfunc.sendMessage({
-                commandType: input.commandType,
-                obj: input.obj,
-                args: {
-                    content: errors.uErr.osu.tracking.channel_ms,
-                    edit: true
-                }
-            }, input.canReply);
-            return;
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: errors.uErr.osu.tracking.channel_ms,
+                edit: true
+            }
+        }, input.canReply);
+        return;
     } else {
-        if(guildsetting?.dataValues?.trackChannel != input.obj.channelId){
+        if (guildsetting?.dataValues?.trackChannel != input.obj.channelId) {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
                 obj: input.obj,
@@ -12465,7 +12489,7 @@ export async function trackremove(input: extypes.commandInput) {
 
     let replymsg;
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         replymsg = errors.noUser(user);
         log.logCommand({
             event: 'Error',
@@ -12959,7 +12983,7 @@ export async function compare(input: extypes.commandInput) {
                     return;
                 }
             } else {
-                if (osufunc.getPreviousId('user', `${input.obj.guildId}`).id == null) {
+                if (osufunc.getPreviousId('user', `${input.obj.guildId}`).id == false) {
                     throw new Error('Second user not found');
                 }
                 second = osufunc.getPreviousId('user', `${input.obj.guildId}`).id;
@@ -13001,7 +13025,7 @@ export async function compare(input: extypes.commandInput) {
 
         const firstuser = firstuserReq.apiData;
 
-        if (firstuser?.error) {
+        if (firstuser?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 throw new Error('could not fetch first user data');
 
@@ -13028,7 +13052,7 @@ export async function compare(input: extypes.commandInput) {
 
         const seconduser = seconduserReq.apiData;
 
-        if (seconduser?.error) {
+        if (seconduser?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 throw new Error('could not fetch second user data');
             }
@@ -13105,7 +13129,7 @@ export async function compare(input: extypes.commandInput) {
 
                 const firsttopdata: osuApiTypes.Score[] & osuApiTypes.Error = firsttopdataReq.apiData;
 
-                if (firsttopdata?.error) {
+                if (firsttopdata?.hasOwnProperty('error')) {
                     if (input.commandType != 'button' && input.commandType != 'link') {
                         throw new Error('could not fetch first user\'s top scores');
                     }
@@ -13131,7 +13155,7 @@ export async function compare(input: extypes.commandInput) {
 
                 const secondtopdata: osuApiTypes.Score[] & osuApiTypes.Error = secondtopdataReq.apiData;
 
-                if (secondtopdata?.error) {
+                if (secondtopdata?.hasOwnProperty('error')) {
                     if (input.commandType != 'button' && input.commandType != 'link') {
                         throw new Error('could not fetch second user\'s top scores');
                     }
@@ -13873,7 +13897,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
 
-    if (osudata?.error || !osudata.id) {
+    if (osudata?.hasOwnProperty('error') || !osudata.id) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -13926,7 +13950,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
 
     const osutopdata: osuApiTypes.Score[] & osuApiTypes.Error = osutopdataReq.apiData; osufunc.debug(osutopdataReq, 'command', 'whatif', input.obj.guildId, 'osuTopData');
 
-    if (osutopdata?.error) {
+    if (osutopdata?.hasOwnProperty('error')) {
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -14565,4 +14589,26 @@ export function cleanArgs(args: string[]) {
         }
     }
     return newArgs;
+}
+
+async function missingPrevID_map(input: extypes.commandInput) {
+    if (input.commandType != 'button' && input.commandType != 'link') {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: errors.uErr.osu.map.m_msp,
+                edit: true
+            }
+        }, input.canReply);
+    }
+    log.logCommand({
+        event: 'Error',
+        commandName: 'scores',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        object: input.obj,
+        customString: errors.uErr.osu.map.m_msp
+    });
+    return;
 }
