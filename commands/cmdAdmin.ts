@@ -547,7 +547,15 @@ export async function debug(input: extypes.commandInput) {
         return;
     }
 
-    type clearTypes = 'all' | 'normal' | 'permanent' | 'previous' | 'pmaps' | 'pscores' | 'pusers' | 'users' | 'errors' | 'trueall';
+    type clearTypes = 'all' | 'normal' | 'permanent' |
+        'previous' |
+        'pmaps' | 'prevmap' |
+        'pscores' | 'prevscore' |
+        'pusers' | 'prevuser' |
+        'users' | 'errors' | 'trueall' |
+        'maps' | 'map' |
+        'graph'
+        ;
 
     switch (type) {
         //return api files for []
@@ -720,9 +728,12 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             break;
         case 'clear': {
             //all in command data, temporary files, permanent files, all in previous
-            const ctype = input.args[1] as clearTypes;
+            const ctype = input.args[0] as clearTypes;
 
             clear(ctype);
+            usemsgArgs = {
+                content: `Clearing files...`
+            };
         }
             break;
         default: {
@@ -739,6 +750,10 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                 log.toOutput(`manually clearing temporary files in ${path}\\cache\\commandData\\`);
                 const curpath = `${path}\\cache\\commandData`;
                 const files = fs.readdirSync(curpath);
+                for (const file of files) {
+                    fs.unlinkSync(`${curpath}\\` + file);
+                    log.toOutput(`${curpath}\\` + file);
+                }
 
             }
                 break;
@@ -747,37 +762,109 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                 const curpath = `${path}\\cache\\commandData`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
-                    fs.unlinkSync(`${path}\\cache\\commandData\\` + file);
-                    log.toOutput(`${path}\\cache\\commandData\\` + file);
+                    fs.unlinkSync(`${curpath}\\` + file);
+                    log.toOutput(`${curpath}\\` + file);
                 }
             }
+                break;
             case 'trueall': { //clears everything in cache
                 clear('all');
                 clear('previous');
                 clear('errors');
             }
-            case 'permanent': { // clears all permanent files (maps and mapsets)
-
+                break;
+            case 'map': case 'maps': { // clears all maps and mapset files
+                log.toOutput(`manually clearing all map and mapset files in ${path}\\cache\\commandData\\`);
+                const curpath1 = `${path}\\cache\\commandData`;
+                const files1 = fs.readdirSync(curpath1);
+                for (const file of files1) {
+                    if (file.includes('bmsdata') || file.includes('mapdata')) {
+                        fs.unlinkSync(`${curpath1}\\` + file);
+                        log.toOutput(`${curpath1}\\` + file);
+                    }
+                }
+                const curpath2 = `${path}\\files\\maps`;
+                const files2 = fs.readdirSync(curpath2);
+                for (const file of files2) {
+                    fs.unlinkSync(`${curpath2}\\` + file);
+                    log.toOutput(`${curpath2}\\` + file);
+                }
             }
+                break;
             case 'users': { //clears all osudata files
-
+                log.toOutput(`manually clearing all osudata files in ${path}\\cache\\commandData\\`);
+                const curpath = `${path}\\cache\\commandData`;
+                const files = fs.readdirSync(curpath);
+                for (const file of files) {
+                    if (file.includes('osudata')) {
+                        fs.unlinkSync(`${curpath}\\` + file);
+                        log.toOutput(`${curpath}\\` + file);
+                    }
+                }
             }
+                break;
             case 'previous': { // clears all previous files
-
+                log.toOutput(`manually clearing all prev files in ${path}\\cache\\previous\\`);
+                const curpath = `${path}\\cache\\previous`;
+                const files = fs.readdirSync(curpath);
+                for (const file of files) {
+                    fs.unlinkSync(`${curpath}\\` + file);
+                    log.toOutput(`${curpath}\\` + file);
+                }
             }
-            case 'pmaps': { //clears previous maps
-
+                break;
+            case 'pmaps': { // clears all previous files
+                log.toOutput(`manually clearing all prev files in ${path}\\cache\\previous\\`);
+                const curpath = `${path}\\cache\\previous`;
+                const files = fs.readdirSync(curpath);
+                for (const file of files) {
+                    if (file.includes('map')) {
+                        fs.unlinkSync(`${curpath}\\` + file);
+                        log.toOutput(`${curpath}\\` + file);
+                    }
+                }
             }
-            case 'pscores': { //clears previous scores
-
+                break;
+            case 'pscores': { // clears all previous files
+                log.toOutput(`manually clearing all prev files in ${path}\\cache\\previous\\`);
+                const curpath = `${path}\\cache\\previous`;
+                const files = fs.readdirSync(curpath);
+                for (const file of files) {
+                    if (file.includes('score')) {
+                        fs.unlinkSync(`${curpath}\\` + file);
+                        log.toOutput(`${curpath}\\` + file);
+                    }
+                }
             }
+            case 'pusers': { // clears all previous files
+                log.toOutput(`manually clearing all prev files in ${path}\\cache\\previous\\`);
+                const curpath = `${path}\\cache\\previous`;
+                const files = fs.readdirSync(curpath);
+                for (const file of files) {
+                    if (file.includes('user')) {
+                        fs.unlinkSync(`${curpath}\\` + file);
+                        log.toOutput(`${curpath}\\` + file);
+                    }
+                }
+            }
+                break;
             case 'errors': { //clears all errors
-                log.toOutput(`manually clearing all err files in ${path}\\cache\\err\\`);
+                log.toOutput(`manually clearing all err files in ${path}\\cache\\errors\\`);
                 const curpath = `${path}\\cache\\errors`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
-                    fs.unlinkSync(`${path}\\cache\\errors\\` + file);
-                    log.toOutput(`${path}\\cache\\errors\\` + file);
+                    fs.unlinkSync(`${curpath}\\` + file);
+                    log.toOutput(`${curpath}\\` + file);
+                }
+            }
+                break;
+            case 'graph': {
+                log.toOutput(`manually clearing all err files in ${path}\\cache\\graphs\\`);
+                const curpath = `${path}\\cache\\graphs`;
+                const files = fs.readdirSync(curpath);
+                for (const file of files) {
+                    fs.unlinkSync(`${curpath}\\` + file);
+                    log.toOutput(`${curpath}\\` + file);
                 }
             }
         }
