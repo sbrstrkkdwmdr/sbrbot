@@ -317,3 +317,6 @@ commit:
 [QOL] convert now accepts shorthand SI prefixes (ie kg, instead of kilogram)
 [FIX] SI prefixes no longer work on imperial measurements
 [QOL] added new SI prefixes - quetta, ronna, ronto, quecto
+[FIX] fixed debugs clear arg (and added graph opt)
+[FIX] changed how get prev is handled if there is no previous data to pull from
+[FIX] changed ?.error to ?.hasOwnProperty('error') || api gives error property but error always == null so if statements return always false using if(?.error) but if(hasOwnPropert('error')) returns true
