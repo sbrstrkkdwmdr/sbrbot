@@ -253,8 +253,8 @@ export default (input: {
         ];
 
         let allowed = true;
-        let missingPermsBot: string[] = [];
-        let missingPermsUser: string[] = [];
+        const missingPermsBot: string[] = [];
+        const missingPermsUser: string[] = [];
 
         if (
             requireEmbedCommands.includes(command) && commandType == 'message' &&

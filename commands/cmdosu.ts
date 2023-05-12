@@ -2672,7 +2672,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
     const commanduser: Discord.User = parseArgs.commanduser;
 
     let user = parseArgs.user;
-    let searchid = parseArgs.searchid;
+    const searchid = parseArgs.searchid;
     let page = parseArgs.page ?? 0;
 
     const scoredetailed: number = parseArgs.scoredetailed ?? 1;
@@ -11948,29 +11948,6 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                     ||
                     filterTitle.toLowerCase().replaceAll(' ', '').includes(x.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', ''))
                 );
-
-
-        function fr(map) {
-            return (
-                map.title.toLowerCase().replaceAll(' ', '')
-                +
-                map.artist.toLowerCase().replaceAll(' ', '')
-                +
-                map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', '')
-            ).includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-                ||
-                map.title.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-                ||
-                map.artist.toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-                ||
-                map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', '').includes(filterTitle.toLowerCase().replaceAll(' ', ''))
-                ||
-                filterTitle.toLowerCase().replaceAll(' ', '').includes(map.title.toLowerCase().replaceAll(' ', ''))
-                ||
-                filterTitle.toLowerCase().replaceAll(' ', '').includes(map.artist.toLowerCase().replaceAll(' ', ''))
-                ||
-                filterTitle.toLowerCase().replaceAll(' ', '').includes(map.beatmaps.map(x => x.version).join('').toLowerCase().replaceAll(' ', ''));
-        }
     }
 
     if (parseMap == true) {

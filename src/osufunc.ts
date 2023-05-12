@@ -2652,8 +2652,8 @@ ${input.artist_unicode} - ${input.title_unicode}`;
         }
             break;
         case 2: {
-            let title = input.title == input.title_unicode ? input.title : `${input.title_unicode} (${input.title})`;
-            let artist = input.artist == input.artist_unicode ? input.artist : `${input.artist_unicode} (${input.artist})`;
+            const title = input.title == input.title_unicode ? input.title : `${input.title_unicode} (${input.title})`;
+            const artist = input.artist == input.artist_unicode ? input.artist : `${input.artist_unicode} (${input.artist})`;
             if (input.ignore.artist) {
                 fullTitle = `${title}`;
             } else if (input.ignore.title) {

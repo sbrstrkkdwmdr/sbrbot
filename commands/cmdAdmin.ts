@@ -547,6 +547,8 @@ export async function debug(input: extypes.commandInput) {
         return;
     }
 
+    type clearTypes = 'all' | 'normal' | 'permanent' | 'previous' | 'pmaps' | 'pscores' | 'pusers' | 'users' | 'errors' | 'trueall';
+
     switch (type) {
         //return api files for []
         case 'commandfile': {
@@ -717,59 +719,9 @@ Joined(EPOCH):  ${member.joinedTimestamp}
         }
             break;
         case 'clear': {
-            type clearTypes = 'all' | 'normal' | 'permanent' | 'previous' | 'pmaps' | 'pscores' | 'pusers' | 'users' | 'errors' | 'trueall';
             //all in command data, temporary files, permanent files, all in previous
             const ctype = input.args[1] as clearTypes;
 
-            function clear(input: clearTypes) {
-                switch (ctype) {
-                    case 'normal': default: { //clears all temprary files (cache/commandData)
-                        log.toOutput(`manually clearing temporary files in ${path}\\cache\\commandData\\`);
-                        const curpath = `${path}\\cache\\commandData`;
-                        const files = fs.readdirSync(curpath);
-
-                    }
-                        break;
-                    case 'all': { //clears all files in commandData
-                        log.toOutput(`manually clearing all files in ${path}\\cache\\commandData\\`);
-                        const curpath = `${path}\\cache\\commandData`;
-                        const files = fs.readdirSync(curpath);
-                        for (const file of files) {
-                            fs.unlinkSync(`${path}\\cache\\commandData\\` + file);
-                            log.toOutput(`${path}\\cache\\commandData\\` + file);
-                        }
-                    }
-                    case 'trueall': { //clears everything in cache
-                        clear('all');
-                        clear('previous');
-                        clear('errors');
-                    }
-                    case 'permanent': { // clears all permanent files (maps and mapsets)
-
-                    }
-                    case 'users': { //clears all osudata files
-
-                    }
-                    case 'previous': { // clears all previous files
-
-                    }
-                    case 'pmaps': { //clears previous maps
-
-                    }
-                    case 'pscores': { //clears previous scores
-
-                    }
-                    case 'errors': { //clears all errors
-                        log.toOutput(`manually clearing all err files in ${path}\\cache\\err\\`);
-                        const curpath = `${path}\\cache\\errors`;
-                        const files = fs.readdirSync(curpath);
-                        for (const file of files) {
-                            fs.unlinkSync(`${path}\\cache\\errors\\` + file);
-                            log.toOutput(`${path}\\cache\\errors\\` + file);
-                        }
-                    }
-                }
-            }
             clear(ctype);
         }
             break;
@@ -779,6 +731,56 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             };
         }
 
+    }
+
+    function clear(input: clearTypes) {
+        switch (input) {
+            case 'normal': default: { //clears all temprary files (cache/commandData)
+                log.toOutput(`manually clearing temporary files in ${path}\\cache\\commandData\\`);
+                const curpath = `${path}\\cache\\commandData`;
+                const files = fs.readdirSync(curpath);
+
+            }
+                break;
+            case 'all': { //clears all files in commandData
+                log.toOutput(`manually clearing all files in ${path}\\cache\\commandData\\`);
+                const curpath = `${path}\\cache\\commandData`;
+                const files = fs.readdirSync(curpath);
+                for (const file of files) {
+                    fs.unlinkSync(`${path}\\cache\\commandData\\` + file);
+                    log.toOutput(`${path}\\cache\\commandData\\` + file);
+                }
+            }
+            case 'trueall': { //clears everything in cache
+                clear('all');
+                clear('previous');
+                clear('errors');
+            }
+            case 'permanent': { // clears all permanent files (maps and mapsets)
+
+            }
+            case 'users': { //clears all osudata files
+
+            }
+            case 'previous': { // clears all previous files
+
+            }
+            case 'pmaps': { //clears previous maps
+
+            }
+            case 'pscores': { //clears previous scores
+
+            }
+            case 'errors': { //clears all errors
+                log.toOutput(`manually clearing all err files in ${path}\\cache\\err\\`);
+                const curpath = `${path}\\cache\\errors`;
+                const files = fs.readdirSync(curpath);
+                for (const file of files) {
+                    fs.unlinkSync(`${path}\\cache\\errors\\` + file);
+                    log.toOutput(`${path}\\cache\\errors\\` + file);
+                }
+            }
+        }
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================

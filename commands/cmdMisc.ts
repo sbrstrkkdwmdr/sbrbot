@@ -244,7 +244,7 @@ export async function duckify(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const frStr = string.split(' ');
-    let fin: string[] = [];
+    const fin: string[] = [];
     for (const string in frStr) {
         fin.push('quack');
     }
@@ -344,7 +344,7 @@ export async function gif(input: extypes.commandInput) {
 
     let gifSelection = [def.images.any.url];
     let baseString = 'null';
-    let self = commanduser.id == secondaryUser.id;
+    const self = commanduser.id == secondaryUser.id;
     switch (type) {
         case 'hug': {
             gifSelection = gifs.hug;

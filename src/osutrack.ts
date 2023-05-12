@@ -19,7 +19,7 @@ export default (input: {
 }) => {
     // trackUsers(trackDb)
     let enableTrack = input.config.enableTracking;
-    let totalTime = 60 * 1000 * 60 //requests every 60 min
+    const totalTime = 60 * 1000 * 60 //requests every 60 min
     if (enableTrack == true) {
         a();
         setInterval(() => {

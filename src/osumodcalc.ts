@@ -682,7 +682,7 @@ function unrankedMods_stable(mods: string) {
  * @param mods shorthand mods name to verify (ie HDDT not hidden double time or 72)
  */
 function unrankedMods_lazer(mods: string) {
-    let val = false;
+    const val = false;
     const unverifiable: ModListLazer[] = [
         'AT', 'CM'
     ];

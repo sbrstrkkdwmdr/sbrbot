@@ -48,36 +48,44 @@ export default (input: {
     }
 
     function setActivity() {
-        const rdm = Math.floor(Math.random() * 100);
+        // const rdm = Math.floor(Math.random() * 100);
         let string;
         let fr = 0;
-        switch (true) {
-            case rdm > 50: {
-                let map = getMap();
-                if (map == false) {
-                    string = `Artist - Title [version]`;
-                } else {
-                    string = `${map.beatmapset.artist} - ${map.beatmapset.title}`;
-                }
-                fr = 2;
-            }
-                break;
-            case rdm > 1: {
-                const gamesList = [
-                    'osu!',
-                    'osu! Lazer',
-                    'McOsu',
-                    'danser'
-                ];
-                string = gamesList[Math.floor(Math.random() * gamesList.length)];
-                fr = 0;
-            }
-                break;
-            default: {
-                string = 'you';
-                fr = 3;
-            }
-                break;
+        // switch (true) {
+        //     case rdm > 2: {
+        //         const map = getMap();
+        //         if (map == false) {
+        //             string = `Artist - Title [version]`;
+        //         } else {
+        //             string = `${map.beatmapset.artist} - ${map.beatmapset.title}`;
+        //         }
+        //         fr = 2;
+        //     }
+        //         break;
+        //     case rdm < 1: {
+        //         const gamesList = [
+        //             'osu!',
+        //             'osu! Lazer',
+        //             'McOsu',
+        //             'danser'
+        //         ];
+        //         string = gamesList[Math.floor(Math.random() * gamesList.length)];
+        //         fr = 0;
+        //     }
+        //         break;
+        //     default: {
+        //         string = 'you';
+        //         fr = 3;
+        //     }
+        //         break;
+        // }
+        const map = getMap();
+        if (map == false) {
+            string = 'you';
+            fr = 3;
+        } else {
+            string = `${map.beatmapset.artist} - ${map.beatmapset.title}`;
+            fr = 2;
         }
 
         input.client.user.setPresence({
