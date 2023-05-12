@@ -226,9 +226,6 @@ export async function duckify(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
 
     log.logCommand({
@@ -247,9 +244,9 @@ export async function duckify(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const frStr = string.split(' ');
-    let returnString: string = '';
+    let fin: string[] = [];
     for (const string in frStr) {
-        returnString += 'quack ';
+        fin.push('quack');
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -257,6 +254,7 @@ export async function duckify(input: extypes.commandInput) {
         commandType: input.commandType,
         obj: input.obj,
         args: {
+            content: fin.join(' ')
         }
     }, input.canReply);
 
@@ -393,7 +391,7 @@ export async function gif(input: extypes.commandInput) {
     }
 
     if (gifSelection.length < 1) {
-        gifSelection.push(def.images.any.url)
+        gifSelection.push(def.images.any.url);
     }
 
     const embed = new Discord.EmbedBuilder()

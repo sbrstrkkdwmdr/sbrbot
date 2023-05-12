@@ -1990,7 +1990,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`);
 
     let useEmbeds = [];
-    let useFiles = [];
+    const useFiles = [];
 
     async function getGraphs() {
         let chartplay;
@@ -2669,25 +2669,25 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
 
     const parseArgs = await parseArgs_scoreList(input);
-    let commanduser: Discord.User = parseArgs.commanduser;
+    const commanduser: Discord.User = parseArgs.commanduser;
 
     let user = parseArgs.user;
     let searchid = parseArgs.searchid;
     let page = parseArgs.page ?? 0;
 
-    let scoredetailed: number = parseArgs.scoredetailed ?? 1;
+    const scoredetailed: number = parseArgs.scoredetailed ?? 1;
 
-    let sort: embedStuff.scoreSort = parseArgs.sort ?? 'recent';
-    let reverse = parseArgs.reverse ?? false;
+    const sort: embedStuff.scoreSort = parseArgs.sort ?? 'recent';
+    const reverse = parseArgs.reverse ?? false;
     let mode = parseArgs.mode ?? 'osu';
 
-    let filteredMapper = parseArgs.filteredMapper ?? null;
-    let filteredMods = parseArgs.filteredMods ?? null;
-    let filterTitle = parseArgs.filterTitle ?? null;
-    let filterRank = parseArgs.filterRank ?? null;
+    const filteredMapper = parseArgs.filteredMapper ?? null;
+    const filteredMods = parseArgs.filteredMods ?? null;
+    const filterTitle = parseArgs.filterTitle ?? null;
+    const filterRank = parseArgs.filterRank ?? null;
 
-    let parseScore = parseArgs.parseScore ?? false;
-    let parseId = parseArgs.parseId ?? null;
+    const parseScore = parseArgs.parseScore ?? false;
+    const parseId = parseArgs.parseId ?? null;
 
     let reachedMaxCount = false;
     let embedStyle: extypes.osuCmdStyle = 'L';
@@ -3333,7 +3333,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
     func.storeFile(mapdataReq, mapid, 'mapdata');
 
-    let fulltitle = osufunc.parseUnicodeStrings({
+    const fulltitle = osufunc.parseUnicodeStrings({
         title: mapdata.beatmapset.title,
         artist: mapdata.beatmapset.artist,
         title_unicode: mapdata.beatmapset.title_unicode,
@@ -3719,26 +3719,26 @@ Has replay: ${score.replay_available == 1 ? '✅' : '❌'}
 export async function osutop(input: extypes.commandInput & { statsCache: any; }) {
 
     const parseArgs = await parseArgs_scoreList(input);
-    let commanduser: Discord.User = parseArgs.commanduser;
+    const commanduser: Discord.User = parseArgs.commanduser;
 
     let user = parseArgs.user;
-    let searchid = parseArgs.searchid;
+    const searchid = parseArgs.searchid;
     let page = parseArgs.page ?? 0;
 
-    let scoredetailed: number = parseArgs.scoredetailed ?? 1;
+    const scoredetailed: number = parseArgs.scoredetailed ?? 1;
 
     let sort: embedStuff.scoreSort = parseArgs.sort ?? 'pp';
     let reverse = parseArgs.reverse ?? false;
     let mode = parseArgs.mode ?? 'osu';
     let filteredMapper = parseArgs.filteredMapper ?? null;
     let filteredMods = parseArgs.filteredMods ?? null;
-    let filterTitle = parseArgs.filterTitle ?? null;
-    let filterRank = parseArgs.filterRank ?? null;
+    const filterTitle = parseArgs.filterTitle ?? null;
+    const filterRank = parseArgs.filterRank ?? null;
 
-    let parseScore = parseArgs.parseScore ?? false;
-    let parseId = parseArgs.parseId ?? null;
+    const parseScore = parseArgs.parseScore ?? false;
+    const parseId = parseArgs.parseId ?? null;
 
-    let reachedMaxCount = false;
+    // let reachedMaxCount = false;
 
     let embedStyle: extypes.osuCmdStyle = 'L';
     let noMiss = false;
@@ -4196,25 +4196,25 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 export async function pinned(input: extypes.commandInput & { statsCache: any; }) {
 
     const parseArgs = await parseArgs_scoreList(input);
-    let commanduser: Discord.User = parseArgs.commanduser;
+    const commanduser: Discord.User = parseArgs.commanduser;
 
     let user = parseArgs.user;
-    let searchid = parseArgs.searchid;
+    const searchid = parseArgs.searchid;
     let page = parseArgs.page ?? 0;
 
-    let scoredetailed: number = parseArgs.scoredetailed ?? 1;
+    const scoredetailed: number = parseArgs.scoredetailed ?? 1;
 
-    let sort: embedStuff.scoreSort = parseArgs.sort ?? 'recent';
-    let reverse = parseArgs.reverse ?? false;
+    const sort: embedStuff.scoreSort = parseArgs.sort ?? 'recent';
+    const reverse = parseArgs.reverse ?? false;
     let mode = parseArgs.mode ?? 'osu';
 
-    let filteredMapper = parseArgs.filteredMapper ?? null;
-    let filteredMods = parseArgs.filteredMods ?? null;
-    let filterTitle = parseArgs.filterTitle ?? null;
-    let filterRank = parseArgs.filterRank ?? null;
+    const filteredMapper = parseArgs.filteredMapper ?? null;
+    const filteredMods = parseArgs.filteredMods ?? null;
+    const filterTitle = parseArgs.filterTitle ?? null;
+    const filterRank = parseArgs.filterRank ?? null;
 
-    let parseScore = parseArgs.parseScore ?? false;
-    let parseId = parseArgs.parseId ?? null;
+    const parseScore = parseArgs.parseScore ?? false;
+    const parseId = parseArgs.parseId ?? null;
 
     let reachedMaxCount = false;
     let embedStyle: extypes.osuCmdStyle = 'L';
@@ -5108,7 +5108,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         });
 
     let useComponents = [pgbuttons, buttons];
-    let useFiles = [];
+    const useFiles = [];
 
     if (list != true) {
         rsEmbed.setColor(colours.embedColour.score.dec);
@@ -5359,8 +5359,8 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         const curbmpasstime = Math.floor(msToFail / 1000);
         const guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
 
-        let showFailGraph = false;
-        let FailGraph = '';
+        // let showFailGraph = false;
+        // let FailGraph = '';
 
         let rsgrade;
         switch (curscore.rank.toUpperCase()) {
@@ -5841,7 +5841,7 @@ export async function replayparse(input: extypes.commandInput) {
     }
     let mapbg: string;
     let mapcombo: string | number;
-    let fulltitle: string = osufunc.parseUnicodeStrings({
+    const fulltitle: string = osufunc.parseUnicodeStrings({
         title: mapdata.beatmapset.title,
         artist: mapdata.beatmapset.artist,
         title_unicode: mapdata.beatmapset.title_unicode,
@@ -6754,7 +6754,7 @@ export async function scorepost(input: extypes.commandInput) {
     let customString: string;
     let mode: osuApiTypes.GameMode = 'osu';
 
-    let type: number = 0;
+    const type: number = 0;
 
     switch (input.commandType) {
         case 'message': {
@@ -7057,7 +7057,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     let mode = 'osu';
     let filteredMapper = null;
     let filteredMods = null;
-    let filterRank = null;
+    const filterRank = null;
 
     let parseScore = false;
     let parseId = null;
@@ -11122,7 +11122,7 @@ export async function recMap(input: extypes.commandInput) {
         });
     }
 
-    let osudata: osuApiTypes.User = osudataReq.apiData;
+    const osudata: osuApiTypes.User = osudataReq.apiData;
 
     osufunc.debug(osudataReq, 'command', 'osu', input.obj.guildId, 'osuData');
 
@@ -11268,7 +11268,7 @@ export async function maplocal(input: extypes.commandInput) {
 
     const decoder = new osuparsers.BeatmapDecoder();
 
-    let mapParsed: osuclasses.Beatmap = await decoder.decodeFromPath(mapPath, true);
+    const mapParsed: osuclasses.Beatmap = await decoder.decodeFromPath(mapPath, true);
 
     osufunc.debug(mapParsed, 'fileparse', 'map (file)', input.obj.guildId, 'map');
 
@@ -11283,7 +11283,7 @@ export async function maplocal(input: extypes.commandInput) {
     } else if (mods.includes('HT') || mods.includes('DC')) {
         clockRate = 0.75;
     }
-    let bpmTxt = bpm.min == bpm.max ?
+    const bpmTxt = bpm.min == bpm.max ?
         `${(bpm.mode * clockRate)?.toFixed(2)} ` :
         `${(bpm.min * clockRate)?.toFixed(2)} -${(bpm.max * clockRate)?.toFixed(2)} (${(bpm.mode * clockRate)?.toFixed(2)})`;
 
@@ -12021,9 +12021,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
 
 
 
-    let mapsarg;
-
-    mapsarg = await embedStuff.mapList({
+    const mapsarg = await embedStuff.mapList({
         type:
             filter == 'most_played' ?
                 'mapsetplays' :
@@ -14152,7 +14150,6 @@ async function parseArgs_scoreList_message(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
     let user;
-    let searchid;
     let page = 0;
 
     let scoredetailed: number = 1;
@@ -14160,8 +14157,8 @@ async function parseArgs_scoreList_message(input: extypes.commandInput) {
     let sort: embedStuff.scoreSort = null;
     let reverse = false;
     let mode = 'osu';
-    let filteredMapper = null;
-    let filteredMods = null;
+    const filteredMapper = null;
+    const filteredMods = null;
     let filterTitle = null;
 
     let parseScore = false;
@@ -14171,7 +14168,7 @@ async function parseArgs_scoreList_message(input: extypes.commandInput) {
 
     input.obj = input.obj as Discord.Message;
 
-    searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+    const searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
     if (input.args.includes('-parse')) {
         parseScore = true;
         const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
@@ -14350,7 +14347,6 @@ async function parseArgs_scoreList_interaction(input: extypes.commandInput) {
 }
 
 async function parseArgs_scoreList_button(input: extypes.commandInput) {
-    let user;
     let page = 0;
 
     let scoredetailed: number = 1;
@@ -14364,8 +14360,8 @@ async function parseArgs_scoreList_button(input: extypes.commandInput) {
     let filterTitle = null;
     let filterRank: osuApiTypes.Rank = null;
 
-    let parseScore = false;
-    let parseId = null;
+    const parseScore = false;
+    const parseId = null;
 
     input.obj = (input.obj as Discord.ButtonInteraction);
 
@@ -14374,7 +14370,7 @@ async function parseArgs_scoreList_button(input: extypes.commandInput) {
     }
     const searchid = input.obj.member.user.id;
 
-    user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
+    const user = input.obj.message.embeds[0].url.split('users/')[1].split('/')[0];
     mode = input.obj.message.embeds[0].url.split('users/')[1].split('/')[1];
     page = 0;
 

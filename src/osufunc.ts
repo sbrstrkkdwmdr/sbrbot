@@ -698,8 +698,8 @@ export async function failGraph(
         });
 
     function customRadius(context) {
-        let index = context.dataIndex;
-        let value = context.dataset.data[index];
+        const index = context.dataIndex;
+        const value = context.dataset.data[index];
         return index === point.objectNumber || value >= 8 ?
             10 : 0;
     }
@@ -1454,7 +1454,7 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
     } catch (error) {
         let data: {
             id: string,
-            apiData: {},
+            apiData: object,
             mods: string;
         };
         switch (type) {
@@ -1486,7 +1486,7 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
 }
 export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string, data: {
     id: string,
-    apiData: {},
+    apiData:object,
     mods: string,
 }) {
     if (!data.mods || data.mods.length == 0) {
@@ -2093,8 +2093,8 @@ export function Stats(arr: number[]) {
     if (arr.length % 2 == 1) {
         median = arr[Math.floor(arr.length / 2)];
     } else {
-        let temp1 = arr[arr.length / 2];
-        let temp2 = arr[(arr.length / 2) + 1];
+        const temp1 = arr[arr.length / 2];
+        const temp2 = arr[(arr.length / 2) + 1];
         median = (temp1 + temp2) / 2;
     }
 
@@ -2183,7 +2183,7 @@ export function randomMap(type?: 'Ranked' | 'Loved' | 'Approved' | 'Qualified' |
     const cache = fs.existsSync(`${path}\\cache\\commandData`);
     if (cache) {
         let mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
-        let maps: apiReturn[] = [];
+        const maps: apiReturn[] = [];
         if (type) {
             mapsExist = mapsExist.filter(x => x.includes(type));
         }
@@ -2219,8 +2219,8 @@ export function recommendMap(baseRating: number, maxDifference: number) {
     //check if cache exists
     const cache = fs.existsSync(`${path}\\cache\\commandData`);
     if (cache) {
-        let mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
-        let maps: apiReturn[] = [];
+        const mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
+        const maps: apiReturn[] = [];
 
         for (let i = 0; i < mapsExist.length; i++) {
             if (mapsExist[i].includes('.json')) {
@@ -2229,7 +2229,7 @@ export function recommendMap(baseRating: number, maxDifference: number) {
             }
         }
 
-        let filteredMaps = maps.filter(x => (x?.apiData?.difficulty_rating > baseRating - maxDifference && x?.apiData?.difficulty_rating < baseRating + maxDifference));
+        const filteredMaps = maps.filter(x => (x?.apiData?.difficulty_rating > baseRating - maxDifference && x?.apiData?.difficulty_rating < baseRating + maxDifference));
         if (filteredMaps.length < 1) {
             errormsg =
                 `No maps within ${maxDifference?.toFixed(2)}⭐ of ${baseRating}⭐ were found
@@ -2284,7 +2284,7 @@ export async function calcUr(
     const hitOffset = osumodcalc.ODtoms(map.Difficulty.OverallDifficulty).hitwindow_50;
 
     //get every hitobject
-    let hitObjectTimings: {
+    const hitObjectTimings: {
         x: number,
         y: number,
         time: number,

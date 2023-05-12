@@ -284,9 +284,6 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
 
     let foundOne = false;
 
-    let formStart = '';
-    let formEnd = '';
-
     const tcat1 = func.removeSIPrefix(cat1);
     const tcat2 = func.removeSIPrefix(cat2);
     let usePre1 = true;
@@ -352,7 +349,7 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
                         if (curObject.system == 'Metric' && tcat1.prefix.removed.length > 0 && usePre1) {
                             num *= tcat1.power;
                             fromType = tcat1.prefix?.long?.length > 0 ? calc.toCapital(tcat1.prefix.long) + curObject.name.toLowerCase() : curObject.name;
-                            formStart = `${tcat1.power}`;
+                            const formStart = `${tcat1.power}`;
                             formula = `${formStart}*(${formula})`;
                         }
 
@@ -361,7 +358,7 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
                         if (secondaryMetric && tcat2.prefix.removed.length > 0 && usePre2) {
                             finNum *= tcat2.power;
                             toType = tcat2.prefix?.long?.length > 0 ? calc.toCapital(tcat2.prefix.long) + curCalc.to.toLowerCase() : curCalc.to;
-                            formStart = `${tcat2.power}`;
+                            const formEnd = `${tcat2.power}`;
                             formula = `(${formula})/${formEnd}`;
                         }
 
@@ -1215,7 +1212,7 @@ export async function math(input: extypes.commandInput) {
             .trim()
             ;
         let isErr = false;
-        let evalstr: string = await calc.stringMath(string)
+        const evalstr: string = await calc.stringMath(string)
             .catch(x => {
                 isErr = true;
                 return x;
@@ -1861,11 +1858,11 @@ export async function time(input: extypes.commandInput) {
                 useComponents = [buttons];
             }
 
-            if (useComponents.length == 0) {
-                if (input?.overrides?.overwriteModal) {
+            // if (useComponents.length == 0) {
+            //     if (input?.overrides?.overwriteModal) {
 
-                }
-            }
+            //     }
+            // }
 
             const offsetToMinutes = Math.floor(offset * 60);
 
@@ -2032,7 +2029,7 @@ export async function timeset(input: extypes.commandInput) {
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let txt = 'null';
+    const txt = 'null';
     const fields: Discord.EmbedField[] = [];
 
     const Embed = new Discord.EmbedBuilder()
@@ -2086,13 +2083,13 @@ export async function timeset(input: extypes.commandInput) {
                 useComponents = [buttons];
             }
 
-            if (useComponents.length == 0) {
-                if (input?.overrides?.overwriteModal) {
+            // if (useComponents.length == 0) {
+            //     if (input?.overrides?.overwriteModal) {
 
-                }
-            }
+            //     }
+            // }
 
-            let updateRows: {
+            const updateRows: {
                 userid: string | number,
                 timezone: string;
             } = {

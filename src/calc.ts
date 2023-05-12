@@ -512,7 +512,7 @@ export async function stringMath(eq:string, callback?) {
     const mulDiv = /([+-]?\d*\.?\d+(?:e[+-]\d+)?)\s*([*/])\s*([+-]?\d*\.?\d+(?:e[+-]\d+)?)/;
     const plusMin = /([+-]?\d*\.?\d+(?:e[+-]\d+)?)\s*([+-])\s*([+-]?\d*\.?\d+(?:e[+-]\d+)?)/;
     const parentheses = /(\d)?\s*\(([^()]*)\)\s*/;
-    var current;
+    let current;
     while (eq.search(/^\s*([+-]?\d*\.?\d+(?:e[+-]\d+)?)\s*$/) === -1) {
         eq = fParentheses(eq);
         if (eq === current) return handleCallback(new SyntaxError('The equation is invalid.'), null);
