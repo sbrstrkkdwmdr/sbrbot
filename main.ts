@@ -404,7 +404,7 @@ ${error}
 });
 
 
-client.login(config.token);
+client.login(config.important.token);
 
 export { };
 

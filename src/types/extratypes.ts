@@ -4,7 +4,13 @@ import * as embedStuff from '../embed.js';
 import * as osuapitypes from '../types/osuApiTypes.js';
 
 export type config = {
-    token: string,
+    important: {
+        token: string,
+        dbd_license: string,
+        redirect_uri: string,
+        client_secret: string,
+        client_id: string,
+    },
     prefix: string,
     osuClientID: string,
     osuClientSecret: string,
