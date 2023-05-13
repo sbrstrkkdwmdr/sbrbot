@@ -34,6 +34,11 @@ import * as trackfunc from './src/trackfunc.js';
 import config from './config/config.json' assert { type: 'json' };
 import { path } from './path.js';
 
+import SoftUI from 'dbd-soft-ui';
+import DBD from 'discord-dashboard';
+import * as dashboardcmds from './src/consts/dbdcmd.js';
+let langsSettings = {};
+
 const client = new Client({
     intents: [
         GatewayIntentBits.GuildBans,
@@ -403,8 +408,200 @@ ${error}
     }
 });
 
+(async () => {
+    await DBD.useLicense(config.important.dbd_license);
+    DBD.Dashboard = DBD.UpdatedClass();
 
-client.login(config.token);
+    const Dashboard = new DBD.Dashboard({
+        port: 80,
+        client: {
+            id: config.important.client_id,
+            secret: config.important.client_secret
+        },
+        redirectUri: config.important.redirect_uri,
+        domain: 'http://localhost',
+        bot: client,
+        ownerIDs: config.ownerusers,
+        useThemeMaintenance: true,
+        useTheme404: true,
+        theme: SoftUI({
+            customThemeOptions: {
+                //@ts-expect-error idfk
+                index: async ({ req, res, config }) => {
+                    return {
+                        values: [],
+                        graph: {}, // More info at https://dbd-docs.assistantscenter.com/soft-ui/docs/customThemeOptions/
+                        cards: [],
+                    };
+                },
+            },
+            websiteName: "sbrbot",
+            colorScheme: "pink",
+            supporteMail: "support@support.com",
+            icons: {
+                favicon: "https://assistantscenter.com/wp-content/uploads/2021/11/cropped-cropped-logov6.png",
+                noGuildIcon: "https://pnggrid.com/wp-content/uploads/2021/05/Discord-Logo-Circle-1024x1024.png",
+                sidebar: {
+                    darkUrl: "https://assistantscenter.com/api/user/avatar/63ad65e2d3f1b1b3acdff794",
+                    lightUrl: "https://assistantscenter.com/api/user/avatar/63ad65e2d3f1b1b3acdff794",
+                    hideName: true,
+                    borderRadius: false,
+                    alignCenter: true,
+                },
+            },
+            preloader: {
+                image: "/img/soft-ui.webp",
+                spinner: false,
+                text: "Page is loading",
+            },
+            index: {
+                graph: {
+                    enabled: true,
+                    lineGraph: false,
+                    tag: 'Memory (MB)',
+                    max: 100
+                },
+            },
+            sweetalert: {
+                errors: {
+                    requirePremium: 'require premium error'
+                },
+                success: {
+                    login: "Successfully logged in.",
+                }
+            },
+            admin: {
+                pterodactyl: {
+                    enabled: false,
+                    apiKey: "apiKey",
+                    panelLink: "https://panel.website.com",
+                    serverUUIDs: []
+                }
+            },
+            commands: dashboardcmds.exCmds,
+            locales: {
+                enUK: {
+                    name: "English",
+                    index: {
+                        feeds: ["Current Users", "CPU", "System Platform", "Server Count"],
+                        card: {
+                            image: "link to image",
+                            category: "Soft UI",
+                            title: "Assistants - The center of everything",
+                            description:
+                                "Assistants Discord Bot management panel. Assistants Bot was created to give others the ability to do what they want. Just.<br>That's an example text. <br><br><b><i>Feel free to use HTML</i></b>",
+                            footer: "Learn More"
+                        },
+                        feedsTitle: "Feeds",
+                        graphTitle: "Graphs"
+                    },
+                    manage: {
+                        settings: {
+                            memberCount: "Members",
+                            info: {
+                                info: "Info",
+                                server: "Server Information"
+                            }
+                        }
+                    },
+                    privacyPolicy: {
+                        title: "Privacy Policy",
+                        description: "Privacy Policy and Terms of Service",
+                        pp: "Complete Privacy Policy"
+                    },
+                    partials: {
+                        sidebar: {
+                            dash: "Dashboard",
+                            manage: "Manage Guilds",
+                            commands: "Commands",
+                            pp: "Privacy Policy",
+                            admin: "Admin",
+                            account: "Account Pages",
+                            login: "Sign In",
+                            logout: "Sign Out"
+                        },
+                        navbar: {
+                            home: "Home",
+                            pages: {
+                                manage: "Manage Guilds",
+                                settings: "Manage Guilds",
+                                commands: "Commands",
+                                pp: "Privacy Policy",
+                                admin: "Admin Panel",
+                                error: "Error",
+                                credits: "Credits",
+                                debug: "Debug",
+                                leaderboard: "Leaderboard",
+                                profile: "Profile",
+                                maintenance: "Under Maintenance"
+                            }
+                        },
+                        title: {
+                            pages: {
+                                manage: "Manage Guilds",
+                                settings: "Manage Guilds",
+                                commands: "Commands",
+                                pp: "Privacy Policy",
+                                admin: "Admin Panel",
+                                error: "Error",
+                                credits: "Credits",
+                                debug: "Debug",
+                                leaderboard: "Leaderboard",
+                                profile: "Profile",
+                                maintenance: "Under Maintenance"
+                            }
+                        },
+                        preloader: {
+                            text: "Page is loading..."
+                        },
+                        premium: {
+                            title: "Want more from Assistants?",
+                            description: "Check out premium features below!",
+                            buttonText: "Become Premium"
+                        },
+                        settings: {
+                            title: "Site Configuration",
+                            description: "Configurable Viewing Options",
+                            theme: {
+                                title: "Site Theme",
+                                description: "Make the site more appealing for your eyes!"
+                            },
+                            language: {
+                                title: "Site Language",
+                                description: "Select your preffered language!"
+                            }
+                        }
+                    }
+                }
+            }
+        }),
+        settings: [
+            {
+                categoryId: 'setup',
+                categoryName: "Setup",
+                categoryDescription: "Setup your bot with default settings!",
+                categoryOptionsList: [
+                    {
+                        optionId: 'lang',
+                        optionName: "Language",
+                        optionDescription: "Change bot's language easily",
+                        optionType: DBD.formTypes.select({ "Polish": 'pl', "English": 'en', "French": 'fr' }),
+                        getActualSet: async ({ guild }) => {
+                            return langsSettings[guild.id] || null;
+                        },
+                        setNew: async ({ guild, newData }) => {
+                            langsSettings[guild.id] = newData;
+                            return;
+                        }
+                    },
+                ]
+            },
+        ]
+    });
+    Dashboard.init();
+})();
+
+client.login(config.important.token);
 
 export { };
 

@@ -26,3 +26,4 @@ channels*.txt
 users*.txt
 dist/
 1_*
+json.sqlite

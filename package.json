@@ -23,7 +23,9 @@
     "dependencies": {
         "@types/node": "^18.15.11",
         "chartjs-to-image": "^1.1.0",
+        "dbd-soft-ui": "^1.6.44-beta.1",
         "discord-api-types": "^0.37.39",
+        "discord-dashboard": "^2.3.61",
         "discord.js": "^14.9.0",
         "moment": "^2.29.4",
         "node-fetch": "2.6.7",
