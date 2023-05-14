@@ -15,6 +15,7 @@ import * as osuparsers from 'osu-parsers';
 import * as replayparser from 'osureplayparser';
 import config from '../config/config.json' assert { type: 'json' };
 import { path, precomppath } from '../path.js';
+import * as errors from './consts/errors.js';
 import * as log from './log.js';
 import * as mapParser from './mapParser.js';
 import * as tools from './tools.js';
@@ -976,7 +977,7 @@ export async function apiget(input: apiInput) {
 
         }
         if ('error' in datafirst && !input.type.includes('search')) {
-            throw new Error('nullwww');
+            throw new Error(errors.apiError);
         }
         data = {
             url,
@@ -990,7 +991,7 @@ export async function apiget(input: apiInput) {
             input,
             totaltimeNum: after - before,
             apiData: datafirst,
-            error
+            error: error ?? 'Unknown error'
         };
         fs.writeFileSync(`${path}\\cache\\errors\\osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
