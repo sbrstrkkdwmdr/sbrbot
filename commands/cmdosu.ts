@@ -12984,7 +12984,7 @@ export async function compare(input: extypes.commandInput) {
                 }
             } else {
                 if (osufunc.getPreviousId('user', `${input.obj.guildId}`).id == false) {
-                    throw new Error('Second user not found');
+                    throw new Error(`Could not find second user - ${errors.uErr.osu.profile.user_msp}`);
                 }
                 second = osufunc.getPreviousId('user', `${input.obj.guildId}`).id;
             }
