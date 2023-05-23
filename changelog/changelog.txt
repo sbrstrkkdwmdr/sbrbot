@@ -321,3 +321,5 @@ commit:
 [FIX] changed how get prev is handled if there is no previous data to pull from
 [FIX] changed ?.error to ?.hasOwnProperty('error') || api gives error property but error always == null so if statements return always false using if(?.error) but if(hasOwnPropert('error')) returns true
 [QOL] update error messages
+[ADD] added arbitrary units to convert
+[QOL] moved conversions.ts to src/consts/

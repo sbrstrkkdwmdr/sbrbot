@@ -1,7 +1,7 @@
 type convVal = {
     name: string,
     names: string[],
-    type: 'Temperature' | 'Distance' | 'Volume' | 'Time' | 'Mass' | 'Pressure' | 'Energy' | 'Angle',
+    type: 'Temperature' | 'Distance' | 'Volume' | 'Time' | 'Mass' | 'Pressure' | 'Energy' | 'Angle' | 'N/A',
     system: 'Metric' | 'Imperial' | 'N/A',
     calc: {
         to: string,
@@ -9,6 +9,13 @@ type convVal = {
         func: (x: number) => number,
         text: string;
     }[];
+};
+
+type convValCalc = {
+    to: string,
+    names: string[];
+    func: (x: number) => number,
+    text: string;
 };
 
 const template: convVal[] = [
@@ -29,6 +36,48 @@ const template: convVal[] = [
         ]
     },
 ];
+
+function arbitrary(x: number) {
+    const actions = ['add', 'sub1', 'sub2', 'mul', 'div1', 'div2'];
+    const type = actions[Math.floor(Math.random() * actions.length)];
+    let num = x;
+    const useMultiple = Math.floor(Math.random() * 2) == 1 ? false : true;
+    const multiple =
+        useMultiple ?
+            (Math.random() * (1000 + 1000)) - 1000 : 1;
+    switch (type) {
+        case 'add':
+            num = (Math.random() * multiple) + x;
+            break;
+        case 'sub1':
+            num = (Math.random() * multiple) - x;
+            break;
+        case 'sub2':
+            num = x - (Math.random() * multiple);
+            break;
+        case 'mul': default:
+            num = (Math.random() * multiple) * x;
+            break;
+        case 'div1':
+            num = (Math.random() * multiple) / x;
+            break;
+        case 'div2':
+            num = x / (Math.random() * multiple);
+            break;
+    }
+
+
+    return num;
+}
+
+const toArbitrary: convValCalc = {
+    to: 'Arbitrary units',
+    names: ['Arbitrary units', 'idk', 'wtf', '???', '?'],
+    func: (x) => {
+        return arbitrary(x);
+    },
+    text: 'x*ư̶̧̨̞̘̙̭̺͚̰̱̼̮͙͕̰͉̜͔̥̳̲̣͇̦̹̪̪̤̜̣̣͓̩̳̺̰͖͉̫̬̮͚̖̗̪̲̓̂̀̏̒͋̒̽͂̒̀̈́͐̒̑͌͋̊̑̐̐̚͘̕̚͠͝͠ͅn̶̢̡̧̧̧̛͖̳̪͓̪̜̣̙̳̼͚̭̲̫͇̘͍͓̮̼̺̞͍̬͈͔͚̮̺̙͙͍̯͙̰͈͙̝̍́̋͆̃̈́̀͌̿̈́͂͌̈̀̌̋̉̾̾̈́͑̉͌̓̈́̿́̑͘͠͝k̷̡̛͔̦̠̲͔̠͉̬͈̝̦̉̅̂͐̈́̇̈́̓̾̈͑͋̾̈́̏͗̓̋͆͊̕͝͝͝͝ṇ̵̢̨̛͕̺͖̗̘̎̏͑͋̿̾͆͗͂͒̏̃͗̽͊̈̂̆̀̏̑̋̑͛̐̌́̋͂́̆̋͂̇͌̌͑̈̓̂̃̉̕̕̚͝͝͝͠ͅǫ̸̡̧̞̦̤͈̺̮̳̤̫̞͈̲͚̤̥̥̖̼͙̤͑̾̽͗̌̌̽̈́̔̈́̓̏̃̕͠w̸̧̧̮͔͙̫̲̲̣̙̝͉͉͙̠̟̰͓̟̲͖̭͉̤͔̬̬̭͕͇̝͍̠͕͔̹̫̤̱̪̉̔͗̈̉̈̽́̋̊̄̂̿͗̉̇͋̒̐̀̇͌̾́͂̿̉̚̕̕ͅn̵̢̡̨̛͍̗̺̤̭̥͕̠̟̞̥͇͉̹̖̞̰̬̼͖̥̹̫̩͓̩̫̦̂̃̑̎́̇̏̒̃̓͑̂̍̿́̇̒̀̉̅̓̆̌͘̚͠͝͠ͅͅ'
+};
 
 /**
  * measurements are smallest to largest (excluding temp cos it rlly doesn't matter)
@@ -74,7 +123,8 @@ export const values: convVal[] = [
                     return x + 273.15;
                 },
                 text: 'x+273.15'
-            }
+            },
+            toArbitrary
         ]
     },
     {
@@ -106,7 +156,8 @@ export const values: convVal[] = [
                     return (x - 32) * 5 / 9 + 273.15;
                 },
                 text: '((x)-32)*5/9 + 273.15'
-            }
+            },
+            toArbitrary
         ]
     },
     {
@@ -138,7 +189,8 @@ export const values: convVal[] = [
                     return x;
                 },
                 text: 'x'
-            }
+            },
+            toArbitrary
         ]
     },
     // Distance
@@ -196,6 +248,7 @@ export const values: convVal[] = [
                 },
                 text: 'x*0.0254/9460730472580800'
             },
+            toArbitrary
         ]
     },
     {
@@ -252,6 +305,7 @@ export const values: convVal[] = [
                 },
                 text: 'x*0.3048/9460730472580800'
             },
+            toArbitrary
         ]
     },
     {
@@ -308,6 +362,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/9460730472580800'
             },
+            toArbitrary
         ]
     },
     {
@@ -364,6 +419,7 @@ export const values: convVal[] = [
                 },
                 text: 'x*1609.344/9460730472580800'
             },
+            toArbitrary
         ]
     },
     {
@@ -420,6 +476,7 @@ export const values: convVal[] = [
                 },
                 text: 'x*149597870700/9460730472580800'
             },
+            toArbitrary
         ]
     },
     {
@@ -476,6 +533,7 @@ export const values: convVal[] = [
                 },
                 text: 'x'
             },
+            toArbitrary
         ]
     },
     // Time
@@ -541,6 +599,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/86400/365.25'
             },
+            toArbitrary
         ]
     },
     {
@@ -605,6 +664,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/1440/365.25'
             },
+            toArbitrary
         ]
     },
     {
@@ -669,6 +729,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/8766'
             },
+            toArbitrary
         ]
     },
     {
@@ -733,6 +794,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/365.25'
             },
+            toArbitrary
         ]
     },
     {
@@ -797,6 +859,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/52.1785714286'
             },
+            toArbitrary
         ]
     },
     {
@@ -861,6 +924,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/12'
             },
+            toArbitrary
         ]
     },
     {
@@ -925,6 +989,7 @@ export const values: convVal[] = [
                 },
                 text: 'x'
             },
+            toArbitrary
         ]
     },
     // Volume
@@ -998,6 +1063,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/202884.2'
             },
+            toArbitrary
         ]
     },
     {
@@ -1070,6 +1136,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/67628.05'
             },
+            toArbitrary
         ]
     },
     {
@@ -1142,6 +1209,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/33814'
             },
+            toArbitrary
         ]
     },
     {
@@ -1214,6 +1282,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/4167'
             },
+            toArbitrary
         ]
     },
     {
@@ -1286,6 +1355,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/33814'
             },
+            toArbitrary
         ]
     },
     {
@@ -1358,6 +1428,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/1000'
             },
+            toArbitrary
         ]
     },
     {
@@ -1430,6 +1501,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/264.2'
             },
+            toArbitrary
         ]
     },
     {
@@ -1560,6 +1632,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/10^6'
             },
+            toArbitrary
         ]
     },
     {
@@ -1616,6 +1689,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/35274'
             },
+            toArbitrary
         ]
     },
     {
@@ -1672,6 +1746,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/2205'
             },
+            toArbitrary
         ]
     },
     {
@@ -1728,6 +1803,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/157.473'
             },
+            toArbitrary
         ]
     },
     {
@@ -1784,6 +1860,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/1.102'
             },
+            toArbitrary
         ]
     },
     {
@@ -1840,6 +1917,7 @@ export const values: convVal[] = [
                 },
                 text: 'x'
             },
+            toArbitrary
         ]
     },
     // Pressure
@@ -1889,6 +1967,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/101325'
             },
+            toArbitrary
         ]
     },
     {
@@ -1937,6 +2016,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/760'
             },
+            toArbitrary
         ]
     },
     {
@@ -1985,6 +2065,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/14.696'
             },
+            toArbitrary
         ]
     },
     {
@@ -2033,6 +2114,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/1.013'
             },
+            toArbitrary
         ]
     },
     {
@@ -2081,6 +2163,7 @@ export const values: convVal[] = [
                 },
                 text: 'x'
             },
+            toArbitrary
         ]
     },
     //energy
@@ -2114,6 +2197,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/(2.611*10^19)'
             },
+            toArbitrary
         ]
     },
     {
@@ -2146,6 +2230,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/4.184'
             },
+            toArbitrary
         ]
     },
     {
@@ -2178,6 +2263,7 @@ export const values: convVal[] = [
                 },
                 text: 'x'
             },
+            toArbitrary
         ]
     },
     //area
@@ -2235,6 +2321,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/2.788e+7'
             },
+            toArbitrary
         ]
     },
     {
@@ -2291,6 +2378,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/2.59e+6'
             },
+            toArbitrary
         ]
     },
     {
@@ -2347,6 +2435,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/640'
             },
+            toArbitrary
         ]
     },
     {
@@ -2403,6 +2492,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/258.999'
             },
+            toArbitrary
         ]
     },
     {
@@ -2459,6 +2549,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/2.59'
             },
+            toArbitrary
         ]
     },
     {
@@ -2515,6 +2606,7 @@ export const values: convVal[] = [
                 },
                 text: 'x'
             },
+            toArbitrary
         ]
     },
     //angle
@@ -2548,6 +2640,7 @@ export const values: convVal[] = [
                 },
                 text: '(x*π)/200'
             },
+            toArbitrary
         ]
     },
     {
@@ -2580,6 +2673,7 @@ export const values: convVal[] = [
                 },
                 text: '(x*π)/180'
             },
+            toArbitrary
         ]
     },
     {
@@ -2612,6 +2706,7 @@ export const values: convVal[] = [
                 },
                 text: 'x'
             },
+            toArbitrary
         ]
     },
     //speed
@@ -2657,10 +2752,11 @@ export const values: convVal[] = [
                 to: 'Light',
                 names: ['Light', 'c', 'lightspeed'],
                 func: (x) => {
-                    return x/1079252848.8;
+                    return x / 1079252848.8;
                 },
                 text: 'x/1079252848.8'
             },
+            toArbitrary
         ]
     },
     {
@@ -2705,10 +2801,11 @@ export const values: convVal[] = [
                 to: 'Light',
                 names: ['Light', 'c', 'lightspeed'],
                 func: (x) => {
-                    return x/670635728.546;
+                    return x / 670635728.546;
                 },
                 text: 'x/670635728.546'
             },
+            toArbitrary
         ]
     },
     {
@@ -2753,10 +2850,11 @@ export const values: convVal[] = [
                 to: 'Light',
                 names: ['Light', 'c', 'lightspeed'],
                 func: (x) => {
-                    return x/582796538.352;
+                    return x / 582796538.352;
                 },
                 text: 'x/582796538.352'
             },
+            toArbitrary
         ]
     },
     {
@@ -2805,6 +2903,7 @@ export const values: convVal[] = [
                 },
                 text: 'x/299792458'
             },
+            toArbitrary
         ]
     },
     {
@@ -2853,6 +2952,293 @@ export const values: convVal[] = [
                 },
                 text: 'x'
             },
+            toArbitrary
+        ]
+    },
+    //arbitrary units
+    {
+        name: 'Arbitrary units',
+        names: ['Arbitrary units', 'idk', 'wtf', '???', '?'],
+        type: 'N/A',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Celsius',
+                names: ['Celsius', 'Celcius', 'Centigrade', 'C'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Fahrenheit',
+                names: ['Fahrenheit', 'F'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Kelvin',
+                names: ['Kelvin', 'K'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Inch',
+                names: ['Inch', 'in'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Feet',
+                names: ['Feet', 'ft'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Metre',
+                names: ['Metre', 'm', 'Meter'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Mile',
+                names: ['Mile', 'mi'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Astronomical Unit',
+                names: ['Astronomical Unit', 'au'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Light Year',
+                names: ['Light Year', 'LY'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Second',
+                names: ['Second', 'sec', 's'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Minute',
+                names: ['Minute', 'min',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Hour',
+                names: ['Hour', 'hr'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Day',
+                names: ['Day', 'd',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Week',
+                names: ['Week', 'wk',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Month',
+                names: ['Month', 'mth',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Year',
+                names: ['Year', 'yr',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Teaspoon',
+                names: ['Teaspoon', 'tsp',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Tablespoon',
+                names: ['Tablespoon', 'tbp',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Fluid Ounce',
+                names: ['Fluid Ounce', 'floz', 'oz'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Cup',
+                names: ['Cup', 'C',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Pint',
+                names: ['Pint', 'pt',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Litre',
+                names: ['Litre', 'Liter', 'L'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Gallon',
+                names: ['Galloon', 'gal',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Cubic Metre',
+                names: ['Cubic Metre', 'm3', 'm^3'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Pascal',
+                names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'mmHg',
+                names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'psi',
+                names: ['Pounds per square inch', 'psi'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Bar',
+                names: ['Bar'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Standard Atmosphere',
+                names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Electron Volt',
+                names: ['Electron Volt', 'eV', 'Electronvolt'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Joule',
+                names: ['Joule', 'j'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Calorie',
+                names: ['Calorie', 'cal'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Square foot',
+                names: ['Square foot', 'ft2'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Square metre',
+                names: ['Square metre', 'm2'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Acre',
+                names: ['Acre', 'ac'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Hectare',
+                names: ['Hectare', 'Ha'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Square kilometre',
+                names: ['Square kilometre', 'km2'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Square mile',
+                names: ['Square mile', 'mi2'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Gradian',
+                names: ['Gradian', 'grad'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Degree',
+                names: ['Degree', 'deg'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Radian',
+                names: ['Radian', 'rad'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Kilometres per hour',
+                names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Miles per hour',
+                names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Knot',
+                names: ['Knot', 'kt', 'nmih', 'nmh'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Metres per second',
+                names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Light',
+                names: ['Light', 'c', 'lightspeed'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            toArbitrary
         ]
     }
 ];
