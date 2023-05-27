@@ -304,3 +304,7 @@ export type replay = {
     raw_replay_data: string;
 }
 
+export type SortedScore = {
+    index: number,
+    score: osuapitypes.Score
+}

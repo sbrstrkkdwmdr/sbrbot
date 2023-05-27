@@ -2879,6 +2879,15 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
     const parseScore = parseArgs.parseScore ?? false;
     const parseId = parseArgs.parseId ?? null;
 
+    const exactMods = parseArgs.exactMods;
+
+    const pp = parseArgs.pp;
+    const score = parseArgs.score;
+    const acc = parseArgs.acc;
+    const combo = parseArgs.combo;
+    const miss = parseArgs.miss;
+    const bpm = parseArgs.bpm;
+
     let reachedMaxCount = false;
     let embedStyle: extypes.osuCmdStyle = 'L';
 
@@ -2931,6 +2940,10 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                 value: filteredMods
             },
             {
+                name: 'Exact Mods',
+                value: exactMods
+            },
+            {
                 name: 'Detailed',
                 value: scoredetailed
             },
@@ -2945,6 +2958,30 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             {
                 name: 'Rank',
                 value: filterRank
+            },
+            {
+                name: 'pp',
+                value: pp
+            },
+            {
+                name: 'Score',
+                value: score
+            },
+            {
+                name: 'Accuracy',
+                value: acc
+            },
+            {
+                name: 'Combo',
+                value: combo
+            },
+            {
+                name: 'Miss',
+                value: miss
+            },
+            {
+                name: 'BPM',
+                value: bpm
             }
         ]
     });
@@ -3248,7 +3285,14 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         filteredMods,
         filterMapTitle: filterTitle,
         filterRank,
-        reverse: reverse,
+        reverse,
+        exactMods,
+        pp,
+        score,
+        acc,
+        combo,
+        miss,
+        bpm
     }, {
         useScoreMap: true
     });
@@ -3742,6 +3786,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             truePosType: 'score',
             filteredMapper: null,
             filteredMods: null,
+            exactMods: null,
             filterMapTitle: null,
             filterRank: null,
             reverse: false,
@@ -4027,6 +4072,15 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     const parseScore = parseArgs.parseScore ?? false;
     const parseId = parseArgs.parseId ?? null;
 
+    const exactMods = parseArgs.exactMods;
+
+    const pp = parseArgs.pp;
+    const score = parseArgs.score;
+    const acc = parseArgs.acc;
+    const combo = parseArgs.combo;
+    const miss = parseArgs.miss;
+    const bpm = parseArgs.bpm;
+
     // let reachedMaxCount = false;
 
     let embedStyle: extypes.osuCmdStyle = 'L';
@@ -4122,7 +4176,31 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             {
                 name: 'Rank',
                 value: filterRank
-            }
+            },
+            {
+                name: 'Exact Mods',
+                value: exactMods
+            },
+            {
+                name: 'pp',
+                value: pp
+            },
+            {
+                name: 'Score',
+                value: score
+            },
+            {
+                name: 'Accuracy',
+                value: acc
+            },
+            {
+                name: 'Combo',
+                value: combo
+            },
+            {
+                name: 'Miss',
+                value: miss
+            },
         ]
     });
 
@@ -4426,7 +4504,14 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             filteredMods,
             filterMapTitle: filterTitle,
             filterRank,
-            reverse
+            reverse,
+            exactMods,
+            pp,
+            score,
+            acc,
+            combo,
+            miss,
+            bpm
         },
         {
             useScoreMap: true
@@ -4542,6 +4627,15 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     const parseScore = parseArgs.parseScore ?? false;
     const parseId = parseArgs.parseId ?? null;
 
+    let exactMods = parseArgs.exactMods;
+
+    const pp = parseArgs.pp;
+    const score = parseArgs.score;
+    const acc = parseArgs.acc;
+    const combo = parseArgs.combo;
+    const miss = parseArgs.miss;
+    const bpm = parseArgs.bpm;
+
     let reachedMaxCount = false;
     let embedStyle: extypes.osuCmdStyle = 'L';
 
@@ -4620,8 +4714,31 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             {
                 name: 'Rank',
                 value: filterRank
-            }
-
+            },
+            {
+                name: 'Exact Mods',
+                value: exactMods
+            },
+            {
+                name: 'pp',
+                value: pp
+            },
+            {
+                name: 'Score',
+                value: score
+            },
+            {
+                name: 'Accuracy',
+                value: acc
+            },
+            {
+                name: 'Combo',
+                value: combo
+            },
+            {
+                name: 'Miss',
+                value: miss
+            },
         ]
     });
 
@@ -4909,7 +5026,14 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             filteredMods: filteredMods,
             filterMapTitle: filterTitle,
             filterRank,
-            reverse: false
+            reverse: false,
+            exactMods,
+            pp,
+            score,
+            acc,
+            combo,
+            miss,
+            bpm
         },
         {
             useScoreMap: true
@@ -5016,6 +5140,15 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
     let filterTitle = null;
     let filterRank: osuApiTypes.Rank = null;
 
+    let exactMods = null;
+
+    let pp = null;
+    let score = null;
+    let acc = null;
+    let combo = null;
+    let miss = null;
+    let bpm = null;
+
     let embedStyle: extypes.osuCmdStyle = 'S';
 
     let scoredetailed = 1;
@@ -5064,6 +5197,15 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             filterTitle = temp.filterTitle;
             scoredetailed = temp.scoredetailed;
             filterRank = temp.filterRank;
+
+            exactMods = temp.exactMods;
+
+            pp = temp.pp;
+            score = temp.score;
+            acc = temp.acc;
+            combo = temp.combo;
+            miss = temp.miss;
+            bpm = temp.bpm;
 
             input.args = cleanArgs(input.args);
 
@@ -5277,8 +5419,31 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             {
                 name: 'Rank',
                 value: filterRank
-            }
-
+            },
+            {
+                name: 'Exact Mods',
+                value: exactMods
+            },
+            {
+                name: 'pp',
+                value: pp
+            },
+            {
+                name: 'Score',
+                value: score
+            },
+            {
+                name: 'Accuracy',
+                value: acc
+            },
+            {
+                name: 'Combo',
+                value: combo
+            },
+            {
+                name: 'Miss',
+                value: miss
+            },
         ]
     });
 
@@ -6045,7 +6210,14 @@ ${srStr}
                 filteredMods: null,
                 filterMapTitle: filterTitle,
                 filterRank,
-                reverse: false
+                reverse: false,
+                exactMods,
+                pp,
+                score,
+                acc,
+                combo,
+                miss,
+                bpm
             },
             {
                 useScoreMap: true
@@ -7607,6 +7779,15 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     let parseScore = false;
     let parseId = null;
 
+    let exactMods = null;
+
+    let pp = null;
+    let score = null;
+    let acc = null;
+    let combo = null;
+    let miss = null;
+    let bpm = null;
+
     let useContent: string = null;
 
     let embedStyle: extypes.osuCmdStyle = 'L';
@@ -7864,7 +8045,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             {
                 name: 'Parse',
                 value: `${parseId}`
-            }
+            },
         ]
     });
 
@@ -8206,7 +8387,14 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             filterMapTitle: null,
             filterRank,
             reverse: reverse,
-            mapidOverride: mapdata.id
+            mapidOverride: mapdata.id,
+            exactMods,
+            pp,
+            score,
+            acc,
+            combo,
+            miss,
+            bpm
         },
         {
             useScoreMap: false,
@@ -15208,12 +15396,21 @@ async function parseArgs_scoreList_message(input: extypes.commandInput) {
     let sort: embedStuff.scoreSort = null;
     let reverse = false;
     let mode = 'osu';
-    const filteredMapper = null;
-    const filteredMods = null;
+    let filteredMapper = null;
+    let filteredMods = null;
+    let exactMods = null;
     let filterTitle = null;
 
     let parseScore = false;
     let parseId = null;
+
+    let pp = null;
+    let score = null;
+    let acc = null;
+    let combo = null;
+    let miss = null;
+    let bpm = null;
+
 
     let filterRank: osuApiTypes.Rank = null;
 
@@ -15300,41 +15497,13 @@ async function parseArgs_scoreList_message(input: extypes.commandInput) {
         sort = 'recent';
         input.args.splice(input.args.indexOf('-recent'), 1);
     }
-    if (input.args.includes('-performance')) {
-        sort = 'pp';
-        input.args.splice(input.args.indexOf('-performance'), 1);
-    }
-    if (input.args.includes('-pp')) {
-        sort = 'pp';
-        input.args.splice(input.args.indexOf('-pp'), 1);
-    }
-    if (input.args.includes('-score')) {
-        sort = 'score';
-        input.args.splice(input.args.indexOf('-score'), 1);
-    }
-    if (input.args.includes('-acc')) {
-        sort = 'acc';
-        input.args.splice(input.args.indexOf('-acc'), 1);
-    }
-    if (input.args.includes('-combo')) {
-        sort = 'combo';
-        input.args.splice(input.args.indexOf('-combo'), 1);
-    }
-    if (input.args.includes('-misses')) {
-        sort = 'miss',
-            input.args.splice(input.args.indexOf('-misses'));
-    }
-    if (input.args.includes('-miss')) {
-        sort = 'miss';
-        input.args.splice(input.args.indexOf('-miss'), 1);
-    }
-    if (input.args.includes('-rank')) {
-        sort = 'rank';
-        input.args.splice(input.args.indexOf('-rank'), 1);
-    }
     if (input.args.includes('-r')) {
         sort = 'recent';
         input.args.splice(input.args.indexOf('-r'), 1);
+    }
+    if (input.args.includes('-performance')) {
+        sort = 'pp';
+        input.args.splice(input.args.indexOf('-performance'), 1);
     }
     if (input.args.includes('-reverse')) {
         reverse = true;
@@ -15344,6 +15513,77 @@ async function parseArgs_scoreList_message(input: extypes.commandInput) {
         reverse = true;
         input.args.splice(input.args.indexOf('-rev'), 1);
     }
+    if (input.args.includes('-mods')) {
+        const temp = func.parseArg(input.args, '-mods', 'string', filteredMods, false);
+        filteredMods = temp.value;
+        input.args.splice(input.args.indexOf('-mods'), 1);
+    }
+    if (input.args.includes('-modx')) {
+        const temp = func.parseArg(input.args, '-modx', 'string', exactMods, false);
+        exactMods = temp.value;
+        input.args.splice(input.args.indexOf('-modx'), 1);
+    }
+    if (input.args.includes('-mx')) {
+        const temp = func.parseArg(input.args, '-mx', 'string', exactMods, false);
+        exactMods = temp.value;
+        input.args.splice(input.args.indexOf('-mx'), 1);
+    }
+    if (input.args.includes('-mapper')) {
+        const temp = func.parseArg(input.args, '-mapper', 'string', filteredMapper, true);
+        filteredMapper = temp.value;
+        input.args.splice(input.args.indexOf('-mapper'), 1);
+    }
+    if (input.args.includes('-sort')) {
+        const temp = func.parseArg(input.args, '-sort', 'string', sort, false);
+        sort = temp.value;
+        input.args.splice(input.args.indexOf('-sort'), 1);
+    }
+
+    if (input.args.includes('-pp')) {
+        const temp = func.parseArg(input.args, '-pp', 'string', pp, false);
+        pp = temp.value;
+        input.args.splice(input.args.indexOf('-pp'), 1);
+    }
+    if (input.args.includes('-score')) {
+        const temp = func.parseArg(input.args, '-score', 'string', score, false);
+        score = temp.value;
+        input.args.splice(input.args.indexOf('-score'), 1);
+    }
+    if (input.args.includes('-acc')) {
+        const temp = func.parseArg(input.args, '-acc', 'string', acc, false);
+        acc = temp.value;
+        input.args.splice(input.args.indexOf('-acc'), 1);
+    }
+    if (input.args.includes('-combo')) {
+        const temp = func.parseArg(input.args, '-combo', 'string', combo, false);
+        combo = temp.value;
+        input.args.splice(input.args.indexOf('-combo'), 1);
+    }
+    if (input.args.includes('-misses')) {
+        const temp = func.parseArg(input.args, '-misses', 'string', miss, false);
+        miss = temp.value;
+        input.args.splice(input.args.indexOf('-misses'), 1);
+    }
+    if (input.args.includes('-miss')) {
+        const temp = func.parseArg(input.args, '-miss', 'string', miss, false);
+        miss = temp.value;
+        input.args.splice(input.args.indexOf('-miss'), 1);
+    }
+    if (input.args.includes('-rank')) {
+        const temp = func.parseArg(input.args, '-rank', 'string', filterRank, false);
+        filterRank = temp.value;
+        input.args.splice(input.args.indexOf('-rank'), 1);
+    }
+    if (input.args.includes('-bpm')) {
+        const temp = func.parseArg(input.args, '-bpm', 'string', bpm, false);
+        bpm = temp.value;
+        input.args.splice(input.args.indexOf('-bpm'), 1);
+    }
+    if (input.args.includes('-grade')) {
+        const temp = func.parseArg(input.args, '-grade', 'string', filterRank, false);
+        filterRank = osumodcalc.checkGrade(temp.value);
+        input.args = temp.newArgs;
+    }
 
     if (input.args.includes('-?')) {
         const temp = func.parseArg(input.args, '-?', 'string', filterTitle, true);
@@ -15351,11 +15591,6 @@ async function parseArgs_scoreList_message(input: extypes.commandInput) {
         input.args = temp.newArgs;
     }
 
-    if (input.args.includes('-grade')) {
-        const temp = func.parseArg(input.args, '-grade', 'string', filterRank, false);
-        filterRank = osumodcalc.checkGrade(temp.value);
-        input.args = temp.newArgs;
-    }
 
     input.args = cleanArgs(input.args);
 
@@ -15366,8 +15601,11 @@ async function parseArgs_scoreList_message(input: extypes.commandInput) {
     return {
         user, searchid, page, scoredetailed,
         sort, reverse, mode,
-        filteredMapper, filteredMods, filterTitle, filterRank,
+        filteredMapper, filterTitle, filterRank,
         parseScore, parseId,
+        filteredMods, exactMods,
+        pp, score, acc, combo, miss,
+        bpm
     };
 }
 
@@ -15546,6 +15784,16 @@ async function parseArgs_scoreList(input: extypes.commandInput) {
     let parseScore = false;
     let parseId = null;
 
+
+    let exactMods = null;
+
+    let pp = null;
+    let score = null;
+    let acc = null;
+    let combo = null;
+    let miss = null;
+    let bpm = null;
+
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
@@ -15566,7 +15814,13 @@ async function parseArgs_scoreList(input: extypes.commandInput) {
             parseScore = temp.parseScore;
             parseId = temp.parseId;
             filterRank = temp.filterRank;
-
+            exactMods = temp.exactMods;
+            pp = temp.pp;
+            score = temp.score;
+            acc = temp.acc;
+            combo = temp.combo;
+            miss = temp.miss;
+            bpm = temp.bpm;
         }
             break;
 
@@ -15620,8 +15874,11 @@ async function parseArgs_scoreList(input: extypes.commandInput) {
         commanduser,
         user, searchid, page, scoredetailed,
         sort, reverse, mode,
-        filteredMapper, filteredMods, filterTitle, filterRank,
+        filteredMapper, filterTitle, filterRank,
         parseScore, parseId,
+        filteredMods, exactMods,
+        pp, score, acc, combo, miss,
+        bpm
     };
 }
 

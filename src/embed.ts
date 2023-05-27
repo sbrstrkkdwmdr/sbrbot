@@ -6,6 +6,7 @@ import * as emojis from './consts/emojis.js';
 import * as osufunc from './osufunc.js';
 import * as osumodcalc from './osumodcalc.js';
 import * as func from './tools.js';
+import * as extypes from './types/extratypes.js';
 import * as osuapitypes from './types/osuApiTypes.js';
 
 export async function scoreList(
@@ -20,77 +21,175 @@ export async function scoreList(
         truePosType: scoreSort,
         filteredMapper: string,
         filteredMods: string,
+        exactMods: string,
         filterMapTitle: string,
         filterRank: osuapitypes.Rank,
         reverse: boolean,
         mapidOverride?: number,
         showUserName?: boolean,
+        pp?: string,
+        score?: string,
+        acc?: string,
+        combo?: string,
+        miss?: string,
+        bpm?: string,
     },
     mapping: {
         useScoreMap: boolean,
         overrideMapLastDate?: string;
     }
 ) {
-    let filtereddata = asObj.scores.slice();
+    let filtereddata: extypes.SortedScore[] = [];
     let filterinfo = '';
+    //convert scores into "sorted scores" in order to preserve their index number
+    for (let i = 0; i < asObj.scores.length; i++) {
+        filtereddata.push({
+            index: i + 1,
+            score: asObj.scores[i]
+        });
+    }
 
     if (asObj.filteredMapper != null) {
-        filtereddata = filtereddata.filter(array => array.beatmapset.creator.toLowerCase() == asObj.filteredMapper.toLowerCase());
+        filtereddata = filtereddata.filter(array => array.score.beatmapset.creator.toLowerCase() == asObj.filteredMapper.toLowerCase());
         filterinfo += `\nmapper: ${asObj.filteredMapper}`;
     }
     let calcmods = osumodcalc.OrderMods(asObj.filteredMods + '');
+    let calcmodsx = osumodcalc.OrderMods(asObj.filteredMods + '');
     if (calcmods.length < 1) {
         calcmods = 'NM';
         asObj.filteredMods = null;
     }
-    if (asObj.filteredMods != null && !asObj.filteredMods.includes('any')) {
-        filtereddata = filtereddata.filter(array => array.mods.toString().replaceAll(',', '') == calcmods);
-        filterinfo += `\nmods: ${asObj.filteredMods}`;
+    if (calcmodsx.length < 1) {
+        calcmodsx = 'NM';
+        asObj.exactMods = null;
     }
-    if (asObj.filteredMods != null && asObj.filteredMods.includes('any')) {
-        filtereddata = filtereddata.filter(array => array.mods.toString().replaceAll(',', '').includes(calcmods));
-        filterinfo += `\nmods: ${asObj.filteredMods}`;
+    if (asObj.exactMods != null) {
+        filtereddata = filtereddata.filter(array => array.score.mods.toString().replaceAll(',', '') == calcmods);
+        filterinfo += `\nexact mods: ${calcmodsx}`;
+    }
+    if (asObj.filteredMods != null) {
+        filtereddata = filtereddata.filter(array => array.score.mods.toString().replaceAll(',', '').includes(calcmods));
+        filterinfo += `\nmods: ${calcmods}`;
     }
     if (asObj.filterMapTitle != null) {
+        filtereddata = filtereddata.filter(y => {
+            const x = y.score;
+            return (
+                x.beatmapset.title.toLowerCase().replaceAll(' ', '')
+                +
+                x.beatmapset.artist.toLowerCase().replaceAll(' ', '')
+                +
+                x.beatmap.version.toLowerCase().replaceAll(' ', '')
+            ).includes(asObj.filterMapTitle.toLowerCase().replaceAll(' ', ''))
+                ||
+                x.beatmapset.title.toLowerCase().replaceAll(' ', '').includes(asObj.filterMapTitle.toLowerCase().replaceAll(' ', ''))
+                ||
+                x.beatmapset.artist.toLowerCase().replaceAll(' ', '').includes(asObj.filterMapTitle.toLowerCase().replaceAll(' ', ''))
+                ||
+                x.beatmap.version.toLowerCase().replaceAll(' ', '').includes(asObj.filterMapTitle.toLowerCase().replaceAll(' ', ''))
+                ||
+                asObj.filterMapTitle.toLowerCase().replaceAll(' ', '').includes(x.beatmapset.title.toLowerCase().replaceAll(' ', ''))
+                ||
+                asObj.filterMapTitle.toLowerCase().replaceAll(' ', '').includes(x.beatmapset.artist.toLowerCase().replaceAll(' ', ''))
+                ||
+                asObj.filterMapTitle.toLowerCase().replaceAll(' ', '').includes(x.beatmap.version.toLowerCase().replaceAll(' ', ''));
+        });
+
         filterinfo += `\nmap: ${asObj.filterMapTitle}`;
     }
     if (asObj.filterRank != null) {
+        filtereddata = filtereddata.filter(array => array.score.mods.toString().replaceAll(',', '').includes(calcmods));
         filterinfo += `\nrank: ${asObj.filterRank}`;
     }
+    if (asObj.pp != null) {
+        filterinfo += `\npp: ${asObj.pp}`;
+        const tempType: 'l' | 'g' = asObj.pp.includes('<') ? 'l' : 'g';
+        const tempValue = +(asObj.pp.replace('<', '').replace('>', '')) ?? 0;
+        filtereddata = filtereddata.filter(array =>
+            tempType == 'g' ?
+                array.score.pp > tempValue :
+                array.score.pp < tempValue);
+    }
+    if (asObj.score != null) {
+        filterinfo += `\nscore: ${asObj.score}`;
+        const tempType: 'l' | 'g' = asObj.score.includes('<') ? 'l' : 'g';
+        const tempValue = +(asObj.score.replace('<', '').replace('>', '')) ?? 0;
+        filtereddata = filtereddata.filter(array =>
+            tempType == 'g' ?
+                array.score.score > tempValue :
+                array.score.score < tempValue);
+    }
+    if (asObj.acc != null) {
+        filterinfo += `\nacc: ${asObj.acc}`;
+        const tempType: 'l' | 'g' = asObj.acc.includes('<') ? 'l' : 'g';
+        const tempValue = +(asObj.acc.replace('<', '').replace('>', '')) ?? 0;
+        filtereddata = filtereddata.filter(array =>
+            tempType == 'g' ?
+                array.score.accuracy > tempValue :
+                array.score.accuracy < tempValue);
+    }
+    if (asObj.combo != null) {
+        filterinfo += `\ncombo: ${asObj.combo}`;
+        const tempType: 'l' | 'g' = asObj.combo.includes('<') ? 'l' : 'g';
+        const tempValue = +(asObj.combo.replace('<', '').replace('>', '')) ?? 0;
+        filtereddata = filtereddata.filter(array =>
+            tempType == 'g' ?
+                array.score.max_combo > tempValue :
+                array.score.max_combo < tempValue);
+    }
+    if (asObj.miss != null) {
+        filterinfo += `\nmiss: ${asObj.miss}`;
+        const tempType: 'l' | 'g' = asObj.miss.includes('<') ? 'l' : 'g';
+        const tempValue = +(asObj.miss.replace('<', '').replace('>', '')) ?? 0;
+        filtereddata = filtereddata.filter(array =>
+            tempType == 'g' ?
+                array.score.statistics.count_miss > tempValue :
+                array.score.statistics.count_miss < tempValue);
+    }
+    if (asObj.bpm != null) {
+        filterinfo += `\nbpm: ${asObj.bpm}`;
+        const tempType: 'l' | 'g' = asObj.bpm.includes('<') ? 'l' : 'g';
+        const tempValue = +(asObj.bpm.replace('<', '').replace('>', '')) ?? 0;
+        filtereddata = filtereddata.filter(array =>
+            tempType == 'g' ?
+                array.score.beatmap.bpm > tempValue :
+                array.score.beatmap.bpm < tempValue);
+    }
+
 
     let newData = filtereddata.slice();
     let sortinfo;
     switch (asObj.sort) {
         case 'score':
-            newData = await filtereddata.slice().sort((a, b) => b.score - a.score);
+            newData = await filtereddata.slice().sort((a, b) => b.score.score - a.score.score);
             sortinfo = `\nsorted by highest score`;
             break;
         case 'acc':
-            newData = await filtereddata.slice().sort((a, b) => b.accuracy - a.accuracy);
+            newData = await filtereddata.slice().sort((a, b) => b.score.accuracy - a.score.accuracy);
             sortinfo = `\nsorted by highest accuracy`;
             break;
         case 'pp': default:
-            newData = await filtereddata.slice().sort((a, b) => b.pp - a.pp);
+            newData = await filtereddata.slice().sort((a, b) => b.score.pp - a.score.pp);
             sortinfo = `\nsorted by highest pp`;
             asObj.sort = 'pp';
             break;
         case 'recent':
             newData = await filtereddata.slice().sort((a, b) =>
-                parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
+                parseFloat(b.score.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
                 -
-                parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')));
+                parseFloat(a.score.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', '')));
             sortinfo = `\nsorted by most recent`;
             break;
         case 'combo':
-            newData = await filtereddata.slice().sort((a, b) => b.max_combo - a.max_combo);
+            newData = await filtereddata.slice().sort((a, b) => b.score.max_combo - a.score.max_combo);
             sortinfo = `\nsorted by highest combo`;
             break;
         case 'miss':
-            newData = await filtereddata.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss);
+            newData = await filtereddata.slice().sort((a, b) => a.score.statistics.count_miss - b.score.statistics.count_miss);
             sortinfo = `\nsorted by least misses`;
             break;
         case 'rank':
-            newData = await filtereddata.slice().sort((a, b) => a.rank.localeCompare(b.rank));
+            newData = await filtereddata.slice().sort((a, b) => a.score.rank.localeCompare(b.score.rank));
             sortinfo = `\nsorted by best rank`;
             break;
     }
@@ -127,40 +226,6 @@ export async function scoreList(
 
     fs.writeFileSync('debug.json', JSON.stringify(asObj.scores, null, 2));
 
-    let trueIndex: string | number = '';
-
-    let truePosArr = newData.slice();
-
-    if (asObj.showTruePosition && asObj.sort != asObj.truePosType) {
-        switch (asObj.truePosType) {
-            case 'score':
-                truePosArr = await asObj.scores.slice().sort((a, b) => b.score - a.score);
-                break;
-            case 'acc':
-                truePosArr = await asObj.scores.slice().sort((a, b) => b.accuracy - a.accuracy);
-                break;
-            case 'pp': default:
-                truePosArr = await asObj.scores.slice().sort((a, b) => b.pp - a.pp);
-                break;
-            case 'recent':
-                truePosArr = await asObj.scores.slice().sort((a, b) =>
-                    parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
-                    -
-                    parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
-                );
-                break;
-            case 'combo':
-                truePosArr = await asObj.scores.slice().sort((a, b) => b.max_combo - a.max_combo);
-                break;
-            case 'miss':
-                truePosArr = await asObj.scores.slice().sort((a, b) => a.statistics.count_miss - b.statistics.count_miss);
-                break;
-            case 'rank':
-                truePosArr = await asObj.scores.slice().sort((a, b) => a.rank.localeCompare(b.rank));
-                break;
-        }
-    }
-
     let perPage = 5;
     switch (asObj.detailed) {
         case 0:
@@ -182,18 +247,16 @@ export async function scoreList(
 
     for (let i = 0; i < newData.length && i < perPage; i++) {
         const scoreoffset = asObj.page * perPage + i;
-        const curscore = newData[scoreoffset];
+        const curscore = newData[scoreoffset].score;
 
         if (!curscore) {
             break;
         }
-        if (asObj.showTruePosition && asObj.sort != asObj.truePosType) {
-            if (curscore.id != truePosArr[scoreoffset].id) {
-                trueIndex = await truePosArr.indexOf(curscore) + 1;
-            } else {
-                trueIndex = '';
-            }
-        }
+
+        // const trueIndex = newData[scoreoffset].index;
+        const scoreID =
+        //  `${scoreoffset + 1} ${trueIndex != scoreoffset + 1 ? `(${trueIndex})` : ''}`;
+        `${newData[scoreoffset].index}`;
 
         const mapid = asObj.mapidOverride ?? curscore.beatmap.id;
 
@@ -268,10 +331,10 @@ export async function scoreList(
         if (asObj.showMapTitle == true) {
             showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}`;
         } else {
-            showtitle = `[Score #${i + 1 + (asObj.page * perPage)}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods}`;
+            showtitle = `[Score #${scoreID}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${ifmods}`;
         }
         if (asObj.showUserName == true) {
-            showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id}) ${trueIndex != '' ? `(#${trueIndex})` : ''} ${ifmods}`;
+            showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id}) ${ifmods}`;
         }
 
         let weighted;
@@ -283,12 +346,12 @@ export async function scoreList(
 
         switch (asObj.detailed) {
             case 0: case 2: {
-                let useTitle = `**#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}** | ${showtitle ? '**' + showtitle + '**' : ''}`;
+                let useTitle = `**#${scoreID}** | ${showtitle ? '**' + showtitle + '**' : ''}`;
                 if (showtitle.includes('Score #')) {
                     useTitle = `**${showtitle}**`;
                 }
                 scoresAsFields.push({
-                    name: `#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
+                    name: `#${scoreID}`,
                     value: `
 ${showtitle ? '**' + showtitle + '**' : ''}
 \`${hitlist}\` | ${curscore.max_combo == curscore?.beatmap?.max_combo ? `**${func.separateNum(curscore.max_combo)}x**` : `${func.separateNum(curscore.max_combo)}x`} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} ${curscore?.pp ? `| ` + curscore.pp.toFixed(2) + 'pp' : ''}
@@ -303,7 +366,7 @@ ${useTitle}
                 break;
             default: case 1: {
                 scoresAsFields.push({
-                    name: `#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}`,
+                    name: `#${scoreID}`,
                     value: `
 ${showtitle ? '**' + showtitle + '**\n' : ''} **<t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>** | [Score](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${curscore.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 \`${hitlist}\` | ${curscore.max_combo == curscore?.beatmap?.max_combo ? `**${func.separateNum(curscore.max_combo)}x**` : `${func.separateNum(curscore.max_combo)}x`} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
@@ -311,7 +374,7 @@ ${pptxt} ${weighted}`,
                     inline: false
                 });
                 scoresAsArrStr.push(
-                    `#${i + 1 + (asObj.page * perPage)} ${trueIndex != '' ? `(#${trueIndex})` : ''}
+                    `#${scoreID}
 ${showtitle ? '**' + showtitle + '**\n' : ''} **<t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>** | [Score](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${curscore.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 \`${hitlist}\` | ${curscore.max_combo == curscore?.beatmap?.max_combo ? `**${func.separateNum(curscore.max_combo)}x**` : `${func.separateNum(curscore.max_combo)}x`} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
 ${pptxt} ${weighted}
@@ -663,11 +726,11 @@ ${calc.secondsToTime(topmap.total_length)} | ${func.separateNum(curmapset.favour
                             inline: false
                         });
                         mapsArrStr.push(
-`**#${offset + 1} | [${curmapset.artist} - ${curmapset.title} [${current.beatmap.version}]](https://osu.ppy.sh/s/${curmapset.id})**
+                            `**#${offset + 1} | [${curmapset.artist} - ${curmapset.title} [${current.beatmap.version}]](https://osu.ppy.sh/s/${curmapset.id})**
 **${current.count}x plays**
 ${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
 ${calc.secondsToTime(topmap.total_length)} | ${func.separateNum(curmapset.favourite_count)} favourites`
-);
+                        );
                         break;
                 }
             }
@@ -702,6 +765,11 @@ export async function sortScores(input: {
     reverse: boolean,
     mapidOverride?: number,
     showUserName?: boolean,
+    pp?: string,
+    score?: string,
+    acc?: string,
+    combo?: string,
+    miss?: string;
 }) {
 
 }

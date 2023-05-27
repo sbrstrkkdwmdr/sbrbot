@@ -323,3 +323,6 @@ commit:
 [QOL] update error messages
 [ADD] added arbitrary units to convert
 [QOL] moved conversions.ts to src/consts/
+[ADD] added greater/less than args to filter by pp, score etc.
+[QOL] rewrote some of the sorting flags to fit the change above
+[QOL] rewrote index numbers on scorelist commands
