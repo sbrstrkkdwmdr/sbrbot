@@ -577,7 +577,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk',],
+                names: ['Week', 'wk', 'sennight',],
                 func: (x) => {
                     return x / 604800;
                 },
@@ -592,12 +592,60 @@ export const values: convVal[] = [
                 text: 'x/86400/30.437'
             },
             {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x / 86400 / 40;
+                },
+                text: 'x/86400/40'
+            },
+            {
                 to: 'Year',
                 names: ['Year', 'yr',],
                 func: (x) => {
                     return x / 86400 / 365.25;
                 },
                 text: 'x/86400/365.25'
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x / 86400 / 365.25 / 10;
+                },
+                text: 'x/86400/365.25/10'
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x / 86400 / 365.25 / 100;
+                },
+                text: 'x/86400/365.25/100'
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: (x) => {
+                    return x / 86400 / 365.25 / 1000;
+                },
+                text: 'x/86400/365.25/1000'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: (x) => {
+                    return x / 86400 / 365.25 / 1000000;
+                },
+                text: 'x/86400/365.25/1000000'
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
+                func: (x) => {
+                    return x / 86400 / 365.25 / 1000000000;
+                },
+                text: 'x/86400/365.25/1000000000'
             },
             toArbitrary
         ]
@@ -642,7 +690,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk',],
+                names: ['Week', 'wk', 'sennight',],
                 func: (x) => {
                     return x / 10080;
                 },
@@ -657,12 +705,60 @@ export const values: convVal[] = [
                 text: 'x/1440/30.437'
             },
             {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x / 1440 / 40;
+                },
+                text: 'x/1440/40'
+            },
+            {
                 to: 'Year',
                 names: ['Year', 'yr'],
                 func: (x) => {
                     return x / 1440 / 365.25;
                 },
                 text: 'x/1440/365.25'
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x / 1440 / 365.25 / 10;
+                },
+                text: 'x/1440/365.25/10'
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x / 1440 / 365.25 / 100;
+                },
+                text: 'x/1440/365.25/100'
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: (x) => {
+                    return x / 1440 / 365.25 / 1000;
+                },
+                text: 'x/1440/365.25/1000'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: (x) => {
+                    return x / 1440 / 365.25 / 1000000;
+                },
+                text: 'x/1440/365.25/1000000'
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
+                func: (x) => {
+                    return x / 1440 / 365.25 / 1000000000;
+                },
+                text: 'x/1440/365.25/1000000000'
             },
             toArbitrary
         ]
@@ -707,7 +803,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk',],
+                names: ['Week', 'wk', 'sennight',],
                 func: (x) => {
                     return x / 168;
                 },
@@ -722,12 +818,60 @@ export const values: convVal[] = [
                 text: 'x/730.0008'
             },
             {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x / 24 / 40;
+                },
+                text: 'x/24/40'
+            },
+            {
                 to: 'Year',
                 names: ['Year', 'yr',],
                 func: (x) => {
                     return x / 8766;
                 },
                 text: 'x/8766'
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x / 8766 / 10;
+                },
+                text: 'x/8766/10'
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x / 8766 / 100;
+                },
+                text: 'x/8766/100'
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: (x) => {
+                    return x / 8766 / 1000;
+                },
+                text: 'x/8766/1000'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: (x) => {
+                    return x / 8766 / 1000000;
+                },
+                text: 'x/8766/1000000'
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
+                func: (x) => {
+                    return x / 8766 / 1000000000;
+                },
+                text: 'x/8766/1000000000'
             },
             toArbitrary
         ]
@@ -772,7 +916,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk',],
+                names: ['Week', 'wk', 'sennight',],
                 func: (x) => {
                     return x / 7;
                 },
@@ -787,6 +931,14 @@ export const values: convVal[] = [
                 text: 'x/30.4167'
             },
             {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x / 40;
+                },
+                text: 'x/40'
+            },
+            {
                 to: 'Year',
                 names: ['Year', 'yr',],
                 func: (x) => {
@@ -794,12 +946,52 @@ export const values: convVal[] = [
                 },
                 text: 'x/365.25'
             },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x / 365.25 / 10;
+                },
+                text: 'x/365.25/10'
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x / 365.25 / 100;
+                },
+                text: 'x/365.25/100'
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: (x) => {
+                    return x / 365.25 / 1000;
+                },
+                text: 'x/365.25/1000'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: (x) => {
+                    return x / 365.25 / 1000000;
+                },
+                text: 'x/365.25/1000000'
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
+                func: (x) => {
+                    return x / 365.25 / 1000000000;
+                },
+                text: 'x/365.25/1000000000'
+            },
             toArbitrary
         ]
     },
     {
         name: 'Week',
-        names: ['Week', 'wk'],
+        names: ['Week', 'wk', 'sennight',],
         type: 'Time',
         system: 'N/A',
         calc: [
@@ -837,7 +1029,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk',],
+                names: ['Week', 'wk', 'sennight',],
                 func: (x) => {
                     return x;
                 },
@@ -852,12 +1044,60 @@ export const values: convVal[] = [
                 text: 'x/4.34524'
             },
             {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x * 7 / 40;
+                },
+                text: 'x*7/40'
+            },
+            {
                 to: 'Year',
                 names: ['Year', 'yr',],
                 func: (x) => {
                     return x / 52.1785714286;
                 },
                 text: 'x/52.1785714286'
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x / 52.1785714286 / 10;
+                },
+                text: 'x/52.1785714286/10'
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x / 52.1785714286 / 100;
+                },
+                text: 'x/52.1785714286/100'
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: (x) => {
+                    return x / 52.1785714286 / 1000;
+                },
+                text: 'x/52.1785714286/1000'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: (x) => {
+                    return x / 52.1785714286 / 1000000;
+                },
+                text: 'x/52.1785714286/1000000'
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
+                func: (x) => {
+                    return x / 52.1785714286 / 1000000000;
+                },
+                text: 'x/52.1785714286/1000000000'
             },
             toArbitrary
         ]
@@ -902,7 +1142,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk',],
+                names: ['Week', 'wk', 'sennight',],
                 func: (x) => {
                     return x * 4.34524;
                 },
@@ -917,12 +1157,173 @@ export const values: convVal[] = [
                 text: 'x'
             },
             {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x * 30.4167 / 40;
+                },
+                text: 'x*30.4167/40'
+            },
+            {
                 to: 'Year',
                 names: ['Year', 'yr',],
                 func: (x) => {
                     return x / 12;
                 },
                 text: 'x/12'
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x / 12 / 10;
+                },
+                text: 'x/12/10'
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x / 12 / 100;
+                },
+                text: 'x/12/100'
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: (x) => {
+                    return x / 12 / 1000;
+                },
+                text: 'x/12/1000'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: (x) => {
+                    return x / 12 / 1000000;
+                },
+                text: 'x/12/1000000'
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
+                func: (x) => {
+                    return x / 12 / 1000000000;
+                },
+                text: 'x/12/1000000000'
+            },
+            toArbitrary
+        ]
+    },
+    { // 40 days
+        name: 'Quarantine',
+        names: ['Quarantine', 'quarantina', 'quarentine'],
+        type: 'Time',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Second',
+                names: ['Second', 'sec', 's'],
+                func: (x) => {
+                    return x * 86400 * 40;
+                },
+                text: 'x*86400*40'
+            },
+            {
+                to: 'Minute',
+                names: ['Minute', 'min',],
+                func: (x) => {
+                    return x * 1440 * 40;
+                },
+                text: 'x*1440*40'
+            },
+            {
+                to: 'Hour',
+                names: ['Hour', 'hr'],
+                func: (x) => {
+                    return x * 24 * 40;
+                },
+                text: 'x*24*40'
+            },
+            {
+                to: 'Day',
+                names: ['Day', 'd',],
+                func: (x) => {
+                    return x * 40;
+                },
+                text: 'x*40'
+            },
+            {
+                to: 'Week',
+                names: ['Week', 'wk', 'sennight',],
+                func: (x) => {
+                    return x * 40 / 7;
+                },
+                text: 'x/7*40'
+            },
+            {
+                to: 'Month',
+                names: ['Month', 'mth',],
+                func: (x) => {
+                    return x * 40 / 30.4167;
+                },
+                text: 'x*40/30.4167'
+            },
+            {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Year',
+                names: ['Year', 'yr',],
+                func: (x) => {
+                    return x * 40 / 365.25;
+                },
+                text: 'x*40/365.25'
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x * 40 / 365.25 / 10;
+                },
+                text: 'x*40/365.25/10'
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x * 40 / 365.25 / 100;
+                },
+                text: 'x*40/365.25/100'
+            },
+            {
+                to: 'Millennium',
+                names: ['Year', 'yr',],
+                func: (x) => {
+                    return x * 40 / 365.25 / 1000;
+                },
+                text: 'x*40/365.25/1000'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Year', 'yr',],
+                func: (x) => {
+                    return x * 40 / 365.25 / 1000000;
+                },
+                text: 'x*40/365.25/1000000'
+            },
+            {
+                to: 'Eon',
+                names: ['Year', 'yr',],
+                func: (x) => {
+                    return x * 40 / 365.25 / 1000000000;
+                },
+                text: 'x*40/365.25/1000000000'
             },
             toArbitrary
         ]
@@ -967,7 +1368,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk',],
+                names: ['Week', 'wk', 'sennight',],
                 func: (x) => {
                     return x * 52.1785714286;
                 },
@@ -982,8 +1383,613 @@ export const values: convVal[] = [
                 text: 'x*12'
             },
             {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x * 52.1785714286 / 40;
+                },
+                text: 'x*52.1785714286/40'
+            },
+            {
                 to: 'Year',
                 names: ['Year', 'yr',],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x / 10;
+                },
+                text: 'x/10'
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x / 100;
+                },
+                text: 'x/100'
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: (x) => {
+                    return x / 1000;
+                },
+                text: 'x/1000'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: (x) => {
+                    return x / 1000000;
+                },
+                text: 'x/1000000'
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
+                func: (x) => {
+                    return x / 1000000000;
+                },
+                text: 'x/1000000000'
+            },
+            toArbitrary
+        ]
+    },
+    { // 10 yr
+        name: 'Decade',
+        names: ['Year', 'yr'],
+        type: 'Time',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Second',
+                names: ['Second', 'sec', 's'],
+                func: (x) => {
+                    return x * 31557600 * 10;
+                },
+                text: 'x*31557600*10'
+            },
+            {
+                to: 'Minute',
+                names: ['Minute', 'min',],
+                func: (x) => {
+                    return x * 525960 * 10;
+                },
+                text: 'x*525960*10'
+            },
+            {
+                to: 'Hour',
+                names: ['Hour', 'hr'],
+                func: (x) => {
+                    return x * 8766 * 10;
+                },
+                text: 'x*8766*10'
+            },
+            {
+                to: 'Day',
+                names: ['Day', 'd',],
+                func: (x) => {
+                    return x * 365.25 * 10;
+                },
+                text: 'x*365.25*10'
+            },
+            {
+                to: 'Week',
+                names: ['Week', 'wk', 'sennight',],
+                func: (x) => {
+                    return x * 52.1785714286 * 10;
+                },
+                text: 'x*52.1785714286*10'
+            },
+            {
+                to: 'Month',
+                names: ['Month', 'mth',],
+                func: (x) => {
+                    return x * 12 * 10;
+                },
+                text: 'x*12*10'
+            },
+            {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x * 52.1785714286 / 40 * 10;
+                },
+                text: 'x*52.1785714286/40*10'
+            },
+            {
+                to: 'Year',
+                names: ['Year', 'yr',],
+                func: (x) => {
+                    return x * 10;
+                },
+                text: 'x*10'
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x' 
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x/10;
+                },
+                text: 'x/10'
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: (x) => {
+                    return x/100;
+                },
+                text: 'x/100'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: (x) => {
+                    return x/100000;
+                },
+                text: 'x/100000'
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
+                func: (x) => {
+                    return x/100000000;
+                },
+                text: 'x/100000000'
+            },
+            toArbitrary
+        ]
+    },
+    { // 100 yr
+        name: 'Century',
+        names: ['Century', 'century'],
+        type: 'Time',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Second',
+                names: ['Second', 'sec', 's'],
+                func: (x) => {
+                    return x * 31557600 * 100;
+                },
+                text: 'x*31557600*100'
+            },
+            {
+                to: 'Minute',
+                names: ['Minute', 'min',],
+                func: (x) => {
+                    return x * 525960 * 100;
+                },
+                text: 'x*525960*100'
+            },
+            {
+                to: 'Hour',
+                names: ['Hour', 'hr'],
+                func: (x) => {
+                    return x * 8766 * 100;
+                },
+                text: 'x*8766*100'
+            },
+            {
+                to: 'Day',
+                names: ['Day', 'd',],
+                func: (x) => {
+                    return x * 365.25 * 100;
+                },
+                text: 'x*365.25*100'
+            },
+            {
+                to: 'Week',
+                names: ['Week', 'wk', 'sennight',],
+                func: (x) => {
+                    return x * 52.1785714286 * 100;
+                },
+                text: 'x*52.1785714286*100'
+            },
+            {
+                to: 'Month',
+                names: ['Month', 'mth',],
+                func: (x) => {
+                    return x * 12 * 100;
+                },
+                text: 'x*12*100'
+            },
+            {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x * 52.1785714286 / 40 * 100;
+                },
+                text: 'x*52.1785714286/40*100'
+            },
+            {
+                to: 'Year',
+                names: ['Year', 'yr',],
+                func: (x) => {
+                    return x * 100;
+                },
+                text: 'x*100'
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x*10;
+                },
+                text: 'x*10' 
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: (x) => {
+                    return x/10;
+                },
+                text: 'x/10'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: (x) => {
+                    return x/10000;
+                },
+                text: 'x/10000'
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
+                func: (x) => {
+                    return x/10000000;
+                },
+                text: 'x/10000000'
+            },
+            toArbitrary
+        ]
+    },
+    { // 1 000 yr
+        name: 'Millennium',
+        names: ['Millennium', 'Millennia'],
+        type: 'Time',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Second',
+                names: ['Second', 'sec', 's'],
+                func: (x) => {
+                    return x * 31557600 * 1000;
+                },
+                text: 'x*31557600 *1000'
+            },
+            {
+                to: 'Minute',
+                names: ['Minute', 'min',],
+                func: (x) => {
+                    return x * 525960 * 1000;
+                },
+                text: 'x*525960 *1000'
+            },
+            {
+                to: 'Hour',
+                names: ['Hour', 'hr'],
+                func: (x) => {
+                    return x * 8766 * 1000;
+                },
+                text: 'x*8766 *1000'
+            },
+            {
+                to: 'Day',
+                names: ['Day', 'd',],
+                func: (x) => {
+                    return x * 365.25 * 1000;
+                },
+                text: 'x*365.25'
+            },
+            {
+                to: 'Week',
+                names: ['Week', 'wk', 'sennight',],
+                func: (x) => {
+                    return x * 52.1785714286 * 1000;
+                },
+                text: 'x*52.1785714286 *1000'
+            },
+            {
+                to: 'Month',
+                names: ['Month', 'mth',],
+                func: (x) => {
+                    return x * 12 * 1000;
+                },
+                text: 'x*12 *1000'
+            },
+            {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x * 52.1785714286 / 40 * 1000;
+                },
+                text: 'x*52.1785714286/40 *1000'
+            },
+            {
+                to: 'Year',
+                names: ['Year', 'yr',],
+                func: (x) => {
+                    return x * 1000;
+                },
+                text: 'x *1000'
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x*100;
+                },
+                text: 'x*100' 
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x*10;
+                },
+                text: 'x*10'
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: (x) => {
+                    return x/1000;
+                },
+                text: 'x/1000'
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
+                func: (x) => {
+                    return x/1000000;
+                },
+                text: 'x/1000000'
+            },
+            toArbitrary
+        ]
+    },
+    { // 1 000 000 yr
+        name: 'Megaannum',
+        names: ['Megaannum'],
+        type: 'Time',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Second',
+                names: ['Second', 'sec', 's'],
+                func: (x) => {
+                    return x * 31557600*1000000;
+                },
+                text: 'x*31557600*1000000'
+            },
+            {
+                to: 'Minute',
+                names: ['Minute', 'min',],
+                func: (x) => {
+                    return x * 525960*1000000;
+                },
+                text: 'x*525960*1000000'
+            },
+            {
+                to: 'Hour',
+                names: ['Hour', 'hr'],
+                func: (x) => {
+                    return x * 8766*1000000;
+                },
+                text: 'x*8766*1000000'
+            },
+            {
+                to: 'Day',
+                names: ['Day', 'd',],
+                func: (x) => {
+                    return x * 365.25*1000000;
+                },
+                text: 'x*365.25*1000000'
+            },
+            {
+                to: 'Week',
+                names: ['Week', 'wk', 'sennight',],
+                func: (x) => {
+                    return x * 52.1785714286*1000000;
+                },
+                text: 'x*52.1785714286*1000000'
+            },
+            {
+                to: 'Month',
+                names: ['Month', 'mth',],
+                func: (x) => {
+                    return x * 12*1000000;
+                },
+                text: 'x*12*1000000'
+            },
+            {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x * 52.1785714286 / 40*1000000;
+                },
+                text: 'x*52.1785714286/40*1000000'
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x*100000;
+                },
+                text: 'x*100000' 
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x*10000;
+                },
+                text: 'x*10000'
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: (x) => {
+                    return x*1000;
+                },
+                text: 'x*1000'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
+                func: (x) => {
+                    return x/1000;
+                },
+                text: 'x/1000'
+            },
+            toArbitrary
+        ]
+    },
+    { // 1*10^9 yr
+        name: 'Eon',
+        names: ['Eon'],
+        type: 'Time',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Second',
+                names: ['Second', 'sec', 's'],
+                func: (x) => {
+                    return x * 31557600*1000000000;
+                },
+                text: 'x*31557600*1000000000'
+            },
+            {
+                to: 'Minute',
+                names: ['Minute', 'min',],
+                func: (x) => {
+                    return x * 525960*1000000000;
+                },
+                text: 'x*525960*1000000000'
+            },
+            {
+                to: 'Hour',
+                names: ['Hour', 'hr'],
+                func: (x) => {
+                    return x * 8766*1000000000;
+                },
+                text: 'x*8766*1000000000'
+            },
+            {
+                to: 'Day',
+                names: ['Day', 'd',],
+                func: (x) => {
+                    return x * 365.25*1000000000;
+                },
+                text: 'x*365.25*1000000000'
+            },
+            {
+                to: 'Week',
+                names: ['Week', 'wk', 'sennight',],
+                func: (x) => {
+                    return x * 52.1785714286*1000000000;
+                },
+                text: 'x*52.1785714286*1000000000'
+            },
+            {
+                to: 'Month',
+                names: ['Month', 'mth',],
+                func: (x) => {
+                    return x * 12*1000000000;
+                },
+                text: 'x*12*1000000000'
+            },
+            {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
+                func: (x) => {
+                    return x * 52.1785714286 / 40*1000000000;
+                },
+                text: 'x*52.1785714286/40*1000000000'
+            },
+            {
+                to: 'Year',
+                names: ['Year', 'yr',],
+                func: (x) => {
+                    return x*1000000000;
+                },
+                text: 'x*1000000000'
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: (x) => {
+                    return x*100000000;
+                },
+                text: 'x*100000000' 
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: (x) => {
+                    return x*10000000;
+                },
+                text: 'x*10000000'
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: (x) => {
+                    return x*1000000;
+                },
+                text: 'x*1000000'
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: (x) => {
+                    return x*1000;
+                },
+                text: 'x*1000'
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
                 func: (x) => {
                     return x;
                 },
@@ -3042,7 +4048,13 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk',],
+                names: ['Week', 'wk', 'sennight',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Quarantine',
+                names: ['Quarantine', 'quarantina', 'quarentine'],
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
@@ -3055,6 +4067,36 @@ export const values: convVal[] = [
             {
                 to: 'Year',
                 names: ['Year', 'yr',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Decade',
+                names: ['Decade'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Century',
+                names: ['Century'],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Millennium',
+                names: ['Millennium', 'Millennia',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Megaannum',
+                names: ['Megaannum',],
+                func: toArbitrary.func,
+                text: toArbitrary.text
+            },
+            {
+                to: 'Eon',
+                names: ['Eon',],
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
