@@ -327,3 +327,4 @@ commit:
 [QOL] rewrote some of the sorting flags to fit the change above
 [QOL] rewrote index numbers on scorelist commands
 [ADD] add more time conversions
+[ADD] added weather command ()

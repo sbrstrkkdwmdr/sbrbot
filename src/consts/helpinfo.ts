@@ -570,7 +570,7 @@ operators: *, /, +, -, (, )
         slashusage: 'settime <timezone>',
         examples: [
             {
-                text: 'PREFIXMSGtime AEST',
+                text: 'PREFIXMSGsettime AEST',
                 descriptor: 'Set\'s the user\'s timezone to Australian Eastern Standard Time'
             },
         ],
@@ -587,7 +587,32 @@ operators: *, /, +, -, (, )
                 commandTypes: ['message', 'interaction']
             }
         ]
-    }
+    },
+    {
+        name: 'Weather',
+        description: 'Shows the weather for a specific region',
+        usage: 'settime <region>',
+        slashusage: 'settime <region>',
+        examples: [
+            {
+                text: 'PREFIXMSGweather auckland',
+                descriptor: 'Returns the weather for Auckland, New Zealand'
+            },
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'region',
+                type: 'string',
+                required: false,
+                description: 'The region to search for',
+                options: ['Country, city, region'],
+                defaultValue: 'UTC',
+                examples: ['Auckland', 'Melbourne', 'New York'],
+                commandTypes: ['message', 'interaction', 'button']
+            }
+        ]
+    },
 ];
 
 const osucmds: commandInfo[] = [

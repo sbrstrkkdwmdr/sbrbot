@@ -4,7 +4,9 @@ import https from 'https';
 import nfetch from 'node-fetch';
 import { filespath, path } from '../path.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
+import * as othertypes from '../src/types/othertypes.js';
 import * as calc from './calc.js';
+import * as log from './log.js';
 import * as osufunc from './osufunc.js';
 
 export function generateId() {
@@ -117,7 +119,7 @@ const cacheById = [
  * @param id command id. if storing a map use the map id/md5 or user id if storing a user
  * @param name 
  */
-export function storeFile(data: osufunc.apiReturn | ((osuApiTypes.Score[] | osuApiTypes.Beatmapset[] | osuApiTypes.Beatmap[]) & osuApiTypes.Error) | osuApiTypes.BeatmapPlayCountArr, id: string | number, name: string, mode?: osuApiTypes.GameMode, type?: string) {
+export function storeFile(data: string | osufunc.apiReturn | ((osuApiTypes.Score[] | osuApiTypes.Beatmapset[] | osuApiTypes.Beatmap[]) & osuApiTypes.Error) | osuApiTypes.BeatmapPlayCountArr | othertypes.geoLocale | othertypes.weatherData | othertypes.geoResults, id: string | number, name: string, mode?: osuApiTypes.GameMode, type?: string) {
     try {
         if (cacheById.some(x => name.includes(x))) {
             switch (true) {
@@ -444,4 +446,187 @@ export function removeSIPrefix(str: string) {
         power,
         originalValue: str.replace(removedPrefix, ''),
     };
+}
+
+export async function getLocation(name: string) {
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${name.replaceAll(' ', '+')}&count=10&language=en&format=json`;
+    log.toOutput(url);
+    const data = await nfetch(url).then(x => x.json());
+    return data as { results: othertypes.geoLocale[]; };
+}
+
+export async function getWeather(
+    latitude: number,
+    longitude: number,
+) {
+    if (isNaN(latitude) || isNaN(longitude)) {
+        return 'error - NaN values given';
+    }
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}`
+        + "&hourly=temperature_2m,precipitation,rain,pressure_msl,windspeed_10m&current_weather=true&forecast_days=1";
+
+    log.toOutput(url);
+
+    const data = await nfetch(url).then(x => x.json());
+    return data as othertypes.weatherData;
+}
+
+export function weatherCodeToString(code: number) {
+    let string = 'Clear';
+    let icon = '';
+    switch (code) {
+        case 0: default:
+            string = 'Clear sky';
+            icon = '☀';
+            break;
+        case 1:
+            string = 'Mostly clear';
+            icon = '🌤';
+            break;
+        case 2:
+            string = 'Partly Cloudy';
+            icon = '⛅';
+            break;
+        case 3:
+            string = 'Overcast';
+            icon = '☁';
+            break;
+        case 45:
+            string = 'Fog';
+            icon = '🌁';
+            break;
+        case 48:
+            string = 'Fog'; //wtf is deposting rime fog
+            icon = '🌁';
+            break;
+        case 51:
+            string = 'Light drizzle';
+            icon = '🌧';
+            break;
+        case 53:
+            string = 'Moderate drizzle';
+            icon = '🌧';
+            break;
+        case 55:
+            string = 'Heavy drizzle';
+            icon = '🌧';
+            break;
+        case 56:
+            string = 'Light freezing drizzle';
+            icon = '🌧';
+            break;
+        case 57:
+            string = 'Heavy freezing drizzle';
+            icon = '🌧';
+            break;
+        case 61:
+            string = 'Light rain';
+            icon = '🌧';
+            break;
+        case 63:
+            string = 'Moderate rain';
+            icon = '🌧';
+            break;
+        case 65:
+            string = 'Heavy rain';
+            icon = '🌧';
+            break;
+        case 66:
+            string = 'Light freezing rain';
+            icon = '🌧';
+            break;
+        case 67:
+            string = 'Heavy freezing rain';
+            icon = '🌧';
+            break;
+        case 71:
+            string = 'Light snow';
+            icon = '❄';
+            break;
+        case 73:
+            string = 'Moderate snow';
+            icon = '❄';
+            break;
+        case 75:
+            string = 'Heavy snow';
+            icon = '❄';
+            break;
+        case 77:
+            string = 'Snow grains';
+            icon = '❄';
+            break;
+        case 80:
+            string = 'Light showers';
+            icon = '🌧';
+            break;
+        case 81:
+            string = 'Moderate showers';
+            icon = '🌧';
+            break;
+        case 82:
+            string = 'Heavy showers';
+            icon = '🌧';
+            break;
+        case 85:
+            string = 'Light snow showers';
+            icon = '❄';
+            break;
+        case 86:
+            string = 'Heavy snow showers';
+            icon = '❄';
+            break;
+        case 95:
+            string = 'Thunderstorms';
+            icon = '⛈';
+            break;
+        case 96:
+            string = 'Thunderstorms and light hail';
+            icon = '⛈';
+            break;
+        case 99:
+            string = 'Thunderstorms and heavy hail';
+            icon = '⛈';
+            break;
+    }
+    return {
+        string, icon
+    };
+
+}
+
+/**
+ * converts an angle to a wind direction (north, north east, north east east whatever)
+ * @returns direction the wind is coming from 
+*/
+export function windToDirection(angle: number) {
+    //thank you chatGPT
+
+    // Define an array of wind directions in clockwise order
+    const directions = [
+        { name: 'North', travels: 'South', emoji: '⬇' },
+        { name: 'North-Northeast', travels: 'South-Southwest', emoji: '↙' },
+        { name: 'Northeast', travels: 'Southwest', emoji: '↙' },
+        { name: 'East-Northeast', travels: 'West-Southwest', emoji: '↙' },
+        { name: 'East', travels: 'West', emoji: '⬅' },
+        { name: 'East-Southeast', travels: 'West-Northwest', emoji: '↖' },
+        { name: 'Southeast', travels: 'Northwest', emoji: '↖' },
+        { name: 'South-Southeast', travels: 'North-Northwest', emoji: '↖' },
+        { name: 'South', travels: 'North', emoji: '⬆' },
+        { name: 'South-Southwest', travels: 'North-Northeast', emoji: '↗' },
+        { name: 'Southwest', travels: 'Northeast', emoji: '↗' },
+        { name: 'West-Southwest', travels: 'East-Northeast', emoji: '↗' },
+        { name: 'West', travels: 'East', emoji: '➡' },
+        { name: 'West-Northwest', travels: 'East-Southeast', emoji: '↘' },
+        { name: 'Northwest', travels: 'Southeast', emoji: '↘' },
+        { name: 'North-Northwest', travels: 'South-Southeast', emoji: '↘' },
+    ];
+
+    // Normalize the angle to the range 0 to 359 degrees
+    const normalizedAngle = (angle % 360 + 360) % 360;
+
+    // Calculate the index corresponding to the wind direction
+    const index = Math.floor(normalizedAngle / 22.5);
+
+    // Retrieve the wind direction from the array
+    return directions[index];
 }

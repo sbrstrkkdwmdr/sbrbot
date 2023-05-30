@@ -27,7 +27,7 @@ export function anyError() {
 export const uErr = {
     osu: {
         profile: {
-            user: 'Could not find user [ID]', 
+            user: 'Could not find user [ID]',
             user_msp: 'No previous user id found in this guild',
             mostplayed: 'Could not find the user\'s most played beatmaps',
             rsact: 'Could not find the user\'s recent activity'
@@ -71,7 +71,7 @@ export const uErr = {
             crash: 'Could not calculate the map\'s pp'
         },
         set: {
-           mode: 'Invalid mode given',
+            mode: 'Invalid mode given',
         },
         tracking: {
             channel_ms: 'The current server/guild does not have a tracking channel',
@@ -83,5 +83,11 @@ export const uErr = {
         channel: {
             msid: 'Invalid channel id'
         }
+    },
+    weather: {
+        api: "Something went wrong with the weather api",
+        locateNF: "The requested location was not found",
+        wrongCoords: "Something went wrong with the weather api (NaN coordinates)",
+        input_ms: "Missing <region> argument"
     }
 };

@@ -128,6 +128,7 @@ export default (input: {
                     {
                         overrides.ex = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
                     }
+                    break;
                 case 'time':
                     {
                         overrides.ex = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
@@ -136,6 +137,12 @@ export default (input: {
                         }
                         overrides.id = buttonsplit[5];
                     }
+                    break;
+                case 'weather':
+                    {
+                        overrides.ex = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
+                    }
+                    break;
             }
         }
 
@@ -283,6 +290,9 @@ export default (input: {
                 break;
             case 'settime':
                 await commands.timeset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
+            case 'weather':
+                await commands.weather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
         }
         fs.appendFileSync(`${path}/logs/totalcommands.txt`, 'x');

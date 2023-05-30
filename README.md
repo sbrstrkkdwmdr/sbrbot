@@ -78,6 +78,7 @@ copy the key and paste it into the google.apiKey field </br>
 - [osu!stats api](https://github.com/respektive/osustats)</br>
 - [node-fetch](https://www.npmjs.com/package/node-fetch)</br>
 - [osureplayparser](https://www.npmjs.com/package/osureplayparser)</br>
+- Weather API: [open-meteo](https://open-meteo.com)</br>
 
 ## config properties
 

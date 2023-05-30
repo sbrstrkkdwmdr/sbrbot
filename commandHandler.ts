@@ -338,6 +338,10 @@ export default (input: {
                 startType(obj);
                 commands.time({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
+            case 'weather':
+                startType(obj);
+                commands.weather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
 
             //misc
             case '8ball': case 'ask':

@@ -14,6 +14,7 @@ import * as colours from '../src/consts/colours.js';
 import * as conversions from '../src/consts/conversions.js';
 import * as def from '../src/consts/defaults.js';
 import * as emojis from '../src/consts/emojis.js';
+import * as errors from '../src/consts/errors.js';
 import * as helpinfo from '../src/consts/helpinfo.js';
 import * as mainconst from '../src/consts/main.js';
 import * as timezoneList from '../src/consts/timezones.js';
@@ -24,6 +25,7 @@ import * as osumodcalc from '../src/osumodcalc.js';
 import * as func from '../src/tools.js';
 import * as extypes from '../src/types/extraTypes.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
+import * as othertypes from '../src/types/othertypes.js';
 import * as msgfunc from './msgfunc.js';
 
 /**
@@ -1082,7 +1084,7 @@ export async function invite(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
-        commandName: 'COMMANDNAME',
+        commandName: 'invite',
         options: []
     });
 
@@ -2206,5 +2208,210 @@ ${found.map(x => `UTC${x.offsetDirection}${x.offsetHours}\n`).join()}`;
             customString: 'Message failed to send'
         });
     }
+}
 
+export async function weather(input: extypes.commandInput) {
+
+    let commanduser: Discord.User;
+    let name = '';
+    let overrideID: number = null;
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+            name = input.args[0];
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+        if (input?.overrides?.ex != null) {
+            overrideID = +input?.overrides?.ex;
+        }
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'Weather',
+        options: [
+            {
+                name: 'Location',
+                value: name
+            },
+            {
+                name: 'OverrideID',
+                value: overrideID
+            }
+        ]
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    let locatingData: othertypes.geoResults;
+    let useComponents = [];
+
+    if (!name || name == null || name.length == 0) {
+        const err = errors.uErr.weather.input_ms;
+        if (input.commandType != 'button' && input.commandType != 'link') {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: err,
+                    edit: true
+                }
+            }, input.canReply);
+        }
+        logWeatherError(err);
+        return;
+    }
+
+    if (func.findFile(input.absoluteID, 'weatherlocationData') &&
+        !('error' in func.findFile(input.absoluteID, 'weatherlocationData')) &&
+        input.button != 'Refresh'
+    ) {
+        locatingData = func.findFile(input.absoluteID, 'weatherlocationData');
+    } else {
+        locatingData = await func.getLocation(name);
+    }
+
+    func.storeFile(locatingData, input.absoluteID, 'weatherlocationData');
+
+    const weatherEmbed = new Discord.EmbedBuilder()
+        .setTitle('Weather');
+
+    if (locatingData.hasOwnProperty('results')) {
+        if (locatingData?.results?.length < 0) {
+            weatherEmbed
+                .setDescription(errors.uErr.weather.locateNF);
+            logWeatherError(errors.uErr.weather.locateNF);
+        } else if (locatingData?.results?.length == 1) {
+            await toWeather(locatingData[0]);
+        } else if (overrideID) {
+            const location = locatingData.results.find(x => x.id == overrideID);
+            await toWeather(location);
+        } else {
+            await toSelector(locatingData);
+        }
+    } else {
+        weatherEmbed
+            .setDescription(errors.uErr.weather.api);
+        logWeatherError(errors.uErr.weather.api);
+    }
+
+    async function toWeather(location: othertypes.geoLocale) {
+        let weatherData = await func.getWeather(location.latitude, location.longitude);
+        func.storeFile(weatherData, input.absoluteID, 'weatherData');
+        if (typeof weatherData == 'string') {
+            weatherEmbed.setDescription(errors.uErr.weather.wrongCoords);
+            logWeatherError(errors.uErr.weather.wrongCoords);
+            return;
+        } else if (weatherData.hasOwnProperty('reason') || weatherData.hasOwnProperty('error')) {
+            weatherEmbed.setDescription(errors.uErr.weather.api);
+            logWeatherError(errors.uErr.weather.api);
+            return;
+        } else {
+            const localTime = moment(weatherData.current_weather.time)
+                .format("ddd, DD MMM YYYY HH:mm:ss");
+
+            const weatherAtmfr = func.weatherCodeToString(weatherData.current_weather.weathercode);
+            const windDir = func.windToDirection(weatherData.current_weather.winddirection);
+
+            weatherEmbed
+                .setTitle(`Weather for ${location.name}`)
+                .setDescription(`
+${location.admin1 ?? ''} ${location.country} :flag_${location.country_code.toLowerCase()}:
+(${location.latitude}, ${location.longitude})
+Time (UTC): ${localTime} 
+Temperature: ${weatherData.current_weather.temperature}${weatherData.hourly_units.temperature_2m}
+Wind: ${weatherData.current_weather.windspeed}${weatherData.hourly_units.windspeed_10m} ${windDir.name}${windDir.emoji}
+${weatherAtmfr.icon} ${weatherAtmfr.string}
+${weatherData.current_weather.is_day == 0 ? 'Nighttime' : 'Daytime'}
+`);
+
+
+        }
+    }
+
+    function toSelector(data: othertypes.geoResults) {
+        weatherEmbed.setDescription('Multiple locations were found\nPlease select one from the list below');
+        const inputModal = new Discord.StringSelectMenuBuilder()
+            .setCustomId(`${mainconst.version}-Select-weather-${commanduser.id}-${input.absoluteID}`)
+            .setPlaceholder('Select a location');
+        for (let i = 0; i < data.results.length && i < 25; i++) {
+            const current = data.results[i];
+            inputModal.addOptions(
+                new Discord.StringSelectMenuOptionBuilder()
+                    .setLabel(`#${i + 1} | ${current.name}`)
+                    .setDescription(`${current.country} ${current?.admin1} (${current?.latitude?.toFixed(2)} ${current?.longitude?.toFixed(2)})`)
+                    .setValue(`${current.id}`)
+            );
+        }
+        const buttons = new Discord.ActionRowBuilder();
+        buttons.addComponents(inputModal);
+        useComponents = [buttons];
+    };
+
+    function logWeatherError(error) {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'Weather',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: error
+        });
+    }
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [weatherEmbed],
+            components: useComponents,
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'Weather',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'Weather',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send',
+        });
+    }
 }
