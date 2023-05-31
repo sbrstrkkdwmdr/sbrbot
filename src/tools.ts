@@ -458,13 +458,15 @@ export async function getLocation(name: string) {
 export async function getWeather(
     latitude: number,
     longitude: number,
+    location: othertypes.geoLocale,
 ) {
     if (isNaN(latitude) || isNaN(longitude)) {
         return 'error - NaN values given';
     }
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}`
-        + "&hourly=temperature_2m,precipitation,rain,pressure_msl,windspeed_10m&current_weather=true&forecast_days=1";
-
+        + "&hourly=temperature_2m,precipitation,rain,pressure_msl,windspeed_10m&current_weather=true&forecast_days=1"
+        + "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,precipitation_probability_min,precipitation_probability_mean,windspeed_10m_max,windgusts_10m_max,winddirection_10m_dominant"
+        + `&timezone=${location.timezone}`;
     log.toOutput(url);
 
     const data = await nfetch(url).then(x => x.json());

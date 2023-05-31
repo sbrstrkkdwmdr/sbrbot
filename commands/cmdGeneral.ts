@@ -2273,18 +2273,16 @@ export async function weather(input: extypes.commandInput) {
     let locatingData: othertypes.geoResults;
     let useComponents = [];
 
-    if (!name || name == null || name.length == 0) {
+    if ((!name || name == null || name.length == 0) && input.commandType != 'button') {
         const err = errors.uErr.weather.input_ms;
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            await msgfunc.sendMessage({
-                commandType: input.commandType,
-                obj: input.obj,
-                args: {
-                    content: err,
-                    edit: true
-                }
-            }, input.canReply);
-        }
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: err,
+                edit: true
+            }
+        }, input.canReply);
         logWeatherError(err);
         return;
     }
@@ -2323,7 +2321,7 @@ export async function weather(input: extypes.commandInput) {
     }
 
     async function toWeather(location: othertypes.geoLocale) {
-        let weatherData = await func.getWeather(location.latitude, location.longitude);
+        let weatherData = await func.getWeather(location.latitude, location.longitude, location);
         func.storeFile(weatherData, input.absoluteID, 'weatherData');
         if (typeof weatherData == 'string') {
             weatherEmbed.setDescription(errors.uErr.weather.wrongCoords);
@@ -2334,24 +2332,82 @@ export async function weather(input: extypes.commandInput) {
             logWeatherError(errors.uErr.weather.api);
             return;
         } else {
-            const localTime = moment(weatherData.current_weather.time)
+            const timezoneOffset = new Date(location.timezone).getTimezoneOffset();
+
+            const localTime = moment().utcOffset(timezoneOffset)
                 .format("ddd, DD MMM YYYY HH:mm:ss");
 
-            const weatherAtmfr = func.weatherCodeToString(weatherData.current_weather.weathercode);
-            const windDir = func.windToDirection(weatherData.current_weather.winddirection);
+
+            const weatherUnits = weatherData.daily_units;
+            const dailyData = weatherData.daily;
+            const curData = weatherData.current_weather;
+
+            const weatherAtmfr = func.weatherCodeToString(curData.weathercode);
+            const predictedWeatherFr = func.weatherCodeToString(dailyData.weathercode[0]);
+            const usePredictWeather = predictedWeatherFr.string != weatherAtmfr.string ? true : false;
+
+            const windDir = func.windToDirection(curData.winddirection);
+            const maxWindDir = func.windToDirection(curData.winddirection);
+
+            // - => S or W
+            let latSide: 'N' | 'S' = 'N';
+            let lonSide: 'E' | 'W' = 'E';
+
+            if (location.latitude < 0) {
+                latSide = 'S';
+            }
+            if (location.latitude < 0) {
+                lonSide = 'W';
+            }
 
             weatherEmbed
-                .setTitle(`Weather for ${location.name}`)
-                .setDescription(`
-${location.admin1 ?? ''} ${location.country} :flag_${location.country_code.toLowerCase()}:
-(${location.latitude}, ${location.longitude})
-Time (UTC): ${localTime} 
-Temperature: ${weatherData.current_weather.temperature}${weatherData.hourly_units.temperature_2m}
-Wind: ${weatherData.current_weather.windspeed}${weatherData.hourly_units.windspeed_10m} ${windDir.name}${windDir.emoji}
-${weatherAtmfr.icon} ${weatherAtmfr.string}
-${weatherData.current_weather.is_day == 0 ? 'Nighttime' : 'Daytime'}
-`);
+                .setTitle(`Weather for ${location.name}`);
 
+            const fields: Discord.EmbedField[] = [
+                {
+                    name: `Information`,
+                    value: `
+${location.admin1 + ',' ?? ''} ${location.country} :flag_${location.country_code.toLowerCase()}:
+Location: (${Math.abs(location.latitude) + latSide}, ${Math.abs(location.longitude) + lonSide})
+Time (local): ${localTime} 
+${weatherData.current_weather.is_day == 0 ? 'Nighttime' : 'Daytime'}
+Status: ${weatherAtmfr.icon} ${weatherAtmfr.string} ${usePredictWeather ?
+                            '(' + predictedWeatherFr.icon + ' ' + predictedWeatherFr.string + ' predicted)'
+                            : ''}
+Sunrise: ${dailyData.sunrise[0]}
+Sunset: ${dailyData.sunset[0]}
+`,
+                    inline: false
+                },
+                {
+                    name: `Temperature`,
+                    value: `
+Current: ${curData.temperature}${weatherUnits.temperature_2m_max}
+Min: ${dailyData.temperature_2m_max[0]}${weatherUnits.temperature_2m_max}
+Max: ${dailyData.temperature_2m_min[0]}${weatherUnits.temperature_2m_max}
+`,
+                    inline: true
+                },
+                {
+                    name: `Precipitation`,
+                    value: `
+Probability: (${dailyData.precipitation_probability_min}% - ${dailyData.precipitation_probability_max}%)
+${dailyData.rain_sum[0] > 0 ? `Rain: ${dailyData.rain_sum[0]}${weatherUnits.rain_sum}\n` : ''}${dailyData.showers_sum[0] > 0 ? `Showers: ${dailyData.showers_sum[0]}${weatherUnits.showers_sum}\n` : ''}${dailyData.snowfall_sum[0] > 0 ? `Snowfall: ${dailyData.snowfall_sum[0]}${weatherUnits.snowfall_sum}\n` : ''}${dailyData.precipitation_sum[0] > 0 ? `Total: ${dailyData.precipitation_sum[0]}${weatherUnits.precipitation_sum}\n` : ''}${dailyData.precipitation_hours[0] > 0 ? `Hours: ${dailyData.precipitation_hours[0]}${weatherUnits.precipitation_hours}\n` : ''}`,
+                    inline: true
+                },
+                {
+                    name: `Wind`,
+                    value: `
+Current: ${curData.windspeed}${weatherUnits.windspeed_10m_max} ${windDir.name}${windDir.emoji}
+Max speed: ${dailyData.windspeed_10m_max[0]}${weatherUnits.windspeed_10m_max}
+Max Gusts: ${dailyData.windgusts_10m_max[0]}${weatherUnits.windgusts_10m_max}
+Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}${weatherUnits.winddirection_10m_dominant}
+`,
+                    inline: true
+                },
+            ];
+
+            weatherEmbed.setFields(fields);
 
         }
     }
