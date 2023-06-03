@@ -28,3 +28,4 @@ dist/
 *.json
 !tsconfig.json
 !config/tempconfig.json
+!TEMPLATE.sqlite

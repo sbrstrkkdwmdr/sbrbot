@@ -302,7 +302,7 @@ commit: 6d9805e4a6b5f828dd484505cb7ec672bd0e196c
 [FIX] fixed randommap crashing
 [FIX] fix recent list sorting by pp
 
-0.4.19
+0.5.0
 date_time
 commit:
 [QOL] emit typing event when receiving a command
@@ -327,4 +327,4 @@ commit:
 [QOL] rewrote some of the sorting flags to fit the change above
 [QOL] rewrote index numbers on scorelist commands
 [ADD] add more time conversions
-[ADD] added weather command ()
+[ADD] added weather command
