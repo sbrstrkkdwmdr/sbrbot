@@ -1,0 +1,12 @@
+cache
+config/config.json
+config/osuauth.json
+config/guilds.json
+debug
+dist
+logs
+node_modules
+previous
+test
+trackingFiles
+debug.json
