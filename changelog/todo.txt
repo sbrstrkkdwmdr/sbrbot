@@ -393,7 +393,7 @@ author:
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-
+✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #35)
     description: redo how commands show unicode titles
     type: qol
@@ -401,4 +401,15 @@ author:
     priority: medium
     request date: 2023-04-09 11:52 AEST (UTC+10)
     finish date: 2023-04-09 19:09 AEST (UTC+10)
+    author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#35)
+    description: add natural disasters/warnings to weather cmd (hurricane, tsunami etc.)
+    type: qol
+    status: WIP (unstarted)
+    priority: low
+    request date: 2023-06-01 15:49 AEST (UTC+10)
+    finish date: 
     author: sbrstrkkdwmdr

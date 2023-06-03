@@ -23,30 +23,40 @@ install rust [here](https://www.rust-lang.org/tools/install)
 
 install all dependencies with `npm i`
 
-create a `./config/` folder and put `config.json` inside it
+in the `./config/` folder rename `tempconfig.json` to `config.json`
 
 `config.json` should look like this:
 
 ```json
 {
-  "token": "create app here => https://discord.com/developers/applications",
-  "prefix": "string",
-  "osuClientID": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
-  "osuClientSecret": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
-  "osuApiKey": "get api key here => https://osu.ppy.sh/p/api",
-  "ownerusers": ["user id"],
-  "google": {
-    "apiKey": "tutorial below",
-    "engineId": "id_here"
-  },
-  "useScreenshotParse": false,
-  "LogApiCalls": false,
-  "LogApiCallsToFile": true,
-  "enableTracking": true,
-  "storeCommandLogs": true
+    "important": {
+        "token": "create app and get token here => https://discord.com/developers/applications",
+        "dbd_license": "ignore this",
+        "redirect_uri": "http://localhost/discord/callback",
+        "client_secret": "ignore this",
+        "client_id": "ignore this"
+    },
+    "prefix": "string",
+    "osuClientID": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
+    "osuClientSecret": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
+    "osuApiKey": "get api key here => https://osu.ppy.sh/home/account/edit#legacy-api",
+    "ownerusers": [
+        "user id",
+        "user id 2"
+    ],
+    "google": {
+        "apiKey": "tutorial below",
+        "engineId": "tutorial below"
+    },
+    "useScreenshotParse": false,
+    "LogApiCalls": true,
+    "LogApiCallsToFile": true,
+    "enableTracking": true,
+    "storeCommandLogs": true
 }
 ```
 
+change the values in `config.json` </br>
 rename `TEMPLATE.sqlite` to `database.sqlite`</br>
 to compile the bot the bot run `tsc` or `npm run build`</br>
 to run the compiled code run `npm run run` </br>
