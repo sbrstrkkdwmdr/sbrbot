@@ -328,3 +328,4 @@ commit:
 [QOL] rewrote index numbers on scorelist commands
 [ADD] add more time conversions
 [ADD] added weather command
+[QOL] remind command now tells what time the reminder will be sent at

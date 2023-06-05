@@ -1573,13 +1573,18 @@ export async function remind(input: extypes.commandInput) {
 
     sendremind(reminder, time, input.obj, sendtochannel, remindertxt, user);
 
+    const absTime = Math.floor(((new Date().getTime()) + calc.timeToMs(time)) / 1000)
+
+    const remindingText = `Sending reminder in <t:${absTime}:R> (<t:${absTime}:f>)`;
+
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage(
         {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                react: true
+                content: remindingText,
+                ephemeral: true,
             }
         }, input.canReply);
 
