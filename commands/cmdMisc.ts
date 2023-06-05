@@ -13,6 +13,7 @@ import * as def from '../src/consts/defaults.js';
 import * as emojis from '../src/consts/emojis.js';
 import * as gifs from '../src/consts/gif.js';
 import * as helpinfo from '../src/consts/helpinfo.js';
+import * as insp from '../src/consts/inspire.js';
 import * as mainconst from '../src/consts/main.js';
 import * as embedStuff from '../src/embed.js';
 import * as log from '../src/log.js';
@@ -261,7 +262,7 @@ export async function duckify(input: extypes.commandInput) {
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: 'COMMANDNAME',
+            commandName: 'Duckify',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -269,7 +270,7 @@ export async function duckify(input: extypes.commandInput) {
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: 'COMMANDNAME',
+            commandName: 'Duckify',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -565,6 +566,101 @@ export async function image(input: extypes.commandInput) {
             customString: 'Message failed to send'
         });
     }
+}
+
+export async function inspire(input: extypes.commandInput) {
+
+    let commanduser: Discord.User;
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'Inspire',
+        options: []
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    const templateString = insp.templateStrings[Math.floor(Math.random() * insp.templateStrings.length)];
+    let sendString = templateString.string;
+
+    for (let i = 0; i < templateString.names; i++) {
+        const rdmName = insp.names[Math.floor(Math.random() * insp.names.length)];
+        sendString = sendString.replaceAll(`name${i + 1}`, rdmName);
+    }
+    for (let i = 0; i < templateString.verbs; i++) {
+        const rdmVerb = insp.verbs[Math.floor(Math.random() * insp.verbs.length)];
+        sendString = sendString.replaceAll(`verb${i + 1}`, rdmVerb);
+    }
+    for (let i = 0; i < templateString.descriptors; i++) {
+        const rdmDesc = insp.descriptors[Math.floor(Math.random() * insp.descriptors.length)];
+        sendString = sendString.replaceAll(`descriptor${i + 1}`, rdmDesc);
+    }
+
+    const embed = new Discord.EmbedBuilder()
+        .setTitle('Inspirational Quote')
+        .setDescription(calc.toCapital(sendString));
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [embed]
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'Inspire',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'Inspire',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send',
+        });
+    }
+
 }
 
 /**

@@ -329,3 +329,4 @@ commit:
 [ADD] add more time conversions
 [ADD] added weather command
 [QOL] remind command now tells what time the reminder will be sent at
+[ADD] added inspire command

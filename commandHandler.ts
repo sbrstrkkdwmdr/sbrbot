@@ -399,6 +399,10 @@ export default (input: {
                 startType(obj);
                 misccmds.image({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
+            case 'inspire':case 'insp':
+                startType(obj);
+                misccmds.inspire({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
             case 'poll': case 'vote':
                 startType(obj);
                 misccmds.poll({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
