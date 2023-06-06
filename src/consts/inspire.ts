@@ -1,11 +1,25 @@
 type quoteTemplate = {
-    string:string,
-    names:number,
-    verbs:number,
-    descriptors:number,
-}
+    string: string,
+    names: number,
+    verbs: number,
+    descriptors: number,
+};
 
-export const templateStrings:quoteTemplate[] = [
+type noun = {
+    base: string,
+    pluralised: string,
+    titled: string, //your, the, a
+};
+
+type verb = {
+    base: string,
+    past: string,
+    present: string,
+    future: string,
+};
+
+
+export const templateStrings: quoteTemplate[] = [
     {
         string: 'Become the name1 who makes other name1s verb1',
         names: 1,
@@ -162,9 +176,9 @@ export const templateStrings:quoteTemplate[] = [
         verbs: 0,
         descriptors: 0,
     },
-] 
+];
 
-export const names:string[] = [
+export const names: string[] = [
     'guy',
     'boy',
     'girl',
@@ -218,9 +232,9 @@ export const names:string[] = [
     'the sun',
     'the earth',
     'the moon',
-]
+];
 
-export const verbs:string[] = [
+export const verbs: string[] = [
     'explode',
     'change',
     'evolve',
@@ -246,9 +260,9 @@ export const verbs:string[] = [
     'relax',
     'remain calm',
     'hyperventilate'
-]
+];
 
-export const descriptors:string[] = [
+export const descriptors: string[] = [
     'nice',
     'kind',
     'smelly',
@@ -289,4 +303,4 @@ export const descriptors:string[] = [
     'dangerous',
     'insane',
     'ashamed'
-]
+];
