@@ -3,9 +3,9 @@ import fs from 'fs';
 import * as calc from './calc.js';
 import * as cmdchecks from './checks.js';
 import * as emojis from './consts/emojis.js';
+import * as func from './func.js';
 import * as osufunc from './osufunc.js';
 import * as osumodcalc from './osumodcalc.js';
-import * as func from './tools.js';
 import * as extypes from './types/extratypes.js';
 import * as osuapitypes from './types/osuApiTypes.js';
 

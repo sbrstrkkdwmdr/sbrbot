@@ -3,9 +3,9 @@ import fs from 'fs';
 import Sequelize from 'sequelize';
 import * as def from './consts/defaults.js';
 import * as embedstuff from './embed.js';
+import * as func from './func.js';
 import * as log from './log.js';
 import * as osufunc from './osufunc.js';
-import * as func from './tools.js';
 import * as trackfunc from './trackfunc.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 

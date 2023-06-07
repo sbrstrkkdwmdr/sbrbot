@@ -4,7 +4,7 @@ import { path } from './path.js';
 import * as checks from './src/checks.js';
 import * as cd from './src/consts/cooldown.js';
 import * as defaults from './src/consts/defaults.js';
-import * as func from './src/tools.js';
+import * as func from './src/func.js';
 
 import * as admincmds from './commands/cmdAdmin.js';
 import * as checkcmds from './commands/cmdChecks.js';

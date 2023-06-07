@@ -16,9 +16,9 @@ import * as replayparser from 'osureplayparser';
 import config from '../config/config.json' assert { type: 'json' };
 import { path, precomppath } from '../path.js';
 import * as errors from './consts/errors.js';
+import * as tools from './func.js';
 import * as log from './log.js';
 import * as mapParser from './mapParser.js';
-import * as tools from './tools.js';
 import * as osuparsertypes from './types/osuparsertypes.js';
 
 /* module.exports = {

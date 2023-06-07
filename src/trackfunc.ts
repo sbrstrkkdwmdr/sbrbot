@@ -5,9 +5,9 @@ import Sequelize from 'sequelize';
 import { path } from '../path.js';
 import * as def from './consts/defaults.js';
 import * as embedstuff from './embed.js';
+import * as func from './func.js';
 import * as log from './log.js';
 import * as osufunc from './osufunc.js';
-import * as func from './tools.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 
 export async function editTrackUser(fr: {

@@ -947,3 +947,14 @@ export {
     ModeNameToInt, ModeIntToName
 };
 
+//badge weight seeding
+export function bws(badges: number, rank: number) {
+    return badges > 0 ?
+        rank ** (0.9937 ** (badges ** 2)) :
+        rank;
+}
+
+//recommended difficulty
+export function recdiff(pp: number) {
+    return (pp ** 0.4) * 0.195;
+}

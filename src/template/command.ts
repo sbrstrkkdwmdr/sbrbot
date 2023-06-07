@@ -13,8 +13,8 @@ import * as osufunc from '../../src/osufunc.js';
 import * as extypes from '../../src/types/extraTypes.js';
 import * as osuApiTypes from '../../src/types/osuApiTypes.js';
 import * as mainconst from '../consts/main.js';
+import * as func from '../func.js';
 import * as osumodcalc from '../osumodcalc.js';
-import * as func from '../tools.js';
 
 
 module.exports = {
