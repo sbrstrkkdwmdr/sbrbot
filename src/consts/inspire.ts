@@ -5,17 +5,32 @@ type quoteTemplate = {
     descriptors: number,
 };
 
+//ps ->
+/** FORMATTING FOR TEMPLATE STRINGS
+ * ---NOUNS---
+ * ba -> base noun (thing)
+ * pl -> pluralised (thing -> things)
+ * ar -> article (thing -> the thing)
+ * ia -> indef article (thing -> a thing)
+ * po -> possessive (thing -> your thing)
+ * ---VERBS---
+ * ba -> base verb (do)
+ * pa -> past tense (did)
+ * pr -> present tense (doing)
+ * fu -> future tense (will do)
+ */
+
 type noun = {
-    base: string,
-    pluralised: string,
-    titled: string, //your, the, a
+    base: string, // thing
+    pluralised: string, // things
+    indefAr: string, // a thing
 };
 
 type verb = {
-    base: string,
-    past: string,
-    present: string,
-    future: string,
+    base: string, // do
+    past: string, // did
+    present: string, // doing
+    future: string, // will do
 };
 
 
@@ -178,63 +193,394 @@ export const templateStrings: quoteTemplate[] = [
     },
 ];
 
-export const names: string[] = [
-    'guy',
-    'boy',
-    'girl',
-    'woman',
-    'ball',
-    'change',
-    'angel',
-    'book',
-    'solutions',
-    'problems',
-    'cow',
-    'dog',
-    'colleague',
-    'human being',
-    'your wife',
-    'your husband',
-    'your partner',
-    'your mother',
-    'your father',
-    'your brother',
-    'your sister',
-    'your sibling',
-    'your cousin',
-    'your aunt',
-    'your uncle',
-    'your niece',
-    'your nephew',
-    'your grandfather',
-    'your grandmother',
-    'your grandparent',
-    'expert',
-    'professional',
-    'teacher',
-    'electrician',
-    'pilot',
-    'hostess',
-    'maid',
-    'cat',
-    'fungal infection',
-    'mcdonald\'s',
-    'success',
-    'brain damage',
-    'monkey',
-    'bank',
-    'a stranger',
-    'the sunrise',
-    'the sunset',
-    'betrayal',
-    'human sacrifice',
-    'the planet',
-    'the sun',
-    'the earth',
-    'the moon',
+const gender: noun[] = [
+    {
+        base: 'guy',
+        pluralised: 'guys',
+        indefAr: 'a guy'
+    },
+    {
+        base: 'boy',
+        pluralised: 'boys',
+        indefAr: 'a boy'
+    },
+    {
+        base: 'girl',
+        pluralised: 'girls',
+        indefAr: 'a girl'
+    },
+    {
+        base: 'woman',
+        pluralised: 'women',
+        indefAr: 'a woman'
+    },
+    {
+        base: 'man',
+        pluralised: 'men',
+        indefAr: 'a man'
+    },
 ];
+const famMembers: noun[] = [
+    {
+        base: 'wife',
+        pluralised: 'wives',
+        indefAr: 'a wife'
+    },
+    {
+        base: 'husband',
+        pluralised: 'husbands',
+        indefAr: 'a husband'
+    },
+    {
+        base: 'partner',
+        pluralised: 'partners',
+        indefAr: 'a partner'
+    },
+    {
+        base: 'mother',
+        pluralised: 'mothers',
+        indefAr: 'a mother'
+    },
+    {
+        base: 'father',
+        pluralised: 'fathers',
+        indefAr: 'a father'
+    },
+    {
+        base: 'brother',
+        pluralised: 'brothers',
+        indefAr: 'a brother'
+    },
+    {
+        base: 'sister',
+        pluralised: 'sisters',
+        indefAr: 'a sister'
+    },
+    {
+        base: 'sibling',
+        pluralised: 'siblings',
+        indefAr: 'a sibling'
+    },
+    {
+        base: 'cousin',
+        pluralised: 'cousins',
+        indefAr: 'a cousin'
+    },
+    {
+        base: 'aunt',
+        pluralised: 'aunts',
+        indefAr: 'an aunt'
+    },
+    {
+        base: 'uncle',
+        pluralised: 'uncles',
+        indefAr: 'an uncle'
+    },
+    {
+        base: 'niece',
+        pluralised: 'nieces',
+        indefAr: 'a niece'
+    },
+    {
+        base: 'nephew',
+        pluralised: 'nephews',
+        indefAr: 'a nephew'
+    },
+    {
+        base: 'grandfather',
+        pluralised: 'grandfathers',
+        indefAr: 'a grandfather'
+    },
+    {
+        base: 'grandmother',
+        pluralised: 'grandmothers',
+        indefAr: 'a grandmother'
+    },
+    {
+        base: 'grandparent',
+        pluralised: 'grandparents',
+        indefAr: 'a grandparent'
+    },
+];
+const people: noun[] = [
+    {
+        base: 'angel',
+        pluralised: 'angels',
+        indefAr: 'an angel'
+    },
+    {
+        base: 'colleague',
+        pluralised: 'colleagues',
+        indefAr: 'a colleague'
+    },
+    {
+        base: 'human being',
+        pluralised: 'human beings',
+        indefAr: 'a human being'
+    },
+    {
+        base: 'expert',
+        pluralised: 'experts',
+        indefAr: 'an expert'
+    },
+    {
+        base: 'professional',
+        pluralised: 'professionals',
+        indefAr: 'a professional'
+    },
+    {
+        base: 'teacher',
+        pluralised: 'teachers',
+        indefAr: 'a teacher'
+    },
+    {
+        base: 'electrician',
+        pluralised: 'electricians',
+        indefAr: 'an electrician'
+    },
+    {
+        base: 'pilot',
+        pluralised: 'pilots',
+        indefAr: 'a pilot'
+    },
+    {
+        base: 'hostess',
+        pluralised: 'hostesses',
+        indefAr: 'a hostess'
+    },
+    {
+        base: 'maid',
+        pluralised: 'maids',
+        indefAr: 'a maid'
+    },
+    {
+        base: 'stranger',
+        pluralised: 'strangers',
+        indefAr: 'a stranger'
+    },
+    {
+        base: 'farmer',
+        pluralised: 'farmers',
+        indefAr: 'a farmer'
+    },
+];
+const animals: noun[] = [
+    {
+        base: 'cow',
+        pluralised: 'cows',
+        indefAr: 'a cow'
+    },
+    {
+        base: 'dog',
+        pluralised: 'dogs',
+        indefAr: 'a dog'
+    },
+    {
+        base: 'cat',
+        pluralised: 'cats',
+        indefAr: 'a cat'
+    },
+    {
+        base: 'monkey',
+        pluralised: 'monkeys',
+        indefAr: 'a monkey'
+    },
+    {
+        base: 'sheep',
+        pluralised: 'sheep',
+        indefAr: 'a sheep'
+    },
+    {
+        base: 'goat',
+        pluralised: 'goats',
+        indefAr: 'a goat'
+    },
+];
+const structs: noun[] = [
+    {
+        base: 'restaurant',
+        pluralised: 'restaurants',
+        indefAr: 'a restaurant'
+    },
+    {
+        base: 'bank',
+        pluralised: 'banks',
+        indefAr: 'a bank'
+    },
+    {
+        base: 'planet',
+        pluralised: 'planets',
+        indefAr: 'a planet'
+    },
+    {
+        base: 'sun',
+        pluralised: 'suns',
+        indefAr: 'a sun'
+    },
+    {
+        base: 'earth',
+        pluralised: 'earths',
+        indefAr: 'an earth'
+    },
+    {
+        base: 'moon',
+        pluralised: 'moons',
+        indefAr: 'a moon'
+    },
+    {
+        base: 'house',
+        pluralised: 'houses',
+        indefAr: 'a house'
+    },
+    {
+        base: 'building',
+        pluralised: 'buildings',
+        indefAr: 'a building'
+    },
+    {
+        base: 'field',
+        pluralised: 'fields',
+        indefAr: 'a field'
+    },
+];
+const concepts: noun[] = [
+    {
+        base: 'change',
+        pluralised: 'changes',
+        indefAr: 'a change'
+    },
+    {
+        base: 'solution',
+        pluralised: 'solutions',
+        indefAr: 'a solution'
+    },
+    {
+        base: 'problem',
+        pluralised: 'problems',
+        indefAr: 'a problem'
+    },
+    {
+        base: 'success',
+        pluralised: 'successes',
+        indefAr: 'a success'
+    },
+    {
+        base: 'sunrise',
+        pluralised: 'sunrises',
+        indefAr: 'a sunrise'
+    },
+    {
+        base: 'sunset',
+        pluralised: 'sunsets',
+        indefAr: 'a sunset'
+    },
+    {
+        base: 'betrayal',
+        pluralised: 'betrayals',
+        indefAr: 'a betrayal'
+    },
+    {
+        base: 'human sacrifice',
+        pluralised: 'human sacrifices',
+        indefAr: 'a human sacrifice'
+    },
+    {
+        base: 'humanity',
+        pluralised: 'humanities',
+        indefAr: 'a humanity'
+    },
+];
+const things: noun[] = [
+    {
+        base: 'ball',
+        pluralised: 'balls',
+        indefAr: 'a ball'
+    },
+    {
+        base: 'book',
+        pluralised: 'books',
+        indefAr: 'a book'
+    },
+    {
+        base: 'fungal infection',
+        pluralised: 'fungal infections',
+        indefAr: 'a fungal infection'
+    },
+    {
+        base: 'brain damage',
+        pluralised: 'brain damages',
+        indefAr: 'a brain damage'
+    },
+    {
+        base: 'fire',
+        pluralised: 'fires',
+        indefAr: 'a fire'
+    },
+    {
+        base: 'water',
+        pluralised: 'waters',
+        indefAr: 'a water'
+    },
+    {
+        base: 'ground',
+        pluralised: 'grounds',
+        indefAr: 'a ground'
+    },
+    {
+        base: 'rock',
+        pluralised: 'rocks',
+        indefAr: 'a rock'
+    },
+];
+const events: noun[] = [
 
-export const verbs: string[] = [
+];
+const vehicles:noun[] = [
+    {
+        base: 'car',
+        pluralised: 'cars',
+        indefAr: 'a car'
+    },
+    {
+        base: 'truck',
+        pluralised: 'trucks',
+        indefAr: 'a truck'
+    },
+    {
+        base: 'bus',
+        pluralised: 'buses',
+        indefAr: 'a bus'
+    },
+    {
+        base: 'train',
+        pluralised: 'trains',
+        indefAr: 'a train'
+    },
+    {
+        base: 'tram',
+        pluralised: 'trams',
+        indefAr: 'a tram'
+    }
+]
+
+export const names: noun[] = [].concat(gender)
+.concat(famMembers).concat(people).concat(animals).concat(structs).concat(concepts).concat(things).concat(events).concat(vehicles)
+
+
+
+
+
+
+
+
+
+
+
+
+export const verbs: verb[] = [
+
+];
+[
     'explode',
     'change',
     'evolve',
