@@ -133,16 +133,16 @@ type weatherDataTypesDaily = {
     precipitation_probability_max?: number[],
     precipitation_probability_min?: number[],
     precipitation_probability_mean?: number[],
-    weathercode?:number[],
-    sunrise?:number[],
-    sunset?:number[],
-    windspeed_10m_max?:number[],
-    windgusts_10m_max?:number[],
-    winddirection_10m_dominant?:number[],
-    shortwave_radiation_sum?:number[],
-    et0_fao_evapotranspiration?:number[],
-    uv_index_max?:number[],
-    uv_index_clear_sky_max?:number[],
+    weathercode?: number[],
+    sunrise?: number[],
+    sunset?: number[],
+    windspeed_10m_max?: number[],
+    windgusts_10m_max?: number[],
+    winddirection_10m_dominant?: number[],
+    shortwave_radiation_sum?: number[],
+    et0_fao_evapotranspiration?: number[],
+    uv_index_max?: number[],
+    uv_index_clear_sky_max?: number[],
 };
 
 type weatherDataUnitsHourly = {
@@ -208,14 +208,70 @@ type weatherDataUnitsDaily = {
     precipitation_probability_max?: string,
     precipitation_probability_min?: string,
     precipitation_probability_mean?: string,
-    weathercode?:string,
-    sunrise?:string,
-    sunset?:string,
-    windspeed_10m_max?:string,
-    windgusts_10m_max?:string,
-    winddirection_10m_dominant?:string,
-    shortwave_radiation_sum?:string,
-    et0_fao_evapotranspiration?:string,
-    uv_index_max?:string,
-    uv_index_clear_sky_max?:string,
-}
+    weathercode?: string,
+    sunrise?: string,
+    sunset?: string,
+    windspeed_10m_max?: string,
+    windgusts_10m_max?: string,
+    winddirection_10m_dominant?: string,
+    shortwave_radiation_sum?: string,
+    et0_fao_evapotranspiration?: string,
+    uv_index_max?: string,
+    uv_index_clear_sky_max?: string,
+};
+
+export type tropicalData = {
+    data?: tsShort[] | tsData | tsFeatureData;
+    error?: any;
+};
+
+export type tsShort = {
+    id: string,
+    name: string,
+    details: string,
+};
+
+export type tsData = {
+    id: string,
+    advisory: string,
+    is_active: boolean,
+    name: string,
+    basin: string,
+    category: string,
+    forecast_hours: number,
+    geojson: string,
+    event_number: number,
+    position: number[], //position isn't given as N or S, but + and -
+    movement: {
+        KPH: number,
+        MPH: number,
+        KTS: number,
+        bearing: number,
+    },
+    max_observed_category: string,
+    max_forecast_category: string,
+    name_list: string[],
+    advisory_list: string[]
+};
+
+export type tsFeatureData = {
+    type: string,
+    features: {
+        type: string,
+        geometry: {
+            type: string,
+            coordinates: number[][],
+        },
+        properties: {
+            featureType: string,
+            id: string,
+            name: string,
+            basin: string,
+            intensity: string,
+            color: string,
+            opacity: number // out of 255?
+        }
+    }[],
+
+
+};

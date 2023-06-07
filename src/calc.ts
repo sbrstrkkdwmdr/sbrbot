@@ -421,7 +421,7 @@ export function secondsToTimeReadable(seconds: number, allowDays?: boolean, show
  * @returns string with the first letter capitalised
  */
 export function toCapital(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
 export function toOrdinal(num: number) {

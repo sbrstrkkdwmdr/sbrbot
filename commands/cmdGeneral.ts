@@ -23,7 +23,7 @@ import * as func from '../src/func.js';
 import * as log from '../src/log.js';
 import * as osufunc from '../src/osufunc.js';
 import * as osumodcalc from '../src/osumodcalc.js';
-import * as extypes from '../src/types/extraTypes.js';
+import * as extypes from '../src/types/extratypes.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
 import * as othertypes from '../src/types/othertypes.js';
 import * as msgfunc from './msgfunc.js';
@@ -1573,7 +1573,7 @@ export async function remind(input: extypes.commandInput) {
 
     sendremind(reminder, time, input.obj, sendtochannel, remindertxt, user);
 
-    const absTime = Math.floor(((new Date().getTime()) + calc.timeToMs(time)) / 1000)
+    const absTime = Math.floor(((new Date().getTime()) + calc.timeToMs(time)) / 1000);
 
     const remindingText = `Sending reminder in <t:${absTime}:R> (<t:${absTime}:f>)`;
 
@@ -2469,6 +2469,136 @@ Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}${weatherUnits.win
         log.logCommand({
             event: 'Error',
             commandName: 'Weather',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send',
+        });
+    }
+}
+
+export async function tropicalWeather(input: extypes.commandInput) {
+
+    let commanduser: Discord.User;
+    let system: string;
+    let type: 'active' | 'storm' | 'features' = 'active';
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+        system = input.overrides.id as string;
+        type = 'storm';
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'COMMANDNAME',
+        options: [{
+            name: 'System',
+            value: 'system'
+        }]
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    let weatherData = await func.getTropical(type, system);
+    const embed = new Discord.EmbedBuilder();
+    let useComponents = [];
+
+    switch (type) {
+        case 'active': default: {
+            picker();
+            embed.setTitle(`Currently Active Storms`);
+            embed.setDescription((weatherData?.data as othertypes.tsShort[]).map(x => calc.toCapital(x.name)).join(', '));
+        }
+            break;
+        case 'storm': {
+
+        } break;
+    }
+
+    function picker() {
+        const data = weatherData?.data as othertypes.tsShort[];
+        embed.setDescription('Multiple locations were found\nPlease select one from the list below');
+        const inputModal = new Discord.StringSelectMenuBuilder()
+            .setCustomId(`${mainconst.version}-Select-weather-${commanduser.id}-${input.absoluteID}`)
+            .setPlaceholder('Select a location');
+        for (let i = 0; i < data.length && i < 25; i++) {
+            const current = data[i];
+            inputModal.addOptions(
+                new Discord.StringSelectMenuOptionBuilder()
+                    .setLabel(`#${i + 1} | ${current.name}`)
+                    .setValue(`${current.id}`)
+            );
+        }
+        const buttons = new Discord.ActionRowBuilder();
+        buttons.addComponents(inputModal);
+        useComponents = [buttons];
+    }
+
+    async function embeddify() {
+        const data = weatherData?.data as othertypes.tsData;
+        const secondData = await func.getTropical('features', system) as othertypes.tsFeatureData;
+
+        embed.setTitle(`Tropical System ${data.name}`)
+        .setDescription(`
+Location: (${data.position.join(',')})
+Category
+
+`)
+
+    }
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [embed],
+            components: useComponents,
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'COMMANDNAME',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'COMMANDNAME',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,

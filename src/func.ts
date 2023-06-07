@@ -633,11 +633,136 @@ export function windToDirection(angle: number) {
     return directions[index];
 }
 
-export async function getTropical(request?: string) {
+export async function getTropical(type: 'active' | 'storm' | 'features', request?: string) {
     const baseURL = 'https://storm.tidetech.org/v1/';
 
-    const reqURL = request ? baseURL + request : baseURL + 'active';
+    const reqURL = type != 'active' ? baseURL + request : baseURL + 'active';
 
     const data = await nfetch(reqURL).then(x => x.json());
-    return data;
+    return data as othertypes.tropicalData;
+}
+
+export function tsCatToString(input: string) {
+    let cat = {
+        name: '',
+        category: input,
+        colour: '',
+        speed: {
+            kts: '',
+            mph: '',
+            kph: '',
+        }
+    };
+    switch (input) {
+        case 'TD':
+            cat = {
+                name: 'Tropical Depression',
+                category: input,
+                colour: '',
+                speed: {
+                    kts: '',
+                    mph: '',
+                    kph: '',
+                }
+            };
+            break;
+        case 'TS':
+            cat = {
+                name: 'Tropical Storm',
+                category: input,
+                colour: '',
+                speed: {
+                    kts: '',
+                    mph: '',
+                    kph: '',
+                }
+            };
+            break;
+        case 'Cat1':
+            cat = {
+                name: 'Hurricane',
+                category: input,
+                colour: '',
+                speed: {
+                    kts: '',
+                    mph: '',
+                    kph: '',
+                }
+            };
+            break;
+        case 'Cat2':
+            cat = {
+                name: '',
+                category: input,
+                colour: '',
+                speed: {
+                    kts: '',
+                    mph: '',
+                    kph: '',
+                }
+            };
+            break;
+        case 'Cat3':
+            cat = {
+                name: '',
+                category: input,
+                colour: '',
+                speed: {
+                    kts: '',
+                    mph: '',
+                    kph: '',
+                }
+            };
+            break;
+        case 'Cat4':
+            cat = {
+                name: '',
+                category: input,
+                colour: '',
+                speed: {
+                    kts: '',
+                    mph: '',
+                    kph: '',
+                }
+            };
+            break;
+        case 'Cat5':
+            cat = {
+                name: '',
+                category: input,
+                colour: '',
+                speed: {
+                    kts: '',
+                    mph: '',
+                    kph: '',
+                }
+            };
+            break;
+    }
+    return cat;
+}
+
+export function tsBasinToString(string: string) {
+    let basin: string = 'null';
+    switch (string) {
+        case 'ATL':
+            basin = 'North Atlantic';
+            break;
+        case 'NEP':
+            basin = 'Northeast Pacific';
+            break;
+        case 'NWP':
+            basin = 'Northwest Pacific';
+            break;
+        case 'SWP':
+            basin = 'Southwest Pacific';
+            break;
+        case 'SIO':
+            basin = 'South Indian Ocean';
+            break;
+        case 'NIO':
+            basin = 'North Indian Ocean';
+            break;
+    }
+    return basin;
 }
