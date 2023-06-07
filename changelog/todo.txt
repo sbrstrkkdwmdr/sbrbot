@@ -404,12 +404,23 @@ author:
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-
-#35)
+✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
+#36)
     description: add natural disasters/warnings to weather cmd (hurricane, tsunami etc.)
     type: qol
-    status: WIP (unstarted)
+    status: FINISHED
     priority: low
     request date: 2023-06-01 15:49 AEST (UTC+10)
-    finish date: 
+    finish date: 2023-06-07 15:30 AEST (UTC+10)
+    author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#37)
+    description: add map of all systems to tropical weather cmd
+    type: qol
+    status: WIP
+    priority: low
+    request date: 2023-06-07 19:30 AEST (UTC+10)
+    finish date:
     author: sbrstrkkdwmdr
