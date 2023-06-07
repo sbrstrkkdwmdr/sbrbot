@@ -618,11 +618,16 @@ export async function inspire(input: extypes.commandInput) {
 
     for (let i = 0; i < templateString.names; i++) {
         const rdmName = insp.names[Math.floor(Math.random() * insp.names.length)];
-        sendString = sendString.replaceAll(`name${i + 1}`, rdmName);
+        sendString = sendString.replaceAll(`name${i + 1}ba`, rdmName.base);
+        sendString = sendString.replaceAll(`name${i + 1}pl`, rdmName.pluralised);
+        sendString = sendString.replaceAll(`name${i + 1}ia`, rdmName.indefAr);
     }
     for (let i = 0; i < templateString.verbs; i++) {
         const rdmVerb = insp.verbs[Math.floor(Math.random() * insp.verbs.length)];
-        sendString = sendString.replaceAll(`verb${i + 1}`, rdmVerb);
+        sendString = sendString.replaceAll(`verb${i + 1}ba`, rdmVerb.base);
+        sendString = sendString.replaceAll(`verb${i + 1}pa`, rdmVerb.past);
+        sendString = sendString.replaceAll(`verb${i + 1}pr`, rdmVerb.present);
+        sendString = sendString.replaceAll(`verb${i + 1}in`, rdmVerb.ing);
     }
     for (let i = 0; i < templateString.descriptors; i++) {
         const rdmDesc = insp.descriptors[Math.floor(Math.random() * insp.descriptors.length)];

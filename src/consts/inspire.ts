@@ -29,32 +29,32 @@ type noun = {
 type verb = {
     base: string, // do
     past: string, // did
-    present: string, // doing
-    future: string, // will do
+    ing: string, // doing
+    present: string, //does
 };
 
 
 export const templateStrings: quoteTemplate[] = [
     {
-        string: 'Become the name1 who makes other name1s verb1',
+        string: 'Become the name1ba who makes other name1pl verb1ba',
         names: 1,
         verbs: 1,
         descriptors: 0,
     },
     {
-        string: 'There are okay name1s and not-so-okay name1s',
+        string: 'There are okay name1pl and not-so-okay name1pl',
         names: 1,
         verbs: 0,
         descriptors: 0,
     },
     {
-        string: 'Forcing a name1 to be name2 is probably not as descriptor1 as it sounds',
+        string: 'Forcing a name1ba to be your name2ba is probably not as descriptor1 as it sounds',
         names: 2,
         verbs: 0,
         descriptors: 1,
     },
     {
-        string: 'name1 is name2 on steroids',
+        string: 'name1ba is name2ba on steroids',
         names: 2,
         verbs: 0,
         descriptors: 0,
@@ -66,127 +66,121 @@ export const templateStrings: quoteTemplate[] = [
         descriptors: 1,
     },
     {
-        string: 'Never let go of an opportunity to verb1',
+        string: 'Never let go of an opportunity to verb1ba',
         names: 0,
         verbs: 1,
         descriptors: 0,
     },
     {
-        string: 'In order to acheive success, you must verb1',
+        string: 'In order to acheive success, you must verb1ba',
         names: 0,
         verbs: 1,
         descriptors: 0,
     },
     {
-        string: 'Always remember that you are a(n) descriptor1 name1',
+        string: 'Always remember that you are a(n) descriptor1 name1ba',
         names: 1,
         verbs: 0,
         descriptors: 1,
     },
     {
-        string: 'Seek name1, seek name2',
+        string: 'Seek name1ba, seek name2ba',
         names: 2,
         verbs: 0,
         descriptors: 0,
     },
     {
-        string: 'you\'re descriptor1, but so is a name1',
+        string: 'you\'re descriptor1, but so is name1ia',
         names: 1,
         verbs: 0,
         descriptors: 1,
     },
     {
-        string: 'verb1 and verb2',
+        string: 'verb1ba and verb2ba',
         names: 0,
         verbs: 2,
         descriptors: 0,
     },
     {
-        string: 'keep calm and verb1',
+        string: 'keep calm and verb1ba',
         names: 0,
         verbs: 1,
         descriptors: 0,
     },
     {
-        string: 'be the first to verb1 what any normal person would consider descriptor1',
+        string: 'be the first to verb1ba what any normal person would consider descriptor1',
         names: 0,
         verbs: 1,
         descriptors: 1,
     },
     {
-        string: 'name1 begins when name2 ends',
+        string: 'the name1ba begins when the name2ba ends',
         names: 2,
         verbs: 0,
         descriptors: 0,
     },
     {
-        string: 'without verb1 there can be no name1',
+        string: 'without verb1ba there can be no name1ba',
         names: 1,
         verbs: 1,
         descriptors: 0,
     },
     {
-        string: 'name1s begin when we learn to verb1',
+        string: 'name1pl begin when we learn to verb1ba',
         names: 1,
         verbs: 1,
         descriptors: 0,
     },
     {
-        string: 'ensure that name1 feels descriptor1',
+        string: 'ensure that your name1 feels descriptor1',
         names: 1,
         verbs: 0,
         descriptors: 1,
     },
     {
-        string: 'you can be the reason why a name1 verb1',
+        string: 'you can be the reason why a name1 verb1pr',
         names: 1,
         verbs: 1,
         descriptors: 0,
     },
     {
-        string: 'someone should verb1. You can be that someone',
+        string: 'someone should verb1ba. You can be that someone',
         names: 0,
         verbs: 1,
         descriptors: 0,
     },
     {
-        string: 'You carry the potential to become a descriptor1 name1',
+        string: 'You carry the potential to become a descriptor1 name1ba',
         names: 1,
         verbs: 0,
         descriptors: 1,
     },
     {
-        string: 'Don\'t verb1 with name1. verb2',
+        string: 'Don\'t verb1ba with name1ba. verb2ba',
         names: 1,
         verbs: 2,
         descriptors: 0,
     },
     {
-        string: 'you\'re descriptor1, but so is a name1',
-        names: 1,
-        verbs: 0,
-        descriptors: 1,
-    },
-    {
-        string: 'a name1 is never just a name2, but its not a name3',
+        string: 'a name1ba is never just a name2ba, but its not a name3ba',
         names: 3,
         verbs: 0,
         descriptors: 0,
     },
     {
-        string: 'first comes name1, then comes name2',
+        string: 'first comes the name1ba, then comes the name2ba',
         names: 2,
         verbs: 0,
         descriptors: 0,
     },
     {
-        string: 'name1 is worth it. Thank you',
+        string: 'name1ba is worth it. Thank you',
         names: 1,
         verbs: 0,
         descriptors: 0,
     },
     {
-        string: 'Society without name1 is no fun.',
+        string: 'Society without name1ba is no fun.',
         names: 1,
         verbs: 0,
         descriptors: 0,
@@ -363,6 +357,11 @@ const people: noun[] = [
         pluralised: 'farmers',
         indefAr: 'a farmer'
     },
+    {
+        base: 'person',
+        pluralised: 'people',
+        indefAr: 'a person'
+    },
 ];
 const animals: noun[] = [
     {
@@ -489,6 +488,31 @@ const concepts: noun[] = [
         pluralised: 'humanities',
         indefAr: 'a humanity'
     },
+    {
+        base: 'sex change',
+        pluralised: 'sex changes',
+        indefAr: 'a sex change'
+    },
+    {
+        base: 'warning',
+        pluralised: 'warnings',
+        indefAr: 'a warning'
+    },
+    {
+        base: 'murder',
+        pluralised: 'murders',
+        indefAr: 'a murder'
+    },
+    {
+        base: 'arson',
+        pluralised: 'arson',
+        indefAr: 'arson'
+    },
+    {
+        base: 'tax fraud',
+        pluralised: 'tax fraud',
+        indefAr: 'tax fraud'
+    },
 ];
 const things: noun[] = [
     {
@@ -531,11 +555,21 @@ const things: noun[] = [
         pluralised: 'rocks',
         indefAr: 'a rock'
     },
+    {
+        base: 'drug',
+        pluralised: 'drugs',
+        indefAr: 'a drug'
+    },
+    {
+        base: 'everything',
+        pluralised: 'everything',
+        indefAr: 'everything'
+    },
 ];
 const events: noun[] = [
 
 ];
-const vehicles:noun[] = [
+const vehicles: noun[] = [
     {
         base: 'car',
         pluralised: 'cars',
@@ -561,10 +595,10 @@ const vehicles:noun[] = [
         pluralised: 'trams',
         indefAr: 'a tram'
     }
-]
+];
 
 export const names: noun[] = [].concat(gender)
-.concat(famMembers).concat(people).concat(animals).concat(structs).concat(concepts).concat(things).concat(events).concat(vehicles)
+    .concat(famMembers).concat(people).concat(animals).concat(structs).concat(concepts).concat(things).concat(events).concat(vehicles);
 
 
 
@@ -576,36 +610,428 @@ export const names: noun[] = [].concat(gender)
 
 
 
-
+//add more verbs to the array below
 export const verbs: verb[] = [
-
-];
-[
-    'explode',
-    'change',
-    'evolve',
-    'grow',
-    'run away',
-    'growl',
-    'bark',
-    'sob',
-    'cry',
-    'sleep',
-    'woof',
-    'get a sex change',
-    'spy on people',
-    'confuse random people',
-    'try drugs',
-    'regret everything',
-    'cries',
-    'ignore warnings',
-    'panic',
-    'attempt murder',
-    'commit arson',
-    'commit tax fraud',
-    'relax',
-    'remain calm',
-    'hyperventilate'
+    {
+        base: 'explode',
+        past: 'exploded',
+        ing: 'exploding',
+        present: 'explodes',
+    },
+    {
+        base: 'change',
+        past: 'changed',
+        ing: 'changing',
+        present: 'changes',
+    },
+    {
+        base: 'evolve',
+        past: 'evolved',
+        ing: 'evolving',
+        present: 'evolves',
+    },
+    {
+        base: 'grow',
+        past: 'grew',
+        ing: 'growing',
+        present: 'grows',
+    },
+    {
+        base: 'run away',
+        past: 'ran away',
+        ing: 'running away',
+        present: 'runs away',
+    },
+    {
+        base: 'growl',
+        past: 'growled',
+        ing: 'growling',
+        present: 'growls',
+    },
+    {
+        base: 'bark',
+        past: 'barked',
+        ing: 'barking',
+        present: 'barks',
+    },
+    {
+        base: 'sob',
+        past: 'sobbed',
+        ing: 'sobbing',
+        present: 'null',
+    },
+    {
+        base: 'cry',
+        past: 'cried',
+        ing: 'crying',
+        present: 'cries',
+    },
+    {
+        base: 'sleep',
+        past: 'slept',
+        ing: 'sleeping',
+        present: 'sleeps',
+    },
+    {
+        base: 'woof',
+        past: 'woofed',
+        ing: 'woofing',
+        present: 'woofs',
+    },
+    {
+        base: 'spy on',
+        past: 'spied on',
+        ing: 'spying on',
+        present: 'spies on',
+    },
+    {
+        base: 'confuse',
+        past: 'confused',
+        ing: 'confusing',
+        present: 'confuses',
+    },
+    {
+        base: 'try drugs',
+        past: 'exploded',
+        ing: 'exploding',
+        present: 'explodes',
+    },
+    {
+        base: 'regret',
+        past: 'regretted',
+        ing: 'regretting',
+        present: 'regrets',
+    },
+    {
+        base: 'ignore',
+        past: 'ignored',
+        ing: 'ignoring',
+        present: 'ignores',
+    },
+    {
+        base: 'panic',
+        past: 'panicked',
+        ing: 'panicking',
+        present: 'panics',
+    },
+    {
+        base: 'attempt',
+        past: 'attempted',
+        ing: 'attempting',
+        present: 'attempts',
+    },
+    {
+        base: 'commit',
+        past: 'committed',
+        ing: 'committing',
+        present: 'commits',
+    },
+    {
+        base: 'relax',
+        past: 'relaxed',
+        ing: 'relaxing',
+        present: 'relaxes',
+    },
+    {
+        base: 'remain calm',
+        past: 'remained calm',
+        ing: 'remaining calm',
+        present: 'remains calm',
+    },
+    {
+        base: 'hyperventilate',
+        past: 'hyperventilated',
+        ing: 'hyperventilating',
+        present: 'hyperventilates',
+    },
+    {
+        base: 'do',
+        past: 'did',
+        ing: 'doing',
+        present: 'does',
+    },
+    {
+        base: 'exist',
+        past: 'existed',
+        ing: 'existing',
+        present: 'exists',
+    },
+    {
+        base: 'fight',
+        past: 'fought',
+        ing: 'fighting',
+        present: 'fights',
+    },
+    {
+        base: 'yell at',
+        past: 'yelled at',
+        ing: 'yelling at',
+        present: 'yells at',
+    },
+    {
+        base: 'scream',
+        past: 'screamed',
+        ing: 'screaming',
+        present: 'screams',
+    },
+    {
+        base: 'shout',
+        past: 'shouted',
+        ing: 'shouting',
+        present: 'shouts',
+    },
+    {
+        base: 'punch',
+        past: 'punched',
+        ing: 'punching',
+        present: 'punchs',
+    },
+    {
+        base: 'kick',
+        past: 'kicked',
+        ing: 'kicking',
+        present: 'kicks',
+    },
+    {
+        base: 'burn down',
+        past: 'burnt down',
+        ing: 'burning down',
+        present: 'burns down',
+    },
+    {
+        base: 'burn',
+        past: 'burnt',
+        ing: 'burning',
+        present: 'burns',
+    },
+    {
+        base: 'jump',
+        past: 'jumped',
+        ing: 'jumping',
+        present: 'jumps',
+    },
+    {
+        base: 'spin',
+        past: 'spun',
+        ing: 'spinning',
+        present: 'spins',
+    },
+    {
+        base: 'run',
+        past: 'ran',
+        ing: 'running',
+        present: 'runs',
+    },
+    {
+        base: 'detonate',
+        past: 'detonated',
+        ing: 'detonating',
+        present: 'detonates',
+    },
+    {
+        base: 'find',
+        past: 'found',
+        ing: 'finding',
+        present: 'finds',
+    },
+    {
+        base: 'walk',
+        past: 'walked',
+        ing: 'walking',
+        present: 'walks',
+    },
+    {
+        base: 'ensure',
+        past: 'ensured',
+        ing: 'ensuring',
+        present: 'ensures',
+    },
+    {
+        base: 'test',
+        past: 'tested',
+        ing: 'testing',
+        present: 'tests',
+    },
+    {
+        base: 'water',
+        past: 'watered',
+        ing: 'watering',
+        present: 'waters',
+    },
+    {
+        base: 'open',
+        past: 'opened',
+        ing: 'opening',
+        present: 'opens',
+    },
+    {
+        base: 'close',
+        past: 'closed',
+        ing: 'closing',
+        present: 'closes',
+    },
+    {
+        base: 'patronise',
+        past: 'patronised',
+        ing: 'patronising',
+        present: 'patronises',
+    },
+    {
+        base: 'paint',
+        past: 'painted',
+        ing: 'painting',
+        present: 'paints',
+    },
+    {
+        base: 'oxidise',
+        past: 'oxidised',
+        ing: 'oxidising',
+        present: 'oxidises',
+    },
+    {
+        base: 'oxygenate',
+        past: 'oxygenated',
+        ing: 'oxygenating',
+        present: 'oxygenates',
+    },
+    {
+        base: 'have',
+        past: 'had',
+        ing: 'having',
+        present: 'has',
+    },
+    {
+        base: 'say',
+        past: 'said',
+        ing: 'saying',
+        present: 'says',
+    },
+    {
+        base: 'get',
+        past: 'got',
+        ing: 'getting',
+        present: 'gets',
+    },
+    {
+        base: 'make',
+        past: 'made',
+        ing: 'making',
+        present: 'makes',
+    },
+    {
+        base: 'go',
+        past: 'is gone',
+        ing: 'going',
+        present: 'goes',
+    },
+    {
+        base: 'know',
+        past: 'knew',
+        ing: 'knowing',
+        present: 'knows',
+    },
+    {
+        base: 'take',
+        past: 'took',
+        ing: 'taking',
+        present: 'takes',
+    },
+    {
+        base: 'see',
+        past: 'saw',
+        ing: 'seeing',
+        present: 'sees',
+    },
+    {
+        base: 'come',
+        past: 'came',
+        ing: 'coming',
+        present: 'comes',
+    },
+    {
+        base: 'think',
+        past: 'thought',
+        ing: 'thinking',
+        present: 'thinks',
+    },
+    {
+        base: 'look',
+        past: 'looked',
+        ing: 'looking',
+        present: 'looks',
+    },
+    {
+        base: 'want',
+        past: 'wanted',
+        ing: 'wanting',
+        present: 'wants',
+    },
+    {
+        base: 'give',
+        past: 'gave',
+        ing: 'giving',
+        present: 'gives',
+    },
+    {
+        base: 'use',
+        past: 'used',
+        ing: 'using',
+        present: 'uses',
+    },
+    {
+        base: 'find',
+        past: 'fought',
+        ing: 'finding',
+        present: 'finds',
+    },
+    {
+        base: 'tell',
+        past: 'told',
+        ing: 'telling',
+        present: 'tells',
+    },
+    {
+        base: 'ask',
+        past: 'asked',
+        ing: 'asking',
+        present: 'asks',
+    },
+    {
+        base: 'work',
+        past: 'worked',
+        ing: 'working',
+        present: 'works',
+    },
+    {
+        base: 'seem',
+        past: 'seemed',
+        ing: 'seeming',
+        present: 'seems',
+    },
+    {
+        base: 'feel',
+        past: 'felt',
+        ing: 'feeling',
+        present: 'feels',
+    },
+    {
+        base: 'try',
+        past: 'tried',
+        ing: 'trying',
+        present: 'tries',
+    },
+    {
+        base: 'leave',
+        past: 'left',
+        ing: 'leaving',
+        present: 'leaves',
+    },
+    {
+        base: 'call',
+        past: 'called',
+        ing: 'calling',
+        present: 'calls',
+    },
 ];
 
 export const descriptors: string[] = [
