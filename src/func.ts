@@ -119,7 +119,7 @@ const cacheById = [
  * @param id command id. if storing a map use the map id/md5 or user id if storing a user
  * @param name 
  */
-export function storeFile(data: string | osufunc.apiReturn | ((osuApiTypes.Score[] | osuApiTypes.Beatmapset[] | osuApiTypes.Beatmap[]) & osuApiTypes.Error) | osuApiTypes.BeatmapPlayCountArr | othertypes.geoLocale | othertypes.weatherData | othertypes.geoResults, id: string | number, name: string, mode?: osuApiTypes.GameMode, type?: string) {
+export function storeFile(data: string | osufunc.apiReturn | ((osuApiTypes.Score[] | osuApiTypes.Beatmapset[] | osuApiTypes.Beatmap[]) & osuApiTypes.Error) | osuApiTypes.BeatmapPlayCountArr | othertypes.geoLocale | othertypes.weatherData | othertypes.geoResults | othertypes.tropicalData, id: string | number, name: string, mode?: osuApiTypes.GameMode, type?: string) {
     try {
         if (cacheById.some(x => name.includes(x))) {
             switch (true) {
@@ -600,11 +600,27 @@ export function weatherCodeToString(code: number) {
  * converts an angle to a wind direction (north, north east, north east east whatever)
  * @returns direction the wind is coming from 
 */
-export function windToDirection(angle: number) {
+export function windToDirection(angle: number, reverse?: boolean) {
     //thank you chatGPT
 
     // Define an array of wind directions in clockwise order
     const directions = [
+        { name: 'North', travels: 'South', emoji: '⬇' },
+        { name: 'North-Northeast', travels: 'South-Southwest', emoji: '↙' },
+        { name: 'Northeast', travels: 'Southwest', emoji: '↙' },
+        { name: 'East-Northeast', travels: 'West-Southwest', emoji: '↙' },
+        { name: 'East', travels: 'West', emoji: '⬅' },
+        { name: 'East-Southeast', travels: 'West-Northwest', emoji: '↖' },
+        { name: 'Southeast', travels: 'Northwest', emoji: '↖' },
+        { name: 'South-Southeast', travels: 'North-Northwest', emoji: '↖' },
+        { name: 'South', travels: 'North', emoji: '⬆' },
+        { name: 'South-Southwest', travels: 'North-Northeast', emoji: '↗' },
+        { name: 'Southwest', travels: 'Northeast', emoji: '↗' },
+        { name: 'West-Southwest', travels: 'East-Northeast', emoji: '↗' },
+        { name: 'West', travels: 'East', emoji: '➡' },
+        { name: 'West-Northwest', travels: 'East-Southeast', emoji: '↘' },
+        { name: 'Northwest', travels: 'Southeast', emoji: '↘' },
+        { name: 'North-Northwest', travels: 'South-Southeast', emoji: '↘' },
         { name: 'North', travels: 'South', emoji: '⬇' },
         { name: 'North-Northeast', travels: 'South-Southwest', emoji: '↙' },
         { name: 'Northeast', travels: 'Southwest', emoji: '↙' },
@@ -627,7 +643,9 @@ export function windToDirection(angle: number) {
     const normalizedAngle = (angle % 360 + 360) % 360;
 
     // Calculate the index corresponding to the wind direction
-    const index = Math.floor(normalizedAngle / 22.5);
+    const index =
+        reverse == true ? Math.floor(normalizedAngle / 22.5) + directions.length / 4 :
+            Math.floor(normalizedAngle / 22.5);
 
     // Retrieve the wind direction from the array
     return directions[index];
@@ -636,7 +654,9 @@ export function windToDirection(angle: number) {
 export async function getTropical(type: 'active' | 'storm' | 'features', request?: string) {
     const baseURL = 'https://storm.tidetech.org/v1/';
 
-    const reqURL = type != 'active' ? baseURL + request : baseURL + 'active';
+    const reqURL = type != 'active' ? baseURL + 'storm/' + request : baseURL + 'active';
+
+    log.toOutput(reqURL);
 
     const data = await nfetch(reqURL).then(x => x.json());
     return data as othertypes.tropicalData;
@@ -645,96 +665,104 @@ export async function getTropical(type: 'active' | 'storm' | 'features', request
 export function tsCatToString(input: string) {
     let cat = {
         name: '',
+        name_asia: '',
+        name_auid: '',
         category: input,
         colour: '',
         speed: {
-            kts: '',
-            mph: '',
-            kph: '',
+            max: '', //in km/h
+            min: '',
         }
     };
     switch (input) {
-        case 'TD':
+        case 'td':
             cat = {
                 name: 'Tropical Depression',
+                name_asia: 'Tropical Depression',
+                name_auid: 'Tropical Depression',
                 category: input,
-                colour: '',
+                colour: '00CCFF',
                 speed: {
-                    kts: '',
-                    mph: '',
-                    kph: '',
+                    max: '63',
+                    min: '0',
                 }
             };
             break;
-        case 'TS':
+        case 'ts':
             cat = {
                 name: 'Tropical Storm',
+                name_asia: 'Tropical Storm',
+                name_auid: 'Tropical Storm',
                 category: input,
-                colour: '',
+                colour: '00FF00',
                 speed: {
-                    kts: '',
-                    mph: '',
-                    kph: '',
+                    max: '63',
+                    min: '118',
                 }
             };
             break;
-        case 'Cat1':
+        case 'cat1':
             cat = {
-                name: 'Hurricane',
+                name: 'Category 1 Hurricane',
+                name_asia: 'Category 1 Typhoon',
+                name_auid: 'Category 1 Cyclone',
                 category: input,
-                colour: '',
+                colour: 'FFFF00',
                 speed: {
-                    kts: '',
-                    mph: '',
-                    kph: '',
+                    max: '119',
+                    min: '153',
                 }
             };
             break;
-        case 'Cat2':
+        case 'cat2':
             cat = {
-                name: '',
+                name: 'Category 2 Hurricane',
+                name_asia: 'Category 2 Typhoon',
+                name_auid: 'Category 2 Cyclone',
                 category: input,
                 colour: '',
                 speed: {
-                    kts: '',
-                    mph: '',
-                    kph: '',
+                    max: '154',
+                    min: '177',
                 }
             };
             break;
-        case 'Cat3':
+        case 'cat3':
             cat = {
-                name: '',
+                name: 'Category 3 Hurricane',
+                name_asia: 'Category 3 Typhoon',
+                name_auid: 'Category 3 Cyclone',
                 category: input,
-                colour: '',
+                colour: 'FF6600',
                 speed: {
-                    kts: '',
-                    mph: '',
-                    kph: '',
+                    max: '178',
+                    min: '208',
                 }
             };
             break;
-        case 'Cat4':
+        case 'cat4':
             cat = {
-                name: '',
+                name: 'Category 4 Hurricane',
+                name_asia: 'Category 4 Typhoon',
+                name_auid: 'Category 4 Cyclone',
                 category: input,
-                colour: '',
+                colour: 'FF0000',
                 speed: {
-                    kts: '',
-                    mph: '',
-                    kph: '',
+                    max: '209',
+                    min: '251',
                 }
             };
             break;
-        case 'Cat5':
+        case 'cat5':
             cat = {
-                name: '',
+                name: 'Category 5 Hurricane',
+                name_asia: 'Category 5 Typhoon',
+                name_auid: 'Category 5 Cyclone',
                 category: input,
-                colour: '',
+                colour: 'CC00CC',
                 speed: {
-                    kts: '',
-                    mph: '',
-                    kph: '',
+                    max: '∞',
+                    min: '251',
                 }
             };
             break;
@@ -762,6 +790,49 @@ export function tsBasinToString(string: string) {
             break;
         case 'NIO':
             basin = 'North Indian Ocean';
+            break;
+        case 'N':
+            basin = 'North Atlantic';
+            break;
+        case 'W':
+            basin = 'Northwest Pacific';
+            break;
+        case 'A':
+            basin = 'Arabian Sea';
+            break;
+        case 'B':
+            basin = 'Bay of Bengal';
+            break;
+        case 'E':
+            basin = 'Northeast Pacific';
+            break;
+        case 'C':
+            basin = 'Central Pacific';
+            break;
+        case 'P':
+            basin = 'Southwest Pacific';
+            break;
+        case 'S':
+            basin = 'South Indian Ocean';
+            break;
+    }
+    return basin;
+}
+
+/**
+ * cyclone, hurricane, or typhoon
+ */
+export function tsBasinToType(string: string) {
+    let basin: 'Hurricane' | 'Typhoon' | 'Cyclone' = 'Hurricane';
+    switch (string) {
+        case 'ATL': case 'N': case 'NEP': case 'E': case 'C': default:
+            basin = 'Hurricane';
+            break;
+        case 'NWP': case 'W':
+            basin = 'Typhoon';
+            break;
+        case 'SWP': case 'SIO': case 'NIO': case 'A': case 'B': case 'P': case 'S':
+            basin = 'Cyclone';
             break;
     }
     return basin;

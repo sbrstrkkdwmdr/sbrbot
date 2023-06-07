@@ -2520,60 +2520,74 @@ export async function tropicalWeather(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
-        commandName: 'COMMANDNAME',
+        commandName: 'TropicalWeather',
         options: [{
             name: 'System',
-            value: 'system'
+            value: system
         }]
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let weatherData = await func.getTropical(type, system);
+    func.storeFile(weatherData, input.absoluteID, `${type}-tropicalWeatherData`);
     const embed = new Discord.EmbedBuilder();
     let useComponents = [];
 
     switch (type) {
         case 'active': default: {
             picker();
-            embed.setTitle(`Currently Active Storms`);
-            embed.setDescription((weatherData?.data as othertypes.tsShort[]).map(x => calc.toCapital(x.name)).join(', '));
+            embed.setTitle(`Currently Active Tropical Storms`);
         }
             break;
         case 'storm': {
-
+            embeddify();
         } break;
     }
 
     function picker() {
         const data = weatherData?.data as othertypes.tsShort[];
-        embed.setDescription('Multiple locations were found\nPlease select one from the list below');
-        const inputModal = new Discord.StringSelectMenuBuilder()
-            .setCustomId(`${mainconst.version}-Select-weather-${commanduser.id}-${input.absoluteID}`)
-            .setPlaceholder('Select a location');
-        for (let i = 0; i < data.length && i < 25; i++) {
-            const current = data[i];
-            inputModal.addOptions(
-                new Discord.StringSelectMenuOptionBuilder()
-                    .setLabel(`#${i + 1} | ${current.name}`)
-                    .setValue(`${current.id}`)
-            );
+        if (data.length > 0) {
+            embed.setDescription((weatherData?.data as othertypes.tsShort[]).map(x => calc.toCapital(x.name)).join(', '));
+            const inputModal = new Discord.StringSelectMenuBuilder()
+                .setCustomId(`${mainconst.version}-Select-tropicalweather-${commanduser.id}-${input.absoluteID}`)
+                .setPlaceholder('Select a storm');
+            for (let i = 0; i < data.length && i < 25; i++) {
+                const current = data[i];
+                inputModal.addOptions(
+                    new Discord.StringSelectMenuOptionBuilder()
+                        .setLabel(`#${i + 1} | ${current.name}`)
+                        .setValue(`${current.id}`)
+                );
+            }
+            const buttons = new Discord.ActionRowBuilder();
+            buttons.addComponents(inputModal);
+            useComponents = [buttons];
+        } else {
+            embed.setDescription('No currently active tropical storms found.')
         }
-        const buttons = new Discord.ActionRowBuilder();
-        buttons.addComponents(inputModal);
-        useComponents = [buttons];
+
     }
 
     async function embeddify() {
         const data = weatherData?.data as othertypes.tsData;
-        const secondData = await func.getTropical('features', system) as othertypes.tsFeatureData;
+        const catData = func.tsCatToString(data.category.toLowerCase());
+        const basin = func.tsBasinToString(data.basin);
+        const basinType = func.tsBasinToType(data.basin);
+        const hurname = basinType == 'Cyclone' ?
+            catData.name_auid : basinType == 'Typhoon' ? catData.name_asia :
+                catData.name;
+        const windDir = func.windToDirection(data.movement.bearing, true);
+        const fullname = data.name_list.length > 1 ?
+            `${data.name} (${data.name_list[0]})` : data.name;
 
-        embed.setTitle(`Tropical System ${data.name}`)
-        .setDescription(`
-Location: (${data.position.join(',')})
-Category
-
+        embed.setTitle(`${hurname} ${fullname}`)
+            .setDescription(`
+Location: ${basin} Basin (${data.position.join(',')})
+Direction: ${windDir.emoji} ${data.movement.KPH}km/h ${data.movement.MPH}mi/h ${data.movement.KTS}kt/s
+Peak: ${data.max_forecast_category} (Forecasted ${data.max_forecast_category})
 `)
+            .setColor(colourfunc.hexToDec(`#${catData.colour}`));
 
     }
 
@@ -2590,7 +2604,7 @@ Category
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: 'COMMANDNAME',
+            commandName: 'TropicalWeather',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -2598,7 +2612,7 @@ Category
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: 'COMMANDNAME',
+            commandName: 'TropicalWeather',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,

@@ -143,6 +143,11 @@ export default (input: {
                         overrides.ex = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
                     }
                     break;
+                case 'tropicalweather':
+                    {
+                        overrides.id = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
+                    }
+                    break;
             }
         }
 
@@ -293,6 +298,9 @@ export default (input: {
                 break;
             case 'weather':
                 await commands.weather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
+            case 'tropicalweather':
+                await commands.tropicalWeather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
         }
         fs.appendFileSync(`${path}/logs/totalcommands.txt`, 'x');

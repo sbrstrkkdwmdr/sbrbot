@@ -342,6 +342,10 @@ export default (input: {
                 startType(obj);
                 commands.weather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
+            case 'tropicalweather':case 'ts':
+                startType(obj);
+                commands.tropicalWeather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
 
             //misc
             case '8ball': case 'ask':
@@ -399,7 +403,7 @@ export default (input: {
                 startType(obj);
                 misccmds.image({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
-            case 'inspire':case 'insp':
+            case 'inspire': case 'insp':
                 startType(obj);
                 misccmds.inspire({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
