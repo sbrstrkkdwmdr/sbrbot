@@ -2537,7 +2537,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
     switch (type) {
         case 'active': default: {
             picker();
-            embed.setTitle(`Currently Active Tropical Storms`);
+            embed.setTitle(`Currently Active Tropical Storms`); 
         }
             break;
         case 'storm': {
@@ -2548,7 +2548,13 @@ export async function tropicalWeather(input: extypes.commandInput) {
     function picker() {
         const data = weatherData?.data as othertypes.tsShort[];
         if (data.length > 0) {
-            embed.setDescription((weatherData?.data as othertypes.tsShort[]).map(x => calc.toCapital(x.name)).join(', '));
+            embed.setDescription((weatherData?.data as othertypes.tsShort[]).map(x => {
+                let first = calc.toCapital(x.name);
+                if (!x.id.includes(x.name)) {
+                    first += ` (${x.id.slice(4, x.id.length)})`;
+                }
+                return first;
+            }).join(', '));
             const inputModal = new Discord.StringSelectMenuBuilder()
                 .setCustomId(`${mainconst.version}-Select-tropicalweather-${commanduser.id}-${input.absoluteID}`)
                 .setPlaceholder('Select a storm');
@@ -2564,7 +2570,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
             buttons.addComponents(inputModal);
             useComponents = [buttons];
         } else {
-            embed.setDescription('No currently active tropical storms found.')
+            embed.setDescription('No currently active tropical storms found.');
         }
 
     }
@@ -2578,8 +2584,9 @@ export async function tropicalWeather(input: extypes.commandInput) {
             catData.name_auid : basinType == 'Typhoon' ? catData.name_asia :
                 catData.name;
         const windDir = func.windToDirection(data.movement.bearing, true);
+        const altName = data.id.slice(4, data.id.length);
         const fullname = data.name_list.length > 1 ?
-            `${data.name} (${data.name_list[0]})` : data.name;
+            `${data.name} (${altName})` : data.name;
 
         embed.setTitle(`${hurname} ${fullname}`)
             .setDescription(`
@@ -2587,7 +2594,9 @@ Location: ${basin} Basin (${data.position.join(',')})
 Direction: ${windDir.emoji} ${data.movement.KPH}km/h ${data.movement.MPH}mi/h ${data.movement.KTS}kt/s
 Peak: ${data.max_forecast_category} (Forecasted ${data.max_forecast_category})
 `)
-            .setColor(colourfunc.hexToDec(`#${catData.colour}`));
+            // .setImage(`https://www.force-13.com/floaters/${altName}/imagery/cl.png`)
+            .setColor(colourfunc.hexToDec(`#${catData.colour}`))
+            ;
 
     }
 

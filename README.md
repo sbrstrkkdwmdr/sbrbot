@@ -89,6 +89,7 @@ copy the key and paste it into the google.apiKey field </br>
 - [node-fetch](https://www.npmjs.com/package/node-fetch)</br>
 - [osureplayparser](https://www.npmjs.com/package/osureplayparser)</br>
 - Weather API: [open-meteo](https://open-meteo.com)</br>
+- Tropical Weather API: [tidetech](https://docs.tidetech.org/storm-api/)</br>
 
 ## config properties
 
