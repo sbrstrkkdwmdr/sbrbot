@@ -507,7 +507,7 @@ export function findMode(input: string[]) {
  * @param callback 
  * @returns 
  */
-export async function stringMath(eq:string, callback?) {
+export async function stringMath(eq: string, callback?) {
     if (typeof eq !== 'string') return handleCallback(new TypeError('The [String] argument is expected.'), null);
     const mulDiv = /([+-]?\d*\.?\d+(?:e[+-]\d+)?)\s*([*/])\s*([+-]?\d*\.?\d+(?:e[+-]\d+)?)/;
     const plusMin = /([+-]?\d*\.?\d+(?:e[+-]\d+)?)\s*([+-])\s*([+-]?\d*\.?\d+(?:e[+-]\d+)?)/;
@@ -566,7 +566,25 @@ export async function stringMath(eq:string, callback?) {
         return result;
 
     }
+}
 
+/**
+ * checks if the string is a number
+ */
+export function checkIsNumber(str: string) {
+    const numbers = [
+        'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+        'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',
+        'thirty', 'forty', 'fifty', 'sixty', 'eighty', 'ninety', 'hundred', 'thousand', 'million', 'billion', 'trillion'
+    ];
+    let bool = false;
+    for (let i = 0; i < numbers.length; i++) {
+        if (str.toLowerCase().trim().includes(numbers[i])) {
+            bool = true;
+            break;
+        };
+    }
+    return bool;
 }
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };

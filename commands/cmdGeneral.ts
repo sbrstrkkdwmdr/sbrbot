@@ -2537,7 +2537,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
     switch (type) {
         case 'active': default: {
             picker();
-            embed.setTitle(`Currently Active Tropical Storms`); 
+            embed.setTitle(`Currently Active Tropical Storms`);
         }
             break;
         case 'storm': {
@@ -2550,7 +2550,10 @@ export async function tropicalWeather(input: extypes.commandInput) {
         if (data.length > 0) {
             embed.setDescription((weatherData?.data as othertypes.tsShort[]).map(x => {
                 let first = calc.toCapital(x.name);
-                if (!x.id.includes(x.name)) {
+                if (calc.checkIsNumber(x.name)) {
+                    first = x.id.slice(4, x.id.length);
+                }
+                else if (!x.id.includes(x.name)) {
                     first += ` (${x.id.slice(4, x.id.length)})`;
                 }
                 return first;
@@ -2558,11 +2561,17 @@ export async function tropicalWeather(input: extypes.commandInput) {
             const inputModal = new Discord.StringSelectMenuBuilder()
                 .setCustomId(`${mainconst.version}-Select-tropicalweather-${commanduser.id}-${input.absoluteID}`)
                 .setPlaceholder('Select a storm');
+
             for (let i = 0; i < data.length && i < 25; i++) {
                 const current = data[i];
+
+                const altName = current.id.slice(4, current.id.length);
+                const fullname = calc.checkIsNumber(current.name) ? altName : current.name;
+
                 inputModal.addOptions(
                     new Discord.StringSelectMenuOptionBuilder()
-                        .setLabel(`#${i + 1} | ${current.name}`)
+                        .setLabel(`#${i + 1} | ${fullname}`)
+                        .setDescription(altName)
                         .setValue(`${current.id}`)
                 );
             }
@@ -2585,8 +2594,8 @@ export async function tropicalWeather(input: extypes.commandInput) {
                 catData.name;
         const windDir = func.windToDirection(data.movement.bearing, true);
         const altName = data.id.slice(4, data.id.length);
-        const fullname = data.name_list.length > 1 ?
-            `${data.name} (${altName})` : data.name;
+        const fullname = calc.checkIsNumber(data.name) ? altName :
+            `${data.name} (${altName})`;
 
         embed.setTitle(`${hurname} ${fullname}`)
             .setDescription(`
