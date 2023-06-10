@@ -591,8 +591,8 @@ operators: *, /, +, -, (, )
     {
         name: 'Weather',
         description: 'Shows the weather for a specific region',
-        usage: 'settime <region>',
-        slashusage: 'settime <region>',
+        usage: 'weather <region>',
+        slashusage: 'weather <region>',
         examples: [
             {
                 text: 'PREFIXMSGweather auckland',
@@ -612,6 +612,15 @@ operators: *, /, +, -, (, )
                 commandTypes: ['message', 'interaction', 'button']
             }
         ]
+    },
+    {
+        name: 'Tropicalweather',
+        description: 'Shows the currently active tropical storms.',
+        usage: 'tropicalweather',
+        slashusage: 'tropicalweather',
+        examples: [],
+        aliases: ['ts'],
+        options: []
     },
 ];
 
@@ -2361,6 +2370,15 @@ const othercmds: commandInfo[] = [
                 commandTypes: ['message', 'interaction']
             }
         ]
+    },
+    {
+        name: 'Inspire',
+        description: 'Sends a randomly generated inspirational quote',
+        usage: 'inspire',
+        slashusage: 'inspire',
+        examples: [],
+        aliases: ['insp'],
+        options: [],
     },
     {
         name: 'poll',
