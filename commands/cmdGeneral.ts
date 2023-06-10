@@ -2388,8 +2388,8 @@ Sunset: ${dailyData.sunset[0]}
                     name: `Temperature`,
                     value: `
 Current: ${curData.temperature}${weatherUnits.temperature_2m_max}
-Min: ${dailyData.temperature_2m_max[0]}${weatherUnits.temperature_2m_max}
-Max: ${dailyData.temperature_2m_min[0]}${weatherUnits.temperature_2m_max}
+Min: ${dailyData.temperature_2m_min[0]}${weatherUnits.temperature_2m_max}
+Max: ${dailyData.temperature_2m_max[0]}${weatherUnits.temperature_2m_max}
 `,
                     inline: true
                 },
@@ -2594,7 +2594,17 @@ Location: ${basin} Basin (${data.position.join(',')})
 Direction: ${windDir.emoji} ${data.movement.KPH}km/h ${data.movement.MPH}mi/h ${data.movement.KTS}kt/s
 Peak: ${data.max_forecast_category} (Forecasted ${data.max_forecast_category})
 `)
-            // .setImage(`https://www.force-13.com/floaters/${altName}/imagery/cl.png`)
+            .setImage(`https://www.force-13.com/floaters/${altName}/imagery/rb-animated.gif`)
+            //.png
+            //-animated.gif
+            /**
+             * types
+             * visible: vis
+             * true colour: true
+             * shortwave ir: 
+             * rgb:
+             * 
+             */
             .setColor(colourfunc.hexToDec(`#${catData.colour}`))
             ;
 

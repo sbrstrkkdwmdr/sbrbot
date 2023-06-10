@@ -156,8 +156,8 @@ export const templateStrings: quoteTemplate[] = [
         descriptors: 1,
     },
     {
-        string: 'Don\'t verb1ba with name1ba. verb2ba',
-        names: 1,
+        string: 'Don\'t verb1ba with name1ba. verb2ba name2pl',
+        names: 2,
         verbs: 2,
         descriptors: 0,
     },
@@ -184,6 +184,12 @@ export const templateStrings: quoteTemplate[] = [
         names: 1,
         verbs: 0,
         descriptors: 0,
+    },
+    {
+        string: 'Are descriptor1 name1pl better than other name1pl?',
+        names: 1,
+        verbs: 0,
+        descriptors: 1,
     },
 ];
 
@@ -512,6 +518,11 @@ const concepts: noun[] = [
         base: 'tax fraud',
         pluralised: 'tax fraud',
         indefAr: 'tax fraud'
+    },
+    {
+        base: 'secret death cult',
+        pluralised: 'secret death cults',
+        indefAr: 'a secret death cult'
     },
 ];
 const things: noun[] = [
