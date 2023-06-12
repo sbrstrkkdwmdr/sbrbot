@@ -119,7 +119,7 @@ const cacheById = [
  * @param id command id. if storing a map use the map id/md5 or user id if storing a user
  * @param name 
  */
-export function storeFile(data: string | osufunc.apiReturn | ((osuApiTypes.Score[] | osuApiTypes.Beatmapset[] | osuApiTypes.Beatmap[]) & osuApiTypes.Error) | osuApiTypes.BeatmapPlayCountArr | othertypes.geoLocale | othertypes.weatherData | othertypes.geoResults | othertypes.tropicalData, id: string | number, name: string, mode?: osuApiTypes.GameMode, type?: string) {
+export function storeFile(data: string | osufunc.apiReturn | ((osuApiTypes.Score[] | osuApiTypes.Beatmapset[] | osuApiTypes.Beatmap[]) & osuApiTypes.Error) | osuApiTypes.BeatmapPlayCountArr | othertypes.geoLocale | othertypes.weatherData | othertypes.geoResults | othertypes.tropicalData | othertypes.tsFeatureData, id: string | number, name: string, mode?: osuApiTypes.GameMode, type?: string) {
     try {
         if (cacheById.some(x => name.includes(x))) {
             switch (true) {
@@ -654,7 +654,11 @@ export function windToDirection(angle: number, reverse?: boolean) {
 export async function getTropical(type: 'active' | 'storm' | 'features', request?: string) {
     const baseURL = 'https://storm.tidetech.org/v1/';
 
-    const reqURL = type != 'active' ? baseURL + 'storm/' + request : baseURL + 'active';
+    const reqURL = type == 'active' ?
+        baseURL + 'active' :
+        type == 'storm' ?
+            baseURL + 'storm/' + request :
+            baseURL + 'storm/' + request + '/features';
 
     log.toOutput(reqURL);
 
@@ -675,7 +679,7 @@ export function tsCatToString(input: string) {
         }
     };
     switch (input) {
-        case 'td':
+        case 'td': default:
             cat = {
                 name: 'Tropical Depression',
                 name_asia: 'Tropical Depression',
@@ -696,8 +700,8 @@ export function tsCatToString(input: string) {
                 category: input,
                 colour: '00FF00',
                 speed: {
-                    max: '63',
-                    min: '118',
+                    max: '118',
+                    min: '63',
                 }
             };
             break;
@@ -709,8 +713,8 @@ export function tsCatToString(input: string) {
                 category: input,
                 colour: 'FFFF00',
                 speed: {
-                    max: '119',
-                    min: '153',
+                    max: '153',
+                    min: '119',
                 }
             };
             break;
@@ -720,10 +724,10 @@ export function tsCatToString(input: string) {
                 name_asia: 'Category 2 Typhoon',
                 name_auid: 'Category 2 Cyclone',
                 category: input,
-                colour: '',
+                colour: 'FFCC00',
                 speed: {
-                    max: '154',
-                    min: '177',
+                    max: '177',
+                    min: '154',
                 }
             };
             break;
@@ -735,8 +739,8 @@ export function tsCatToString(input: string) {
                 category: input,
                 colour: 'FF6600',
                 speed: {
-                    max: '178',
-                    min: '208',
+                    max: '208',
+                    min: '178',
                 }
             };
             break;
@@ -748,8 +752,8 @@ export function tsCatToString(input: string) {
                 category: input,
                 colour: 'FF0000',
                 speed: {
-                    max: '209',
-                    min: '251',
+                    max: '251',
+                    min: '209',
                 }
             };
             break;
@@ -770,8 +774,24 @@ export function tsCatToString(input: string) {
     return cat;
 }
 
+export type basins =
+    'North Atlantic' |
+    'Northeast Pacific' |
+    'Northwest Pacific' |
+    'Southwest Pacific' |
+    'South Indian Ocean' |
+    'North Indian Ocean' |
+    'North Atlantic' |
+    'Northwest Pacific' |
+    'Arabian Sea' |
+    'Bay of Bengal' |
+    'Northeast Pacific' |
+    'Central Pacific' |
+    'Southwest Pacific' |
+    'South Indian Ocean';
+
 export function tsBasinToString(string: string) {
-    let basin: string = 'null';
+    let basin: basins = null;
     switch (string) {
         case 'ATL':
             basin = 'North Atlantic';
@@ -836,4 +856,166 @@ export function tsBasinToType(string: string) {
             break;
     }
     return basin;
+}
+
+/**
+ * Saffir-Simpson Hurricane Wind Scale
+ * @param maxwsp sustained wind speed in km/h
+ */
+export function tsNameSSHWS(maxwsp: number) {
+    let name = '';
+    switch (true) {
+        case maxwsp < 62:
+            name = 'Tropical Depression';
+            break;
+        case maxwsp < 118:
+            name = 'Tropical Storm';
+            break;
+        case maxwsp < 153:
+            name = 'Category 1';
+            break;
+        case maxwsp < 177:
+            name = 'Category 2';
+            break;
+        case maxwsp < 208:
+            name = 'Category 3';
+            break;
+        case maxwsp < 251:
+            name = 'Category 4';
+            break;
+        default:
+            name = 'Category 5';
+            break;
+
+    }
+    return name;
+}
+
+/**
+ * India Meteorological Department
+ * @param maxwsp sustained wind speed in km/h
+ */
+export function tsNameIMD(maxwsp: number) {
+    let name = '';
+    switch (true) {
+        case maxwsp < 31:
+            name = 'Low-pressure area';
+            break;
+        case maxwsp < 49:
+            name = 'Depression';
+            break;
+        case maxwsp < 61:
+            name = 'Deep depression';
+            break;
+        case maxwsp < 88:
+            name = 'Cyclonic storm';
+            break;
+        case maxwsp < 117:
+            name = 'Severe cyclonic storm';
+            break;
+        case maxwsp < 167:
+            name = 'Very severe cyclonic storm';
+            break;
+        case maxwsp < 221:
+            name = 'Extremely severe cyclonic storm';
+            break;
+        default:
+            name = 'Super cyclonic storm';
+            break;
+
+    }
+    return name;
+}
+
+/**
+ * Japan Meteorological Agency
+ * @param maxwsp sustained wind speed in km/h
+ */
+export function tsNameJMA(maxwsp: number) {
+    let name = '';
+    switch (true) {
+        case maxwsp < 62:
+            name = 'Tropical depression';
+            break;
+        case maxwsp < 89:
+            name = 'Tropical storm';
+            break;
+        case maxwsp < 118:
+            name = 'Severe tropical storm';
+            break;
+        case maxwsp < 157:
+            name = 'Typhoon';
+            break;
+        case maxwsp < 194:
+            name = 'Very strong typhoon';
+            break;
+        default:
+            name = 'Violent typhoon';
+            break;
+
+    }
+    return name;
+}
+
+/**
+ * Météo-France
+ * @param maxwsp sustained wind speed in km/h
+ */
+export function tsNameMFR(maxwsp: number) {
+    let name = '';
+    switch (true) {
+        case maxwsp < 51:
+            name = 'Tropical disturbance';
+            break;
+        case maxwsp < 63:
+            name = 'Tropical depression';
+            break;
+        case maxwsp < 89:
+            name = 'Moderate tropical storm';
+            break;
+        case maxwsp < 118:
+            name = 'Severe tropical storm';
+            break;
+        case maxwsp < 166:
+            name = 'Tropical cyclone';
+            break;
+        case maxwsp < 212:
+            name = 'Intense tropical cyclone';
+            break;
+        default:
+            name = 'Very intense tropical cyclone';
+            break;
+
+    }
+    return name;
+}
+
+/**
+ * Australian Tropical Cyclone Intensity Scale
+ * @param maxwsp sustained wind speed in km/h
+ */
+export function tsNameATCIS(maxwsp: number) {
+    let name = '';
+    switch (true) {
+        case maxwsp < 91:
+            name = 'Tropical storm';
+            break;
+        case maxwsp < 126:
+            name = 'One';
+            break;
+        case maxwsp < 167:
+            name = 'Two';
+            break;
+        case maxwsp < 226:
+            name = 'Three';
+            break;
+        case maxwsp < 280:
+            name = 'Four';
+            break;
+        default:
+            name = 'Five';
+            break;
+
+    }
+    return name;
 }
