@@ -331,3 +331,6 @@ commit:
 [QOL] remind command now tells what time the reminder will be sent at
 [ADD] added inspire command
 [ADD] added tropical storm command
+[FIX] fix image parsing
+[FIX] fix map search being slightly broken 
+[QOL] correct difficulty is now shown when using image parse (previously would sort by difficulty)

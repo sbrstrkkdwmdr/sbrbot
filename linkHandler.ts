@@ -80,17 +80,36 @@ export default (input: {
             };
         }
         //disabled for now
-        if (false && input.config.useScreenshotParse == true && settings.osuParseScreenshots == true) {
+        if (/* false && */ input.config.useScreenshotParse == true && settings.osuParseScreenshots == true) {
             //warning: uses a lot of memory
 
             //if message attachments size > 0
             if (imgParseCooldown == false) {
                 if (message.attachments.size > 0) {
                     if (message.attachments.first().url.includes('.png') || message.attachments.first().url.includes('.jpg')) {
-                        const worker = tesseract.createWorker({
-                            logger: m => {
-                                fs.appendFileSync(`logs/gen/imagerender${obj.guildId}.log`,
-                                    `
+                        //                         const worker = tesseract.createWorker({
+                        //                             logger: m => {
+                        //                                 fs.appendFileSync(`${path}/logs/gen/imagerender${obj.guildId}.log`,
+                        //                                     `
+                        // ================================
+                        // ${currentDate.toISOString()}
+                        // ID: ${absoluteID}
+                        // workerID: ${m.workerId}
+                        // jobID: ${m.jobId}
+                        // userjobID: ${m.userJobId}
+                        // status: ${m.status ? m.status : 'none/completed'}
+                        // progress: ${m.progress ? m.progress : 'none'}
+                        // ================================
+                        // `
+                        //                                 );
+                        //                             }
+                        //                         });
+                        imgParseCooldown = true;
+                        await (async () => {
+                            await tesseract.recognize(message.attachments.first().url, 'eng', {
+                                logger: m => {
+                                    fs.appendFileSync(`${path}/logs/gen/imagerender${obj.guildId}.log`,
+                                        `
 ================================
 ${currentDate.toISOString()}
 ID: ${absoluteID}
@@ -101,15 +120,26 @@ status: ${m.status ? m.status : 'none/completed'}
 progress: ${m.progress ? m.progress : 'none'}
 ================================
 `
-                                );
-                            }
-                        });
-                        imgParseCooldown = true;
-                        await (async () => {
-                            (await worker).load();
-                            (await worker).loadLanguage('eng');
-                            (await worker).initialize('eng');
-                            const { data: { text } } = await (await worker).recognize(message.attachments.first().url);
+                                    );
+                                }
+                            });
+                            const { data: { text } } = await tesseract.recognize(message.attachments.first().url, 'eng', {
+                                logger: m => {
+                                    fs.appendFileSync(`${path}/logs/gen/imagerender${obj.guildId}.log`,
+                                        `
+================================
+${currentDate.toISOString()}
+ID: ${absoluteID}
+workerID: ${m.workerId}
+jobID: ${m.jobId}
+userjobID: ${m.userJobId}
+status: ${m.status ? m.status : 'none/completed'}
+progress: ${m.progress ? m.progress : 'none'}
+================================
+`
+                                    );
+                                }
+                            });
                             if (text.includes('Beatmap by')) {
                                 const txttitle = text.split('\n')[0];
                                 const txtcreator = text.split('Beatmap by ')[1].split('\n')[0];

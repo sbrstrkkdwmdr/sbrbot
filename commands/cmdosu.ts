@@ -10088,7 +10088,7 @@ export async function map(input: extypes.commandInput) {
                 opts: [`s=${searchRestrict}`]
             }
         });
-        const mapidtest = mapidtestReq.apiData;
+        const mapidtest = mapidtestReq.apiData as osuApiTypes.BeatmapsetSearch;
         if (mapidtestReq?.error) {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -10109,8 +10109,9 @@ export async function map(input: extypes.commandInput) {
             return;
         }
         osufunc.debug(mapidtestReq, 'command', 'map', input.obj.guildId, 'mapIdTestData');
+        func.storeFile(mapidtestReq, maptitleq.replace(/[\W_]+/g, '').replaceAll(' ', '_'), 'mapQuerydata');
 
-        if (mapidtest?.hasOwnProperty('error')) {
+        if (mapidtest?.hasOwnProperty('error') && !mapidtest.hasOwnProperty('beatmapsets')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
                     commandType: input.commandType,
@@ -10132,9 +10133,10 @@ export async function map(input: extypes.commandInput) {
             return;
         }
 
+        let usemapidpls;
         let mapidtest2;
 
-        if (mapidtest.length == 0) {
+        if (mapidtest.beatmapsets.length == 0) {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
                 obj: input.obj,
@@ -10154,7 +10156,16 @@ export async function map(input: extypes.commandInput) {
             return;
         }
         try {
-            mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => a.difficulty_rating - b.difficulty_rating);
+            let matchedId = null;
+            // first check if any diff name matches the search
+            for (let i = 0; i < mapidtest.beatmapsets[0].beatmaps.length; i++) {
+                if (maptitleq.includes(mapidtest.beatmapsets[0].beatmaps[i].version)) {
+                    matchedId = mapidtest.beatmapsets[0].beatmaps[i].id;
+                }
+            }
+
+            mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating);
+            usemapidpls = matchedId ?? mapidtest2[0].id;
         } catch (error) {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -10190,16 +10201,16 @@ export async function map(input: extypes.commandInput) {
             }
         }
 
-        if (func.findFile(mapidtest2[0].id, 'mapdata') &&
+        if (func.findFile(usemapidpls, 'mapdata') &&
             input.commandType == 'button' &&
-            !('error' in func.findFile(mapidtest2[0].id, 'mapdata')) &&
+            !('error' in func.findFile(usemapidpls, 'mapdata')) &&
             input.button != 'Refresh') {
-            mapdataReq = func.findFile(mapidtest2[0].id, 'mapdata');
+            mapdataReq = func.findFile(usemapidpls, 'mapdata');
         } else {
             mapdataReq = await osufunc.apiget({
                 type: 'map_get',
                 params: {
-                    id: mapidtest2[0].id
+                    id: usemapidpls
                 }
             });
             // mapdataReq = await osufunc.apiget('map_get', `${mapidtest2[0].id}`)

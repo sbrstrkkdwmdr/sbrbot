@@ -183,6 +183,16 @@ export type Beatmapset = BeatmapsetCompact & {
     tags: string,
 } & Error;
 
+export type BeatmapsetSearch = {
+    beatmapsets?: Beatmapset[],
+    cursor: Cursor,
+    cursor_string: CursorString,
+    total: number,
+    error: any,
+    search: any,
+    recommended_difficulty: any,
+} & Error;
+
 //==============================================================================================================================================================================================
 
 export type BeatmapsetDiscussion = {
@@ -565,7 +575,7 @@ export type SpotLights = {
  * year-month-dayThour-minute-second+hour:minute
  * ie 2019-09-05T06:31:20+00:00
 */
-export type Timestamp = `${number}-${number}-${number}T${number}:${number}:${number}${'+'|'-'}${number}:${number}`; //& Error
+export type Timestamp = `${number}-${number}-${number}T${number}:${number}:${number}${'+' | '-'}${number}:${number}`; //& Error
 
 export type UpdateStream = {
     display_name?: string | null,
