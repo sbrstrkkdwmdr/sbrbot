@@ -303,7 +303,7 @@ commit: 6d9805e4a6b5f828dd484505cb7ec672bd0e196c
 [FIX] fix recent list sorting by pp
 
 0.5.0
-date_time
+2023-06-16
 commit:
 [QOL] emit typing event when receiving a command
 [QOL] err logtofile logs to err
