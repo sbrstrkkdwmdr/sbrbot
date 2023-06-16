@@ -304,7 +304,7 @@ commit: 6d9805e4a6b5f828dd484505cb7ec672bd0e196c
 
 0.5.0
 2023-06-16
-commit:
+commit: 6cd863f64c6a006170e9a663b292dac40ad5fd1b
 [QOL] emit typing event when receiving a command
 [QOL] err logtofile logs to err
 [QOL] changed empty fields on embeds from "-" to "⠀" (U+2800)
