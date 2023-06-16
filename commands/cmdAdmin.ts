@@ -729,11 +729,10 @@ Joined(EPOCH):  ${member.joinedTimestamp}
         case 'clear': {
             //all in command data, temporary files, permanent files, all in previous
             const ctype = input.args[0] as clearTypes;
-
-            clear(ctype);
             usemsgArgs = {
                 content: `Clearing files...`
             };
+            clear(ctype);
         }
             break;
         default: {
@@ -751,13 +750,15 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                 const curpath = `${path}\\cache\\commandData`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
-                    const keep = ['Approved', 'Ranked', 'Loved', 'Qualified']
-                    if (!keep.some(x => file.includes(x)) ) {
+                    const keep = ['Approved', 'Ranked', 'Loved', 'Qualified'];
+                    if (!keep.some(x => file.includes(x))) {
                         fs.unlinkSync(`${curpath}\\` + file);
                         log.toOutput(`${curpath}\\` + file);
                     }
                 }
-
+                usemsgArgs = {
+                    content: `Clearing temporary files in .\\cache\\commandData\\`
+                };
             }
                 break;
             case 'all': { //clears all files in commandData
@@ -768,16 +769,23 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                     fs.unlinkSync(`${curpath}\\` + file);
                     log.toOutput(`${curpath}\\` + file);
                 }
+                usemsgArgs = {
+                    content: `Clearing all files in .\\cache\\commandData\\`
+                };
             }
                 break;
             case 'trueall': { //clears everything in cache
                 clear('all');
                 clear('previous');
                 clear('errors');
+                clear('map');
+                usemsgArgs = {
+                    content: `Clearing all files in .\\cache\\commandData\\`
+                };
             }
                 break;
             case 'map': case 'maps': { // clears all maps and mapset files
-                log.toOutput(`manually clearing all map and mapset files in ${path}\\cache\\commandData\\ and ${path}\\files\\maps`);
+                log.toOutput(`manually clearing all map and mapset files in ${path}\\cache\\commandData\\ and ${path}\\files\\maps\\`);
                 const curpath1 = `${path}\\cache\\commandData`;
                 const files1 = fs.readdirSync(curpath1);
                 for (const file of files1) {
@@ -792,6 +800,9 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                     fs.unlinkSync(`${curpath2}\\` + file);
                     log.toOutput(`${curpath2}\\` + file);
                 }
+                usemsgArgs = {
+                    content: `Clearing all map-related files in .\\cache\\commandData\\ and .\\files\\maps\\`
+                };
             }
                 break;
             case 'users': { //clears all osudata files
@@ -804,6 +815,9 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                         log.toOutput(`${curpath}\\` + file);
                     }
                 }
+                usemsgArgs = {
+                    content: `Clearing all osudata files in .\\cache\\commandData\\`
+                };
             }
                 break;
             case 'previous': { // clears all previous files
@@ -814,10 +828,13 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                     fs.unlinkSync(`${curpath}\\` + file);
                     log.toOutput(`${curpath}\\` + file);
                 }
+                usemsgArgs = {
+                    content: `Clearing all previous files in .\\cache\\previous\\`
+                };
             }
                 break;
-            case 'pmaps': { // clears all previous files
-                log.toOutput(`manually clearing all prev files in ${path}\\cache\\previous\\`);
+            case 'pmaps': { // clears all previous map files
+                log.toOutput(`manually clearing all prevmap files in ${path}\\cache\\previous\\`);
                 const curpath = `${path}\\cache\\previous`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
@@ -826,10 +843,13 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                         log.toOutput(`${curpath}\\` + file);
                     }
                 }
+                usemsgArgs = {
+                    content: `Clearing all previous map files in .\\cache\\previous\\`
+                };
             }
                 break;
-            case 'pscores': { // clears all previous files
-                log.toOutput(`manually clearing all prev files in ${path}\\cache\\previous\\`);
+            case 'pscores': { // clears all previous score files
+                log.toOutput(`manually clearing all prev score files in ${path}\\cache\\previous\\`);
                 const curpath = `${path}\\cache\\previous`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
@@ -838,9 +858,12 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                         log.toOutput(`${curpath}\\` + file);
                     }
                 }
+                usemsgArgs = {
+                    content: `Clearing all previous score files in .\\cache\\previous\\`
+                };
             }
-            case 'pusers': { // clears all previous files
-                log.toOutput(`manually clearing all prev files in ${path}\\cache\\previous\\`);
+            case 'pusers': { // clears all previous user files
+                log.toOutput(`manually clearing all prev user files in ${path}\\cache\\previous\\`);
                 const curpath = `${path}\\cache\\previous`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
@@ -849,6 +872,9 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                         log.toOutput(`${curpath}\\` + file);
                     }
                 }
+                usemsgArgs = {
+                    content: `Clearing all previous user files in .\\cache\\previous\\`
+                };
             }
                 break;
             case 'errors': { //clears all errors
@@ -859,16 +885,22 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                     fs.unlinkSync(`${curpath}\\` + file);
                     log.toOutput(`${curpath}\\` + file);
                 }
+                usemsgArgs = {
+                    content: `Clearing error files in .\\cache\\errors\\`
+                };
             }
                 break;
             case 'graph': {
-                log.toOutput(`manually clearing all err files in ${path}\\cache\\graphs\\`);
+                log.toOutput(`manually clearing all graph files in ${path}\\cache\\graphs\\`);
                 const curpath = `${path}\\cache\\graphs`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     fs.unlinkSync(`${curpath}\\` + file);
                     log.toOutput(`${curpath}\\` + file);
                 }
+                usemsgArgs = {
+                    content: `Clearing graph files in .\\cache\\graphs\\`
+                };
             }
         }
     }

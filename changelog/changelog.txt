@@ -334,3 +334,7 @@ commit:
 [FIX] fix image parsing
 [FIX] fix map search being slightly broken 
 [QOL] correct difficulty is now shown when using image parse (previously would sort by difficulty)
+[FIX] debug clear default now only clears temporary files
+[QOL] added debug to helpinfo
+[QOL] command descriptions now link to the website version of the command
+[QOL] more informative debug clear messages 

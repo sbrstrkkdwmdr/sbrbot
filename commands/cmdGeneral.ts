@@ -598,6 +598,8 @@ export async function help(input: extypes.commandInput) {
     const useEmbeds = [];
     const useComponents: any = [buttons];
 
+    let ctname = 'generalcmd';
+
     function commandEmb(command: helpinfo.commandInfo, embed) {
 
         let desc = '<required arg> [optional arg]\n';
@@ -639,6 +641,7 @@ export async function help(input: extypes.commandInput) {
         const commandbuttons = command.buttons && command.buttons.length > 0 ? command.buttons.map(x => `[${x}]`).join('') : 'none';
 
         embed.setTitle("Command info for: " + command.name)
+            .setURL(`https://sbrstrkkdwmdr.github.io/sbrbot/commands.html#${ctname}-${command.name.toLowerCase()}`)
             .setDescription(desc)
             .addFields([
                 {
@@ -670,7 +673,7 @@ export async function help(input: extypes.commandInput) {
                 }
             ]);
         }
-    }
+    };
     function getemb() {
         if (command != null) {
             const fetchcmd = command.toString();
@@ -692,22 +695,26 @@ export async function help(input: extypes.commandInput) {
             } else if (helpinfo.cmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'gen';
+                ctname = 'generalcmd';
                 const res = helpinfo.cmds.find(obj => obj.name == fetchcmd);
                 commandEmb(res, commandInfo);
             } else if (helpinfo.cmds.find(obj => obj.aliases.includes(fetchcmd))) {
                 commandfound = true;
                 commandCategory = 'gen';
+                ctname = 'generalcmd';
                 const res = helpinfo.cmds.find(obj => obj.aliases.includes(fetchcmd));
                 commandEmb(res, commandInfo);
             }
             else if (helpinfo.othercmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'misc';
+                ctname = 'misccmd';
                 const res = helpinfo.othercmds.find(obj => obj.name == fetchcmd);
                 commandEmb(res, commandInfo);
             } else if (helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd))) {
                 commandfound = true;
                 commandCategory = 'misc';
+                ctname = 'misccmd';
                 const res = helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd));
                 commandEmb(res, commandInfo);
             }
@@ -715,11 +722,13 @@ export async function help(input: extypes.commandInput) {
             else if (helpinfo.osucmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'osu';
+                ctname = 'osucmd';
                 const res = helpinfo.osucmds.find(obj => obj.name == fetchcmd);
                 commandEmb(res, commandInfo);
             } else if (helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd))) {
                 commandfound = true;
                 commandCategory = 'osu';
+                ctname = 'osucmd';
                 const res = helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd));
                 commandEmb(res, commandInfo);
             }
@@ -727,11 +736,13 @@ export async function help(input: extypes.commandInput) {
             else if (helpinfo.admincmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'admin';
+                ctname = 'admincmd';
                 const res = helpinfo.admincmds.find(obj => obj.name == fetchcmd);
                 commandEmb(res, commandInfo);
             } else if (helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd))) {
                 commandfound = true;
                 commandCategory = 'admin';
+                ctname = 'admincmd';
                 const res = helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd));
                 commandEmb(res, commandInfo);
             }
@@ -2643,7 +2654,7 @@ Peak: ${data.max_forecast_category} (Forecasted ${data.max_forecast_category})
 
     }
 
-    console.log(embed)
+    console.log(embed);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
