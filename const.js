@@ -500,7 +500,7 @@ operators: *, /, +, -, (, )
         slashusage: 'settime <timezone>',
         examples: [
             {
-                text: 'PREFIXMSGtime AEST',
+                text: 'PREFIXMSGsettime AEST',
                 descriptor: 'Set\'s the user\'s timezone to Australian Eastern Standard Time'
             },
         ],
@@ -517,7 +517,41 @@ operators: *, /, +, -, (, )
                 commandTypes: ['message', 'interaction']
             }
         ]
-    }
+    },
+    {
+        name: 'Weather',
+        description: 'Shows the weather for a specific region',
+        usage: 'weather <region>',
+        slashusage: 'weather <region>',
+        examples: [
+            {
+                text: 'PREFIXMSGweather auckland',
+                descriptor: 'Returns the weather for Auckland, New Zealand'
+            },
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'region',
+                type: 'string',
+                required: false,
+                description: 'The region to search for',
+                options: ['Country, city, region'],
+                defaultValue: 'UTC',
+                examples: ['Auckland', 'Melbourne', 'New York'],
+                commandTypes: ['message', 'interaction', 'button']
+            }
+        ]
+    },
+    {
+        name: 'Tropicalweather',
+        description: 'Shows the currently active tropical storms.',
+        usage: 'tropicalweather',
+        slashusage: 'tropicalweather',
+        examples: [],
+        aliases: ['ts'],
+        options: []
+    },
 ];
 
 const osucommands = [
@@ -2181,7 +2215,7 @@ const osucommands = [
             }
         ]
     }
-]
+];
 
 const misccommands = [
     {
@@ -2266,6 +2300,15 @@ const misccommands = [
                 commandTypes: ['message', 'interaction']
             }
         ]
+    },
+    {
+        name: 'Inspire',
+        description: 'Sends a randomly generated inspirational quote',
+        usage: 'inspire',
+        slashusage: 'inspire',
+        examples: [],
+        aliases: ['insp'],
+        options: [],
     },
     {
         name: 'poll',
@@ -2405,7 +2448,7 @@ const misccommands = [
             }
         ]
     }
-]
+];
 
 const admincommands = [
     {
@@ -2492,6 +2535,35 @@ const admincommands = [
         ]
     },
     {
+        name: 'debug',
+        description: 'Runs a debugging command',
+        usage: 'debug <type> [arg]',
+        slashusage:'debug <type> [arg]',
+        examples: [],
+        aliases: [],
+        options: [
+            {
+                name: 'Type',
+                type: 'string',
+                required: false,
+                description: 'The type of debug to perform',
+                options: ['commandfile', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear'],
+                defaultValue: 'list options',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            },{
+            name: 'arg',
+            type: 'integer/string',
+            required: false,
+            description: 'commandfile -> the id of the command to search for\nlogs -> the ID of the guild to send logs from\nclear -> the types of files to clear (read the options section)',
+            options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
+            defaultValue: 'commandfile -> latest command\nlogs -> current server\n clear -> temporary files only',
+            examples: [''],
+            commandTypes: ['message', 'interaction']
+        }
+        ]
+    },
+    {
         name: 'leaveguild',
         description: 'Makes the bot leave a guild',
         usage: 'leaveguild [guild]',
@@ -2550,7 +2622,7 @@ const admincommands = [
         aliases: [],
         options: []
     }
-]
+];
 
 const buttons = [
     {
