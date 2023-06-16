@@ -2605,6 +2605,35 @@ const admincmds: commandInfo[] = [
         ]
     },
     {
+        name: 'debug',
+        description: 'Runs a debugging command',
+        usage: 'debug <type> [arg]',
+        slashusage:'debug <type> [arg]',
+        examples: [],
+        aliases: [],
+        options: [
+            {
+                name: 'Type',
+                type: 'string',
+                required: false,
+                description: 'The type of debug to perform',
+                options: ['commandfile', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear'],
+                defaultValue: 'list options',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            },{
+            name: 'arg',
+            type: 'integer/string',
+            required: false,
+            description: 'commandfile -> the id of the command to search for\nlogs -> the ID of the guild to send logs from\nclear -> the types of files to clear (read the options section)',
+            options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
+            defaultValue: 'commandfile -> latest command\nlogs -> current server\n clear -> temporary files only',
+            examples: [''],
+            commandTypes: ['message', 'interaction']
+        }
+        ]
+    },
+    {
         name: 'leaveguild',
         description: 'Makes the bot leave a guild',
         usage: 'leaveguild [guild]',

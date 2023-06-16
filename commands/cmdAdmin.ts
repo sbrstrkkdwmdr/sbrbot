@@ -751,8 +751,11 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                 const curpath = `${path}\\cache\\commandData`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
-                    fs.unlinkSync(`${curpath}\\` + file);
-                    log.toOutput(`${curpath}\\` + file);
+                    const keep = ['Approved', 'Ranked', 'Loved', 'Qualified']
+                    if (!keep.some(x => file.includes(x)) ) {
+                        fs.unlinkSync(`${curpath}\\` + file);
+                        log.toOutput(`${curpath}\\` + file);
+                    }
                 }
 
             }
@@ -774,7 +777,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             }
                 break;
             case 'map': case 'maps': { // clears all maps and mapset files
-                log.toOutput(`manually clearing all map and mapset files in ${path}\\cache\\commandData\\`);
+                log.toOutput(`manually clearing all map and mapset files in ${path}\\cache\\commandData\\ and ${path}\\files\\maps`);
                 const curpath1 = `${path}\\cache\\commandData`;
                 const files1 = fs.readdirSync(curpath1);
                 for (const file of files1) {
