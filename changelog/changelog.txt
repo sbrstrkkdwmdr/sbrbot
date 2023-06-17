@@ -338,3 +338,8 @@ commit: 6cd863f64c6a006170e9a663b292dac40ad5fd1b
 [QOL] added debug to helpinfo
 [QOL] command descriptions now link to the website version of the command
 [QOL] more informative debug clear messages 
+
+0.5.1
+date_time
+commit: 
+[FIX] typing event being sent after command was replied to

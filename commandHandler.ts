@@ -342,7 +342,7 @@ export default (input: {
                 startType(obj);
                 commands.weather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
-            case 'tropicalweather':case 'ts':
+            case 'tropicalweather': case 'ts':
                 startType(obj);
                 commands.tropicalWeather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
@@ -878,11 +878,17 @@ export default (input: {
     function startType(object: Discord.Message | Discord.Interaction) {
         try {
             object.channel.sendTyping();
+            setTimeout(() => {
+                return;
+            }, 1000);
         } catch (error) {
             console.log('typing error');
             log.logFile('',
                 log.errLog('typing', error)
             );
+            setTimeout(() => {
+                return;
+            }, 1000);
         }
     }
 }
