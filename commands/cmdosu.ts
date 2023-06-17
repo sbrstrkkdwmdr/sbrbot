@@ -4521,7 +4521,6 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             useScoreMap: true
         }
     );
-    console.log(exactMods);
     topEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`);
     if (scoresarg.fields.length == 0) {
         topEmbed.addFields([{

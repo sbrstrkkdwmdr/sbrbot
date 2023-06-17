@@ -161,8 +161,8 @@ additional notes: string
     issue: links in score list commands aren't embedding properly
     cause: <t:number:type> can no longer be used as hyperlinks (idk why)
     author: sbrstrkkdwmdr
-    found: 2023-05-04 17:09 (UTC+10 AEST)
-    fixed: 2023-05-05 18:37
+    found: 2023-05-04 17:09 AEST (UTC+10)
+    fixed: 2023-05-05 18:37 AEST (UTC+10)
     solution: change scores to be multiple fields rather than one
     additional notes: not FULLY fixed but eh its whatever
 
@@ -174,9 +174,9 @@ additional notes: string
     issue: exact mods arg isnt't parsing properly
     cause: value comes up as null inside scorelist(); function, but everywhere else can still access it as normal
     author: sbrstrkkdwmdr
-    found: 2023-06-17 11:44 AEST
-    fixed: 
-    solution: 
-    additional notes: HOW IS THIS NULL?!??
+    found: 2023-06-17 11:44 AEST (UTC+10)
+    fixed: 2023-06-19 09:21 AEST (UTC+10)
+    solution: `calcmodsx` was using `asObj.filteredMods` instead of `asObj.exactMods`
+    additional notes: 
 
 -------------------------------------------------------------------------------------------------------------------------

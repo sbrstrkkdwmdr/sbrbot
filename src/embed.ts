@@ -54,7 +54,7 @@ export async function scoreList(
         filterinfo += `\nmapper: ${asObj.filteredMapper}`;
     }
     let calcmods = osumodcalc.OrderMods(asObj.filteredMods + '');
-    let calcmodsx = osumodcalc.OrderMods(asObj.filteredMods + '');
+    let calcmodsx = osumodcalc.OrderMods(asObj.exactMods + '');
     if (calcmods.length < 1) {
         calcmods = 'NM';
         asObj.filteredMods = null;
@@ -64,7 +64,7 @@ export async function scoreList(
         asObj.exactMods = null;
     }
     if (asObj.exactMods != null) {
-        filtereddata = filtereddata.filter(array => array.score.mods.join('').toUpperCase() == calcmods.toUpperCase());
+        filtereddata = filtereddata.filter(array => array.score.mods.join('').toUpperCase() == calcmodsx.toUpperCase());
         filterinfo += `\nexact mods: ${calcmodsx}`;
     }
     if (asObj.filteredMods != null) {
@@ -197,6 +197,10 @@ export async function scoreList(
             newData = await filtereddata.slice().sort((a, b) => a.score.rank.localeCompare(b.score.rank));
             sortinfo = `\nsorted by best rank`;
             break;
+        case 'bpm':
+            newData = await filtereddata.slice().sort((a, b) => b.score.beatmapset.bpm - a.score.beatmapset.bpm);
+            sortinfo = `\nsorted by highest bpm`;
+            break;
     }
     if (asObj.reverse == true) {
         newData.reverse();
@@ -260,8 +264,8 @@ export async function scoreList(
 
         // const trueIndex = newData[scoreoffset].index;
         const scoreID =
-        //  `${scoreoffset + 1} ${trueIndex != scoreoffset + 1 ? `(${trueIndex})` : ''}`;
-        `${newData[scoreoffset].index}`;
+            //  `${scoreoffset + 1} ${trueIndex != scoreoffset + 1 ? `(${trueIndex})` : ''}`;
+            `${newData[scoreoffset].index}`;
 
         const mapid = asObj.mapidOverride ?? curscore.beatmap.id;
 
@@ -416,7 +420,7 @@ export function score(score: osuapitypes.Score, map: osuapitypes.Beatmap, detail
     return fields;
 }
 
-export type scoreSort = 'pp' | 'score' | 'acc' | 'recent' | 'combo' | 'miss' | 'rank';
+export type scoreSort = 'pp' | 'score' | 'acc' | 'recent' | 'combo' | 'miss' | 'rank' | 'bpm';
 
 export function user() { }
 

@@ -343,3 +343,5 @@ commit: 6cd863f64c6a006170e9a663b292dac40ad5fd1b
 date_time
 commit: 
 [FIX] typing event being sent after command was replied to
+[QOL] added bpm sort
+[FIX] exactmods flag not parsing properly
