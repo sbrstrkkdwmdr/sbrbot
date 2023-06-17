@@ -4201,6 +4201,10 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
                 name: 'Miss',
                 value: miss
             },
+            {
+                name: 'BPM',
+                value: bpm
+            }
         ]
     });
 
@@ -4503,20 +4507,21 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             filteredMapper,
             filteredMods,
             filterMapTitle: filterTitle,
-            filterRank,
-            reverse,
-            exactMods,
-            pp,
-            score,
-            acc,
-            combo,
-            miss,
-            bpm
+            filterRank: filterRank,
+            reverse: reverse,
+            exactMods: exactMods,
+            pp: pp,
+            score: score,
+            acc: acc,
+            combo: combo,
+            miss: miss,
+            bpm: bpm
         },
         {
             useScoreMap: true
         }
     );
+    console.log(exactMods);
     topEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`);
     if (scoresarg.fields.length == 0) {
         topEmbed.addFields([{
@@ -4739,6 +4744,10 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                 name: 'Miss',
                 value: miss
             },
+            {
+                name: 'BPM',
+                value: bpm
+            }
         ]
     });
 
@@ -5444,6 +5453,10 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 name: 'Miss',
                 value: miss
             },
+            {
+                name: 'BPM',
+                value: bpm
+            }
         ]
     });
 

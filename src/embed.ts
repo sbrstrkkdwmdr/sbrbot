@@ -64,13 +64,18 @@ export async function scoreList(
         asObj.exactMods = null;
     }
     if (asObj.exactMods != null) {
-        filtereddata = filtereddata.filter(array => array.score.mods.toString().replaceAll(',', '') == calcmods);
+        filtereddata = filtereddata.filter(array => array.score.mods.join('').toUpperCase() == calcmods.toUpperCase());
         filterinfo += `\nexact mods: ${calcmodsx}`;
     }
     if (asObj.filteredMods != null) {
-        filtereddata = filtereddata.filter(array => array.score.mods.toString().replaceAll(',', '').includes(calcmods));
+        filtereddata = filtereddata.filter(array => array.score.mods.join('').toUpperCase().includes(calcmods.toUpperCase()));
         filterinfo += `\nmods: ${calcmods}`;
     }
+    if (asObj.exactMods?.toUpperCase() == 'NM') {
+        filtereddata = filtereddata.filter(array => array.score.mods.length == 0);
+        filterinfo += `\nexact mods: ${calcmodsx}`;
+    }
+
     if (asObj.filterMapTitle != null) {
         filtereddata = filtereddata.filter(y => {
             const x = y.score;

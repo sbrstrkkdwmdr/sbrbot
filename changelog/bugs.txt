@@ -155,7 +155,6 @@ additional notes: string
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
-
         
 #13)
     status: WIP
@@ -166,5 +165,18 @@ additional notes: string
     fixed: 2023-05-05 18:37
     solution: change scores to be multiple fields rather than one
     additional notes: not FULLY fixed but eh its whatever
+
+-------------------------------------------------------------------------------------------------------------------------
+
+        
+#13)
+    status: WIP
+    issue: exact mods arg isnt't parsing properly
+    cause: value comes up as null inside scorelist(); function, but everywhere else can still access it as normal
+    author: sbrstrkkdwmdr
+    found: 2023-06-17 11:44 AEST
+    fixed: 
+    solution: 
+    additional notes: HOW IS THIS NULL?!??
 
 -------------------------------------------------------------------------------------------------------------------------
