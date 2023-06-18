@@ -169,14 +169,26 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
 
         
-#13)
-    status: WIP
+#14)
+    status: FINISHED
     issue: exact mods arg isnt't parsing properly
     cause: value comes up as null inside scorelist(); function, but everywhere else can still access it as normal
     author: sbrstrkkdwmdr
     found: 2023-06-17 11:44 AEST (UTC+10)
     fixed: 2023-06-19 09:21 AEST (UTC+10)
     solution: `calcmodsx` was using `asObj.filteredMods` instead of `asObj.exactMods`
+    additional notes: 
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#15)
+    status: WIP
+    issue: local time in weather command uses UTC
+    cause: 
+    author: sbrstrkkdwmdr
+    found: 2023-06-19 07:54 AEST (UTC+10)
+    fixed: 
+    solution: 
     additional notes: 
 
 -------------------------------------------------------------------------------------------------------------------------
