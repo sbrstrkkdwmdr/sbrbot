@@ -4631,7 +4631,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     const parseScore = parseArgs.parseScore ?? false;
     const parseId = parseArgs.parseId ?? null;
 
-    let exactMods = parseArgs.exactMods;
+    const exactMods = parseArgs.exactMods;
 
     const pp = parseArgs.pp;
     const score = parseArgs.score;
@@ -7793,11 +7793,11 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
     const exactMods = null;
 
-    let pp = null;
-    let score = null;
-    let acc = null;
-    let combo = null;
-    let miss = null;
+    const pp = null;
+    const score = null;
+    const acc = null;
+    const combo = null;
+    const miss = null;
     const bpm = null;
 
     let useContent: string = null;
