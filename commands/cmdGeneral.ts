@@ -2336,7 +2336,7 @@ export async function weather(input: extypes.commandInput) {
     }
 
     async function toWeather(location: othertypes.geoLocale) {
-        let weatherData = await func.getWeather(location.latitude, location.longitude, location);
+        const weatherData = await func.getWeather(location.latitude, location.longitude, location);
         func.storeFile(weatherData, input.absoluteID, 'weatherData');
         if (typeof weatherData == 'string') {
             weatherEmbed.setDescription(errors.uErr.weather.wrongCoords);
