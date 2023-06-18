@@ -673,7 +673,7 @@ export async function help(input: extypes.commandInput) {
                 }
             ]);
         }
-    };
+    }
     function getemb() {
         if (command != null) {
             const fetchcmd = command.toString();
@@ -2191,7 +2191,6 @@ ${found.map(x => `UTC${x.offsetDirection}${x.offsetHours}\n`).join()}`;
                 useComponents = [buttons];
             }
         }
-    } else {
     }
 
     Embed.addFields(fields);
@@ -2445,7 +2444,7 @@ Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}${weatherUnits.win
         const buttons = new Discord.ActionRowBuilder();
         buttons.addComponents(inputModal);
         useComponents = [buttons];
-    };
+    }
 
     function logWeatherError(error) {
         log.logCommand({
@@ -2540,7 +2539,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    let weatherData = await func.getTropical(type, system);
+    const weatherData = await func.getTropical(type, system);
     func.storeFile(weatherData, input.absoluteID, `${type}-tropicalWeatherData`);
     const embed = new Discord.EmbedBuilder();
     let useComponents = [];

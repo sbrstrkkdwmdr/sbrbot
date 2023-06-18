@@ -582,7 +582,7 @@ export function checkIsNumber(str: string) {
         if (str.toLowerCase().trim().includes(numbers[i])) {
             bool = true;
             break;
-        };
+        }
     }
     return bool;
 }

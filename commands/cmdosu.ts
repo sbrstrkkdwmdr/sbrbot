@@ -7784,21 +7784,21 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     let sort: embedStuff.scoreSort = 'recent';
     let reverse = false;
     let mode = 'osu';
-    let filteredMapper = null;
-    let filteredMods = null;
+    const filteredMapper = null;
+    const filteredMods = null;
     const filterRank = null;
 
     let parseScore = false;
     let parseId = null;
 
-    let exactMods = null;
+    const exactMods = null;
 
     let pp = null;
     let score = null;
     let acc = null;
     let combo = null;
     let miss = null;
-    let bpm = null;
+    const bpm = null;
 
     let useContent: string = null;
 
@@ -7892,12 +7892,6 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             mode = input.obj.message.embeds[0].author.url.split('users/')[1].split('/')[1];
             mapid = input.obj.message.embeds[0].url.split('osu.ppy.sh/')[1].split('/')[1];
             if (input.obj.message.embeds[0].description) {
-                if (input.obj.message.embeds[0].description.includes('mapper')) {
-                    filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-                }
-                if (input.obj.message.embeds[0].description.includes('mods')) {
-                    filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
-                }
                 const sort1 = input.obj.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
                 switch (true) {
                     case sort1.includes('score'):
