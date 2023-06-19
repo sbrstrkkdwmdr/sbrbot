@@ -345,3 +345,4 @@ commit:
 [FIX] typing event being sent after command was replied to
 [QOL] added bpm sort
 [FIX] exactmods flag not parsing properly
+[FIX] fix time broken in weather command

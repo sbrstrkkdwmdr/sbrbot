@@ -184,11 +184,11 @@ additional notes: string
 #15)
     status: WIP
     issue: local time in weather command uses UTC
-    cause: 
+    cause: frogor + moment hangs when using tz()
     author: sbrstrkkdwmdr
     found: 2023-06-19 07:54 AEST (UTC+10)
-    fixed: 
-    solution: 
+    fixed: 2023-06-19 22:22 AEST (UTC+10)
+    solution: switched to luxon
     additional notes: 
 
 -------------------------------------------------------------------------------------------------------------------------

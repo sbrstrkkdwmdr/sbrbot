@@ -4,6 +4,7 @@ import moment from 'moment';
 import * as replayparser from 'osureplayparser';
 // import strmath from 'string-math';
 // import strmath from 'math-from-string';
+import * as luxon from 'luxon';
 import pkgjson from '../package.json' assert { type: 'json' };
 import { path } from '../path.js';
 import * as calc from '../src/calc.js';
@@ -2347,14 +2348,11 @@ export async function weather(input: extypes.commandInput) {
             logWeatherError(errors.uErr.weather.api);
             return;
         } else {
-            const timezoneOffset = new Date(location.timezone).getTimezoneOffset();
-            //^getTimeZoneOffset(); only searches for cur pc offset
+            const utctime = moment().utc()
+                .format("ddd, DD MMM YYYY HH:mm:ss");
+            const timezoneOffset = luxon.DateTime.now().setZone(location.timezone).offset;
             const localTime = moment().utcOffset(timezoneOffset)
-                .format("ddd, DD MMM YYYY HH:mm:ss");
-            const utctime = moment()
-                .format("ddd, DD MMM YYYY HH:mm:ss");
-
-
+                .format("ddd, DD MMM YYYY HH:mm:ss Z");
             const weatherUnits = weatherData.daily_units;
             const dailyData = weatherData.daily;
             const curData = weatherData.current_weather;
