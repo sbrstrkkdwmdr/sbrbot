@@ -2348,8 +2348,10 @@ export async function weather(input: extypes.commandInput) {
             return;
         } else {
             const timezoneOffset = new Date(location.timezone).getTimezoneOffset();
-
+            //^getTimeZoneOffset(); only searches for cur pc offset
             const localTime = moment().utcOffset(timezoneOffset)
+                .format("ddd, DD MMM YYYY HH:mm:ss");
+            const utctime = moment()
                 .format("ddd, DD MMM YYYY HH:mm:ss");
 
 
@@ -2362,7 +2364,7 @@ export async function weather(input: extypes.commandInput) {
             const usePredictWeather = predictedWeatherFr.string != weatherAtmfr.string ? true : false;
 
             const windDir = func.windToDirection(curData.winddirection);
-            const maxWindDir = func.windToDirection(curData.winddirection);
+            const maxWindDir = func.windToDirection(dailyData.winddirection_10m_dominant[0]);
 
             // - => S or W
             let latSide: 'N' | 'S' = 'N';
@@ -2385,6 +2387,7 @@ export async function weather(input: extypes.commandInput) {
 ${location.admin1 + ',' ?? ''} ${location.country} :flag_${location.country_code.toLowerCase()}:
 Location: (${Math.abs(location.latitude) + latSide}, ${Math.abs(location.longitude) + lonSide})
 Time (local): ${localTime} 
+Time (UTC): ${utctime}
 ${weatherData.current_weather.is_day == 0 ? 'Nighttime' : 'Daytime'}
 Status: ${weatherAtmfr.icon} ${weatherAtmfr.string} ${usePredictWeather ?
                             '(' + predictedWeatherFr.icon + ' ' + predictedWeatherFr.string + ' predicted)'
