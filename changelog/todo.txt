@@ -426,12 +426,12 @@ author:
     author: sbrstrkkdwmdr
 
 -------------------------------------------------------------------------------------------------------------------------
-
+✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #37)
     description: weather cmd - add direction angle to cur wind and add descriptoin to dominant direction
-    type: qol
-    status: WIP
+    type: fix
+    status: FINISHED
     priority: low
-    request date: 2023-06-19 07:55 UTC+10
-    finish date:
+    request date: 2023-06-19 07:55 AEST (UTC+10)
+    finish date: 2023-06-19 20:02 AEST (UTC+10)
     author: sbrstrkkdwmdr
