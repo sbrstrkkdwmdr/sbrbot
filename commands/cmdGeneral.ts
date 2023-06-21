@@ -2611,30 +2611,29 @@ export async function tropicalWeather(input: extypes.commandInput) {
         const fullname = calc.checkIsNumber(data.name) ? altName :
             `${data.name} (${altName})`;
 
-        let localtype;
+        let localtype = '';
 
-        switch (basin) {
-            case 'North Atlantic': case 'Northeast Pacific': case 'Central Pacific':
-                localtype = func.tsNameSSHWS(data.movement.KPH) + ' (SSHWS)';
-                break;
-            case 'Northwest Pacific':
-                localtype = func.tsNameJMA(data.movement.KPH) + ' (JMA)';
-                break;
-            case 'Southwest Pacific':
-                localtype = func.tsNameATCIS(data.movement.KPH) + ' (Australian scale)';
-                break;
-            case 'South Indian Ocean':
-                localtype = func.tsNameMFR(data.movement.KPH) + '( Météo-France)';
-                break;
-            case 'North Indian Ocean': case 'Arabian Sea': case 'Bay of Bengal':
-                localtype = func.tsNameIMD(data.movement.KPH) + ' (IMD)';
-                break;
-        }
+        // switch (basin) {
+        //     case 'North Atlantic': case 'Northeast Pacific': case 'Central Pacific':
+        //         localtype = func.tsNameSSHWS(data.movement.KPH) + ' (SSHWS)';
+        //         break;
+        //     case 'Northwest Pacific':
+        //         localtype = func.tsNameJMA(data.movement.KPH) + ' (JMA)';
+        //         break;
+        //     case 'Southwest Pacific':
+        //         localtype = func.tsNameATCIS(data.movement.KPH) + ' (Australian scale)';
+        //         break;
+        //     case 'South Indian Ocean':
+        //         localtype = func.tsNameMFR(data.movement.KPH) + '( Météo-France)';
+        //         break;
+        //     case 'North Indian Ocean': case 'Arabian Sea': case 'Bay of Bengal':
+        //         localtype = func.tsNameIMD(data.movement.KPH) + ' (IMD)';
+        //         break;
+        // }
 
 
         embed.setTitle(`${hurname} ${fullname}`)
-            .setDescription(`${localtype ?? ''}
-Location: ${basin} Basin (${data.position.join(',')})
+            .setDescription(`Location: ${basin} Basin (${data.position.join(',')})
 Direction: ${windDir.emoji} ${data.movement.KPH}km/h ${data.movement.MPH}mi/h ${data.movement.KTS}kt/s
 Peak: ${data.max_forecast_category} (Forecasted ${data.max_forecast_category})
 `)
