@@ -435,3 +435,12 @@ author:
     request date: 2023-06-19 07:55 AEST (UTC+10)
     finish date: 2023-06-19 20:02 AEST (UTC+10)
     author: sbrstrkkdwmdr
+-------------------------------------------------------------------------------------------------------------------------
+#37)
+    description: weather cmd - add precipitation + windspeed + temp graph
+    type: qol
+    status: WIP
+    priority: low
+    request date: 2023-06-22 13:09 AEST (UTC+10)
+    finish date:
+    author: sbrstrkkdwmdr
