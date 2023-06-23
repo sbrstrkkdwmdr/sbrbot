@@ -15,6 +15,7 @@ import * as osuparsers from 'osu-parsers';
 import * as replayparser from 'osureplayparser';
 import config from '../config/config.json' assert { type: 'json' };
 import { path, precomppath } from '../path.js';
+import * as calc from './calc.js';
 import * as errors from './consts/errors.js';
 import * as tools from './func.js';
 import * as log from './log.js';
@@ -1663,118 +1664,66 @@ export function rawToWeighted(pp: number, index: number) {
 export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: number, mode: osuApiTypes.GameMode,
     statsCache: Sequelize.ModelStatic<any>) {
     const users = await statsCache.findAll();
-    const pprankarr: { pp: string, rank: string; }[] = [];
+    const pprankarr: { pp: number, rank: number; }[] = [];
 
     for (let i = 0; i < users.length; i++) {
         const curuser = users[i].dataValues;
-        switch (mode) {
-            case 'osu': default:
-                if (typeof curuser.osupp == 'undefined' || !curuser.osupp) break;
-                if (typeof curuser.osurank == 'undefined' || !curuser.osurank) break;
-                pprankarr.push({
-                    pp: curuser.osupp,
-                    rank: curuser.osurank
-                });
-                break;
-            case 'taiko':
-                if (typeof curuser.taikopp == 'undefined' || !curuser.taikopp) break;
-                if (typeof curuser.taikorank == 'undefined' || !curuser.taikorank) break;
-                pprankarr.push({
-                    pp: curuser.taikopp,
-                    rank: curuser.taikorank
-                });
-                break;
-            case 'fruits':
-                if (typeof curuser.fruitspp == 'undefined' || !curuser.fruitspp) break;
-                if (typeof curuser.fruitsrank == 'undefined' || !curuser.fruitsrank) break;
-                pprankarr.push({
-                    pp: curuser.fruitspp,
-                    rank: curuser.fruitsrank
-                });
-                break;
-            case 'mania':
-                if (typeof curuser.maniapp == 'undefined' || !curuser.maniapp) break;
-                if (typeof curuser.maniarank == 'undefined' || !curuser.maniarank) break;
-                pprankarr.push({
-                    pp: curuser.maniapp,
-                    rank: curuser.maniarank
-                });
-                break;
-        }
+        console.log(curuser[mode + 'pp']);
+        console.log(curuser[mode + 'rank']);
+        if (
+            typeof curuser[mode + 'pp'] == 'undefined' ||
+            !curuser[mode + 'pp'] ||
+            isNaN(+curuser[mode + 'pp'])
+        ) break;
+        if (
+            typeof curuser[mode + 'rank'] == 'undefined' ||
+            !curuser[mode + 'rank'] ||
+            isNaN(+curuser[mode + 'rank'])
+        ) break;
+        pprankarr.push({
+            pp: +curuser[mode + 'pp'],
+            rank: +curuser[mode + 'rank']
+        });
     }
 
     //sort by pp
-    pprankarr.sort((a, b) => parseFloat(b.pp) - parseFloat(a.pp));
+    pprankarr.sort((a, b) => b.pp - a.pp);
 
-    let returnval: number;
+    for (const user of pprankarr) {
+        if (user.rank < 15){
+            // pprankarr.(pprankarr.indexOf(user), 1)
+            // insert smth smth removing
+        };
+    }
+
+
+    let d: {
+        size: number;
+        notes: string;
+        equation: string;
+        value: number;
+        r: number;
+    } = null;
+
+    console.log(pprankarr);
 
     switch (type) {
         case 'pp->rank': {
-            pprankarr.push({ pp: `${value}`, rank: `${0}` });
-            pprankarr.sort((a, b) => parseFloat(b.pp) - parseFloat(a.pp));
-
-            /** val = 4503
-             *  3000, 68987
-             *  6000, 22
-             * 1000, 500000
-             * 
-             * 4503, null
-             */
-
-            /**
-             * 6000, 22
-             * 4503, null
-             * 3000, 68987  
-             * 1000, 500000
-             * 
-             */
-
-            //get position
-            const pos = pprankarr.findIndex(e => parseFloat(e.pp) == value && e.rank == '0');
-
-            const prev = pprankarr[pos - 1];
-
-            const next = pprankarr[pos + 1];
-            //estimate rank
-            if (typeof prev == 'undefined' && typeof next != 'undefined') {
-                returnval = parseInt(next.rank);
-            }
-            else if (typeof next == 'undefined' && typeof prev != 'undefined') {
-                returnval = parseInt(prev.rank);
-            } else {
-                // returnval = prev.rank + ((next.rank - prev.rank) / (next.pp - prev.pp)) * (value - prev.pp)
-                returnval = (parseInt(prev.rank) + parseInt(next.rank)) / 2;
-            }
-            if (typeof prev == 'undefined' && typeof next == 'undefined') {
-                returnval = null;
-            }
+            d = calc.getValue({
+                x: pprankarr.map(x => +x.pp),
+                y: pprankarr.map(x => +x.rank)
+            }, value, "y");
         }
             break;
         case 'rank->pp': {
-            pprankarr.push({ pp: '0', rank: `${value}` });
-            pprankarr.sort((a, b) => parseInt(a.rank) - parseInt(b.rank));
-            const pos = pprankarr.findIndex(e => parseInt(e.rank) == value && e.pp == '0');
-            const prev = pprankarr[pos - 1];
-            const next = pprankarr[pos + 1];
-
-            //estimate pp
-            if (typeof prev == 'undefined' && typeof next != 'undefined') {
-                returnval = parseInt(next.pp);
-            }
-            else if (typeof next == 'undefined' && typeof prev != 'undefined') {
-                returnval = parseInt(prev.pp);
-            } else {
-                // returnval = prev.pp + ((next.pp - prev.pp) / (next.rank - prev.rank)) * (value - prev.rank)
-                returnval = (parseFloat(prev.pp) + parseFloat(next.pp)) / 2;
-            }
-            if (typeof prev == 'undefined' && typeof next == 'undefined') {
-                returnval = null;
-            }
-
+            d = calc.getValue({
+                x: pprankarr.map(x => +x.pp),
+                y: pprankarr.map(x => +x.rank)
+            }, value, "x");
         }
             break;
     }
-    return returnval;
+    return d;
 }
 
 export function modeValidator(mode: string | number) {

@@ -1578,37 +1578,23 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
         }).setTitle('null')
         .setDescription('null');
 
-    let returnval: string | number;
-
     switch (type) {
         case 'pp': {
-            returnval = await osufunc.getRankPerformance('pp->rank', value, mode, input.statsCache);
-            if (typeof returnval == 'number') {
-                returnval = 'approx. rank #' + func.separateNum(Math.ceil(returnval));
-            } else {
-                returnval = 'null';
-            }
+            const temp = await osufunc.getRankPerformance('pp->rank', value, mode, input.statsCache);
             Embed
-                .setTitle(`Approximate rank for ${value}pp`);
+                .setTitle(`Approximate rank for ${value}pp`)
+                .setDescription(`${temp.value}\n${emojis.gamemodes[mode]}${temp.r ** 2}% accurate`);
         }
             break;
         case 'rank': {
-
-            returnval = await osufunc.getRankPerformance('rank->pp', value, mode, input.statsCache);
-
-            if (typeof returnval == 'number') {
-                returnval = 'approx. ' + func.separateNum(returnval) + 'pp';
-            } else {
-                returnval = 'null';
-            }
-
+            const temp = await osufunc.getRankPerformance('rank->pp', value, mode, input.statsCache);
             Embed
-                .setTitle(`Approximate performance for rank #${value}`);
+                .setTitle(`Approximate performance for rank #${value}`)
+                .setDescription(`${temp.value}\n${emojis.gamemodes[mode]}\n${temp.r ** 2}% accurate`);
+
         }
             break;
     }
-    Embed
-        .setDescription(`${returnval}\n${emojis.gamemodes[mode]}`);
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -15267,7 +15253,8 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         .setDescription(
             `A ${pp} score would be their **${calc.toOrdinal(ppindex + 1)}** top play and would be weighted at **${(weight * 100).toFixed(2)}%**.
 Their pp would change by **${Math.abs((total + bonus) - osudata.statistics.pp).toFixed(2)}pp** and their new total pp would be **${(total + bonus).toFixed(2)}pp**.
-Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - guessrank}).
+Their new rank would be **${guessrank.value}** (+${osudata?.statistics?.global_rank - guessrank.value}).
+Calculations are ${guessrank.r ** 2}% accurate
 `
         );
 

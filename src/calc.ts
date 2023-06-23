@@ -587,6 +587,89 @@ export function checkIsNumber(str: string) {
     return bool;
 }
 
+export function linearRegression(x: number[], y: number[]) {
+    const n = x.length;
+
+    // Calculate the mean of x and y
+    const xMean = x.reduce((sum, value) => sum + value, 0) / n;
+    const yMean = y.reduce((sum, value) => sum + value, 0) / n;
+
+    // Calculate the differences and squares of x and y
+    const xDiff = x.map(value => value - xMean);
+    const yDiff = y.map(value => value - yMean);
+    const xDiffSquared = xDiff.map(value => value * value);
+    const yDiffSquared = yDiff.map(value => value * value);
+
+    // Calculate the sum of the cross-product of x and y differences
+    const xyDiffProduct = xDiff.map((value, index) => value * yDiff[index]);
+    const xyDiffProductSum = xyDiffProduct.reduce((sum, value) => sum + value, 0);
+
+    // Calculate the sum of the squared differences of x and y
+    const xDiffSquaredSum = xDiffSquared.reduce((sum, value) => sum + value, 0);
+    const yDiffSquaredSum = yDiffSquared.reduce((sum, value) => sum + value, 0);
+
+    // Calculate the slope, intercept, and correlation coefficient (r-value)
+    const slope = xyDiffProductSum / xDiffSquaredSum;
+    const intercept = yMean - slope * xMean;
+    const rValue =
+        xyDiffProductSum / Math.sqrt(xDiffSquaredSum * yDiffSquaredSum);
+
+    // Return the slope, intercept, and r-value as an object
+    return {
+        slope,
+        intercept,
+        rValue,
+    };
+}
+
+/**
+ * 
+ * @param data x -> explanatory variable, y -> response variable
+ * @param value known value
+ * @param find value to find (not the type of value)
+ */
+export function getValue(
+    data: {
+        x: number[];
+        y: number[];
+    },
+    value: number,
+    find: 'x' | 'y'
+) {
+    const object = {
+        size: NaN,
+        notes: '',
+        value: NaN,
+        equation: '',
+        r: NaN,
+    };
+    let fr = {
+        slope: NaN, intercept: NaN, rValue: NaN
+    };
+    if (data.x.length == data.y.length) {
+        fr = linearRegression(data.x, data.y);
+        console.log(fr)
+        object['size'] = data.x.length;
+        object['r'] = fr.rValue;
+        object['notes'] = `${fr.rValue}% accurate`
+        object['equation'] = `y=${fr.intercept}+${fr.slope}x`
+    } else {
+        object['error'] = 'size of x[] doesn\'t match size of y[]';
+    }
+
+    if (find == 'x') {
+        // value = fr.intercept + (fr.slope * x);
+        // value - intercept = slope * x
+        //(value - intercept)/slope = slope * x
+        object['value'] = (value - fr.intercept) / fr.slope;
+    }
+    else if (find == 'y') {
+        object['value'] = fr.intercept + (fr.slope * value);
+    }
+    console.log(object)
+    return object;
+}
+
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
 // export {
 //     findHCF, findLCM,
