@@ -1,6 +1,7 @@
 import fs = require('fs');
 import https from 'https';
 // import * as nfetch from 'node-fetch';
+import charttoimg from 'chartjs-to-image';
 import nfetch from 'node-fetch';
 import { filespath, path } from '../path.js';
 import * as calc from './calc.js';
@@ -8,6 +9,7 @@ import * as log from './log.js';
 import * as osufunc from './osufunc.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 import * as othertypes from './types/othertypes.js';
+
 
 export function generateId() {
     const lid = fs.readFileSync(`${path}/id.txt`, 'utf8');
@@ -464,7 +466,7 @@ export async function getWeather(
         return 'error - NaN values given';
     }
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}`
-        + "&hourly=temperature_2m,precipitation,rain,pressure_msl,windspeed_10m&current_weather=true&forecast_days=1"
+        + "&hourly=temperature_2m,precipitation,rain,pressure_msl,windspeed_10m,precipitation_probability&current_weather=true&forecast_days=1"
         + "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,precipitation_probability_min,precipitation_probability_mean,windspeed_10m_max,windgusts_10m_max,winddirection_10m_dominant"
         + `&timezone=${location.timezone}`;
     log.toOutput(url);
@@ -1018,4 +1020,132 @@ export function tsNameATCIS(maxwsp: number) {
 
     }
     return name;
+}
+
+
+/**
+ * 
+ * @param x 
+ * @param y 
+ * @param label name of graph
+ * @param startzero whether or not graph starts at zero
+ * @param reverse y-value goes up or down (useful for rank graphs)
+ * @param showlabelx show names of x axes
+ * @param showlabely show names of y axes
+ * @param fill fill under the line
+ * @param settingsoverride override the given settings
+ * @param displayLegend whether or not to display the legend
+ * @param secondY second set of data
+ * @param secondYlabel label for second set of data
+ * @returns path to the graph
+ */
+export async function graph(
+    x: number[] | string[],
+    y: number[],
+    label: string,
+    startzero?: boolean | null,
+    fill?: boolean | null,
+    displayLegend?: boolean,
+) {
+
+    if (startzero == null || typeof startzero == 'undefined') {
+        startzero = true;
+    }
+    if (fill == null || typeof fill == 'undefined') {
+        fill = false;
+    }
+    if (displayLegend == null || displayLegend == undefined || typeof displayLegend == 'undefined') {
+        displayLegend = false;
+    }
+    let type = 'line';
+
+    let curx = [];
+    let cury = [];
+
+    if (y.length > 200) {
+        const div = y.length / 200;
+        for (let i = 0; i < 200; i++) {
+            const offset = Math.ceil(i * div);
+            const curval = y[offset];
+            cury.push(curval);
+            curx.push(x[offset]);
+        }
+    } else {
+        curx = x;
+        cury = y;
+    }
+    const datasets = [{
+        label: label,
+        data: cury,
+        fill: fill,
+        borderColor: 'rgb(75, 192, 192)',
+        borderWidth: 1,
+        pointRadius: 0
+    }];
+    const chart = new charttoimg()
+        .setConfig({
+            type: type,
+            data: {
+                labels: curx,
+                datasets: datasets
+            },
+            options: {
+                legend: {
+                    display: displayLegend
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#808080'
+                        },
+                        grid: {
+                            display: true,
+                            drawOnChartArea: true,
+                            drawTicks: true,
+                            color: '#404040'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#808080'
+                        },
+                        grid: {
+                            display: true,
+                            drawOnChartArea: true,
+                            drawTicks: true,
+                            color: '#404040'
+                        }
+                    },
+                    xAxes: [
+                        {
+                            display: true,
+                            ticks: {
+                                autoSkip: true,
+                                maxTicksLimit: 10
+                            },
+                        }
+                    ],
+                    yAxes: [
+                        {
+                            display: true,
+                            type: 'linear',
+                            ticks: {
+                                beginAtZero: startzero
+                            },
+                        }
+                    ]
+                }
+            }
+        });
+    chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250);
+
+    const filename = `${(new Date).getTime()}`;
+    const curt = `${path}/cache/graphs/${filename}.jpg`;
+
+    await chart.toFile(curt);
+
+    return {
+        path: curt,
+        filename
+    };
 }

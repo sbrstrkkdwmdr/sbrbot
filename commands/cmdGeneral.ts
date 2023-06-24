@@ -2288,6 +2288,8 @@ export async function weather(input: extypes.commandInput) {
 
     let locatingData: othertypes.geoResults;
     let useComponents = [];
+    const useEmbeds = [];
+    const useFiles = [];
 
     if ((!name || name == null || name.length == 0) && input.commandType != 'button') {
         const err = errors.uErr.weather.input_ms;
@@ -2315,6 +2317,7 @@ export async function weather(input: extypes.commandInput) {
     func.storeFile(locatingData, input.absoluteID, 'weatherlocationData');
 
     const weatherEmbed = new Discord.EmbedBuilder()
+        .setURL(`https://open-meteo.com/en/docs`)
         .setTitle('Weather');
 
     if (locatingData.hasOwnProperty('results')) {
@@ -2375,6 +2378,32 @@ export async function weather(input: extypes.commandInput) {
                 lonSide = 'W';
             }
 
+            const windGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.windspeed_10m, `Wind speed ${weatherData.hourly_units.windspeed_10m}`, true, false, true);
+            const tempGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.temperature_2m, `Temperature ${weatherData.hourly_units.temperature_2m}`, true, true, true);
+            const precGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation, `Total precipitation ${weatherData.hourly_units.precipitation}`, true, true, true);
+            const prChGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation_probability, `Precipitation ${weatherData.hourly_units.precipitation_probability}`, true, false, true);
+
+            useFiles.push(
+                new Discord.AttachmentBuilder(`${windGraph.path}`),
+                new Discord.AttachmentBuilder(`${tempGraph.path}`),
+                new Discord.AttachmentBuilder(`${precGraph.path}`),
+                new Discord.AttachmentBuilder(`${prChGraph.path}`),
+            );
+
+            const graphEmbed1 = new Discord.EmbedBuilder()
+                .setURL(`https://open-meteo.com/en/docs`)
+                .setImage(`attachment://${windGraph.filename}.jpg`);
+            const graphEmbed2 = new Discord.EmbedBuilder()
+                .setURL(`https://open-meteo.com/en/docs`)
+                .setImage(`attachment://${tempGraph.filename}.jpg`);
+            const graphEmbed3 = new Discord.EmbedBuilder()
+                .setURL(`https://open-meteo.com/en/docs`)
+                .setImage(`attachment://${precGraph.filename}.jpg`);
+            const graphEmbed4 = new Discord.EmbedBuilder()
+                .setURL(`https://open-meteo.com/en/docs`)
+                .setImage(`attachment://${prChGraph.filename}.jpg`);
+
+
             weatherEmbed
                 .setTitle(`Weather for ${location.name}`);
 
@@ -2424,7 +2453,7 @@ Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}${maxWindDir.name}
             ];
 
             weatherEmbed.setFields(fields);
-
+            useEmbeds.push(weatherEmbed, graphEmbed1, graphEmbed2, graphEmbed3, graphEmbed4);
         }
     }
 
@@ -2445,6 +2474,7 @@ Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}${maxWindDir.name}
         const buttons = new Discord.ActionRowBuilder();
         buttons.addComponents(inputModal);
         useComponents = [buttons];
+        useEmbeds.push(weatherEmbed);
     }
 
     function logWeatherError(error) {
@@ -2463,8 +2493,9 @@ Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}${maxWindDir.name}
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [weatherEmbed],
+            embeds: useEmbeds,
             components: useComponents,
+            files: useFiles
         }
     }, input.canReply);
 

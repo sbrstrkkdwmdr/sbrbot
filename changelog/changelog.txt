@@ -346,3 +346,4 @@ commit:
 [QOL] added bpm sort
 [FIX] exactmods flag not parsing properly
 [FIX] fix time broken in weather command
+[ADD] added weather graphs
