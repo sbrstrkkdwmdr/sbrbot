@@ -1028,34 +1028,30 @@ export function tsNameATCIS(maxwsp: number) {
  * @param x 
  * @param y 
  * @param label name of graph
- * @param startzero whether or not graph starts at zero
- * @param reverse y-value goes up or down (useful for rank graphs)
- * @param showlabelx show names of x axes
- * @param showlabely show names of y axes
- * @param fill fill under the line
- * @param settingsoverride override the given settings
- * @param displayLegend whether or not to display the legend
- * @param secondY second set of data
- * @param secondYlabel label for second set of data
+ * @param lineColour colour of graph line written as rgb(x, y, z)
  * @returns path to the graph
  */
 export async function graph(
     x: number[] | string[],
     y: number[],
     label: string,
-    startzero?: boolean | null,
-    fill?: boolean | null,
-    displayLegend?: boolean,
+    other: {
+        startzero?: boolean,
+        fill?: boolean,
+        displayLegend?: boolean,
+        lineColour?: string,
+        pointSize?: number;
+    },
 ) {
 
-    if (startzero == null || typeof startzero == 'undefined') {
-        startzero = true;
+    if (other.startzero == null || typeof other.startzero == 'undefined') {
+        other.startzero = true;
     }
-    if (fill == null || typeof fill == 'undefined') {
-        fill = false;
+    if (other.fill == null || typeof other.fill == 'undefined') {
+        other.fill = false;
     }
-    if (displayLegend == null || displayLegend == undefined || typeof displayLegend == 'undefined') {
-        displayLegend = false;
+    if (other.displayLegend == null || other.displayLegend == undefined || typeof other.displayLegend == 'undefined') {
+        other.displayLegend = false;
     }
     let type = 'line';
 
@@ -1077,10 +1073,10 @@ export async function graph(
     const datasets = [{
         label: label,
         data: cury,
-        fill: fill,
-        borderColor: 'rgb(75, 192, 192)',
+        fill: other.fill,
+        borderColor: other.lineColour ?? 'rgb(75, 192, 192)',
         borderWidth: 1,
-        pointRadius: 0
+        pointRadius: other.pointSize ?? 2
     }];
     const chart = new charttoimg()
         .setConfig({
@@ -1091,29 +1087,29 @@ export async function graph(
             },
             options: {
                 legend: {
-                    display: displayLegend
+                    display: other.displayLegend
                 },
                 scales: {
                     x: {
                         ticks: {
-                            color: '#808080'
+                            color: 'rgb(128, 128, 128)'
                         },
                         grid: {
                             display: true,
                             drawOnChartArea: true,
                             drawTicks: true,
-                            color: '#404040'
+                            color: 'rgb(64, 64, 64)'
                         }
                     },
                     y: {
                         ticks: {
-                            color: '#808080'
+                            color: 'rgb(128, 128, 128)'
                         },
                         grid: {
                             display: true,
                             drawOnChartArea: true,
                             drawTicks: true,
-                            color: '#404040'
+                            color: 'rgb(64, 64, 64)'
                         }
                     },
                     xAxes: [
@@ -1130,7 +1126,7 @@ export async function graph(
                             display: true,
                             type: 'linear',
                             ticks: {
-                                beginAtZero: startzero
+                                beginAtZero: other.startzero
                             },
                         }
                     ]

@@ -2378,10 +2378,34 @@ export async function weather(input: extypes.commandInput) {
                 lonSide = 'W';
             }
 
-            const windGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.windspeed_10m, `Wind speed ${weatherData.hourly_units.windspeed_10m}`, true, false, true);
-            const tempGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.temperature_2m, `Temperature ${weatherData.hourly_units.temperature_2m}`, true, true, true);
-            const precGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation, `Total precipitation ${weatherData.hourly_units.precipitation}`, true, true, true);
-            const prChGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation_probability, `Precipitation ${weatherData.hourly_units.precipitation_probability}`, true, false, true);
+            const windGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.windspeed_10m, `Wind speed ${weatherData.hourly_units.windspeed_10m}`,
+                {
+                    startzero: true,
+                    fill: false,
+                    displayLegend: true,
+                    pointSize: 1.5,
+                });
+            const tempGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.temperature_2m, `Temperature ${weatherData.hourly_units.temperature_2m}`,
+                {
+                    startzero: true,
+                    fill: true,
+                    displayLegend: true,
+                    pointSize: 1.5,
+                });
+            const precGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation, `Total precipitation ${weatherData.hourly_units.precipitation}`,
+                {
+                    startzero: true,
+                    fill: true,
+                    displayLegend: true,
+                    pointSize: 1.5,
+                });
+            const prChGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation_probability, `Precipitation ${weatherData.hourly_units.precipitation_probability}`,
+                {
+                    startzero: true,
+                    fill: false,
+                    displayLegend: true,
+                    pointSize: 1.5,
+                });
 
             useFiles.push(
                 new Discord.AttachmentBuilder(`${windGraph.path}`),
