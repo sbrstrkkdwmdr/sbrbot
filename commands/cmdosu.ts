@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
+import * as jimp from 'jimp';
 import * as osuclasses from 'osu-classes';
 import * as osuparsers from 'osu-parsers';
 import * as replayparser from 'osureplayparser';
@@ -7555,6 +7556,26 @@ export async function scorepost(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+    if(!scoreId || isNaN(scoreId)){
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: errors.uErr.osu.score.wrong,
+                edit: true
+            }
+        }, input.canReply);
+        log.logCommand({
+            event: 'Error',
+            commandName: 'scorepost',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: errors.uErr.osu.score.wrong
+        });
+        return;
+    }
+
 
     let scoredataReq: osufunc.apiReturn;
 
@@ -7685,9 +7706,9 @@ export async function scorepost(input: extypes.commandInput) {
         pptxt = `${scoredata.pp}`;
     } else {
         if (scoredata.perfect) {
-            pptxt = `${scoredata.pp} (${ppCalc[3].pp} if SS)`;
+            pptxt = `${scoredata.pp} (${ppCalc[2].pp} if SS)`;
         } else {
-            pptxt = `${scoredata.pp} (${ppCalc[2].pp} if FC)`;
+            pptxt = `${scoredata.pp} (${ppCalc[1].pp} if FC)`;
         }
     }
 
@@ -7720,7 +7741,7 @@ export async function scorepost(input: extypes.commandInput) {
     let titleString = 'null';
 
     switch (type) {
-        case 0: {
+        case 0: default: {
             titleString = `${order.name} | ${order.fullTitle} [${order.version}] ${order.mods.length > 1 ? '+' + order.mods : ''} `
                 + `${order.acc}% ${order.diff}⭐ `
                 + `| ${order.pp} ${null} | ${customString}`
@@ -7731,6 +7752,23 @@ export async function scorepost(input: extypes.commandInput) {
                 + `(${order.diff}, ${order.mapper}) ${order.acc} ${order.comboMin}/${order.comboMax} | ${order.pp}`;
         }
     }
+    //download beatmap bg
+    const bimg = await func.downloadIMG(osufunc.getMapImages(scoredata.beatmapset.id).raw, `${path}\\cache\\graphs\\${scoredata.id ?? input.absoluteID}a.jpg`) as unknown as string;
+    const aimg = await func.downloadIMG(`https://a.ppy.sh/${scoredata.user_id}`, `${path}\\cache\\graphs\\${scoredata.user_id ?? input.absoluteID}b.png`) as unknown as string;
+    console.log(bimg);
+    console.log(aimg);
+    console.log('2')
+    //create scorepost img
+    await jimp.default.read(bimg).then(async (image) => {
+        image.contain(1280, 720);
+        image.brightness(-0.5);
+        image.blit((await jimp.default.read(aimg)), 1280 / 2, 720 / 2, null, null, 256, 256);
+        image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) -300, `${order.fullTitle} [${order.version}]`);
+        image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) +300, `${order.name}`);
+        image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) -300, `${scoredata.beatmapset.artist}`);
+        image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) -300, `${scoredata.beatmapset.artist}`);
+        image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) -300, `${scoredata.beatmapset.artist}`);
+    });
 
     /**
      * formatted as

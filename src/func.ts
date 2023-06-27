@@ -3,7 +3,7 @@ import https from 'https';
 // import * as nfetch from 'node-fetch';
 import charttoimg from 'chartjs-to-image';
 import nfetch from 'node-fetch';
-import { filespath, path } from '../path.js';
+import { filespath, path, precomppath } from '../path.js';
 import * as calc from './calc.js';
 import * as log from './log.js';
 import * as osufunc from './osufunc.js';
@@ -318,6 +318,45 @@ export async function downloadFile(
     });
 
     return output;
+}
+
+/**
+ * 
+ * @param input URL to the file
+ * @param output where to save the file once finished (INCLUDE FILE EXTENSIONS)
+ */
+export async function downloadIMG(
+    input: string,
+    output: string,
+) {
+    //get link to image ie https://website.com/blahblahblah.png
+    //save image to folder ie C://folder/image.png
+
+    // const file = fs.createWriteStream(`${output}`);
+    // await https.get(`${input}`, function (response) {
+    //     response.pipe(file);
+    // });
+    const file = fs.createWriteStream(output);
+    await https.get(input, response => {
+        if (response.statusCode !== 200) {
+            console.error('Failed to fetch the image');
+            return `${precomppath}files\\img\\background-1.png`;
+        }
+        response.pipe(file);
+
+        file.on('finish', () => {
+            console.log('Image downloaded successfully!');
+            file.close();
+            return output;
+        });
+    }).on('error', error => {
+        console.error('Error:', error.message);
+        return `${precomppath}files\\img\\background-1.png`;
+    });
+    setTimeout(() => {
+        console.error('Error:', 'TIMEOUT');
+        return `${precomppath}files\\img\\background-1.png`;
+    }, 1000 * 60)
 }
 
 export async function fetch(url: string) {
