@@ -325,38 +325,35 @@ export async function downloadFile(
  * @param input URL to the file
  * @param output where to save the file once finished (INCLUDE FILE EXTENSIONS)
  */
-export async function downloadIMG(
-    input: string,
-    output: string,
+export function downloadIMG(
+    url: string,
+    filepath: string,
 ) {
-    //get link to image ie https://website.com/blahblahblah.png
-    //save image to folder ie C://folder/image.png
+    return new Promise((resolve, reject) => {
+        const file = fs.createWriteStream(filepath);
 
-    // const file = fs.createWriteStream(`${output}`);
-    // await https.get(`${input}`, function (response) {
-    //     response.pipe(file);
-    // });
-    const file = fs.createWriteStream(output);
-    await https.get(input, response => {
-        if (response.statusCode !== 200) {
-            console.error('Failed to fetch the image');
-            return `${precomppath}files\\img\\background-1.png`;
-        }
-        response.pipe(file);
+        https.get(url, response => {
+            if (response.statusCode !== 200) {
+                file.close();
+                fs.unlinkSync(filepath); // Remove incomplete file
+                console.log('Failed to fetch the image')
+                reject(new Error('Failed to fetch the image'));
+                return;
+            }
 
-        file.on('finish', () => {
-            console.log('Image downloaded successfully!');
+            response.pipe(file);
+
+            file.on('finish', () => {
+                file.close();
+                console.log('Image downloaded successfully!')
+                resolve('Image downloaded successfully!');
+            });
+        }).on('error', error => {
             file.close();
-            return output;
+            fs.unlinkSync(filepath); // Remove incomplete file
+            reject(error);
         });
-    }).on('error', error => {
-        console.error('Error:', error.message);
-        return `${precomppath}files\\img\\background-1.png`;
     });
-    setTimeout(() => {
-        console.error('Error:', 'TIMEOUT');
-        return `${precomppath}files\\img\\background-1.png`;
-    }, 1000 * 60)
 }
 
 export async function fetch(url: string) {
