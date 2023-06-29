@@ -7556,7 +7556,7 @@ export async function scorepost(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    if(!scoreId || isNaN(scoreId)){
+    if (!scoreId || isNaN(scoreId)) {
         await msgfunc.sendMessage({
             commandType: input.commandType,
             obj: input.obj,
@@ -7725,7 +7725,7 @@ export async function scorepost(input: extypes.commandInput) {
 
     const order = {
         name: scoredata.user.username,
-        fullTitle: '',
+        fullTitle: `${scoredata.beatmapset.artist} - ${scoredata.beatmapset.title}`,
         version: scoredata.beatmap.version,
         mods: osumodcalc.OrderMods(scoredata.mods.join('')),
         acc: scoredata.accuracy * 100,
@@ -7743,8 +7743,8 @@ export async function scorepost(input: extypes.commandInput) {
     switch (type) {
         case 0: default: {
             titleString = `${order.name} | ${order.fullTitle} [${order.version}] ${order.mods.length > 1 ? '+' + order.mods : ''} `
-                + `${order.acc}% ${order.diff}⭐ `
-                + `| ${order.pp} ${null} | ${customString}`
+                + `${order.acc?.toFixed(2)}% ${order.diff?.toFixed(2)}⭐ `
+                + `| ${order.pp?.toFixed(2)} ${customString ? '| ' + customString : ''}`
                 ;
         } break;
         case 1: {
@@ -7753,21 +7753,62 @@ export async function scorepost(input: extypes.commandInput) {
         }
     }
     //download beatmap bg
-    const bimg = await func.downloadIMG(osufunc.getMapImages(scoredata.beatmapset.id).raw, `${path}\\cache\\graphs\\${scoredata.id ?? input.absoluteID}a.jpg`) as unknown as string;
-    const aimg = await func.downloadIMG(`https://a.ppy.sh/${scoredata.user_id}`, `${path}\\cache\\graphs\\${scoredata.user_id ?? input.absoluteID}b.png`) as unknown as string;
-    console.log(bimg);
-    console.log(aimg);
-    console.log('2')
+    await func.downloadIMG(osufunc.getMapImages(scoredata.beatmapset.id).raw, `${path}\\cache\\graphs\\${scoredata.id ?? input.absoluteID}a.jpg`) as unknown as string;
+    await func.downloadIMG(`https://a.ppy.sh/${scoredata.user_id}`, `${path}\\cache\\graphs\\${scoredata.id ?? scoredata.user_id ?? input.absoluteID}b.png`) as unknown as string;
+    let bimg = `${path}\\cache\\graphs\\${scoredata.id ?? input.absoluteID}a.jpg`;
+    let aimg = `${path}\\cache\\graphs\\${scoredata.id ?? scoredata.user_id ?? input.absoluteID}b.png`;
+    console.log(precomppath);
+    if (!fs.existsSync(bimg)) {
+        bimg = `${precomppath}\\files\\img\\background-1.png`;
+    }
+    if (!fs.existsSync(aimg)) {
+        aimg = `${precomppath}\\files\\blank.png`;
+    }
     //create scorepost img
-    await jimp.default.read(bimg).then(async (image) => {
-        image.contain(1280, 720);
-        image.brightness(-0.5);
-        image.blit((await jimp.default.read(aimg)), 1280 / 2, 720 / 2, null, null, 256, 256);
-        image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) -300, `${order.fullTitle} [${order.version}]`);
-        image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) +300, `${order.name}`);
-        image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) -300, `${scoredata.beatmapset.artist}`);
-        image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) -300, `${scoredata.beatmapset.artist}`);
-        image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) -300, `${scoredata.beatmapset.artist}`);
+    let frimg: Discord.AttachmentBuilder = new Discord.AttachmentBuilder(`${precomppath}\\files\\img\\background-1.png`);;
+    async function doShit() {
+        try {
+            await jimp.default.read(bimg).then(async (image) => {
+                console.log(1);
+                image.contain(1280, 720);
+                console.log(2);
+                image.brightness(-0.5);
+                try {
+                    image.blit((await jimp.default.read(aimg)), 1280 / 2, 720 / 2, 0, 0, 256, 256);
+                } catch (error) {
+                    console.log(error);
+                    aimg = `${precomppath}\\files\\blank.png`;
+                    return await doShit();
+                }
+                console.log(3);
+                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) - 300, `${order.fullTitle} [${order.version}]`);
+                console.log(4);
+                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) + 300, `${order.name}`);
+                console.log(5);
+                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) - 300, `${scoredata.beatmapset.artist}`);
+                console.log(6);
+                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) - 300, `${scoredata.beatmapset.artist}`);
+                console.log(7);
+                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) - 300, `${scoredata.beatmapset.artist}`);
+                console.log(8);
+                image.writeAsync(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
+                console.log(9);
+            });
+        } catch (error) {
+            bimg = `${precomppath}\\files\\img\\background-1.png`;
+            return await doShit();
+        }
+    }
+    await doShit();
+    await new Promise((resolve, reject) => {
+        if (fs.existsSync(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`)) {
+            frimg = new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
+            resolve('yes');
+        } else {
+            console.log(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
+            reject('err');
+        }
+
     });
 
     /**
@@ -7781,7 +7822,8 @@ export async function scorepost(input: extypes.commandInput) {
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            content: titleString
+            content: titleString,
+            files: [frimg]
         }
     }, input.canReply);
 
