@@ -7744,7 +7744,7 @@ export async function scorepost(input: extypes.commandInput) {
         case 0: default: {
             titleString = `${order.name} | ${order.fullTitle} [${order.version}] ${order.mods.length > 1 ? '+' + order.mods : ''} `
                 + `${order.acc?.toFixed(2)}% ${order.diff?.toFixed(2)}⭐ `
-                + `| ${order.pp?.toFixed(2)} ${customString ? '| ' + customString : ''}`
+                + `| ${order.pp?.toFixed(2)}pp ${customString ? '| ' + customString : ''}`
                 ;
         } break;
         case 1: {
@@ -7769,30 +7769,117 @@ export async function scorepost(input: extypes.commandInput) {
     async function doShit() {
         try {
             await jimp.default.read(bimg).then(async (image) => {
+                image.background(0x000000);
                 console.log(1);
                 image.contain(1280, 720);
                 console.log(2);
-                image.brightness(-0.5);
+                image.brightness(-0.75);
                 try {
-                    image.blit((await jimp.default.read(aimg)), 1280 / 2, 720 / 2, 0, 0, 256, 256);
+                    image.blit((await jimp.default.read(aimg).then(async (image) => { image.resize(256, 256); return image; })), (1280 / 2) - 128, (720 / 2) - 128,);
                 } catch (error) {
                     console.log(error);
                     aimg = `${precomppath}\\files\\blank.png`;
                     return await doShit();
                 }
-                console.log(3);
-                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) - 300, `${order.fullTitle} [${order.version}]`);
-                console.log(4);
-                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) + 300, `${order.name}`);
-                console.log(5);
-                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) - 300, `${scoredata.beatmapset.artist}`);
-                console.log(6);
-                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) - 300, `${scoredata.beatmapset.artist}`);
-                console.log(7);
-                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), 1280 / 2, (720 / 2) - 300, `${scoredata.beatmapset.artist}`);
-                console.log(8);
+                //ctx
+                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_32_WHITE), 1280 / 2, (720 / 2) + 190, {
+                    text: `${scoredata.beatmapset.title}`,
+                    alignmentX: jimp.HORIZONTAL_ALIGN_CENTER
+                },
+                    1080, 50
+                );
+                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_32_WHITE), 1280 / 2, (720 / 2) + 150, {
+                    text: `${scoredata.beatmapset.artist}`,
+                    alignmentX: jimp.HORIZONTAL_ALIGN_CENTER
+                },
+                    1080, 50
+                );
+                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_32_WHITE), 1280 / 2, (720 / 2) + 230, {
+                    text: `[${order.version}]`,
+                    alignmentX: jimp.HORIZONTAL_ALIGN_CENTER
+                },
+                    1080, 50
+                );
+                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_32_WHITE), (1280 / 2) + 128, (720 / 2) - 32, {
+                    text: `${order.name}`,
+                    alignmentX: jimp.HORIZONTAL_ALIGN_LEFT
+                },
+                    960, 50
+                );
+                //stats
+                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_32_WHITE), (1280 / 2) - 128, (720 / 2) - 32, {
+                    text: `${order.pp?.toFixed(2)}pp`,
+                    alignmentX: jimp.HORIZONTAL_ALIGN_RIGHT
+                },
+                    960, 50
+                );
+                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_32_WHITE), (1280 / 2) - 128, (720 / 2) + 32, {
+                    text: `${order.acc?.toFixed(2)}%`,
+                    alignmentX: jimp.HORIZONTAL_ALIGN_RIGHT
+                },
+                    960, 50
+                );
+                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_32_WHITE), (1280 / 2) + 128, (720 / 2) + 32, {
+                    text: `${order.mods}`,
+                    alignmentX: jimp.HORIZONTAL_ALIGN_LEFT
+                },
+                    960, 50
+                );
+                let statusimg = `${precomppath}\\files\\img\\osu\\status-graveyard.png`;
+                let modeimg = `${precomppath}\\files\\img\\osu\\modeosu.png`;
+                switch (mapdata.status) {
+                    case 'ranked':
+                        statusimg = `${precomppath}\\files\\img\\osu\\status-ranked.png`;
+                        break;
+                    case 'approved': case 'qualified':
+                        statusimg = `${precomppath}\\files\\img\\osu\\status-approved.png`;
+                        break;
+                    case 'loved':
+                        statusimg = `${precomppath}\\files\\img\\osu\\status-loved.png`;
+                        break;
+                }
+                switch (scoredata.mode) {
+                    case 'taiko':
+                        modeimg = `${precomppath}\\files\\img\\osu\\modetaiko.png`;
+                        break;
+                    case 'fruits':
+                        modeimg = `${precomppath}\\files\\img\\osu\\modefruits.png`;
+                        break;
+                    case 'mania':
+                        modeimg = `${precomppath}\\files\\img\\osu\\modemania.png`;
+                        break;
+                }
+                try {
+                    image.blit((await jimp.default.read(`${precomppath}\\files\\img\\grades\\Ranking-${scoredata.rank}.png`).then(async (image) => {
+                        image.scale(0.6);
+                        return image;
+                    })), 0, (720 / 2) - (150 * 0.6));
+                } catch (error) {
+                    console.log(error);
+                    aimg = `${precomppath}\\files\\blank.png`;
+                    return await doShit();
+                }
+                try {
+                    image.blit((await jimp.default.read(statusimg).then(async (image) => {
+                        image.scale(0.3);
+                        return image;
+                    })), 0, 0);
+                } catch (error) {
+                    console.log(error);
+                    aimg = `${precomppath}\\files\\blank.png`;
+                    return await doShit();
+                }
+                try {
+                    image.blit((await jimp.default.read(modeimg).then(async (image) => {
+                        image.scale(0.22);
+                        return image;
+                    })), +128, 0);
+                } catch (error) {
+                    console.log(error);
+                    aimg = `${precomppath}\\files\\blank.png`;
+                    return await doShit();
+                }
                 image.writeAsync(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
-                console.log(9);
             });
         } catch (error) {
             bimg = `${precomppath}\\files\\img\\background-1.png`;
@@ -7800,17 +7887,18 @@ export async function scorepost(input: extypes.commandInput) {
         }
     }
     await doShit();
-    await new Promise((resolve, reject) => {
-        if (fs.existsSync(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`)) {
-            frimg = new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
-            resolve('yes');
-        } else {
-            console.log(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
-            reject('err');
-        }
+    // await new Promise((resolve, reject) => {
+    //     if (fs.existsSync(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`)) {
+    //         frimg = new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
+    //         resolve('yes');
+    //     } else {
+    //         console.log(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
+    //         reject('err');
+    //     }
 
-    });
-
+    // });
+    frimg = new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
+    console.log(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
     /**
      * formatted as
      * name | artist - title [version] +mods acc% sr | pp mode | custom
