@@ -13,7 +13,7 @@ additional notes: string
 ========================
 
 #1) 
-    status: FIXED
+    status: FINISHED
     issue: custom emojis in interaction replies don't always work (showing :emoji_name: instead of the actual emoji)
     cause: missing permissions
     author: sbrstrkkdwmdr
@@ -25,7 +25,7 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
         ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #2)
-    status: FIXED
+    status: FINISHED
     issue: maplb page buttons being disabled on page 2
     cause: incorrect number
     author: sbrstrkkdwmdr
@@ -49,7 +49,7 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
         ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #4)
-    status: FIXED
+    status: FINISHED
     issue: prev map id searching for [object Object] instead of id
     cause: using [object] instead of [object].property
     author: sbrstrkkdwmdr
@@ -61,7 +61,7 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
         ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #5)
-    status: FIXED
+    status: FINISHED
     issue: profiles with missing data cause crashes [/dist/commands/cmdosu.js:1528]
     cause: missing data
     author: sbrstrkkdwmdr
@@ -95,9 +95,9 @@ additional notes: string
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
-
+✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #8)
-    status: FIXED
+    status: FINISHED
     issue: NaN values on the x-axis of strain graphs
     cause: 
     author: sbrstrkkdwmdr
@@ -109,7 +109,7 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
         ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #9)
-    status: FIXED
+    status: FINISHED
     issue: incorrect month and offset in time command
     cause: 
     author: sbrstrkkdwmdr
