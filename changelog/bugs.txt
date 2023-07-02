@@ -97,19 +97,19 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
 
 #8)
-    status: WIP
+    status: FIXED
     issue: NaN values on the x-axis of strain graphs
     cause: 
     author: sbrstrkkdwmdr
     found: 2023-01-05 12:46 AEDT (UTC+11)
-    fixed: 
+    fixed: 2023-03-12 11:39 AEDT (UTC+11)
     solution: 
     additional notes:
 
 -------------------------------------------------------------------------------------------------------------------------
         ✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔
 #9)
-    status: WIP
+    status: FIXED
     issue: incorrect month and offset in time command
     cause: 
     author: sbrstrkkdwmdr
@@ -157,7 +157,7 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
         
 #13)
-    status: WIP
+    status: FINISHED
     issue: links in score list commands aren't embedding properly
     cause: <t:number:type> can no longer be used as hyperlinks (idk why)
     author: sbrstrkkdwmdr
