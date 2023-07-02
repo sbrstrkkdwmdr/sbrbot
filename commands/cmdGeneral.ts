@@ -2666,6 +2666,11 @@ export async function tropicalWeather(input: extypes.commandInput) {
         const fullname = calc.checkIsNumber(data.name) ? altName :
             `${data.name} (${altName})`;
 
+        const pcatData = func.tsCatToString(data.max_observed_category.toLowerCase());
+        const phurname = basinType == 'Cyclone' ?
+            pcatData.name_auid : basinType == 'Typhoon' ? pcatData.name_asia :
+                pcatData.name;
+
         let localtype = '';
 
         // switch (basin) {
@@ -2690,7 +2695,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
         embed.setTitle(`${hurname} ${fullname}`)
             .setDescription(`Location: ${basin} Basin (${data.position.join(',')})
 Direction: ${windDir.emoji} ${data.movement.KPH}km/h ${data.movement.MPH}mi/h ${data.movement.KTS}kt/s
-Peak: ${data.max_forecast_category} (Forecasted ${data.max_forecast_category})
+Peak: ${phurname}
 `)
             .setImage(`https://www.force-13.com/floaters/${altName}/imagery/rb-animated.gif`)
             //.png

@@ -347,3 +347,5 @@ commit:
 [FIX] exactmods flag not parsing properly
 [FIX] fix time broken in weather command
 [ADD] added weather graphs
+[ADD] scorepost command - thumbnail and title generator. VERY WIP TEXT DOESN'T ALIGN PROPERLY YET
+[FIX] tropical storm using wrong value for maximum category
