@@ -1089,7 +1089,7 @@ export async function graph(
     if (other.displayLegend == null || other.displayLegend == undefined || typeof other.displayLegend == 'undefined') {
         other.displayLegend = false;
     }
-    let type = 'line';
+    const type = 'line';
 
     let curx = [];
     let cury = [];

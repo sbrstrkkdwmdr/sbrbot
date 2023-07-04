@@ -7765,7 +7765,7 @@ export async function scorepost(input: extypes.commandInput) {
         aimg = `${precomppath}\\files\\blank.png`;
     }
     //create scorepost img
-    let frimg: Discord.AttachmentBuilder = new Discord.AttachmentBuilder(`${precomppath}\\files\\img\\background-1.png`);;
+    let frimg: Discord.AttachmentBuilder = new Discord.AttachmentBuilder(`${precomppath}\\files\\img\\background-1.png`);
     async function doShit() {
         try {
             await jimp.default.read(bimg).then(async (image) => {

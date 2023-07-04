@@ -2671,7 +2671,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
             pcatData.name_auid : basinType == 'Typhoon' ? pcatData.name_asia :
                 pcatData.name;
 
-        let localtype = '';
+        const localtype = '';
 
         // switch (basin) {
         //     case 'North Atlantic': case 'Northeast Pacific': case 'Central Pacific':
