@@ -7757,7 +7757,6 @@ export async function scorepost(input: extypes.commandInput) {
     await func.downloadIMG(`https://a.ppy.sh/${scoredata.user_id}`, `${path}\\cache\\graphs\\${scoredata.id ?? scoredata.user_id ?? input.absoluteID}b.png`) as unknown as string;
     let bimg = `${path}\\cache\\graphs\\${scoredata.id ?? input.absoluteID}a.jpg`;
     let aimg = `${path}\\cache\\graphs\\${scoredata.id ?? scoredata.user_id ?? input.absoluteID}b.png`;
-    console.log(precomppath);
     if (!fs.existsSync(bimg)) {
         bimg = `${precomppath}\\files\\img\\background-1.png`;
     }
@@ -7770,9 +7769,7 @@ export async function scorepost(input: extypes.commandInput) {
         try {
             await jimp.default.read(bimg).then(async (image) => {
                 image.background(0x000000);
-                console.log(1);
                 image.contain(1280, 720);
-                console.log(2);
                 image.brightness(-0.75);
                 try {
                     image.blit((await jimp.default.read(aimg).then(async (image) => { image.resize(256, 256); return image; })), (1280 / 2) - 128, (720 / 2) - 128,);
@@ -7898,7 +7895,6 @@ export async function scorepost(input: extypes.commandInput) {
 
     // });
     frimg = new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
-    console.log(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
     /**
      * formatted as
      * name | artist - title [version] +mods acc% sr | pp mode | custom

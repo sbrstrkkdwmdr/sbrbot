@@ -4,9 +4,10 @@ import moment from 'moment';
 import * as replayparser from 'osureplayparser';
 // import strmath from 'string-math';
 // import strmath from 'math-from-string';
+import * as jimp from 'jimp';
 import * as luxon from 'luxon';
 import pkgjson from '../package.json' assert { type: 'json' };
-import { path } from '../path.js';
+import { path, precomppath } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
 import * as colourfunc from '../src/colourcalc.js';
@@ -2587,23 +2588,90 @@ export async function tropicalWeather(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         commandName: 'TropicalWeather',
-        options: [{
-            name: 'System',
-            value: system
-        }]
+        options: [
+            {
+                name: 'Type',
+                value: type
+            },
+            {
+                name: 'System',
+                value: system
+            },
+        ]
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-    const weatherData = await func.getTropical(type, system);
-    func.storeFile(weatherData, input.absoluteID, `${type}-tropicalWeatherData`);
+    let weatherData: othertypes.tropicalData;
+    if (func.findFile(input.absoluteID, `storm-${system}-tropicalWeatherData`) &&
+        !('error' in func.findFile(input.absoluteID, `storm-${system}-tropicalWeatherData`)) &&
+        input.button != 'Refresh'
+    ) {
+        weatherData = func.findFile(input.absoluteID, `storm-${system}-tropicalWeatherData`);
+    } else {
+        weatherData = await func.getTropical(type, system);
+    }
+    func.storeFile(weatherData, input.absoluteID, `${type}${type == 'storm' ? '-' + (weatherData?.data as othertypes.tsData)?.id : ''}-tropicalWeatherData`);
     const embed = new Discord.EmbedBuilder();
     let useComponents = [];
+    let useAttach = [];
 
     switch (type) {
         case 'active': default: {
             picker();
             embed.setTitle(`Currently Active Tropical Storms`);
+            //create image
+            const worldmapPath = `${precomppath}\\files\\img\\map\\base.png`;
+            let frimg: Discord.AttachmentBuilder = new Discord.AttachmentBuilder(worldmapPath);
+            const xLen = 1437;
+            const yLen = 720;
+            const xFactor = xLen / 180 / 2;
+            const yFactor = yLen / 90 / 2;
+            async function doShitTw() {
+                try {
+                    await jimp.default.read(worldmapPath).then(async (image) => {
+                        image.brightness(-0.75);
+                        if (false/* (weatherData?.data as othertypes.tsShort[]).length == 0 */) {
+                            image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_64_WHITE), (xLen / 2), (yLen / 2), {
+                                text: `NO STORMS FOUND`,
+                                alignmentX: jimp.HORIZONTAL_ALIGN_CENTER
+                            },
+                                720, 50
+                            );
+                        } else {
+                            for (let i = 0; i < 5; i++) {
+                                const curx = 180 - Math.random() * 360;
+                                const cury = 90 - Math.random() * 180;
+                                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), (xLen / 2) + (curx * xFactor), (yLen / 2) - (cury * yFactor), {
+                                    text: `X`,
+                                    alignmentX: jimp.HORIZONTAL_ALIGN_CENTER
+                                },
+                                    720, 50
+                                );
+                            }
+                            // for (const storm of weatherData?.data as othertypes.tsShort[]) {
+                            //     const tempData = await func.getTropical('storm', storm.id) as othertypes.tsData;
+                            //     func.storeFile(tempData, input.absoluteID, `storm-${tempData.id}-tropicalWeatherData`);
+                            //     const curx = tempData.position[0];
+                            //     const cury = tempData.position[1];
+                            //     image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_8_WHITE), (xLen / 2) + (curx * xFactor), (yLen / 2) + (cury * yFactor), {
+                            //         text: `X`,
+                            //         alignmentX: jimp.HORIZONTAL_ALIGN_CENTER
+                            //     },
+                            //         720, 50
+                            //     );
+                            // }
+                        }
+                        image.writeAsync(`${path}\\cache\\commandData\\genStormMap-${input.absoluteID}.png`);
+                    });
+                } catch (err) {
+
+                }
+                frimg = await new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genStormMap-${input.absoluteID}.png`);
+                useAttach = [frimg];
+                embed.setImage(`attachment://genStormMap-${input.absoluteID}.png`)
+                return;
+            };
+            await doShitTw();
         }
             break;
         case 'storm': {
@@ -2654,7 +2722,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
         const data = weatherData?.data as othertypes.tsData;
         const featData1 = await func.getTropical('features', data.id);
         const featData = featData1.data as othertypes.tsFeatureData;
-        func.storeFile(featData, input.absoluteID, `features-tropicalWeatherData`);
+        func.storeFile(featData, input.absoluteID, `features-${data.id}-tropicalWeatherData`);
         const catData = func.tsCatToString(data.category.toLowerCase());
         const basin = func.tsBasinToString(data.basin);
         const basinType = func.tsBasinToType(data.basin);
@@ -2710,10 +2778,8 @@ Peak: ${phurname}
              */
             .setColor(colourfunc.hexToDec(`#${catData.colour}`))
             ;
-
     }
 
-    console.log(embed);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
@@ -2722,6 +2788,7 @@ Peak: ${phurname}
         args: {
             embeds: [embed],
             components: useComponents,
+            files: useAttach,
         }
     }, input.canReply);
 
