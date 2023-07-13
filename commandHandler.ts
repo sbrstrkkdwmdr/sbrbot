@@ -875,6 +875,11 @@ export default (input: {
                 startType(obj);
                 admincmds.getUser({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
+
+            case 'render':
+                startType(obj);
+                checkcmds.disabled(commandType, obj, "command");
+                break;
         }
         return;
     }

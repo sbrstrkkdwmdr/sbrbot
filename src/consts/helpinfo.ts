@@ -589,7 +589,7 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'Weather',
+        name: 'weather',
         description: 'Shows the weather for a specific region',
         usage: 'weather <region>',
         slashusage: 'weather <region>',
@@ -614,7 +614,7 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'Tropicalweather',
+        name: 'tropicalweather',
         description: 'Shows the currently active tropical storms.',
         usage: 'tropicalweather',
         slashusage: 'tropicalweather',
