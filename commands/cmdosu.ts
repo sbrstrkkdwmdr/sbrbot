@@ -2096,6 +2096,21 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             `${osustats.level.current}` :
         '---';
 
+    let supporter = '';
+    switch (osudata.support_level) {
+        case 0:
+            break;
+        case 1: default:
+            supporter = emojis.supporter.first;
+            break;
+        case 2:
+            supporter = emojis.supporter.second;
+            break;
+        case 3:
+            supporter = emojis.supporter.third;
+            break;
+    }
+
     const osuEmbed = new Discord.EmbedBuilder()
         .setFooter({
             text: `${embedStyle}`
@@ -2329,8 +2344,9 @@ ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.
 **Medals**: ${osudata.user_achievements.length}
 **Followers:** ${osudata.follower_count}
 ${prevnames}
-${onlinestatus}
-**Avg time per play:** ${calc.secondsToTime(secperplay)}`,
+${supporter} ${onlinestatus}
+**Avg time per play:** ${calc.secondsToTime(secperplay)}
+`,
                     inline: true
                 }
             ]);
@@ -2375,8 +2391,8 @@ ${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.
 **Player joined** <t:${new Date(osudata.join_date).getTime() / 1000}:R>
 **Followers:** ${osudata.follower_count}
 ${prevnames}
-${onlinestatus}
 **Total Play Time:** ${calc.secondsToTimeReadable(osudata?.statistics.play_time, true, false)}
+${supporter} ${onlinestatus}
         `);
             useEmbeds = [osuEmbed];
         }

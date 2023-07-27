@@ -1,5 +1,5 @@
 //MAP OBJECTS
-const mapobjs = {
+export const mapobjs = {
     circle_old: '<:circle:927478586028474398>',
     slider_old: '<:slider:927478585701330976>',
     circle: '<:count_circles:1007196068196384899>',
@@ -13,7 +13,7 @@ const mapobjs = {
     hp: '♥',
 };
 
-const gamemodes = {
+export const gamemodes = {
     standard: '<:modeosu:944181096868884481>', //standard, STD, osu!
     osu: '<:modeosu:944181096868884481>',
     taiko: '<:modetaiko:944181097053442068>', //taiko, drums
@@ -21,7 +21,7 @@ const gamemodes = {
     mania: '<:modemania:944181095874834453>' //piano
 };
 
-const rankedstatus = {
+export const rankedstatus = {
     ranked: '<:statusranked:944512775579926609>',
     approved: '<:statusapproved:944512764913811467>',
     qualified: '<:statusapproved:944512764913811467>',
@@ -29,7 +29,7 @@ const rankedstatus = {
     graveyard: '<:statusgraveyard:944512765282897940>'
 };
 
-const grades = {
+export const grades = {
     XH: '<:RankingXH:1054912277788242000>', //platinum SS
     X: '<:RankingX:1054912275846275135>', //gold SS
     SH: '<:RankingSH:1054912272759259210>', //platinum S
@@ -62,11 +62,11 @@ const grades = {
         F: 'F',
     }
 };
-const onlinestatus = {
+export const onlinestatus = {
     online: '<:osu_online:927800818445455421>',
     offline: '<:osu_offline:927800829153513472>'
 };
-const mods = {
+export const mods = {
     //full name
     none: '',
     nofail: '',
@@ -160,6 +160,11 @@ const mods = {
     //Lazer
 };
 
+export const supporter = {
+    first: '<:support1:1134082832273252473>',
+    second: '<:support2:1134082835909713980>',
+    third: '<:support3:1134082838355005470>',
+};
+
 //module.exports = { mapobjs, gamemodes, rankedstatus, grades, onlinestatus }
-export { mapobjs, gamemodes, rankedstatus, grades, onlinestatus, mods };
 
