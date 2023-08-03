@@ -2630,48 +2630,52 @@ export async function tropicalWeather(input: extypes.commandInput) {
                 try {
                     await jimp.default.read(worldmapPath).then(async (image) => {
                         image.brightness(-0.75);
-                        if (false/* (weatherData?.data as othertypes.tsShort[]).length == 0 */) {
+                        if ((weatherData?.data as othertypes.tsShort[]).length == 0) {
                             image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_64_WHITE), (xLen / 2), (yLen / 2), {
                                 text: `NO STORMS FOUND`,
                                 alignmentX: jimp.HORIZONTAL_ALIGN_CENTER
                             },
                                 720, 50
                             );
+                            return true;
                         } else {
-                            for (let i = 0; i < 5; i++) {
-                                const curx = 180 - Math.random() * 360;
-                                const cury = 90 - Math.random() * 180;
-                                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), (xLen / 2) + (curx * xFactor), (yLen / 2) - (cury * yFactor), {
-                                    text: `X`,
-                                    alignmentX: jimp.HORIZONTAL_ALIGN_CENTER
-                                },
-                                    720, 50
-                                );
-                            }
-                            // for (const storm of weatherData?.data as othertypes.tsShort[]) {
-                            //     const tempData = await func.getTropical('storm', storm.id) as othertypes.tsData;
-                            //     func.storeFile(tempData, input.absoluteID, `storm-${tempData.id}-tropicalWeatherData`);
-                            //     const curx = tempData.position[0];
-                            //     const cury = tempData.position[1];
-                            //     image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_8_WHITE), (xLen / 2) + (curx * xFactor), (yLen / 2) + (cury * yFactor), {
+                            // for (let i = 0; i < 5; i++) {
+                            //     const curx = 180 - Math.random() * 360;
+                            //     const cury = 90 - Math.random() * 180;
+                            //     image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), (xLen / 2) + (curx * xFactor), (yLen / 2) - (cury * yFactor), {
                             //         text: `X`,
-                            //         alignmentX: jimp.HORIZONTAL_ALIGN_CENTER
+                            //         alignmentX: jimp.HORIZONTAL_ALIGN_CENTER,
+                            //         alignmentY: jimp.VERTICAL_ALIGN_MIDDLE
                             //     },
                             //         720, 50
                             //     );
                             // }
+                            for (const storm of weatherData?.data as othertypes.tsShort[]) {
+                                const tempData = await func.getTropical('storm', storm.id);
+                                func.storeFile((tempData as othertypes.tsData), input.absoluteID, `storm-${(tempData.data as othertypes.tsData).id}-tropicalWeatherData`);
+                                const curx = (tempData as othertypes.tsData).position[0];
+                                const cury = (tempData as othertypes.tsData).position[1];
+                                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_8_WHITE), (xLen / 2) + (curx * xFactor), (yLen / 2) + (cury * yFactor), {
+                                    text: `X`,
+                                    alignmentX: jimp.HORIZONTAL_ALIGN_CENTER,
+                                    alignmentY: jimp.VERTICAL_ALIGN_MIDDLE,
+                                },
+                                    720, 50
+                                );
+                            }
                         }
-                        image.writeAsync(`${path}\\cache\\commandData\\genStormMap-${input.absoluteID}.png`);
+                        await image.writeAsync(`${path}\\cache\\commandData\\genStormMap-${input.absoluteID}.png`);
+                        return true;
                     });
                 } catch (err) {
-
+                    return true;
                 }
+            };
+            await doShitTw().then(async x => {
                 frimg = await new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genStormMap-${input.absoluteID}.png`);
                 useAttach = [frimg];
-                embed.setImage(`attachment://genStormMap-${input.absoluteID}.png`)
-                return;
-            };
-            await doShitTw();
+                embed.setImage(`attachment://genStormMap-${input.absoluteID}.png`);
+            });
         }
             break;
         case 'storm': {
