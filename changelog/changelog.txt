@@ -351,3 +351,4 @@ commit:
 [FIX] tropical storm using wrong value for maximum category
 [ADD] added a tropical storm world map
 [ADD] added supporter tag to osu command
+[QOL] changed icons for more/less details

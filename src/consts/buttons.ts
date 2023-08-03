@@ -22,8 +22,8 @@ export const label = {
         refresh: '<:refresh:1025233415383031918>',
         detailed: '<:details_default:1058601386935332974>',
         detailDefault: '<:details_default:1058601386935332974>',
-        detailMore: '<:details_more:1047767495693565973>',
-        detailLess: '<:details_less:1047767494011662416>',
+        detailMore: '<:details_more:1136617552026550393>',
+        detailLess: '<:details_less:1136617548230709249>',
     },
     extras: {
         random: '<:random:1058601388965363772>', //🎲
