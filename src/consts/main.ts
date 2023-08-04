@@ -9,28 +9,33 @@ export const versions: {
 }[] = [
         {
             name: '0.0.0',
-            releaseDate: NaN,
-            releaseDateFormatted: null
+            releaseDate: 20210807,
+            releaseDateFormatted: '2021-08-07'
         },
         {
             name: '0.1.0',
-            releaseDate: NaN,
-            releaseDateFormatted: null
+            releaseDate: 20211104,
+            releaseDateFormatted: '2021-11-04'
         },
         {
             name: '0.1.1',
-            releaseDate: NaN,
-            releaseDateFormatted: null
+            releaseDate: 20211229,
+            releaseDateFormatted: '2021-12-29'
         },
         {
             name: '0.2.0',
-            releaseDate: NaN,
-            releaseDateFormatted: null
+            releaseDate: 20220311,
+            releaseDateFormatted: '2022-03-11'
         },
         {
             name: '0.3.0',
-            releaseDate: NaN,
-            releaseDateFormatted: null
+            releaseDate: 20220609,
+            releaseDateFormatted: '2022-09-03'
+        },
+        {
+            name: '0.3.2',
+            releaseDate: 20220903,
+            releaseDateFormatted: '2022-09-03'
         },
         {
             name: '0.4.0',
@@ -129,8 +134,13 @@ export const versions: {
         },
         {
             name: '0.5.0',
-            releaseDate: 20230600,
+            releaseDate: 20230616,
             releaseDateFormatted: '2023-06-16'
+        },
+        {
+            name: '0.5.1',
+            releaseDate: 0,
+            releaseDateFormatted: '2023-xx-xx'
         },
     ];
 

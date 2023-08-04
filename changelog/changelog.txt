@@ -2,36 +2,50 @@
 [REM] = removal
 [FIX] = fix
 [QOL] = quality of life
-[MAJ] = major change
+[MAJ] = major breaking change
 [MIN] = minor change 
 
 commit: the final commit for that version
 
+VERSION 
 0.0.0
-commit:
-NON EXISTENT
+2021-08-07
+commit: 7005504084d13a619e43b9781d27a8fa1470bf13
+changes:
+the beginning
+
+VERSION 
 0.1.0
-commit:
+2021-11-04
+commit: de46d2dc56986e59f1a33f189f232d185327c9a0
+changes: 
+https://github.com/sbrstrkkdwmdr/sbrbot/tree/discordjs-v12
 discord.js v12
 osu commands didn't work at this point in time
-https://github.com/sbrstrkkdwmdr/sbrbot/tree/discordjs-v12
+
+VERSION 
 0.1.1
+2021-12-29
 commit: 34d53fbac325157b63093a4bae5c514bc60f64b1
-didn't know how to use oauthv2 so osu cmds no work ww
-can't remember what else
-???
+changes: 
+osu commands still not yet working
+
+VERSION 
 0.2.0
+2022-03-11
 commit: c3566227ccecb19e93935a5be65f1c63dc7a0949
-discord.js v13
+changes: 
+updated to discord.js v13
 first implementation of slash commands
-osu commands actually work??!?!
-can't remember what else 
+osu commands first iteration
 https://github.com/sbrstrkkdwmdr/sbrbot/tree/slashcmd
 https://github.com/sbrstrkkdwmdr/sbrbot/tree/old
 
+VERSION
 0.3.0
+2022-06-09
 commit: 
-discord.js v13
+changes: 
 switched from booba to rosu-pp
 stopped using `fetch (thing).then(x => {
     osudata = X
@@ -42,18 +56,20 @@ stopped using `fetch (thing).then(x => {
 stopped using `username = JSON.stringify([osudata], [username]).replace().replace().replace()`
 switched to `username  = osudata.username`
 
-can't remember what else 
-
+VERSION
 0.3.2
+2022-09-03
 commit: c9eed60322ae19a7b0e040997d29b5e2fa4d7ca0
+changes: 
+undocumented
 
-
+VERSION
 0.4.0
 2022-09-14 --- 2022-11-07 --- 2022-12-01
 commit: 16c5c46a499dd6541ac027857ab9634be54383e4
-discord.js v14
-switched from using ts-node with commonjs to nodenext (all because of this video - https://www.youtube.com/watch?v=H91aqUHn8sE)
-
+changes: 
+[MAJ] updated to discord.js v14
+[MAJ] switched from using ts-node with commonjs to nodenext (all because of this video - https://www.youtube.com/watch?v=H91aqUHn8sE)
 [ADD] added command select menu to help
 [FIX] fixed server lb 
 [ADD] added server prefix command 
@@ -80,9 +96,11 @@ switched from using ts-node with commonjs to nodenext (all because of this video
 [QOL] edit debugging 
 
 
+VERSION
 0.4.1
 2022-12-03
 commit: 9854e19840ef21abb1653be5c4b0e4535627a174
+changes: 
 [QOL] updated buttons
 [ADD] firsts, osutop/top, nochokes/nc, sotarks, pinned, recent/rs/rl, scores/c, userbeatmaps/ubm have options to use different "detail" modes (show more or less information)
 [ADD] osu command has an added graph button
@@ -92,9 +110,11 @@ commit: 9854e19840ef21abb1653be5c4b0e4535627a174
 [REM] disabled simulate temporarily (rewriting argument handling)
 [REM] disabled localmapparse temporarily (making separate map parser)
 
+VERSION
 0.4.2
 2022-12-06
 commit: 3293ee645ab4bf4cb5cd3debd950334b5c5fd74b
+changes: 
 [FIX] fixed map and simulate
 [FIX] fixed page search
 [FIX] fixed recent/rs showing the wrong star rating
@@ -105,26 +125,32 @@ commit: 3293ee645ab4bf4cb5cd3debd950334b5c5fd74b
 [QOL] pp and rank should be more accurate now
 [MIN] general code clean up 
 
+VERSION
 0.4.3
 2022-12-10
 commit: d7f4856f3fa92458ecb5a5e448d0bcabf973dc22
+changes: 
 [QOL] fix ppcalc being slow (deleting wrong maps)
 [MIN] general code clean up
 [ADD] add recentactivity/rsact command.
 [FIX] fixed pages for expanded lists 
 
+VERSION
 0.4.4
 2022-12-13
 commit: 9b2d8f945091bd9c798e367ecb662a369664497a
+changes: 
 [FIX] fix medals in recentactivity/rsact displaying as [object Object]
 [FIX] fix rl displaying only one score
 [FIX] fix permissions checker
 [FIX] fix maplb and scores/c crashing when calculating pp (undefined map object)
 [FIX] fix map ids not being stored in the correct path 
 
+VERSION
 0.4.5
 2022-12-16
 commit: 5f57e70d361d3ced78e2fd900e29d2ef08f0ae37
+changes: 
 [QOL] edit recent activity/rsact formatting
 [FIX] fix osutop sorting by recent instead of pp
 [FIX] edit beatmapsetApprove not being handled 
@@ -135,9 +161,11 @@ commit: 5f57e70d361d3ced78e2fd900e29d2ef08f0ae37
 [QOL] switched rankings from sbr v11 to osu default
 [FIX] fix stats crashing due to invalid paths
 
+VERSION
 0.4.6 
 2022-12-22
 commit: e413f9b949dc824897a279735a61f44bc412840c
+changes: 
 [QOL] update help info and docs 
 [QOL] map button on rs and scoreparse now uses mod from the score 
 [FIX] fix paths ('./' => `${path}/`)
@@ -149,9 +177,11 @@ commit: e413f9b949dc824897a279735a61f44bc412840c
 [FIX] fix rank lost events not using the beatmap url (was using /b/mapid instead of https://osu.ppy.sh/b/mapid)
 [ADD] add user button to bws, firsts, globals, map, nochokes, osutop, pinned, recent, recentactivity, scoreparse, scores, scorestats, ubm, whatif
 
+VERSION
 0.4.7
 2022-12-28
 commit: 33b1f2679676931914cbd0ab0b4f58276712fe7b
+changes: 
 [ADD] statuses now use maps cached in .\\cache\\commandData\\
 [MIN] reworked statuses
 [FIX] fixed convert not showing the - sign on negative numbers (i didn't know what Math.abs() meant when i first made the command)
@@ -163,9 +193,11 @@ commit: 33b1f2679676931914cbd0ab0b4f58276712fe7b
 [QOL] re-ordered some buttons for clarity
 [REM] maplb no longer uses the last map's mods
 
+VERSION
 0.4.8
 2023-01-04
 commit: 1fe82480c9bb288321264c4d33b0d9b8dc570fb4
+changes: 
 [QOL] edited author.name sections
 [QOL] added user info to recent's author.name section
 [ADD] to do list
@@ -183,9 +215,11 @@ commit: 1fe82480c9bb288321264c4d33b0d9b8dc570fb4
 [FIX] fix help command crashing (#7)
 [FIX] fix globals crashing
 
+VERSION
 0.4.9
 2023-01-12
 commit: ec60a52823a7720a8c9e3e6efbc9bb81e2b4a1e3
+changes: 
 [QOL] increase accuracy of fail point calculator
 [ADD] graph that shows exact point of fail in rs
 [QOL] reworked time command: uses timezones like CST, AEST and UTC+10 instead of [region]/[city]
@@ -194,9 +228,11 @@ commit: ec60a52823a7720a8c9e3e6efbc9bb81e2b4a1e3
 [ADD] added stats for score grades to scorestats
 [QOL] moved errors to a separate object 
 
+VERSION
 0.4.10
 2023-01-22
 commit: 67de12ec87dc9a74c738069fb4efd0d0842c8221
+changes: 
 [QOL] time command shows days again
 [ADD] add scores button to rs and scoreparse
 [QOL] fixed README.md and LICENSE
@@ -209,9 +245,11 @@ commit: 67de12ec87dc9a74c738069fb4efd0d0842c8221
 [QOL] time still displays original timezone on clashing timezones
 [QOL] time is displayed in specific columns for readability
 
+VERSION
 0.4.11
 2023-02-05
 commit: 15801df248b24e2b6d68da8fa208abb79db784cd
+changes: 
 [FIX] fix time command crashing on invalid timezones
 [REM] remove UR on replayparse
 [ADD] added more aliases to time command (endyonyms and iso codes)
@@ -224,9 +262,11 @@ commit: 15801df248b24e2b6d68da8fa208abb79db784cd
 [QOL] fix time command being case sensitive
 [FIX] math command uses string-math instead of eval();
 
+VERSION
 0.4.12
 2023-02-11
 commit: 363487d632d7f51df11f18ee255faa015651f528
+changes: 
 [QOL] outdated messages show bot and disabled command version
 [QOL] changed required options to be listed as <arg> and optional as [arg]
 [ADD] added heads or tails images to coin flip
@@ -234,9 +274,11 @@ commit: 363487d632d7f51df11f18ee255faa015651f528
 [REM] removed graphChannelId property from config
 [FIX] fixed time command showing day of year instead of day of month
 
+VERSION
 0.4.13
 2023-02-19
 commit: ad076f1511dc8fefad7369bb97b49f68101249fa
+changes: 
 [QOL] reworked convert command
 [ADD] added pressure conversions to convert command
 [ADD] convert command now parses SI prefixes
@@ -244,9 +286,11 @@ commit: ad076f1511dc8fefad7369bb97b49f68101249fa
 [ADD] added energy, area, angle and speed to convert command
 [QOL] modified the layout in the map command
 
+VERSION
 0.4.14
 2023-02-26
 commit: d9151bbb43245b46b0a16047ebc125c2a1b8a23f
+changes: 
 [FIX] fix SI prefixed values not dividing/multiplying properly
 [QOL] formula now shows SI prefix (ie km = 10e3*x)
 [FIX] fix [optional arg] <required arg> not being on a separate line
@@ -255,9 +299,11 @@ commit: d9151bbb43245b46b0a16047ebc125c2a1b8a23f
 [QOL] most played now shows map difficulty
 [ADD] added -bg arg to only show background url
 
+VERSION
 0.4.15
 2023-03-12
 commit: 3fc799cc5c28c4d6c88e7d6a8e1bdb750df0504c
+changes: 
 [ADD] add more timezones
 [ADD] add set timezone command
 [QOL] update coin flip images
@@ -267,17 +313,21 @@ commit: 3fc799cc5c28c4d6c88e7d6a8e1bdb750df0504c
 [FIX] fix strains with NaN times
 [QOL] added strains to other modes
 
+VERSION
 0.4.16
 2023-03-24
 commit: ddf104c2d6954e726f9662ad2dc2220db561af12
+changes: 
 [FIX] fix null property in apiget causing crashes
 [QOL] update dependencies
 [ADD] add lightspeed to convert
 [ADD] added recommend map
 
+VERSION
 0.4.17
 2023-03-26
 commit: 687aa84a0698b1a77ea78b3f5d4331a075b6d043
+changes: 
 [FIX] fix get fail point crashing
 [FIX] fix compare freezing/crashing when comparing scores
 [FIX] disabled osc (respektive api is offline)
@@ -285,9 +335,11 @@ commit: 687aa84a0698b1a77ea78b3f5d4331a075b6d043
 [QOL] score dates use discord timestamps - time/date now matches the user rather than just using UTC+0 (ie an australian will see 18:16 instead of 07:16)
 [FIX] disabled commands still running
 
+VERSION
 0.4.18
 2023-04-10
 commit: c328732d575b4aae819ec07d35d5c0cf99de912a
+changes: 
 [QOL] changed recommend map design
 [QOL] added median to scorestats
 [QOL] recommend and random map call map command directly (old ver sends a link, then bot parses its own message)
@@ -296,15 +348,19 @@ commit: c328732d575b4aae819ec07d35d5c0cf99de912a
 [QOL] edit how non-latin map titles are shown
 [QOL] updated dependencies
 
+VERSION
 0.4.18_b
 2023-04-10
 commit: 6d9805e4a6b5f828dd484505cb7ec672bd0e196c
+changes: 
 [FIX] fixed randommap crashing
 [FIX] fix recent list sorting by pp
 
+VERSION
 0.5.0
 2023-06-16
 commit: 6cd863f64c6a006170e9a663b292dac40ad5fd1b
+changes: 
 [QOL] emit typing event when receiving a command
 [QOL] err logtofile logs to err
 [QOL] changed empty fields on embeds from "-" to "⠀" (U+2800)
@@ -339,9 +395,10 @@ commit: 6cd863f64c6a006170e9a663b292dac40ad5fd1b
 [QOL] command descriptions now link to the website version of the command
 [QOL] more informative debug clear messages 
 
-0.5.1
+VERSION 0.5.1
 date_time
-commit: 
+commit: null
+changes: 
 [FIX] typing event being sent after command was replied to
 [QOL] added bpm sort
 [FIX] exactmods flag not parsing properly

@@ -42,6 +42,7 @@ export async function changelog(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
+            version = input.args[0];
         }
             break;
 
@@ -77,42 +78,71 @@ export async function changelog(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
     //get version
-    let found = null;
+    let found: string | number = null;
+    let foundBool = true;
     if (version !== null) {
         //search for version
         if (version.includes('.')) {
-            found = mainconst.versions.findIndex(x => {
-                x.name.includes(version) || (`${x.releaseDate}`).includes(version) || x.releaseDateFormatted.includes(version);
-            });
+            found = mainconst.versions.findIndex(x =>
+                `${x.name}`.includes(version) || (`${x.releaseDate}`).includes(version) || `${x.releaseDateFormatted}`.includes(version) ||
+                version.includes(`${x.name}`) || version.includes(`${x.releaseDate}`) || version.includes(`${x.releaseDateFormatted}`)
+            );
+            if (found == -1) {
+                found = null;
+                foundBool = false;
+            }
         } else {
             switch (version) {
                 case 'first': case 'original':
-                    version = 0;
+                    found = 0;
                     break;
                 case 'second':
-                    version = 1;
+                    found = 1;
                     break;
                 case 'third':
-                    version = 2;
+                    found = 2;
+                    break;
+                case 'latest':
+                    break;
+                case 'versions':
+                    found = 'string';
+                    break;
+                default:
+                    foundBool = false;
                     break;
             }
         }
     }
-    const document = fs.readFileSync(`${precomppath}\\changelog\\changelog.txt`, 'utf-8');
-    const list = document.split('VERSION');
-    const cur = list[found ?? list.length - 1 - offset] as string;
-    const verdata = mainconst.versions[found ?? mainconst.versions.length - 1 - offset];
-    const commit = cur.split('commit:')[1].split('\n')[0] as string;
-    const changes = cur.split('changes:')[1];
 
-    const Embed = new Discord.EmbedBuilder()
-        .setTitle(`Changelog for ${verdata.name}`)
-        .setURL(`https://github.com/sbrstrkkdwmdr/sbrbot/commit/${commit}`)
-        .setDescription(`commit [${commit.slice(0, 5)}](https://github.com/sbrstrkkdwmdr/sbrbot/commit/${commit})
+    const Embed = new Discord.EmbedBuilder();
+    if (typeof found == 'string') {
+        Embed.setTitle('ALL VERSIONS')
+        .setDescription(`${mainconst.versions.map(x => `${x.name} (${x.releaseDateFormatted})`).join('\n')}`)
+    } else {
+        const document = fs.readFileSync(`${precomppath}\\changelog\\changelog.txt`, 'utf-8');
+        const list = document.split('VERSION');
+        list.shift();
+        const cur = list[found ?? list.length - 1 - offset] as string;
+        const verdata = mainconst.versions[found ?? mainconst.versions.length - 1 - offset];
+        const commit = cur.split('commit:')[1].split('\n')[0] as string;
+        const changes = cur.split('changes:')[1];
+        const url = commit?.toString()?.includes('null') ?
+            `https://github.com/sbrstrkkdwmdr/sbrbot/`
+            :
+            `https://github.com/sbrstrkkdwmdr/sbrbot/commit/${commit.trim()}`;
+
+
+        Embed
+            .setTitle(`${verdata.name.trim()} Changelog`)
+            .setURL(url)
+            .setDescription(`commit [${commit.trim()?.slice(0, 7)?.trim()}](${url})
 Released ${verdata.releaseDateFormatted}
-**Changes**
-${changes}
+
+**Changes** ${changes}
+${foundBool ? '' : `\nThere was an error trying to find version ${version}`}
 `);
+
+    }
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================

@@ -286,6 +286,10 @@ const cmds: commandInfo[] = [
                 text: 'sbr-changelog first',
                 descriptor: 'Returns the changelog for the first version'
             },
+            {
+                text: 'sbr-changelog versions',
+                descriptor: 'Returns a list of all versions'
+            },
         ],
         aliases: ['clog', 'changes'],
         options: [
@@ -294,7 +298,7 @@ const cmds: commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The version',
-                options: ['formatted as major.minor.patch (0.4.1) or first, second etc.'],
+                options: ['formatted as major.minor.patch (`0.4.1`) or `first`, `second` etc. `versions` also works'],
                 defaultValue: 'latest',
                 examples: ['0.4.1', 'version:0.4.1', 'first'],
                 commandTypes: ['message', 'interaction']
