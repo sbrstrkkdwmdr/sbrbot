@@ -472,7 +472,7 @@ export async function getUserAv(input: extypes.commandInput) {
 export async function debug(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
-    type debugtype = 'commandfile' | 'servers' | 'channels' | 'users' | 'forcetrack' | 'curcmdid' | 'logs' | 'clear';
+    type debugtype = 'commandfile' | 'commandfiletype' | 'servers' | 'channels' | 'users' | 'forcetrack' | 'curcmdid' | 'logs' | 'clear';
 
     let type: debugtype;
     let inputstr;
@@ -586,6 +586,140 @@ export async function debug(input: extypes.commandInput) {
                     usemsgArgs = {
                         content: `Files found matching ${cmdidcur}: `,
                         files: searchfiles.map(x => `${path}/cache/commandData/` + x)
+                    };
+                }
+            }
+        }
+            break;
+        case 'commandfiletype': {
+            usemsgArgs = { content: 'txt' };
+            if (!inputstr) {
+                usemsgArgs = {
+                    content: `No search query given`
+                };
+            }
+            const files = fs.readdirSync(`${path}\\cache\\debug\\command`);
+            if (files.length < 1) {
+                console.log('ichi');
+                usemsgArgs = {
+                    content: 'Cache folder is currently empty'
+                };
+            } else {
+                //convert to search term
+                let resString;
+                switch (inputstr) {
+                    case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':
+                        resString = 'bws';
+                        break;
+                    case 'firstplaceranks': case 'fpr': case 'fp': case '#1s': case 'first': case '#1': case '1s':
+                        resString = 'firsts';
+                        break;
+                    case 'osc': case 'osustatscount':
+                        resString = 'globals';
+                        break;
+                    case 'm':
+                        resString = 'map';
+                        break;
+                    case 'maplb': case 'mapleaderboard': case 'leaderboard':
+                        resString = 'maplb';
+                        break;
+                    case 'profile': case 'o': case 'user':
+                    case 'taiko': case 'drums':
+                    case 'fruits': case 'ctb': case 'catch':
+                    case 'mania':
+                        resString = 'osu';
+                        break;
+                    case 'top': case 't': case 'ot': case 'toposu': case 'topo':
+                    case 'taikotop': case 'toptaiko': case 'tt': case 'topt':
+                    case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tctb': case 'tf': case 'topf': case 'topc':
+                    case 'maniatop': case 'topmania': case 'tm': case 'topm':
+                    case 'sotarks': case 'sotarksosu':
+                    case 'sotarkstaiko': case 'taikosotarks': case 'sotarkst': case 'tsotarks':
+                    case 'sotarksfruits': case 'fruitssotarks': case 'fruitsotarks': case 'sotarksfruit': case 'sotarkscatch': case 'catchsotarks':
+                    case 'sotarksctb': case 'ctbsotarks': case 'fsotarks': case 'sotarksf': case 'csotarks': case 'sotarksc':
+                    case 'sotarksmania': case 'maniasottarks': case 'sotarksm': case 'msotarks':
+                        resString = 'osutop';
+                        break;
+                    case 'rs': case 'r':
+                    case 'rs best': case 'recent best':
+                    case 'rsbest': case 'recentbest': case 'rb':
+                    case 'recentlist': case 'rl':
+                    case 'recentlisttaiko': case 'rlt':
+                    case 'recentlistfruits': case 'rlf': case 'rlctb': case 'rlc':
+                    case 'recentlistmania': case 'rlm':
+                    case 'recenttaiko': case 'rt':
+                    case 'recentfruits': case 'rf': case 'rctb':
+                    case 'recentmania': case 'rm':
+                        resString = 'recent';
+                        break;
+                    case 'recentactivity': case 'recentact': case 'rsact':
+                        resString = 'recent_activity';
+                        break;
+                    case 'score': case 'sp':
+                        resString = 'scoreparse';
+                        break;
+                    case 'c':
+                        resString = 'scores';
+                        break;
+                    case 'ss':
+                        resString = 'scorestats';
+                        break;
+                    case 'simulate': case 'sim':
+                        resString = 'simulate';
+                        break;
+                    case 'ub': case 'userb': case 'ubm': case 'um': case 'usermaps':
+                        resString = 'userbeatmaps';
+                        break;
+                    case 'wi':
+                        resString = 'whatif';
+                        break;
+                    case 'mapfile': case 'mf':
+                        resString = 'map (file)';
+                        break;
+                    default:
+                        resString = inputstr;
+                        break;
+                }
+                switch (resString) {
+                    case 'badges':
+                    case 'bws':
+                    case 'firsts':
+                    case 'globals':
+                    case 'map':
+                    case 'maplb':
+                    case 'osu':
+                    case 'osutop':
+                    case 'pinned':
+                    case 'recent':
+                    case 'scoreparse':
+                    case 'scores':
+                    case 'scorestats':
+                    case 'simplay':
+                    case 'userbeatmaps':
+                    case 'whatif':
+                        {
+                            await findAndReturn(`${path}\\cache\\debug\\command`, resString);
+                        }
+                        break;
+                    case 'map (file)':
+                    case 'replay':
+                        {
+                            await findAndReturn(`${path}\\cache\\debug\\fileparse`, resString);
+                        }
+                        break;
+                    default:
+                        usemsgArgs = {
+                            content: `${inputstr && inputstr?.length > 0 ? `No files found for command "${inputstr}"\n` : ''}Valid options are: \`badges\`,\`bws\`,\`firsts\`,\`globals\`,\`map\`,\`maplb\`,\`osu\`,\`osutop\`,\`pinned\`,\`recent\`,\`scoreparse\`,\`scores\`,\`scorestats\`,\`simplay\`,\`userbeatmaps\`,\`whatif\`,`
+                        };
+                        break;
+                }
+                async function findAndReturn(inpath: string, find: string) {
+                    const sFiles = fs.readdirSync(`${inpath}`);
+                    const found = sFiles.find(x => x == find);
+                    const inFiles = fs.readdirSync(`${inpath}\\${found}`);
+                    usemsgArgs = {
+                        content: `Files found for command \`${inputstr}\``,
+                        files: inFiles.map(x => `${inpath}\\${found}\\${x}`)
                     };
                 }
             }
@@ -713,7 +847,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             } else {
                 serverId = inputstr;
             }
-            const curServer = fs.existsSync(`${path}/logs/cmd/commands${serverId}.log`);
+            const curServer = fs.existsSync(`${path}\\logs\\cmd\\commands${serverId}.log`);
             if (!curServer) {
                 usemsgArgs = {
                     content: `Server ${serverId} not found - does not exist or bot is not in the guild`
@@ -737,7 +871,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             break;
         default: {
             usemsgArgs = {
-                content: 'Valid types are: `commandfile`,`servers`,`channels`,`users`,`forcetrack`,`curcmdid`,`logs`, `clear`'
+                content: 'Valid types are: `commandfile`(id),`commandfiletype`(cmd),`servers`,`channels`,`users`,`forcetrack`,`curcmdid`,`logs`(sid), `clear`(type)'
             };
         }
 
