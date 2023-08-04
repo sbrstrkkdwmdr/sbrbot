@@ -31,6 +31,121 @@ import * as othertypes from '../src/types/othertypes.js';
 import * as msgfunc from './msgfunc.js';
 
 /**
+ * 
+ */
+export async function changelog(input: extypes.commandInput) {
+    let commanduser;
+    let offset = 0;
+    let version = null;
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+        }
+            break;
+
+        //==============================================================================================================================================================================================
+
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+        }
+
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
+            commanduser = input.obj.member.user;
+        }
+            break;
+    }
+
+
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'changelog',
+        options: []
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+    //get version
+    let found = null;
+    if (version !== null) {
+        //search for version
+        if (version.includes('.')) {
+            found = mainconst.versions.findIndex(x => {
+                x.name.includes(version) || (`${x.releaseDate}`).includes(version) || x.releaseDateFormatted.includes(version);
+            });
+        } else {
+            switch (version) {
+                case 'first': case 'original':
+                    version = 0;
+                    break;
+                case 'second':
+                    version = 1;
+                    break;
+                case 'third':
+                    version = 2;
+                    break;
+            }
+        }
+    }
+    const document = fs.readFileSync(`${precomppath}\\changelog\\changelog.txt`, 'utf-8');
+    const list = document.split('VERSION');
+    const cur = list[found ?? list.length - 1 - offset] as string;
+    const verdata = mainconst.versions[found ?? mainconst.versions.length - 1 - offset];
+    const commit = cur.split('commit:')[1].split('\n')[0] as string;
+    const changes = cur.split('changes:')[1];
+
+    const Embed = new Discord.EmbedBuilder()
+        .setTitle(`Changelog for ${verdata.name}`)
+        .setURL(`https://github.com/sbrstrkkdwmdr/sbrbot/commit/${commit}`)
+        .setDescription(`commit [${commit.slice(0, 5)}](https://github.com/sbrstrkkdwmdr/sbrbot/commit/${commit})
+Released ${verdata.releaseDateFormatted}
+**Changes**
+${changes}
+`);
+
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [Embed],
+        }
+    }, input.canReply);
+
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'changelog',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'changelog',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send'
+        });
+    }
+}
+
+/**
  * convert a value
  */
 export async function convert(input: extypes.commandInput) {

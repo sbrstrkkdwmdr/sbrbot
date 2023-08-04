@@ -298,6 +298,10 @@ export default (input: {
         canReply: boolean,
     ) {
         switch (command) {
+            case 'changelog': case 'clog': case 'changes':
+                startType(obj);
+                commands.changelog({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
             case 'convert': case 'conv':
                 startType(obj);
                 commands.convert({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });

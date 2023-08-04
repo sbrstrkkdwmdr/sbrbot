@@ -273,6 +273,35 @@ const scoreListCommandOptions: commandInfoOptions[] = [
 
 const cmds: commandInfo[] = [
     {
+        name: 'changelog',
+        description: 'Displays the changes for the current version or version requested',
+        usage: 'changelog [version]',
+        slashusage: 'changelog [version]',
+        examples: [
+            {
+                text: 'sbr-changelog 0.4.0',
+                descriptor: 'Returns the changelog for version 0.4.0'
+            },
+            {
+                text: 'sbr-changelog first',
+                descriptor: 'Returns the changelog for the first version'
+            },
+        ],
+        aliases: ['clog', 'changes'],
+        options: [
+            {
+                name: 'version',
+                type: 'string',
+                required: false,
+                description: 'The version',
+                options: ['formatted as major.minor.patch (0.4.1) or first, second etc.'],
+                defaultValue: 'latest',
+                examples: ['0.4.1', 'version:0.4.1', 'first'],
+                commandTypes: ['message', 'interaction']
+            },
+        ]
+    },
+    {
         name: 'convert',
         description: 'Converts a number from one unit to another',
         usage: 'convert <from> [to] [number]',
@@ -2608,7 +2637,7 @@ const admincmds: commandInfo[] = [
         name: 'debug',
         description: 'Runs a debugging command',
         usage: 'debug <type> [arg]',
-        slashusage:'debug <type> [arg]',
+        slashusage: 'debug <type> [arg]',
         examples: [],
         aliases: [],
         options: [
@@ -2621,16 +2650,16 @@ const admincmds: commandInfo[] = [
                 defaultValue: 'list options',
                 examples: [''],
                 commandTypes: ['message', 'interaction']
-            },{
-            name: 'arg',
-            type: 'integer/string',
-            required: false,
-            description: 'commandfile -> the id of the command to search for\nlogs -> the ID of the guild to send logs from\nclear -> the types of files to clear (read the options section)',
-            options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
-            defaultValue: 'commandfile -> latest command\nlogs -> current server\n clear -> temporary files only',
-            examples: [''],
-            commandTypes: ['message', 'interaction']
-        }
+            }, {
+                name: 'arg',
+                type: 'integer/string',
+                required: false,
+                description: 'commandfile -> the id of the command to search for\nlogs -> the ID of the guild to send logs from\nclear -> the types of files to clear (read the options section)',
+                options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
+                defaultValue: 'commandfile -> latest command\nlogs -> current server\n clear -> temporary files only',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            }
         ]
     },
     {
@@ -2742,5 +2771,5 @@ const buttons: {
         },
     ];
 
-export { cmds, othercmds, osucmds, admincmds, buttons };
+export { admincmds, buttons, cmds, osucmds, othercmds };
 
