@@ -279,15 +279,15 @@ const cmds: commandInfo[] = [
         slashusage: 'changelog [version]',
         examples: [
             {
-                text: 'sbr-changelog 0.4.0',
+                text: 'PREFIXMSGchangelog 0.4.0',
                 descriptor: 'Returns the changelog for version 0.4.0'
             },
             {
-                text: 'sbr-changelog first',
+                text: 'PREFIXMSGchangelog first',
                 descriptor: 'Returns the changelog for the first version'
             },
             {
-                text: 'sbr-changelog versions',
+                text: 'PREFIXMSGchangelog versions',
                 descriptor: 'Returns a list of all versions'
             },
         ],
@@ -1839,6 +1839,46 @@ const osucmds: commandInfo[] = [
         ],
         aliases: ['score', 'sp'],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.map, buttonsObjs.label.extras.user],
+        options: [
+            {
+                name: 'id',
+                type: 'integer',
+                required: true,
+                description: 'The id of the score',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['id:727'],
+                commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: 'false if message command, true if link',
+                description: 'The mode of the score',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu',
+                examples: ['mode:osu'],
+                commandTypes: ['message', 'interaction', 'link']
+            }
+        ]
+    },
+    {
+        name: 'scorepost',
+        description: 'Generates a thumbnail and title for a score',
+        usage: 'scorepost <id> [mode]',
+        slashusage: 'null',
+        examples: [
+            {
+                text: 'PREFIXMSGscorepost 1234567890',
+                descriptor: 'Generates a thumbnail and title for the osu! score with the id 1234567890'
+            },
+            {
+                text: 'PREFIXMSGscorepost 1234567890 mania',
+                descriptor: 'Generates a thumbnail and title for the osu! score with the id 1234567890'
+            },
+        ],
+        aliases: [],
+        buttons: [],
         options: [
             {
                 name: 'id',
