@@ -410,6 +410,7 @@ changes:
 [ADD] added supporter tag to osu command
 [QOL] changed icons for more/less details
 [ADD] `commandfiletype` option in debug - returns the last used data for specified command 
+[ADD] changelog command
 [FIX] extraTypes differs from extratypes only in casing
 [FIX] version undefined
 [FIX] no such file or directory (path\\genStormMap)
