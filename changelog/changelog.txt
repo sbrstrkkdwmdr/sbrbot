@@ -397,7 +397,7 @@ changes:
 
 VERSION 0.5.1
 2023-08-05
-commit: c6c3d2cbec4938ea52ab6ee15e4df85acd8c7ecc
+commit: 1b16927b1d4ecadc3d07c3a6a0f55d7e55436725
 changes: 
 [FIX] typing event being sent after command was replied to
 [QOL] added bpm sort
@@ -410,3 +410,5 @@ changes:
 [ADD] added supporter tag to osu command
 [QOL] changed icons for more/less details
 [ADD] `commandfiletype` option in debug - returns the last used data for specified command 
+[FIX] extraTypes differs from extratypes only in casing
+[FIX] version undefined
