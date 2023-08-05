@@ -33,7 +33,7 @@ osu commands still not yet working
 VERSION 
 0.2.0
 2022-03-11
-commit: c3566227ccecb19e93935a5be65f1c63dc7a0949
+commit: 10bf389f91247ae4070e2f5be3eb013ba2e80337
 changes: 
 updated to discord.js v13
 first implementation of slash commands
@@ -44,7 +44,7 @@ https://github.com/sbrstrkkdwmdr/sbrbot/tree/old
 VERSION
 0.3.0
 2022-06-09
-commit: 
+commit: c3566227ccecb19e93935a5be65f1c63dc7a0949
 changes: 
 switched from booba to rosu-pp
 stopped using `fetch (thing).then(x => {

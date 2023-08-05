@@ -133,6 +133,11 @@ export const versions: {
             releaseDateFormatted: '2023-04-10'
         },
         {
+            name: '0.4.18_b',
+            releaseDate: 20230410,
+            releaseDateFormatted: '2023-04-10'
+        },
+        {
             name: '0.5.0',
             releaseDate: 20230616,
             releaseDateFormatted: '2023-06-16'
