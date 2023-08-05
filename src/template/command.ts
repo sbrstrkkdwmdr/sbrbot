@@ -10,7 +10,7 @@ import * as def from '../../src/consts/defaults.js';
 import * as emojis from '../../src/consts/emojis.js';
 import * as log from '../../src/log.js';
 import * as osufunc from '../../src/osufunc.js';
-import * as extypes from '../../src/types/extraTypes.js';
+import * as extypes from '../../src/types/extratypes.js';
 import * as osuApiTypes from '../../src/types/osuApiTypes.js';
 import * as mainconst from '../consts/main.js';
 import * as func from '../func.js';

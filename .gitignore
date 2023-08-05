@@ -29,3 +29,4 @@ dist/
 !tsconfig.json
 !config/tempconfig.json
 !TEMPLATE.sqlite
+*.7z

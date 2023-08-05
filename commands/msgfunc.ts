@@ -1,5 +1,5 @@
 import * as log from '../src/log.js';
-import * as extypes from '../src/types/extraTypes.js';
+import * as extypes from '../src/types/extratypes.js';
 import Discord = require('discord.js');
 import fs = require('fs');
 

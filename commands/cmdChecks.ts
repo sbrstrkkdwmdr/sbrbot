@@ -16,7 +16,7 @@ import * as func from '../src/func.js';
 import * as log from '../src/log.js';
 import * as osufunc from '../src/osufunc.js';
 import * as osumodcalc from '../src/osumodcalc.js';
-import * as extypes from '../src/types/extraTypes.js';
+import * as extypes from '../src/types/extratypes.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
 import * as msgfunc from './msgfunc.js';
 
