@@ -397,7 +397,7 @@ changes:
 
 VERSION 0.5.1
 2023-08-05
-commit: 1b16927b1d4ecadc3d07c3a6a0f55d7e55436725
+commit: bacac7be3a9b1511bbc9621f721ba30a01028409
 changes: 
 [FIX] typing event being sent after command was replied to
 [QOL] added bpm sort
