@@ -117,7 +117,7 @@ export async function changelog(input: extypes.commandInput) {
     const Embed = new Discord.EmbedBuilder();
     if (typeof found == 'string') {
         Embed.setTitle('ALL VERSIONS')
-        .setDescription(`${mainconst.versions.map(x => `${x.name} (${x.releaseDateFormatted})`).join('\n')}`)
+            .setDescription(`${mainconst.versions.map(x => `${x.name} (${x.releaseDateFormatted})`).join('\n')}`);
     } else {
         const document = fs.readFileSync(`${precomppath}\\changelog\\changelog.txt`, 'utf-8');
         const list = document.split('VERSION');
@@ -2813,14 +2813,21 @@ export async function tropicalWeather(input: extypes.commandInput) {
                         return true;
                     });
                 } catch (err) {
-                    return true;
+                    return false;
                 }
             };
-            await doShitTw().then(async x => {
-                frimg = await new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genStormMap-${input.absoluteID}.png`);
-                useAttach = [frimg];
-                embed.setImage(`attachment://genStormMap-${input.absoluteID}.png`);
-            });
+            const aaaeee = await doShitTw();
+            if (aaaeee === true) {
+                try {
+                    frimg = await new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genStormMap-${input.absoluteID}.png`);
+                    useAttach = [frimg];
+                    embed.setImage(`attachment://genStormMap-${input.absoluteID}.png`);
+                } catch (err) {
+                    console.log('err');
+                    console.log(err);
+                    useAttach = [];
+                }
+            }
         }
             break;
         case 'storm': {

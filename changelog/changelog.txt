@@ -406,9 +406,10 @@ changes:
 [ADD] added weather graphs
 [ADD] scorepost command - thumbnail and title generator. VERY WIP TEXT DOESN'T ALIGN PROPERLY YET
 [FIX] tropical storm using wrong value for maximum category
-[ADD] added a tropical storm world map
+[ADD] added a tropical storm world map (broken)
 [ADD] added supporter tag to osu command
 [QOL] changed icons for more/less details
 [ADD] `commandfiletype` option in debug - returns the last used data for specified command 
 [FIX] extraTypes differs from extratypes only in casing
 [FIX] version undefined
+[FIX] no such file or directory (path\\genStormMap)
