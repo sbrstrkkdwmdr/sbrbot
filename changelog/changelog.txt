@@ -396,8 +396,8 @@ changes:
 [QOL] more informative debug clear messages 
 
 VERSION 0.5.1
-date_time
-commit: null
+2023-08-05
+commit: c6c3d2cbec4938ea52ab6ee15e4df85acd8c7ecc
 changes: 
 [FIX] typing event being sent after command was replied to
 [QOL] added bpm sort
