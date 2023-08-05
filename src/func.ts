@@ -345,7 +345,6 @@ export function downloadIMG(
 
             file.on('finish', () => {
                 file.close();
-                console.log('Image downloaded successfully!')
                 resolve('Image downloaded successfully!');
             });
         }).on('error', error => {
