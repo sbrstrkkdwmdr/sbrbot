@@ -1,6 +1,6 @@
-export const version = '20230616';
+export const version = '20230805';
 
-export const versionAlt = '0.5.0';
+export const versionAlt = '0.5.1';
 
 export const versions: {
     name: string,
@@ -139,8 +139,8 @@ export const versions: {
         },
         {
             name: '0.5.1',
-            releaseDate: 0,
-            releaseDateFormatted: '2023-xx-xx'
+            releaseDate: 20230805,
+            releaseDateFormatted: '2023-08-05'
         },
     ];
 
