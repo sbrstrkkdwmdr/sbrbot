@@ -42,7 +42,7 @@ export async function changelog(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            version = input.args[0];
+            version = input.args[0] ?? null;
         }
             break;
 
@@ -80,9 +80,9 @@ export async function changelog(input: extypes.commandInput) {
     //get version
     let found: string | number = null;
     let foundBool = true;
-    if (version !== null) {
+    if (version) {
         //search for version
-        if (version.includes('.')) {
+        if (version?.includes('.')) {
             found = mainconst.versions.findIndex(x =>
                 `${x.name}`.includes(version) || (`${x.releaseDate}`).includes(version) || `${x.releaseDateFormatted}`.includes(version) ||
                 version.includes(`${x.name}`) || version.includes(`${x.releaseDate}`) || version.includes(`${x.releaseDateFormatted}`)
