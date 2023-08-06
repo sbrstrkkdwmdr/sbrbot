@@ -913,7 +913,7 @@ export async function apiget(input: apiInput) {
                     url += `users/${input.params.username ?? input.params.userid}/beatmapsets/${input.params.category ?? 'favourite'}&limit=100`;
                     break;
                 case 'user_recent_activity':
-                    url += `users/${input.params.username ?? input.params.userid}/recent_activity`;
+                    url += `users/${input.params.username ?? input.params.userid}/recent_activity?limit=100`;
                     break;
             }
         }
