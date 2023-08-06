@@ -83,7 +83,10 @@ export default (input: {
             .setTitle('Error - Button does not work')
             .setDescription('Feature not yet implemented/supported');
 
-        const PageOnlyCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'recentactivity', 'scores', 'userbeatmaps'];
+        const PageOnlyCommands = [
+            'firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'recentactivity', 'scores', 'userbeatmaps',
+            'changelog'
+    ];
         const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores'];
         if (button == 'Search' && PageOnlyCommands.includes(command)) {
             const menu = new Discord.ModalBuilder()
@@ -235,6 +238,9 @@ export default (input: {
 
 
         switch (command) {
+            case 'changelog':
+                await commands.changelog({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
             case 'compare':
                 await osucmds.compare({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;

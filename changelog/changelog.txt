@@ -418,5 +418,7 @@ changes:
 VERSION 0.5.2
 date_time
 commit: null
-changes
+changes:
 [FIX] recent going back to most recent score when using non-page buttons
+[ADD] add buttons to changelog
+[QOL] fix changelog showing 0.4.1 instead of 0.4.1x

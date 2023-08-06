@@ -37,6 +37,8 @@ export async function changelog(input: extypes.commandInput) {
     let commanduser;
     let offset = 0;
     let version = null;
+    let useNum = null;
+    let isList = false;
 
     switch (input.commandType) {
         case 'message': {
@@ -59,6 +61,38 @@ export async function changelog(input: extypes.commandInput) {
         case 'button': {
             input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
+            const curpage = parseInt(
+                input.obj.message.embeds[0].footer.text.split('/')[0]
+            ) - 1;
+            switch (input.button) {
+                case 'BigLeftArrow':
+                    useNum = 1;
+                    break;
+                case 'LeftArrow':
+                    useNum = curpage - 1;
+                    break;
+                case 'RightArrow':
+                    useNum = curpage + 1;
+                    break;
+                case 'BigRightArrow':
+                    useNum = parseInt(
+                        input.obj.message.embeds[0].footer.text.split('/')[1]
+                    ) - 1;
+                    break;
+                default:
+                    useNum = curpage;
+                    break;
+            }
+            switch (input.button) {
+                case 'Detail0':
+                    isList = false;
+                    version = null;
+                    break;
+                case 'Detail1':
+                    isList = true;
+                    version = 'versions';
+                    break;
+            }
         }
             break;
     }
@@ -73,10 +107,26 @@ export async function changelog(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         commandName: 'changelog',
-        options: []
+        options: [
+            {
+                name: 'Version',
+                value: version
+            },
+            {
+                name: 'useNum',
+                value: useNum
+            },
+            {
+                name: 'listMode',
+                value: isList
+            }
+        ]
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    const pgbuttons: Discord.ActionRowBuilder = await msgfunc.pageButtons('changelog', commanduser, input.absoluteID);
+    let buttons = new Discord.ActionRowBuilder();
     //get version
     let found: string | number = null;
     let foundBool = true;
@@ -84,8 +134,8 @@ export async function changelog(input: extypes.commandInput) {
         //search for version
         if (version?.includes('.')) {
             found = mainconst.versions.findIndex(x =>
-                `${x.name}`.includes(version) || (`${x.releaseDate}`).includes(version) || `${x.releaseDateFormatted}`.includes(version) ||
-                version.includes(`${x.name}`) || version.includes(`${x.releaseDate}`) || version.includes(`${x.releaseDateFormatted}`)
+                version.trim() === `${x.name}`.trim() || version.includes(`${x.releaseDate}`) || version.includes(`${x.releaseDateFormatted}`)
+                || (`${x.releaseDate}`).includes(version) || `${x.releaseDateFormatted}`.includes(version)
             );
             if (found == -1) {
                 found = null;
@@ -113,17 +163,22 @@ export async function changelog(input: extypes.commandInput) {
             }
         }
     }
+    useNum = useNum ?? found ?? mainconst.versions.length - 1 - offset;
 
     const Embed = new Discord.EmbedBuilder();
     if (typeof found == 'string') {
+        isList = true;
         Embed.setTitle('ALL VERSIONS')
-            .setDescription(`${mainconst.versions.map(x => `${x.name} (${x.releaseDateFormatted})`).join('\n')}`);
+            .setDescription(`${mainconst.versions.map(x => `${x.name} (${x.releaseDateFormatted})`).join('\n')}`)
+            .setFooter({
+                text: `${useNum + 1}/${mainconst.versions.length}`
+            });
     } else {
         const document = fs.readFileSync(`${precomppath}\\changelog\\changelog.txt`, 'utf-8');
         const list = document.split('VERSION');
         list.shift();
-        const cur = list[found ?? list.length - 1 - offset] as string;
-        const verdata = mainconst.versions[found ?? mainconst.versions.length - 1 - offset];
+        const cur = list[useNum] as string;
+        const verdata = mainconst.versions[useNum];
         const commit = cur.split('commit:')[1].split('\n')[0] as string;
         const changes = cur.split('changes:')[1];
         const url = commit?.toString()?.includes('null') ?
@@ -140,10 +195,40 @@ Released ${verdata.releaseDateFormatted}
 
 **Changes** ${changes}
 ${foundBool ? '' : `\nThere was an error trying to find version ${version}`}
-`);
+`)
+            .setFooter({
+                text: `${useNum + 1}/${mainconst.versions.length}`
+            })
+            ;
 
     }
 
+    if (isList) {
+        buttons
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail0-changelog-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess),
+            );
+    } else {
+        buttons
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Detail1-changelog-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore),
+            );
+    }
+
+    if (useNum == 0) {
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+    }
+    if (useNum == mainconst.versions.length) {
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
+    }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
@@ -151,6 +236,7 @@ ${foundBool ? '' : `\nThere was an error trying to find version ${version}`}
         obj: input.obj,
         args: {
             embeds: [Embed],
+            components: [pgbuttons, buttons]
         }
     }, input.canReply);
 

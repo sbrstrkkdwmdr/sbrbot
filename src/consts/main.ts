@@ -147,6 +147,11 @@ export const versions: {
             releaseDate: 20230805,
             releaseDateFormatted: '2023-08-05'
         },
+        {
+            name: '0.5.2',
+            releaseDate: 20230805,
+            releaseDateFormatted: '2023-08-05'
+        },
     ];
 
 export const linkInvite = 'There is currently no invite link publicly available';
