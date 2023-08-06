@@ -691,6 +691,7 @@ export async function debug(input: extypes.commandInput) {
                     case 'osutop':
                     case 'pinned':
                     case 'recent':
+                    case 'recent_activity':
                     case 'scoreparse':
                     case 'scores':
                     case 'scorestats':
@@ -709,7 +710,7 @@ export async function debug(input: extypes.commandInput) {
                         break;
                     default:
                         usemsgArgs = {
-                            content: `${inputstr && inputstr?.length > 0 ? `No files found for command "${inputstr}"\n` : ''}Valid options are: \`badges\`,\`bws\`,\`firsts\`,\`globals\`,\`map\`,\`maplb\`,\`osu\`,\`osutop\`,\`pinned\`,\`recent\`,\`scoreparse\`,\`scores\`,\`scorestats\`,\`simplay\`,\`userbeatmaps\`,\`whatif\`,`
+                            content: `${inputstr && inputstr?.length > 0 ? `No files found for command "${inputstr}"\n` : ''}Valid options are: \`badges\`,\`bws\`,\`firsts\`,\`globals\`,\`map\`,\`maplb\`,\`osu\`,\`osutop\`,\`pinned\`,\`recent\`,\`recent_activity\`,\`scoreparse\`,\`scores\`,\`scorestats\`,\`simplay\`,\`userbeatmaps\`,\`whatif\`,`
                         };
                         break;
                 }
