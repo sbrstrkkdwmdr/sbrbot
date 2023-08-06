@@ -5305,7 +5305,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                     case 'BigRightArrow':
                         page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[1].split('\n')[0]);
                         break;
-                    case 'Refresh':
+                    default:
                         page = parseInt((input.obj.message.embeds[0].description).split('Page: ')[1].split('/')[0]);
                         break;
                 }
@@ -5321,7 +5321,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                     case 'RightArrow':
                         page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]) + 1;
                         break;
-                    case 'Refresh':
+                    default:
                         page = parseInt((input.obj.message.embeds[0].title).split(' ')[0].split('#')[1]);
                         break;
                 }

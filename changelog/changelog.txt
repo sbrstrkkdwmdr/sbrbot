@@ -414,3 +414,9 @@ changes:
 [FIX] extraTypes differs from extratypes only in casing
 [FIX] version undefined
 [FIX] no such file or directory (path\\genStormMap)
+
+VERSION 0.5.2
+date_time
+commit: null
+changes
+[FIX] recent going back to most recent score when using non-page buttons
