@@ -10895,7 +10895,7 @@ HP${baseHP}`;
                     value: `[osu!](https://osu.ppy.sh/b/${mapdata.id}) | [Chimu](https://api.chimu.moe/v1/download${mapdata.beatmapset_id}) | [Beatconnect](https://beatconnect.io/b/${mapdata.beatmapset_id}) | [Kitsu](https://kitsu.io/d/${mapdata.beatmapset_id})\n` +
                         `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapdata.id})`,
                     inline: false
-                },
+                }, // [osu!direct](osu://b/${mapdata.id}) - discord doesn't support schemes other than http, https and discord
                 {
                     name: 'MAP DETAILS',
                     value: `${statusimg} | ${mapimg} | ${mapdata.max_combo}x combo \n ` +
