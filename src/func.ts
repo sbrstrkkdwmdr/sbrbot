@@ -5,11 +5,11 @@ import charttoimg from 'chartjs-to-image';
 import nfetch from 'node-fetch';
 import { filespath, path, precomppath } from '../path.js';
 import * as calc from './calc.js';
+import * as mainconst from './consts/main.js';
 import * as log from './log.js';
 import * as osufunc from './osufunc.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 import * as othertypes from './types/othertypes.js';
-
 
 export function generateId() {
     const lid = fs.readFileSync(`${path}/id.txt`, 'utf8');
@@ -336,7 +336,7 @@ export function downloadIMG(
             if (response.statusCode !== 200) {
                 file.close();
                 fs.unlinkSync(filepath); // Remove incomplete file
-                console.log('Failed to fetch the image')
+                console.log('Failed to fetch the image');
                 reject(new Error('Failed to fetch the image'));
                 return;
             }
@@ -486,6 +486,12 @@ export function removeSIPrefix(str: string) {
 }
 
 export async function getLocation(name: string) {
+    if (mainconst.isTesting) {
+        const init = fs.readFileSync(`${precomppath}\\files\\testfiles\\weatherlocationdata.json`, 'utf-8');
+        return JSON.parse(init) as {
+            results: othertypes.geoLocale[];
+        };
+    }
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${name.replaceAll(' ', '+')}&count=10&language=en&format=json`;
     log.toOutput(url);
     const data = await nfetch(url).then(x => x.json());
@@ -497,17 +503,22 @@ export async function getWeather(
     longitude: number,
     location: othertypes.geoLocale,
 ) {
-    if (isNaN(latitude) || isNaN(longitude)) {
-        return 'error - NaN values given';
-    }
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}`
-        + "&hourly=temperature_2m,precipitation,rain,pressure_msl,windspeed_10m,precipitation_probability&current_weather=true&forecast_days=1"
-        + "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,precipitation_probability_min,precipitation_probability_mean,windspeed_10m_max,windgusts_10m_max,winddirection_10m_dominant"
-        + `&timezone=${location.timezone}`;
-    log.toOutput(url);
+    if (mainconst.isTesting) {
+        const init = fs.readFileSync(`${precomppath}\\files\\testfiles\\weatherdata.json`, 'utf-8');
+        return JSON.parse(init) as othertypes.weatherData;
+    } else {
+        if (isNaN(latitude) || isNaN(longitude)) {
+            return 'error - NaN values given';
+        }
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}`
+            + "&hourly=temperature_2m,precipitation,rain,pressure_msl,windspeed_10m,windgusts_10m,precipitation_probability&current_weather=true&forecast_days=1"
+            + "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,precipitation_probability_min,precipitation_probability_mean,windspeed_10m_max,windgusts_10m_max,winddirection_10m_dominant"
+            + `&timezone=${location.timezone}`;
+        log.toOutput(url);
 
-    const data = await nfetch(url).then(x => x.json());
-    return data as othertypes.weatherData;
+        const data = await nfetch(url).then(x => x.json());
+        return data as othertypes.weatherData;
+    }
 }
 
 export function weatherCodeToString(code: number) {
@@ -1077,6 +1088,10 @@ export async function graph(
         lineColour?: string,
         pointSize?: number;
     },
+    extra?: {
+        data: number[];
+        label: string;
+    }[]
 ) {
 
     if (other.startzero == null || typeof other.startzero == 'undefined') {
@@ -1113,6 +1128,26 @@ export async function graph(
         borderWidth: 1,
         pointRadius: other.pointSize ?? 2
     }];
+
+    if (!(extra == null || extra == undefined)) {
+        const diff = 360 / Math.floor(extra.length);
+        let i = 1;
+        for (const newData of extra) {
+            if (newData?.data?.length > 0) {
+                datasets.push({
+                    label: newData.label,
+                    data: newData.data,
+                    fill: other.fill,
+                    borderColor: other.lineColour ?? `rgb(${75 + diff * i}, 192, 192)`,
+                    borderWidth: 1,
+                    pointRadius: other.pointSize ?? 2
+                });
+                i++
+            }
+        }
+    }
+
+
     const chart = new charttoimg()
         .setConfig({
             type: type,

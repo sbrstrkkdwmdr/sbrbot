@@ -155,3 +155,5 @@ export const versions: {
     ];
 
 export const linkInvite = 'There is currently no invite link publicly available';
+
+export const isTesting:boolean = false;

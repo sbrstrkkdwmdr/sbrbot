@@ -2616,7 +2616,12 @@ export async function weather(input: extypes.commandInput) {
                     fill: false,
                     displayLegend: true,
                     pointSize: 1.5,
-                });
+                },
+                [{
+                    data: weatherData.hourly.windgusts_10m,
+                    label: `Wind gusts ${weatherData.hourly_units.windgusts_10m}`
+                }]
+            );
             const tempGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.temperature_2m, `Temperature ${weatherData.hourly_units.temperature_2m}`,
                 {
                     startzero: true,
@@ -2646,16 +2651,16 @@ export async function weather(input: extypes.commandInput) {
                 new Discord.AttachmentBuilder(`${prChGraph.path}`),
             );
 
-            const graphEmbed1 = new Discord.EmbedBuilder()
+            const graphEmbedWind = new Discord.EmbedBuilder()
                 .setURL(`https://open-meteo.com/en/docs`)
                 .setImage(`attachment://${windGraph.filename}.jpg`);
-            const graphEmbed2 = new Discord.EmbedBuilder()
+            const graphEmbedTemp = new Discord.EmbedBuilder()
                 .setURL(`https://open-meteo.com/en/docs`)
                 .setImage(`attachment://${tempGraph.filename}.jpg`);
-            const graphEmbed3 = new Discord.EmbedBuilder()
+            const graphEmbedPrec = new Discord.EmbedBuilder()
                 .setURL(`https://open-meteo.com/en/docs`)
                 .setImage(`attachment://${precGraph.filename}.jpg`);
-            const graphEmbed4 = new Discord.EmbedBuilder()
+            const graphEmbedPrCh = new Discord.EmbedBuilder()
                 .setURL(`https://open-meteo.com/en/docs`)
                 .setImage(`attachment://${prChGraph.filename}.jpg`);
 
@@ -2709,7 +2714,7 @@ Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}${maxWindDir.name}
             ];
 
             weatherEmbed.setFields(fields);
-            useEmbeds.push(weatherEmbed, graphEmbed1, graphEmbed2, graphEmbed3, graphEmbed4);
+            useEmbeds.push(weatherEmbed, graphEmbedWind, graphEmbedTemp, graphEmbedPrCh, graphEmbedPrec);
         }
     }
 
