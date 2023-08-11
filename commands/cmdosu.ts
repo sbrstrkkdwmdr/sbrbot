@@ -3890,7 +3890,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             });
             return;
         }
-        osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbData');
+        osufunc.debug(lbdataReq, 'command', 'maplb', input.obj.guildId, 'lbDataO');
 
         if (lbdata?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {

@@ -708,10 +708,24 @@ export async function getTropical(type: 'active' | 'storm' | 'features', request
             baseURL + 'storm/' + request :
             baseURL + 'storm/' + request + '/features';
 
-    log.toOutput(reqURL);
-
-    const data = await nfetch(reqURL).then(x => x.json());
-    return data as othertypes.tropicalData;
+    if (mainconst.isTesting) {
+        let data;
+        switch (type) {
+            case 'active':
+                data = fs.readFileSync(`${precomppath}\\files\\testfiles\\tropicalweatherdata.json`, 'utf-8');
+                break;
+            case 'storm':
+                const list = ['05e', '06w', '07w'];
+                const opt = list[Math.floor(Math.random() * list.length)];
+                data = fs.readFileSync(`${precomppath}\\files\\testfiles\\2023${opt}.json`, 'utf-8');
+                break;
+        }
+        return JSON.parse(data) as othertypes.tropicalData;
+    } else {
+        log.toOutput(reqURL);
+        const data = await nfetch(reqURL).then(x => x.json());
+        return data as othertypes.tropicalData;
+    }
 }
 
 export function tsCatToString(input: string) {
@@ -1142,7 +1156,7 @@ export async function graph(
                     borderWidth: 1,
                     pointRadius: other.pointSize ?? 2
                 });
-                i++
+                i++;
             }
         }
     }

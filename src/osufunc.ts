@@ -16,11 +16,11 @@ import * as replayparser from 'osureplayparser';
 import config from '../config/config.json' assert { type: 'json' };
 import { path, precomppath } from '../path.js';
 import * as errors from './consts/errors.js';
+import * as mainconst from './consts/main.js';
 import * as tools from './func.js';
 import * as log from './log.js';
 import * as mapParser from './mapParser.js';
 import * as osuparsertypes from './types/osuparsertypes.js';
-
 /* module.exports = {
     modemods, modemappers
 } */
@@ -950,14 +950,19 @@ export async function apiget(input: apiInput) {
     let datafirst;
     const before = perf.performance.now();
     try {
-        datafirst = await fetch(url, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${access_token}`,
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            }
-        }).then(res => res.json());
+        if (mainconst.isTesting) {
+            datafirst = apigetOffline(input);
+        } else {
+            datafirst = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                }
+            }).then(res => res.json());
+            log.toOutput(url);
+        }
     } catch (error) {
         data = {
             url,
@@ -995,7 +1000,6 @@ export async function apiget(input: apiInput) {
         };
         fs.writeFileSync(`${path}\\cache\\errors\\osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
-    log.toOutput(url);
 
     if (data?.apiData?.apiData) {
         data = data?.apiData;
@@ -2681,4 +2685,108 @@ ${input.artist_unicode} - ${input.title_unicode}`;
     }
 
     return fullTitle;
+}
+
+/**
+ * @param input - see apiInput
+ * @returns apiReturn
+ * @property url
+ * @property
+ */
+export async function apigetOffline(input: apiInput) {
+    const basePath = `${path}\\cache\\debug`;
+    let ipath = basePath;
+    let spath = basePath;
+    switch (input.version) {
+        case 1: {
+            switch (input.type) {
+                case 'scores_get_map':
+                    spath = `${basePath}\\command\\maplb\\lbDataO`;
+                    break;
+            }
+        }
+
+        case 2: {
+            switch (input.type) {
+                case 'map_get': case 'map':
+                    spath = `${basePath}\\command\\map\\mapData`;
+                    break;
+                case 'map_get_md5':
+                    spath = `${basePath}\\command\\map\\mapData`;
+                    break;
+                case 'mapset_get': case 'mapset':
+                    spath = `${basePath}\\command\\map\\bmsData`;
+                    break;
+                case 'mapset_search':
+                    spath = `${basePath}\\command\\map\\mapIdTestData`;
+                    break;
+                case 'score_get': case 'score':
+                    spath = `${basePath}\\command\\scoreparse\\scoreData`;
+                    break;
+                case 'scores_get_best': case 'osutop': case 'best':
+                    spath = `${basePath}\\command\\osutop\\osuTopData`;
+                    break;
+                case 'scores_get_first': case 'firsts':
+                    spath = `${basePath}\\command\\firsts\\firstsScoresData`;
+                    break;
+                case 'firsts_alt':
+                    spath = `${basePath}\\command\\firsts\\firstsScoresData`;
+                    break;
+                case 'scores_get_map': case 'maplb':
+                    spath = `${basePath}\\command\\maplb\\lbData`;
+                    break;
+                case 'scores_get_pinned': case 'pinned':
+                    spath = `${basePath}\\command\\pinned\\pinnedScoresData`;
+                    break;
+                case 'pinned_alt':
+                    spath = `${basePath}\\command\\pinned\\pinnedScoresData`;
+                    break;
+                case 'scores_get_recent': case 'recent':
+                    spath = `${basePath}\\command\\recent\\rsData`;
+                    break;
+                case 'recent_alt':
+                    spath = `${basePath}\\command\\recent\\rsData`;
+                    break;
+                case 'user_get': case 'user':
+                    spath = `${basePath}\\command\\osu\\osuData`;
+                    break;
+                case 'user_get_most_played': case 'most_played':
+                    spath = `${basePath}\\command\\osu\\mostPlayedData`;
+                    break;
+                case 'user_get_scores_map':
+                    spath = `${basePath}\\command\\scores\\scoreDataPresort`;
+                    break;
+                case 'user_get_maps':
+                    spath = `${basePath}\\command\\userbeatmaps\\mapListData`;
+                    break;
+                case 'user_get_maps_alt':
+                    spath = `${basePath}\\command\\userbeatmaps\\mapListDataF`;
+                    break;
+                case 'user_recent_activity':
+                    spath = `${basePath}\\command\\recent_activity\\rsactData`;
+                    break;
+            }
+        }
+            let skillissue = false;
+            //using spath find file
+            const full = spath.split('\\');
+            const file = full.pop();
+            console.log(full.join('\\'))
+            const dir = fs.readdirSync(full.join('\\'));
+            console.log(dir)
+            const isPresent = dir.filter(x => x.includes(file));
+            console.log(isPresent)
+            console.log(file)
+            if (isPresent.length > 0) {
+                ipath = full.join('\\') + `\\${isPresent[Math.floor(Math.random() * isPresent.length)]}`;
+            } else {
+                skillissue = true;
+            }
+            console.log(skillissue)
+            //else return err
+
+            const d = skillissue ? '{ error: "null" }' : fs.readFileSync(ipath, 'utf-8');
+            return JSON.parse(d) as object;
+    }
+
 }

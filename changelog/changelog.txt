@@ -426,3 +426,4 @@ changes:
 [ADD] added wind gusts to weather command
 [ADD] added WIP testing mode
 [ADD] added support for multiple datasets per graph
+[QOL] add testing mode
