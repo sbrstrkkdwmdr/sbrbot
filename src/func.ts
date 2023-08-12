@@ -717,7 +717,7 @@ export async function getTropical(type: 'active' | 'storm' | 'features', request
             case 'storm':
                 const list = ['05e', '06w', '07w'];
                 const opt = list[Math.floor(Math.random() * list.length)];
-                data = fs.readFileSync(`${precomppath}\\files\\testfiles\\2023${opt}.json`, 'utf-8');
+                data = fs.readFileSync(`${precomppath}\\files\\testfiles\\tropicalweatherdata2023${opt}.json`, 'utf-8');
                 break;
         }
         return JSON.parse(data) as othertypes.tropicalData;
