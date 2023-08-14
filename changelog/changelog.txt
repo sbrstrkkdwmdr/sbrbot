@@ -427,3 +427,5 @@ changes:
 [ADD] added WIP testing mode
 [ADD] added support for multiple datasets per graph
 [QOL] add testing mode
+[FIX] tropical storm global map not working
+[QOL] added config checker

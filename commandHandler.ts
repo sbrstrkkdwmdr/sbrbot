@@ -94,7 +94,7 @@ export default (input: {
         const absoluteID = func.generateId();
         const button = null;
         const overrides = null;
-        execCommand(command, 'message', message, overrides, button, absoluteID, currentDate, message.author.id, args);
+        execCommand(command, 'message', message, overrides, button, absoluteID, currentDate, message.author.id, args, input. config);
     });
 
     input.client.on('interactionCreate', async (interaction) => {
@@ -152,10 +152,10 @@ export default (input: {
                 prefix: 'sbr-',
             };
         }
-        execCommand(interaction.commandName, 'interaction', interaction, null, button, absoluteID, currentDate, interaction.member.user.id, args);
+        execCommand(interaction.commandName, 'interaction', interaction, null, button, absoluteID, currentDate, interaction.member.user.id, args, input.config);
     });
 
-    function execCommand(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[]) {
+    function execCommand(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[], config: extypes.config) {
         let canReply = true;
         if (!checks.botHasPerms(obj, input.client, ['ReadMessageHistory'])) {
             canReply = false;
@@ -167,7 +167,7 @@ export default (input: {
             (obj.channel.type == Discord.ChannelType.PublicThread ||
                 obj.channel.type == Discord.ChannelType.PrivateThread)) return;
 
-        const allowed = execCommand_checker(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply);
+        const allowed = execCommand_checker(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply, config);
 
         if (allowed == true) {
             execCommand_switch(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply);
@@ -177,7 +177,7 @@ export default (input: {
     }
 
     function execCommand_checker(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[],
-        canReply: boolean,
+        canReply: boolean, config: extypes.config
     ) {
         const requireEmbedCommands: string[] = [
             //gen
@@ -269,10 +269,10 @@ export default (input: {
         if (botRequireAdmin.includes(command) && !checks.botHasPerms(obj, input.client, ['Administrator'])) {
             missingPermsBot.push('Administrator');
         }
-        if (userRequireAdminOrOwner.includes(command) && !(checks.isAdmin(userid, obj.guildId, input.client) || checks.isOwner(userid))) {
+        if (userRequireAdminOrOwner.includes(command) && !(checks.isAdmin(userid, obj.guildId, input.client) || checks.isOwner(userid, config))) {
             missingPermsUser.push('Administrator');
         }
-        if (userRequireOwner.includes(command) && !(checks.isOwner(userid))) {
+        if (userRequireOwner.includes(command) && !(checks.isOwner(userid, config), config)) {
             missingPermsUser.push('Owner');
         }
         if (missingPermsBot.length > 0) {

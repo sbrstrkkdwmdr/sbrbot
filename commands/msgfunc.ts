@@ -795,7 +795,8 @@ export async function missingPrevID_map(input: extypes.commandInput) {
         commandType: input.commandType,
         commandId: input.absoluteID,
         object: input.obj,
-        customString: errors.uErr.osu.map.m_msp
+        customString: errors.uErr.osu.map.m_msp,
+        config: input.config
     });
     return;
 }

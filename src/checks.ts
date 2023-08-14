@@ -1,14 +1,149 @@
 import * as fs from 'fs';
 import fetch from 'node-fetch';
 // const config = JSON.parse(fs.readFileSync('../config/config.json', 'utf-8'));
-import config from '../config/config.json' assert { type: 'json' };
+import * as extypes from './types/extratypes.js';
 import Discord = require('discord.js');
+
+export function checkConfig(config: object): extypes.config {
+    console.log(`
+====================================================
+CHECKING CONFIG FOR ANY ERRORS
+----------------------------------------------------
+`);
+    if (config.hasOwnProperty("important")) {
+        if (!config["important"].hasOwnProperty("token") && typeof config["important"]["token"] != "string") {
+            console.log("Property `token` is invalid or an incorrect type");
+            console.log("The bot cannot run without this property");
+            process.exit(0);
+        }
+        if (!config["important"].hasOwnProperty("dbd_license") && typeof config["important"]["dbd_license"] != "string") {
+            console.log("Property `important.dbd_license` is invalid or an incorrect type");
+            console.log("The default value of `null` will be used as a placeholder");
+            config["important"]["dbd_license"] = null;
+        }
+        if (!config["important"].hasOwnProperty("redirect_uri") && typeof config["redirect_uri"] != "string") {
+            console.log("Property `important.redirect_uri` is invalid or an incorrect type");
+            console.log("The default redirect_uri of `null` will be used as a placeholder");
+            config["important"]["dbd_license"] = null;
+        }
+        if (!config["important"].hasOwnProperty("client_secret") && typeof config["important"]["client_secret"] != "string") {
+            console.log("Property `important.client_secret` is invalid or an incorrect type");
+            console.log("The default value of `null` will be used as a placeholder");
+            config["important"]["client_secret"] = null;
+        }
+        if (!config["important"].hasOwnProperty("client_id") && typeof config["important"]["client_id"] != "string") {
+            console.log("Property `important.client_id` is invalid or an incorrect type");
+            console.log("The default value of `null` will be used as a placeholder");
+            config["important"]["client_id"] = null;
+        }
+    } else {
+        console.log("Property `important` is missing");
+        console.log("The bot cannot run without this property");
+        process.exit(0);
+    }
+    if (!config.hasOwnProperty("prefix") && typeof config["prefix"] != "string") {
+        console.log("Property `prefix` is invalid or an incorrect type");
+        console.log("The default value of `sbr-` will be used as a placeholder");
+        config["prefix"] = "sbr-";
+    }
+    if (!config.hasOwnProperty("osuClientID") && typeof config["osuClientID"] != "string") {
+        console.log("Property `osuClientID` is invalid or an incorrect type");
+        console.log("osu! commands will not work until this property is added/fixed");
+        config["osuClientID"] = "null";
+    }
+    if (!config.hasOwnProperty("osuClientSecret") && typeof config["osuClientSecret"] != "string") {
+        console.log("Property `osuClientSecret` is invalid or an incorrect type");
+        console.log("osu! commands will not work until this property is added/fixed");
+        console.log("The default value of `null` will be used as a placeholder");
+        config["osuClientSecret"] = "";
+    }
+    if (!config.hasOwnProperty("osuApiKey") && typeof config["osuApiKey"] != "string") {
+        console.log("Property `osuApiKey` is invalid or an incorrect type");
+        console.log("map leaderboards will not work until this property is added/fixed");
+        console.log("The default value of `null` will be used as a placeholder");
+        config["osuApiKey"] = "";
+    }
+    if (config.hasOwnProperty("ownerusers")) {
+        let tempIsArr = false;
+        let smthWrong: boolean = false;
+        if (Array.isArray(config["ownerusers"])) {
+            tempIsArr = true;
+            config["ownerusers"].forEach(x => {
+                if (typeof x !== "string") { smthWrong = true; };
+            });
+        }
+        if (tempIsArr === false && smthWrong) {
+            console.log("Property `ownerusers` is invalid or an incorrect type");
+            console.log("Some admin related commands will not work with this property");
+            console.log("The default value of `[]` will be used as a placeholder");
+            config["ownerusers"] = [];
+        }
+    } else {
+        console.log("Property `ownerusers` is missing");
+        console.log("Some admin related commands will not work with this property");
+        console.log("The default value of `[]` will be used as a placeholder");
+        config["ownerusers"] = [];
+    }
+    if (!config.hasOwnProperty("google") && typeof config["google"] != "string") {
+        if (!config["google"].hasOwnProperty("apiKey") && typeof config["google"]["apiKey"] != "string") {
+            console.log("Property `google.apiKey` is invalid or an incorrect type");
+            console.log("image search commands will not work until this property is added/fixed");
+            config["google"]["apiKey"] = "null";
+        }
+        if (!config["google"].hasOwnProperty("engineId") && typeof config["google"]["engineId"] != "string") {
+            console.log("Property `google.engineId` is invalid or an incorrect type");
+            console.log("image search commands will not work until this property is added/fixed");
+            config["google"]["engineId"] = "null";
+        }
+    } else {
+        console.log("Property `google` is missing");
+        console.log("image search commands will not work until this property is added/fixed");
+        config["google"] = {};
+        config["google"]["apiKey"] = "null";
+        config["google"]["engineId"] = "null";
+
+    }
+    if (!config.hasOwnProperty("useScreenshotParse") && typeof config["useScreenshotParse"] != "boolean") {
+        console.log("Property `useScreenshotParse` is invalid or an incorrect type");
+        console.log("The default value of `false` will be used as a placeholder");
+        config["useScreenshotParse"] = false;
+    }
+    if (!config.hasOwnProperty("LogApiCalls") && typeof config["LogApiCalls"] != "boolean") {
+        console.log("Property `LogApiCalls` is invalid or an incorrect type");
+        console.log("The default value of `true` will be used as a placeholder");
+        config["LogApiCalls"] = true;
+    }
+    if (!config.hasOwnProperty("LogApiCallsToFile") && typeof config["LogApiCallsToFile"] != "boolean") {
+        console.log("Property `LogApiCallsToFile` is invalid or an incorrect type");
+        console.log("The default value of `false` will be used as a placeholder");
+        config["LogApiCallsToFile"] = false;
+    }
+    if (!config.hasOwnProperty("enableTracking") && typeof config["enableTracking"] != "boolean") {
+        console.log("Property `enableTracking` is invalid or an incorrect type");
+        console.log("The default value of `false` will be used as a placeholder");
+        config["enableTracking"] = false;
+    }
+    if (!config.hasOwnProperty("storeCommandLogs") && typeof config["storeCommandLogs"] != "boolean") {
+        console.log("Property `storeCommandLogs` is invalid or an incorrect type");
+        console.log("The default value of `false` will be used as a placeholder");
+        config["storeCommandLogs"] = false;
+    }
+    console.log(`
+----------------------------------------------------
+CHECKS COMPLETE
+====================================================
+`);
+    return config as extypes.config;
+};
+
+
+
 /**
  * 
  * @param {number} userid 
  * @returns true if the user is an owner
  */
-function isOwner(userid: string | number) {
+function isOwner(userid: string | number, config: extypes.config) {
     for (let i = 0; i < config.ownerusers.length; i++) {
         if (`${config.ownerusers[i]}` == `${userid}`) {
             return true;

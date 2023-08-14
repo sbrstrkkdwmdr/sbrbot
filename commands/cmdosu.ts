@@ -94,7 +94,8 @@ export async function badges(input: extypes.commandInput & { statsCache: any; })
             commanduser,
             object: input.obj,
             commandName: 'badges',
-            options: []
+            options: [],
+            config: input.config
         });
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -134,7 +135,8 @@ export async function badges(input: extypes.commandInput & { statsCache: any; })
                 params: {
                     username: cmdchecks.toHexadecimal(user),
                     mode: osufunc.modeValidator('osu')
-                }
+                },
+                config: input.config
             });
         }
 
@@ -155,7 +157,8 @@ export async function badges(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError
+                customString: errors.apiError,
+                config: input.config
             });
             return;
         }
@@ -179,7 +182,8 @@ export async function badges(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.noUser(user)
+                customString: errors.noUser(user),
+                config: input.config
             });
             return;
         }
@@ -253,6 +257,7 @@ ${badge.image_url.length != 0 ? `[Image](${badge.image_url})` : ''}`,
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config
             });
         } else {
             log.logCommand({
@@ -261,7 +266,8 @@ ${badge.image_url.length != 0 ? `[Image](${badge.image_url})` : ''}`,
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: 'Message failed to send'
+                customString: 'Message failed to send',
+                config: input.config
             });
         }
     }
@@ -319,7 +325,8 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
         commanduser,
         object: input.obj,
         commandName: 'bws (Badge Weight System)',
-        options: []
+        options: [],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -356,10 +363,11 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator('osu')
-            }
+            },
         });
     }
 
@@ -379,7 +387,8 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -403,7 +412,8 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.noUser(user)
+            customString: errors.noUser(user),
+            config: input.config
         });
         return;
     }
@@ -478,6 +488,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -486,7 +497,8 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 }
@@ -573,7 +585,8 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
                 name: 'Mode',
                 value: mode
             }
-        ]
+        ],
+        config: input.config
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -602,7 +615,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         params: {
             username: cmdchecks.toHexadecimal(user),
             mode: 'osu'
-        }
+        }, config: input.config
     });
     const osudata: osuApiTypes.User = osudataReq.apiData;
     if (osudataReq?.error) {
@@ -620,7 +633,8 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -642,7 +656,8 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.noUser(user)
+            customString: errors.noUser(user),
+            config: input.config
         });
         return;
     }
@@ -672,7 +687,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            log.toOutput(error);
+            log.toOutput(error, input.config);
         }
     }
 
@@ -734,6 +749,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -742,7 +758,8 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -837,7 +854,8 @@ export async function lb(input: extypes.commandInput) {
                 name: 'Mode',
                 value: mode
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1062,6 +1080,7 @@ export async function lb(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1070,7 +1089,8 @@ export async function lb(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -1248,7 +1268,8 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
                 name: 'Spotlight',
                 value: spotlight
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1277,11 +1298,12 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
     } else {
         rankingdataReq = (await osufunc.apiget({
             type: 'custom',
+            config: input.config,
             params: {
                 urlOverride: url
             },
             ignoreNonAlphaChar: true,
-            version: 2
+            version: 2,
         }).catch(async () => {
             if (country != 'ALL') {
                 await msgfunc.sendMessage({
@@ -1323,7 +1345,8 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -1345,7 +1368,8 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.uErr.osu.rankings
+            customString: errors.uErr.osu.rankings,
+            config: input.config
         });
         return;
     }
@@ -1449,6 +1473,7 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1457,7 +1482,8 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -1568,7 +1594,8 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
                 name: 'Mode',
                 value: mode
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1629,6 +1656,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1637,7 +1665,8 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -1871,8 +1900,8 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                 name: 'Graph',
                 value: `${graphonly}`
             }
-
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1950,6 +1979,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
@@ -1973,7 +2003,8 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -1997,7 +2028,8 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.noUser(user)
+            customString: errors.noUser(user),
+            config: input.config
         });
         return;
     }
@@ -2013,6 +2045,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         mode = osudata.playmode;
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
@@ -2034,7 +2067,8 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError
+                customString: errors.apiError,
+                config: input.config
             });
             return;
         }
@@ -2051,7 +2085,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
             osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(mode), 'User');
         } catch (error) {
-            log.toOutput(error);
+            log.toOutput(error, input.config);
         }
     }
 
@@ -2211,6 +2245,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             } else {
                 osutopdataReq = await osufunc.apiget({
                     type: 'best',
+                    config: input.config,
                     params: {
                         userid: osudata.id,
                         mode: mode,
@@ -2235,7 +2270,8 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
-                    customString: errors.apiError
+                    customString: errors.apiError,
+                    config: input.config
                 });
                 return;
             }
@@ -2258,7 +2294,8 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
-                    customString: errors.uErr.osu.scores.best.replace('ID', user)
+                    customString: errors.uErr.osu.scores.best.replace('ID', user),
+                    config: input.config
                 });
                 return;
             }
@@ -2266,6 +2303,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             //await osufunc.apiget('most_played', `${osudata.id}`)
             const mostplayeddataReq: osufunc.apiReturn = await osufunc.apiget({
                 type: 'most_played',
+                config: input.config,
                 params: {
                     userid: osudata.id,
                 }
@@ -2286,7 +2324,8 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
-                    customString: errors.apiError
+                    customString: errors.apiError,
+                    config: input.config
                 });
                 return;
             }
@@ -2309,7 +2348,8 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
-                    customString: errors.uErr.osu.profile.mostplayed
+                    customString: errors.uErr.osu.profile.mostplayed,
+                    config: input.config
                 });
                 return;
             }
@@ -2420,6 +2460,7 @@ ${supporter} ${onlinestatus}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -2428,7 +2469,8 @@ ${supporter} ${onlinestatus}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -2554,7 +2596,8 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
                 name: 'Filter',
                 value: filter
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -2596,6 +2639,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: 'osu'
@@ -2619,7 +2663,8 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -2643,7 +2688,8 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.noUser(user)
+            customString: errors.noUser(user),
+            config: input.config
         });
         return;
     }
@@ -2656,7 +2702,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
             osufunc.userStatsCache([osudata], input.statsCache, 'osu', 'User');
         } catch (error) {
-            log.toOutput(error);
+            log.toOutput(error, input.config);
         }
     }
     buttons
@@ -2677,6 +2723,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
     } else {
         recentActivityReq = await osufunc.apiget({
             type: 'user_recent_activity',
+            config: input.config,
             params: {
                 userid: osudata.id,
                 opts: ['limit=100']
@@ -2700,7 +2747,8 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -2723,7 +2771,8 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.uErr.osu.profile.rsact
+            customString: errors.uErr.osu.profile.rsact,
+            config: input.config
         });
         return;
     }
@@ -2853,6 +2902,7 @@ ${actText}`);
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -2861,7 +2911,8 @@ ${actText}`);
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -3000,7 +3051,8 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                 name: 'BPM',
                 value: bpm
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -3061,6 +3113,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode),
@@ -3084,7 +3137,8 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -3108,7 +3162,8 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.noUser(user)
+            customString: errors.noUser(user),
+            config: input.config
         });
         return;
     }
@@ -3134,6 +3189,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
         const fdReq: osufunc.apiReturn = await osufunc.apiget({
             type: 'firsts',
+            config: input.config,
             params: {
                 userid: `${osudata.id}`,
                 opts: [`offset=${cinitnum}`, 'limit=100', `mode=${mode}`],
@@ -3157,7 +3213,8 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError
+                customString: errors.apiError,
+                config: input.config
             });
             return;
         }
@@ -3178,7 +3235,8 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.uErr.osu.scores.first.replace('[ID]', user) + ` offset by ${cinitnum}`
+                customString: errors.uErr.osu.scores.first.replace('[ID]', user) + ` offset by ${cinitnum}`,
+                config: input.config
             });
             return;
         }
@@ -3262,7 +3320,8 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `${errors.uErr.osu.score.nf} at index ${pid}`
+                customString: `${errors.uErr.osu.score.nf} at index ${pid}`,
+                config: input.config
             });
             return;
         }
@@ -3312,7 +3371,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         bpm
     }, {
         useScoreMap: true
-    });
+    }, input.config);
     firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
 
     if (scoresarg.fields.length == 0) {
@@ -3362,7 +3421,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            log.toOutput(error);
+            log.toOutput(error, input.config);
         }
     }
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -3383,6 +3442,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -3391,7 +3451,8 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -3444,7 +3505,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             }
             input.args = msgfunc.cleanArgs(input.args);
 
-            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map;
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true, input.config)).map;
         }
             break;
 
@@ -3554,7 +3615,8 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 name: 'Parse',
                 value: `${parseId}`
             },
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -3593,6 +3655,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         mapdataReq = await osufunc.apiget(
             {
                 type: 'map',
+                config: input.config,
                 params: {
                     id: mapid
                 }
@@ -3615,7 +3678,8 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -3638,7 +3702,8 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `${errors.uErr.osu.map.m.replace('[ID]', mapid)}`
+            customString: `${errors.uErr.osu.map.m.replace('[ID]', mapid)}`,
+            config: input.config
         });
         return;
     }
@@ -3676,6 +3741,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         } else {
             lbdataReq = await osufunc.apiget({
                 type: 'scores_get_map',
+                config: input.config,
                 params: {
                     id: mapid,
                     mode: mapdata.mode,
@@ -3699,7 +3765,8 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError
+                customString: errors.apiError,
+                config: input.config
             });
             return;
         }
@@ -3723,7 +3790,8 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `${errors.uErr.osu.map.lb.replace('[ID]', mapid)} (API V2)`
+                customString: `${errors.uErr.osu.map.lb.replace('[ID]', mapid)} (API V2)`,
+                config: input.config
             });
             return;
         }
@@ -3762,7 +3830,8 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
-                    customString: `${errors.uErr.osu.score.nf} at index ${pid}`
+                    customString: `${errors.uErr.osu.score.nf} at index ${pid}`,
+                    config: input.config
                 });
                 return;
             }
@@ -3812,7 +3881,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         }, {
             useScoreMap: false,
             overrideMapLastDate: mapdata.last_updated
-        });
+        }, input.config);
 
         if (scoresarg.fields.length == 0) {
             lbEmbed.addFields([{
@@ -3861,6 +3930,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             lbdataReq = await osufunc.apiget(
                 {
                     type: 'scores_get_map',
+                    config: input.config,
                     params: {
                         id: mapid,
                         mods: mods //function auto converts to id
@@ -3886,7 +3956,8 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError
+                customString: errors.apiError,
+                config: input.config
             });
             return;
         }
@@ -3909,7 +3980,8 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `${errors.uErr.osu.map.lb.replace('[ID]', mapid)} (API v1)`
+                customString: `${errors.uErr.osu.map.lb.replace('[ID]', mapid)} (API v1)`,
+                config: input.config
             });
             return;
         }
@@ -3947,7 +4019,8 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
-                    customString: `${errors.uErr.osu.score.nf} at index ${pid}`
+                    customString: `${errors.uErr.osu.score.nf} at index ${pid}`,
+                    config: input.config
                 });
                 return;
             }
@@ -4050,6 +4123,7 @@ Has replay: ${score.replay_available == 1 ? '✅' : '❌'}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -4058,7 +4132,8 @@ Has replay: ${score.replay_available == 1 ? '✅' : '❌'}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -4222,7 +4297,8 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
                 name: 'BPM',
                 value: bpm
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -4284,6 +4360,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
@@ -4307,7 +4384,8 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -4330,7 +4408,8 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.noUser(user)
+            customString: errors.noUser(user),
+            config: input.config
         });
         return;
     }
@@ -4357,6 +4436,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     } else {
         osutopdataReq = await osufunc.apiget({
             type: 'best',
+            config: input.config,
             params: {
                 userid: osudata.id,
                 mode: osufunc.modeValidator(mode),
@@ -4381,7 +4461,8 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -4409,7 +4490,8 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             object: input.obj,
             customString: `${errors.uErr.osu.scores.best
                 .replace('[ID]', user)
-                }`
+                }`,
+            config: input.config
         });
         return;
     }
@@ -4488,7 +4570,8 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `${errors.uErr.osu.score.nf} at index ${pid}`
+                customString: `${errors.uErr.osu.score.nf} at index ${pid}`,
+                config: input.config
             });
             return;
         }
@@ -4536,7 +4619,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         },
         {
             useScoreMap: true
-        }
+        }, input.config
     );
     topEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`);
     if (scoresarg.fields.length == 0) {
@@ -4586,7 +4669,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            log.toOutput(error);
+            log.toOutput(error, input.config);
         }
     }
 
@@ -4608,6 +4691,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -4616,7 +4700,8 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -4764,7 +4849,8 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                 name: 'BPM',
                 value: bpm
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -4814,6 +4900,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
@@ -4837,7 +4924,8 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -4859,7 +4947,8 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.noUser(user)
+            customString: errors.noUser(user),
+            config: input.config
         });
         return;
     }
@@ -4884,6 +4973,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         }
         const fdReq: osufunc.apiReturn = await osufunc.apiget({
             type: 'pinned',
+            config: input.config,
             params: {
                 userid: `${osudata.id}`,
                 opts: [`offset=${cinitnum}`, 'limit=100', `mode=${mode}`],
@@ -4906,7 +4996,8 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError
+                customString: errors.apiError,
+                config: input.config
             });
             return;
         }
@@ -4927,7 +5018,8 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `${errors.uErr.osu.scores.pinned.replace('[ID]', user)} offset by ${cinitnum}`
+                customString: `${errors.uErr.osu.scores.pinned.replace('[ID]', user)} offset by ${cinitnum}`,
+                config: input.config
             });
             return;
         }
@@ -5014,7 +5106,8 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `${errors.uErr.osu.score.nf} at index ${pid}`
+                customString: `${errors.uErr.osu.score.nf} at index ${pid}`,
+                config: input.config
             });
             return;
         }
@@ -5062,7 +5155,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         },
         {
             useScoreMap: true
-        });
+        }, input.config);
     pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
     if (scoresarg.fields.length == 0) {
         pinnedEmbed.addFields([{
@@ -5110,7 +5203,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            log.toOutput(error);
+            log.toOutput(error, input.config);
         }
     }
 
@@ -5134,6 +5227,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -5142,7 +5236,8 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -5473,7 +5568,8 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 name: 'BPM',
                 value: bpm
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -5526,6 +5622,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
@@ -5549,7 +5646,8 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -5572,7 +5670,8 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.noUser(user)
+            customString: errors.noUser(user),
+            config: input.config
         });
         return;
     }
@@ -5609,6 +5708,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
     } else {
         rsdataReq = await osufunc.apiget({
             type: 'recent',
+            config: input.config,
             params: {
                 userid: osudata.id,
                 mode,
@@ -5633,7 +5733,8 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -5655,7 +5756,8 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: `${errors.uErr.osu.scores.recent.replace('[ID]', user)}`
+            customString: `${errors.uErr.osu.scores.recent.replace('[ID]', user)}`,
+            config: input.config
         });
         return;
     }
@@ -5761,6 +5863,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         } else {
             mapdataReq = await osufunc.apiget({
                 type: 'map',
+                config: input.config,
                 params: {
                     id: curbm.id
                 }
@@ -5782,7 +5885,8 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError
+                customString: errors.apiError,
+                config: input.config
             });
             return;
         }
@@ -5804,7 +5908,8 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `${errors.uErr.osu.map.m.replace('[ID]', curbm.id.toString())}`
+                customString: `${errors.uErr.osu.map.m.replace('[ID]', curbm.id.toString())}`,
+                config: input.config
             });
             return;
         }
@@ -5932,7 +6037,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 score: curscore.score,
                 calctype: 0,
                 passedObj: embedStuff.getTotalHits(curscore.mode, curscore),
-            }, new Date(curscore.beatmap.last_updated));
+            }, new Date(curscore.beatmap.last_updated), input.config);
 
             totaldiff = ppcalcing[1].difficulty.stars.toFixed(2);
 
@@ -5961,7 +6066,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                     curscore.pp.toFixed(2) :
                     NaN;
             ppissue = errors.uErr.osu.performance.crash;
-            log.toOutput(error);
+            log.toOutput(error, input.config);
         }
 
         const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
@@ -6250,7 +6355,7 @@ ${srStr}
             },
             {
                 useScoreMap: true
-            });
+            }, input.config);
         if (scoresarg.fields.length == 0) {
             rsEmbed.addFields([{
                 name: 'Error',
@@ -6286,7 +6391,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
         try {
             osufunc.updateUserStats(osudata, osudata.playmode, input.userdata);
         } catch (error) {
-            log.toOutput(error);
+            log.toOutput(error, input.config);
         }
     }
 
@@ -6312,6 +6417,7 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -6320,7 +6426,8 @@ ${filterTitle ? `Filter: ${filterTitle}` : ''}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -6376,7 +6483,8 @@ export async function replayparse(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         commandName: 'replay parse',
-        options: []
+        options: [],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -6391,7 +6499,8 @@ export async function replayparse(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: 'Could not parse replay\n' + err
+                customString: 'Could not parse replay\n' + err,
+                config: input.config
             }
         );
         return;
@@ -6409,6 +6518,7 @@ export async function replayparse(input: extypes.commandInput) {
         mapdataReq = await osufunc.apiget(
             {
                 type: 'map_get_md5',
+                config: input.config,
                 params: {
                     md5: replay.beatmapMD5
                 }
@@ -6430,7 +6540,8 @@ export async function replayparse(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -6457,6 +6568,7 @@ export async function replayparse(input: extypes.commandInput) {
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: replay.playerName,
                 mode: osufunc.modeValidator('osu')
@@ -6480,7 +6592,8 @@ export async function replayparse(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -6575,7 +6688,7 @@ export async function replayparse(input: extypes.commandInput) {
             score: replay.score,
             calctype: 0,
             passedObj: totalhits,
-        }, new Date(mapdata.last_updated));
+        }, new Date(mapdata.last_updated), input.config);
         ppissue = '';
     } catch (error) {
         xpp = [{
@@ -6660,6 +6773,7 @@ ${isfail}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -6668,7 +6782,8 @@ ${isfail}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -6828,7 +6943,8 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
                 name: 'Score ID',
                 value: `${scoreid}`
             }
-        ]
+        ],
+        config: input.config
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -6843,6 +6959,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         scoredataReq = await osufunc.apiget(
             {
                 type: 'score',
+                config: input.config,
                 params: {
                     id: scoreid,
                     mode: osufunc.modeValidator(scoremode)
@@ -6866,7 +6983,8 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -6892,7 +7010,8 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             object: input.obj,
             customString: errors.uErr.osu.score.nd
                 .replace('[SID]', scoreid.toString())
-                .replace('[MODE]', scoremode)
+                .replace('[MODE]', scoremode),
+            config: input.config
         });
         return;
     }
@@ -6913,7 +7032,8 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`
+            customString: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`,
+            config: input.config
         });
         return;
     }
@@ -6970,6 +7090,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandId: input.absoluteID,
             object: input.obj,
             customString: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`,
+            config: input.config
         });
         return;
     }
@@ -6981,6 +7102,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     } else {
         mapdataReq = await osufunc.apiget({
             type: 'map',
+            config: input.config,
             params: {
                 id: scoredata.beatmap.id,
             }
@@ -7003,7 +7125,8 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -7024,7 +7147,8 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.uErr.osu.map.m.replace('[ID]', scoredata.beatmap.id.toString())
+            customString: errors.uErr.osu.map.m.replace('[ID]', scoredata.beatmap.id.toString()),
+            config: input.config
         });
         return;
     }
@@ -7111,7 +7235,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             score: scoredata.score,
             calctype: 0,
             passedObj: embedStuff.getTotalHits(scoredata.mode, scoredata),
-        }, new Date(mapdata.last_updated));
+        }, new Date(mapdata.last_updated), input.config);
 
         ppissue = '';
         osufunc.debug(ppcalcing, 'command', 'scoreparse', input.obj.guildId, 'ppCalcing');
@@ -7195,6 +7319,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: scoredata.user.username,
                 mode: osufunc.modeValidator(mode)
@@ -7218,7 +7343,8 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -7244,7 +7370,8 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             object: input.obj,
             customString: `${errors.uErr.osu.profile.user
                 .replace('[ID]', scoredata?.user?.username)
-                } AKA ${scoredata.user.username}`
+                } AKA ${scoredata.user.username}`,
+            config: input.config
         });
         return;
     }
@@ -7439,6 +7566,7 @@ ${srStr}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -7447,7 +7575,8 @@ ${srStr}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -7567,7 +7696,8 @@ export async function scorepost(input: extypes.commandInput) {
                 name: 'Custom String',
                 value: customString
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -7587,7 +7717,8 @@ export async function scorepost(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.uErr.osu.score.wrong
+            customString: errors.uErr.osu.score.wrong,
+            config: input.config
         });
         return;
     }
@@ -7604,6 +7735,7 @@ export async function scorepost(input: extypes.commandInput) {
         scoredataReq = await osufunc.apiget(
             {
                 type: 'score',
+                config: input.config,
                 params: {
                     id: scoreId,
                     mode: osufunc.modeValidator(mode)
@@ -7627,7 +7759,8 @@ export async function scorepost(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -7655,6 +7788,7 @@ export async function scorepost(input: extypes.commandInput) {
         mapdataReq = await osufunc.apiget(
             {
                 type: 'map',
+                config: input.config,
                 params: {
                     id: scoredata.beatmap.id
                 }
@@ -7677,7 +7811,8 @@ export async function scorepost(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -7700,7 +7835,8 @@ export async function scorepost(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.uErr.osu.map.m.replace('[ID]', scoredata.beatmap.id.toString())
+            customString: errors.uErr.osu.map.m.replace('[ID]', scoredata.beatmap.id.toString()),
+            config: input.config
         });
         return;
     }
@@ -7714,7 +7850,7 @@ export async function scorepost(input: extypes.commandInput) {
         acc: scoredata.accuracy,
         maxcombo: scoredata.max_combo,
         mapid: scoredata.beatmap.id
-    }, new Date(mapdata.last_updated));
+    }, new Date(mapdata.last_updated), input.config);
 
     let pptxt: string;
 
@@ -7934,6 +8070,7 @@ export async function scorepost(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -7942,7 +8079,8 @@ export async function scorepost(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -8027,7 +8165,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map;
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true, input.config)).map;
             if (mapid != null) {
                 input.args.splice(input.args.indexOf(input.args.find(arg => arg.includes('https://osu.ppy.sh/'))), 1);
             }
@@ -8232,7 +8370,8 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                 name: 'Parse',
                 value: `${parseId}`
             },
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -8292,6 +8431,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
@@ -8315,7 +8455,8 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -8338,7 +8479,8 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.noUser(user)
+            customString: errors.noUser(user),
+            config: input.config
         });
         return;
 
@@ -8365,6 +8507,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     } else {
         mapdataReq = await osufunc.apiget({
             type: 'map',
+            config: input.config,
             params: {
                 id: mapid
             }
@@ -8386,7 +8529,8 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -8408,7 +8552,8 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
+            customString: errors.uErr.osu.map.m.replace('[ID]', mapid),
+            config: input.config
         });
         return;
     }
@@ -8423,6 +8568,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     } else {
         scoredataReq = await osufunc.apiget({
             type: 'user_get_scores_map',
+            config: input.config,
             params: {
                 userid: osudata.id,
                 id: mapid,
@@ -8446,7 +8592,8 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -8473,7 +8620,8 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             object: input.obj,
             customString: errors.uErr.osu.scores.map
                 .replace('[ID]', user)
-                .replace('[MID', mapid)
+                .replace('[MID', mapid),
+            config: input.config
         });
         return;
     }
@@ -8517,7 +8665,8 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: `${errors.uErr.osu.score.nf} at index ${pid}`
+                customString: `${errors.uErr.osu.score.nf} at index ${pid}`,
+                config: input.config
             });
             return;
         }
@@ -8585,7 +8734,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         {
             useScoreMap: false,
             overrideMapLastDate: mapdata.last_updated
-        });
+        }, input.config);
     scoresEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\nmode: ${mode}\n`);
     if (scoresarg.fields.length == 0) {
         scoresEmbed.addFields([{
@@ -8659,6 +8808,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -8667,7 +8817,8 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -8852,7 +9003,8 @@ export async function scorestats(input: extypes.commandInput) {
                 name: 'Search ID',
                 value: searchid
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -8894,6 +9046,7 @@ export async function scorestats(input: extypes.commandInput) {
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
@@ -8917,7 +9070,8 @@ export async function scorestats(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError
+            customString: errors.apiError,
+            config: input.config
         });
         return;
     }
@@ -8940,7 +9094,8 @@ export async function scorestats(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.noUser(user)
+            customString: errors.noUser(user),
+            config: input.config
         });
         return;
     }
@@ -8960,6 +9115,7 @@ export async function scorestats(input: extypes.commandInput) {
     async function getScoreCount(cinitnum) {
         const req: osufunc.apiReturn = await osufunc.apiget({
             type: scoreTypes,
+            config: input.config,
             params: {
                 userid: `${osudata.id}`,
                 opts: [`offset=${cinitnum}`, 'limit=100', `mode=${osufunc.modeValidator(mode)}`],
@@ -8983,6 +9139,7 @@ export async function scorestats(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -9004,6 +9161,7 @@ export async function scorestats(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: `Could not find user's ${scoreTypes} scores`
             });
             return;
@@ -9184,6 +9342,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
             });
         } else {
             log.logCommand({
@@ -9192,6 +9351,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: 'Message failed to send'
             });
         }
@@ -9204,6 +9364,7 @@ ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
         commandType: input.commandType,
         commandId: input.absoluteID,
         object: input.obj,
+        config: input.config,
     });
 
 }
@@ -9392,8 +9553,8 @@ export async function simulate(input: extypes.commandInput) {
         commandType: input.commandType,
         commandId: input.absoluteID,
         commanduser,
-        object: input.obj,
         commandName: 'simulate',
+        object: input.obj,
         options: [
             {
                 name: 'Map ID',
@@ -9427,7 +9588,8 @@ export async function simulate(input: extypes.commandInput) {
                 name: 'Misses',
                 value: nMiss
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -9460,6 +9622,7 @@ export async function simulate(input: extypes.commandInput) {
     } else {
         mapdataReq = await osufunc.apiget({
             type: 'map_get',
+            config: input.config,
             params: {
                 id: mapid
             }
@@ -9482,6 +9645,7 @@ export async function simulate(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.apiError
         });
         return;
@@ -9505,6 +9669,7 @@ export async function simulate(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
         });
         return;
@@ -9547,7 +9712,7 @@ export async function simulate(input: extypes.commandInput) {
         score: null,
         calctype: 0,
         clockRate: overrideSpeed
-    }, new Date(mapdata.last_updated));
+    }, new Date(mapdata.last_updated), input.config);
     osufunc.debug(score, 'command', 'simulate', input.obj.guildId, 'ppCalc');
 
     const fcaccgr =
@@ -9569,7 +9734,7 @@ export async function simulate(input: extypes.commandInput) {
         mapid,
         calctype: 0,
         clockRate: 1
-    }, new Date(mapdata.last_updated));
+    }, new Date(mapdata.last_updated), input.config);
 
     const title = osufunc.parseUnicodeStrings({
         title: mapdata.beatmapset.title,
@@ -9657,6 +9822,7 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -9665,6 +9831,7 @@ ${emojis.mapobjs.bpm}${mapdata.bpm}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -9783,7 +9950,7 @@ export async function map(input: extypes.commandInput) {
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map;
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true, input.config)).map;
         }
             break;
 
@@ -9906,6 +10073,7 @@ export async function map(input: extypes.commandInput) {
                 } else {
                     bmsdataReq = await osufunc.apiget({
                         type: 'mapset_get',
+                        config: input.config,
                         params: {
                             id: setid
                         }
@@ -9929,6 +10097,7 @@ export async function map(input: extypes.commandInput) {
                         commandType: input.commandType,
                         commandId: input.absoluteID,
                         object: input.obj,
+                        config: input.config,
                         customString: errors.apiError
                     });
                     return;
@@ -9948,6 +10117,7 @@ export async function map(input: extypes.commandInput) {
                         commandType: input.commandType,
                         commandId: input.absoluteID,
                         object: input.obj,
+                        config: input.config,
                         customString: errors.uErr.osu.map.ms.replace('[ID]', mapid)
                     });
                     return;
@@ -9969,6 +10139,7 @@ export async function map(input: extypes.commandInput) {
                         commandType: input.commandType,
                         commandId: input.absoluteID,
                         object: input.obj,
+                        config: input.config,
                         customString: errors.uErr.osu.map.setonly.replace('[ID]', bmsdata.id.toString())
                     });
                     return;
@@ -10024,6 +10195,7 @@ export async function map(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'map',
         options: [
             {
@@ -10066,7 +10238,7 @@ export async function map(input: extypes.commandInput) {
                 name: 'hp',
                 value: customHP
             },
-        ]
+        ],
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -10115,6 +10287,7 @@ export async function map(input: extypes.commandInput) {
         } else {
             mapdataReq = await osufunc.apiget({
                 type: 'map_get',
+                config: input.config,
                 params: {
                     id: mapid
                 }
@@ -10137,6 +10310,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -10165,6 +10339,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
             });
             return;
@@ -10180,6 +10355,7 @@ export async function map(input: extypes.commandInput) {
             bmsdataReq = await osufunc.apiget(
                 {
                     type: 'mapset_get',
+                    config: input.config,
                     params: {
                         id: mapdata.beatmapset_id
                     }
@@ -10201,6 +10377,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -10224,6 +10401,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.uErr.osu.map.ms.replace('[ID]', mapdata.beatmapset_id.toString())
             });
             return;
@@ -10269,6 +10447,7 @@ export async function map(input: extypes.commandInput) {
     if (maptitleq != null) {
         const mapidtestReq = await osufunc.apiget({
             type: 'mapset_search',
+            config: input.config,
             params: {
                 searchString: maptitleq,
                 opts: [`s=${searchRestrict}`]
@@ -10290,6 +10469,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -10314,6 +10494,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.uErr.osu.map.search
             });
             return;
@@ -10337,6 +10518,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq)
             });
             return;
@@ -10367,6 +10549,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: 'Maps failed to sort'
             });
             return;
@@ -10395,6 +10578,7 @@ export async function map(input: extypes.commandInput) {
         } else {
             mapdataReq = await osufunc.apiget({
                 type: 'map_get',
+                config: input.config,
                 params: {
                     id: usemapidpls
                 }
@@ -10418,6 +10602,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -10440,6 +10625,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: `${errors.uErr.osu.map.m.replace('[ID]', mapidtest2.id)}`
             });
             return;
@@ -10634,7 +10820,7 @@ export async function map(input: extypes.commandInput) {
                 customAR,
                 customOD,
                 customHP
-            }, new Date(mapdata.last_updated));
+            }, new Date(mapdata.last_updated), input.config);
             ppissue = '';
             try {
                 totaldiff = mapdata.difficulty_rating.toFixed(2) != ppComputed[0].difficulty.stars?.toFixed(2) ?
@@ -10734,6 +10920,7 @@ HP${baseHP}`;
             mapperdataReq = await osufunc.apiget(
                 {
                     type: 'user',
+                    config: input.config,
                     params: {
                         userid: mapdata.beatmapset.user_id,
                     }
@@ -10756,6 +10943,7 @@ HP${baseHP}`;
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -10771,12 +10959,13 @@ HP${baseHP}`;
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: `Could not find user ${mapdata.beatmapset.user_id} (map creator).\nUsing default json file`
             });
         }
         func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
 
-        const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode, new Date(mapdata.last_updated));
+        const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode, new Date(mapdata.last_updated), input.config);
         try {
             osufunc.debug(strains, 'command', 'map', input.obj.guildId, 'strains');
 
@@ -10919,6 +11108,7 @@ HP${baseHP}`;
                 gdReq = await osufunc.apiget(
                     {
                         type: 'user',
+                        config: input.config,
                         params: {
                             userid: mapdata.user_id,
                         }
@@ -10941,6 +11131,7 @@ HP${baseHP}`;
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
+                    config: input.config,
                     customString: errors.apiError
                 });
                 return;
@@ -10956,6 +11147,7 @@ HP${baseHP}`;
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
+                    config: input.config,
                     customString: `Could not find user ${mapdata.user_id} (guest mapper).\nUsing default json file.`
                 });
             }
@@ -11105,6 +11297,7 @@ HP${baseHP}`;
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -11113,6 +11306,7 @@ HP${baseHP}`;
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -11210,7 +11404,7 @@ export async function ppCalc(input: extypes.commandInput) {
             }
             input.args = msgfunc.cleanArgs(input.args);
 
-            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true)).map;
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true, input.config)).map;
         }
             break;
 
@@ -11263,6 +11457,7 @@ export async function ppCalc(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'ppcalc',
         options: [
             {
@@ -11335,6 +11530,7 @@ export async function ppCalc(input: extypes.commandInput) {
         } else {
             mapdataReq = await osufunc.apiget({
                 type: 'map_get',
+                config: input.config,
                 params: {
                     id: mapid
                 }
@@ -11357,6 +11553,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -11381,6 +11578,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
             });
             return;
@@ -11396,6 +11594,7 @@ export async function ppCalc(input: extypes.commandInput) {
             bmsdataReq = await osufunc.apiget(
                 {
                     type: 'mapset_get',
+                    config: input.config,
                     params: {
                         id: mapdata.beatmapset_id
                     }
@@ -11417,6 +11616,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -11440,6 +11640,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.uErr.osu.map.m.replace('[ID]', mapdata.beatmapset_id.toString())
             });
             return;
@@ -11485,6 +11686,7 @@ export async function ppCalc(input: extypes.commandInput) {
     if (maptitleq != null) {
         const mapidtestReq = await osufunc.apiget({
             type: 'mapset_search',
+            config: input.config,
             params: {
                 searchString: maptitleq,
                 opts: [`s=${searchRestrict}`]
@@ -11506,6 +11708,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -11529,6 +11732,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq)
             });
             return;
@@ -11584,6 +11788,7 @@ export async function ppCalc(input: extypes.commandInput) {
         } else {
             mapdataReq = await osufunc.apiget({
                 type: 'map_get',
+                config: input.config,
                 params: {
                     id: mapidtest2[0].id
                 }
@@ -11607,6 +11812,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -11629,6 +11835,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.uErr.osu.map.m.replace('[ID]', mapidtest2[0].id)
             });
             return;
@@ -11744,7 +11951,7 @@ export async function ppCalc(input: extypes.commandInput) {
             customOD,
             customHP,
             maxLimit: 21
-        }, new Date(mapdata.last_updated));
+        }, new Date(mapdata.last_updated), input.config);
         ppissue = '';
         try {
             totaldiff = ppComputed[0].difficulty.stars?.toFixed(2);
@@ -12058,6 +12265,7 @@ export async function ppCalc(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -12066,6 +12274,7 @@ export async function ppCalc(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -12193,6 +12402,7 @@ export async function randomMap(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'map (random)',
         options: [
             {
@@ -12203,7 +12413,8 @@ export async function randomMap(input: extypes.commandInput) {
                 name: 'Random ranked type',
                 value: `${useRandomRanked}`
             }
-        ]
+        ],
+
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -12252,6 +12463,7 @@ export async function randomMap(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -12260,6 +12472,7 @@ export async function randomMap(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -12328,6 +12541,7 @@ export async function recMap(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'map (random)',
         options: [
             {
@@ -12342,7 +12556,7 @@ export async function recMap(input: extypes.commandInput) {
                 name: 'Range',
                 value: maxRange
             }
-        ]
+        ],
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -12375,6 +12589,7 @@ export async function recMap(input: extypes.commandInput) {
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator('')
@@ -12398,6 +12613,7 @@ export async function recMap(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.apiError
         });
         return;
@@ -12421,6 +12637,7 @@ export async function recMap(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.noUser(user)
         });
         return;
@@ -12470,6 +12687,7 @@ ${txt}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -12478,6 +12696,7 @@ ${txt}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -12530,8 +12749,9 @@ export async function maplocal(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'map (file)',
-        options: []
+        options: [],
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -12671,6 +12891,7 @@ HitObjects: ${mapParsed.hitObjects?.length}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: error
         });
         return;
@@ -12694,6 +12915,7 @@ HitObjects: ${mapParsed.hitObjects?.length}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -12702,6 +12924,7 @@ HitObjects: ${mapParsed.hitObjects?.length}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -12989,6 +13212,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'user beatmaps',
         options: [
             {
@@ -13023,7 +13247,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                 name: 'Detailed',
                 value: mapDetailed
             }
-        ]
+        ],
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -13076,6 +13300,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator('osu')
@@ -13099,6 +13324,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.apiError
         });
         return;
@@ -13122,6 +13348,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.noUser(user)
         });
         return;
@@ -13148,6 +13375,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         }
         const fdReq: osufunc.apiReturn = await osufunc.apiget({
             type: 'user_get_maps',
+            config: input.config,
             params: {
                 userid: osudata.id,
                 category: filter,
@@ -13172,6 +13400,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -13193,6 +13422,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: `Could not find user's ${calc.toCapital(filter)} maps`
             });
             return;
@@ -13298,6 +13528,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.uErr.osu.map.m_uk + `at index ${pid}`
             });
             return;
@@ -13406,6 +13637,7 @@ Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${fil
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -13414,6 +13646,7 @@ Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${fil
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -13502,6 +13735,7 @@ export async function trackadd(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'track add',
         options: [
             {
@@ -13512,7 +13746,7 @@ export async function trackadd(input: extypes.commandInput) {
                 name: 'Mode',
                 value: mode
             }
-        ]
+        ],
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -13564,6 +13798,7 @@ export async function trackadd(input: extypes.commandInput) {
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: mode
@@ -13587,6 +13822,7 @@ export async function trackadd(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.apiError
         });
         return;
@@ -13601,6 +13837,7 @@ export async function trackadd(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.noUser(user)
         });
     } else {
@@ -13636,6 +13873,7 @@ export async function trackadd(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -13644,6 +13882,7 @@ export async function trackadd(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -13725,6 +13964,7 @@ export async function trackremove(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'track remove',
         options: [
             {
@@ -13735,7 +13975,7 @@ export async function trackremove(input: extypes.commandInput) {
                 name: 'Mode',
                 value: mode
             }
-        ]
+        ],
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -13787,6 +14027,7 @@ export async function trackremove(input: extypes.commandInput) {
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode
@@ -13810,6 +14051,7 @@ export async function trackremove(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.apiError
         });
         return;
@@ -13824,6 +14066,7 @@ export async function trackremove(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.noUser(user)
         });
     } else {
@@ -13860,6 +14103,7 @@ export async function trackremove(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -13868,6 +14112,7 @@ export async function trackremove(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -13916,13 +14161,14 @@ export async function trackchannel(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'track channel',
         options: [
             {
                 name: 'Channel id',
                 value: `${channelId}`
             }
-        ]
+        ],
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -13988,6 +14234,7 @@ export async function trackchannel(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -13996,6 +14243,7 @@ export async function trackchannel(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -14041,8 +14289,9 @@ export async function tracklist(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'track list',
-        options: []
+        options: [],
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -14106,6 +14355,7 @@ export async function tracklist(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -14114,6 +14364,7 @@ export async function tracklist(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -14237,6 +14488,7 @@ export async function compare(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'compare',
         options: [
             {
@@ -14267,7 +14519,7 @@ export async function compare(input: extypes.commandInput) {
                 name: 'Page',
                 value: page
             }
-        ]
+        ],
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -14344,6 +14596,7 @@ export async function compare(input: extypes.commandInput) {
             firstuserReq = await osufunc.apiget(
                 {
                     type: 'user',
+                    config: input.config,
                     params: {
                         username: first
                     }
@@ -14366,6 +14619,7 @@ export async function compare(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -14389,6 +14643,7 @@ export async function compare(input: extypes.commandInput) {
             seconduserReq = await osufunc.apiget(
                 {
                     type: 'user',
+                    config: input.config,
                     params: {
                         username: second
                     }
@@ -14411,6 +14666,7 @@ export async function compare(input: extypes.commandInput) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
                 customString: errors.apiError
             });
             return;
@@ -14482,6 +14738,7 @@ export async function compare(input: extypes.commandInput) {
                 } else {
                     firsttopdataReq = await osufunc.apiget({
                         type: 'best',
+                        config: input.config,
                         params: {
                             userid: firstuser.id,
                             mode: osufunc.modeValidator(mode),
@@ -14506,6 +14763,7 @@ export async function compare(input: extypes.commandInput) {
                         commandType: input.commandType,
                         commandId: input.absoluteID,
                         object: input.obj,
+                        config: input.config,
                         customString: errors.apiError
                     });
                     return;
@@ -14526,6 +14784,7 @@ export async function compare(input: extypes.commandInput) {
                 } else {
                     secondtopdataReq = await osufunc.apiget({
                         type: 'best',
+                        config: input.config,
                         params: {
                             userid: seconduser.id,
                             mode: osufunc.modeValidator(mode),
@@ -14550,6 +14809,7 @@ export async function compare(input: extypes.commandInput) {
                         commandType: input.commandType,
                         commandId: input.absoluteID,
                         object: input.obj,
+                        config: input.config,
                         customString: errors.apiError
                     });
                     return;
@@ -14645,6 +14905,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: `${error}`
         });
     }
@@ -14674,6 +14935,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -14682,6 +14944,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -14805,6 +15068,7 @@ export async function osuset(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'osuset',
         options: [
             {
@@ -14934,6 +15198,7 @@ export async function osuset(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -14942,6 +15207,7 @@ export async function osuset(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -15030,6 +15296,7 @@ export async function saved(input: extypes.commandInput) {
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'saved',
         options: [
             {
@@ -15108,6 +15375,7 @@ export async function saved(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -15116,6 +15384,7 @@ export async function saved(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }
@@ -15235,6 +15504,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         commandId: input.absoluteID,
         commanduser,
         object: input.obj,
+        config: input.config,
         commandName: 'what if',
         options: [
             {
@@ -15287,6 +15557,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
+            config: input.config,
             params: {
                 username: cmdchecks.toHexadecimal(user),
                 mode: osufunc.modeValidator(mode)
@@ -15310,6 +15581,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.apiError
         });
         return;
@@ -15331,6 +15603,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.noUser(user)
         });
         return;
@@ -15357,6 +15630,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
 
     const osutopdataReq: osufunc.apiReturn = await osufunc.apiget({
         type: 'best',
+        config: input.config,
         params: {
             userid: osudata.id,
             mode: mode,
@@ -15381,6 +15655,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: errors.apiError
         });
         return;
@@ -15402,6 +15677,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: `Could not find user's top scores`
         });
         return;
@@ -15468,6 +15744,7 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
         });
     } else {
         log.logCommand({
@@ -15476,6 +15753,7 @@ Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - 
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config,
             customString: 'Message failed to send'
         });
     }

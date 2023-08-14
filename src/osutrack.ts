@@ -28,7 +28,7 @@ export default (input: {
     }
     function a() {
         try {
-            trackfunc.trackUsers(input.trackDb, input.client, input.guildSettings, totalTime);
+            trackfunc.trackUsers(input.trackDb, input.client, input.guildSettings, totalTime, input.config);
         } catch (err) {
             console.log(err);
             console.log('temporarily disabling tracking for an hour');

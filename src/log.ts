@@ -1,6 +1,5 @@
 import Discord from 'discord.js';
 import fs from 'fs';
-import config from '../config/config.json' assert { type: 'json' };
 import { path } from '../path.js';
 import * as extypes from './types/extratypes.js';
 
@@ -73,12 +72,13 @@ export function logCommand(input: {
     commanduser?: Discord.User,
     object: extypes.commandObject,
     button?: string,
-    commandName: string;
+    commandName: string,
     options?: {
         name: string,
-        value: string | number | boolean;
+        value: string | number | boolean,
     }[];
-    customString?: string;
+    customString?: string,
+    config: extypes.config,
 }) {
     let optstring;
     if (input.options && input.options.length > 0) {
@@ -155,14 +155,14 @@ ID:           ${input.commandId}
 ====================================================`;
             break;
     }
-    if (config.storeCommandLogs) {
+    if (input.config.storeCommandLogs) {
         fs.appendFileSync(`${path}/logs/${input?.object?.guildId ? 'cmd/' + input?.object?.guildId + '.log' : 'commands.log'}`, output, 'utf-8');
     }
 }
 // commandLog,
 // optsLog,
 
-export function toOutput(string: string) {
+export function toOutput(string: string, config: extypes.config,) {
     if (config.LogApiCalls == true) {
         console.log(string);
     }

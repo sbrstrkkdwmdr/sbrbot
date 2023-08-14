@@ -120,7 +120,8 @@ export async function changelog(input: extypes.commandInput) {
                 name: 'listMode',
                 value: isList
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -248,6 +249,7 @@ ${foundBool ? '' : `\nThere was an error trying to find version ${version}`}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -256,7 +258,8 @@ ${foundBool ? '' : `\nThere was an error trying to find version ${version}`}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 }
@@ -335,7 +338,8 @@ export async function convert(input: extypes.commandInput) {
                 name: 'Number',
                 value: `${num}`
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -673,6 +677,7 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -681,7 +686,8 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -811,7 +817,8 @@ export async function help(input: extypes.commandInput) {
                 name: 'Random',
                 value: `${rdm}`
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1150,6 +1157,7 @@ export async function help(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1158,7 +1166,8 @@ export async function help(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -1213,7 +1222,8 @@ export async function info(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         commandName: 'info',
-        options: []
+        options: [],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1276,6 +1286,7 @@ Bot Version: ${pkgjson.version}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1284,7 +1295,8 @@ Bot Version: ${pkgjson.version}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -1329,7 +1341,8 @@ export async function invite(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         commandName: 'invite',
-        options: []
+        options: [],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1352,6 +1365,7 @@ export async function invite(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1360,7 +1374,8 @@ export async function invite(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -1433,7 +1448,8 @@ export async function math(input: extypes.commandInput) {
                 name: 'Query',
                 value: `${input?.args?.[0] ? input.args.join(' ') : null}`
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1561,6 +1577,7 @@ export async function math(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1569,7 +1586,8 @@ export async function math(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 }
@@ -1613,7 +1631,8 @@ export async function ping(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         commandName: 'ping',
-        options: []
+        options: [],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1673,6 +1692,7 @@ ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
         commandType: input.commandType,
         commandId: input.absoluteID,
         object: input.obj,
+        config: input.config
     });
 }
 
@@ -1733,7 +1753,7 @@ export async function remind(input: extypes.commandInput) {
 
             time = input.obj.options.getString('time').replaceAll(' ', '');
             sendtochannel =
-                (cmdchecks.isOwner(commanduser.id) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)) ?
+                (cmdchecks.isOwner(commanduser.id, input.config) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)) ?
 
                     input.obj.options.getBoolean('sendinchannel') : false;
             user = input.obj.member.user;
@@ -1787,7 +1807,8 @@ export async function remind(input: extypes.commandInput) {
                 name: 'User',
                 value: user.id
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1839,6 +1860,7 @@ export async function remind(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1847,7 +1869,8 @@ export async function remind(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -1894,7 +1917,8 @@ export async function stats(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         commandName: 'stats',
-        options: []
+        options: [],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1946,6 +1970,7 @@ Current Shard:
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1954,7 +1979,8 @@ Current Shard:
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 }
@@ -2023,7 +2049,8 @@ export async function time(input: extypes.commandInput) {
                 name: 'Timezone',
                 value: `${fetchtimezone}`
             }
-        ]
+        ],
+        config: input.config
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -2203,6 +2230,7 @@ export async function time(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -2211,7 +2239,8 @@ export async function time(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -2276,7 +2305,8 @@ export async function timeset(input: extypes.commandInput) {
                 name: 'Timezone',
                 value: `${fetchtimezone}`
             }
-        ]
+        ],
+        config: input.config
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -2445,6 +2475,7 @@ ${found.map(x => `UTC${x.offsetDirection}${x.offsetHours}\n`).join()}`;
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -2453,7 +2484,8 @@ ${found.map(x => `UTC${x.offsetDirection}${x.offsetHours}\n`).join()}`;
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 }
@@ -2513,7 +2545,8 @@ export async function weather(input: extypes.commandInput) {
                 name: 'OverrideID',
                 value: overrideID
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -2543,7 +2576,7 @@ export async function weather(input: extypes.commandInput) {
     ) {
         locatingData = func.findFile(input.absoluteID, 'weatherlocationData');
     } else {
-        locatingData = await func.getLocation(name);
+        locatingData = await func.getLocation(name, input.config);
     }
 
     func.storeFile(locatingData, input.absoluteID, 'weatherlocationData');
@@ -2572,7 +2605,7 @@ export async function weather(input: extypes.commandInput) {
     }
 
     async function toWeather(location: othertypes.geoLocale) {
-        const weatherData = await func.getWeather(location.latitude, location.longitude, location);
+        const weatherData = await func.getWeather(location.latitude, location.longitude, location, input.config);
         func.storeFile(weatherData, input.absoluteID, 'weatherData');
         if (typeof weatherData == 'string') {
             weatherEmbed.setDescription(errors.uErr.weather.wrongCoords);
@@ -2745,7 +2778,8 @@ Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}${maxWindDir.name}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: error
+            customString: error,
+            config: input.config
         });
     }
 
@@ -2767,6 +2801,7 @@ Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}${maxWindDir.name}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -2776,6 +2811,7 @@ Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}${maxWindDir.name}
             commandId: input.absoluteID,
             object: input.obj,
             customString: 'Message failed to send',
+            config: input.config
         });
     }
 }
@@ -2833,7 +2869,8 @@ export async function tropicalWeather(input: extypes.commandInput) {
                 name: 'System',
                 value: system
             },
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -2844,7 +2881,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
     ) {
         weatherData = func.findFile(input.absoluteID, `storm-${system}-tropicalWeatherData`);
     } else {
-        weatherData = await func.getTropical(type, system);
+        weatherData = await func.getTropical(input.config, type, system);
     }
     func.storeFile(weatherData, input.absoluteID, `${type}${type == 'storm' ? '-' + (weatherData?.data as othertypes.tsData)?.id : ''}-tropicalWeatherData`);
     const embed = new Discord.EmbedBuilder();
@@ -2878,7 +2915,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
                             } else {
                                 exInf = `\nStorm locations shown are approximate`;
                                 for (const storm of weatherData?.data as othertypes.tsShort[]) {
-                                    const tempData = await func.getTropical('storm', storm.id);
+                                    const tempData = await func.getTropical(input.config, 'storm', storm.id);
                                     const inTempData = tempData.data as othertypes.tsData;
                                     func.storeFile((tempData as othertypes.tsData), input.absoluteID, `storm-${(inTempData as othertypes.tsData).id}-tropicalWeatherData`);
                                     const curx = inTempData.position[0];
@@ -2960,7 +2997,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
 
     async function embeddify() {
         const data = weatherData?.data as othertypes.tsData;
-        const featData1 = await func.getTropical('features', data.id);
+        const featData1 = await func.getTropical(input.config, 'features', data.id);
         const featData = featData1.data as othertypes.tsFeatureData;
         func.storeFile(featData, input.absoluteID, `features-${data.id}-tropicalWeatherData`);
         const catData = func.tsCatToString(data.category.toLowerCase());
@@ -3039,6 +3076,7 @@ Peak: ${phurname}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -3048,6 +3086,7 @@ Peak: ${phurname}
             commandId: input.absoluteID,
             object: input.obj,
             customString: 'Message failed to send',
+            config: input.config
         });
     }
 }

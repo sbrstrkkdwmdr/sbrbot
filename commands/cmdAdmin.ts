@@ -84,7 +84,8 @@ export async function checkperms(input: extypes.commandInput) {
                 name: 'User',
                 value: searchUser.id ?? commanduser.id
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -92,7 +93,7 @@ export async function checkperms(input: extypes.commandInput) {
     if (searchUser == null || typeof searchUser == 'undefined') {
         searchUser = commanduser;
     }
-    if (!(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id))) {
+    if (!(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id, input.config))) {
         searchUser = commanduser;
     }
 
@@ -135,6 +136,7 @@ export async function checkperms(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -143,7 +145,8 @@ export async function checkperms(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -190,7 +193,8 @@ export async function crash(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         commandName: 'crash',
-        options: []
+        options: [],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -253,7 +257,8 @@ export async function getUser(input: extypes.commandInput) {
                 name: 'Id',
                 value: id
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -343,6 +348,7 @@ export async function getUser(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -351,7 +357,8 @@ export async function getUser(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -412,7 +419,8 @@ export async function getUserAv(input: extypes.commandInput) {
                 name: 'Id',
                 value: id
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -452,6 +460,7 @@ export async function getUserAv(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -460,7 +469,8 @@ export async function getUserAv(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -531,7 +541,8 @@ export async function debug(input: extypes.commandInput) {
                 name: 'Input String',
                 value: inputstr
             },
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -827,7 +838,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             break;
         //force osutrack to update
         case 'forcetrack': {
-            trackfunc.trackUsers(input.trackDb, input.client, input.guildSettings, 60 * 1000);
+            trackfunc.trackUsers(input.trackDb, input.client, input.guildSettings, 60 * 1000, input.config);
             usemsgArgs = {
                 content: `Running osu!track...`
             };
@@ -878,17 +889,17 @@ Joined(EPOCH):  ${member.joinedTimestamp}
 
     }
 
-    function clear(input: clearTypes) {
-        switch (input) {
+    function clear(tincan: clearTypes) {
+        switch (tincan) {
             case 'normal': default: { //clears all temprary files (cache/commandData)
-                log.toOutput(`manually clearing temporary files in ${path}\\cache\\commandData\\`);
+                log.toOutput(`manually clearing temporary files in ${path}\\cache\\commandData\\`, input.config);
                 const curpath = `${path}\\cache\\commandData`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     const keep = ['Approved', 'Ranked', 'Loved', 'Qualified'];
                     if (!keep.some(x => file.includes(x))) {
                         fs.unlinkSync(`${curpath}\\` + file);
-                        log.toOutput(`${curpath}\\` + file);
+                        log.toOutput(`${curpath}\\` + file, input.config);
                     }
                 }
                 usemsgArgs = {
@@ -897,12 +908,12 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             }
                 break;
             case 'all': { //clears all files in commandData
-                log.toOutput(`manually clearing all files in ${path}\\cache\\commandData\\`);
+                log.toOutput(`manually clearing all files in ${path}\\cache\\commandData\\`, input.config);
                 const curpath = `${path}\\cache\\commandData`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     fs.unlinkSync(`${curpath}\\` + file);
-                    log.toOutput(`${curpath}\\` + file);
+                    log.toOutput(`${curpath}\\` + file, input.config);
                 }
                 usemsgArgs = {
                     content: `Clearing all files in .\\cache\\commandData\\`
@@ -920,20 +931,20 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             }
                 break;
             case 'map': case 'maps': { // clears all maps and mapset files
-                log.toOutput(`manually clearing all map and mapset files in ${path}\\cache\\commandData\\ and ${path}\\files\\maps\\`);
+                log.toOutput(`manually clearing all map and mapset files in ${path}\\cache\\commandData\\ and ${path}\\files\\maps\\`, input.config);
                 const curpath1 = `${path}\\cache\\commandData`;
                 const files1 = fs.readdirSync(curpath1);
                 for (const file of files1) {
                     if (file.includes('bmsdata') || file.includes('mapdata')) {
                         fs.unlinkSync(`${curpath1}\\` + file);
-                        log.toOutput(`${curpath1}\\` + file);
+                        log.toOutput(`${curpath1}\\` + file, input.config);
                     }
                 }
                 const curpath2 = `${path}\\files\\maps`;
                 const files2 = fs.readdirSync(curpath2);
                 for (const file of files2) {
                     fs.unlinkSync(`${curpath2}\\` + file);
-                    log.toOutput(`${curpath2}\\` + file);
+                    log.toOutput(`${curpath2}\\` + file, input.config);
                 }
                 usemsgArgs = {
                     content: `Clearing all map-related files in .\\cache\\commandData\\ and .\\files\\maps\\`
@@ -941,13 +952,13 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             }
                 break;
             case 'users': { //clears all osudata files
-                log.toOutput(`manually clearing all osudata files in ${path}\\cache\\commandData\\`);
+                log.toOutput(`manually clearing all osudata files in ${path}\\cache\\commandData\\`, input.config);
                 const curpath = `${path}\\cache\\commandData`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     if (file.includes('osudata')) {
                         fs.unlinkSync(`${curpath}\\` + file);
-                        log.toOutput(`${curpath}\\` + file);
+                        log.toOutput(`${curpath}\\` + file, input.config);
                     }
                 }
                 usemsgArgs = {
@@ -956,12 +967,12 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             }
                 break;
             case 'previous': { // clears all previous files
-                log.toOutput(`manually clearing all prev files in ${path}\\cache\\previous\\`);
+                log.toOutput(`manually clearing all prev files in ${path}\\cache\\previous\\`, input.config);
                 const curpath = `${path}\\cache\\previous`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     fs.unlinkSync(`${curpath}\\` + file);
-                    log.toOutput(`${curpath}\\` + file);
+                    log.toOutput(`${curpath}\\` + file, input.config);
                 }
                 usemsgArgs = {
                     content: `Clearing all previous files in .\\cache\\previous\\`
@@ -969,13 +980,13 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             }
                 break;
             case 'pmaps': { // clears all previous map files
-                log.toOutput(`manually clearing all prevmap files in ${path}\\cache\\previous\\`);
+                log.toOutput(`manually clearing all prevmap files in ${path}\\cache\\previous\\`, input.config);
                 const curpath = `${path}\\cache\\previous`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     if (file.includes('map')) {
                         fs.unlinkSync(`${curpath}\\` + file);
-                        log.toOutput(`${curpath}\\` + file);
+                        log.toOutput(`${curpath}\\` + file, input.config);
                     }
                 }
                 usemsgArgs = {
@@ -984,13 +995,13 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             }
                 break;
             case 'pscores': { // clears all previous score files
-                log.toOutput(`manually clearing all prev score files in ${path}\\cache\\previous\\`);
+                log.toOutput(`manually clearing all prev score files in ${path}\\cache\\previous\\`, input.config);
                 const curpath = `${path}\\cache\\previous`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     if (file.includes('score')) {
                         fs.unlinkSync(`${curpath}\\` + file);
-                        log.toOutput(`${curpath}\\` + file);
+                        log.toOutput(`${curpath}\\` + file, input.config);
                     }
                 }
                 usemsgArgs = {
@@ -998,13 +1009,13 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                 };
             }
             case 'pusers': { // clears all previous user files
-                log.toOutput(`manually clearing all prev user files in ${path}\\cache\\previous\\`);
+                log.toOutput(`manually clearing all prev user files in ${path}\\cache\\previous\\`, input.config);
                 const curpath = `${path}\\cache\\previous`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     if (file.includes('user')) {
                         fs.unlinkSync(`${curpath}\\` + file);
-                        log.toOutput(`${curpath}\\` + file);
+                        log.toOutput(`${curpath}\\` + file, input.config);
                     }
                 }
                 usemsgArgs = {
@@ -1013,12 +1024,12 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             }
                 break;
             case 'errors': { //clears all errors
-                log.toOutput(`manually clearing all err files in ${path}\\cache\\errors\\`);
+                log.toOutput(`manually clearing all err files in ${path}\\cache\\errors\\`, input.config);
                 const curpath = `${path}\\cache\\errors`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     fs.unlinkSync(`${curpath}\\` + file);
-                    log.toOutput(`${curpath}\\` + file);
+                    log.toOutput(`${curpath}\\` + file, input.config);
                 }
                 usemsgArgs = {
                     content: `Clearing error files in .\\cache\\errors\\`
@@ -1026,12 +1037,12 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             }
                 break;
             case 'graph': {
-                log.toOutput(`manually clearing all graph files in ${path}\\cache\\graphs\\`);
+                log.toOutput(`manually clearing all graph files in ${path}\\cache\\graphs\\`, input.config);
                 const curpath = `${path}\\cache\\graphs`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     fs.unlinkSync(`${curpath}\\` + file);
-                    log.toOutput(`${curpath}\\` + file);
+                    log.toOutput(`${curpath}\\` + file, input.config);
                 }
                 usemsgArgs = {
                     content: `Clearing graph files in .\\cache\\graphs\\`
@@ -1054,6 +1065,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1062,7 +1074,8 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 }
@@ -1153,7 +1166,8 @@ export async function find(input: extypes.commandInput) {
                 name: 'Id',
                 value: id
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1230,7 +1244,7 @@ Flags: ${userfind.user.flags.toArray().join(',')}
             break;
         case 'guild':
             {
-                if (!(cmdchecks.isOwner(commanduser.id) || (id == input.obj.guildId && cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)))) {
+                if (!(cmdchecks.isOwner(commanduser.id, input.config) || (id == input.obj.guildId && cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
                     let guildfind;
@@ -1259,7 +1273,7 @@ Creation date: ${guildfind.createdAt}
             break;
         case 'channel':
             {
-                if (!(cmdchecks.isOwner(commanduser.id) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client))) {
+                if (!(cmdchecks.isOwner(commanduser.id, input.config) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
                     let channelfind;
@@ -1285,7 +1299,7 @@ Guild: ${guild.name} | ${guild.id}
             break;
         case 'role':
             {
-                if (!(cmdchecks.isOwner(commanduser.id) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client))) {
+                if (!(cmdchecks.isOwner(commanduser.id, input.config) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
                     let rolefind;
@@ -1354,6 +1368,7 @@ Valid Types: user, guild, channel, role, emoji
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1362,7 +1377,8 @@ Valid Types: user, guild, channel, role, emoji
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -1417,11 +1433,12 @@ export async function leaveguild(input: extypes.commandInput) {
                 name: 'Guild Id',
                 value: guildId
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-    if (cmdchecks.isOwner(commanduser.id)) {
+    if (cmdchecks.isOwner(commanduser.id, input.config)) {
         const guild = input.client.guilds.cache.get(guildId);
         if (guild) {
             guild.leave();
@@ -1453,6 +1470,7 @@ export async function leaveguild(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1461,7 +1479,8 @@ export async function leaveguild(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -1516,7 +1535,8 @@ export async function prefix(input: extypes.commandInput) {
                 name: 'Prefix',
                 value: newPrefix
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1526,7 +1546,7 @@ export async function prefix(input: extypes.commandInput) {
     if (curGuildSettings == null) {
         replymsg = 'Error: Guild settings not found';
     } else {
-        if (typeof newPrefix != 'string' || newPrefix.length < 1 || !(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id))) {
+        if (typeof newPrefix != 'string' || newPrefix.length < 1 || !(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id, input.config))) {
             replymsg = `The current prefix is \`${curGuildSettings.prefix}\``;
         } else {
             curGuildSettings.update({
@@ -1556,6 +1576,7 @@ export async function prefix(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1564,7 +1585,8 @@ export async function prefix(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -1611,7 +1633,8 @@ export async function servers(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         commandName: 'servers',
-        options: []
+        options: [],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1652,6 +1675,7 @@ export async function servers(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1660,7 +1684,8 @@ export async function servers(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 

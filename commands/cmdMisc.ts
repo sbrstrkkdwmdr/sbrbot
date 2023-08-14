@@ -65,7 +65,8 @@ export async function _8ball(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         commandName: '8ball',
-        options: []
+        options: [],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -93,6 +94,7 @@ export async function _8ball(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -101,7 +103,8 @@ export async function _8ball(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -147,7 +150,8 @@ export async function coin(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         commandName: 'coin',
-        options: []
+        options: [],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -181,6 +185,7 @@ export async function coin(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -190,6 +195,7 @@ export async function coin(input: extypes.commandInput) {
             commandId: input.absoluteID,
             object: input.obj,
             customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -239,7 +245,8 @@ export async function duckify(input: extypes.commandInput) {
         options: [{
             name: 'text',
             value: string
-        }]
+        }],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -266,6 +273,7 @@ export async function duckify(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -275,6 +283,7 @@ export async function duckify(input: extypes.commandInput) {
             commandId: input.absoluteID,
             object: input.obj,
             customString: 'Message failed to send',
+            config: input.config
         });
     }
 }
@@ -338,7 +347,8 @@ export async function gif(input: extypes.commandInput) {
                 name: 'Target user',
                 value: secondaryUser.id
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -416,6 +426,7 @@ export async function gif(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -425,6 +436,7 @@ export async function gif(input: extypes.commandInput) {
             commandId: input.absoluteID,
             object: input.obj,
             customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -483,14 +495,15 @@ export async function image(input: extypes.commandInput) {
                 name: 'Query',
                 value: query
             }
-        ]
+        ],
+        config: input.config
     });
 
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const res = await fetch(
-        `https://customsearch.googleapis.com/customsearch/v1?q=${query}&cx=${input.config.google.engineId}&key=${input.config.google.apiKey}&searchType=image`
+        `https://customsearch.googleapis.com/customsearch/v1?q=${query}&cx=${input.config?.google?.engineId}&key=${input.config?.google?.apiKey}&searchType=image`
     );
 
 
@@ -555,6 +568,7 @@ export async function image(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -563,7 +577,8 @@ export async function image(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 }
@@ -605,7 +620,8 @@ export async function inspire(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         commandName: 'Inspire',
-        options: []
+        options: [],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -651,6 +667,7 @@ export async function inspire(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -660,6 +677,7 @@ export async function inspire(input: extypes.commandInput) {
             commandId: input.absoluteID,
             object: input.obj,
             customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -738,7 +756,8 @@ export function poll(input: extypes.commandInput) {
                 name: 'Options',
                 value: pollOptsInit
             }
-        ]
+        ],
+        config: input.config
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
@@ -831,6 +850,7 @@ export function poll(input: extypes.commandInput) {
         commandType: input.commandType,
         commandId: input.absoluteID,
         object: input.obj,
+        config: input.config
     });
 
 }
@@ -897,7 +917,8 @@ export async function roll(input: extypes.commandInput) {
                 name: 'Minimum number',
                 value: minNum
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -926,6 +947,7 @@ export async function roll(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -934,7 +956,8 @@ export async function roll(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 
@@ -999,7 +1022,8 @@ export function say(input: extypes.commandInput) {
                 name: 'Channel',
                 value: channel.id
             }
-        ]
+        ],
+        config: input.config
     });
 
 
@@ -1053,6 +1077,7 @@ export function say(input: extypes.commandInput) {
         commandType: input.commandType,
         commandId: input.absoluteID,
         object: input.obj,
+        config: input.config
     });
 
 }
@@ -1106,7 +1131,8 @@ export async function ytsearch(input: extypes.commandInput) {
                 name: 'Query',
                 value: query
             }
-        ]
+        ],
+        config: input.config
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -1168,6 +1194,7 @@ Description: \`${curItem.description}\`
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
+            config: input.config
         });
     } else {
         log.logCommand({
@@ -1176,7 +1203,8 @@ Description: \`${curItem.description}\`
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: 'Message failed to send'
+            customString: 'Message failed to send',
+            config: input.config
         });
     }
 

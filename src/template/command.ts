@@ -99,7 +99,8 @@ module.exports = {
             commanduser,
             object: input.obj,
             commandName: 'COMMANDNAME',
-            options: []
+            options: [],
+            config: input.config,
         });
 
         //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -121,6 +122,7 @@ module.exports = {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
+                config: input.config,
             });
         } else {
             log.logCommand({
@@ -130,6 +132,7 @@ module.exports = {
                 commandId: input.absoluteID,
                 object: input.obj,
                 customString: 'Message failed to send',
+                config: input.config,
             });
         }
     }

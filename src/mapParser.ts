@@ -4,7 +4,6 @@ import fetch from 'node-fetch';
 import perf from 'perf_hooks';
 import rosu from 'rosu-pp';
 import Sequelize from 'sequelize';
-import config from '../config/config.json';
 import * as cmdchecks from './checks.js';
 import * as osufunc from './osufunc.js';
 import * as osumodcalc from './osumodcalc.js';

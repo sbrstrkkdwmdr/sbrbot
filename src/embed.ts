@@ -37,7 +37,8 @@ export async function scoreList(
     mapping: {
         useScoreMap: boolean,
         overrideMapLastDate?: string;
-    }
+    },
+    config: extypes.config
 ) {
     let filtereddata: extypes.SortedScore[] = [];
     let filterinfo = '';
@@ -313,7 +314,8 @@ export async function scoreList(
                 mapping.useScoreMap ?
                     new Date(curscore.beatmap.last_updated)
                     :
-                    new Date(mapping.overrideMapLastDate)
+                    new Date(mapping.overrideMapLastDate),
+                config
             );
         if (curscore.accuracy != 1) {
             if (curscore.pp == null || isNaN(curscore.pp)) {

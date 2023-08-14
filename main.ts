@@ -31,8 +31,10 @@ import * as func from './src/func.js';
 import * as osufunc from './src/osufunc.js';
 import * as trackfunc from './src/trackfunc.js';
 
-import config from './config/config.json' assert { type: 'json' };
+import inconfig from './config/config.json' assert { type: 'json' };
 import { path } from './path.js';
+
+const config = checks.checkConfig(inconfig);
 
 const client = new Client({
     intents: [

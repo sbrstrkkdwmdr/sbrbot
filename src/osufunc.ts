@@ -1,25 +1,23 @@
 import charttoimg from 'chartjs-to-image';
 import fs from 'fs';
 import fetch from 'node-fetch';
+import * as osuparsers from 'osu-parsers';
+import * as replayparser from 'osureplayparser';
 import perf from 'perf_hooks';
 import rosu from 'rosu-pp';
 import Sequelize from 'sequelize';
 import * as msgfunc from '../commands/msgfunc.js';
+import { path, precomppath } from '../path.js';
 import * as cmdchecks from './checks.js';
 import * as emojis from './consts/emojis.js';
-import * as osumodcalc from './osumodcalc.js';
-import * as extypes from './types/extratypes.js';
-import * as osuApiTypes from './types/osuApiTypes.js';
-//const config = JSON.parse(fs.readFileSync('../config/config.json', 'utf-8'));
-import * as osuparsers from 'osu-parsers';
-import * as replayparser from 'osureplayparser';
-import config from '../config/config.json' assert { type: 'json' };
-import { path, precomppath } from '../path.js';
 import * as errors from './consts/errors.js';
 import * as mainconst from './consts/main.js';
 import * as tools from './func.js';
 import * as log from './log.js';
 import * as mapParser from './mapParser.js';
+import * as osumodcalc from './osumodcalc.js';
+import * as extypes from './types/extratypes.js';
+import * as osuApiTypes from './types/osuApiTypes.js';
 import * as osuparsertypes from './types/osuparsertypes.js';
 /* module.exports = {
     modemods, modemappers
@@ -67,7 +65,8 @@ export async function mapcalc(
         customHP?: number,
         maxLimit?: number,
     },
-    lastUpdated: Date
+    lastUpdated: Date,
+    config: extypes.config,
 ) {
     let ppl: rosu.PerformanceAttributes[];
 
@@ -80,7 +79,7 @@ export async function mapcalc(
             if (!fs.existsSync('files/maps/')) {
                 fs.mkdirSync('files/maps/');
             }
-            const mapPath = await dlMap(obj.mapid, 0, lastUpdated);
+            const mapPath = await dlMap(obj.mapid, 0, lastUpdated, config);
 
             if (!(typeof mapPath == 'string')) {
                 return mapPath;
@@ -155,7 +154,8 @@ export async function scorecalc(
         calctype?: number | null, passedObj?: number | null, failed?: boolean | null,
         clockRate?: number | null,
     },
-    lastUpdated: Date
+    lastUpdated: Date,
+    config: extypes.config,
 ) {
     let ppl: rosu.PerformanceAttributes[];
 
@@ -177,7 +177,7 @@ export async function scorecalc(
                     console.log('creating files/maps/');
                     fs.mkdirSync('files/maps/');
                 }
-                const mapPath = await dlMap(obj.mapid, 0, lastUpdated);
+                const mapPath = await dlMap(obj.mapid, 0, lastUpdated, config);
 
 
                 if (!(typeof mapPath == 'string')) {
@@ -313,11 +313,11 @@ export async function scorecalc(
  * @param mode 
  * @returns the strains of a beatmap. times given in milliseconds
  */
-export async function straincalc(mapid: number, mods: string, calctype: number, mode: osuApiTypes.GameMode, lastUpdated: Date) {
+export async function straincalc(mapid: number, mods: string, calctype: number, mode: osuApiTypes.GameMode, lastUpdated: Date, config: extypes.config,) {
     let strains;
     switch (calctype) {
         case 0: default: {
-            const mapPath = await dlMap(mapid, 0, lastUpdated);
+            const mapPath = await dlMap(mapid, 0, lastUpdated, config);
 
             if (!(typeof mapPath == 'string')) {
                 return mapPath;
@@ -816,9 +816,10 @@ export type apiInput = {
         opts?: string[],
         urlOverride?: string;
     },
+    config: extypes.config,
     version?: number,
     callNum?: number,
-    ignoreNonAlphaChar?: boolean;
+    ignoreNonAlphaChar?: boolean,
 };
 /**
  * @param input - see apiInput
@@ -837,7 +838,7 @@ export async function apiget(input: apiInput) {
     } catch (error) {
         access_token = '';
     }
-    const key = config.osuApiKey;
+    const key = input.config.osuApiKey;
     if (!input.version) {
         input.version = 2;
     }
@@ -961,7 +962,7 @@ export async function apiget(input: apiInput) {
                     Accept: "application/json"
                 }
             }).then(res => res.json());
-            log.toOutput(url);
+            log.toOutput(url, input.config);
         }
     } catch (error) {
         data = {
@@ -976,7 +977,7 @@ export async function apiget(input: apiInput) {
     const after = perf.performance.now();
     try {
         if (datafirst?.authentication) {
-            await updateToken();
+            await updateToken(input.config);
             input.callNum ? input.callNum = input.callNum + 1 : input.callNum = 1;
             datafirst = await apiget(input);
 
@@ -1138,7 +1139,6 @@ export async function apigetOT(input: {
         };
         fs.writeFileSync(`${path}/cache/errr_osutrackerapi${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
-    log.toOutput(baseurl);
 
     if (data.apiData.apiData) {
         data = data.apiData;
@@ -1148,7 +1148,7 @@ export async function apigetOT(input: {
 
 
 
-export async function updateToken() {
+export async function updateToken(config: extypes.config) {
     const clientId = config.osuClientID;
     const clientSecret = config.osuClientSecret;
     const newtoken: osuApiTypes.OAuth = await fetch('https://osu.ppy.sh/oauth/token', {
@@ -1178,7 +1178,7 @@ export async function updateToken() {
         fs.writeFileSync(`${path}/config/osuauth.json`, JSON.stringify(newtoken));
         fs.appendFileSync(`${path}/logs/updates.log`, '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
     }
-    log.toOutput('Update token: https://osu.ppy.sh/oauth/token');
+    log.toOutput('Update token: https://osu.ppy.sh/oauth/token', config);
 }
 
 // export function log.toOutput(data: string, title?: string) {
@@ -1250,12 +1250,13 @@ export async function updateUserStats(user: osuApiTypes.User, mode: string, sqlD
     return;
 }
 
-export async function getUser(username: string) {
+export async function getUser(username: string, config: extypes.config) {
     return await apiget({
         type: 'user',
         params: {
             username
-        }
+        },
+        config,
         // url: `https://osu.ppy.sh/api/v2/users/${username}`,
     });
     //apiget('user_get', username);
@@ -1596,7 +1597,7 @@ export function getMapImages(mapSetId: string | number) {
  * @param curCall - start at 0
  * @returns 
  */
-export async function dlMap(mapid: number | string, curCall: number, lastUpdated: Date) {
+export async function dlMap(mapid: number | string, curCall: number, lastUpdated: Date, config: extypes.config) {
     const mapFiles = fs.readdirSync(`${path}/files/maps`);
     let isFound = false;
     let mapDir = '';
@@ -1609,14 +1610,14 @@ export async function dlMap(mapid: number | string, curCall: number, lastUpdated
         }
         const writer = fs.createWriteStream(thispath);
         const res = await fetch(url);
-        log.toOutput(`Beatmap file download: ${url}`);
+        log.toOutput(`Beatmap file download: ${url}`, config);
         res.body.pipe(writer);
         await new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve('w');
             }, 1000);
         });
-        log.toOutput(`Saved file: ${mapDir.replace(`${path}/`, '')}`);
+        log.toOutput(`Saved file: ${mapDir.replace(`${path}/`, '')}`, config);
     } else {
         for (let i = 0; i < mapFiles.length; i++) {
             const curmap = mapFiles[i];
@@ -1625,7 +1626,7 @@ export async function dlMap(mapid: number | string, curCall: number, lastUpdated
             }
         }
         isFound = true;
-        log.toOutput(`Found file: ${mapDir.replace(`${path}/`, '')}`);
+        log.toOutput(`Found file: ${mapDir.replace(`${path}/`, '')}`, config);
     }
     const fileStat = fs.statSync(mapDir);
     if (fileStat.size < 500) {
@@ -1636,12 +1637,12 @@ export async function dlMap(mapid: number | string, curCall: number, lastUpdated
         if (curCall > 3) {
             throw new Error('Map file size is too small. Deleting file...');
         } else {
-            return await dlMap(mapid, curCall + 1, lastUpdated);
+            return await dlMap(mapid, curCall + 1, lastUpdated, config);
         }
     }
     if (fileStat.birthtimeMs < lastUpdated.getTime() && isFound == true) {
         await fs.unlinkSync(mapDir);
-        return await dlMap(mapid, curCall + 1, lastUpdated);
+        return await dlMap(mapid, curCall + 1, lastUpdated, config);
     }
     return mapDir;
 }
@@ -1995,7 +1996,7 @@ export async function userStatsCacheFix(database: Sequelize.ModelStatic<any>, mo
  * @param url the url to check
  * @param callIfMapIdNull if only set id is found, then send an api request to fetch the map id
  */
-export async function mapIdFromLink(url: string, callIfMapIdNull: boolean) {
+export async function mapIdFromLink(url: string, callIfMapIdNull: boolean, config: extypes.config) {
 
     if (url.includes(' ')) {
         const temp = url.split(' ');
@@ -2058,7 +2059,8 @@ export async function mapIdFromLink(url: string, callIfMapIdNull: boolean) {
             type: 'mapset_get',
             params: {
                 id: object.set
-            }
+            },
+            config
         });
         object.map = (bmsdataReq.apiData as osuApiTypes.Beatmapset)?.beatmaps?.[0]?.id ?? null;
     }
@@ -2279,7 +2281,8 @@ total maps: ${maps.length}`;
  */
 export async function calcUr(
     osr: string,
-    osu: string
+    osu: string,
+    config: extypes.config,
 ) {
     const unstableRate: number[] = [];
 
@@ -2370,7 +2373,7 @@ export async function calcUr(
         }
     }
 
-    log.toOutput(JSON.stringify(hitObjectTimings, null, 2));
+    log.toOutput(JSON.stringify(hitObjectTimings, null, 2), config);
 
     const hitObjectsforAvg = hitObjectTimings.slice();
 
@@ -2771,18 +2774,18 @@ export async function apigetOffline(input: apiInput) {
             //using spath find file
             const full = spath.split('\\');
             const file = full.pop();
-            console.log(full.join('\\'))
+            console.log(full.join('\\'));
             const dir = fs.readdirSync(full.join('\\'));
-            console.log(dir)
+            console.log(dir);
             const isPresent = dir.filter(x => x.includes(file));
-            console.log(isPresent)
-            console.log(file)
+            console.log(isPresent);
+            console.log(file);
             if (isPresent.length > 0) {
                 ipath = full.join('\\') + `\\${isPresent[Math.floor(Math.random() * isPresent.length)]}`;
             } else {
                 skillissue = true;
             }
-            console.log(skillissue)
+            console.log(skillissue);
             //else return err
 
             const d = skillissue ? '{ error: "null" }' : fs.readFileSync(ipath, 'utf-8');

@@ -8,6 +8,7 @@ import * as calc from './calc.js';
 import * as mainconst from './consts/main.js';
 import * as log from './log.js';
 import * as osufunc from './osufunc.js';
+import * as extypes from './types/extratypes.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 import * as othertypes from './types/othertypes.js';
 
@@ -485,7 +486,7 @@ export function removeSIPrefix(str: string) {
     };
 }
 
-export async function getLocation(name: string) {
+export async function getLocation(name: string, config: extypes.config) {
     if (mainconst.isTesting) {
         const init = fs.readFileSync(`${precomppath}\\files\\testfiles\\weatherlocationdata.json`, 'utf-8');
         return JSON.parse(init) as {
@@ -493,7 +494,7 @@ export async function getLocation(name: string) {
         };
     }
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${name.replaceAll(' ', '+')}&count=10&language=en&format=json`;
-    log.toOutput(url);
+    log.toOutput(url, config);
     const data = await nfetch(url).then(x => x.json());
     return data as { results: othertypes.geoLocale[]; };
 }
@@ -502,6 +503,7 @@ export async function getWeather(
     latitude: number,
     longitude: number,
     location: othertypes.geoLocale,
+    config: extypes.config
 ) {
     if (mainconst.isTesting) {
         const init = fs.readFileSync(`${precomppath}\\files\\testfiles\\weatherdata.json`, 'utf-8');
@@ -514,7 +516,7 @@ export async function getWeather(
             + "&hourly=temperature_2m,precipitation,rain,pressure_msl,windspeed_10m,windgusts_10m,precipitation_probability&current_weather=true&forecast_days=1"
             + "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,precipitation_probability_min,precipitation_probability_mean,windspeed_10m_max,windgusts_10m_max,winddirection_10m_dominant"
             + `&timezone=${location.timezone}`;
-        log.toOutput(url);
+        log.toOutput(url, config);
 
         const data = await nfetch(url).then(x => x.json());
         return data as othertypes.weatherData;
@@ -699,7 +701,7 @@ export function windToDirection(angle: number, reverse?: boolean) {
     return directions[index];
 }
 
-export async function getTropical(type: 'active' | 'storm' | 'features', request?: string) {
+export async function getTropical(config: extypes.config, type: 'active' | 'storm' | 'features', request?: string) {
     const baseURL = 'https://storm.tidetech.org/v1/';
 
     const reqURL = type == 'active' ?
@@ -722,7 +724,7 @@ export async function getTropical(type: 'active' | 'storm' | 'features', request
         }
         return JSON.parse(data) as othertypes.tropicalData;
     } else {
-        log.toOutput(reqURL);
+        log.toOutput(reqURL, config);
         const data = await nfetch(reqURL).then(x => x.json());
         return data as othertypes.tropicalData;
     }
