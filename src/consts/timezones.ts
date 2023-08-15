@@ -1293,12 +1293,19 @@ export const timezones: timezone[] = [
         ]
     },
 ];
-
+/**
+ * vic, sa, nsw, tasmania, 
+ * nz
+ * namibia, egypt, morocco
+ * eu excl. russia and belarus
+ * syria, iran
+ * most of USA, most of canada, mexico, some caribbean isles
+ * parts of brazil, chile,  paraguay
+ */
 export const hasDaylight: {
     offset_normal: number,
     offset_dst: number,
-    start: `${number}-${number}`,
-    finish: `${number}-${number}`;
+    check: (date: Date) => boolean,
     includes: string[],
 }[] = [
         {
@@ -1308,9 +1315,30 @@ export const hasDaylight: {
                 'Victoria', 'VIC',
                 'Melbourne',
                 'New South Wales', 'NSW',
-                'Sydney'
+                'Sydney',
+                'Tasmania', 'TAS',
+                'Hobart'
             ],
-            start: `10-06`,
-            finish: `0-0`
+            check: ((date) => {
+                if ((date.getDay() === 0 || date.getDate() > 6) && (date.getMonth() > 9 || date.getMonth() < 4) ){
+                    return true;
+                } 
+                return false;
+            })
+        }
+        {
+            offset_normal: 10,
+            offset_dst: 11,
+            includes: [
+                'Victoria', 'VIC',
+                'Melbourne',
+                'New South Wales', 'NSW',
+                'Sydney',
+                'Tasmania', 'TAS',
+                'Hobart'
+            ],
+            check: (x => {
+                //first sunday in oct until first sunday in april
+            })
         }
     ];
