@@ -2135,25 +2135,26 @@ export async function time(input: extypes.commandInput) {
                 }
                 useComponents = [buttons];
             }
+            let isOffset = false;
+            for (let i = 0; i < timezoneList.hasDaylight.length; i++) {
+                const curTimeZone = timezoneList.hasDaylight[i];
+                if (curTimeZone.includes.slice().map(x => x.trim().toUpperCase()).includes(fetchtimezone.trim().toUpperCase()) && curTimeZone.check(input.currentDate)) {
+                    isOffset = true;
+                }
+            }
 
-            // if (useComponents.length == 0) {
-            //     if (input?.overrides?.overwriteModal) {
-
-            //     }
-            // }
-
-            const offsetToMinutes = Math.floor(offset * 60);
+            const offsetToMinutes = isOffset ? Math.floor(offset * 60) + 60 : Math.floor(offset * 60);
 
             const reqTime = moment().utcOffset(offsetToMinutes);
 
             const Hrs = offset > 0 ?
-                Math.floor(offset).toString().padStart(3, '+0') :
-                Math.floor(offset).toString().replace('-', '').padStart(3, '-0');
+                Math.floor(isOffset ? offset + 1 : offset).toString().padStart(3, '+0') :
+                Math.floor(isOffset ? offset + 1 : offset).toString().replace('-', '').padStart(3, '-0');
 
             const offsetReadable = `UTC${Hrs}:${(Math.abs(offsetToMinutes % 60)).toString().padStart(2, '0')}`;
 
             fields.push({
-                name: `${calc.toCapital(displayedTimezone)}/${offsetReadable}`,
+                name: `${calc.toCapital(displayedTimezone)}/${offsetReadable} ${isOffset ? '(DST)' : ''}`,
                 value:
                     `\n\`Date              | \`${reqTime.format("DD/MM/YYYY")}` +
                     `\n\`Full Date         | \`${reqTime.format("ddd, DD MMM YYYY hh:mm:ssA Z")}` +

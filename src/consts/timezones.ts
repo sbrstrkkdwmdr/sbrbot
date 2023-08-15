@@ -140,7 +140,7 @@ export const timezones: timezone[] = [
             'Yukon', //^ province/territory
             'Clipperton Island',
             'Mexico', 'México', 'Mēxihco', 'MX', 'MEX',
-            'Baja Calirfornia Norte', //^ 
+            'Baja California Norte', 'Baja California',//^ 
             'Pitcairn Islands', ' Pitkern Ailen', 'PN', 'PCN',
             'Adamstown', //^ capital
             'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
@@ -178,7 +178,6 @@ export const timezones: timezone[] = [
             'Lloydminster',//^ 
             'Mexico', 'México', 'Mēxihco', 'MX', 'MEX',
             'Baja California Sur',//^ 
-            'Chihuahua',//^ 
             'Nayarit',//^ 
             'Sinaloa',//^ 
             'Sonora',//^ 
@@ -237,6 +236,29 @@ export const timezones: timezone[] = [
             'Tegucigalpa', //^ capital
             'Mexico', 'México', 'Mēxihco', 'MX', 'MEX',
             'Mexico City', 'Ciudad de México', 'Āltepētl Mēxihco', //^ capital
+            'Aguascalientes', //^
+            'Campeche', //^
+            'Chiapas', //^
+            'Chihuahua',//^ 
+            'Coahila', //^
+            'Colima', //^
+            'Durango', //^
+            'Guanajuato', //^
+            'Guerrero', //^
+            'Hidalgo', //^
+            'Jalisco', //^
+            'Morelos ', //^
+            'Nuevo León ', 'Neuvo Leon',//^
+            'Oaxaca', //^
+            'Puebla', //^
+            'Querétaro ', 'Queretaro', //^
+            'San Luis Potosí', //^
+            'Tabasco', //^
+            'Tamaulipas', //^
+            'Tlaxcala', //^
+            'Veracruz de Ignacio de la Llave', 'Veracruz', //^
+            'Yucatán', 'Yucatan', //^
+            'Zacatecas', //^
             'Nicaragua', 'NI', 'NIC',
             'Managua', //^ capital
             'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
@@ -288,7 +310,7 @@ export const timezones: timezone[] = [
             '-05',
             'CDT',
             'EST',
-            'Bahamas', 'BS', 'BHS',
+            'The Bahamas', 'Bahamas', 'BS', 'BHS',
             'Nassau', //^ capital
             'Brazil', 'Brasil', 'BR', 'BRA',
             'Acre', //^ 
@@ -311,6 +333,8 @@ export const timezones: timezone[] = [
             'Port-au-Prince', 'Pòtoprens', //^ capital
             'Jamaica', 'JM', 'JAM',
             'Kingston', //^ capital
+            'Mexico', 'México', 'Mēxihco', 'MX', 'MEX',
+            'Quintana Roo',
             'Navassa Island',
             'Panama', 'Panamá', 'PA', 'PAN',
             'Panama City', 'Ciudad de Panamá', //^ capital
@@ -414,6 +438,8 @@ export const timezones: timezone[] = [
             'Stanley', //^ capital
             'Greenland', 'Kalaallit Nunaat', 'Grønland', 'GL', 'GRL', //W
             'Nuuk', 'Godthåb', //^ capital
+            'Ittoqqortoormiit',
+            'Thule Air Base',
             'Grenada', 'GD', 'GRD',
             'St. George\'s', //^ capital
             'Guadeloupe',
@@ -599,7 +625,6 @@ export const timezones: timezone[] = [
             'England', //^ 
             'Scotland', //^ 
             'Wales', //^ 
-            'Western Sahara', 'EH', 'ESH'
         ]
     },
     {
@@ -662,7 +687,7 @@ export const timezones: timezone[] = [
             'Italy', 'Italia', 'IT', 'ITA',
             'Rome', 'Roma', //^ capital
             'Kosovo', 'Косово', 'Kosova', 'XK', 'XKX',
-            'Pristina', 'Prishtinë', 'Priština', 'Приштина',
+            'Pristina', 'Prishtinë', 'Priština', 'Приштина', //^ capital
             'Liechtenstein', 'LI', 'LIE',
             'Vaduz', //^ capital
             'Luxembourg', 'Lëtzebuerg', 'Luxemburg', 'LU', 'LUX',
@@ -672,7 +697,7 @@ export const timezones: timezone[] = [
             'Montenegro', 'Crna Gora', 'Црна Гора', 'ME', 'MNE',
             'Podgorica', 'Подгорица', //^ capital
             'Morocco', 'Amerruk', 'Elmeɣrib', 'ⴰⵎⵔⵔⵓⴽ', 'ⵍⵎⵖⵔⵉⴱ', 'Al-maɣréb', 'المغرب', 'MA', 'MAR',
-            'Rabat', 'Errbaṭ', 'ⵔⵔⴱⴰⵟ', 'Ar-ribaaṭ', 'الرباط',
+            'Rabat', 'Errbaṭ', 'ⵔⵔⴱⴰⵟ', 'Ar-ribaaṭ', 'الرباط', //^ capital
             'Netherlands', 'Nederland', 'Nederlân', 'NL', 'NLD',
             'Amsterdam', //^ capital
             'Niger', 'NE', 'NER',
@@ -700,7 +725,8 @@ export const timezones: timezone[] = [
             'Bern', 'Berne', 'Berna', //^ capital
             'Tunisia', 'Tunes', 'ⵜⵓⵏⵙ', 'Tūns', 'تونس', 'TN', 'TUN',
             'Tunis', //^ capital
-            'Vatican City', 'Civitas Vaticana', 'Città del Vaticano', 'VA', 'VAT'
+            'Vatican City', 'Civitas Vaticana', 'Città del Vaticano', 'Holy See', 'VA', 'VAT',
+            'Western Sahara', 'EH', 'ESH'
         ]
     },
     {
@@ -738,7 +764,7 @@ export const timezones: timezone[] = [
             'Aland', 'Åland', 'Ahvenanmaa', //^ (autonomous region)
             'Mariehamn', 'Maarianhamina', //^ capital
             'Greece', 'Hellas', 'Ellada', 'Ελλάς', 'Ελλάδα', 'GR', 'GRC',
-            'Athens', 'Athinai', 'Athina', 'Αθήναι', 'Αθήνα',
+            'Athens', 'Athinai', 'Athina', 'Αθήναι', 'Αθήνα', //^ capital
             'Israel', 'Yisra\'el', 'ישראל', 'Israʼiyl', 'إسرائيل', 'IL', 'ISR',
             'Jerusalem', 'Yerushalayim', 'ירושלים', 'Al-Quds', 'القُدس', //^ capital
             'Jordan', 'Al-’Urdun', 'الأردن', 'JO', 'JOR',
@@ -1170,7 +1196,8 @@ export const timezones: timezone[] = [
             'GMT+1030',
             'GMT+10:30',
             '+1030',
-            'ACDT'
+            'ACDT',
+            'Lord Howe Island',
         ]
     },
     {
@@ -1294,7 +1321,7 @@ export const timezones: timezone[] = [
     },
 ];
 /**
- * vic, sa, nsw, tasmania, 
+ * australia -> vic,nsw,tas,sa, lord howe isl. 
  * nz
  * namibia, egypt, morocco
  * eu excl. russia and belarus
@@ -1303,42 +1330,456 @@ export const timezones: timezone[] = [
  * parts of brazil, chile,  paraguay
  */
 export const hasDaylight: {
-    offset_normal: number,
-    offset_dst: number,
+    start: string,
+    end: string,
     check: (date: Date) => boolean,
     includes: string[],
 }[] = [
+        //template 
         {
-            offset_normal: 10,
-            offset_dst: 11,
-            includes: [
-                'Victoria', 'VIC',
-                'Melbourne',
-                'New South Wales', 'NSW',
-                'Sydney',
-                'Tasmania', 'TAS',
-                'Hobart'
-            ],
+            start: 'x Sunday in March',
+            end: 'x Sunday in October',
+            includes: [],
             check: ((date) => {
-                if ((date.getDay() === 0 || date.getDate() > 6) && (date.getMonth() > 9 || date.getMonth() < 4) ){
+                if (true) {
                     return true;
-                } 
+                }
                 return false;
             })
-        }
+        },
+        //southern hemisphere
         {
-            offset_normal: 10,
-            offset_dst: 11,
+            start: 'First Sunday in October',
+            end: 'First Sunday in April',
             includes: [
+                'Australian Capital Territory', 'ACT', //^ territory
+                'Canberra', //^ capital 
                 'Victoria', 'VIC',
-                'Melbourne',
+                'Melbourne', //^
                 'New South Wales', 'NSW',
-                'Sydney',
+                'Sydney', //^
                 'Tasmania', 'TAS',
-                'Hobart'
+                'Hobart', //^
+                'Lord Howe Island',
+                'Norfolk Island', ' Norf\'k Ailen', //^
+                'Kingston', //^ capital
             ],
-            check: (x => {
-                //first sunday in oct until first sunday in april
+            check: ((date) => {
+                if (isPastDayOfWeek(date, 0) && isDateBetweenMonths(date, 10, 4)) {
+                    return true;
+                }
+                return false;
             })
-        }
+        },
+        {
+            start: 'Last Sunday in October',
+            end: 'First Sunday in March',
+            includes: [
+                'Paraguay', 'Paraguái', 'PY', 'PRY',
+                'Asuncion', 'Asunción', //^ capital
+            ],
+            check: ((date) => {
+                if (isDateBetweenMonths(date, 10, 4)) {
+                    if (date.getMonth() == 10 && isPastDayOfWeek(date, 0)) {
+                        return true;
+                    } else if (date.getMonth() == 4 && isLastDayOfWeekMonth(date, 0)) {
+                        return true;
+                    } else if (date.getMonth() !== 10 && date.getMonth() !== 4) {
+                        return true;
+                    }
+                }
+                return false;
+            })
+        },
+        {
+            start: 'Last Sunday in March',
+            end: 'First Sunday in October',
+            includes: [
+                'New Zealand', 'Aotearoa', 'NZ', 'NZL',
+                'Wellington', 'Ponoeke', 'Te Whanganui-a-Tara', //^ capital
+                'Auckland', //^ major city
+                'Chatham Islands',
+                'Tokelau', 'TK', 'TKL',
+            ],
+            check: ((date) => {
+                if (isDateBetweenMonths(date, 10, 3)) {
+                    if (date.getMonth() == 10 && isPastDayOfWeek(date, 0)) {
+                        return true;
+                    } else if (date.getMonth() == 3 && isLastDayOfWeekMonth(date, 0)) {
+                        return true;
+                    } else if (date.getMonth() !== 10 && date.getMonth() !== 3) {
+                        return true;
+                    }
+                }
+                return false;
+            })
+        },
+        // northern hemisphere
+        {
+            start: 'Last Sunday in March',
+            end: 'Last Sunday in October',
+            includes: [
+                'Aland', 'Åland', 'Ahvenanmaa', //^ (autonomous region)
+                'Mariehamn', 'Maarianhamina', //^ capital
+                'Shqiperia', 'AL', 'ALB',
+                'Tirana', //^ capital
+                'Andorra', 'AD', 'AND',
+                'Andorra la Vella', //^ capital
+                'Austria', 'Österreich', 'Osterreich', 'AT', 'AUT',
+                'Vienna', 'Wien', //^ capital
+                'Belgium', 'België', 'Belgique', 'Belgien', 'BE', 'BEL',
+                'Brussels', 'Bruxelles', 'Brüssel', //^ capital
+                'Bosnia And Herzegovina', 'Bosnia', 'Herzegovina', 'Bosna i Hercegovina', 'Босна и Херцеговина', 'BA', 'BIH',
+                'Sarajevo', 'Сарајево', //^ capital
+                'Bulgaria', 'Bălgariya', 'Bălgarija', 'България', 'BG', 'BGR',
+                'Sofia', 'Sofiya', 'Sofija', 'София', //^ capital
+                'Croatia', 'Hrvatska', 'HR', 'HRV',
+                'Zagreb', //^ capital
+                'Czech Republic', 'Česká republika', 'Česko', 'CZ', 'CZE',
+                'Prague', 'Praha', //^ capital
+                'Denmark', 'Danmark', 'DK', 'DNK',
+                'Copenhagen', 'København', //^ capital
+                'Estonia', 'Eesti', 'EE', 'EST',
+                'Tallinn', //^ capital
+                'Faroe Islands', 'Føroyar', 'Færøerne', 'FO', 'FRO',
+                'Torshavn', 'Thorshavn', 'Tórshavn', //^ capital
+                'Finland', 'Suomi', 'FI', 'FIN',
+                'Helsinki', 'Helsingfors', //^ capital
+                'France', 'FR', 'FRA',
+                'Paris', //^ capital
+                'Germany', 'Deutschland', 'DE', 'DEU',
+                'Berlin', //^ capital
+                'Gibraltar', 'GI', 'GIB',
+                'Greece', 'Hellas', 'Ellada', 'Ελλάς', 'Ελλάδα', 'GR', 'GRC',
+                'Athens', 'Athinai', 'Athina', 'Αθήναι', 'Αθήνα',
+                'Ittoqqortoormiit', //greenland
+                'Guernsey', 'GG', 'GGY',
+                'Saint Peter Port', //^ capital
+                'Hungary', 'Magyarország', 'HU', 'HUN',
+                'Budapest', //^ capital
+                'Ireland', 'Éire', 'IE', 'IRL',
+                'Dublin', 'Baile Átha Cliath', //^ capital
+                'Isle of Man', 'Ellan Vannin', 'IM', 'IMN',
+                'Douglas', 'Doolish', //^ capital
+                'Italy', 'Italia', 'IT', 'ITA',
+                'Jersey', 'Jèrri', 'JE', 'JEY',
+                'St. Helier', 'Saint Hélier', 'Saint Hélyi', //^ capital
+                'Kosovo', 'Косово', 'Kosova', 'XK', 'XKX',
+                'Pristina', 'Prishtinë', 'Priština', 'Приштина', //^ capital
+                'Latvia', 'Latvija', 'LV', 'LVA',
+                'Riga', 'Rīga', //^ capital
+                'Liechtenstein', 'LI', 'LIE',
+                'Vaduz', //^ capital
+                'Lithuania', 'Lietuva', 'LT', 'LTU',
+                'Vilnius', //^ capital
+                'Luxembourg', 'Lëtzebuerg', 'Luxemburg', 'LU', 'LUX',
+                'Malta', 'MT', 'MLT',
+                'Valletta', 'Il-Belt Valletta', //^ capital
+                'Moldova', 'MD', 'MDA',
+                'Chisinau', 'Chișinău', //^ capital
+                'Monaco', 'Múnegu', 'MC', 'MCO',
+                'Montenegro', 'Crna Gora', 'Црна Гора', 'ME', 'MNE',
+                'Podgorica', 'Подгорица', //^ capital
+                'Netherlands', 'Nederland', 'Nederlân', 'NL', 'NLD',
+                'Amsterdam', //^ capital
+                'North Macedonia', 'Severna Makedonija', 'Северна Македонија', 'Maqedonia e Veriut', 'MK', 'MKD',
+                'Skopje', 'Скопје', 'Shkup', //^ capital
+                'Norway', 'Norge', 'Noreg', 'Norga', 'Vuodna', 'Nöörje', 'NO', 'NOR',
+                'Oslo', //^ capital
+                'Poland', 'Polska', 'PL', 'POL',
+                'Warsaw', 'Warszawa', //^ capital
+                'Portugal', 'PT', 'PRT',
+                'Lisbon', 'Lisboa', //^ capital
+                'Romania', 'România', 'RO', 'ROU',
+                'Bucharest', 'București', //^ capital
+                'San Marino', 'SM', 'SMR',
+                'Serbia', 'Srbija', 'Србија', 'RS', 'SRB',
+                'Belgrade', 'Beograd', 'Београд', //^ capital
+                'Slovakia', 'Slovensko', 'SK', 'SVK',
+                'Philipsburg', //^ capital
+                'Slovenia', 'Slovenija', 'SI', 'SVN',
+                'Ljubljana', //^ capital
+                'Spain', 'España', 'Espanya', 'Espainia', 'Espanha', 'ES', 'ESP',
+                'Madrid', 'Madril', //^ capital
+                'Sweden', 'Sverige', 'SZ', 'SWZ',
+                'Stockholm', //^ capital
+                'Switzerland', 'Schweiz', 'Suisse', 'Svizzera', 'Svizra', 'SE', 'SWE',
+                'Bern', 'Berne', 'Berna', //^ capital
+                'Ukraine', 'Ukrajina', 'Україна', 'UA', 'UKR',
+                'Kyiv', 'Kyjiv', 'Київ', //^ capital
+                'United Kingdom', 'UK', 'U.K.', 'Britain', 'Great Britain', 'Y Deyrnas Unedig', 'Unitit Kinrick', 'Rìoghachd Aonaichte', 'Ríocht Aontaithe', 'An Rywvaneth Unys', 'GB', 'GBR',
+                'London', 'Llundain', 'Lunnon', 'Lunnainn', 'Londain', 'Loundres', //^ capital
+                'England', //^ 
+                'Scotland', //^ 
+                'Wales', //^ 
+                'Vatican City', 'Civitas Vaticana', 'Città del Vaticano', 'Holy See', 'VA', 'VAT'
+            ],
+            check: ((date) => {
+                if (isLastDayOfWeekMonth(date, 0) && isDateBetweenMonths(date, 3, 10)) {
+                    return true;
+                }
+                return false;
+            })
+        },
+        {
+            start: 'Second Sunday in March',
+            end: 'First Sunday in October',
+            includes: [
+                'Bermuda', 'BM', 'BMU',
+                'Hamilton', //^ capital
+                'British Columbia', //^ province/territory //most of
+                'Victoria', //^ province/territory capital
+                'Vancouver', //^ major city
+                'Edmonton', //^ province/territory capital
+                'Calgary', //^ major city
+                'British Columbia',//^ province/territory
+                'Lloydminster',//^ 
+                'Manitoba',//^ province/territory
+                'Winnipeg', //^ province/territory capital
+                'Saskatoom', //^ major city
+                'Ontario', //^ provincce //NW
+                'Ottawa', //^ capital
+                'Nunavut',//^ 
+                'Ontario', //^ //most of
+                'Toronto', //^ province/territory capital
+                'Quebec', //^ province/territory //most of
+                'Quebec City', //^ province/territory capital
+                'Montreal', //^ major city
+                'Labrador',//^
+                'New Brunswick',//^ province/territory
+                'Fredericton', //^ province/territory capital
+                'Moncton', //^ major city
+                'Nova Scotia',//^ province/territory
+                'Halifax', //^ province/territory capital
+                'Prince Edward Island',//^ province/territory
+                'Charlottetown', //^ province/territory capital
+                'Quebec', //^ province/territory //E
+                'Newfoundland and Labrador', 'Newfoundland',
+                'St. John\'s', //^ province/territory capital
+                'Cuba', 'CU', 'CUB',
+                'Havana', 'La Habana', //^ capital
+                'Thule Air Base',
+                'Haiti', 'Haïti', 'Ayiti', 'HT', 'HTI',
+                'Port-au-Prince', 'Pòtoprens', //^ capital
+                'Baja California Norte', 'Baja California',//^ 
+                'Chihuahua',//^ 
+                'Tamaulipas', //^
+                'Nuevo León', 'Nuevo Leon', //^
+                'Saint Pierre and Miquelon', 'PM', 'SPM',
+                'Saint-Pierre', 'Saint Pierre', //^ capital
+                'The Bahamas', 'Bahamas', 'BS', 'BHS',
+                'Nassau', //^ capital
+                'Turks and Caicos Islands', 'TC', 'TCA',
+                'Cockburn Town', //^ capital
+                'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
+                'Washington',//^ state
+                'Olympia', //^ state capital
+                'Idaho', //^ state //north
+                'Oregon',//^ state
+                'Salem', //^ state capital
+                'California',//^ state
+                'Sacramento', //^ state capital
+                'Los Angeles', //^ major city
+                'San Francisco', //^ major city
+                'Silicon Valley', //^ part of san francisco
+                'Nevada', //^ state
+                'Carson City', //^ state capital
+                'Las Vegas', //^ major city
+                'North Dakota', //^state //SW
+                'South Dakota', //^state //W
+                'Nebraska', //^ state//W
+                'Kansas', //^ state//small bit
+                'Montana',//^ state
+                'Helena', //^ state capital
+                'Oregon', //^ state//small bit
+                'Idaho', //^state //southern
+                'Boise', //^ state capital
+                'Wyoming',//^ state
+                'Cheyenne', //^ state capital
+                'Utah',//^ state
+                'Salt Lake', 'Salt Lake City', //^ state capital
+                'Colorado',//^ state
+                'Denver', //^ state capital
+                'New Mexico',//^ state
+                'Santa Fe', //^ state capital
+                'Albuquerque', //^ major city
+                'Texas', //^ state //El Paso area
+                'Wisconsin',//^ state
+                'Madison', //^ state capital
+                'Illinois',//^ state
+                'Springfield', //^ state capital
+                'Indiana', //^ state//SW and NW corners
+                'Kentucky',//^  state//W
+                'Tennessee',//^  state//W and central
+                'Mississippi',//^ state
+                'Jackson', //^ state capital
+                'Alabama',//^ state
+                'Montgomery', //^ state capital
+                'Minnesota',//^ state
+                'Saint Paul', //^ state capital
+                'Iowa',//^ state
+                'Des Moines', //^ state capital
+                'Missouri',//^ state
+                'Jefferson City', //^ state capital
+                'Arkansas',//^ state
+                'Little Rock', //^ state capital
+                'Louisiana',//^ state
+                'Baton Rouge', //^ state capital
+                'North Dakota',//^  state//N and E
+                'Bismark', //^ state capital
+                'South Dakota',//^state //E
+                'Pierre', //^ state capital
+                'Nebraska', //^ state//E and central
+                'Lincoln', //^ state capital
+                'Kansas',//^ state //most of
+                'Topeka', //^ state capital
+                'Oklahoma',//^ state
+                'Oklahoma City', //^ state capital
+                'Texas', //^ state//most of
+                'Austin', //^ state capital
+                'Houston', //^ major city
+                'Florida', //^ state //W
+                'Maine',//^ state 
+                'Augusta', //^ state capital
+                'New Hampshire',//^ state 
+                'Concord', //^ state capital
+                'Vermont',//^ state 
+                'Montpelier', //^ state capital
+                'New York', //^ state 
+                'Albany', //^ state capital
+                'NYC', 'New York City', //^ major city
+                'Massachusetts',//^ state 
+                'Boston', //^ state capital
+                'Connecticut',//^ state 
+                'Hartford', //^ state capital
+                'Rhode Island',//^ state 
+                'Providence', //^ state capital
+                'Michigan', //^state  //excl. few north west
+                'Lansing', //^ state capital  
+                'Indiana', //^ state //excl. NW and SW corners
+                'Indianapolis', //^ state capital            
+                'Ohio',//^ state 
+                'Columbus', //^ state capital
+                'Pennsylvania',//^ state 
+                'Harrisburg', //^ state capital
+                'New Jersey',//^ state
+                'Trenton', //^ state capital
+                'Kentucky', //^state //E
+                'Frankfort', //^ state capital
+                'West Virginia',//^ state
+                'Charleston', //^ state capital
+                'Virginia',//^ state
+                'Richmond', //^ state capital
+                'Washington D.C.', 'Washington, D.C.', 'Washington DC',//^ capital
+                'Maryland',//^ state
+                'Annapolis', //^ state capital
+                'Delaware',//^ state
+                'Dover', //^ state capital
+                'Tennessee', //^state //E
+                'Nashville', //^ state capital
+                'North Carolina',//^ state
+                'Raleigh', //^ state capital
+                'Georgia',//^ state
+                'Atlanta', //^ state capital
+                'South Carolina',//^ state
+                'Columbia', //^ state capital
+                'Florida',//^ state //excl. W panhandle
+                'Tallahassee', //^ state capital
+                'Miami', //^ major city
+            ],
+            check: ((date) => {
+                if (isDateBetweenMonths(date, 4, 10)) {
+                    if (date.getMonth() == 10 && isPastDayOfWeek(date, 0)) {
+                        return true;
+                    } else if (date.getMonth() == 4 && isDateBeforeOrAfterNthDayOfWeek(date, 0, 2, "before")) {
+                        return true;
+                    } else if (date.getMonth() !== 10 && date.getMonth() !== 4) {
+                        return true;
+                    }
+                }
+                return false;
+            })
+        },
+        {
+            start: 'Last Saturday in April',
+            end: 'Last Saturday in October',
+            includes: [
+                'Palestine', 'Filasṭīn', 'فلسطين', 'PS', 'PSE',
+                'East Jerusalem', 'Al-Quds Al-Sharqit', 'القدس الشرقية', //^ declared capital
+                'Ramallah', 'Rāmallāh', 'رام الله', //^ administrative capital
+            ],
+            check: ((date) => {
+                if (isDateBetweenMonths(date, 4, 10) && isLastDayOfWeekMonth(date, 6)) {
+                    return true;
+                }
+                return false;
+            })
+        },
+        {
+            start: 'Last Thursday in March',
+            end: 'Last Sunday in October',
+            includes: [
+                'Lebanon', 'Lubnān', 'لبنان ', 'Liban', 'LB', 'LBN',
+                'Beirut', 'Bayrut', 'Bayrūt', 'بيروت', 'Beyrouth', //^ capital
+            ],
+            check: ((date) => {
+                if (isDateBetweenMonths(date, 3, 10)) {
+                    if (date.getMonth() == 10 && isPastDayOfWeek(date, 0)) {
+                        return true;
+                    } else if (date.getMonth() == 3 && isLastDayOfWeekMonth(date, 0)) {
+                        return true;
+                    } else if (date.getMonth() !== 10 && date.getMonth() !== 3) {
+                        return true;
+                    }
+                }
+                return false;
+            })
+        },
     ];
+
+//thanks chat gpt
+/**
+ * 
+ * @param date cur date
+ * @param targetWeekday 0 = sun, 1 = mon etc.
+ * @returns 
+ */
+function isPastDayOfWeek(date: Date, targetWeekday: number) {
+    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const firstDayWeekday = firstDayOfMonth.getDay();
+    const daysToAdd = (targetWeekday - firstDayWeekday + 7) % 7;
+    const targetDate = new Date(date.getFullYear(), date.getMonth(), 1 + daysToAdd);
+    return date > targetDate;
+}
+
+function isLastDayOfWeekMonth(date: Date, targetWeekday: number) {
+    const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const lastDayWeekday = lastDayOfMonth.getDay(); // Sunday=0, Monday=1, ..., Saturday=6
+
+    return lastDayWeekday === targetWeekday && date.getDate() === lastDayOfMonth.getDate();
+}
+
+function isDateBeforeOrAfterNthDayOfWeek(date: Date, targetWeekday: number, nthOccurrence: number, comparison: "before" | "after") {
+    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const daysToAdd = (targetWeekday - firstDayOfMonth.getDay() + 7) % 7 + (nthOccurrence - 1) * 7;
+
+    const targetDate = new Date(date.getFullYear(), date.getMonth(), 1 + daysToAdd);
+
+    if (comparison === "before") {
+        return date < targetDate;
+    } else if (comparison === "after") {
+        return date > targetDate;
+    } else {
+        throw new Error("Invalid comparison type. Use 'before' or 'after'.");
+    }
+}
+
+function isDateBetweenMonths(date: Date, startMonth: number, endMonth: number) {
+    const inputMonth = date.getMonth();
+
+    if (startMonth <= endMonth) {
+        return startMonth <= inputMonth && inputMonth <= endMonth;
+    } else {
+        return inputMonth >= startMonth || inputMonth <= endMonth;
+    }
+}
