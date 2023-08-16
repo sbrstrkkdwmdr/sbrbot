@@ -2738,10 +2738,10 @@ ${dailyData.rain_sum[0] > 0 ? `Rain: ${dailyData.rain_sum[0]}${weatherUnits.rain
                 {
                     name: `Wind`,
                     value: `
-Current: ${curData.windspeed}${weatherUnits.windspeed_10m_max} ${windDir.name}${windDir.emoji}
+Current: ${curData.windspeed}${weatherUnits.windspeed_10m_max} ${windDir.name}${windDir.emoji} (${curData.winddirection}°)
 Max speed: ${dailyData.windspeed_10m_max[0]}${weatherUnits.windspeed_10m_max}
 Max Gusts: ${dailyData.windgusts_10m_max[0]}${weatherUnits.windgusts_10m_max}
-Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}${maxWindDir.name}${maxWindDir.emoji}
+Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}° ${maxWindDir.name}${maxWindDir.emoji}
 `,
                     inline: true
                 },

@@ -430,3 +430,4 @@ changes:
 [FIX] tropical storm global map not working
 [QOL] added config checker
 [ADD] added DST support to time command
+[QOL] add wind angle to current wind direction
