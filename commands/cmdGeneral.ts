@@ -2670,7 +2670,7 @@ export async function weather(input: extypes.commandInput) {
                     displayLegend: true,
                     pointSize: 1.5,
                 });
-            const prChGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation_probability, `Precipitation ${weatherData.hourly_units.precipitation_probability}`,
+            const prChGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation_probability, `${weatherData.hourly_units.precipitation_probability} Chance of Precipitation`,
                 {
                     startzero: true,
                     fill: false,
