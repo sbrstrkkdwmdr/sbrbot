@@ -423,7 +423,7 @@ changes:
 [ADD] add buttons to changelog
 [QOL] fix changelog showing 0.4.1 instead of 0.4.1x
 [FIX] debug commandfiletype not accepting "recent_activity"
-[ADD] added wind gusts to weather command
+[ADD] added wind gusts to weather command graphs
 [ADD] added WIP testing mode
 [ADD] added support for multiple datasets per graph
 [QOL] add testing mode
