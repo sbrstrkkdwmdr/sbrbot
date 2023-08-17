@@ -417,7 +417,7 @@ changes:
 
 VERSION 0.5.2
 2023-08-17
-commit: null
+commit: c4bca0407a8ff85ad7c078e0968d1bc345470e7c
 changes:
 [FIX] recent going back to most recent score when using non-page buttons
 [ADD] add buttons to changelog
