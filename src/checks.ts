@@ -84,7 +84,7 @@ CHECKING CONFIG FOR ANY ERRORS
         console.log("The default value of `[]` will be used as a placeholder");
         config["ownerusers"] = [];
     }
-    if (!config.hasOwnProperty("google") && typeof config["google"] != "string") {
+    if (config.hasOwnProperty("google") && typeof config["google"] != "string") {
         if (!config["google"].hasOwnProperty("apiKey") && typeof config["google"]["apiKey"] != "string") {
             console.log("Property `google.apiKey` is invalid or an incorrect type");
             console.log("image search commands will not work until this property is added/fixed");
