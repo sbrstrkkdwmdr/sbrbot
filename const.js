@@ -203,6 +203,39 @@ const scoreListCommandOptions = [
 
 const generalcommands = [
     {
+        name: 'changelog',
+        description: 'Displays the changes for the current version or version requested',
+        usage: 'changelog [version]',
+        slashusage: 'changelog [version]',
+        examples: [
+            {
+                text: 'PREFIXMSGchangelog 0.4.0',
+                descriptor: 'Returns the changelog for version 0.4.0'
+            },
+            {
+                text: 'PREFIXMSGchangelog first',
+                descriptor: 'Returns the changelog for the first version'
+            },
+            {
+                text: 'PREFIXMSGchangelog versions',
+                descriptor: 'Returns a list of all versions'
+            },
+        ],
+        aliases: ['clog', 'changes'],
+        options: [
+            {
+                name: 'version',
+                type: 'string',
+                required: false,
+                description: 'The version',
+                options: ['formatted as major.minor.patch (`0.4.1`) or `first`, `second` etc. `versions` also works'],
+                defaultValue: 'latest',
+                examples: ['0.4.1', 'version:0.4.1', 'first'],
+                commandTypes: ['message', 'interaction']
+            },
+        ]
+    },
+    {
         name: 'convert',
         description: 'Converts a number from one unit to another',
         usage: 'convert <from> [to] [number]',
@@ -519,7 +552,7 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'Weather',
+        name: 'weather',
         description: 'Shows the weather for a specific region',
         usage: 'weather <region>',
         slashusage: 'weather <region>',
@@ -544,7 +577,7 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'Tropicalweather',
+        name: 'tropicalweather',
         description: 'Shows the currently active tropical storms.',
         usage: 'tropicalweather',
         slashusage: 'tropicalweather',
@@ -913,7 +946,7 @@ const osucommands = [
                 descriptor: 'Returns the leaderboard of the most recent map in the guild with HDHR'
             }
         ],
-        aliases: ['leaderboard', 'mapleaderboard'],
+        aliases: ['leaderboard', 'mapleaderboard', 'ml'],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last,],
         options: [
             {
@@ -1760,6 +1793,46 @@ const osucommands = [
         ]
     },
     {
+        name: 'scorepost',
+        description: 'Generates a thumbnail and title for a score',
+        usage: 'scorepost <id> [mode]',
+        slashusage: 'null',
+        examples: [
+            {
+                text: 'PREFIXMSGscorepost 1234567890',
+                descriptor: 'Generates a thumbnail and title for the osu! score with the id 1234567890'
+            },
+            {
+                text: 'PREFIXMSGscorepost 1234567890 mania',
+                descriptor: 'Generates a thumbnail and title for the osu! score with the id 1234567890'
+            },
+        ],
+        aliases: [],
+        buttons: [],
+        options: [
+            {
+                name: 'id',
+                type: 'integer',
+                required: true,
+                description: 'The id of the score',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['id:727'],
+                commandTypes: ['message', 'interaction', 'link']
+            },
+            {
+                name: 'mode',
+                type: 'string',
+                required: 'false if message command, true if link',
+                description: 'The mode of the score',
+                options: ['osu', 'taiko', 'fruits', 'mania'],
+                defaultValue: 'osu',
+                examples: ['mode:osu'],
+                commandTypes: ['message', 'interaction', 'link']
+            }
+        ]
+    },
+    {
         name: 'scores',
         description: 'Shows the scores of a user on a beatmap',
         usage: 'scores [user] [id] [-page/-p] [-parse] [-grade] [-reverse]',
@@ -2302,7 +2375,7 @@ const misccommands = [
         ]
     },
     {
-        name: 'Inspire',
+        name: 'inspire',
         description: 'Sends a randomly generated inspirational quote',
         usage: 'inspire',
         slashusage: 'inspire',
@@ -2538,7 +2611,7 @@ const admincommands = [
         name: 'debug',
         description: 'Runs a debugging command',
         usage: 'debug <type> [arg]',
-        slashusage:'debug <type> [arg]',
+        slashusage: 'debug <type> [arg]',
         examples: [],
         aliases: [],
         options: [
@@ -2551,16 +2624,16 @@ const admincommands = [
                 defaultValue: 'list options',
                 examples: [''],
                 commandTypes: ['message', 'interaction']
-            },{
-            name: 'arg',
-            type: 'integer/string',
-            required: false,
-            description: 'commandfile -> the id of the command to search for\nlogs -> the ID of the guild to send logs from\nclear -> the types of files to clear (read the options section)',
-            options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
-            defaultValue: 'commandfile -> latest command\nlogs -> current server\n clear -> temporary files only',
-            examples: [''],
-            commandTypes: ['message', 'interaction']
-        }
+            }, {
+                name: 'arg',
+                type: 'integer/string',
+                required: false,
+                description: 'commandfile -> the id of the command to search for\ncommandfiletype -> the name of the command to search\nlogs -> the ID of the guild to send logs from\nclear -> the types of files to clear (read the options section)',
+                options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
+                defaultValue: 'commandfile -> latest command\ncommandfiletype -> list options\nlogs -> current server\n clear -> temporary files only',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            }
         ]
     },
     {
@@ -2627,131 +2700,43 @@ const admincommands = [
 const buttons = [
     {
         name: 'Refresh',
-        description: 'Refreshes the embed',
-        imagesrc: './img/buttons/refresh.png',
-        emojisrc: '',
-        examples: [],
-        aliases: [],
-        options: []
-    },
-    {
+        description: 'Refreshes the current embed',
+        emoji: buttonsObjs.label.main.refresh,
+    }, {
         name: 'BigLeftArrow',
         description: 'Switches to the first page',
-        imagesrc: './img/buttons/page_first.png',
-        emojisrc: '',
-        examples: [],
-        aliases: [],
-        options: []
-    },
-    {
+        emoji: buttonsObjs.label.page.first,
+    }, {
         name: 'LeftArrow',
         description: 'Switches to the previous page',
-        imagesrc: './img/buttons/page_previous.png',
-        emojisrc: '',
-        examples: [],
-        aliases: [],
-        options: []
-    },
-    {
+        emoji: buttonsObjs.label.page.previous,
+    }, {
         name: 'Search',
-        description: 'Enter a page number to go to',
-        imagesrc: './img/buttons/page_select.png',
-        emojisrc: '🔍',
-        examples: [{
-            text: '2',
-            descriptor: 'Goes to page 2. If the page number is invalid, it will go to the last page'
-        }],
-        aliases: [],
-        options: []
-    },
-    {
+        description: 'Switches to the chosen page',
+        emoji: buttonsObjs.label.page.search,
+    }, {
         name: 'RightArrow',
         description: 'Switches to the next page',
-        imagesrc: './img/buttons/page_next.png',
-        emojisrc: '',
-        examples: [],
-        aliases: [],
-        options: []
-    },
-    {
+        emoji: buttonsObjs.label.page.next,
+    }, {
         name: 'BigRightArrow',
         description: 'Switches to the last page',
-        imagesrc: './img/buttons/page_last.png',
-        emojisrc: '',
-        examples: [],
-        aliases: [],
-        options: []
-    },
-    {
+        emoji: buttonsObjs.label.page.last,
+    }, {
         name: 'detailMore',
-        description: 'Expands the details of the current embed',
-        imagesrc: './img/buttons/details_more.png',
-        emojisrc: '',
-        examples: [],
-        aliases: [],
-        options: []
-    },
-    {
+        description: 'Expands the current embed',
+        emoji: buttonsObjs.label.main.detailMore,
+    }, {
         name: 'detailLess',
-        description: 'Collapses the details of the current embed',
-        imagesrc: './img/buttons/details_less.png',
-        emojisrc: '',
-        examples: [],
-        aliases: [],
-        options: []
-    },
-    {
+        description: 'Collapses the current embed',
+        emoji: buttonsObjs.label.main.detailLess,
+    }, {
         name: 'Detailed',
-        description: 'Toggles the detailed view of the current embed',
-        imagesrc: '',
-        emojisrc: '📝',
-        examples: [],
-        aliases: [],
-        options: []
-    },
-    {
+        description: 'Toggles the amount of content on the current embed',
+        emoji: buttonsObjs.label.main.detailed,
+    }, {
         name: 'Random',
-        description: 'Picks a random value from a list',
-        imagesrc: './img/buttons/random.png',
-        emojisrc: '',
-        examples: [],
-        aliases: [],
-        options: []
+        description: 'Picks a random command to display',
+        emoji: buttonsObjs.label.extras.random,
     },
-    {
-        name: 'Graph',
-        description: 'Switches to the graph view of the current embed',
-        imagesrc: './img/buttons/graph.png',
-        emojisrc: '',
-        examples: [],
-        aliases: [],
-        options: []
-    },
-    {
-        name: 'Leaderboard',
-        description: 'Shows the leaderboard of the current map',
-        imagesrc: './img/buttons/leaderboard.png',
-        emojisrc: '',
-        examples: [],
-        aliases: [],
-        options: []
-    },
-    {
-        name: 'Map',
-        description: 'Shows the map of the current score/scoreboard',
-        imagesrc: './img/buttons/map.png',
-        emojisrc: '',
-        examples: [],
-        aliases: [],
-        options: []
-    },
-    {
-        name: 'User',
-        description: 'Shows the user/mapper of the current score/scoreboard/map',
-        imagesrc: './img/buttons/user.png',
-        emojisrc: '',
-        examples: [],
-        aliases: [],
-        options: []
-    },
-]
+];
