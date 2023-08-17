@@ -100,37 +100,37 @@ function toListButtons(commands, div, name) {
         cmddiv.classList.add('command');
         cmddiv.innerHTML =
             `
-    
-    <details>
-    <summary class="divCommandName" id="${name}-${cmd.name}">${cmd.name}</summary>
-    <div class="divCommandDetails">
-    <p>${cmd.description}
-    </p>
 
-    <pre>
-   ${cmd.examples.length > 0 ?
+<details>
+<summary class="divCommandName" id="${name}-${cmd.name}">${cmd.name}</summary>
+<div class="divCommandDetails">
+<p>${cmd.description}
+</p>
+
+<pre>
+${cmd.examples.length > 0 ?
                 `\nExamples:` +
                 `<table class="cmdexample">` +
                 cmd.examples.map(x =>
                     `<tr>
-                <td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
-                <td class="tdEx"><div class="exdesc">${x.descriptor}</div></td>
-                </tr>
-                `
+<td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
+<td class="tdEx"><div class="exdesc">${x.descriptor}</div></td>
+</tr>
+`
 
                 ).join(`\n`) + '</table>' :
                 ''}
-    </pre>
-    ${cmd.imagesrc.length > 0 ? `<img src="${cmd.imagesrc}" alt="${cmd.name}" style="height:10%;width:10%">` : ''}
-    ${cmd.emojisrc.length > 0 ?
+</pre>
+${cmd.imagesrc.length > 0 ? `<img src="${cmd.imagesrc}" alt="${cmd.name}" style="height:10%;width:10%">` : ''}
+${cmd.emojisrc.length > 0 ?
                 `<p style="font-size:50px">${cmd.emojisrc}</p>` : ''
             }
-    </div>
+</div>
 
 
-    </details>
-    </div>
-    `
+</details>
+</div>
+`
         div.appendChild(cmddiv);
     }
 }
@@ -158,6 +158,7 @@ class smoothOpen {
         } else if (this.isExpanding || this.el.open) {
             this.shrink();
         }
+        
     }
 
     shrink() {

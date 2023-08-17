@@ -151,7 +151,7 @@ summary {
 }
 
 summary:hover {
-    color: green;
+    color: black;
 }
 
 
@@ -228,7 +228,7 @@ pre {
     z-index: 98;
 }
 
-.command {
+.command details {
     background-color: rgba(49, 49, 49, 0.5);
     margin-left: 3%;
     margin-right: 3%;
@@ -237,4 +237,31 @@ pre {
     padding: 10px;
     border-radius: 5px;
     z-index: 99;
+    user-select: none;
+}
+
+.command details[open] {
+    background-color: rgba(75, 75, 75, 0.5);
+    /* margin-left: 3%; */
+    /* margin-right: 3%; */
+    /* margin-top: 10px; */
+    /* margin-bottom: 10px; */
+    /* padding: 10px; */
+    border-radius: 5px;
+    z-index: 99;
+}
+
+.command details:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 99;
+}
+
+.command details[open]:hover {
+    background-color: rgba(75, 75, 75, 0.5);
 }

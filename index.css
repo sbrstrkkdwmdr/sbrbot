@@ -3,16 +3,12 @@ html {
 }
 
 body {
-    background-color: #a04747;
-    /*background-image: url(../image/bg.jpg);*/
-    background-image: url(./docbg.jpg);
+    /* background-image: url(./docbg.jpg); */
+    background: linear-gradient(to right bottom, #FF8C3F, #FF3FE5);
     background-repeat: repeat;
     background-attachment: fixed;
-    background-size: fill;
+    background-size: contain;
     color: white;
-    margin-top: 150px;
-    z-index: 1;
-
 }
 
 /* h1 {
@@ -45,6 +41,30 @@ p {
     display: flex;
     justify-content: center;
     background-image: url(./docnav.jpg);
+}
+
+.codeblock {
+    float: inline-start;
+    color: rgb(226, 223, 219);
+    background-color: rgb(66, 72, 75);
+    margin-right: 25px;
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+    font-family: 'Consolas';
+    font-weight: bolder;
+}
+
+.surround {
+    float: inline-start;
+    color: rgb(226, 223, 219);
+    background-color: rgba(66, 72, 75, 0.5);
+    margin-right: 25px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
 }
 
 
