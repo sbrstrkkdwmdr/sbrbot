@@ -181,15 +181,17 @@ export default (input: {
     ) {
         const requireEmbedCommands: string[] = [
             //gen
-            'convert', 'help', 'info', 'invite', 'ping', 'remind', 'stats', 'time',
+            'convert', 'help', 'info', 'invite', 'ping', 'remind', 'stats', 'time', 'weather', 'tropicalweather', 'ts',
             //misc
             'image', 'imagesearch', 'poll', 'vote', 'ytsearch', 'yt', 'yts',
+            'hug', 'kiss', 'lick', 'pet', 'punch', 'slap', 
+            'inspire', 'insp',
             //osu
             'bws', 'badgeweightsystem', 'badgeweight', 'badgeweightseed', 'badgerank',
             'compare', 'common',
             'firsts', 'firstplaceranks', 'fpr', 'fp', '#1s', 'first', '#1', '1s',
             'globals', 'osc', 'osustatscount',
-            'leaderboard', 'maplb', 'mapleaderboard',
+            'leaderboard', 'maplb', 'mapleaderboard', 'ml',
             'lb',
             'map', 'm',
             'maprandom', 'f2', 'maprand', 'mapsuggest', 'randommap', 'randmap',
@@ -455,7 +457,7 @@ export default (input: {
                 startType(obj);
                 osucmds.globals({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
                 break;
-            case 'leaderboard': case 'maplb': case 'mapleaderboard':
+            case 'leaderboard': case 'maplb': case 'mapleaderboard': case 'ml':
                 startType(obj);
                 osucmds.maplb({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
                 break;

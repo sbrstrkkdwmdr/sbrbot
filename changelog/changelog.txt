@@ -432,3 +432,4 @@ changes:
 [ADD] added DST support to time command
 [QOL] add wind angle to current wind direction
 [QOL] reword graph key
+[QOL] update command checkers

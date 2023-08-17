@@ -1016,7 +1016,7 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Returns the leaderboard of the most recent map in the guild with HDHR'
             }
         ],
-        aliases: ['leaderboard', 'mapleaderboard'],
+        aliases: ['leaderboard', 'mapleaderboard', 'ml'],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last,],
         options: [
             {
@@ -2445,7 +2445,7 @@ const othercmds: commandInfo[] = [
         ]
     },
     {
-        name: 'Inspire',
+        name: 'inspire',
         description: 'Sends a randomly generated inspirational quote',
         usage: 'inspire',
         slashusage: 'inspire',
