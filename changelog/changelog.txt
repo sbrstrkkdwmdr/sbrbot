@@ -435,3 +435,9 @@ changes:
 [QOL] update command checkers
 [QOL] weather command now automatically picks first result
 [QOL] keep location selector in weather command
+
+VERSION 0.5.3
+date_time 
+commit: null
+changes:
+[QOL] versions are now evenly spaced

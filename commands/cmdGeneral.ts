@@ -170,7 +170,7 @@ export async function changelog(input: extypes.commandInput) {
     if (typeof found == 'string') {
         isList = true;
         Embed.setTitle('ALL VERSIONS')
-            .setDescription(`${mainconst.versions.map(x => `${x.name} (${x.releaseDateFormatted})`).join('\n')}`)
+            .setDescription(`${mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n')}`)
             .setFooter({
                 text: `${useNum + 1}/${mainconst.versions.length}`
             });
