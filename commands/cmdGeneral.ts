@@ -2496,6 +2496,9 @@ export async function weather(input: extypes.commandInput) {
     let commanduser: Discord.User;
     let name = '';
     let overrideID: number = null;
+    let useComponents: Discord.ActionRowBuilder<any>[] = [];
+    const useEmbeds = [];
+    const useFiles = [];
 
     switch (input.commandType) {
         case 'message': {
@@ -2515,6 +2518,7 @@ export async function weather(input: extypes.commandInput) {
         case 'button': {
             input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
+            useComponents = input.obj.message.components as any[];
         }
             break;
         case 'link': {
@@ -2553,9 +2557,6 @@ export async function weather(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let locatingData: othertypes.geoResults;
-    let useComponents = [];
-    const useEmbeds = [];
-    const useFiles = [];
 
     if ((!name || name == null || name.length == 0) && input.commandType != 'button') {
         const err = errors.uErr.weather.input_ms;
@@ -2597,7 +2598,9 @@ export async function weather(input: extypes.commandInput) {
             const location = locatingData.results.find(x => x.id == overrideID);
             await toWeather(location);
         } else {
+            await toWeather(locatingData.results[0]);
             await toSelector(locatingData);
+
         }
     } else {
         weatherEmbed
@@ -2606,8 +2609,16 @@ export async function weather(input: extypes.commandInput) {
     }
 
     async function toWeather(location: othertypes.geoLocale) {
-        const weatherData = await func.getWeather(location.latitude, location.longitude, location, input.config);
-        func.storeFile(weatherData, input.absoluteID, 'weatherData');
+        let weatherData: othertypes.weatherData | string;
+        if (func.findFile(input.absoluteID, `weatherData+${location.id}`) &&
+            !('error' in func.findFile(input.absoluteID, `weatherData+${location.id}`)) &&
+            input.button != 'Refresh'
+        ) {
+            weatherData = func.findFile(input.absoluteID, `weatherData+${location.id}`);
+        } else {
+            weatherData = await func.getWeather(location.latitude, location.longitude, location, input.config);
+        }
+        func.storeFile(weatherData, input.absoluteID, `weatherData+${location.id}`);
         if (typeof weatherData == 'string') {
             weatherEmbed.setDescription(errors.uErr.weather.wrongCoords);
             logWeatherError(errors.uErr.weather.wrongCoords);
@@ -2752,8 +2763,8 @@ Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}° ${maxWindDir.na
         }
     }
 
-    function toSelector(data: othertypes.geoResults) {
-        weatherEmbed.setDescription('Multiple locations were found\nPlease select one from the list below');
+    async function toSelector(data: othertypes.geoResults) {
+        // weatherEmbed.setDescription('Multiple locations were found\nPlease select one from the list below');
         const inputModal = new Discord.StringSelectMenuBuilder()
             .setCustomId(`${mainconst.version}-Select-weather-${commanduser.id}-${input.absoluteID}`)
             .setPlaceholder('Select a location');
@@ -2769,7 +2780,6 @@ Dominant Direction: ${dailyData.winddirection_10m_dominant[0]}° ${maxWindDir.na
         const buttons = new Discord.ActionRowBuilder();
         buttons.addComponents(inputModal);
         useComponents = [buttons];
-        useEmbeds.push(weatherEmbed);
     }
 
     function logWeatherError(error) {

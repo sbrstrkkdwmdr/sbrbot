@@ -433,3 +433,5 @@ changes:
 [QOL] add wind angle to current wind direction
 [QOL] reword graph key
 [QOL] update command checkers
+[QOL] weather command now automatically picks first result
+[QOL] keep location selector in weather command
