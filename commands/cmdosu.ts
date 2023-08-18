@@ -1912,12 +1912,14 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                 .setCustomId(`${mainconst.version}-Refresh-osu-${commanduser.id}-${input.absoluteID}`)
                 .setStyle(buttonsthing.type.current)
                 .setEmoji(buttonsthing.label.main.refresh),
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-Graph-osu-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.extras.graph),
         );
     if (graphonly != true) {
+        buttons.addComponents(
+            new Discord.ButtonBuilder()
+            .setCustomId(`${mainconst.version}-Graph-osu-${commanduser.id}-${input.absoluteID}`)
+            .setStyle(buttonsthing.type.current)
+            .setEmoji(buttonsthing.label.extras.graph),
+        )
         switch (detailed) {
             case 1: {
                 buttons.addComponents(
@@ -1940,6 +1942,13 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             }
                 break;
         }
+    } else {
+        buttons.addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Detail1-osu-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.user),
+        );
     }
 
     //if user is null, use searchid
@@ -2447,7 +2456,7 @@ ${supporter} ${onlinestatus}
         args: {
             content: useContent,
             embeds: useEmbeds,
-            components: graphonly == true ? [] : [buttons],
+            components: [buttons],
             files: useFiles,
             edit: true
         }

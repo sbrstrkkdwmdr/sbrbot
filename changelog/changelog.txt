@@ -12,7 +12,7 @@ VERSION
 2021-08-07
 commit: 7005504084d13a619e43b9781d27a8fa1470bf13
 changes:
-the beginning
+[MAJ] the beginning
 
 VERSION 
 0.1.0
@@ -20,7 +20,7 @@ VERSION
 commit: de46d2dc56986e59f1a33f189f232d185327c9a0
 changes: 
 https://github.com/sbrstrkkdwmdr/sbrbot/tree/discordjs-v12
-discord.js v12
+[MAJ] discord.js v12
 osu commands didn't work at this point in time
 
 VERSION 
@@ -35,9 +35,9 @@ VERSION
 2022-03-11
 commit: 10bf389f91247ae4070e2f5be3eb013ba2e80337
 changes: 
-updated to discord.js v13
-first implementation of slash commands
-osu commands first iteration
+[MAJ] updated to discord.js v13
+[ADD] first implementation of slash commands
+[ADD] osu commands first iteration
 https://github.com/sbrstrkkdwmdr/sbrbot/tree/slashcmd
 https://github.com/sbrstrkkdwmdr/sbrbot/tree/old
 
@@ -46,15 +46,11 @@ VERSION
 2022-06-09
 commit: c3566227ccecb19e93935a5be65f1c63dc7a0949
 changes: 
-switched from booba to rosu-pp
-stopped using `fetch (thing).then(x => {
-    osudata = X
-    blahblahblah
-})` and switched to 
-`osudata = fetch (thing).then(res => res.json())`
+[MAJ] switched from booba to rosu-pp
+[QOL] stopped using `fetch (thing).then(x => {    osudata = X    blahblahblah})` and switched to `osudata = fetch (thing).then(res => res.json())`
 
-stopped using `username = JSON.stringify([osudata], [username]).replace().replace().replace()`
-switched to `username  = osudata.username`
+[QOL] stopped using `username = JSON.stringify([osudata], [username]).replace().replace().replace()`
+[QOL] switched to `username  = osudata.username`
 
 VERSION
 0.3.2
@@ -444,3 +440,4 @@ changes:
 [QOL] change wind directions to shorthand (west-southwest -> WSW)
 [FIX] page # when requesting to show all versions
 [QOL] show all versions instead of just latest when an invalid input is given
+[QOL] add buttons to turn graph mode to user profile mode on osu cmd

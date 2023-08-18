@@ -163,8 +163,10 @@ export async function changelog(input: extypes.commandInput) {
             }
         }
     }
-    useNum = useNum ?? typeof found == 'number' ? (found as number) : mainconst.versions.length - 1 - offset;
-
+    useNum = useNum != null ? useNum : 
+    typeof found == 'number' ? 
+    (found as number) : 
+    mainconst.versions.length - 1 - offset;
     const Embed = new Discord.EmbedBuilder();
     if (typeof found == 'string') {
         isList = true;
@@ -180,7 +182,63 @@ export async function changelog(input: extypes.commandInput) {
         const cur = list[useNum] as string;
         const verdata = mainconst.versions[useNum];
         const commit = cur.split('commit:')[1].split('\n')[0] as string;
-        const changes = cur.split('changes:')[1];
+        const changesTxt = cur.split('changes:')[1];
+        let changes: { add: string[]; rem: string[]; qol: string[], fix: string[], maj: string[]; min: string[]; } = {
+            add: [],
+            rem: [],
+            qol: [],
+            fix: [],
+            maj: [],
+            min: [],
+        };
+        const changesList = changesTxt.split('\n').map(x => x.trim());
+        for (const change of changesList) {
+            switch (true) {
+                case change.startsWith('[ADD]'):
+                    changes.add.push(change.slice(5));
+                    break;
+                case change.startsWith('[QOL]'):
+                    changes.qol.push(change.slice(5));
+                    break;
+                case change.startsWith('[FIX]'):
+                    changes.fix.push(change.slice(5));
+                    break;
+                case change.startsWith('[REM]'):
+                    changes.rem.push(change.slice(5));
+                    break;
+                case change.startsWith('[MAJ]'):
+                    changes.maj.push(change.slice(5));
+                    break;
+                default:
+                    if (change.length > 2) changes.min.push(change.replaceAll('[MIN]', ''));
+                    break;
+            }
+        }
+        let txt = '';
+        if (changes.maj.length > 0) {
+            txt += `\n**MAJOR CHANGES**\n` + changes.maj.join('\n');
+
+        }
+        if (changes.add.length > 0) {
+            txt += `\n**ADDITIONS**\n` + changes.add.join('\n');
+        }
+        if (changes.qol.length > 0) {
+            txt += `\n**QUALITY OF LIFE**\n` + changes.qol.join('\n');
+
+        }
+        if (changes.fix.length > 0) {
+            txt += `\n**FIXES**\n` + changes.fix.join('\n');
+
+        }
+        if (changes.rem.length > 0) {
+            txt += `\n**REMOVALS**\n` + changes.rem.join('\n');
+
+        }
+        if (changes.min.length > 0) {
+            txt += `\n**OTHER/MINOR CHANGES**\n` + changes.min.join('\n');
+
+        }
+
         const url = commit?.toString()?.includes('null') ?
             `https://github.com/sbrstrkkdwmdr/sbrbot/`
             :
@@ -193,8 +251,7 @@ export async function changelog(input: extypes.commandInput) {
             .setDescription(`commit [${commit.trim()?.slice(0, 7)?.trim()}](${url})
 Released ${verdata.releaseDateFormatted}
 
-**Changes** ${changes}
-${foundBool ? '' : `\nThere was an error trying to find version ${version}`}
+${txt}
 `)
             .setFooter({
                 text: `${useNum + 1}/${mainconst.versions.length}`
