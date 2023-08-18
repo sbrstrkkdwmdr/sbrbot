@@ -2184,8 +2184,8 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',');
             const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',');
 
-            const play = await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount graph', false, false, true, true, true, null, true);
-            const rank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank graph', null, null, null, null, null, 'rank', true);
+            const play = await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount', false, false, true, true, true, null, true);
+            const rank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank', null, null, null, null, null, 'rank', true);
 
             const fileplay = new Discord.AttachmentBuilder(`${play.path}`);
             const filerank = new Discord.AttachmentBuilder(`${rank.path}`);
