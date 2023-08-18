@@ -440,4 +440,5 @@ changes:
 [QOL] change wind directions to shorthand (west-southwest -> WSW)
 [FIX] page # when requesting to show all versions
 [QOL] show all versions instead of just latest when an invalid input is given
+[QOL] changes in changelog are categorised by type
 [QOL] add buttons to turn graph mode to user profile mode on osu cmd
