@@ -442,3 +442,5 @@ commit: null
 changes:
 [QOL] versions are now evenly spaced
 [QOL] change wind directions to shorthand (west-southwest -> WSW)
+[FIX] page # when requesting to show all versions
+[QOL] show all versions instead of just latest when an invalid input is given

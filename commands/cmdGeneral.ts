@@ -37,7 +37,7 @@ export async function changelog(input: extypes.commandInput) {
     let commanduser;
     let offset = 0;
     let version = null;
-    let useNum = null;
+    let useNum: number = null;
     let isList = false;
 
     switch (input.commandType) {
@@ -155,22 +155,21 @@ export async function changelog(input: extypes.commandInput) {
                     break;
                 case 'latest':
                     break;
-                case 'versions':
-                    found = 'string';
-                    break;
                 default:
                     foundBool = false;
+                case 'versions': case 'list': case 'all':
+                    found = 'string';
                     break;
             }
         }
     }
-    useNum = useNum ?? found ?? mainconst.versions.length - 1 - offset;
+    useNum = useNum ?? typeof found == 'number' ? (found as number) : mainconst.versions.length - 1 - offset;
 
     const Embed = new Discord.EmbedBuilder();
     if (typeof found == 'string') {
         isList = true;
         Embed.setTitle('ALL VERSIONS')
-            .setDescription(`${mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n')}`)
+            .setDescription(`${mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n')}${foundBool ? '' : `\nThere was an error trying to find version ${version}`}`)
             .setFooter({
                 text: `${useNum + 1}/${mainconst.versions.length}`
             });
