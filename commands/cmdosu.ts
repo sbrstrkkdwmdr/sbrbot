@@ -6984,28 +6984,6 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         });
         return;
     }
-    if (typeof scoredata?.hasOwnProperty('error') != 'undefined') {
-        if (input.commandType != 'button' && input.commandType != 'link') {
-            await msgfunc.sendMessage({
-                commandType: input.commandType,
-                obj: input.obj,
-                args: {
-                    content: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`,
-                    edit: true
-                }
-            }, input.canReply);
-        }
-        log.logCommand({
-            event: 'Error',
-            commandName: 'scoreparse',
-            commandType: input.commandType,
-            commandId: input.absoluteID,
-            object: input.obj,
-            customString: errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${scoremode}/${scoreid}`,
-            config: input.config
-        });
-        return;
-    }
     func.storeFile(scoredataReq, scoreid, 'scoredata', osufunc.modeValidator(scoredata.mode));
 
     let buttons = new Discord.ActionRowBuilder()
@@ -7042,6 +7020,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     try {
         scoredata.rank.toUpperCase();
     } catch (error) {
+        console.log('uppercase')
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -7124,38 +7103,8 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
 
     func.storeFile(mapdataReq, scoredata.beatmap.id, 'mapdata');
 
-    const ranking = scoredata.rank ? scoredata.rank : 'f';
-    let scoregrade = emojis.grades.F;
-    switch (ranking.toUpperCase()) {
-        case 'F':
-            scoregrade = emojis.grades.F;
-            break;
-        case 'D':
-            scoregrade = emojis.grades.D;
-            break;
-        case 'C':
-            scoregrade = emojis.grades.C;
-            break;
-        case 'B':
-            scoregrade = emojis.grades.B;
-            break;
-        case 'A':
-            scoregrade = emojis.grades.A;
-            break;
-        case 'S':
-            scoregrade = emojis.grades.S;
-            break;
-        case 'SH':
-            scoregrade = emojis.grades.SH;
-            break;
-        case 'X':
-            scoregrade = emojis.grades.X;
-            break;
-        case 'XH':
-            scoregrade = emojis.grades.XH;
+    const scoregrade = emojis.grades[scoredata.rank.toUpperCase()];
 
-            break;
-    }
     const gamehits = scoredata.statistics;
 
     const mode = scoredata.mode;
@@ -7368,7 +7317,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             embedStyle = 'LC';
             scoreembed
                 .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
 <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 \`${hitlist}\`
 ${scoredata?.pp?.toFixed(2) ?? 'null '}pp
@@ -7379,7 +7328,7 @@ ${scoredata?.pp?.toFixed(2) ?? 'null '}pp
             embedStyle = 'L';
             scoreembed
                 .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + osumodcalc.OrderMods(scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('')) : ''}
 <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 [Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
 \`${hitlist}\`
