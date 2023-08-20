@@ -22,6 +22,11 @@ const defaultClientConfig: extypes.config = {
     LogApiCallsToFile: true,
     enableTracking: true,
     storeCommandLogs: true,
+    useEmojis: {
+        gamemodes: true,
+        scoreGrades: true,
+        mods: false,
+    }
 };
 
 const defaultGuildSettings: extypes.guildSettings = {

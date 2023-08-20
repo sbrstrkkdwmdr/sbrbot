@@ -22,5 +22,10 @@
     "LogApiCalls": true,
     "LogApiCallsToFile": true,
     "enableTracking": true,
-    "storeCommandLogs": true
+    "storeCommandLogs": true,
+    "useEmojis": {
+        "gamemodes": true,
+        "scoreGrades": true,
+        "mods": false
+    }
 }

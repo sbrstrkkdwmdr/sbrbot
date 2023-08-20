@@ -1636,7 +1636,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
             break;
     }
     Embed
-        .setDescription(`${returnval}\n${emojis.gamemodes[mode]}`);
+        .setDescription(`${returnval}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}`);
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -2154,6 +2154,10 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             break;
     }
 
+    const gradeCounts = input.config.useEmojis.scoreGrades ?
+        `${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}` :
+        `XH${grades.ssh} X}{grades.ss} SH${grades.sh} S}{grades.s} A}{grades.a}`;
+
     const osuEmbed = new Discord.EmbedBuilder()
         .setFooter({
             text: `${embedStyle}`
@@ -2389,7 +2393,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     name: def.invisbleChar,
                     value:
                         `**Player joined** <t:${new Date(osudata.join_date).getTime() / 1000}:R>                        
-${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}
+${gradeCounts}
 **Medals**: ${osudata.user_achievements.length}
 **Followers:** ${osudata.follower_count}
 ${prevnames}
@@ -2436,7 +2440,7 @@ ${supporter} ${onlinestatus}
 **Play Count:** ${playcount}
 **Level:** ${lvl}
 **Medals**: ${osudata.user_achievements.length}
-${emojis.grades.XH}${grades.ssh} ${emojis.grades.X}${grades.ss} ${emojis.grades.SH}${grades.sh} ${emojis.grades.S}${grades.s} ${emojis.grades.A}${grades.a}\n
+${gradeCounts}
 **Player joined** <t:${new Date(osudata.join_date).getTime() / 1000}:R>
 **Followers:** ${osudata.follower_count}
 ${prevnames}
@@ -2856,7 +2860,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             case 'rank': {
                 const temp = (curEv as osuApiTypes.EventRank);
                 obj.desc =
-                    `Achieved rank **#${temp.rank}** on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url}) (${emojis.gamemodes[temp.mode]}) <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                    `Achieved rank **#${temp.rank}** on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url}) (${input.config.useEmojis.gamemodes ? emojis.gamemodes[temp.mode] : temp.mode}) <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             }
                 break;
             case 'rankLost': {
@@ -3381,7 +3385,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
     }, {
         useScoreMap: true
     }, input.config);
-    firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
+    firstsEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
 
     if (scoresarg.fields.length == 0) {
         firstsEmbed.addFields([{
@@ -3402,7 +3406,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                     temptxt += scoresarg.string[i];
                 }
                 firstsEmbed.setDescription(
-                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
+                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
                     + temptxt
                 );
             }
@@ -4630,7 +4634,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             useScoreMap: true
         }, input.config
     );
-    topEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${emojis.gamemodes[mode]}`);
+    topEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}`);
     if (scoresarg.fields.length == 0) {
         topEmbed.addFields([{
             name: 'Error',
@@ -4650,7 +4654,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
                     temptxt += scoresarg.string[i];
                 }
                 topEmbed.setDescription(
-                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}`
+                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}`
                     + temptxt
                 );
             }
@@ -5165,7 +5169,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         {
             useScoreMap: true
         }, input.config);
-    pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
+    pinnedEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}\n${reachedMaxCount ? 'Only first 500 scores are shown' : ''}`);
     if (scoresarg.fields.length == 0) {
         pinnedEmbed.addFields([{
             name: 'Error',
@@ -5185,7 +5189,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                     temptxt += scoresarg.string[i];
                 }
                 pinnedEmbed.setDescription(
-                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
+                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
                     + temptxt
                 );
             }
@@ -5827,12 +5831,12 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         if (!curscore || curscore == undefined || curscore == null) {
             let err = `${errors.uErr.osu.scores.recent_ms
                 .replace('[ID]', user)
-                .replace('[MODE]', emojis.gamemodes[osufunc.modeValidator(mode)])
+                .replace('[MODE]', input.config.useEmojis.gamemodes ? emojis.gamemodes[osufunc.modeValidator(mode)] : mode)
                 }`;
             if (filterTitle) {
                 err = `${errors.uErr.osu.scores.recent_ms
                     .replace('[ID]', user)
-                    .replace('[MODE]', emojis.gamemodes[osufunc.modeValidator(mode)])
+                    .replace('[MODE]', input.config.useEmojis.gamemodes ? emojis.gamemodes[osufunc.modeValidator(mode)] : mode)
                     } matching \`${filterTitle}\``;
             }
 
@@ -6088,10 +6092,13 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         // let FailGraph = '';
 
         let rsgrade;
-        rsgrade = emojis.grades[curscore.rank.toUpperCase()];
+        rsgrade = input.config.useEmojis.scoreGrades ? emojis.grades[curscore.rank.toUpperCase()] : curscore.rank.toUpperCase();
         if (curscore.rank.toUpperCase() == 'F') {
             rspassinfo = `${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.total_length)})`;
-            rsgrade = emojis.grades.F + `(${emojis.grades[osumodcalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).grade]} if pass)`;
+            rsgrade =
+                input.config.useEmojis.scoreGrades ?
+                    emojis.grades.F + `(${emojis.grades[osumodcalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).grade]} if pass)` :
+                    `F (${osumodcalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).grade})`;
         }
 
         const fulltitle = `${osufunc.parseUnicodeStrings({
@@ -6126,7 +6133,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 rsEmbed
                     .setDescription(`
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
-${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
+${totaldiff}⭐ | ${input.config.useEmojis.gamemodes ? emojis.gamemodes[curscore.mode] : curscore.mode}
 <t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 ${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\` | ${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo
@@ -6138,7 +6145,7 @@ ${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\` | ${curscore.max
                 rsEmbed
                     .setDescription(`
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
-${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
+${totaldiff}⭐ | ${input.config.useEmojis.gamemodes ? emojis.gamemodes[curscore.mode] : curscore.mode}
 <t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}
 `)
@@ -6189,7 +6196,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                 rsEmbed
                     .setDescription(`
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
-${totaldiff}⭐ | ${emojis.gamemodes[curscore.mode]}
+${totaldiff}⭐ | ${input.config.useEmojis.gamemodes ? emojis.gamemodes[curscore.mode] : curscore.mode}
 <t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}`)
                     .addFields([
@@ -6342,7 +6349,7 @@ ${srStr}
             }
         }
         rsEmbed.setDescription(`Page: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
-${emojis.gamemodes[mode]}
+${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}
 ${filterTitle ? `Filter: ${filterTitle}` : ''}
 `);
         if (scoresarg.isFirstPage) {
@@ -7020,7 +7027,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     try {
         scoredata.rank.toUpperCase();
     } catch (error) {
-        console.log('uppercase')
+        console.log('uppercase');
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -7103,7 +7110,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
 
     func.storeFile(mapdataReq, scoredata.beatmap.id, 'mapdata');
 
-    const scoregrade = emojis.grades[scoredata.rank.toUpperCase()];
+    const scoregrade = input.config.useEmojis.scoreGrades ? emojis.grades[scoredata.rank.toUpperCase()] : scoredata.rank.toUpperCase();
 
     const gamehits = scoredata.statistics;
 
@@ -7317,7 +7324,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             embedStyle = 'LC';
             scoreembed
                 .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**` : ''}
 <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 \`${hitlist}\`
 ${scoredata?.pp?.toFixed(2) ?? 'null '}pp
@@ -7328,7 +7335,7 @@ ${scoredata?.pp?.toFixed(2) ?? 'null '}pp
             embedStyle = 'L';
             scoreembed
                 .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + osumodcalc.OrderMods(scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('')) : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**` : ''}
 <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 [Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
 \`${hitlist}\`
@@ -7391,7 +7398,7 @@ ${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata
                         name: 'Score details',
                         value:
                             `
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.join('').length > 1 ? '| ' + osumodcalc.OrderMods(scoredata.mods.join('')) : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**` : ''}
 ${hitlist}
 ${scoredata.max_combo == mapdata.max_combo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mapdata.max_combo}x**
 `                        ,
@@ -8673,7 +8680,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                     temptxt += scoresarg.string[i];
                 }
                 scoresEmbed.setDescription(
-                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${emojis.gamemodes[mode]}`
+                    `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}`
                     + temptxt
                 );
             }
@@ -10710,19 +10717,10 @@ export async function map(input: extypes.commandInput) {
             hitlength,
             mapmods
         );
-        let mapimg = emojis.gamemodes.standard;
+        let mapimg = input.config.useEmojis.gamemodes ?
+            emojis.gamemodes[mapdata.mode] :
+            mapdata.mode;
 
-        switch (mapdata.mode) {
-            case 'taiko':
-                mapimg = emojis.gamemodes.taiko;
-                break;
-            case 'fruits':
-                mapimg = emojis.gamemodes.fruits;
-                break;
-            case 'mania':
-                mapimg = emojis.gamemodes.mania;
-                break;
-        }
         let ppComputed: PerformanceAttributes[];
         let ppissue: string;
         let totaldiff: string | number = mapdata.difficulty_rating;
@@ -11840,19 +11838,6 @@ export async function ppCalc(input: extypes.commandInput) {
         hitlength,
         mapmods
     );
-    let mapimg = emojis.gamemodes.standard;
-
-    switch (mapdata.mode) {
-        case 'taiko':
-            mapimg = emojis.gamemodes.taiko;
-            break;
-        case 'fruits':
-            mapimg = emojis.gamemodes.fruits;
-            break;
-        case 'mania':
-            mapimg = emojis.gamemodes.mania;
-            break;
-    }
     let ppComputed: PerformanceAttributes[];
     let ppissue: string;
     let totaldiff: string | number = mapdata.difficulty_rating;
@@ -12786,7 +12771,7 @@ ${emojis.mapobjs.bpm}${bpmTxt}
                 }
             ])
             .setDescription(`
-Mode: ${emojis.gamemodes[osumodcalc.ModeIntToName(mapParsed.mode)]}
+Mode: ${input.config.useEmojis.gamemodes ? emojis.gamemodes[osumodcalc.ModeIntToName(mapParsed.mode)] : mapParsed.mode}
 File format: ${mapParsed.fileFormat}
 Map Creator: ${mapParsed.metadata.creator}
 Last Updated: <t:${Math.floor((new Date(mapParsed?.fileUpdateDate)).getTime() / 1000)}:R>
@@ -13460,8 +13445,6 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         page = Math.ceil(maplistdata.length / 5) - 1;
     }
 
-
-
     const mapsarg = await embedStuff.mapList({
         type:
             filter == 'most_played' ?
@@ -13472,7 +13455,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
         sort,
         reverse,
         detailed: mapDetailed
-    });
+    }, input.config);
 
     const mapList = new Discord.EmbedBuilder()
         .setFooter({
@@ -14254,7 +14237,7 @@ export async function tracklist(input: extypes.commandInput) {
         .setTitle(`All tracked users in ${input.obj.guild.name}`)
         .setColor(colours.embedColour.userlist.dec)
         .setDescription(`There are ${userList.length} users being tracked in this server\n\n` +
-            `${userList.map((user, i) => `${i + 1}. ${emojis.gamemodes[user.mode == 'undefined' ? 'osu' : user.mode]} https://osu.ppy.sh/users/${user.osuid}`).join('\n')}`
+            `${userList.map((user, i) => `${i + 1}. ${input.config.useEmojis.gamemodes ? emojis.gamemodes[user.mode == 'undefined' ? 'osu' : user.mode] : user.mode == 'undefined' ? 'osu' : user.mode} https://osu.ppy.sh/users/${user.osuid}`).join('\n')}`
         );
 
     //SEND/EDIT MSG==============================================================================================================================================================================================

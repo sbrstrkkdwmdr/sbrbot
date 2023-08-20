@@ -25,6 +25,11 @@ export type config = {
     LogApiCallsToFile: boolean,
     enableTracking: boolean,
     storeCommandLogs: boolean,
+    useEmojis: {
+        gamemodes: boolean,
+        scoreGrades: boolean,
+        mods: boolean,
+    }
 };
 
 export type guildSettings = {

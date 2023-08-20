@@ -287,13 +287,15 @@ export async function scoreList(
             }
         );
 
-        const tempMods = curscore.mods;
         let ifmods: string;
 
-        if (!tempMods || tempMods.join('') == '' || tempMods == null || tempMods == undefined) {
+        if (!curscore.mods || curscore.mods.join('') == '' || curscore.mods == null || curscore.mods == undefined) {
             ifmods = '';
         } else {
-            ifmods = '+' + osumodcalc.OrderMods(tempMods.join(''));
+            ifmods =
+                config.useEmojis.mods == true ?
+                    curscore.mods.map(x => emojis.mods[x.toLowerCase()]).join(' ') :
+                    `**${osumodcalc.OrderMods(curscore.mods.join(''))}**`;
         }
 
         let pptxt: string;
@@ -340,12 +342,12 @@ export async function scoreList(
         let showtitle: string;
 
         if (asObj.showMapTitle == true) {
-            showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id}) ${ifmods}`;
+            showtitle = `[${curscore.beatmapset.title} [${curscore.beatmap.version}]](https://osu.ppy.sh/b/${curscore.beatmap.id})`;
         } else {
-            showtitle = `[Score #${scoreID}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${ifmods}`;
+            showtitle = `[Score #${scoreID}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})`;
         }
         if (asObj.showUserName == true) {
-            showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id}) ${ifmods}`;
+            showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id})`;
         }
 
         let weighted;
@@ -380,7 +382,7 @@ ${useTitle}
                     name: `#${scoreID}`,
                     value: `
 ${showtitle ? '**' + showtitle + '**\n' : ''} **<t:${new Date(curscore.created_at.toString()).getTime() / 1000}:R>** | [Score](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}) ${curscore.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-\`${hitlist}\` | ${curscore.max_combo == curscore?.beatmap?.max_combo ? `**${func.separateNum(curscore.max_combo)}x**` : `${func.separateNum(curscore.max_combo)}x`} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade}
+\`${hitlist}\` | ${curscore.max_combo == curscore?.beatmap?.max_combo ? `**${func.separateNum(curscore.max_combo)}x**` : `${func.separateNum(curscore.max_combo)}x`} | ${(curscore.accuracy * 100).toFixed(2)}% | ${grade} ${curscore.mods.length > 0 ? '| ' + ifmods : ''}
 ${pptxt} ${weighted}`,
                     inline: false
                 });
@@ -438,37 +440,7 @@ export function userList(data: {
 export type userSort = 'pp' | 'rank' | 'acc' | 'playcount' | 'level' | 'joindate' | 'countryrank' | 'countrypp' | 'score' | 'score_ranked';
 
 export function gradeToEmoji(str: string) {
-    let grade;
-    switch (str) {
-        case 'F':
-            grade = emojis.grades.F;
-            break;
-        case 'D':
-            grade = emojis.grades.D;
-            break;
-        case 'C':
-            grade = emojis.grades.C;
-            break;
-        case 'B':
-            grade = emojis.grades.B;
-            break;
-        case 'A':
-            grade = emojis.grades.A;
-            break;
-        case 'S':
-            grade = emojis.grades.S;
-            break;
-        case 'SH':
-            grade = emojis.grades.SH;
-            break;
-        case 'X':
-            grade = emojis.grades.X;
-            break;
-        case 'XH':
-            grade = emojis.grades.XH;
-            break;
-    }
-    return grade;
+    return emojis.grades[str];
 }
 
 export function hitList(
@@ -509,7 +481,8 @@ export async function mapList(
         sort: mapSort,
         reverse: boolean,
         detailed: number,
-    }
+    },
+    config: extypes.config
 ) {
     let filterinfo: string = '';
     let newData = [];
@@ -654,7 +627,7 @@ ${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bp
                             value:
                                 `
 [**${curmapset.artist} - ${curmapset.title}**](https://osu.ppy.sh/s/${curmapset.id})
-${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
+${emojis.rankedstatus[curmapset.status]} | ${config.useEmojis.gamemodes ? emojis.gamemodes[topmap.mode] : topmap.mode}
 ${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bpm}
 ${func.separateNum(curmapset.play_count)} plays | ${func.separateNum(topmap.passcount)} passes | ${func.separateNum(curmapset.favourite_count)} favourites
 Submitted <t:${new Date(curmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(curmapset.last_updated).getTime() / 1000}:R>
@@ -669,7 +642,7 @@ ${topmap.status == 'ranked' ?
                         });
                         mapsArrStr.push(
                             `**#${offset + 1} | [${curmapset.artist} - ${curmapset.title}](https://osu.ppy.sh/s/${curmapset.id})**
-${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
+${emojis.rankedstatus[curmapset.status]} | ${config.useEmojis.gamemodes ? emojis.gamemodes[topmap.mode] : topmap.mode}
 ${calc.secondsToTime(topmap.total_length)} | ${curmapset.bpm}${emojis.mapobjs.bpm}
 ${func.separateNum(curmapset.play_count)} plays | ${func.separateNum(topmap.passcount)} passes | ${func.separateNum(curmapset.favourite_count)} favourites
 Submitted <t:${new Date(curmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(curmapset.last_updated).getTime() / 1000}:R>
@@ -731,7 +704,7 @@ ${topmap.status == 'ranked' ?
                                 `
 [**${curmapset.artist} - ${curmapset.title} [${current.beatmap.version}]**](https://osu.ppy.sh/s/${curmapset.id})
 **${current.count}x plays**
-${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
+${emojis.rankedstatus[curmapset.status]} | ${config.useEmojis.gamemodes ? emojis.gamemodes[topmap.mode] : topmap.mode}
 ${calc.secondsToTime(topmap.total_length)} | ${func.separateNum(curmapset.favourite_count)} favourites
 `,
                             inline: false
@@ -739,7 +712,7 @@ ${calc.secondsToTime(topmap.total_length)} | ${func.separateNum(curmapset.favour
                         mapsArrStr.push(
                             `**#${offset + 1} | [${curmapset.artist} - ${curmapset.title} [${current.beatmap.version}]](https://osu.ppy.sh/s/${curmapset.id})**
 **${current.count}x plays**
-${emojis.rankedstatus[curmapset.status]} | ${emojis.gamemodes[topmap.mode]}
+${emojis.rankedstatus[curmapset.status]} | ${config.useEmojis.gamemodes ? emojis.gamemodes[topmap.mode] : topmap.mode}
 ${calc.secondsToTime(topmap.total_length)} | ${func.separateNum(curmapset.favourite_count)} favourites`
                         );
                         break;
