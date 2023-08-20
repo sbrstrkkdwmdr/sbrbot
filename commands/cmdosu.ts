@@ -1916,10 +1916,10 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
     if (graphonly != true) {
         buttons.addComponents(
             new Discord.ButtonBuilder()
-            .setCustomId(`${mainconst.version}-Graph-osu-${commanduser.id}-${input.absoluteID}`)
-            .setStyle(buttonsthing.type.current)
-            .setEmoji(buttonsthing.label.extras.graph),
-        )
+                .setCustomId(`${mainconst.version}-Graph-osu-${commanduser.id}-${input.absoluteID}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.graph),
+        );
         switch (detailed) {
             case 1: {
                 buttons.addComponents(
@@ -6088,50 +6088,10 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         // let FailGraph = '';
 
         let rsgrade;
-        switch (curscore.rank.toUpperCase()) {
-            case 'F': {
-                rspassinfo = `${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.total_length)})`;
-                rsgrade = emojis.grades.F;
-                // showFailGraph = true;
-                // const strains = await osufunc.straincalc(mapdata.id, curscore.mods.join(''), 0, mapdata.mode, new Date(mapdata.last_updated));
-
-                // FailGraph = await msgfunc.SendFileToChannel(input.graphChannel,
-                //     await osufunc.failGraph(
-                //         {
-                //             x: strains.strainTime,
-                //             y: strains.value,
-                //         },
-                //         {
-                //             time: msToFail,
-                //             objectNumber: totalhits,
-                //         }
-                //     ));
-            }
-                break;
-            case 'D':
-                rsgrade = emojis.grades.D;
-                break;
-            case 'C':
-                rsgrade = emojis.grades.C;
-                break;
-            case 'B':
-                rsgrade = emojis.grades.B;
-                break;
-            case 'A':
-                rsgrade = emojis.grades.A;
-                break;
-            case 'S':
-                rsgrade = emojis.grades.S;
-                break;
-            case 'SH':
-                rsgrade = emojis.grades.SH;
-                break;
-            case 'X':
-                rsgrade = emojis.grades.X;
-                break;
-            case 'XH':
-                rsgrade = emojis.grades.XH;
-                break;
+        rsgrade = emojis.grades[curscore.rank.toUpperCase()];
+        if (curscore.rank.toUpperCase() == 'F') {
+            rspassinfo = `${guesspasspercentage.toFixed(2)}% completed (${calc.secondsToTime(curbmpasstime)}/${calc.secondsToTime(curbm.total_length)})`;
+            rsgrade = emojis.grades.F + `(${emojis.grades[osumodcalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).grade]} if pass)`;
         }
 
         const fulltitle = `${osufunc.parseUnicodeStrings({
