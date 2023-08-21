@@ -443,3 +443,4 @@ changes:
 [QOL] changes in changelog are categorised by type
 [QOL] add buttons to turn graph mode to user profile mode on osu cmd
 [QOL] show grade if passed
+[FIX] east/west coords being swapped

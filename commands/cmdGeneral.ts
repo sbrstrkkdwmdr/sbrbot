@@ -2702,13 +2702,13 @@ export async function weather(input: extypes.commandInput) {
 
             // - => S or W
             let latSide: 'N' | 'S' = 'N';
-            let lonSide: 'E' | 'W' = 'E';
+            let lonSide: 'E' | 'W' = 'W';
 
             if (location.latitude < 0) {
                 latSide = 'S';
             }
             if (location.latitude < 0) {
-                lonSide = 'W';
+                lonSide = 'E';
             }
 
             const windGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.windspeed_10m, `Wind speed ${weatherData.hourly_units.windspeed_10m}`,
