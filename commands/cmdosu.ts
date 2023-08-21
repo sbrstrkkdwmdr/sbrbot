@@ -6303,7 +6303,7 @@ ${srStr}
             .setThumbnail(`${osudata.avatar_url ?? def.images.any.url}`)
             ;
         if (sort == 'pp') {
-            rsEmbed.setTitle(`Best recent ${showFails == 1 ? 'play' : 'passes'} for ${osudata.username}`);
+            rsEmbed.setTitle(`Best recent ${showFails == 1 ? 'plays' : 'passes'} for ${osudata.username}`);
         }
 
         const scoresarg = await embedStuff.scoreList(

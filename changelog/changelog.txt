@@ -447,3 +447,5 @@ changes:
 [QOL] add sun/moon emojis to day/night
 [QOL] update config checker and README
 [FIX] errors in replayparse
+[FIX] rsbest saying "play" instead of "plays"
+[QOL] 
