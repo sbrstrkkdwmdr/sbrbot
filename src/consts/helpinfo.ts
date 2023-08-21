@@ -1628,7 +1628,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'recent',
         description: 'Shows the recent score(s) of a user',
-        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-?] [-grade]',
+        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-?] [-grade] [-mods] [-modsx]',
         slashusage: 'recent [user] [page] [mode] [list] [filter] [grade]',
         examples: [
             {
@@ -1644,8 +1644,8 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Shows the second page of your recent scores in a list'
             },
             {
-                text: '/recent list:true',
-                descriptor: 'Shows your recent scores in a list'
+                text: 'PREFIXMSGrsbest',
+                descriptor: 'Shows your recent scores in a list, sorted by pp'
             },
             {
                 text: 'PREFIXMSGrl -mania',
@@ -1660,14 +1660,14 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Shows your second most recent taiko score'
             },
             {
-                text: 'PREFIXMSGrl -passes',
-                descriptor: 'Shows your recent scores excluding fails'
+                text: 'PREFIXMSGrl -nf -? "Shinbatsu"',
+                descriptor: 'Shows your recent scores with the map name/difficulty/artist/creator matching "shinbatsu", excluding fails'
             }
         ],
-        aliases: ['rs', 'r', 'rt', 'rf', 'rm', 'rctb', 'rl', 'rlt', 'rlf', 'rlm', 'rlctb'],
+        aliases: ['rs', 'r', 'rt', 'rf', 'rm', 'rctb', 'rl', 'rlt', 'rlf', 'rlm', 'rlctb', 'rsbest', 'recentbest', 'rb'],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.map, buttonsObjs.label.extras.user],
-        options: scoreListCommandOptions.slice()
-            .splice(8, 1) //removes parse param
+        options: scoreListCommandOptions.slice(0, 8).concat(
+            scoreListCommandOptions.slice(10))
             .concat([
                 {
                     name: 'list',
@@ -1679,6 +1679,28 @@ const osucmds: commandInfo[] = [
                     aliases: ['l'],
                     examples: ['-l', 'list:true'],
                     commandTypes: ['message', 'interaction']
+                },
+                {
+                    name: 'passes',
+                    type: 'boolean',
+                    required: false,
+                    description: 'Whether to show only scores that were passed. If false, all scores will be shown',
+                    options: ['true', 'false'],
+                    defaultValue: 'true',
+                    aliases: ['pass', 'nofail', 'nf'],
+                    examples: ['-pass',],
+                    commandTypes: ['message']
+                },
+                {
+                    name: '-?',
+                    type: 'string',
+                    required: false,
+                    description: 'Filter scores by maps matching the given string',
+                    options: [''],
+                    defaultValue: 'null',
+                    aliases: [],
+                    examples: ['-? "shinbatsu o tadori"',],
+                    commandTypes: ['message']
                 },
                 {
                     name: 'passes',
