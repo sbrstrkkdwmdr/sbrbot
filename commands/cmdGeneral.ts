@@ -2777,7 +2777,7 @@ ${location.admin1 + ',' ?? ''} ${location.country} :flag_${location.country_code
 Location: (${Math.abs(location.latitude) + latSide}, ${Math.abs(location.longitude) + lonSide})
 Time (local): ${localTime} 
 Time (UTC): ${utctime}
-${weatherData.current_weather.is_day == 0 ? 'Nighttime' : 'Daytime'}
+${weatherData.current_weather.is_day == 0 ? '🌒Nighttime' : '☀Daytime'}
 Status: ${weatherAtmfr.icon} ${weatherAtmfr.string} ${usePredictWeather ?
                             '(' + predictedWeatherFr.icon + ' ' + predictedWeatherFr.string + ' predicted)'
                             : ''}
