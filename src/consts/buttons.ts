@@ -9,7 +9,7 @@ export const type = {
 // Discord.ButtonStyle.Secondary //grey
 // Discord.ButtonStyle.Success //green
 
-
+// files/img/button/(x).png
 export const label = {
     page: {
         first: '<:first:1025231767067689001>',

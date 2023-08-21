@@ -55,13 +55,13 @@ CHECKING CONFIG FOR ANY ERRORS
         console.log("Property `osuClientSecret` is invalid or an incorrect type");
         console.log("osu! commands will not work until this property is added/fixed");
         console.log("The default value of `null` will be used as a placeholder");
-        config["osuClientSecret"] = "";
+        config["osuClientSecret"] = "null";
     }
     if (!config.hasOwnProperty("osuApiKey") && typeof config["osuApiKey"] != "string") {
         console.log("Property `osuApiKey` is invalid or an incorrect type");
         console.log("map leaderboards will not work until this property is added/fixed");
         console.log("The default value of `null` will be used as a placeholder");
-        config["osuApiKey"] = "";
+        config["osuApiKey"] = "null";
     }
     if (config.hasOwnProperty("ownerusers")) {
         let tempIsArr = false;
@@ -84,7 +84,7 @@ CHECKING CONFIG FOR ANY ERRORS
         console.log("The default value of `[]` will be used as a placeholder");
         config["ownerusers"] = [];
     }
-    if (config.hasOwnProperty("google") && typeof config["google"] != "string") {
+    if (config.hasOwnProperty("google")) {
         if (!config["google"].hasOwnProperty("apiKey") && typeof config["google"]["apiKey"] != "string") {
             console.log("Property `google.apiKey` is invalid or an incorrect type");
             console.log("image search commands will not work until this property is added/fixed");
@@ -127,6 +127,29 @@ CHECKING CONFIG FOR ANY ERRORS
         console.log("Property `storeCommandLogs` is invalid or an incorrect type");
         console.log("The default value of `false` will be used as a placeholder");
         config["storeCommandLogs"] = false;
+    }
+    if (config.hasOwnProperty("useEmojis")) {
+        if (!config["useEmojis"].hasOwnProperty("gamemodes") && typeof config["useEmojis"]["gamemodes"] != "string") {
+            console.log("Property `useEmojis.gamemodes` is invalid or an incorrect type");
+            console.log("The default value of `false` will be used as a placeholder");
+            config["useEmojis"]["gamemodes"] = false;
+        }
+        if (!config["useEmojis"].hasOwnProperty("scoreGrades") && typeof config["useEmojis"]["scoreGrades"] != "string") {
+            console.log("Property `useEmojis.scoreGrades` is invalid or an incorrect type");
+            console.log("The default value of `false` will be used as a placeholder");
+            config["useEmojis"]["scoreGrades"] = false;
+        }
+        if (!config["useEmojis"].hasOwnProperty("mods") && typeof config["useEmojis"]["mods"] != "string") {
+            console.log("Property `useEmojis.mods` is invalid or an incorrect type");
+            console.log("The default value of `false` will be used as a placeholder");
+            config["useEmojis"]["mods"] = false;
+        }
+    } else {
+        console.log("Property `google` is missing");
+        console.log("image search commands will not work until this property is added/fixed");
+        config["google"] = {};
+        config["google"]["apiKey"] = "null";
+        config["google"]["engineId"] = "null";
     }
     console.log(`
 ----------------------------------------------------

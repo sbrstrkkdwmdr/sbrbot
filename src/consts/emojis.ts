@@ -1,4 +1,7 @@
 //MAP OBJECTS
+// files/img/osu/greyscale/count_(x).png
+// files/img/osu/greyscale/bpm.png
+// files/img/osu/greyscale/total_length.png
 export const mapobjs = {
     circle_old: '<:circle:927478586028474398>',
     slider_old: '<:slider:927478585701330976>',
@@ -13,6 +16,7 @@ export const mapobjs = {
     hp: '♥',
 };
 
+// files/img/osu/mode(x).png
 export const gamemodes = {
     standard: '<:modeosu:944181096868884481>', //standard, STD, osu!
     osu: '<:modeosu:944181096868884481>',
@@ -21,6 +25,7 @@ export const gamemodes = {
     mania: '<:modemania:944181095874834453>' //piano
 };
 
+// files/img/osu/status-(x).png
 export const rankedstatus = {
     ranked: '<:statusranked:944512775579926609>',
     approved: '<:statusapproved:944512764913811467>',
@@ -29,6 +34,7 @@ export const rankedstatus = {
     graveyard: '<:statusgraveyard:944512765282897940>'
 };
 
+// files/img/grades/print/Ranking-(x).png
 export const grades = {
     XH: '<:RankingXH:1054912277788242000>', //platinum SS
     X: '<:RankingX:1054912275846275135>', //gold SS
@@ -62,10 +68,12 @@ export const grades = {
         F: 'F',
     }
 };
+// files/img/osu/mode(x).png
 export const onlinestatus = {
     online: '<:osu_online:927800818445455421>',
     offline: '<:osu_offline:927800829153513472>'
 };
+// files/img/osu/mods/(x).png
 export const mods = {
     //full name
     none: '<:none:1142632545947762788>',
@@ -161,6 +169,7 @@ export const mods = {
     //Lazer
 };
 
+// files/img/osu/support(x).png
 export const supporter = {
     first: '<:support1:1134082832273252473>',
     second: '<:support2:1134082835909713980>',

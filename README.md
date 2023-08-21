@@ -21,7 +21,7 @@ install nodejs (v16) [here](https://nodejs.org/en/download/)
 
 install rust [here](https://www.rust-lang.org/tools/install)
 
-install all dependencies with `npm i`
+install all dependencies with `npm i` in the main directory
 
 in the `./config/` folder rename `tempconfig.json` to `config.json`
 
@@ -53,11 +53,18 @@ in the `./config/` folder rename `tempconfig.json` to `config.json`
     "LogApiCallsToFile": true,
     "enableTracking": true,
     "storeCommandLogs": true
+    "useEmojis": {
+        "gamemodes": true,
+        "scoreGrades": true,
+        "mods": false
+    }
 }
 ```
 
 change the values in `config.json` </br>
 rename `TEMPLATE.sqlite` to `database.sqlite`</br>
+check `src/consts/emojis.ts` and `src/consts/buttons.ts` and change the emojis that are formatted as <:name:ID:> (reupload to a private server that the bot is in) </br>
+to get the emoji id, type the emoji then put a `\` in front of it</br>
 to compile the bot the bot run `tsc` or `npm run build`</br>
 to run the compiled code run `npm run run` </br>
 
@@ -93,15 +100,45 @@ copy the key and paste it into the google.apiKey field </br>
 
 ## config properties
 
-</br></br>token: bot token. go to https://discord.com/developers/applications, create a new app, and create a new bot under the bot section. copy the token from there
-</br></br>prefix: a string at the start of each message to detect if a message is a command. ie `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't.
-</br></br>osuClientID: the client id of an osu! api v2 app
-</br></br>osuClientSecret: the secret/token of an osu! api v2 app
-</br></br>ownerusers: an array of user ids stored as strings. users with these ids can use any command
-</br></br>google.apiKey: the api key of a google programmable search engine
-</br></br>google.engineId: the search engine id of a google programmable search engine
-</br></br>useScreenshotParse: enables/disables the detection of maps in screenshots. Can cause crashes due to high CPU and memory usage
-</br></br>LogApiCalls: enables/disables logging output to the console
-</br></br>LogApiCallsToFile: enables/disable console output being logged to `logs/console.log`. Still saves logs even if `LogApiCalls` is false
-</br></br>enableTracking: enables/disables osutrack. Users can still be added/removed but scores won't be updated.
-</br></br>storeCommandLogs: enables/disables logs being stored locally
+"useEmojis": {
+"gamemodes": true,
+"scoreGrades": true,
+"mods": false
+}
+
+
+| Property | Type | Description | Default |
+| --- | --- | --- | --- |
+| important | object | see below | {} |
+| prefix | string | a string at the start of each message to detect if a message is a command. ie `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't. | sbr- |
+| osuClientID | string | the client id of an osu! api v2 app | null |
+| osuClientSecret | string | the secret/token of an osu! api v2 app | null |
+| osuApiKey | string | the api key used for osu api v1 (only currently used for maplb with mods) | null |
+| ownerusers | string[] | an array of user ids stored as strings. users with these ids can use any command | [] |
+| google | object | see below | {} |
+| useScreenshotParse | boolean | enables/disables the detection of maps in screenshots. Can cause crashes due to high CPU and memory usage | false |
+| LogApiCalls | boolean | enables/disables logging output to the console | true |
+| LogApiCallsToFile | boolean | enables/disable console output being logged to `logs/console.log`. Still saves logs even if `LogApiCalls` is false | false |
+| enableTracking | boolean | enables/disables osutrack. Users can still be added/removed but scores won't be updated. | false |
+| storeCommandLogs | boolean | enables/disables logs being stored locally | false |
+| useEmojis | object | see below | {} |
+
+### important
+| Property | Type | Description | Default |
+| --- | --- | --- | --- |
+| token | string | application token for bot to connect to discords API. </br>go to https://discord.com/developers/applications, create a new app, and create a new bot under the bot section. copy the token from there | N/A |
+| dbd_license | string | ignore this property | null |
+| redirect_uri | string | ignore this property | null |
+| client_secret | string | ignore this property | null |
+| client_id | string | ignore this property | null |
+### google
+| Property | Type | Description | Default |
+| --- | --- | --- | --- |
+| apiKey | string |  the api key of a google programmable search engine | null |
+| engineId | string | the search engine id of a google programmable search engine | null |
+### useEmojis
+| Property | Type | Description | Default |
+| --- | --- | --- | --- |
+| gamemodes | boolean | enables/disables gamemodes being shown as emojis instead of text | true |
+| scoreGrades | boolean | enables/disables rank letters shown as emojis instead of text | true |
+| mods | boolean | enables/disables mods shown as emojis instead of text | false |

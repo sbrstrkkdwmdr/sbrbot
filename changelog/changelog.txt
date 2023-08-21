@@ -445,3 +445,4 @@ changes:
 [QOL] show grade if passed
 [FIX] east/west coords being swapped
 [QOL] add sun/moon emojis to day/night
+[QOL] update config checker and README
