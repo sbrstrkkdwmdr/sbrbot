@@ -6506,7 +6506,7 @@ export async function replayparse(input: extypes.commandInput) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.map.ms_md5.replace('[ID]', replay.beatmapMD5),
                 edit: true
             }
         }, input.canReply);
@@ -6516,7 +6516,7 @@ export async function replayparse(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.map.ms_md5.replace('[ID]', replay.beatmapMD5),
             config: input.config
         });
         return;
@@ -6558,7 +6558,7 @@ export async function replayparse(input: extypes.commandInput) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user_msp.replace('[ID]', replay.playerName),
                 edit: true
             }
         }, input.canReply);
@@ -6568,7 +6568,7 @@ export async function replayparse(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.profile.user_msp.replace('[ID]', replay.playerName),
             config: input.config
         });
         return;

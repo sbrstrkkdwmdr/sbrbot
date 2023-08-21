@@ -446,3 +446,4 @@ changes:
 [FIX] east/west coords being swapped
 [QOL] add sun/moon emojis to day/night
 [QOL] update config checker and README
+[FIX] errors in replayparse

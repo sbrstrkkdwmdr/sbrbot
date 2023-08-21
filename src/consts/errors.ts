@@ -40,6 +40,7 @@ export const uErr = {
             m_msp: 'No previous map id found in this guild',
             m_uk: 'Could not find the requested beatmap',
             ms: 'Could not find beatmapset [ID]',
+            ms_md5: 'Could not find beatmap with the hash [ID]',
             search: 'Beatmap search failed',
             search_nf: 'No beatmaps found with args "[INPUT]"',
             setonly: 'No beatmaps found in beatmapset [ID]',
