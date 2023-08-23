@@ -35,6 +35,7 @@
         "osureplayparser": "^1.0.1",
         "rosu-pp": "^0.9.4",
         "sequelize": "^6.32.1",
+        "simple-statistics": "^7.8.3",
         "sqlite3": "^5.1.6",
         "tesseract.js": "^4.1.1",
         "tslib": "^2.6.1",

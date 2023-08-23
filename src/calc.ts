@@ -600,6 +600,31 @@ export function getIQR(array: number[]) {
     };
 }
 
+export function wipDiffThing(array: { x: number, y: number; }[], inputX: number) {
+    array.sort((a, b) => b.x - a.x);
+    const pos = array.findIndex(e => e.x == inputX && e.y == 0);
+    const prev = array[pos - 1];
+    const next = array[pos + 1];
+    const diff = Math.abs(prev?.x - next?.x);
+    if (!prev) {
+        return next.x;
+    } else if (!next) {
+        return prev.x;
+    } else if (diff == 0) {
+        return ((prev.y + next.y) / 2);
+    } else {
+        const prevDis = Math.abs(prev.x - inputX); //100
+        const nextDis = Math.abs(next.x - inputX); //50
+        //50/100 = 0.5 prev
+        //100/50 = 2 next
+        //10
+        //5
+        const init = ((prev.y + next.y) / 2);
+        let mutable = (init - ((nextDis/prevDis)*(init-prev.x)))- (((prevDis/nextDis)*(init-next.x)));
+        return mutable;
+    }
+}
+
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
 // export {
 //     findHCF, findLCM,

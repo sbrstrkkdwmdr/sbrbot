@@ -1607,7 +1607,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
         .setDescription('null');
 
     let returnval: string | number;
-
+    const disclaimer = 'Values are very rough estimates (especially pp to rank)';
     switch (type) {
         case 'pp': {
             returnval = await osufunc.getRankPerformance('pp->rank', value, mode, input.statsCache);
@@ -1625,7 +1625,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
             returnval = await osufunc.getRankPerformance('rank->pp', value, mode, input.statsCache);
 
             if (typeof returnval == 'number') {
-                returnval = 'approx. ' + func.separateNum(returnval) + 'pp';
+                returnval = 'approx. ' + func.separateNum(returnval.toFixed(2)) + 'pp';
             } else {
                 returnval = 'null';
             }

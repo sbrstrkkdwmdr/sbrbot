@@ -53,7 +53,7 @@ export function readAllFiles(directory: string) {
  * @info separates numbers ie 3000000 -> 3,000,000
  * @param number 
  * @param separator default is ,
- * @returns string
+ * @returns string with numbers separated. Doesn't separate values after the decimal point.
  */
 export function separateNum(number: string | number, separator?: string) {
     let cursep = ',';
@@ -62,8 +62,8 @@ export function separateNum(number: string | number, separator?: string) {
     }
     let ans = `${number}`.replace(/\B(?=(\d{3})+(?!\d))/g, cursep);
     if (`${number}`.includes('.')) {
-        const init = number.toString().split('.')[0];
-        const after = number.toString().split('.')[1];
+        const init = `${number}`.split('.')[0];
+        const after = `${number}`.split('.')[1];
         ans = init.replace(/\B(?=(\d{3})+(?!\d))/g, cursep) + `.${after}`;
     }
     return ans;

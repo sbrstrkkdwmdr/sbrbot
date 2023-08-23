@@ -448,4 +448,4 @@ changes:
 [QOL] update config checker and README
 [FIX] errors in replayparse
 [FIX] rsbest saying "play" instead of "plays"
-[QOL] 
+[QOL] switched rank pp to use regression to predict
