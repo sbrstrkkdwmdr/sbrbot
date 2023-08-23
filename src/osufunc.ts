@@ -1797,1014 +1797,1060 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
     return returnval;
 }
 
-export function modeValidator(mode: string | number) {
-    let returnf: osuApiTypes.GameMode = 'osu';
-
-    if (typeof mode == 'number') {
-        switch (mode) {
-            case 0: default:
-                returnf = 'osu';
-                break;
-            case 1:
-                returnf = 'taiko';
-                break;
-            case 2:
-                returnf = 'fruits';
-                break;
-            case 3:
-                returnf = 'mania';
-                break;
-        }
-    } else if (typeof mode == 'string') {
-        switch (mode) {
-            case 'osu': default: case 'o': case 'std': case 'standard':
-                returnf = 'osu';
-                break;
-            case 'taiko': case 't': case 'drums':
-                returnf = 'taiko';
-                break;
-            case 'fruits': case 'f': case 'c': case 'ctb': case 'catch': case 'catch the beat': case 'catchthebeat':
-                returnf = 'fruits';
-                break;
-            case 'mania': case 'm': case 'piano': case 'key': case 'keys':
-                returnf = 'mania';
-                break;
-        }
-    }
-    return returnf;
-}
-
-export function modeValidatorAlt(mode: string | number) {
-    let returnf: osuApiTypes.GameMode = 'osu';
-
-    if (typeof mode == 'number') {
-        switch (mode) {
-            case 0: default:
-                returnf = 'osu';
-                break;
-            case 1:
-                returnf = 'taiko';
-                break;
-            case 2:
-                returnf = 'fruits';
-                break;
-            case 3:
-                returnf = 'mania';
-                break;
-        }
-    } else if (typeof mode == 'string') {
-        switch (mode) {
-            case 'osu': default: case 'o': case 'std': case 'standard':
-                returnf = 'osu';
-                break;
-            case 'taiko': case 't': case 'drums':
-                returnf = 'taiko';
-                break;
-            case 'fruits': case 'f': case 'c': case 'ctb': case 'catch': case 'catch the beat': case 'catchthebeat':
-                returnf = 'fruits';
-                break;
-            case 'mania': case 'm': case 'piano': case 'key': case 'keys':
-                returnf = 'mania';
-                break;
-        }
-    }
-
-    const included = [
-        0, 'osu', 'o', 'std', 'standard',
-        1, 'taiko', 't', 'drums',
-        2, 'fruits', 'f', 'c', 'ctb', 'catch', 'catch the beat', 'catchthebeat',
-        3, 'mania', 'm', 'piano', 'key', 'keys'
-    ];
-
-    let isincluded = true;
-    if (!included.includes(mode)) {
-        isincluded = false;
-    }
-
-    return {
-        mode: returnf,
-        isincluded
-    };
-}
-
-export async function userStatsCache(user: osuApiTypes.UserStatistics[] | osuApiTypes.User[], database: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode, type: 'Stat' | 'User') {
-    await (async () => {
-        switch (type) {
-            case 'Stat': {
-                user = user as osuApiTypes.UserStatistics[];
-                for (let i = 0; i < user.length; i++) {
-                    const curuser = user[i];
-                    if (!(curuser?.pp || !curuser?.global_rank)) {
-                        break;
-                    }
-                    let findname = await database.findOne({
-                        where: {
-                            osuid: curuser.user.id
-                        }
-                    });
-                    if (findname == Promise<{ pending; }>) {
-                        findname = null;
-                    }
-                    if (typeof findname == 'undefined' || !findname) {
-                        await database.create({
-                            osuid: curuser.user.id,
-                            country: curuser.user.country_code,
-                            [mode + 'pp']: curuser.pp,
-                            [mode + 'rank']: curuser.global_rank,
-                            [mode + 'acc']: curuser.hit_accuracy
-                        });
-                    } else {
-                        await database.update({
-                            [mode + 'pp']: curuser.pp,
-                            [mode + 'rank']: curuser.global_rank,
-                            [mode + 'acc']: curuser.hit_accuracy
-                        },
-                            {
-                                where: { osuid: curuser.user.id }
-                            });
-                    }
-                }
-            } break;
-            case 'User': {
-                user = user as osuApiTypes.User[];
-                for (let i = 0; i < user.length; i++) {
-                    const curuser = user[i];
-                    if (!(curuser?.statistics?.pp || !curuser?.statistics?.global_rank)) {
-                        break;
-                    }
-                    let findname = await database.findOne({
-                        where: {
-                            osuid: curuser.id
-                        }
-                    });
-                    if (findname == Promise<{ pending; }>) {
-                        findname = null;
-                    }
-
-                    if (typeof findname == 'undefined' || !findname) {
-                        await database.create({
-                            osuid: `${curuser.id}`,
-                            country: `${curuser.country_code}`,
-                            [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
-                            [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
-                            [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
-                        });
-                    } else {
-                        await database.update({
-                            [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
-                            [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
-                            [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
-                        },
-                            {
-                                where: { osuid: `${curuser.id}` }
-                            });
-                    }
-                }
-            } break;
-        }
-    })();
-    try {
-        await userStatsCacheFix(database, mode);
-    } catch (error) {
-    }
-}
-
-export async function userStatsCacheFix(database: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode) {
-    const users = await database.findAll();
-    const actualusers: {
-        pp: string,
-        rank: string,
-        acc: string,
-        uid: string;
-    }[] = [];
+export async function getRankPerformanceAlt(type: 'pp->rank' | 'rank->pp', value: number, mode: osuApiTypes.GameMode,
+    statsCache: Sequelize.ModelStatic<any>,) {
+    const users = await statsCache.findAll();
+    const pprankarr: { pp: string, rank: string; }[] = [];
+    let returnval: number = null;
     for (let i = 0; i < users.length; i++) {
-        const curuser = {
-            pp: users[i].dataValues[`${mode}pp`],
-            rank: users[i].dataValues[`${mode}rank`],
-            acc: users[i].dataValues[`${mode}acc`],
-            uid: users[i].dataValues.osuid
-        };
-        actualusers.push(curuser);
-    }
-
-    actualusers.sort((a, b) => (+b.pp) - (+a.pp));
-
-    for (let i = 0; i < actualusers.length; i++) {
-        const curuser = actualusers[i];
-        let givenrank = curuser.rank;
-        //if user doesn't have a rank, make it null
-        if (typeof curuser.pp == 'undefined' || !curuser.pp) {
-            givenrank = null;
+        const curuser = users[i].dataValues;
+        switch (mode) {
+            case 'osu': default:
+                if (typeof curuser.osupp == 'undefined' || !curuser.osupp) break;
+                if (typeof curuser.osurank == 'undefined' || !curuser.osurank) break;
+                pprankarr.push({
+                    pp: curuser.osupp,
+                    rank: curuser.osurank
+                });
+                break;
+            case 'taiko':
+                if (typeof curuser.taikopp == 'undefined' || !curuser.taikopp) break;
+                if (typeof curuser.taikorank == 'undefined' || !curuser.taikorank) break;
+                pprankarr.push({
+                    pp: curuser.taikopp,
+                    rank: curuser.taikorank
+                });
+                break;
+            case 'fruits':
+                if (typeof curuser.fruitspp == 'undefined' || !curuser.fruitspp) break;
+                if (typeof curuser.fruitsrank == 'undefined' || !curuser.fruitsrank) break;
+                pprankarr.push({
+                    pp: curuser.fruitspp,
+                    rank: curuser.fruitsrank
+                });
+                break;
+            case 'mania':
+                if (typeof curuser.maniapp == 'undefined' || !curuser.maniapp) break;
+                if (typeof curuser.maniarank == 'undefined' || !curuser.maniarank) break;
+                pprankarr.push({
+                    pp: curuser.maniapp,
+                    rank: curuser.maniarank
+                });
+                break;
         }
-        await database.update({
-            [`${mode}pp`]: curuser.pp,
-            [`${mode}rank`]: givenrank,
-            [`${mode}acc`]: curuser.acc,
-        }, {
-            where: { osuid: curuser.uid }
-        });
+        
+        
+        return returnval;
     }
-}
 
-/**
- * checks url for beatmap id. if url given is just a number, then map id is the number
- * @param url the url to check
- * @param callIfMapIdNull if only set id is found, then send an api request to fetch the map id
- */
-export async function mapIdFromLink(url: string, callIfMapIdNull: boolean, config: extypes.config) {
+    export function modeValidator(mode: string | number) {
+        let returnf: osuApiTypes.GameMode = 'osu';
 
-    if (url.includes(' ')) {
-        const temp = url.split(' ');
-        //get arg that has osu.ppy.sh
-        for (let i = 0; i < temp.length; i++) {
-            const curarg = temp[i];
-            if (curarg.includes('osu.ppy.sh')) {
-                url = curarg;
+        if (typeof mode == 'number') {
+            switch (mode) {
+                case 0: default:
+                    returnf = 'osu';
+                    break;
+                case 1:
+                    returnf = 'taiko';
+                    break;
+                case 2:
+                    returnf = 'fruits';
+                    break;
+                case 3:
+                    returnf = 'mania';
+                    break;
+            }
+        } else if (typeof mode == 'string') {
+            switch (mode) {
+                case 'osu': default: case 'o': case 'std': case 'standard':
+                    returnf = 'osu';
+                    break;
+                case 'taiko': case 't': case 'drums':
+                    returnf = 'taiko';
+                    break;
+                case 'fruits': case 'f': case 'c': case 'ctb': case 'catch': case 'catch the beat': case 'catchthebeat':
+                    returnf = 'fruits';
+                    break;
+                case 'mania': case 'm': case 'piano': case 'key': case 'keys':
+                    returnf = 'mania';
+                    break;
+            }
+        }
+        return returnf;
+    }
+
+    export function modeValidatorAlt(mode: string | number) {
+        let returnf: osuApiTypes.GameMode = 'osu';
+
+        if (typeof mode == 'number') {
+            switch (mode) {
+                case 0: default:
+                    returnf = 'osu';
+                    break;
+                case 1:
+                    returnf = 'taiko';
+                    break;
+                case 2:
+                    returnf = 'fruits';
+                    break;
+                case 3:
+                    returnf = 'mania';
+                    break;
+            }
+        } else if (typeof mode == 'string') {
+            switch (mode) {
+                case 'osu': default: case 'o': case 'std': case 'standard':
+                    returnf = 'osu';
+                    break;
+                case 'taiko': case 't': case 'drums':
+                    returnf = 'taiko';
+                    break;
+                case 'fruits': case 'f': case 'c': case 'ctb': case 'catch': case 'catch the beat': case 'catchthebeat':
+                    returnf = 'fruits';
+                    break;
+                case 'mania': case 'm': case 'piano': case 'key': case 'keys':
+                    returnf = 'mania';
+                    break;
+            }
+        }
+
+        const included = [
+            0, 'osu', 'o', 'std', 'standard',
+            1, 'taiko', 't', 'drums',
+            2, 'fruits', 'f', 'c', 'ctb', 'catch', 'catch the beat', 'catchthebeat',
+            3, 'mania', 'm', 'piano', 'key', 'keys'
+        ];
+
+        let isincluded = true;
+        if (!included.includes(mode)) {
+            isincluded = false;
+        }
+
+        return {
+            mode: returnf,
+            isincluded
+        };
+    }
+
+    export async function userStatsCache(user: osuApiTypes.UserStatistics[] | osuApiTypes.User[], database: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode, type: 'Stat' | 'User') {
+        await (async () => {
+            switch (type) {
+                case 'Stat': {
+                    user = user as osuApiTypes.UserStatistics[];
+                    for (let i = 0; i < user.length; i++) {
+                        const curuser = user[i];
+                        if (!(curuser?.pp || !curuser?.global_rank)) {
+                            break;
+                        }
+                        let findname = await database.findOne({
+                            where: {
+                                osuid: curuser.user.id
+                            }
+                        });
+                        if (findname == Promise<{ pending; }>) {
+                            findname = null;
+                        }
+                        if (typeof findname == 'undefined' || !findname) {
+                            await database.create({
+                                osuid: curuser.user.id,
+                                country: curuser.user.country_code,
+                                [mode + 'pp']: curuser.pp,
+                                [mode + 'rank']: curuser.global_rank,
+                                [mode + 'acc']: curuser.hit_accuracy
+                            });
+                        } else {
+                            await database.update({
+                                [mode + 'pp']: curuser.pp,
+                                [mode + 'rank']: curuser.global_rank,
+                                [mode + 'acc']: curuser.hit_accuracy
+                            },
+                                {
+                                    where: { osuid: curuser.user.id }
+                                });
+                        }
+                    }
+                } break;
+                case 'User': {
+                    user = user as osuApiTypes.User[];
+                    for (let i = 0; i < user.length; i++) {
+                        const curuser = user[i];
+                        if (!(curuser?.statistics?.pp || !curuser?.statistics?.global_rank)) {
+                            break;
+                        }
+                        let findname = await database.findOne({
+                            where: {
+                                osuid: curuser.id
+                            }
+                        });
+                        if (findname == Promise<{ pending; }>) {
+                            findname = null;
+                        }
+
+                        if (typeof findname == 'undefined' || !findname) {
+                            await database.create({
+                                osuid: `${curuser.id}`,
+                                country: `${curuser.country_code}`,
+                                [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
+                                [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
+                                [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
+                            });
+                        } else {
+                            await database.update({
+                                [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
+                                [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
+                                [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
+                            },
+                                {
+                                    where: { osuid: `${curuser.id}` }
+                                });
+                        }
+                    }
+                } break;
+            }
+        })();
+        try {
+            await userStatsCacheFix(database, mode);
+        } catch (error) {
+        }
+    }
+
+    export async function userStatsCacheFix(database: Sequelize.ModelStatic<any>, mode: osuApiTypes.GameMode) {
+        const users = await database.findAll();
+        const actualusers: {
+            pp: string,
+            rank: string,
+            acc: string,
+            uid: string;
+        }[] = [];
+        for (let i = 0; i < users.length; i++) {
+            const curuser = {
+                pp: users[i].dataValues[`${mode}pp`],
+                rank: users[i].dataValues[`${mode}rank`],
+                acc: users[i].dataValues[`${mode}acc`],
+                uid: users[i].dataValues.osuid
+            };
+            actualusers.push(curuser);
+        }
+
+        actualusers.sort((a, b) => (+b.pp) - (+a.pp));
+
+        for (let i = 0; i < actualusers.length; i++) {
+            const curuser = actualusers[i];
+            let givenrank = curuser.rank;
+            //if user doesn't have a rank, make it null
+            if (typeof curuser.pp == 'undefined' || !curuser.pp) {
+                givenrank = null;
+            }
+            await database.update({
+                [`${mode}pp`]: curuser.pp,
+                [`${mode}rank`]: givenrank,
+                [`${mode}acc`]: curuser.acc,
+            }, {
+                where: { osuid: curuser.uid }
+            });
+        }
+    }
+
+    /**
+     * checks url for beatmap id. if url given is just a number, then map id is the number
+     * @param url the url to check
+     * @param callIfMapIdNull if only set id is found, then send an api request to fetch the map id
+     */
+    export async function mapIdFromLink(url: string, callIfMapIdNull: boolean, config: extypes.config) {
+
+        if (url.includes(' ')) {
+            const temp = url.split(' ');
+            //get arg that has osu.ppy.sh
+            for (let i = 0; i < temp.length; i++) {
+                const curarg = temp[i];
+                if (curarg.includes('osu.ppy.sh')) {
+                    url = curarg;
+                    break;
+                }
+            }
+        }
+
+        const object = {
+            set: null,
+            mode: null,
+            map: null,
+        };
+
+        //patterns: 
+        /**
+         *
+         * osu.ppy.sh/b/{map}
+         * osu.ppy.sh/beatmaps/{map}
+         * osu.ppy.sh/b/{map}?m={mode}
+         * osu.ppy.sh/beatmaps/{map}?m={mode}
+         * osu.ppy.sh/s/{set} //mapset
+         * osu.ppy.sh/beatmapsets/{set}#{mode}/{map}
+         * osu.ppy.sh/beatmapsets/{set}
+         */
+
+        switch (true) {
+            case url.includes('?m='):
+                object.mode = url.split('?m=')[1];
+                object.map = url.split('?m=')[0];
+                break;
+            case url.includes('/b/'):
+                object.map = url.split('/b/')[1];
+                break;
+            case url.includes('beatmaps/'):
+                object.map = url.split('/beatmaps/')[1];
+                break;
+            case url.includes('beatmapsets') && url.includes('#'):
+                object.set = url.split('beatmapsets/')[1].split('#')[0];
+                object.mode = url.split('#')[1].split('/')[0];
+                object.map = url.split('#')[1].split('/')[1];
+                break;
+            case url.includes('/s/'):
+                object.set = url.split('/s/')[1];
+                break;
+            case url.includes('beatmapsets/'):
+                object.set = url.split('/beatmapsets/')[1];
+                break;
+            case !isNaN(+url):
+                object.map = url;
+                break;
+        }
+        if (callIfMapIdNull && object.map == null) {
+            const bmsdataReq = await apiget({
+                type: 'mapset_get',
+                params: {
+                    id: object.set
+                },
+                config
+            });
+            object.map = (bmsdataReq.apiData as osuApiTypes.Beatmapset)?.beatmaps?.[0]?.id ?? null;
+        }
+        return object;
+    }
+
+
+
+    /**
+     * 
+     * @param {*} arr array of scores
+     * @returns most common mod combinations
+     */
+    export function modemods(arr: osuApiTypes.Score[]) {
+        return arr.sort((a, b) => //swap b and a to make it least common
+            arr.filter(v => v.mods === a.mods).length
+            - arr.filter(v => v.mods === b.mods).length
+        ).pop();
+    }
+    /**
+     * 
+     * @param {*} arr array of scores
+     * @returns most common mapper
+     */
+    export function modemappers(arr: osuApiTypes.Score[]) {
+        return arr.sort((a, b) => //swap b and a to make it least common
+            arr.filter(v => v.beatmapset.creator === a.beatmapset.creator).length
+            - arr.filter(v => v.beatmapset.creator === b.beatmapset.creator).length
+        ).pop();
+    }
+
+    type stat = {
+        highest: number,
+        average: number,
+        lowest: number,
+        median: number,
+        ignored?: number,
+    };
+
+    /**
+     * 
+     * @param arr array of numbers
+     * @returns stats
+     */
+    export function Stats(arr: number[]) {
+        const init = arr.slice();
+        arr = arr.filter(x => x != null);
+        arr.sort((a, b) => b - a);
+        let median = 0;
+        //if even, else
+        if (arr.length % 2 == 1) {
+            median = arr[Math.floor(arr.length / 2)];
+        } else {
+            const temp1 = arr[arr.length / 2];
+            const temp2 = arr[(arr.length / 2) + 1];
+            median = (temp1 + temp2) / 2;
+        }
+
+        const stats: stat = {
+            highest: arr[0],
+            average: arr.reduce((b, a) => b + a, 0) / arr.length,
+            lowest: arr[arr.length - 1],
+            median: median,
+            ignored: init.length - arr.length
+        };
+        return stats;
+    }
+
+    /**
+     * 
+     * @param arr array of scores
+     * @returns mappers of scores in order of most common to least common, with percentage
+     */
+    export function CommonMappers(arr: osuApiTypes.Score[]) {
+        const mapperArray: {
+            mapper: string,
+            count: number,
+            percentage: number;
+        }[] = [];
+        arr.forEach(score => {
+            const mapper = score.beatmapset.creator;
+            const mapperIndex = mapperArray.findIndex(x => x.mapper == mapper);
+            if (mapperIndex == -1) {
+                mapperArray.push({
+                    mapper,
+                    count: 1,
+                    percentage: 0
+                });
+            } else {
+                mapperArray[mapperIndex].count++;
+            }
+        });
+        mapperArray.sort((a, b) => b.count - a.count);
+        mapperArray.forEach(x => x.percentage = (x.count / arr.length) * 100);
+        return mapperArray;
+    }
+
+    export function CommonMods(arr: osuApiTypes.Score[]) {
+        const modComboArray: {
+            mods: string,
+            count: number,
+            percentage: number;
+        }[] = [];
+        arr.forEach(score => {
+            const mods = score.mods.length != 0 ? score.mods.join('') : 'NM';
+            const modComboIndex = modComboArray.findIndex(x => x.mods == mods);
+            if (modComboIndex == -1) {
+                modComboArray.push({
+                    mods,
+                    count: 1,
+                    percentage: 0
+                });
+            } else {
+                modComboArray[modComboIndex].count++;
+            }
+        });
+        modComboArray.sort((a, b) => b.count - a.count);
+        modComboArray.forEach(x => x.percentage = (x.count / arr.length) * 100);
+        return modComboArray;
+    }
+
+    export function ModToEmojis(mods: string[], canEmoji?: boolean) {
+        if (canEmoji) {
+            const modEmojis: string[] = [];
+            for (let i = 0; i < mods.length; i++) {
+                let current: string = '';
+                //find
+                current = emojis.mods[mods[i]];
+                //push
+                current ? modEmojis.push(current) : null;
+            }
+        } else {
+            return mods;
+        }
+    }
+
+    export function randomMap(type?: 'Ranked' | 'Loved' | 'Approved' | 'Qualified' | 'Pending' | 'WIP' | 'Graveyard') {
+        let returnId = 4204;
+        let errormsg = null;
+        //check if cache exists
+        const cache = fs.existsSync(`${path}\\cache\\commandData`);
+        if (cache) {
+            let mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
+            const maps: apiReturn[] = [];
+            if (type) {
+                mapsExist = mapsExist.filter(x => x.includes(type));
+            }
+
+            for (let i = 0; i < mapsExist.length; i++) {
+                if (mapsExist[i].includes('.json')) {
+                    const dataAsStr = fs.readFileSync(`${path}\\cache\\commandData\\${mapsExist[i]}`, 'utf-8');
+                    maps.push(JSON.parse(dataAsStr) as apiReturn);
+                }
+            }
+            if (maps.length > 0) {
+                try {
+                    const curmap = maps[Math.floor(Math.random() * maps.length)];
+                    returnId = curmap?.apiData?.id ?? 4204;
+                } catch (error) {
+                    errormsg = `There was an error while trying to parse the map ID`;
+                }
+            } else {
+                errormsg = `No ${type ?? ''} maps found`;
+            }
+        } else {
+            errormsg = 'No maps found';
+        }
+        return {
+            returnId,
+            err: errormsg
+        };
+    }
+
+    export function recommendMap(baseRating: number, maxDifference: number) {
+        let returnId = 4204;
+        let errormsg = null;
+        //check if cache exists
+        const cache = fs.existsSync(`${path}\\cache\\commandData`);
+        if (cache) {
+            const mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
+            const maps: apiReturn[] = [];
+
+            for (let i = 0; i < mapsExist.length; i++) {
+                if (mapsExist[i].includes('.json')) {
+                    const dataAsStr = fs.readFileSync(`${path}\\cache\\commandData\\${mapsExist[i]}`, 'utf-8');
+                    maps.push(JSON.parse(dataAsStr) as apiReturn);
+                }
+            }
+
+            const filteredMaps = maps.filter(x => (x?.apiData?.difficulty_rating > baseRating - maxDifference && x?.apiData?.difficulty_rating < baseRating + maxDifference));
+            if (filteredMaps.length < 1) {
+                errormsg =
+                    `No maps within ${maxDifference?.toFixed(2)}⭐ of ${baseRating}⭐ were found
+total maps: ${maps.length}`;
+            } else {
+                try {
+                    const curmap = filteredMaps[Math.floor(Math.random() * filteredMaps.length)];
+                    returnId = curmap?.apiData?.id;
+                } catch (error) {
+                    errormsg = `There was an error while trying to parse the map ID`;
+                }
+            }
+        } else {
+            errormsg = 'No maps were found';
+        }
+        return {
+            returnId,
+            err: errormsg
+        };
+    }
+
+    /**
+     * 
+     * @param osr path to replay file
+     * @param osu path to .osu file (map)
+     * @returns unstable rate - the unstable rate
+     * @returns averageoffset - the avg ms off from a "perfect" hit. negatives are early
+     */
+    export async function calcUr(
+        osr: string,
+        osu: string,
+        config: extypes.config,
+    ) {
+        const unstableRate: number[] = [];
+
+        let replay: extypes.replay = await replayparser.parseReplay(osr);
+        let map = await mapParser.mapObject_Alt(osu);
+
+        try {
+            replay = await replayparser.parseReplay(osr);
+            map = await mapParser.mapObject_Alt(osu);
+        } catch (error) {
+            return {
+                unstablerate: 0,
+                averageOffset: 0,
+            };
+        }
+
+        console.log(map.HitObjects);
+
+        //get offset
+        const pixeloffset = osumodcalc.csToRadius(map.Difficulty.CircleSize);
+        const hitOffset = osumodcalc.ODtoms(map.Difficulty.OverallDifficulty).hitwindow_50;
+
+        //get every hitobject
+        const hitObjectTimings: {
+            x: number,
+            y: number,
+            time: number,
+        }[] = [];
+        for (let i = 0; i < map.HitObjects.length; i++) {
+            const curObj = map.HitObjects[i];
+            hitObjectTimings.push({
+                x: curObj.position.x,
+                y: curObj.position.y,
+                time: curObj.time
+            });
+        }
+
+
+
+        //get every tap
+        const taps: {
+            x: number,
+            y: number,
+            time: number,
+        }[] = [];
+        for (let i = 0; i < replay.replay_data.length; i++) {
+            const curHit = replay.replay_data[i];
+            const lastHit = replay.replay_data[i - 1];
+            let tapTime: number;
+
+            let tapCounts = false;
+
+            if (!curHit) {
+                tapCounts = false;
+            } else {
+                if (!lastHit) {
+                    console.log('no last hit');
+                    if (curHit.keysPressed.K1 ||
+                        curHit.keysPressed.K2 ||
+                        curHit.keysPressed.M1 ||
+                        curHit.keysPressed.M2
+                    ) {
+                        tapCounts = true;
+                        const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
+                        tapTime = tempArr.reduce((a, b) => a + b, 0);
+                    }
+                } else {
+                    //check if a key was pressed that wasn't pressed before
+                    if ((curHit.keysPressed.K1 && lastHit.keysPressed.K1 == false) ||
+                        (curHit.keysPressed.K2 && lastHit.keysPressed.K2 == false) ||
+                        (curHit.keysPressed.M1 && lastHit.keysPressed.M1 == false) ||
+                        (curHit.keysPressed.M2 && lastHit.keysPressed.M2 == false)
+                    ) {
+                        tapCounts = true;
+                        const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
+                        tapTime = tempArr.reduce((a, b) => a + b, 0);
+                    }
+                }
+            }
+            if (tapCounts) {
+                taps.push(
+                    {
+                        x: curHit.x,
+                        y: curHit.y,
+                        time: tapTime
+                    }
+                );
+            }
+        }
+
+        log.toOutput(JSON.stringify(hitObjectTimings, null, 2), config);
+
+        const hitObjectsforAvg = hitObjectTimings.slice();
+
+        //gets avg. from the absolute perfect hit;
+        const unstableRateF: number[] = [];
+
+        for (let i = 0; i < taps.length; i++) {
+            const curHit = taps[i];
+            const curHitObj = hitObjectsforAvg[0];
+            let doable = true;
+            let missaim = false;
+            let mistap = false;
+            let objectGONE = false;
+
+            console.log(i);
+            console.log(curHit);
+            console.log(curHitObj);
+
+            if (hitObjectsforAvg.length == 0) {
                 break;
             }
-        }
-    }
 
-    const object = {
-        set: null,
-        mode: null,
-        map: null,
-    };
-
-    //patterns: 
-    /**
-     *
-     * osu.ppy.sh/b/{map}
-     * osu.ppy.sh/beatmaps/{map}
-     * osu.ppy.sh/b/{map}?m={mode}
-     * osu.ppy.sh/beatmaps/{map}?m={mode}
-     * osu.ppy.sh/s/{set} //mapset
-     * osu.ppy.sh/beatmapsets/{set}#{mode}/{map}
-     * osu.ppy.sh/beatmapsets/{set}
-     */
-
-    switch (true) {
-        case url.includes('?m='):
-            object.mode = url.split('?m=')[1];
-            object.map = url.split('?m=')[0];
-            break;
-        case url.includes('/b/'):
-            object.map = url.split('/b/')[1];
-            break;
-        case url.includes('beatmaps/'):
-            object.map = url.split('/beatmaps/')[1];
-            break;
-        case url.includes('beatmapsets') && url.includes('#'):
-            object.set = url.split('beatmapsets/')[1].split('#')[0];
-            object.mode = url.split('#')[1].split('/')[0];
-            object.map = url.split('#')[1].split('/')[1];
-            break;
-        case url.includes('/s/'):
-            object.set = url.split('/s/')[1];
-            break;
-        case url.includes('beatmapsets/'):
-            object.set = url.split('/beatmapsets/')[1];
-            break;
-        case !isNaN(+url):
-            object.map = url;
-            break;
-    }
-    if (callIfMapIdNull && object.map == null) {
-        const bmsdataReq = await apiget({
-            type: 'mapset_get',
-            params: {
-                id: object.set
-            },
-            config
-        });
-        object.map = (bmsdataReq.apiData as osuApiTypes.Beatmapset)?.beatmaps?.[0]?.id ?? null;
-    }
-    return object;
-}
-
-
-
-/**
- * 
- * @param {*} arr array of scores
- * @returns most common mod combinations
- */
-export function modemods(arr: osuApiTypes.Score[]) {
-    return arr.sort((a, b) => //swap b and a to make it least common
-        arr.filter(v => v.mods === a.mods).length
-        - arr.filter(v => v.mods === b.mods).length
-    ).pop();
-}
-/**
- * 
- * @param {*} arr array of scores
- * @returns most common mapper
- */
-export function modemappers(arr: osuApiTypes.Score[]) {
-    return arr.sort((a, b) => //swap b and a to make it least common
-        arr.filter(v => v.beatmapset.creator === a.beatmapset.creator).length
-        - arr.filter(v => v.beatmapset.creator === b.beatmapset.creator).length
-    ).pop();
-}
-
-type stat = {
-    highest: number,
-    average: number,
-    lowest: number,
-    median: number,
-    ignored?: number,
-};
-
-/**
- * 
- * @param arr array of numbers
- * @returns stats
- */
-export function Stats(arr: number[]) {
-    const init = arr.slice();
-    arr = arr.filter(x => x != null);
-    arr.sort((a, b) => b - a);
-    let median = 0;
-    //if even, else
-    if (arr.length % 2 == 1) {
-        median = arr[Math.floor(arr.length / 2)];
-    } else {
-        const temp1 = arr[arr.length / 2];
-        const temp2 = arr[(arr.length / 2) + 1];
-        median = (temp1 + temp2) / 2;
-    }
-
-    const stats: stat = {
-        highest: arr[0],
-        average: arr.reduce((b, a) => b + a, 0) / arr.length,
-        lowest: arr[arr.length - 1],
-        median: median,
-        ignored: init.length - arr.length
-    };
-    return stats;
-}
-
-/**
- * 
- * @param arr array of scores
- * @returns mappers of scores in order of most common to least common, with percentage
- */
-export function CommonMappers(arr: osuApiTypes.Score[]) {
-    const mapperArray: {
-        mapper: string,
-        count: number,
-        percentage: number;
-    }[] = [];
-    arr.forEach(score => {
-        const mapper = score.beatmapset.creator;
-        const mapperIndex = mapperArray.findIndex(x => x.mapper == mapper);
-        if (mapperIndex == -1) {
-            mapperArray.push({
-                mapper,
-                count: 1,
-                percentage: 0
-            });
-        } else {
-            mapperArray[mapperIndex].count++;
-        }
-    });
-    mapperArray.sort((a, b) => b.count - a.count);
-    mapperArray.forEach(x => x.percentage = (x.count / arr.length) * 100);
-    return mapperArray;
-}
-
-export function CommonMods(arr: osuApiTypes.Score[]) {
-    const modComboArray: {
-        mods: string,
-        count: number,
-        percentage: number;
-    }[] = [];
-    arr.forEach(score => {
-        const mods = score.mods.length != 0 ? score.mods.join('') : 'NM';
-        const modComboIndex = modComboArray.findIndex(x => x.mods == mods);
-        if (modComboIndex == -1) {
-            modComboArray.push({
-                mods,
-                count: 1,
-                percentage: 0
-            });
-        } else {
-            modComboArray[modComboIndex].count++;
-        }
-    });
-    modComboArray.sort((a, b) => b.count - a.count);
-    modComboArray.forEach(x => x.percentage = (x.count / arr.length) * 100);
-    return modComboArray;
-}
-
-export function ModToEmojis(mods: string[], canEmoji?: boolean) {
-    if (canEmoji) {
-        const modEmojis: string[] = [];
-        for (let i = 0; i < mods.length; i++) {
-            let current: string = '';
-            //find
-            current = emojis.mods[mods[i]];
-            //push
-            current ? modEmojis.push(current) : null;
-        }
-    } else {
-        return mods;
-    }
-}
-
-export function randomMap(type?: 'Ranked' | 'Loved' | 'Approved' | 'Qualified' | 'Pending' | 'WIP' | 'Graveyard') {
-    let returnId = 4204;
-    let errormsg = null;
-    //check if cache exists
-    const cache = fs.existsSync(`${path}\\cache\\commandData`);
-    if (cache) {
-        let mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
-        const maps: apiReturn[] = [];
-        if (type) {
-            mapsExist = mapsExist.filter(x => x.includes(type));
-        }
-
-        for (let i = 0; i < mapsExist.length; i++) {
-            if (mapsExist[i].includes('.json')) {
-                const dataAsStr = fs.readFileSync(`${path}\\cache\\commandData\\${mapsExist[i]}`, 'utf-8');
-                maps.push(JSON.parse(dataAsStr) as apiReturn);
-            }
-        }
-        if (maps.length > 0) {
-            try {
-                const curmap = maps[Math.floor(Math.random() * maps.length)];
-                returnId = curmap?.apiData?.id ?? 4204;
-            } catch (error) {
-                errormsg = `There was an error while trying to parse the map ID`;
-            }
-        } else {
-            errormsg = `No ${type ?? ''} maps found`;
-        }
-    } else {
-        errormsg = 'No maps found';
-    }
-    return {
-        returnId,
-        err: errormsg
-    };
-}
-
-export function recommendMap(baseRating: number, maxDifference: number) {
-    let returnId = 4204;
-    let errormsg = null;
-    //check if cache exists
-    const cache = fs.existsSync(`${path}\\cache\\commandData`);
-    if (cache) {
-        const mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
-        const maps: apiReturn[] = [];
-
-        for (let i = 0; i < mapsExist.length; i++) {
-            if (mapsExist[i].includes('.json')) {
-                const dataAsStr = fs.readFileSync(`${path}\\cache\\commandData\\${mapsExist[i]}`, 'utf-8');
-                maps.push(JSON.parse(dataAsStr) as apiReturn);
-            }
-        }
-
-        const filteredMaps = maps.filter(x => (x?.apiData?.difficulty_rating > baseRating - maxDifference && x?.apiData?.difficulty_rating < baseRating + maxDifference));
-        if (filteredMaps.length < 1) {
-            errormsg =
-                `No maps within ${maxDifference?.toFixed(2)}⭐ of ${baseRating}⭐ were found
-total maps: ${maps.length}`;
-        } else {
-            try {
-                const curmap = filteredMaps[Math.floor(Math.random() * filteredMaps.length)];
-                returnId = curmap?.apiData?.id;
-            } catch (error) {
-                errormsg = `There was an error while trying to parse the map ID`;
-            }
-        }
-    } else {
-        errormsg = 'No maps were found';
-    }
-    return {
-        returnId,
-        err: errormsg
-    };
-}
-
-/**
- * 
- * @param osr path to replay file
- * @param osu path to .osu file (map)
- * @returns unstable rate - the unstable rate
- * @returns averageoffset - the avg ms off from a "perfect" hit. negatives are early
- */
-export async function calcUr(
-    osr: string,
-    osu: string,
-    config: extypes.config,
-) {
-    const unstableRate: number[] = [];
-
-    let replay: extypes.replay = await replayparser.parseReplay(osr);
-    let map = await mapParser.mapObject_Alt(osu);
-
-    try {
-        replay = await replayparser.parseReplay(osr);
-        map = await mapParser.mapObject_Alt(osu);
-    } catch (error) {
-        return {
-            unstablerate: 0,
-            averageOffset: 0,
-        };
-    }
-
-    console.log(map.HitObjects);
-
-    //get offset
-    const pixeloffset = osumodcalc.csToRadius(map.Difficulty.CircleSize);
-    const hitOffset = osumodcalc.ODtoms(map.Difficulty.OverallDifficulty).hitwindow_50;
-
-    //get every hitobject
-    const hitObjectTimings: {
-        x: number,
-        y: number,
-        time: number,
-    }[] = [];
-    for (let i = 0; i < map.HitObjects.length; i++) {
-        const curObj = map.HitObjects[i];
-        hitObjectTimings.push({
-            x: curObj.position.x,
-            y: curObj.position.y,
-            time: curObj.time
-        });
-    }
-
-
-
-    //get every tap
-    const taps: {
-        x: number,
-        y: number,
-        time: number,
-    }[] = [];
-    for (let i = 0; i < replay.replay_data.length; i++) {
-        const curHit = replay.replay_data[i];
-        const lastHit = replay.replay_data[i - 1];
-        let tapTime: number;
-
-        let tapCounts = false;
-
-        if (!curHit) {
-            tapCounts = false;
-        } else {
-            if (!lastHit) {
-                console.log('no last hit');
-                if (curHit.keysPressed.K1 ||
-                    curHit.keysPressed.K2 ||
-                    curHit.keysPressed.M1 ||
-                    curHit.keysPressed.M2
-                ) {
-                    tapCounts = true;
-                    const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
-                    tapTime = tempArr.reduce((a, b) => a + b, 0);
-                }
-            } else {
-                //check if a key was pressed that wasn't pressed before
-                if ((curHit.keysPressed.K1 && lastHit.keysPressed.K1 == false) ||
-                    (curHit.keysPressed.K2 && lastHit.keysPressed.K2 == false) ||
-                    (curHit.keysPressed.M1 && lastHit.keysPressed.M1 == false) ||
-                    (curHit.keysPressed.M2 && lastHit.keysPressed.M2 == false)
-                ) {
-                    tapCounts = true;
-                    const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
-                    tapTime = tempArr.reduce((a, b) => a + b, 0);
-                }
-            }
-        }
-        if (tapCounts) {
-            taps.push(
-                {
-                    x: curHit.x,
-                    y: curHit.y,
-                    time: tapTime
-                }
-            );
-        }
-    }
-
-    log.toOutput(JSON.stringify(hitObjectTimings, null, 2), config);
-
-    const hitObjectsforAvg = hitObjectTimings.slice();
-
-    //gets avg. from the absolute perfect hit;
-    const unstableRateF: number[] = [];
-
-    for (let i = 0; i < taps.length; i++) {
-        const curHit = taps[i];
-        const curHitObj = hitObjectsforAvg[0];
-        let doable = true;
-        let missaim = false;
-        let mistap = false;
-        let objectGONE = false;
-
-        console.log(i);
-        console.log(curHit);
-        console.log(curHitObj);
-
-        if (hitObjectsforAvg.length == 0) {
-            break;
-        }
-
-        if (!curHitObj) {
-            hitObjectsforAvg.shift();
-        } else {
-
-            if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
-                doable = true;
-                objectGONE = true;
-            } else {
-                missaim = true;
-                doable = false;
-            }
-
-            if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
-                doable = true;
-                objectGONE = true;
-            } else {
-                mistap = true;
-                doable = false;
-            }
-            if ((curHit.time - curHitObj.time) > hitOffset) {
-                objectGONE = true;
-            }
-
-            if (objectGONE) {
+            if (!curHitObj) {
                 hitObjectsforAvg.shift();
-            }
-            if (doable) {
-                unstableRateF.push(curHit.time - curHitObj.time);
+            } else {
+
+                if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
+                    doable = true;
+                    objectGONE = true;
+                } else {
+                    missaim = true;
+                    doable = false;
+                }
+
+                if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
+                    doable = true;
+                    objectGONE = true;
+                } else {
+                    mistap = true;
+                    doable = false;
+                }
+                if ((curHit.time - curHitObj.time) > hitOffset) {
+                    objectGONE = true;
+                }
+
+                if (objectGONE) {
+                    hitObjectsforAvg.shift();
+                }
+                if (doable) {
+                    unstableRateF.push(curHit.time - curHitObj.time);
+                }
             }
         }
-    }
-    const avg = (unstableRateF.filter(x => x).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length;
+        const avg = (unstableRateF.filter(x => x).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length;
 
-    //now does the same as before with avg factored in
-    for (let i = 0; i < taps.length; i++) {
-        const curHit = taps[i];
-        const curHitObj = hitObjectTimings[0];
-        let doable = true;
-        let missaim = false;
-        let mistap = false;
-        let objectGONE = false;
+        //now does the same as before with avg factored in
+        for (let i = 0; i < taps.length; i++) {
+            const curHit = taps[i];
+            const curHitObj = hitObjectTimings[0];
+            let doable = true;
+            let missaim = false;
+            let mistap = false;
+            let objectGONE = false;
 
-        if (hitObjectTimings.length == 0) {
-            break;
-        }
-
-        if (!curHitObj) {
-            hitObjectTimings.shift();
-        } else {
-
-            if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
-                doable = true;
-                objectGONE = true;
-            } else {
-                missaim = true;
-                doable = false;
+            if (hitObjectTimings.length == 0) {
+                break;
             }
 
-            if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
-                doable = true;
-                objectGONE = true;
-            } else {
-                mistap = true;
-                doable = false;
-            }
-
-            if ((curHit.time - curHitObj.time) > hitOffset) {
-                objectGONE = true;
-            }
-
-            if (objectGONE) {
+            if (!curHitObj) {
                 hitObjectTimings.shift();
-            }
-            if (doable) {
-                unstableRate.push((curHit.time - curHitObj.time) - avg);
+            } else {
+
+                if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
+                    doable = true;
+                    objectGONE = true;
+                } else {
+                    missaim = true;
+                    doable = false;
+                }
+
+                if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
+                    doable = true;
+                    objectGONE = true;
+                } else {
+                    mistap = true;
+                    doable = false;
+                }
+
+                if ((curHit.time - curHitObj.time) > hitOffset) {
+                    objectGONE = true;
+                }
+
+                if (objectGONE) {
+                    hitObjectTimings.shift();
+                }
+                if (doable) {
+                    unstableRate.push((curHit.time - curHitObj.time) - avg);
+                }
             }
         }
-    }
 
-    console.log(unstableRate);
-    console.log((unstableRate.reduce((prev, cur) => Math.abs(prev) + Math.abs(cur), 0)));
-    console.log(unstableRate.length);
+        console.log(unstableRate);
+        console.log((unstableRate.reduce((prev, cur) => Math.abs(prev) + Math.abs(cur), 0)));
+        console.log(unstableRate.length);
 
-    return {
-        unstablerate: ((unstableRate.reduce((prev, cur) => Math.abs(prev) + Math.abs(cur), 0)) / unstableRate.length) * 10,
-        averageOffset: avg,
-        averageEarly: (unstableRateF.filter(x => x < 0).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length,
-        averageLate: (unstableRateF.filter(x => x > 0).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length
-    };
-}
-
-/**
- * 
- * @param objectsPassed total number of hits
- * @param mapPath path to the map file
- * @returns the point of fail in a map in milliseconds
- */
-export async function getFailPoint(
-    objectsPassed: number,
-    mapPath: string
-) {
-    let time = 1000;
-    if (fs.existsSync(mapPath)) {
-        try {
-            const decoder = new osuparsers.BeatmapDecoder();
-            const beatmap = await decoder.decodeFromPath(mapPath, false) as osuparsertypes.Beatmap;
-            if (objectsPassed == null || objectsPassed < 1) {
-                objectsPassed = 1;
-            }
-            const objectOfFail = beatmap.hitObjects[objectsPassed - 1];
-            time = objectOfFail.startTime;
-        } catch (error) {
-            console.log("passed: " + objectsPassed);
-            console.log("path: " + mapPath);
-            console.log(error);
-        }
-    } else {
-        console.log("Path does not exist:" + mapPath);
-    }
-    return time;
-}
-
-/**
- * @param hits score statistics (api v2)
- * @param mode osu, taiko, fruits (ctb), mania
- * @returns 
- */
-export function returnHits(hits: osuApiTypes.Score['statistics'], mode: osuApiTypes.GameMode) {
-    const object: {
-        short: string,
-        long: string,
-        ex: { name: string, value: string | number; }[];
-    } = {
-        short: '',
-        long: '',
-        ex: []
-    };
-    switch (mode) {
-        case 'osu':
-            object.short = `${hits.count_300}/${hits.count_100}/${hits.count_50}/${hits.count_miss}`;
-            object.long = `**300:** ${hits.count_300} \n **100:** ${hits.count_100} \n **50:** ${hits.count_50} \n **Miss:** ${hits.count_miss}`;
-            object.ex = [
-                {
-                    name: '300',
-                    value: hits.count_300
-                },
-                {
-                    name: '100',
-                    value: hits.count_100
-                },
-                {
-                    name: '50',
-                    value: hits.count_50
-                },
-                {
-                    name: 'Miss',
-                    value: hits.count_miss
-                }
-            ];
-            break;
-        case 'taiko':
-            object.short = `${hits.count_300}/${hits.count_100}/${hits.count_miss}`;
-            object.long = `**Great:** ${hits.count_300} \n **Good:** ${hits.count_100} \n **Miss:** ${hits.count_miss}`;
-            object.ex = [
-                {
-                    name: 'Great',
-                    value: hits.count_300
-                },
-                {
-                    name: 'Good',
-                    value: hits.count_100
-                },
-                {
-                    name: 'Miss',
-                    value: hits.count_miss
-                }
-            ];
-            break;
-        case 'fruits':
-            object.short = `${hits.count_300}/${hits.count_100}/${hits.count_50}/${hits.count_miss}/${hits.count_katu}`;
-            object.long = `**Fruits:** ${hits.count_300} \n **Drops:** ${hits.count_100} \n **Droplets:** ${hits.count_50} \n **Miss:** ${hits.count_miss} \n **Miss(droplets):** ${hits.count_katu}`;
-            object.ex = [
-                {
-                    name: 'Fruits',
-                    value: hits.count_300
-                },
-                {
-                    name: 'Drops',
-                    value: hits.count_100
-                },
-                {
-                    name: 'Droplets',
-                    value: hits.count_50
-                },
-                {
-                    name: 'Miss',
-                    value: hits.count_miss
-                },
-                {
-                    name: 'Miss(droplets)',
-                    value: hits.count_katu
-                },
-            ];
-            break;
-        case 'mania':
-            object.short = `${hits.count_geki}/${hits.count_300}/${hits.count_katu}/${hits.count_100}/${hits.count_50}/${hits.count_miss}`;
-            object.long = `**300+:** ${hits.count_geki} \n **300:** ${hits.count_300} \n **200:** ${hits.count_katu} \n **100:** ${hits.count_100} \n **50:** ${hits.count_50} \n **Miss:** ${hits.count_miss}`;
-            object.ex = [
-                {
-                    name: '300+',
-                    value: hits.count_geki
-                },
-                {
-                    name: '300',
-                    value: hits.count_300
-                },
-                {
-                    name: '200',
-                    value: hits.count_katu
-                },
-                {
-                    name: '100',
-                    value: hits.count_100
-                },
-                {
-                    name: '50',
-                    value: hits.count_50
-                },
-                {
-                    name: 'Miss',
-                    value: hits.count_miss
-                }
-            ];
-            break;
-    }
-    return object;
-}
-
-/**
- * parses a string that has a unicode and "romanised" version
- * @style 1 artist title (artist title). uses style 2 if only title or artist is different
- * @style 2 artist (artist) title (title)
- */
-export function parseUnicodeStrings(
-    input: {
-        title: string,
-        artist: string,
-        title_unicode: string,
-        artist_unicode: string,
-        ignore: {
-            artist: boolean,
-            title: boolean,
+        return {
+            unstablerate: ((unstableRate.reduce((prev, cur) => Math.abs(prev) + Math.abs(cur), 0)) / unstableRate.length) * 10,
+            averageOffset: avg,
+            averageEarly: (unstableRateF.filter(x => x < 0).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length,
+            averageLate: (unstableRateF.filter(x => x > 0).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length
         };
-    },
-    style?: 1 | 2
-) {
-    let fullTitle: string;
-    switch (style) {
-        case 1: default: {
+    }
 
-            if (
-                (input.title != input.title_unicode && input.artist == input.artist_unicode)
-                ||
-                (input.title == input.title_unicode && input.artist != input.artist_unicode)
-                ||
-                (input.title == input.title_unicode && input.artist == input.artist_unicode)
-                ||
-                (input.ignore.artist == true || input.ignore.title == true)
-            ) {
-                return parseUnicodeStrings(input, 2);
-            } else {
-                fullTitle =
-                    `${input.artist} - ${input.title}
+    /**
+     * 
+     * @param objectsPassed total number of hits
+     * @param mapPath path to the map file
+     * @returns the point of fail in a map in milliseconds
+     */
+    export async function getFailPoint(
+        objectsPassed: number,
+        mapPath: string
+    ) {
+        let time = 1000;
+        if (fs.existsSync(mapPath)) {
+            try {
+                const decoder = new osuparsers.BeatmapDecoder();
+                const beatmap = await decoder.decodeFromPath(mapPath, false) as osuparsertypes.Beatmap;
+                if (objectsPassed == null || objectsPassed < 1) {
+                    objectsPassed = 1;
+                }
+                const objectOfFail = beatmap.hitObjects[objectsPassed - 1];
+                time = objectOfFail.startTime;
+            } catch (error) {
+                console.log("passed: " + objectsPassed);
+                console.log("path: " + mapPath);
+                console.log(error);
+            }
+        } else {
+            console.log("Path does not exist:" + mapPath);
+        }
+        return time;
+    }
+
+    /**
+     * @param hits score statistics (api v2)
+     * @param mode osu, taiko, fruits (ctb), mania
+     * @returns 
+     */
+    export function returnHits(hits: osuApiTypes.Score['statistics'], mode: osuApiTypes.GameMode) {
+        const object: {
+            short: string,
+            long: string,
+            ex: { name: string, value: string | number; }[];
+        } = {
+            short: '',
+            long: '',
+            ex: []
+        };
+        switch (mode) {
+            case 'osu':
+                object.short = `${hits.count_300}/${hits.count_100}/${hits.count_50}/${hits.count_miss}`;
+                object.long = `**300:** ${hits.count_300} \n **100:** ${hits.count_100} \n **50:** ${hits.count_50} \n **Miss:** ${hits.count_miss}`;
+                object.ex = [
+                    {
+                        name: '300',
+                        value: hits.count_300
+                    },
+                    {
+                        name: '100',
+                        value: hits.count_100
+                    },
+                    {
+                        name: '50',
+                        value: hits.count_50
+                    },
+                    {
+                        name: 'Miss',
+                        value: hits.count_miss
+                    }
+                ];
+                break;
+            case 'taiko':
+                object.short = `${hits.count_300}/${hits.count_100}/${hits.count_miss}`;
+                object.long = `**Great:** ${hits.count_300} \n **Good:** ${hits.count_100} \n **Miss:** ${hits.count_miss}`;
+                object.ex = [
+                    {
+                        name: 'Great',
+                        value: hits.count_300
+                    },
+                    {
+                        name: 'Good',
+                        value: hits.count_100
+                    },
+                    {
+                        name: 'Miss',
+                        value: hits.count_miss
+                    }
+                ];
+                break;
+            case 'fruits':
+                object.short = `${hits.count_300}/${hits.count_100}/${hits.count_50}/${hits.count_miss}/${hits.count_katu}`;
+                object.long = `**Fruits:** ${hits.count_300} \n **Drops:** ${hits.count_100} \n **Droplets:** ${hits.count_50} \n **Miss:** ${hits.count_miss} \n **Miss(droplets):** ${hits.count_katu}`;
+                object.ex = [
+                    {
+                        name: 'Fruits',
+                        value: hits.count_300
+                    },
+                    {
+                        name: 'Drops',
+                        value: hits.count_100
+                    },
+                    {
+                        name: 'Droplets',
+                        value: hits.count_50
+                    },
+                    {
+                        name: 'Miss',
+                        value: hits.count_miss
+                    },
+                    {
+                        name: 'Miss(droplets)',
+                        value: hits.count_katu
+                    },
+                ];
+                break;
+            case 'mania':
+                object.short = `${hits.count_geki}/${hits.count_300}/${hits.count_katu}/${hits.count_100}/${hits.count_50}/${hits.count_miss}`;
+                object.long = `**300+:** ${hits.count_geki} \n **300:** ${hits.count_300} \n **200:** ${hits.count_katu} \n **100:** ${hits.count_100} \n **50:** ${hits.count_50} \n **Miss:** ${hits.count_miss}`;
+                object.ex = [
+                    {
+                        name: '300+',
+                        value: hits.count_geki
+                    },
+                    {
+                        name: '300',
+                        value: hits.count_300
+                    },
+                    {
+                        name: '200',
+                        value: hits.count_katu
+                    },
+                    {
+                        name: '100',
+                        value: hits.count_100
+                    },
+                    {
+                        name: '50',
+                        value: hits.count_50
+                    },
+                    {
+                        name: 'Miss',
+                        value: hits.count_miss
+                    }
+                ];
+                break;
+        }
+        return object;
+    }
+
+    /**
+     * parses a string that has a unicode and "romanised" version
+     * @style 1 artist title (artist title). uses style 2 if only title or artist is different
+     * @style 2 artist (artist) title (title)
+     */
+    export function parseUnicodeStrings(
+        input: {
+            title: string,
+            artist: string,
+            title_unicode: string,
+            artist_unicode: string,
+            ignore: {
+                artist: boolean,
+                title: boolean,
+            };
+        },
+        style?: 1 | 2
+    ) {
+        let fullTitle: string;
+        switch (style) {
+            case 1: default: {
+
+                if (
+                    (input.title != input.title_unicode && input.artist == input.artist_unicode)
+                    ||
+                    (input.title == input.title_unicode && input.artist != input.artist_unicode)
+                    ||
+                    (input.title == input.title_unicode && input.artist == input.artist_unicode)
+                    ||
+                    (input.ignore.artist == true || input.ignore.title == true)
+                ) {
+                    return parseUnicodeStrings(input, 2);
+                } else {
+                    fullTitle =
+                        `${input.artist} - ${input.title}
 ${input.artist_unicode} - ${input.title_unicode}`;
+                }
             }
-        }
-            break;
-        case 2: {
-            const title = input.title == input.title_unicode ? input.title : `${input.title_unicode} (${input.title})`;
-            const artist = input.artist == input.artist_unicode ? input.artist : `${input.artist_unicode} (${input.artist})`;
-            if (input.ignore.artist) {
-                fullTitle = `${title}`;
-            } else if (input.ignore.title) {
-                fullTitle = `${artist}`;
-            } else {
-                fullTitle = `${artist} - ${title}`;
+                break;
+            case 2: {
+                const title = input.title == input.title_unicode ? input.title : `${input.title_unicode} (${input.title})`;
+                const artist = input.artist == input.artist_unicode ? input.artist : `${input.artist_unicode} (${input.artist})`;
+                if (input.ignore.artist) {
+                    fullTitle = `${title}`;
+                } else if (input.ignore.title) {
+                    fullTitle = `${artist}`;
+                } else {
+                    fullTitle = `${artist} - ${title}`;
+                }
             }
+                break;
         }
-            break;
+
+        return fullTitle;
     }
 
-    return fullTitle;
-}
-
-/**
- * @param input - see apiInput
- * @returns apiReturn
- * @property url
- * @property
- */
-export async function apigetOffline(input: apiInput) {
-    const basePath = `${path}\\cache\\debug`;
-    let ipath = basePath;
-    let spath = basePath;
-    switch (input.version) {
-        case 1: {
-            switch (input.type) {
-                case 'scores_get_map':
-                    spath = `${basePath}\\command\\maplb\\lbDataO`;
-                    break;
+    /**
+     * @param input - see apiInput
+     * @returns apiReturn
+     * @property url
+     * @property
+     */
+    export async function apigetOffline(input: apiInput) {
+        const basePath = `${path}\\cache\\debug`;
+        let ipath = basePath;
+        let spath = basePath;
+        switch (input.version) {
+            case 1: {
+                switch (input.type) {
+                    case 'scores_get_map':
+                        spath = `${basePath}\\command\\maplb\\lbDataO`;
+                        break;
+                }
             }
+
+            case 2: {
+                switch (input.type) {
+                    case 'map_get': case 'map':
+                        spath = `${basePath}\\command\\map\\mapData`;
+                        break;
+                    case 'map_get_md5':
+                        spath = `${basePath}\\command\\map\\mapData`;
+                        break;
+                    case 'mapset_get': case 'mapset':
+                        spath = `${basePath}\\command\\map\\bmsData`;
+                        break;
+                    case 'mapset_search':
+                        spath = `${basePath}\\command\\map\\mapIdTestData`;
+                        break;
+                    case 'score_get': case 'score':
+                        spath = `${basePath}\\command\\scoreparse\\scoreData`;
+                        break;
+                    case 'scores_get_best': case 'osutop': case 'best':
+                        spath = `${basePath}\\command\\osutop\\osuTopData`;
+                        break;
+                    case 'scores_get_first': case 'firsts':
+                        spath = `${basePath}\\command\\firsts\\firstsScoresData`;
+                        break;
+                    case 'firsts_alt':
+                        spath = `${basePath}\\command\\firsts\\firstsScoresData`;
+                        break;
+                    case 'scores_get_map': case 'maplb':
+                        spath = `${basePath}\\command\\maplb\\lbData`;
+                        break;
+                    case 'scores_get_pinned': case 'pinned':
+                        spath = `${basePath}\\command\\pinned\\pinnedScoresData`;
+                        break;
+                    case 'pinned_alt':
+                        spath = `${basePath}\\command\\pinned\\pinnedScoresData`;
+                        break;
+                    case 'scores_get_recent': case 'recent':
+                        spath = `${basePath}\\command\\recent\\rsData`;
+                        break;
+                    case 'recent_alt':
+                        spath = `${basePath}\\command\\recent\\rsData`;
+                        break;
+                    case 'user_get': case 'user':
+                        spath = `${basePath}\\command\\osu\\osuData`;
+                        break;
+                    case 'user_get_most_played': case 'most_played':
+                        spath = `${basePath}\\command\\osu\\mostPlayedData`;
+                        break;
+                    case 'user_get_scores_map':
+                        spath = `${basePath}\\command\\scores\\scoreDataPresort`;
+                        break;
+                    case 'user_get_maps':
+                        spath = `${basePath}\\command\\userbeatmaps\\mapListData`;
+                        break;
+                    case 'user_get_maps_alt':
+                        spath = `${basePath}\\command\\userbeatmaps\\mapListDataF`;
+                        break;
+                    case 'user_recent_activity':
+                        spath = `${basePath}\\command\\recent_activity\\rsactData`;
+                        break;
+                }
+            }
+                let skillissue = false;
+                //using spath find file
+                const full = spath.split('\\');
+                const file = full.pop();
+                console.log(full.join('\\'));
+                const dir = fs.readdirSync(full.join('\\'));
+                console.log(dir);
+                const isPresent = dir.filter(x => x.includes(file));
+                console.log(isPresent);
+                console.log(file);
+                if (isPresent.length > 0) {
+                    ipath = full.join('\\') + `\\${isPresent[Math.floor(Math.random() * isPresent.length)]}`;
+                } else {
+                    skillissue = true;
+                }
+                console.log(skillissue);
+                //else return err
+
+                const d = skillissue ? '{ error: "null" }' : fs.readFileSync(ipath, 'utf-8');
+                return JSON.parse(d) as object;
         }
 
-        case 2: {
-            switch (input.type) {
-                case 'map_get': case 'map':
-                    spath = `${basePath}\\command\\map\\mapData`;
-                    break;
-                case 'map_get_md5':
-                    spath = `${basePath}\\command\\map\\mapData`;
-                    break;
-                case 'mapset_get': case 'mapset':
-                    spath = `${basePath}\\command\\map\\bmsData`;
-                    break;
-                case 'mapset_search':
-                    spath = `${basePath}\\command\\map\\mapIdTestData`;
-                    break;
-                case 'score_get': case 'score':
-                    spath = `${basePath}\\command\\scoreparse\\scoreData`;
-                    break;
-                case 'scores_get_best': case 'osutop': case 'best':
-                    spath = `${basePath}\\command\\osutop\\osuTopData`;
-                    break;
-                case 'scores_get_first': case 'firsts':
-                    spath = `${basePath}\\command\\firsts\\firstsScoresData`;
-                    break;
-                case 'firsts_alt':
-                    spath = `${basePath}\\command\\firsts\\firstsScoresData`;
-                    break;
-                case 'scores_get_map': case 'maplb':
-                    spath = `${basePath}\\command\\maplb\\lbData`;
-                    break;
-                case 'scores_get_pinned': case 'pinned':
-                    spath = `${basePath}\\command\\pinned\\pinnedScoresData`;
-                    break;
-                case 'pinned_alt':
-                    spath = `${basePath}\\command\\pinned\\pinnedScoresData`;
-                    break;
-                case 'scores_get_recent': case 'recent':
-                    spath = `${basePath}\\command\\recent\\rsData`;
-                    break;
-                case 'recent_alt':
-                    spath = `${basePath}\\command\\recent\\rsData`;
-                    break;
-                case 'user_get': case 'user':
-                    spath = `${basePath}\\command\\osu\\osuData`;
-                    break;
-                case 'user_get_most_played': case 'most_played':
-                    spath = `${basePath}\\command\\osu\\mostPlayedData`;
-                    break;
-                case 'user_get_scores_map':
-                    spath = `${basePath}\\command\\scores\\scoreDataPresort`;
-                    break;
-                case 'user_get_maps':
-                    spath = `${basePath}\\command\\userbeatmaps\\mapListData`;
-                    break;
-                case 'user_get_maps_alt':
-                    spath = `${basePath}\\command\\userbeatmaps\\mapListDataF`;
-                    break;
-                case 'user_recent_activity':
-                    spath = `${basePath}\\command\\recent_activity\\rsactData`;
-                    break;
-            }
-        }
-            let skillissue = false;
-            //using spath find file
-            const full = spath.split('\\');
-            const file = full.pop();
-            console.log(full.join('\\'));
-            const dir = fs.readdirSync(full.join('\\'));
-            console.log(dir);
-            const isPresent = dir.filter(x => x.includes(file));
-            console.log(isPresent);
-            console.log(file);
-            if (isPresent.length > 0) {
-                ipath = full.join('\\') + `\\${isPresent[Math.floor(Math.random() * isPresent.length)]}`;
-            } else {
-                skillissue = true;
-            }
-            console.log(skillissue);
-            //else return err
-
-            const d = skillissue ? '{ error: "null" }' : fs.readFileSync(ipath, 'utf-8');
-            return JSON.parse(d) as object;
     }
-
-}

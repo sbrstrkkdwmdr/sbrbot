@@ -1,3 +1,5 @@
+import * as stats from 'simple-statistics';
+
 /**
  * 
  * @param {number} x first number
@@ -585,6 +587,17 @@ export function checkIsNumber(str: string) {
         }
     }
     return bool;
+}
+
+export function getIQR(array: number[]) {
+    const iqr = stats.interquartileRange(array);
+    const q2 = stats.medianSorted(array);
+    return {
+        q1: stats.medianSorted(array.filter(x => x < q2)),
+        q2,
+        q3: stats.medianSorted(array.filter(x => x > q2)),
+        iqr,
+    };
 }
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
