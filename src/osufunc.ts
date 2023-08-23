@@ -6,6 +6,7 @@ import * as replayparser from 'osureplayparser';
 import perf from 'perf_hooks';
 import rosu from 'rosu-pp';
 import Sequelize from 'sequelize';
+import * as stats from 'simple-statistics';
 import * as msgfunc from '../commands/msgfunc.js';
 import { path, precomppath } from '../path.js';
 import * as cmdchecks from './checks.js';
@@ -1666,7 +1667,7 @@ export function rawToWeighted(pp: number, index: number) {
 }
 
 export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: number, mode: osuApiTypes.GameMode,
-    statsCache: Sequelize.ModelStatic<any>) {
+    statsCache: Sequelize.ModelStatic<any>, useRegr?: boolean) {
     const users = await statsCache.findAll();
     const pprankarr: { pp: string, rank: string; }[] = [];
 
@@ -1713,71 +1714,85 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
 
     let returnval: number;
 
-    switch (type) {
-        case 'pp->rank': {
-            pprankarr.push({ pp: `${value}`, rank: `${0}` });
-            pprankarr.sort((a, b) => parseFloat(b.pp) - parseFloat(a.pp));
-
-            /** val = 4503
-             *  3000, 68987
-             *  6000, 22
-             * 1000, 500000
-             * 
-             * 4503, null
-             */
-
-            /**
-             * 6000, 22
-             * 4503, null
-             * 3000, 68987  
-             * 1000, 500000
-             * 
-             */
-
-            //get position
-            const pos = pprankarr.findIndex(e => parseFloat(e.pp) == value && e.rank == '0');
-
-            const prev = pprankarr[pos - 1];
-
-            const next = pprankarr[pos + 1];
-            //estimate rank
-            if (typeof prev == 'undefined' && typeof next != 'undefined') {
-                returnval = parseInt(next.rank);
-            }
-            else if (typeof next == 'undefined' && typeof prev != 'undefined') {
-                returnval = parseInt(prev.rank);
-            } else {
-                // returnval = prev.rank + ((next.rank - prev.rank) / (next.pp - prev.pp)) * (value - prev.pp)
-                returnval = (parseInt(prev.rank) + parseInt(next.rank)) / 2;
-            }
-            if (typeof prev == 'undefined' && typeof next == 'undefined') {
-                returnval = null;
-            }
+    if (useRegr) {
+        let redo: number[][] = [];
+        switch (type) {
+            case 'pp->rank':
+                redo = pprankarr.map(x => [+x.pp, +x.rank]);
+                break;
+            case 'rank->pp':
+                redo = pprankarr.map(x => [+x.rank, +x.pp]);
+                break;
         }
-            break;
-        case 'rank->pp': {
-            pprankarr.push({ pp: '0', rank: `${value}` });
-            pprankarr.sort((a, b) => parseInt(a.rank) - parseInt(b.rank));
-            const pos = pprankarr.findIndex(e => parseInt(e.rank) == value && e.pp == '0');
-            const prev = pprankarr[pos - 1];
-            const next = pprankarr[pos + 1];
+        const regress = stats.linearRegressionLine(stats.linearRegression(redo));
+        returnval = regress(value);
+    } else {
+        switch (type) {
+            case 'pp->rank': {
+                pprankarr.push({ pp: `${value}`, rank: `${0}` });
+                pprankarr.sort((a, b) => parseFloat(b.pp) - parseFloat(a.pp));
 
-            //estimate pp
-            if (typeof prev == 'undefined' && typeof next != 'undefined') {
-                returnval = parseInt(next.pp);
-            }
-            else if (typeof next == 'undefined' && typeof prev != 'undefined') {
-                returnval = parseInt(prev.pp);
-            } else {
-                // returnval = prev.pp + ((next.pp - prev.pp) / (next.rank - prev.rank)) * (value - prev.rank)
-                returnval = (parseFloat(prev.pp) + parseFloat(next.pp)) / 2;
-            }
-            if (typeof prev == 'undefined' && typeof next == 'undefined') {
-                returnval = null;
-            }
+                /** val = 4503
+                 *  3000, 68987
+                 *  6000, 22
+                 * 1000, 500000
+                 * 
+                 * 4503, null
+                 */
 
+                /**
+                 * 6000, 22
+                 * 4503, null
+                 * 3000, 68987  
+                 * 1000, 500000
+                 * 
+                 */
+
+                //get position
+                const pos = pprankarr.findIndex(e => parseFloat(e.pp) == value && e.rank == '0');
+
+                const prev = pprankarr[pos - 1];
+
+                const next = pprankarr[pos + 1];
+                //estimate rank
+                if (typeof prev == 'undefined' && typeof next != 'undefined') {
+                    returnval = parseInt(next.rank);
+                }
+                else if (typeof next == 'undefined' && typeof prev != 'undefined') {
+                    returnval = parseInt(prev.rank);
+                } else {
+                    // returnval = prev.rank + ((next.rank - prev.rank) / (next.pp - prev.pp)) * (value - prev.pp)
+                    returnval = (parseInt(prev.rank) + parseInt(next.rank)) / 2;
+                }
+                if (typeof prev == 'undefined' && typeof next == 'undefined') {
+                    returnval = null;
+                }
+            }
+                break;
+            case 'rank->pp': {
+                pprankarr.push({ pp: '0', rank: `${value}` });
+                pprankarr.sort((a, b) => parseInt(a.rank) - parseInt(b.rank));
+                const pos = pprankarr.findIndex(e => parseInt(e.rank) == value && e.pp == '0');
+                const prev = pprankarr[pos - 1];
+                const next = pprankarr[pos + 1];
+
+                //estimate pp
+                if (typeof prev == 'undefined' && typeof next != 'undefined') {
+                    returnval = parseInt(next.pp);
+                }
+                else if (typeof next == 'undefined' && typeof prev != 'undefined') {
+                    returnval = parseInt(prev.pp);
+                } else {
+                    // returnval = prev.pp + ((next.pp - prev.pp) / (next.rank - prev.rank)) * (value - prev.rank)
+                    returnval = (parseFloat(prev.pp) + parseFloat(next.pp)) / 2;
+                }
+                if (typeof prev == 'undefined' && typeof next == 'undefined') {
+                    returnval = null;
+                }
+
+            }
+                break;
         }
-            break;
     }
     return returnval;
 }
