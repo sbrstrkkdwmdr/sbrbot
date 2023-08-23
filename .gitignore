@@ -30,3 +30,4 @@ dist/
 !config/tempconfig.json
 !TEMPLATE.sqlite
 *.7z
+*.zip
