@@ -1820,8 +1820,7 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
         case 'pp->rank': {
             const data = pprankarr.map(x => [x.pp, Math.log10(x.rank)]);
             const line = stats.linearRegressionLine(stats.linearRegression(data));
-            return (line(value) * (10 ** line(value)));
-            //log y
+            return (10 ** line(value));
         }
             break;
         case 'rank->pp': {
