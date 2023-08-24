@@ -449,3 +449,4 @@ changes:
 [FIX] errors in replayparse
 [FIX] rsbest saying "play" instead of "plays"
 [QOL] switched rank pp to use regression to predict
+[ADD] add reminders list to remind command

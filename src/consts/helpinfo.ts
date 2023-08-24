@@ -503,10 +503,14 @@ operators: *, /, +, -, (, )
     },
     {
         name: 'remind',
-        description: 'Sets a reminder',
-        usage: 'remind <time> [reminder]',
+        description: 'Sets a reminder. Leave all args blank or use the reminders alias to return a list of reminders',
+        usage: 'remind [time] [reminder]',
         slashusage: 'remind <time> <reminder> [sendinchannel]',
         examples: [
+            {
+                text: 'PREFIXMSGremind',
+                descriptor: 'Returns a list of reminders.'
+            },
             {
                 text: 'PREFIXMSGremind 1h30m30s reminder',
                 descriptor: 'Sets a reminder for 1 hour, 30 minutes, and 30 seconds'
@@ -520,7 +524,7 @@ operators: *, /, +, -, (, )
                 descriptor: 'Sets a reminder for 1 hour, 30 minutes, and 30 seconds and sends it in the channel'
             }
         ],
-        aliases: [],
+        aliases: ['reminders'],
         options: [
             {
                 name: 'time',

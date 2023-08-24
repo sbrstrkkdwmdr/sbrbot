@@ -163,10 +163,10 @@ export async function changelog(input: extypes.commandInput) {
             }
         }
     }
-    useNum = useNum != null ? useNum : 
-    typeof found == 'number' ? 
-    (found as number) : 
-    mainconst.versions.length - 1 - offset;
+    useNum = useNum != null ? useNum :
+        typeof found == 'number' ?
+            (found as number) :
+            mainconst.versions.length - 1 - offset;
     const Embed = new Discord.EmbedBuilder();
     if (typeof found == 'string') {
         isList = true;
@@ -1755,14 +1755,15 @@ ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
 /**
  * set reminder
  */
-export async function remind(input: extypes.commandInput) {
+export async function remind(input: extypes.commandInput & { reminders: extypes.reminder[]; }) {
 
     let commanduser;
 
     let time;
     let remindertxt;
     let sendtochannel;
-    let user;
+    let user: Discord.User;
+    let list = false;
 
     switch (input.commandType) {
         case 'message': {
@@ -1773,20 +1774,13 @@ export async function remind(input: extypes.commandInput) {
             sendtochannel = false;
             user = input.obj.author;
 
-            if (!input.args[0]) {
-                return await msgfunc.sendMessage({
-                    commandType: input.commandType,
-                    obj: input.obj,
-                    args: {
-                        content: 'Please specify a time'
-                    }
-                }, input.canReply);
-
+            if (!input.args[0] || input.args[0].includes('remind')) {
+                list = true;
             }
             if (!input.args[1]) {
                 remindertxt = 'null';
             }
-            if (!input.args[0].endsWith('d') && !input.args[0].endsWith('h') && !input.args[0].endsWith('m') && !input.args[0].endsWith('s') && !time.includes(':') && !time.includes('.')) {
+            if (list == false && !input.args[0].endsWith('d') && !input.args[0].endsWith('h') && !input.args[0].endsWith('m') && !input.args[0].endsWith('s') && !time.includes(':') && !time.includes('.')) {
                 return await msgfunc.sendMessage({
                     commandType: input.commandType,
                     obj: input.obj,
@@ -1869,34 +1863,56 @@ export async function remind(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    async function sendremind(reminder, time, obj, sendchannel, remindertxt, usersent) {
+    async function sendremind(reminder: Discord.Embed | Discord.EmbedBuilder, time: string, sendchannel: boolean, remindertxt: string, usersent: Discord.User, absTime: number) {
+        input.reminders.push({
+            time: absTime,
+            text: remindertxt,
+            userID: `${usersent.id}`
+        });
         try {
             if (sendchannel == true) {
                 setTimeout(() => {
                     input.obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` });
-
+                    remReminder(absTime);
                 }, calc.timeToMs(time));
             }
             else {
                 setTimeout(() => {
                     usersent.send({ embeds: [reminder] });
-
+                    remReminder(absTime);
                 }, calc.timeToMs(time));
             }
         } catch (error) {
             console.log('embed error' + 'time:' + time + '\ntxt:' + remindertxt);
         }
     }
+    function remReminder(time: number) {
+        const findOne = input.reminders.findIndex(x => x.time === time);
+        return input.reminders.splice(findOne, 1);
+    }
+
+
     const reminder = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
-        .setTitle('REMINDER')
+        .setTitle(list ? 'REMINDERS' : 'REMINDER')
         .setDescription(`${remindertxt}`);
+    let remindingText = '';
+    let useEmbeds = [];
 
-    sendremind(reminder, time, input.obj, sendtochannel, remindertxt, user);
+    if (list) {
+        remindingText = null;
+        const useReminders = input.reminders.filter(x => `${x.userID}` === `${commanduser.id}`);
+        reminder.setDescription(useReminders.length > 0 ?
+            useReminders.map(x => `Reminder sending in <t:${x.time}:R>: ${x.text}`).join('\n').slice(0, 2000)
+            : 'You have no reminders'
+        );
+        useEmbeds = [reminder];
+    } else {
+        const absTime = Math.floor(((new Date().getTime()) + calc.timeToMs(time)) / 1000);
+        remindingText = `Sending reminder in <t:${absTime}:R> (<t:${absTime}:f>)`;
+        sendremind(reminder, time, sendtochannel, remindertxt, commanduser, absTime);
+    }
 
-    const absTime = Math.floor(((new Date().getTime()) + calc.timeToMs(time)) / 1000);
-
-    const remindingText = `Sending reminder in <t:${absTime}:R> (<t:${absTime}:f>)`;
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage(
@@ -1905,6 +1921,7 @@ export async function remind(input: extypes.commandInput) {
             obj: input.obj,
             args: {
                 content: remindingText,
+                embeds: useEmbeds,
                 ephemeral: true,
             }
         }, input.canReply);

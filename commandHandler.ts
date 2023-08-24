@@ -26,6 +26,7 @@ export default (input: {
     statsCache;
 }) => {
     let timeouttime;
+    let reminders: extypes.reminder[] = [];
 
     input.client.on('messageCreate', async (message) => {
         const currentDate = new Date();
@@ -94,7 +95,7 @@ export default (input: {
         const absoluteID = func.generateId();
         const button = null;
         const overrides = null;
-        execCommand(command, 'message', message, overrides, button, absoluteID, currentDate, message.author.id, args, input. config);
+        execCommand(command, 'message', message, overrides, button, absoluteID, currentDate, message.author.id, args, input.config);
     });
 
     input.client.on('interactionCreate', async (interaction) => {
@@ -184,7 +185,7 @@ export default (input: {
             'convert', 'help', 'info', 'invite', 'ping', 'remind', 'stats', 'time', 'weather', 'tropicalweather', 'ts',
             //misc
             'image', 'imagesearch', 'poll', 'vote', 'ytsearch', 'yt', 'yts',
-            'hug', 'kiss', 'lick', 'pet', 'punch', 'slap', 
+            'hug', 'kiss', 'lick', 'pet', 'punch', 'slap',
             'inspire', 'insp',
             //osu
             'bws', 'badgeweightsystem', 'badgeweight', 'badgeweightseed', 'badgerank',
@@ -330,7 +331,7 @@ export default (input: {
                 break;
             case 'remind':
                 startType(obj);
-                commands.remind({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                commands.remind({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, reminders });
                 break;
             case 'stats':
                 startType(obj);

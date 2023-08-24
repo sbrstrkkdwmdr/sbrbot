@@ -313,3 +313,9 @@ export type SortedScore = {
     index: number,
     score: osuapitypes.Score
 }
+
+export type reminder = {
+    time: number,
+    text: string, 
+    userID: string,
+}
