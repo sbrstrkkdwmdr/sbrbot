@@ -450,3 +450,5 @@ changes:
 [FIX] rsbest saying "play" instead of "plays"
 [QOL] switched rank pp to use regression to predict
 [ADD] add reminders list to remind command
+[FIX] east/west being incorrect - i was using the latitude value by accident mbmb
+[QOL] store weather data to reduce api calls needed

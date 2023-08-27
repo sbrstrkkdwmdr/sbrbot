@@ -270,7 +270,8 @@ export default (input: {
         'osudata',
         'scoredata',
         'maplistdata',
-        'firstscoresdata'
+        'firstscoresdata',
+        'weatherlocationdata',
     ];
 
     const permanentCache = [

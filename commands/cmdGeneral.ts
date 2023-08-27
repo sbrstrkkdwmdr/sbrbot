@@ -2592,6 +2592,8 @@ export async function weather(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.ButtonInteraction<any>);
             commanduser = input.obj.member.user;
             useComponents = input.obj.message.components as any[];
+            const tempEmb = input.obj.message.embeds[0];
+            name = tempEmb.footer.text.split('input: ')[1];
         }
             break;
         case 'link': {
@@ -2645,16 +2647,16 @@ export async function weather(input: extypes.commandInput) {
         return;
     }
 
-    if (func.findFile(input.absoluteID, 'weatherlocationData') &&
-        !('error' in func.findFile(input.absoluteID, 'weatherlocationData')) &&
+    if (func.findFile(name, 'weatherlocationdata') &&
+        !('error' in func.findFile(name, 'weatherlocationdata')) &&
         input.button != 'Refresh'
     ) {
-        locatingData = func.findFile(input.absoluteID, 'weatherlocationData');
+        locatingData = func.findFile(name, 'weatherlocationdata');
     } else {
         locatingData = await func.getLocation(name, input.config);
     }
 
-    func.storeFile(locatingData, input.absoluteID, 'weatherlocationData');
+    func.storeFile(locatingData, name, 'weatherlocationdata');
 
     const weatherEmbed = new Discord.EmbedBuilder()
         .setURL(`https://open-meteo.com/en/docs`)
@@ -2666,7 +2668,7 @@ export async function weather(input: extypes.commandInput) {
                 .setDescription(errors.uErr.weather.locateNF);
             logWeatherError(errors.uErr.weather.locateNF);
         } else if (locatingData?.results?.length == 1) {
-            await toWeather(locatingData[0]);
+            await toWeather(locatingData.results[0]);
         } else if (overrideID) {
             const location = locatingData.results.find(x => x.id == overrideID);
             await toWeather(location);
@@ -2683,15 +2685,15 @@ export async function weather(input: extypes.commandInput) {
 
     async function toWeather(location: othertypes.geoLocale) {
         let weatherData: othertypes.weatherData | string;
-        if (func.findFile(input.absoluteID, `weatherData+${location.id}`) &&
-            !('error' in func.findFile(input.absoluteID, `weatherData+${location.id}`)) &&
+        if (func.findFile(location.id, `weatherdata`) &&
+            !('error' in func.findFile(location.id, `weatherdata`)) &&
             input.button != 'Refresh'
         ) {
-            weatherData = func.findFile(input.absoluteID, `weatherData+${location.id}`);
+            weatherData = func.findFile(location.id, `weatherdata`);
         } else {
             weatherData = await func.getWeather(location.latitude, location.longitude, location, input.config);
         }
-        func.storeFile(weatherData, input.absoluteID, `weatherData+${location.id}`);
+        func.storeFile(weatherData, location.id, `weatherdata`);
         if (typeof weatherData == 'string') {
             weatherEmbed.setDescription(errors.uErr.weather.wrongCoords);
             logWeatherError(errors.uErr.weather.wrongCoords);
@@ -2719,13 +2721,13 @@ export async function weather(input: extypes.commandInput) {
 
             // - => S or W
             let latSide: 'N' | 'S' = 'N';
-            let lonSide: 'E' | 'W' = 'W';
+            let lonSide: 'E' | 'W' = 'E';
 
             if (location.latitude < 0) {
                 latSide = 'S';
             }
-            if (location.latitude < 0) {
-                lonSide = 'E';
+            if (location.longitude < 0) {
+                lonSide = 'W';
             }
 
             const windGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.windspeed_10m, `Wind speed ${weatherData.hourly_units.windspeed_10m}`,
@@ -2784,6 +2786,7 @@ export async function weather(input: extypes.commandInput) {
 
 
             weatherEmbed
+                .setFooter({ text: `input: ${name}` })
                 .setTitle(`Weather for ${location.name}`);
 
             const fields: Discord.EmbedField[] = [
