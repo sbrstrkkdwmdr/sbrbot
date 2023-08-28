@@ -452,3 +452,4 @@ changes:
 [ADD] add reminders list to remind command
 [FIX] east/west being incorrect - i was using the latitude value by accident mbmb
 [QOL] store weather data to reduce api calls needed
+[QOL] put weather precipitation data on the same graph

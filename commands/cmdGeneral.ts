@@ -2730,7 +2730,7 @@ export async function weather(input: extypes.commandInput) {
                 lonSide = 'W';
             }
 
-            const windGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.windspeed_10m, `Wind speed ${weatherData.hourly_units.windspeed_10m}`,
+            const windGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.windspeed_10m, `Wind speed (${weatherData.hourly_units.windspeed_10m})`,
                 {
                     startzero: true,
                     fill: false,
@@ -2739,36 +2739,37 @@ export async function weather(input: extypes.commandInput) {
                 },
                 [{
                     data: weatherData.hourly.windgusts_10m,
-                    label: `Wind gusts ${weatherData.hourly_units.windgusts_10m}`
+                    label: `Wind gusts (${weatherData.hourly_units.windgusts_10m})`,
+                    separateAxis: false,
                 }]
             );
-            const tempGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.temperature_2m, `Temperature ${weatherData.hourly_units.temperature_2m}`,
+            const tempGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.temperature_2m, `Temperature (${weatherData.hourly_units.temperature_2m})`,
                 {
                     startzero: true,
                     fill: true,
                     displayLegend: true,
                     pointSize: 1.5,
+                    gradient: true,
                 });
-            const precGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation, `Total precipitation ${weatherData.hourly_units.precipitation}`,
+                const precGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation, `(Total precipitation ${weatherData.hourly_units.precipitation})`,
                 {
                     startzero: true,
                     fill: true,
                     displayLegend: true,
                     pointSize: 1.5,
-                });
-            const prChGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation_probability, `${weatherData.hourly_units.precipitation_probability} Chance of Precipitation`,
-                {
-                    startzero: true,
-                    fill: false,
-                    displayLegend: true,
-                    pointSize: 1.5,
-                });
+                },
+                [{
+                    data: weatherData.hourly.precipitation_probability,
+                    label: `(${weatherData.hourly_units.precipitation_probability}) Chance of Precipitation`,
+                    separateAxis: true,
+                }]
+                
+                );
 
             useFiles.push(
                 new Discord.AttachmentBuilder(`${windGraph.path}`),
                 new Discord.AttachmentBuilder(`${tempGraph.path}`),
                 new Discord.AttachmentBuilder(`${precGraph.path}`),
-                new Discord.AttachmentBuilder(`${prChGraph.path}`),
             );
 
             const graphEmbedWind = new Discord.EmbedBuilder()
@@ -2780,9 +2781,9 @@ export async function weather(input: extypes.commandInput) {
             const graphEmbedPrec = new Discord.EmbedBuilder()
                 .setURL(`https://open-meteo.com/en/docs`)
                 .setImage(`attachment://${precGraph.filename}.jpg`);
-            const graphEmbedPrCh = new Discord.EmbedBuilder()
-                .setURL(`https://open-meteo.com/en/docs`)
-                .setImage(`attachment://${prChGraph.filename}.jpg`);
+            // const graphEmbedPrCh = new Discord.EmbedBuilder()
+            //     .setURL(`https://open-meteo.com/en/docs`)
+            //     .setImage(`attachment://${prChGraph.filename}.jpg`);
 
 
             weatherEmbed
@@ -2835,7 +2836,7 @@ Dominant Direction: ${maxWindDir.short}${maxWindDir.emoji} (${dailyData.winddire
             ];
 
             weatherEmbed.setFields(fields);
-            useEmbeds.push(weatherEmbed, graphEmbedWind, graphEmbedTemp, graphEmbedPrCh, graphEmbedPrec);
+            useEmbeds.push(weatherEmbed, graphEmbedWind, graphEmbedTemp, graphEmbedPrec);
         }
     }
 

@@ -667,7 +667,7 @@ export function windToDirection(angle: number, reverse?: boolean) {
         { name: 'South-Southwest', travels: 'North-Northeast', emoji: '↗', short: 'SSW', },
         { name: 'Southwest', travels: 'Northeast', emoji: '↗', short: 'SW', },
         { name: 'West-Southwest', travels: 'East-Northeast', emoji: '↗', short: 'WSW', },
-        { name: 'West', travels: 'East', emoji: '➡' , short: 'W', },
+        { name: 'West', travels: 'East', emoji: '➡', short: 'W', },
         { name: 'West-Northwest', travels: 'East-Southeast', emoji: '↘', short: 'WNW', },
         { name: 'Northwest', travels: 'Southeast', emoji: '↘', short: 'NW', },
         { name: 'North-Northwest', travels: 'South-Southeast', emoji: '↘', short: 'NNW', },
@@ -683,7 +683,7 @@ export function windToDirection(angle: number, reverse?: boolean) {
         { name: 'South-Southwest', travels: 'North-Northeast', emoji: '↗', short: 'SSW', },
         { name: 'Southwest', travels: 'Northeast', emoji: '↗', short: 'SW', },
         { name: 'West-Southwest', travels: 'East-Northeast', emoji: '↗', short: 'WSW', },
-        { name: 'West', travels: 'East', emoji: '➡' , short: 'W', },
+        { name: 'West', travels: 'East', emoji: '➡', short: 'W', },
         { name: 'West-Northwest', travels: 'East-Southeast', emoji: '↘', short: 'WNW', },
         { name: 'Northwest', travels: 'Southeast', emoji: '↘', short: 'NW', },
         { name: 'North-Northwest', travels: 'South-Southeast', emoji: '↘', short: 'NNW', },
@@ -1103,10 +1103,12 @@ export async function graph(
         displayLegend?: boolean,
         lineColour?: string,
         pointSize?: number;
+        gradient?: boolean;
     },
     extra?: {
         data: number[];
         label: string;
+        separateAxis: boolean;
     }[]
 ) {
 
@@ -1142,9 +1144,10 @@ export async function graph(
         fill: other.fill,
         borderColor: other.lineColour ?? 'rgb(75, 192, 192)',
         borderWidth: 1,
-        pointRadius: other.pointSize ?? 2
+        pointRadius: other.pointSize ?? 2,
+        yAxisID: '1y'
     }];
-
+    let showSecondAxis = false;
     if (!(extra == null || extra == undefined)) {
         const diff = 360 / Math.floor(extra.length);
         let i = 1;
@@ -1156,8 +1159,10 @@ export async function graph(
                     fill: other.fill,
                     borderColor: other.lineColour ?? `rgb(${75 + diff * i}, 192, 192)`,
                     borderWidth: 1,
-                    pointRadius: other.pointSize ?? 2
+                    pointRadius: other.pointSize ?? 2,
+                    yAxisID: newData.separateAxis ? '2y' : '1y'
                 });
+                if (newData.separateAxis) showSecondAxis = true;
                 i++;
             }
         }
@@ -1209,8 +1214,18 @@ export async function graph(
                     ],
                     yAxes: [
                         {
-                            display: true,
+                            id: '1y',
                             type: 'linear',
+                            position: 'left',
+                            display: true,
+                            ticks: {
+                                beginAtZero: other.startzero
+                            },
+                        }, {
+                            id: '2y',
+                            type: 'linear',
+                            position: 'right',
+                            display: showSecondAxis,
                             ticks: {
                                 beginAtZero: other.startzero
                             },
