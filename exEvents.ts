@@ -344,7 +344,14 @@ export default (input: {
                             log.toOutput(`Deleted file ${path}\\cache\\commandData\\` + file, input.config);
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
-                    } else {
+                    } else if (file.includes('weatherdata')) {
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 15)) {
+                            fs.unlinkSync(`${path}/cache/commandData/` + file);
+                            log.toOutput(`Deleted file ${path}\\cache\\commandData\\` + file, input.config);
+                            // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                        }
+                    }
+                    else {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 3)) {
                             fs.unlinkSync(`${path}/cache/commandData/` + file);
                             log.toOutput(`Deleted file ${path}\\cache\\commandData\\` + file, input.config);
