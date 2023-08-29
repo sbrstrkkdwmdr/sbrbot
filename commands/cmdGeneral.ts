@@ -2751,7 +2751,7 @@ export async function weather(input: extypes.commandInput) {
                     pointSize: 1.5,
                     gradient: true,
                 });
-                const precGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation, `(Total precipitation ${weatherData.hourly_units.precipitation})`,
+            const precGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation, `(Total precipitation ${weatherData.hourly_units.precipitation})`,
                 {
                     startzero: true,
                     fill: true,
@@ -2763,8 +2763,8 @@ export async function weather(input: extypes.commandInput) {
                     label: `(${weatherData.hourly_units.precipitation_probability}) Chance of Precipitation`,
                     separateAxis: true,
                 }]
-                
-                );
+
+            );
 
             useFiles.push(
                 new Discord.AttachmentBuilder(`${windGraph.path}`),
@@ -2979,7 +2979,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
     let exInf = '';
     switch (type) {
         case 'active': default: {
-            picker();
+            await picker();
             embed.setTitle(`Currently Active Tropical Storms`);
             //create image
             let frimg: Discord.AttachmentBuilder = new Discord.AttachmentBuilder(worldmapPath);
@@ -3003,14 +3003,22 @@ export async function tropicalWeather(input: extypes.commandInput) {
                             } else {
                                 exInf = `\nStorm locations shown are approximate`;
                                 for (const storm of weatherData?.data as othertypes.tsShort[]) {
-                                    const tempData = await func.getTropical(input.config, 'storm', storm.id);
+                                    let tempData: othertypes.tropicalData;
+                                    if (func.findFile(`${storm.id}`, 'storm-tropicalweatherdata') &&
+                                        !('error' in func.findFile(`${storm.id}`, 'storm-tropicalweatherdata')) &&
+                                        input.button != 'Refresh'
+                                    ) {
+                                        tempData = func.findFile(`${storm.id}`, 'storm-tropicalweatherdata');
+                                    } else {
+                                        tempData = await func.getTropical(input.config, 'storm', storm.id);
+                                    }
                                     const inTempData = tempData.data as othertypes.tsData;
-                                    func.storeFile((tempData as othertypes.tsData), input.absoluteID, `storm-${(inTempData as othertypes.tsData).id}-tropicalWeatherData`);
+                                    func.storeFile((tempData as othertypes.tsData), `${(inTempData as othertypes.tsData).id}`, `storm-tropicalWeatherData`);
                                     const curx = inTempData.position[0];
                                     const cury = inTempData.position[1];
 
                                     image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), (xLen / 2) + (curx * xFactor), (yLen / 2) - (cury * yFactor), {
-                                        text: `X`,
+                                        text: `X\n${storm.id.slice(4, inTempData.id.length)}`,
                                         alignmentX: jimp.HORIZONTAL_ALIGN_CENTER,
                                         alignmentY: jimp.VERTICAL_ALIGN_MIDDLE,
                                     },
@@ -3044,19 +3052,55 @@ export async function tropicalWeather(input: extypes.commandInput) {
         } break;
     }
 
-    function picker() {
+    async function picker() {
         const data = weatherData?.data as othertypes.tsShort[];
         if (data.length > 0) {
-            embed.setDescription((weatherData?.data as othertypes.tsShort[]).map(x => {
-                let first = calc.toCapital(x.name);
+            const Tnames: string[] = [];
+            for (const x of (weatherData?.data as othertypes.tsShort[])) {
+                let first = x.name;
+                let second;
+                async function doNames(x) {
+                    return new Promise(async (resolve, reject) => {
+                        let first = calc.toCapital(x.name);
+                        let tempData: othertypes.tropicalData;
+                        if (func.findFile(`${x.id}`, 'storm-tropicalweatherdata') &&
+                            !('error' in func.findFile(`${x.id}`, 'storm-tropicalweatherdata')) &&
+                            input.button != 'Refresh'
+                        ) {
+                            tempData = func.findFile(`${x.id}`, 'storm-tropicalweatherdata');
+                        } else {
+                            tempData = await func.getTropical(input.config, 'storm', x.id);
+                        }
+                        const inTempData = tempData.data as othertypes.tsData;
+                        func.storeFile((tempData as othertypes.tsData), `${(inTempData as othertypes.tsData).id}`, `storm-tropicalweatherdata`);
+                        if (inTempData?.category) {
+                            second = inTempData?.category.toUpperCase() + ' ' + first;
+                        }
+                        resolve(true);
+                    });
+                }
+                const l = await doNames(x);
+                console.log(l);
                 if (calc.checkIsNumber(x.name)) {
                     first = x.id.slice(4, x.id.length);
+                    second = x.id.slice(4, x.id.length);
                 }
                 else if (!x.id.includes(x.name)) {
                     first += ` (${x.id.slice(4, x.id.length)})`;
+                    second += ` (${x.id.slice(4, x.id.length)})`;
                 }
-                return first;
-            }).join(', ') + exInf);
+                if (l === true) {
+                    console.log(second);
+                    Tnames.push(second);
+                } else {
+                    console.log(first);
+                    Tnames.push(first);
+                }
+            }
+            const tempTxt = (Tnames.length > 0 ? Tnames.join(', ') : 'err') + exInf;
+            console.log(tempTxt);
+            console.log('errww');
+            embed.setDescription(tempTxt);
             const inputModal = new Discord.StringSelectMenuBuilder()
                 .setCustomId(`${mainconst.version}-Select-tropicalweather-${commanduser.id}-${input.absoluteID}`)
                 .setPlaceholder('Select a storm');
