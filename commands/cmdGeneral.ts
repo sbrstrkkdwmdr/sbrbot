@@ -3080,7 +3080,6 @@ export async function tropicalWeather(input: extypes.commandInput) {
                     });
                 }
                 const l = await doNames(x);
-                console.log(l);
                 if (calc.checkIsNumber(x.name)) {
                     first = x.id.slice(4, x.id.length);
                     second = x.id.slice(4, x.id.length);
@@ -3090,16 +3089,12 @@ export async function tropicalWeather(input: extypes.commandInput) {
                     second += ` (${x.id.slice(4, x.id.length)})`;
                 }
                 if (l === true) {
-                    console.log(second);
                     Tnames.push(second);
                 } else {
-                    console.log(first);
                     Tnames.push(first);
                 }
             }
             const tempTxt = (Tnames.length > 0 ? Tnames.join(', ') : 'err') + exInf;
-            console.log(tempTxt);
-            console.log('errww');
             embed.setDescription(tempTxt);
             const inputModal = new Discord.StringSelectMenuBuilder()
                 .setCustomId(`${mainconst.version}-Select-tropicalweather-${commanduser.id}-${input.absoluteID}`)
