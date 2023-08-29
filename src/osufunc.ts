@@ -1808,7 +1808,9 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
     for (let i = 0; i < users.length; i++) {
         const curuser = users[i].dataValues;
         if (!(isNaN(+curuser[`${mode ?? 'osu'}pp`]) || typeof curuser[`${mode ?? 'osu'}pp`] == 'undefined' || !curuser[`${mode ?? 'osu'}pp`] ||
-            isNaN(+curuser[`${mode ?? 'osu'}rank`]) || typeof curuser[`${mode ?? 'osu'}rank`] == 'undefined' || !curuser[`${mode ?? 'osu'}rank`])) {
+            isNaN(+curuser[`${mode ?? 'osu'}rank`]) || typeof curuser[`${mode ?? 'osu'}rank`] == 'undefined' || !curuser[`${mode ?? 'osu'}rank`] ||
+            +curuser[`${mode ?? 'osu'}rank`] < 5
+        )) {
             pprankarr.push({
                 pp: +curuser[`${mode ?? 'osu'}pp`],
                 rank: +curuser[`${mode ?? 'osu'}rank`]
@@ -1821,6 +1823,7 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
             const data = pprankarr.map(x => [x.pp, Math.log10(x.rank)]);
             const line = stats.linearRegressionLine(stats.linearRegression(data));
             return (10 ** line(value));
+            //log y
         }
             break;
         case 'rank->pp': {
