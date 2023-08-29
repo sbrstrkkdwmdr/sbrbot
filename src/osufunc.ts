@@ -1804,12 +1804,12 @@ export async function getRankPerformanceOld(type: 'pp->rank' | 'rank->pp', value
 export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: number, mode: osuApiTypes.GameMode,
     statsCache: Sequelize.ModelStatic<any>,) {
     const users = await statsCache.findAll();
-    const pprankarr: { pp: number, rank: number; }[] = [];
+    let pprankarr: { pp: number, rank: number; }[] = [];
     for (let i = 0; i < users.length; i++) {
         const curuser = users[i].dataValues;
         if (!(isNaN(+curuser[`${mode ?? 'osu'}pp`]) || typeof curuser[`${mode ?? 'osu'}pp`] == 'undefined' || !curuser[`${mode ?? 'osu'}pp`] ||
-            isNaN(+curuser[`${mode ?? 'osu'}rank`]) || typeof curuser[`${mode ?? 'osu'}rank`] == 'undefined' || !curuser[`${mode ?? 'osu'}rank`] ||
-            +curuser[`${mode ?? 'osu'}rank`] < 5
+            isNaN(+curuser[`${mode ?? 'osu'}rank`]) || typeof curuser[`${mode ?? 'osu'}rank`] == 'undefined' || !curuser[`${mode ?? 'osu'}rank`]
+            //||   +curuser[`${mode ?? 'osu'}rank`] < 5
         )) {
             pprankarr.push({
                 pp: +curuser[`${mode ?? 'osu'}pp`],
@@ -1818,9 +1818,35 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
         }
     }
     let data: number[][] = [];
+    //find if a value is in the dataset then use it otherwise use predict
+    const tempChecking = pprankarr.filter((x) => {
+        switch (type) {
+            case 'pp->rank': {
+                //pp within 10
+                return (calc.isWithinPercentage(+x.pp, +x.pp * 0.000001, +value) || calc.isWithinValue(+x.pp, 1, +value)) ?? false;
+            } break;
+            case 'rank->pp': {
+                //rank within 1%
+                return calc.isWithinPercentage(+x.rank, 1, +value) ?? false;
+            } break;
+        }
+    });
+    if (tempChecking.length > 0) {
+        const rankData = Stats(tempChecking.map(x => x.rank));
+        const ppData = Stats(tempChecking.map(x => x.pp));
+        switch (type) {
+            case 'pp->rank': {
+                return rankData.median ?? rankData.mean;
+            } break;
+            case 'rank->pp': {
+                return ppData.median ?? ppData.mean;
+            } break;
+        }
+    }
+    pprankarr = pprankarr.filter(x => x.rank > 5);
     switch (type) {
         case 'pp->rank': {
-            const data = pprankarr.map(x => [x.pp, Math.log10(x.rank)]);
+            data = pprankarr.map(x => [x.pp, Math.log10(x.rank)]);
             const line = stats.linearRegressionLine(stats.linearRegression(data));
             return (10 ** line(value));
             //log y
@@ -2148,10 +2174,12 @@ export function modemappers(arr: osuApiTypes.Score[]) {
 
 type stat = {
     highest: number,
-    average: number,
+    mean: number,
     lowest: number,
     median: number,
     ignored?: number,
+    calculated?: number,
+    total?:number,
 };
 
 /**
@@ -2169,16 +2197,18 @@ export function Stats(arr: number[]) {
         median = arr[Math.floor(arr.length / 2)];
     } else {
         const temp1 = arr[arr.length / 2];
-        const temp2 = arr[(arr.length / 2) + 1];
+        const temp2 = arr[(arr.length / 2) - 1];
         median = (temp1 + temp2) / 2;
     }
 
     const stats: stat = {
         highest: arr[0],
-        average: arr.reduce((b, a) => b + a, 0) / arr.length,
+        mean: arr.reduce((b, a) => b + a, 0) / arr.length,
         lowest: arr[arr.length - 1],
         median: median,
-        ignored: init.length - arr.length
+        ignored: init.length - arr.length,
+        calculated: arr.length,
+        total: init.length,
     };
     return stats;
 }

@@ -620,9 +620,32 @@ export function wipDiffThing(array: { x: number, y: number; }[], inputX: number)
         //10
         //5
         const init = ((prev.y + next.y) / 2);
-        let mutable = (init - ((nextDis/prevDis)*(init-prev.x)))- (((prevDis/nextDis)*(init-next.x)));
+        let mutable = (init - ((nextDis / prevDis) * (init - prev.x))) - (((prevDis / nextDis) * (init - next.x)));
         return mutable;
     }
+}
+
+/**
+ * checks if input is within a specified percentage of against
+ * 
+ * percentages are 0-100 not 0-1
+ */
+export function isWithinPercentage(input: number, percentage: number, against: number) {
+    if (percentage < 0 || percentage > 100) {
+        throw new Error('Percentage should be between 0 and 100.');
+    }
+    const lowerBound = against - ((against * percentage) / 100);
+    const upperBound = against + ((against * percentage) / 100);
+    return input >= lowerBound && input <= upperBound;
+}
+
+/**
+ * checks if input is within a specified value of against
+ */
+export function isWithinValue(input: number, value: number, against: number) {
+    const lowerBound = against - value;
+    const upperBound = against + value;
+    return input >= lowerBound && input <= upperBound;
 }
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };

@@ -1621,9 +1621,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
         }
             break;
         case 'rank': {
-
             returnval = await osufunc.getRankPerformance('rank->pp', value, mode, input.statsCache);
-
             if (typeof returnval == 'number') {
                 returnval = 'approx. ' + func.separateNum(returnval.toFixed(2)) + 'pp';
             } else {
@@ -2425,7 +2423,7 @@ ${supporter} ${onlinestatus}
                     name: def.invisbleChar,
                     value: `**Highest pp:** ${ppstats.highest?.toFixed(2)}
         **Lowest pp:** ${ppstats.lowest?.toFixed(2)}
-        **Average pp:** ${ppstats.average?.toFixed(2)}
+        **Average pp:** ${ppstats.mean?.toFixed(2)}
         **Highest accuracy:** ${accstats.highest?.toFixed(2)}%
         **Lowest accuracy:** ${accstats.lowest?.toFixed(2)}%`,
                     inline: true
@@ -9202,7 +9200,7 @@ export async function scorestats(input: extypes.commandInput) {
                 value: `
 Highest: ${(acc?.highest * 100)?.toFixed(2)}%
 Lowest: ${(acc?.lowest * 100)?.toFixed(2)}%
-Average: ${(acc?.average * 100)?.toFixed(2)}%
+Average: ${(acc?.mean * 100)?.toFixed(2)}%
 Median: ${(acc?.median * 100)?.toFixed(2)}%
 ${acc?.ignored > 0 ? `Skipped: ${acc?.ignored}` : ''}
 `,
@@ -9213,7 +9211,7 @@ ${acc?.ignored > 0 ? `Skipped: ${acc?.ignored}` : ''}
                 value: `
 Highest: ${pp?.highest?.toFixed(2)}pp
 Lowest: ${pp?.lowest?.toFixed(2)}pp
-Average: ${pp?.average?.toFixed(2)}pp
+Average: ${pp?.mean?.toFixed(2)}pp
 Median: ${pp?.median?.toFixed(2)}pp
 ${pp?.ignored > 0 ? `Skipped: ${pp?.ignored}` : ''}
 `,
@@ -9224,7 +9222,7 @@ ${pp?.ignored > 0 ? `Skipped: ${pp?.ignored}` : ''}
                 value: `
 Highest: ${combo?.highest}
 Lowest: ${combo?.lowest}
-Average: ${Math.floor(combo?.average)}
+Average: ${Math.floor(combo?.mean)}
 Median: ${combo?.median}
 ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
 `,
