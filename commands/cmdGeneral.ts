@@ -3170,7 +3170,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
 Direction: ${windDir.emoji} ${data.movement.KPH}km/h ${data.movement.MPH}mi/h ${data.movement.KTS}kt/s
 Peak: ${phurname}
 `)
-            .setImage(`https://www.force-13.com/floaters/${altName}/imagery/rb-animated.gif`)
+            .setImage(`https://www.force-13.com/floaters/${altName.replace('N', 'L')}/imagery/rb-animated.gif`)
             //.png
             //-animated.gif
             /**
