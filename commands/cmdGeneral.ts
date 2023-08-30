@@ -2757,6 +2757,7 @@ export async function weather(input: extypes.commandInput) {
                     fill: true,
                     displayLegend: true,
                     pointSize: 1.5,
+                    type: 'bar'
                 },
                 [{
                     data: weatherData.hourly.precipitation_probability,

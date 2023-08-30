@@ -455,3 +455,5 @@ changes:
 [QOL] put weather precipitation data on the same graph
 [QOL] categories are now shown in tropical storms
 [QOL] override pp/rank predictions if a value is almost the exact same as the input
+[QOL] change map fail graph from line to stacked bar graph
+[QOL] change precipitation graph to bar graph
