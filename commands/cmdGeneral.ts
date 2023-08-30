@@ -3125,9 +3125,6 @@ export async function tropicalWeather(input: extypes.commandInput) {
 
     async function embeddify() {
         const data = weatherData?.data as othertypes.tsData;
-        const featData1 = await func.getTropical(input.config, 'features', data.id);
-        const featData = featData1.data as othertypes.tsFeatureData;
-        func.storeFile(featData, input.absoluteID, `features-${data.id}-tropicalWeatherData`);
         const catData = func.tsCatToString(data.category.toLowerCase());
         const basin = func.tsBasinToString(data.basin);
         const basinType = func.tsBasinToType(data.basin);
@@ -3146,6 +3143,19 @@ export async function tropicalWeather(input: extypes.commandInput) {
 
         const localtype = '';
 
+        let tempPos = [];
+        if (data.position[0] > 1) {
+            tempPos.push('E');
+        } else {
+            tempPos.push('W');
+        }
+        if (data.position[1] > 1) {
+            tempPos.push('N');
+        } else {
+            tempPos.push('S');
+        }
+
+        const pos = `${Math.abs(data.position[0])}${tempPos[0]}, ${Math.abs(data.position[1])}${tempPos[1]}`;
         // switch (basin) {
         //     case 'North Atlantic': case 'Northeast Pacific': case 'Central Pacific':
         //         localtype = func.tsNameSSHWS(data.movement.KPH) + ' (SSHWS)';
@@ -3166,11 +3176,12 @@ export async function tropicalWeather(input: extypes.commandInput) {
 
 
         embed.setTitle(`${hurname} ${fullname}`)
-            .setDescription(`Location: ${basin} Basin (${data.position.join(',')})
+            .setDescription(`Location: ${basin} Basin (${pos})
 Direction: ${windDir.emoji} ${data.movement.KPH}km/h ${data.movement.MPH}mi/h ${data.movement.KTS}kt/s
 Peak: ${phurname}
 `)
             .setImage(`https://www.force-13.com/floaters/${altName.replace('N', 'L')}/imagery/rb-animated.gif`)
+            .setURL(`https://www.force-13.com/satellite?flt=${altName.replace('N', 'L')}`)
             //.png
             //-animated.gif
             /**

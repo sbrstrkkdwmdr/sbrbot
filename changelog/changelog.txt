@@ -457,3 +457,4 @@ changes:
 [QOL] override pp/rank predictions if a value is almost the exact same as the input
 [QOL] change map fail graph from line to stacked bar graph
 [QOL] change precipitation graph to bar graph
+[QOL] show storm positions as NESW instead of +-
