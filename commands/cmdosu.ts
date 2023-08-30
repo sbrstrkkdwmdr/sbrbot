@@ -11131,10 +11131,21 @@ HP${baseHP}`;
             const exitval = mapdata.failtimes.exit;
             const numofval = [];
             for (let i = 0; i < failval.length; i++) {
-                numofval.push(i);
+                numofval.push(`${i}s`);
             }
 
-            const passInit = await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits');
+            const passInit = 
+            // await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits');
+            await func.graph(numofval, mapdata.failtimes.fail, 'Fails', {
+                stacked: true,
+                type: 'bar',
+                showAxisX: false,
+                title: 'Fail times'
+            }, [{
+                data: mapdata.failtimes.exit,
+                label: 'Exits',
+                separateAxis: false,
+            }]);
             useFiles.push(passInit.path);
 
             const passurl = passInit.filename;

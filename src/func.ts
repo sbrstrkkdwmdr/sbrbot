@@ -1104,6 +1104,11 @@ export async function graph(
         lineColour?: string,
         pointSize?: number;
         gradient?: boolean;
+        type?: 'line' | 'bar';
+        stacked?: boolean;
+        title?: string;
+        showAxisX?: boolean;
+        showAxisY?: boolean;
     },
     extra?: {
         data: number[];
@@ -1121,7 +1126,9 @@ export async function graph(
     if (other.displayLegend == null || other.displayLegend == undefined || typeof other.displayLegend == 'undefined') {
         other.displayLegend = false;
     }
-    const type = 'line';
+    if (other.type == null || other.type == undefined || typeof other.displayLegend == 'undefined') {
+        other.type = 'line';
+    }
 
     let curx = [];
     let cury = [];
@@ -1168,72 +1175,82 @@ export async function graph(
         }
     }
 
+    const cfgopts = {
+        legend: {
+            display: other.displayLegend
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: 'rgb(128, 128, 128)'
+                },
+                grid: {
+                    display: true,
+                    drawOnChartArea: true,
+                    drawTicks: true,
+                    color: 'rgb(64, 64, 64)'
+                }
+            },
+            y: {
+                ticks: {
+                    color: 'rgb(128, 128, 128)'
+                },
+                grid: {
+                    display: true,
+                    drawOnChartArea: true,
+                    drawTicks: true,
+                    color: 'rgb(64, 64, 64)'
+                }
+            },
+            xAxes: [
+                {
+                    display: true,
+                    ticks: {
+                        autoSkip: true,
+                        maxTicksLimit: 10
+                    },
+                }
+            ],
+            yAxes: [
+                {
+                    id: '1y',
+                    type: 'linear',
+                    position: 'left',
+                    display: true,
+                    ticks: {
+                        beginAtZero: other.startzero
+                    },
+                }, {
+                    id: '2y',
+                    type: 'linear',
+                    position: 'right',
+                    display: showSecondAxis,
+                    ticks: {
+                        beginAtZero: other.startzero
+                    },
+                }
+            ]
+        }
+    };
 
+    if (other?.type == 'bar' && other?.stacked == true) {
+        for(const elem of cfgopts['scales']['xAxes']){
+            elem['stacked'] = other.stacked ?? false
+        }
+        for(const elem of cfgopts['scales']['yAxes']){
+            elem['stacked'] = other.stacked ?? false
+        }
+    }
     const chart = new charttoimg()
         .setConfig({
-            type: type,
+            type: other?.type ?? 'line',
             data: {
                 labels: curx,
                 datasets: datasets
             },
-            options: {
-                legend: {
-                    display: other.displayLegend
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: 'rgb(128, 128, 128)'
-                        },
-                        grid: {
-                            display: true,
-                            drawOnChartArea: true,
-                            drawTicks: true,
-                            color: 'rgb(64, 64, 64)'
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: 'rgb(128, 128, 128)'
-                        },
-                        grid: {
-                            display: true,
-                            drawOnChartArea: true,
-                            drawTicks: true,
-                            color: 'rgb(64, 64, 64)'
-                        }
-                    },
-                    xAxes: [
-                        {
-                            display: true,
-                            ticks: {
-                                autoSkip: true,
-                                maxTicksLimit: 10
-                            },
-                        }
-                    ],
-                    yAxes: [
-                        {
-                            id: '1y',
-                            type: 'linear',
-                            position: 'left',
-                            display: true,
-                            ticks: {
-                                beginAtZero: other.startzero
-                            },
-                        }, {
-                            id: '2y',
-                            type: 'linear',
-                            position: 'right',
-                            display: showSecondAxis,
-                            ticks: {
-                                beginAtZero: other.startzero
-                            },
-                        }
-                    ]
-                }
-            }
+            options: cfgopts
         });
+
     chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250);
 
     const filename = `${(new Date).getTime()}`;
