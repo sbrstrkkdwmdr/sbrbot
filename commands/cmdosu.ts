@@ -11134,18 +11134,18 @@ HP${baseHP}`;
                 numofval.push(`${i}s`);
             }
 
-            const passInit = 
-            // await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits');
-            await func.graph(numofval, mapdata.failtimes.fail, 'Fails', {
-                stacked: true,
-                type: 'bar',
-                showAxisX: false,
-                title: 'Fail times'
-            }, [{
-                data: mapdata.failtimes.exit,
-                label: 'Exits',
-                separateAxis: false,
-            }]);
+            const passInit =
+                // await osufunc.graph(numofval, failval, 'Fails', true, false, false, false, true, 'bar', true, exitval, 'Exits');
+                await func.graph(numofval, mapdata.failtimes.fail, 'Fails', {
+                    stacked: true,
+                    type: 'bar',
+                    showAxisX: false,
+                    title: 'Fail times'
+                }, [{
+                    data: mapdata.failtimes.exit,
+                    label: 'Exits',
+                    separateAxis: false,
+                }]);
             useFiles.push(passInit.path);
 
             const passurl = passInit.filename;
@@ -11946,35 +11946,30 @@ export async function ppCalc(input: extypes.commandInput) {
 
             extras = `
 ---===SS===---  
-- Aim: ${curattr[0].ppAim}
-- Speed: ${curattr[0].ppSpeed}
-- Acc: ${curattr[0].ppAcc}
-- Flashlight: ${curattr[0].ppFlashlight}
-- Total: ${curattr[0].pp} 
+\`Aim        ${curattr[0].ppAim?.toFixed(3)}\`
+\`Speed      ${curattr[0].ppSpeed?.toFixed(3)}\`
+\`Acc        ${curattr[0].ppAcc?.toFixed(3)}\`
+${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[0].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[0].pp?.toFixed(3)}\`
 ---===97%===---
-- Aim: ${curattr[3].ppAim}
-- Speed: ${curattr[3].ppSpeed}
-- Acc: ${curattr[3].ppAcc}
-- Flashlight: ${curattr[3].ppFlashlight}
-- Total: ${curattr[3].pp} 
+\`Aim        ${curattr[3].ppAim?.toFixed(3)}\`
+\`Speed      ${curattr[3].ppSpeed?.toFixed(3)}\`
+\`Acc        ${curattr[3].ppAcc?.toFixed(3)}\`
+${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[3].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[3].pp?.toFixed(3)}\`
 ---===95%===---
-- Aim: ${curattr[5].ppAim}
-- Speed: ${curattr[5].ppSpeed}
-- Acc: ${curattr[5].ppAcc}
-- Flashlight: ${curattr[5].ppFlashlight}
-- Total: ${curattr[5].pp} 
+\`Aim        ${curattr[5].ppAim?.toFixed(3)}\`
+\`Speed      ${curattr[5].ppSpeed?.toFixed(3)}\`
+\`Acc        ${curattr[5].ppAcc?.toFixed(3)}\`
+${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[5].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[5].pp?.toFixed(3)}\`
 ---===93%===---
-- Aim: ${curattr[7].ppAim}
-- Speed: ${curattr[7].ppSpeed}
-- Acc: ${curattr[7].ppAcc}
-- Flashlight: ${curattr[7].ppFlashlight}
-- Total: ${curattr[7].pp} 
+\`Aim        ${curattr[7].ppAim?.toFixed(3)}\`
+\`Speed      ${curattr[7].ppSpeed?.toFixed(3)}\`
+\`Acc        ${curattr[7].ppAcc?.toFixed(3)}\`
+${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[7].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[7].pp?.toFixed(3)}\`
 ---===90%===---
-- Aim: ${curattr[10].ppAim}
-- Speed: ${curattr[10].ppSpeed}
-- Acc: ${curattr[10].ppAcc}
-- Flashlight: ${curattr[10].ppFlashlight}
-- Total: ${curattr[10].pp}                 
+\`Aim        ${curattr[10].ppAim?.toFixed(3)}\`
+\`Speed      ${curattr[10].ppSpeed?.toFixed(3)}\`
+\`Acc        ${curattr[10].ppAcc?.toFixed(3)}\`
+${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[10].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[10].pp?.toFixed(3)}\`
 `;
         }
             break;

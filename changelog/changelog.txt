@@ -458,3 +458,5 @@ changes:
 [QOL] change map fail graph from line to stacked bar graph
 [QOL] change precipitation graph to bar graph
 [QOL] show storm positions as NESW instead of +-
+[QOL] ppcalc pp values start on same vertical line
+[QOL] don't show flashlight pp if 0
