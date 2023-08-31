@@ -2888,20 +2888,30 @@ export async function weather(input: extypes.commandInput) {
                     pointSize: 1.5,
                     gradient: true,
                 });
-            const precGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation, `(Total precipitation ${weatherData.hourly_units.precipitation})`,
+                const precGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.rain, `(${weatherData.hourly_units.rain}) Rainfall`,
                 {
                     startzero: true,
                     fill: true,
                     displayLegend: true,
                     pointSize: 1.5,
-                    type: 'bar'
+                    type: 'bar',
+                    stacked: true
                 },
                 [{
                     data: weatherData.hourly.precipitation_probability,
                     label: `(${weatherData.hourly_units.precipitation_probability}) Chance of Precipitation`,
                     separateAxis: true,
-                }]
-
+                },
+                {
+                    data: weatherData.hourly.showers,
+                    label: `(${weatherData.hourly_units.showers}) Showers`,
+                    separateAxis: false,
+                },
+                {
+                    data: weatherData.hourly.snowfall,
+                    label: `(${weatherData.hourly_units.snowfall}) Snowfall`,
+                    separateAxis: false,
+                },]
             );
 
             useFiles.push(
