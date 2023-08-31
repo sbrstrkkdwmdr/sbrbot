@@ -461,3 +461,5 @@ changes:
 [QOL] ppcalc pp values start on same vertical line
 [QOL] don't show flashlight pp if 0
 [ADD] setweather command
+[QOL] re-add score to recent
+[QOL] change buttons on recent

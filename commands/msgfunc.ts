@@ -233,7 +233,7 @@ export async function buttonsAddDetails(command: string, commanduser: Discord.Us
                     temp.push(set0);
                 }
                 if (disabled.detailed == false) {
-                    disabled.compact_rem ?
+                    disabled.detailed_rem ?
                         null :
                         temp.push(set2.setDisabled(true));
                 } else {

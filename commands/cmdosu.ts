@@ -5502,14 +5502,16 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
     }
 
     //==============================================================================================================================================================================================
-
-    let buttons = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-Refresh-recent-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.refresh),
-        );
+    let buttons = new Discord.ActionRowBuilder();
+    if (scoredetailed != 1) {
+        buttons
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Refresh-recent-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.refresh),
+            );
+    }
 
     log.logCommand({
         event: 'Command',
@@ -5612,10 +5614,10 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
     }
 
     const checkDetails = await msgfunc.buttonsAddDetails('recent', commanduser, input.absoluteID, buttons, scoredetailed, embedStyle, {
-        compact: false,
+        compact: true,
         compact_rem: true,
         detailed: true,
-        detailed_rem: false
+        detailed_rem: true
     });
     buttons = checkDetails.buttons;
     embedStyle = checkDetails.embedStyle;
@@ -6133,7 +6135,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 [${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${input.config.useEmojis.gamemodes ? emojis.gamemodes[curscore.mode] : curscore.mode}
 <t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
-${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
+${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}${func.separateNum(curscore.score)} | ${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
 ${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\` | ${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo
 **${rspp}**pp ${fcflag}\n${ppissue}
 `);
@@ -6150,7 +6152,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                     .addFields([
                         {
                             name: 'SCORE DETAILS',
-                            value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
+                            value: `${func.separateNum(curscore.score)}\n${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
                                 `${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\`\n${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo`,
                             inline: true
                         },
@@ -6200,7 +6202,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                     .addFields([
                         {
                             name: 'SCORE DETAILS',
-                            value: `${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
+                            value: `${func.separateNum(curscore.score)}\n${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
                                 `${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}${hitlist}\n${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo`,
                             inline: true
                         },
