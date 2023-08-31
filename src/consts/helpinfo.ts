@@ -2421,7 +2421,7 @@ const othercmds: commandInfo[] = [
                 descriptor: 'Sends a random gif matching "slap"'
             }
         ],
-        aliases: [],
+        aliases: ['hug', 'kiss', 'lick', 'pet', 'punch', 'slap'],
         options: [
             {
                 name: 'type',
