@@ -10,6 +10,9 @@ export const hug: string[] = [
     'https://media.tenor.com/C7nY0yyhwIIAAAAM/anime.gif',
     'https://media.tenor.com/ZmMbIa4rjhMAAAAM/hug-anime.gif',
     'https://cdn.weeb.sh/images/HkzndOXvZ.gif',
+    'https://tenor.com/view/covid-meme-cute-gif-23513805',
+    'https://tenor.com/view/love-hug-gif-25661526',
+    'https://tenor.com/view/cute-hug-gif-25654459'
 ];
 
 export const kiss: string[] = [
