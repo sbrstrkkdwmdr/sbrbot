@@ -460,3 +460,4 @@ changes:
 [QOL] show storm positions as NESW instead of +-
 [QOL] ppcalc pp values start on same vertical line
 [QOL] don't show flashlight pp if 0
+[ADD] setweather command

@@ -97,6 +97,9 @@ const userdata = sequelize.define('userdata', {
         type: Sequelize.STRING,
         defaultValue: 'GMT',
     },
+    location: {
+        type: Sequelize.STRING,
+    }
 });
 
 const guildSettings = sequelize.define('guildSettings', {

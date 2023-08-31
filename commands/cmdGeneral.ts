@@ -2564,6 +2564,140 @@ ${found.map(x => `UTC${x.offsetDirection}${x.offsetHours}\n`).join()}`;
     }
 }
 
+export async function locationset(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+    let fetchlocate: string;
+
+    let useComponents = [];
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message);
+            commanduser = input.obj.author;
+            fetchlocate = input.args.join(' ');
+        }
+            break;
+
+        //==============================================================================================================================================================================================
+
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
+            commanduser = input.obj.member.user;
+
+            fetchlocate = input.obj.options.getString('timezone');
+        }
+
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction);
+            commanduser = input.obj.member.user;
+        }
+            break;
+    }
+
+    if (input?.overrides) {
+        if (input?.overrides?.ex) {
+            fetchlocate = input?.overrides?.ex as string;
+        }
+    }
+
+
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'setlocation',
+        options: [
+            {
+                name: 'Locations',
+                value: `${fetchlocate}`
+            }
+        ],
+        config: input.config
+    });
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    const txt = 'null';
+    const fields: Discord.EmbedField[] = [];
+
+    const Embed = new Discord.EmbedBuilder()
+        .setColor(colours.embedColour.info.dec)
+        .setTitle('Set location');
+
+    if (fetchlocate != null && fetchlocate != '') {
+        const updateRows: {
+            userid: string | number,
+            location: string;
+        } = {
+            userid: commanduser.id,
+            location: fetchlocate,
+        };
+        const findname = await input.userdata.findOne({ where: { userid: commanduser.id } });
+        let fieldText = 'null';
+        let fieldTitle = 'Updated settings';
+        if (findname == null) {
+            try {
+                await input.userdata.create({
+                    userid: commanduser.id,
+                    location: fetchlocate
+                });
+                fieldText = `Changed location to: \`${fetchlocate}\``;
+            } catch (error) {
+                fieldText = `There was an error trying to create user settings`;
+
+            }
+        } else {
+            const affectedRows = await input.userdata.update(updateRows,
+                { where: { userid: commanduser.id } }
+            );
+            if (affectedRows.length > 0 || affectedRows[0] > 0) {
+                fieldText = `Changed location to: \`${fetchlocate}\``;
+            } else {
+                fieldText = `There was an error trying to update your settings.`;
+                log.errLog('Database error', `${affectedRows}`, `${input.absoluteID}`);
+            }
+        }
+    }
+
+    Embed.addFields(fields);
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [Embed],
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'setlocation',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            config: input.config
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'setlocation',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send',
+            config: input.config
+        });
+    }
+}
+
 export async function weather(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
@@ -2632,7 +2766,10 @@ export async function weather(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let locatingData: othertypes.geoResults;
-
+    if ((!name || name == null || name.length == 0) && input.commandType != 'button') {
+        const cuser = await osufunc.searchUserFull(commanduser.id, input.userdata);
+        name = cuser.location;
+    }
     if ((!name || name == null || name.length == 0) && input.commandType != 'button') {
         const err = errors.uErr.weather.input_ms;
         await msgfunc.sendMessage({

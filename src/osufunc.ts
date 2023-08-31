@@ -1422,11 +1422,13 @@ export async function searchUserFull(searchid: string, userdata: any) {
     let tz;
     let skin;
     let errorValue;
+    let location;
     if (findname != null) {
         user = findname.get('osuname');
         errorValue = null;
         mode = findname.get('mode');
         tz = findname.get('timezone');
+        location = findname.get('location');
         skin = findname.get('skin');
         if (mode.length < 1 || mode == null) {
             mode = 'osu';
@@ -1446,6 +1448,7 @@ export async function searchUserFull(searchid: string, userdata: any) {
         gamemode: mode,
         tz,
         skin,
+        location,
         error: errorValue,
     };
     return object;
@@ -2179,7 +2182,7 @@ type stat = {
     median: number,
     ignored?: number,
     calculated?: number,
-    total?:number,
+    total?: number,
 };
 
 /**
