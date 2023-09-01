@@ -329,13 +329,13 @@ export default (input: {
             case 'stats':
                 commands.stats({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
-            case 'settime':
-                commands.timeset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
-                break;
-            case 'setlocation': case 'setweather':
-                startType(obj);
-                commands.locationset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
-                break;
+            // case 'settime':
+            //     commands.timeset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+            //     break;
+            // case 'setlocation': case 'setweather':
+            //     startType(obj);
+            //     commands.locationset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+            //     break;
             case 'time':
                 commands.time({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
@@ -504,6 +504,22 @@ export default (input: {
             case 'setskin': {
                 overrides = {
                     type: 'skin'
+                };
+                // startType(obj);
+                osucmds.osuset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+            }
+                break;
+            case 'settime': case 'settz': {
+                overrides = {
+                    type: 'tz'
+                };
+                // startType(obj);
+                osucmds.osuset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+            }
+                break;
+            case 'setlocation': case 'setweather': {
+                overrides = {
+                    type: 'location'
                 };
                 // startType(obj);
                 osucmds.osuset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });

@@ -14868,6 +14868,8 @@ export async function osuset(input: extypes.commandInput) {
     let name;
     let mode;
     let skin;
+    let location;
+    let tz;
 
     let type;
     let value;
@@ -14923,6 +14925,26 @@ export async function osuset(input: extypes.commandInput) {
                 skin = temp.value;
                 input.args = temp.newArgs;
             }
+            if (input.args.includes('-location')) {
+                const temp = func.parseArg(input.args, '-location', 'string', weather, true);
+                weather = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-weather')) {
+                const temp = func.parseArg(input.args, '-weather', 'string', weather, true);
+                weather = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-timezone')) {
+                const temp = func.parseArg(input.args, '-timezone', 'string', tz, true);
+                tz = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-tz')) {
+                const temp = func.parseArg(input.args, '-tz', 'string', tz, true);
+                tz = temp.value;
+                input.args = temp.newArgs;
+            }
 
             input.args = msgfunc.cleanArgs(input.args);
 
@@ -14960,6 +14982,12 @@ export async function osuset(input: extypes.commandInput) {
                 case 'skin':
                     skin = name;
                     break;
+                case 'tz':
+                    tz = name;
+                    break;
+                case 'location':
+                    location = name;
+                    break;
             }
             name = null;
         }
@@ -14990,6 +15018,14 @@ export async function osuset(input: extypes.commandInput) {
                 name: 'Skin',
                 value: skin
             },
+            {
+                name: 'TZ',
+                value: tz
+            },
+            {
+                name: 'Location',
+                value: location
+            }
             {
                 name: 'Type',
                 value: type
@@ -15041,6 +15077,12 @@ export async function osuset(input: extypes.commandInput) {
     if (skin != null) {
         updateRows['skin'] = skin;
     }
+    if (tz != null) {
+        updateRows['tz'] = skin;
+    }
+    if (location != null) {
+        updateRows['location'] = skin;
+    }
 
     const findname = await input.userdata.findOne({ where: { userid: commanduser.id } });
     if (findname == null) {
@@ -15049,7 +15091,9 @@ export async function osuset(input: extypes.commandInput) {
                 userid: commanduser.id,
                 osuname: name ?? 'undefined',
                 mode: mode ?? 'osu',
-                skin: skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117'
+                skin: skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117',
+                location,
+                tz,
             });
             txt = 'Added to database';
             if (name) {
@@ -15060,6 +15104,12 @@ export async function osuset(input: extypes.commandInput) {
             }
             if (skin) {
                 txt += `\nSet your skin to \`${skin}\``;
+            }
+            if (location) {
+                txt += `\nSet your location to \`${location}\``;
+            }
+            if (tz) {
+                txt += `\nSet your timezone to \`${tz}\``;
             }
         } catch (error) {
             txt = 'There was an error trying to update your settings';
@@ -15081,6 +15131,12 @@ export async function osuset(input: extypes.commandInput) {
             }
             if (skin) {
                 txt += `\nSet your skin to \`${skin}\``;
+            }
+            if (location) {
+                txt += `\nSet your location to \`${location}\``;
+            }
+            if (tz) {
+                txt += `\nSet your timezone to \`${tz}\``;
             }
         } else {
             txt = 'There was an error trying to update your settings';
