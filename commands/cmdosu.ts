@@ -14926,13 +14926,13 @@ export async function osuset(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
             if (input.args.includes('-location')) {
-                const temp = func.parseArg(input.args, '-location', 'string', weather, true);
-                weather = temp.value;
+                const temp = func.parseArg(input.args, '-location', 'string', location, true);
+                location = temp.value;
                 input.args = temp.newArgs;
             }
             if (input.args.includes('-weather')) {
-                const temp = func.parseArg(input.args, '-weather', 'string', weather, true);
-                weather = temp.value;
+                const temp = func.parseArg(input.args, '-weather', 'string', location, true);
+                location = temp.value;
                 input.args = temp.newArgs;
             }
             if (input.args.includes('-timezone')) {
@@ -15025,7 +15025,7 @@ export async function osuset(input: extypes.commandInput) {
             {
                 name: 'Location',
                 value: location
-            }
+            },
             {
                 name: 'Type',
                 value: type
@@ -15078,10 +15078,10 @@ export async function osuset(input: extypes.commandInput) {
         updateRows['skin'] = skin;
     }
     if (tz != null) {
-        updateRows['tz'] = skin;
+        updateRows['timezone'] = tz;
     }
     if (location != null) {
-        updateRows['location'] = skin;
+        updateRows['location'] = location;
     }
 
     const findname = await input.userdata.findOne({ where: { userid: commanduser.id } });
@@ -15093,7 +15093,7 @@ export async function osuset(input: extypes.commandInput) {
                 mode: mode ?? 'osu',
                 skin: skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117',
                 location,
-                tz,
+                timezone: tz,
             });
             txt = 'Added to database';
             if (name) {

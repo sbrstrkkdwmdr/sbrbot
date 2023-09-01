@@ -2711,7 +2711,7 @@ export async function weather(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
-            name = input.args[0];
+            name = input.args.join(' ');
         }
             break;
         //==============================================================================================================================================================================================
@@ -2888,7 +2888,32 @@ export async function weather(input: extypes.commandInput) {
                     pointSize: 1.5,
                     gradient: true,
                 });
-                const precGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.rain, `(${weatherData.hourly_units.rain}) Rainfall`,
+            const frDat = [];
+            if (weatherData?.hourly?.rain.reduce((a, b) => a + b, 0) > 0) {
+                frDat.push({
+                    data: weatherData.hourly.rain,
+                    label: `(${weatherData.hourly_units.rain}) Rainfall`,
+                    separateAxis: true,
+                    customStack: 1
+                });
+            }
+            if (weatherData?.hourly?.showers.reduce((a, b) => a + b, 0) > 0) {
+                frDat.push({
+                    data: weatherData.hourly.showers,
+                    label: `(${weatherData.hourly_units.showers}) Showers`,
+                    separateAxis: true,
+                    customStack: 1
+                });
+            }
+            if (weatherData?.hourly?.snowfall.reduce((a, b) => a + b, 0) > 0) {
+                frDat.push({
+                    data: weatherData.hourly.snowfall,
+                    label: `(${weatherData.hourly_units.snowfall}) Snowfall`,
+                    separateAxis: true,
+                    customStack: 2
+                });
+            }
+            const precGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation_probability, `(${weatherData.hourly_units.precipitation_probability}) Chance of Precipitation`,
                 {
                     startzero: true,
                     fill: true,
@@ -2897,21 +2922,7 @@ export async function weather(input: extypes.commandInput) {
                     type: 'bar',
                     stacked: true
                 },
-                [{
-                    data: weatherData.hourly.precipitation_probability,
-                    label: `(${weatherData.hourly_units.precipitation_probability}) Chance of Precipitation`,
-                    separateAxis: true,
-                },
-                {
-                    data: weatherData.hourly.showers,
-                    label: `(${weatherData.hourly_units.showers}) Showers`,
-                    separateAxis: false,
-                },
-                {
-                    data: weatherData.hourly.snowfall,
-                    label: `(${weatherData.hourly_units.snowfall}) Snowfall`,
-                    separateAxis: false,
-                },]
+                frDat
             );
 
             useFiles.push(

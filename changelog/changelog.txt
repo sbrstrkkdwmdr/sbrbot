@@ -463,3 +463,4 @@ changes:
 [ADD] setweather command
 [QOL] re-add score to recent
 [QOL] change buttons on recent
+[QOL] precipitation graph shows each type 

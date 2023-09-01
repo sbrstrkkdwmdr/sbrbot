@@ -513,7 +513,8 @@ export async function getWeather(
             return 'error - NaN values given';
         }
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}`
-            + "&hourly=temperature_2m,precipitation,rain,pressure_msl,windspeed_10m,windgusts_10m,precipitation_probability&current_weather=true&forecast_days=1"
+            + "&hourly=temperature_2m,precipitation,rain,pressure_msl,windspeed_10m,windgusts_10m,precipitation_probability,showers,snowfall"
+            + "&current_weather=true&forecast_days=1"
             + "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,precipitation_probability_min,precipitation_probability_mean,windspeed_10m_max,windgusts_10m_max,winddirection_10m_dominant"
             + `&timezone=${location.timezone}`;
         log.toOutput(url, config);
@@ -1109,11 +1110,13 @@ export async function graph(
         title?: string;
         showAxisX?: boolean;
         showAxisY?: boolean;
+        stacksSeparate?: boolean;
     },
     extra?: {
         data: number[];
         label: string;
         separateAxis: boolean;
+        customStack?: number;
     }[]
 ) {
 
@@ -1154,13 +1157,16 @@ export async function graph(
         pointRadius: other.pointSize ?? 2,
         yAxisID: '1y'
     }];
+    if(other?.stacked == true){
+        datasets[0]['stack'] = 'Stack 0'
+    }
     let showSecondAxis = false;
     if (!(extra == null || extra == undefined)) {
         const diff = 360 / Math.floor(extra.length);
         let i = 1;
         for (const newData of extra) {
             if (newData?.data?.length > 0) {
-                datasets.push({
+                const xData = {
                     label: newData.label,
                     data: newData.data,
                     fill: other.fill,
@@ -1168,7 +1174,13 @@ export async function graph(
                     borderWidth: 1,
                     pointRadius: other.pointSize ?? 2,
                     yAxisID: newData.separateAxis ? '2y' : '1y'
-                });
+                };
+                if (other?.type == 'bar' && other?.stacked == true && other?.stacksSeparate == true) {
+                    newData.customStack ?
+                        xData['stack'] = `Stack ${newData.customStack}` :
+                        xData['stack'] = 'Stack 0';
+                }
+                datasets.push(xData);
                 if (newData.separateAxis) showSecondAxis = true;
                 i++;
             }
@@ -1234,11 +1246,11 @@ export async function graph(
     };
 
     if (other?.type == 'bar' && other?.stacked == true) {
-        for(const elem of cfgopts['scales']['xAxes']){
-            elem['stacked'] = other.stacked ?? false
+        for (const elem of cfgopts['scales']['xAxes']) {
+            elem['stacked'] = other.stacked ?? false;
         }
-        for(const elem of cfgopts['scales']['yAxes']){
-            elem['stacked'] = other.stacked ?? false
+        for (const elem of cfgopts['scales']['yAxes']) {
+            elem['stacked'] = other.stacked ?? false;
         }
     }
     const chart = new charttoimg()
