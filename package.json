@@ -1,6 +1,6 @@
 {
     "name": "sbrbot",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "description": "",
     "main": "dist/main.js",
     "type": "module",
@@ -21,12 +21,12 @@
     },
     "homepage": "https://github.com/sbrstrkkdwmdr/sbrbot#readme",
     "dependencies": {
-        "@types/node": "^20.5.0",
+        "@types/node": "^20.5.7",
         "chartjs-to-image": "^1.2.1",
-        "discord-api-types": "^0.37.53",
-        "discord.js": "^14.11.0",
+        "discord-api-types": "^0.37.56",
+        "discord.js": "^14.13.0",
         "jimp": "^0.22.10",
-        "luxon": "^3.4.0",
+        "luxon": "^3.4.2",
         "moment": "^2.29.4",
         "moment-timezone": "^0.5.43",
         "node-fetch": "2.6.7",
@@ -37,12 +37,12 @@
         "sequelize": "^6.32.1",
         "simple-statistics": "^7.8.3",
         "sqlite3": "^5.1.6",
-        "tesseract.js": "^4.1.1",
-        "tslib": "^2.6.1",
-        "typescript": "^5.1.6",
+        "tesseract.js": "^4.1.2",
+        "tslib": "^2.6.2",
+        "typescript": "^5.2.2",
         "yt-search": "^2.10.4"
     },
     "devDependencies": {
-        "@types/luxon": "^3.3.1"
+        "@types/luxon": "^3.3.2"
     }
 }

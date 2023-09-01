@@ -9,6 +9,7 @@
         "sourceMap": true,
         "outDir": "dist",
         "allowSyntheticDefaultImports": true,
+        "types": [],
     },
     "include": [
         "commands/**/*",
@@ -20,6 +21,6 @@
     "exclude": [
         "setup.ts",
         "node_modules",
-        "test"
+        "test",
     ]
 }
