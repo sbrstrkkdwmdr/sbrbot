@@ -93,6 +93,34 @@ const embedColour = {
         dec: colourcalc.hexToDec('#91BC5C'),
     },
 };
+/**
+ * [nm
+ * ie [31m
+ */
+export const codeBlockColour = {
+    text: {
+        grey: 30,
+        red: 31,
+        green: 32,
+        yellow: 33,
+        blue: 34,
+        pink: 35,
+        cyan: 36,
+        white: 37,
+        default: 38,
+    },
+    background: {
+        darkBlue: 40,
+        red: 41,
+        lightGrey: 42,
+        lighterGrey: 43,
+        lightestGrey: 44,
+        indigo: 45,
+        gray: 46,
+        white: 47,
+        none: 48,
+    }
+};
 
 export { diffcolour, embedColour };
 

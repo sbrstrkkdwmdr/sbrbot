@@ -1,3 +1,4 @@
+import * as clrs from './consts/colours.js';
 /**
  * 
  * @param str string formatted as #rrggbb
@@ -76,3 +77,10 @@ function hexToDec(str: string) {
 
 export { hexToRgb, rgbToHex, rgbToDec, decToRgb, decToHex, hexToDec };
 
+//[nm
+/**
+ * [nm
+ */
+export function codeBlockColourText(str: string, colour: string, type: 'background' | 'text') {
+    return `\`\`\`ansi\n[${clrs.codeBlockColour[type][colour]}m${str}\n\`\`\``;
+}

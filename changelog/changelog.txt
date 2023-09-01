@@ -464,3 +464,4 @@ changes:
 [QOL] re-add score to recent
 [QOL] change buttons on recent
 [QOL] precipitation graph shows each type 
+[QOL] colour coded changelog headings

@@ -216,28 +216,30 @@ export async function changelog(input: extypes.commandInput) {
         }
         let txt = '';
         if (changes.maj.length > 0) {
-            txt += `\n**MAJOR CHANGES**\n` + changes.maj.join('\n');
+            txt += `${colourfunc.codeBlockColourText("MAJOR CHANGES", "blue", "text")}` + changes.maj.join('\n');
 
         }
         if (changes.add.length > 0) {
-            txt += `\n**ADDITIONS**\n` + changes.add.join('\n');
+            txt += `${colourfunc.codeBlockColourText("ADDITIONS", "green", "text")}` + changes.add.join('\n');
         }
         if (changes.qol.length > 0) {
-            txt += `\n**QUALITY OF LIFE**\n` + changes.qol.join('\n');
+            txt += `${colourfunc.codeBlockColourText("QUALITY OF LIFE", "pink", "text")}` + changes.qol.join('\n');
 
         }
         if (changes.fix.length > 0) {
-            txt += `\n**FIXES**\n` + changes.fix.join('\n');
+            txt += `${colourfunc.codeBlockColourText("FIXES", "yellow", "text")}` + changes.fix.join('\n');
 
         }
         if (changes.rem.length > 0) {
-            txt += `\n**REMOVALS**\n` + changes.rem.join('\n');
+            txt += `${colourfunc.codeBlockColourText("REMOVALS", "red", "text")}` + changes.rem.join('\n');
 
         }
         if (changes.min.length > 0) {
-            txt += `\n**OTHER/MINOR CHANGES**\n` + changes.min.join('\n');
+            txt += `${colourfunc.codeBlockColourText("MINOR", "cyan", "text")}` + changes.min.join('\n');
 
         }
+
+        txt = txt.slice(0, 2000);
 
         const url = commit?.toString()?.includes('null') ?
             `https://github.com/sbrstrkkdwmdr/sbrbot/`
@@ -249,9 +251,7 @@ export async function changelog(input: extypes.commandInput) {
             .setTitle(`${verdata.name.trim()} Changelog`)
             .setURL(url)
             .setDescription(`commit [${commit.trim()?.slice(0, 7)?.trim()}](${url})
-Released ${verdata.releaseDateFormatted}
-
-${txt}
+Released ${verdata.releaseDateFormatted}${txt}
 `)
             .setFooter({
                 text: `${useNum + 1}/${mainconst.versions.length}`
