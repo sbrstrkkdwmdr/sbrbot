@@ -465,3 +465,5 @@ changes:
 [QOL] change buttons on recent
 [QOL] precipitation graph shows each type 
 [QOL] colour coded changelog headings
+[ADD] added global and id opts to lb
+[QOL] remove null results from lb

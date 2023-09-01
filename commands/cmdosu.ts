@@ -775,26 +775,54 @@ export async function lb(input: extypes.commandInput) {
 
     let page = 0;
     let mode = 'osu';
-    const guild = input.obj.guild;
+    let id = null;
 
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            const gamemode = input.args[0];
-            if (!input.args[0] || gamemode == 'osu' || gamemode == 'o' || gamemode == '0' || gamemode == 'standard' || gamemode == 'std') {
+            if (input.args.includes('-osu')) {
                 mode = 'osu';
+                input.args.splice(input.args.indexOf('-osu'), 1);
             }
-            if (gamemode == 'taiko' || gamemode == 't' || gamemode == '1' || gamemode == 'drums') {
+            if (input.args.includes('-o')) {
+                mode = 'osu';
+                input.args.splice(input.args.indexOf('-o'), 1);
+            }
+            if (input.args.includes('-taiko')) {
                 mode = 'taiko';
+                input.args.splice(input.args.indexOf('-taiko'), 1);
             }
-            if (gamemode == 'fruits' || gamemode == 'c' || gamemode == '2' || gamemode == 'catch' || gamemode == 'ctb') {
+            if (input.args.includes('-t')) {
+                mode = 'taiko';
+                input.args.splice(input.args.indexOf('-t'), 1);
+            }
+            if (input.args.includes('-catch')) {
                 mode = 'fruits';
+                input.args.splice(input.args.indexOf('-catch'), 1);
             }
-            if (gamemode == 'mania' || gamemode == 'm' || gamemode == '3' || gamemode == 'piano') {
+            if (input.args.includes('-fruits')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-fruits'), 1);
+            }
+            if (input.args.includes('-ctb')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-ctb'), 1);
+            }
+            if (input.args.includes('-f')) {
+                mode = 'fruits';
+                input.args.splice(input.args.indexOf('-f'));
+            }
+            if (input.args.includes('-mania')) {
                 mode = 'mania';
+                input.args.splice(input.args.indexOf('-mania'), 1);
+            }
+            if (input.args.includes('-m')) {
+                mode = 'mania';
+                input.args.splice(input.args.indexOf('-m'));
             }
             input.args = msgfunc.cleanArgs(input.args);
+            id = input.args[0];
         }
             break;
 
@@ -853,6 +881,10 @@ export async function lb(input: extypes.commandInput) {
             {
                 name: 'Mode',
                 value: mode
+            },
+            {
+                name: 'ID',
+                value: id
             }
         ],
         config: input.config
@@ -865,6 +897,19 @@ export async function lb(input: extypes.commandInput) {
     }
     page--;
 
+    let global = false;
+    let guild = input.obj.guild;
+    if (id == 'global') {
+        global = true;
+    }
+    if (typeof +id == 'number') {
+        const tempguild = input.client.guilds.cache.get(id);
+        if (tempguild) {
+            const isThere = tempguild.members.cache.has(input.obj.member.id);
+            guild = isThere ? tempguild : guild;
+        }
+    }
+
     const serverlb = new Discord.EmbedBuilder()
         .setFooter({
             text: `${embedStyle}`
@@ -874,6 +919,7 @@ export async function lb(input: extypes.commandInput) {
     const useridsarraylen = await input.userdata.count();
     let rtxt = `\n`;
     const rarr = [];
+
 
     if (input.commandType == 'interaction') {
         await msgfunc.sendMessage({
@@ -885,156 +931,68 @@ export async function lb(input: extypes.commandInput) {
         }, input.canReply);
     }
 
+    let cache: Discord.Collection<string, Discord.GuildMember> | Discord.Collection<string, Discord.User>;
 
+    if (global) {
+        cache = input.client.users.cache;
+    } else {
+        cache = guild.members.cache;
+    }
     for (let i = 0; i < useridsarraylen; i++) {
         const user: extypes.dbUser = userids[i].dataValues;
-
-        guild.members.cache.forEach(async member => {
+        if (global) {
+            (cache as Discord.Collection<string, Discord.User>).forEach(member => {
+                if (`${member.id}` == `${user.userid}` && user != null && !rtxt.includes(`${member.id}`)) {
+                    addUser({ id: member.id, name: member.username });
+                }
+            });
+        } else {
+            (cache as Discord.Collection<string, Discord.GuildMember>).forEach(member => {
+                if (`${member.id}` == `${user.userid}` && user != null && !rtxt.includes(`${member.id}`)) {
+                    addUser({ id: member.user.id, name: member.displayName });
+                }
+            });
+        }
+        function addUser(member: { id: string, name: string; }) {
             if (`${member.id}` == `${user.userid}`) {
-                if (user != null && !rtxt.includes(`${member.user.id}`)) {
+                if (user != null && !rtxt.includes(`${member.id}`)) {
                     let acc: string | number;
                     let pp: string | number;
                     let rank: string | number;
-                    switch (mode) {
-                        case 'osu':
-                        default:
+                        acc = user[`${mode}acc`];
+                        if (isNaN(+acc) || acc == null) {
+                            return;
+                        } else {
+                            acc = user.osuacc.toFixed(2);
+                        }
+                        pp = user[`${mode}pp`];
+                        if (isNaN(+pp) || pp == null) {
+                            return;
+                        } else {
+                            pp = Math.floor(user.osupp);
+                        }
+                        rank = user[`${mode}rank`];
+                        if (isNaN(+rank) || rank == null) {
+                            return;
+                        }
+                        rarr.push(
                             {
-                                acc = user.osuacc;
-                                if (isNaN(acc) || acc == null) {
-                                    acc = 'null ';
-                                } else {
-                                    acc = user.osuacc.toFixed(2);
-                                }
-                                pp = user.osupp;
-                                if (isNaN(pp) || pp == null) {
-                                    pp = 'null ';
-                                } else {
-                                    pp = Math.floor(user.osupp);
-                                }
-                                rank = user.osurank;
-                                if (isNaN(rank) || rank == null) {
-                                    rank = 'null ';
-                                }
-                                rarr.push(
-                                    {
-                                        discname:
-                                            ((member.displayName.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.displayName.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.displayName.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
-                                        osuname:
-                                            (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
-                                        rank:
-                                            rank.toString().padEnd(10 - 2, ' ').substring(0, 8),
-                                        acc:
-                                            acc.toString(),
-                                        pp:
-                                            (pp.toString() + 'pp').padEnd(9 - 2, ' '),
-                                    }
-                                );
+                                discname:
+                                    ((member.name.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.name.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.name.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
+                                osuname:
+                                    (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
+                                rank:
+                                    `${rank}`.padEnd(10 - 2, ' ').substring(0, 8),
+                                acc:
+                                    `${acc}`,
+                                pp:
+                                    `${pp}pp`.padEnd(9 - 2, ' '),
                             }
-                            break;
-                        case 'taiko':
-                            {
-                                acc = user.taikoacc;
-                                if (isNaN(acc) || acc == null) {
-                                    acc = 'null ';
-                                }
-                                pp = user.taikopp;
-                                if (isNaN(pp) || pp == null) {
-                                    pp = 'null ';
-                                }
-                                rank = user.taikorank;
-                                if (isNaN(rank) || rank == null) {
-                                    rank = 'null ';
-                                }
-                                rarr.push(
-                                    {
-                                        discname:
-                                            ((member.displayName.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.displayName.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.displayName.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
-                                        osuname:
-                                            (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
-                                        rank:
-                                            rank.toString().padEnd(10 - 2, ' ').substring(0, 8),
-                                        acc:
-                                            acc.toString(),
-                                        pp:
-                                            (pp.toString() + 'pp').padEnd(9 - 2, ' '),
-                                    }
-                                );
-                            }
-                            break;
-                        case 'fruits':
-                            {
-                                acc = user.fruitsacc;
-                                if (isNaN(acc) || acc == null) {
-                                    acc = 'null ';
-                                } else {
-                                    acc = user.fruitsacc.toFixed(2);
-                                }
-                                pp = user.fruitspp;
-                                if (isNaN(pp) || pp == null) {
-                                    pp = 'null ';
-                                } else {
-                                    pp = Math.floor(user.fruitspp);
-                                }
-                                rank = user.fruitsrank;
-                                if (isNaN(rank) || rank == null) {
-                                    rank = 'null ';
-                                }
-                                rarr.push(
-                                    {
-                                        discname:
-                                            ((member.displayName.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.displayName.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.displayName.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
-                                        osuname:
-                                            (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
-                                        rank:
-                                            rank.toString().padEnd(10 - 2, ' ').substring(0, 8),
-                                        acc:
-                                            acc.toString(),
-                                        pp:
-                                            (pp.toString() + 'pp').padEnd(9 - 2, ' '),
-                                    }
-                                );
-                            }
-                            break;
-                        case 'mania':
-                            {
-                                acc = user.maniaacc;
-                                if (isNaN(acc) || acc == null) {
-                                    acc = 'null ';
-                                } else {
-                                    acc = user.maniaacc.toFixed(2);
-                                }
-                                pp = user.maniapp;
-                                if (isNaN(pp) || pp == null) {
-                                    pp = 'null ';
-                                } else {
-                                    pp = Math.floor(user.maniapp);
-                                }
-                                rank = user.maniarank;
-                                if (isNaN(rank) || rank == null) {
-                                    rank = 'null ';
-                                }
-                                rarr.push(
-                                    {
-                                        discname:
-                                            ((member.displayName.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.displayName.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.displayName.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
-                                        osuname:
-                                            (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
-                                        rank:
-                                            rank.toString().padEnd(10 - 2, ' ').substring(0, 8),
-                                        acc:
-                                            acc.toString(),
-                                        pp:
-                                            (pp.toString() + 'pp').padEnd(9 - 2, ' '),
-                                    }
-                                );
-                            }
-                            break;
-                    }
+                        );
                 }
 
             }
-        });
-
+        }
     }
 
     // let iterator = 0;
