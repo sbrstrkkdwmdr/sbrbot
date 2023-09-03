@@ -433,8 +433,8 @@ changes:
 [QOL] keep location selector in weather command
 
 VERSION 0.5.3
-date_time 
-commit: null
+2023-09-03 
+commit: 40c3b6731e34f42cbff523a015904aa12e4232bd
 changes:
 [QOL] versions are now evenly spaced
 [QOL] change wind directions to shorthand (west-southwest -> WSW)
