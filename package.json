@@ -1,6 +1,6 @@
 {
     "name": "sbrbot",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "description": "",
     "main": "dist/main.js",
     "type": "module",
@@ -21,7 +21,7 @@
     },
     "homepage": "https://github.com/sbrstrkkdwmdr/sbrbot#readme",
     "dependencies": {
-        "@types/node": "^20.5.0",
+        "@types/node": "^20.5.9",
         "chartjs-to-image": "^1.2.1",
         "discord-api-types": "^0.37.53",
         "discord.js": "^14.11.0",

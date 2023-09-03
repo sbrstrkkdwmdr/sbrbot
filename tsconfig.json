@@ -9,6 +9,7 @@
         "sourceMap": true,
         "outDir": "dist",
         "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true
     },
     "include": [
         "commands/**/*",
