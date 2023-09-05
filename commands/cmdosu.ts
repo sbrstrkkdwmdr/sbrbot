@@ -910,8 +910,8 @@ export async function lb(input: extypes.commandInput) {
         }
     }
 
-    const name = global ? "Global SSoB leaderboard" : 
-    `Server leaderboard for ${guild?.name ?? "null"}`
+    const name = global ? "Global SSoB leaderboard" :
+        `Server leaderboard for ${guild?.name ?? "null"}`;
 
     const serverlb = new Discord.EmbedBuilder()
         .setFooter({
@@ -962,36 +962,36 @@ export async function lb(input: extypes.commandInput) {
                     let acc: string | number;
                     let pp: string | number;
                     let rank: string | number;
-                        acc = user[`${mode}acc`];
-                        if (isNaN(+acc) || acc == null) {
-                            return;
-                        } else {
-                            acc = user.osuacc.toFixed(2);
+                    acc = user[`${mode}acc`];
+                    if (isNaN(+acc) || acc == null) {
+                        return;
+                    } else {
+                        acc = user.osuacc.toFixed(2);
+                    }
+                    pp = user[`${mode}pp`];
+                    if (isNaN(+pp) || pp == null) {
+                        return;
+                    } else {
+                        pp = Math.floor(user.osupp);
+                    }
+                    rank = user[`${mode}rank`];
+                    if (isNaN(+rank) || rank == null) {
+                        return;
+                    }
+                    rarr.push(
+                        {
+                            discname:
+                                ((member.name.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.name.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.name.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
+                            osuname:
+                                (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
+                            rank:
+                                `${rank}`.padEnd(10 - 2, ' ').substring(0, 8),
+                            acc:
+                                `${acc}`,
+                            pp:
+                                `${pp}pp`.padEnd(9 - 2, ' '),
                         }
-                        pp = user[`${mode}pp`];
-                        if (isNaN(+pp) || pp == null) {
-                            return;
-                        } else {
-                            pp = Math.floor(user.osupp);
-                        }
-                        rank = user[`${mode}rank`];
-                        if (isNaN(+rank) || rank == null) {
-                            return;
-                        }
-                        rarr.push(
-                            {
-                                discname:
-                                    ((member.name.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.name.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.name.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
-                                osuname:
-                                    (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
-                                rank:
-                                    `${rank}`.padEnd(10 - 2, ' ').substring(0, 8),
-                                acc:
-                                    `${acc}`,
-                                pp:
-                                    `${pp}pp`.padEnd(9 - 2, ' '),
-                            }
-                        );
+                    );
                 }
 
             }
@@ -9733,7 +9733,7 @@ export async function map(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
     let mapid;
-    let mapmods;
+    let mapmods: string;
     let maptitleq: string = null;
     let detailed: number = 1;
     const searchRestrict = 'any';
@@ -10614,6 +10614,10 @@ export async function map(input: extypes.commandInput) {
         else {
             mapmods = osumodcalc.OrderMods(mapmods.toUpperCase());
         }
+
+        mapmods = osumodcalc.modHandler(mapmods.toUpperCase(), mapdata.mode).join();
+
+
         let statusimg = emojis.rankedstatus.graveyard;
         if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
             await msgfunc.sendMessage({

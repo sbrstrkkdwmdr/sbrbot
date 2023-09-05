@@ -473,3 +473,4 @@ date_time
 commit: null
 changes:
 [FIX] server leaderboard when showing global leaderboard
+[FIX] mania mods 

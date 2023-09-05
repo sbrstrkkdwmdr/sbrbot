@@ -690,6 +690,61 @@ function unrankedMods_lazer(mods: string) {
 }
 
 /**
+ * reorders mods to be in the correct order, removes duplicates and mods that don't fit the mode
+ * NOTE LAZER MODS ARE IGNORED
+ */
+export function modHandler(mods: string, mode: 'osu' | 'taiko' | 'fruits' | 'mania') {
+    const ModsOrder: ModList[] = ['EZ', 'HD', 'FI', 'HT', 'DT', 'NC', 'HR', 'FL', 'SD', 'PF', 'NF', 'AT', 'CM', 'RL', 'AP', 'TP', 'SO', 'TD', '1K', '2K', '3K', '4K', '5K', '6K', '7K', '8K', '9K', 'CP', 'RD', 'MR', 'SV2'];
+    const modStringArray = mods.toUpperCase().replaceAll(' ', '').replaceAll(',', '').replace(/(.{2})/g, "$1 ")
+        .replaceAll('RLX', 'RL')
+        .replaceAll('RX', 'RL')
+        .replaceAll('AU', 'AT')
+        .replaceAll('CN', 'CM')
+        .replaceAll('V2', 'SV2')
+        .replaceAll('S2', 'SV2')
+        .split(' ');
+    const modStringArrayOrdered: ModList[] = [];
+    const modStringArrayOrderedtest: ModList[] = [];
+    for (let i = 0; i < ModsOrder.length; i++) {
+        for (let j = 0; j < modStringArray.length; j++) {
+            if (ModsOrder[i] === modStringArray[j]) {
+                modStringArrayOrderedtest.push((modStringArray as ModList[])[j]);
+            }
+        }
+    }
+    const maniaOnlyMods: ModList[] = ['FI', '1K', '2K', '3K', '4K', '5K', '6K', '7K', '8K', '9K', 'CP', 'RD', 'MR',];
+    const standardMods: ModList[] = ['AP', 'TP', 'SO', 'TD',];
+    let ignoreMods = [];
+    switch (mode) {
+        default:
+        case 'osu':
+            ignoreMods = maniaOnlyMods;
+            break;
+        case 'taiko': case 'fruits':
+            ignoreMods = maniaOnlyMods.concat(standardMods);
+            break;
+        case 'mania':
+            ignoreMods = standardMods;
+            break;
+    }
+
+    for (const elem of modStringArrayOrderedtest) {
+        if (ignoreMods.includes(elem)) {
+            const index = modStringArrayOrderedtest.indexOf(elem);
+            modStringArrayOrderedtest.splice(index, 1);
+        }
+    }
+
+    for (let i = 0; i < modStringArrayOrderedtest.length; i++) {
+        if (modStringArrayOrderedtest.indexOf(modStringArrayOrderedtest[i]) === i) {
+            modStringArrayOrdered.push(modStringArrayOrderedtest[i]);
+        }
+    }
+
+    return modStringArrayOrdered;
+}
+
+/**
  * 
  * @param cs circle size
  * @returns the radius of the circle
@@ -934,18 +989,7 @@ function checkGrade(string: string, defaultRank?: osuapitypes.Rank) {
 }
 
 //module.exports = { DoubleTimeAR, HalfTimeAR, calcgrade, calcgradeTaiko, calcgradeCatch, calcgradeMania, odDT, odHT, ODtoms, ARtoms, msToAR, msToOD, toEZ, toHR, ModStringToInt, ModIntToString, OrderMods, shortModName, longModName, csToRadius, csFromRadius }
-export {
-    DoubleTimeAR, HalfTimeAR,
-    calcgrade, calcgradeTaiko, calcgradeCatch, calcgradeMania, checkGrade,
-    odDT, odHT,
-    ODtoms, ARtoms, msToAR, msToOD,
-    toEZ, toHR,
-    ModStringToInt, ModIntToString, OrderMods, shortModName, longModName,
-    unrankedMods_stable, unrankedMods_lazer,
-    csToRadius, csFromRadius,
-    calcValues,
-    ModeNameToInt, ModeIntToName
-};
+export { ARtoms, DoubleTimeAR, HalfTimeAR, ModIntToString, ModStringToInt, ModeIntToName, ModeNameToInt, ODtoms, OrderMods, calcValues, calcgrade, calcgradeCatch, calcgradeMania, calcgradeTaiko, checkGrade, csFromRadius, csToRadius, longModName, msToAR, msToOD, odDT, odHT, shortModName, toEZ, toHR, unrankedMods_lazer, unrankedMods_stable };
 
 //badge weight seeding
 export function bws(badges: number, rank: number) {
