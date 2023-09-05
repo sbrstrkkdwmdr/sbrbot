@@ -910,11 +910,14 @@ export async function lb(input: extypes.commandInput) {
         }
     }
 
+    const name = global ? "Global SSoB leaderboard" : 
+    `Server leaderboard for ${guild?.name ?? "null"}`
+
     const serverlb = new Discord.EmbedBuilder()
         .setFooter({
             text: `${embedStyle}`
         }).setColor(colours.embedColour.userlist.dec)
-        .setTitle(`server leaderboard for ${guild.name}`);
+        .setTitle(name);
     const userids = await input.userdata.findAll();
     const useridsarraylen = await input.userdata.count();
     let rtxt = `\n`;
