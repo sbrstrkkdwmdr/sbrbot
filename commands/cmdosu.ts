@@ -10612,10 +10612,8 @@ export async function map(input: extypes.commandInput) {
             mapmods = 'NM';
         }
         else {
-            mapmods = osumodcalc.OrderMods(mapmods.toUpperCase());
+            mapmods = osumodcalc.modHandler(mapmods.toUpperCase(), mapdata.mode).join();
         }
-
-        mapmods = osumodcalc.modHandler(mapmods.toUpperCase(), mapdata.mode).join();
 
 
         let statusimg = emojis.rankedstatus.graveyard;
@@ -11161,7 +11159,7 @@ HP${baseHP}`;
         {
             id: `${mapdata.id}`,
             apiData: null,
-            mods: mapmods
+            mods: null
         }
     );
 
@@ -11760,7 +11758,7 @@ export async function ppCalc(input: extypes.commandInput) {
         mapmods = 'NM';
     }
     else {
-        mapmods = osumodcalc.OrderMods(mapmods.toUpperCase());
+        mapmods = osumodcalc.modHandler(mapmods.toUpperCase(), mapdata.mode).join();
     }
     if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
         await msgfunc.sendMessage({
@@ -12094,7 +12092,7 @@ ${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[10].ppFlashlight?.toFixe
         {
             id: `${mapdata.id}`,
             apiData: null,
-            mods: mapmods
+            mods: null
         }
     );
 
