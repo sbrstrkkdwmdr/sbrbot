@@ -481,4 +481,4 @@ changes:
 [FIX] bws crashing when using interaction version
 [ADD] add tz and location to saved 
 [FIX] compare (top plays) not working with page buttons - was looking for `u/id` instead of `users/id`
-[QOL] error messages being unspecific 
+[FIX] error messages being unspecific 
