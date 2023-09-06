@@ -2785,7 +2785,15 @@ export async function weather(input: extypes.commandInput) {
         logWeatherError(err);
         return;
     }
-
+    if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
+    }
     if (func.findFile(name, 'weatherlocationdata') &&
         !('error' in func.findFile(name, 'weatherlocationdata')) &&
         input.button != 'Refresh'
@@ -3039,7 +3047,8 @@ Dominant Direction: ${maxWindDir.short}${maxWindDir.emoji} (${dailyData.winddire
         args: {
             embeds: useEmbeds,
             components: useComponents,
-            files: useFiles
+            files: useFiles,
+            edit: true
         }
     }, input.canReply);
 
@@ -3124,6 +3133,15 @@ export async function tropicalWeather(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
     let weatherData: othertypes.tropicalData;
+    if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: `Loading...`,
+            }
+        }, input.canReply);
+    }
     if (func.findFile(input.absoluteID, `storm-${system}-tropicalWeatherData`) &&
         !('error' in func.findFile(input.absoluteID, `storm-${system}-tropicalWeatherData`)) &&
         input.button != 'Refresh'
@@ -3365,6 +3383,7 @@ Peak: ${phurname}
             embeds: [embed],
             components: useComponents,
             files: useAttach,
+            edit: true,
         }
     }, input.canReply);
 

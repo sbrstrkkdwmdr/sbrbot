@@ -155,7 +155,7 @@ export default (input: {
             dmPermission: false,
             options: [
                 {
-                    name: 'Location',
+                    name: 'location',
                     description: 'The location to get the weather for',
                     type: Discord.ApplicationCommandOptionType.String,
                     required: true
