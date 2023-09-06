@@ -478,3 +478,4 @@ changes:
 [QOL] update helpinfo
 [QOL] add timestamp to time cmd
 [ADD] interaction commands for changelog, weather, tropicalweather
+[FIX] bws crashing when using interaction version

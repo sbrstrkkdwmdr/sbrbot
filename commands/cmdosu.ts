@@ -477,7 +477,8 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
         obj: input.obj,
         args: {
             embeds: [embed],
-            components: [cmdbuttons]
+            components: [cmdbuttons],
+            edit: true,
         }
     }, input.canReply);
 
