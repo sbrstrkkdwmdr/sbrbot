@@ -836,8 +836,6 @@ export default (input: {
                 osucmds.userBeatmaps({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             }
                 break;
-
-
             case 'whatif': case 'wi':
                 startType(obj);
                 osucmds.whatif({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });

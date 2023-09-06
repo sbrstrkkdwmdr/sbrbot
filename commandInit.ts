@@ -18,6 +18,19 @@ export default (input: {
 
     commands?.set([
         {
+            name: 'changelog',
+            description: 'Displays the changes for the current version or version requested',
+            dmPermission: false, 
+            options: [
+                {
+                    name: 'version',
+                    description: 'What version to check',
+                    type: Discord.ApplicationCommandOptionType.String,
+                    required: false,
+                }
+            ]
+        },
+        {
             name: 'convert',
             description: 'Converts one value to another',
             dmPermission: false,
@@ -95,20 +108,20 @@ export default (input: {
         },
         {
             name: 'remind',
-            description: 'Reminds the user of something',
+            description: 'Reminds the user of something. If no args are given, a list of pending reminders is returned.',
             dmPermission: false,
             options: [
                 {
                     name: 'time',
-                    description: 'How long to wait before sending the reminder. Must end in d, h, m, or s',
+                    description: 'How long to wait before sending the reminder. Formatted as ?d?h?m?s or hh:mm:ss',
                     type: Discord.ApplicationCommandOptionType.String,
-                    required: true
+                    required: false
                 },
                 {
                     name: 'reminder',
                     description: 'The reminder',
                     type: Discord.ApplicationCommandOptionType.String,
-                    required: true
+                    required: false
                 },
                 {
                     name: 'sendinchannel',
@@ -135,6 +148,24 @@ export default (input: {
                     required: false,
                 }
             ]
+        },
+        {
+            name: 'weather',
+            description: 'Displays the weather for a given location',
+            dmPermission: false,
+            options: [
+                {
+                    name: 'Location',
+                    description: 'The location to get the weather for',
+                    type: Discord.ApplicationCommandOptionType.String,
+                    required: true
+                }
+            ]
+        },
+        {
+            name: 'tropicalweather',
+            description: 'displays a list of all currently active tropical storms',
+            dmPermission: false,
         },
 
         //below are osu related commands
