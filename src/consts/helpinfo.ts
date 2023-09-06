@@ -601,31 +601,6 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'settime',
-        description: 'Shows the current time in a specific timezone. ',
-        usage: 'settime <timezone>',
-        slashusage: 'settime <timezone>',
-        examples: [
-            {
-                text: 'PREFIXMSGsettime AEST',
-                descriptor: 'Set\'s the user\'s timezone to Australian Eastern Standard Time'
-            },
-        ],
-        aliases: [],
-        options: [
-            {
-                name: 'timezone',
-                type: 'string',
-                required: false,
-                description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset)',
-                options: ['Formatted as [city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
-                defaultValue: 'UTC',
-                examples: ['Australia/Melbourne', 'Europe/Warsaw'],
-                commandTypes: ['message', 'interaction']
-            }
-        ]
-    },
-    {
         name: 'weather',
         description: 'Shows the weather for a specific region',
         usage: 'weather <region>',
@@ -1228,8 +1203,8 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'osuset',
-        description: 'Sets your osu! username/mode/skin',
-        usage: 'osuset <username> [-(mode)] [-skin]',
+        description: 'Sets your osu! username/mode/skin or any setting',
+        usage: 'osuset <username> [-(mode)] [-skin] [-timezone] [-location]',
         slashusage: 'osuset <username> [mode] [skin]',
         examples: [
             {
@@ -1253,7 +1228,7 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Sets your skin to sbr v11'
             },
         ],
-        aliases: ['setuser', 'set', 'setmode', 'setskin'],
+        aliases: ['setuser', 'set', 'setmode', 'setskin', 'settime', 'settz', 'setweather', 'setlocation'],
         options: [
             {
                 name: 'username',
@@ -1283,6 +1258,26 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: 'osu! default 2014',
                 examples: ['-skin sbr v11', 'skin:rafis hddt'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'timezone',
+                type: 'string',
+                required: false,
+                description: 'The timezone to set',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['-timezone auckland', '-tz UTC+6'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'location',
+                type: 'string',
+                required: false,
+                description: 'The location to set',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['-location melbourne', '-weather melbourne'],
                 commandTypes: ['message', 'interaction']
             }
         ]
