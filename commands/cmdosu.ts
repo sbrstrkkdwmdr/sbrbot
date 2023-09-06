@@ -147,7 +147,7 @@ export async function badges(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.profile.user.replace('[ID]', user),
                     edit: true
                 }
             }, input.canReply);
@@ -157,7 +157,7 @@ export async function badges(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError,
+                customString: errors.uErr.osu.profile.user.replace('[ID]', user),
                 config: input.config
             });
             return;
@@ -377,7 +377,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -387,7 +387,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user),
             config: input.config
         });
         return;
@@ -624,7 +624,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -634,7 +634,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user),
             config: input.config
         });
         return;
@@ -1297,7 +1297,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.rankings,
                 edit: true
             }
         }, input.canReply);
@@ -1307,7 +1307,7 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.rankings,
             config: input.config
         });
         return;
@@ -1962,7 +1962,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -1972,7 +1972,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user),
             config: input.config
         });
         return;
@@ -2026,7 +2026,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.profile.user.replace('[ID]', user),
                     edit: true
                 }
             }, input.canReply);
@@ -2036,7 +2036,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError,
+                customString: errors.uErr.osu.profile.user.replace('[ID]', user),
                 config: input.config
             });
             return;
@@ -2233,7 +2233,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: errors.apiError,
+                        content: errors.uErr.osu.scores.best.replace('[ID]', user),
                         edit: true
                     }
                 }, input.canReply);
@@ -2243,7 +2243,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
-                    customString: errors.apiError,
+                    customString: errors.uErr.osu.scores.best.replace('[ID]', user),
                     config: input.config
                 });
                 return;
@@ -2287,7 +2287,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: errors.apiError,
+                        content: errors.uErr.osu.map.group_nf.replace('[TYPE]', 'most played'),
                         edit: true
                     }
                 }, input.canReply);
@@ -2297,7 +2297,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                     commandType: input.commandType,
                     commandId: input.absoluteID,
                     object: input.obj,
-                    customString: errors.apiError,
+                    customString: errors.uErr.osu.map.group_nf.replace('[TYPE]', 'most played'),
                     config: input.config
                 });
                 return;
@@ -2626,7 +2626,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -2636,7 +2636,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user),
             config: input.config
         });
         return;
@@ -2710,7 +2710,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.rsact,
                 edit: true
             }
         }, input.canReply);
@@ -2720,7 +2720,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.rsact,
             config: input.config
         });
         return;
@@ -3100,7 +3100,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -3110,7 +3110,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user),
             config: input.config
         });
         return;
@@ -3176,7 +3176,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.scores.first.replace('[ID]', user),
                     edit: true
                 }
             }, input.canReply);
@@ -3186,7 +3186,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError,
+                customString: errors.uErr.osu.scores.first.replace('[ID]', user),
                 config: input.config
             });
             return;
@@ -3641,7 +3641,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.map.m.replace('[ID]', mapid),
                 edit: true
             }
         }, input.canReply);
@@ -3651,7 +3651,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.map.m.replace('[ID]', mapid),
             config: input.config
         });
         return;
@@ -3728,7 +3728,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.map.lb.replace('[ID]', mapid),
                     edit: true
                 }
             }, input.canReply);
@@ -3738,7 +3738,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError,
+                customString: errors.uErr.osu.map.lb.replace('[ID]', mapid),
                 config: input.config
             });
             return;
@@ -3919,7 +3919,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.map.lb.replace('[ID]', mapid),
                     edit: true
                 }
             }, input.canReply);
@@ -3929,7 +3929,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError,
+                customString: errors.uErr.osu.map.lb.replace('[ID]', mapid),
                 config: input.config
             });
             return;
@@ -4347,7 +4347,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -4357,7 +4357,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user),
             config: input.config
         });
         return;
@@ -4424,7 +4424,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.scores.best.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -4434,7 +4434,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.scores.best.replace('[ID]', user),
             config: input.config
         });
         return;
@@ -4887,7 +4887,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -4897,7 +4897,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user),
             config: input.config
         });
         return;
@@ -4959,7 +4959,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.scores.pinned.replace('[ID]', user),
                     edit: true
                 }
             }, input.canReply);
@@ -4969,7 +4969,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError,
+                customString: errors.uErr.osu.scores.pinned.replace('[ID]', user),
                 config: input.config
             });
             return;
@@ -5611,7 +5611,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -5621,7 +5621,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user),
             config: input.config
         });
         return;
@@ -5698,7 +5698,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.scores.recent.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -5708,7 +5708,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.scores.recent.replace('[ID]', user),
             config: input.config
         });
         return;
@@ -5850,7 +5850,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.map.m.replace('[ID]', `${curbm.id}`),
                     edit: true
                 }
             }, input.canReply);
@@ -5860,7 +5860,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 commandType: input.commandType,
                 commandId: input.absoluteID,
                 object: input.obj,
-                customString: errors.apiError,
+                customString: errors.uErr.osu.map.m.replace('[ID]', `${curbm.id}`),
                 config: input.config
             });
             return;
@@ -6911,7 +6911,9 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.score.nd
+                        .replace('[SID]', scoreid.toString())
+                        .replace('[MODE]', scoremode),
                 edit: true
             }
         }, input.canReply);
@@ -6921,7 +6923,9 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.score.nd
+                        .replace('[SID]', scoreid.toString())
+                        .replace('[MODE]', scoremode),
             config: input.config
         });
         return;
@@ -7032,7 +7036,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.map.m.replace('[ID]', `${scoredata.beatmap.id}`),
                 edit: true
             }
         }, input.canReply);
@@ -7042,7 +7046,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.map.m.replace('[ID]', `${scoredata.beatmap.id}`),
             config: input.config
         });
         return;
@@ -7220,7 +7224,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', scoredata.user.username),
                 edit: true
             }
         }, input.canReply);
@@ -7230,7 +7234,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.profile.user.replace('[ID]', scoredata.user.username),
             config: input.config
         });
         return;
@@ -7636,7 +7640,7 @@ export async function scorepost(input: extypes.commandInput) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: `${errors.uErr.osu.score.nf}`,
                 edit: true
             }
         }, input.canReply);
@@ -7646,7 +7650,7 @@ export async function scorepost(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: `${errors.uErr.osu.score.nf}`,
             config: input.config
         });
         return;
@@ -7688,7 +7692,7 @@ export async function scorepost(input: extypes.commandInput) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.map.m.replace('[ID]', `${scoredata.beatmap.id}`),
                 edit: true
             }
         }, input.canReply);
@@ -7698,7 +7702,7 @@ export async function scorepost(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.map.m.replace('[ID]', `${scoredata.beatmap.id}`),
             config: input.config
         });
         return;
@@ -8332,7 +8336,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -8342,7 +8346,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user),
             config: input.config
         });
         return;
@@ -8406,7 +8410,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.map.m.replace('[ID]', mapid),
                 edit: true
             }
         }, input.canReply);
@@ -8416,7 +8420,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.map.m.replace('[ID]', mapid),
             config: input.config
         });
         return;
@@ -8469,7 +8473,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.scores.map.replace('[ID]', user).replace('[MID]', mapid),
                 edit: true
             }
         }, input.canReply);
@@ -8479,7 +8483,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.scores.map.replace('[ID]', user).replace('[MID]', mapid),
             config: input.config
         });
         return;
@@ -8947,7 +8951,7 @@ export async function scorestats(input: extypes.commandInput) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -8957,7 +8961,7 @@ export async function scorestats(input: extypes.commandInput) {
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
-            customString: errors.apiError,
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user),
             config: input.config
         });
         return;
@@ -9016,7 +9020,7 @@ export async function scorestats(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.scores.best.replace('[ID]', user).replace('top', scoreTypes == 'best' ? 'top' : scoreTypes),
                     edit: true
                 }
             }, input.canReply);
@@ -9027,7 +9031,7 @@ export async function scorestats(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.scores.best.replace('[ID]', user).replace('top', scoreTypes == 'best' ? 'top' : scoreTypes)
             });
             return;
         }
@@ -9522,7 +9526,7 @@ export async function simulate(input: extypes.commandInput) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.map.m.replace('[ID]', mapid),
                 edit: true
             }
         }, input.canReply);
@@ -9533,7 +9537,7 @@ export async function simulate(input: extypes.commandInput) {
             commandId: input.absoluteID,
             object: input.obj,
             config: input.config,
-            customString: errors.apiError
+            customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
         });
         return;
     }
@@ -9974,7 +9978,7 @@ export async function map(input: extypes.commandInput) {
                         commandType: input.commandType,
                         obj: input.obj,
                         args: {
-                            content: errors.apiError,
+                            content: errors.uErr.osu.map.ms.replace('[ID]', `${setid}`),
                             edit: true
                         }
                     }, input.canReply);
@@ -9985,7 +9989,7 @@ export async function map(input: extypes.commandInput) {
                         commandId: input.absoluteID,
                         object: input.obj,
                         config: input.config,
-                        customString: errors.apiError
+                        customString: errors.uErr.osu.map.ms.replace('[ID]', `${setid}`)
                     });
                     return;
                 }
@@ -9994,7 +9998,7 @@ export async function map(input: extypes.commandInput) {
                         commandType: input.commandType,
                         obj: input.obj,
                         args: {
-                            content: errors.uErr.osu.map.ms.replace('[ID]', mapid),
+                            content: errors.uErr.osu.map.ms.replace('[ID]', `${setid}`),
                             edit: true
                         }
                     }, input.canReply);
@@ -10005,7 +10009,7 @@ export async function map(input: extypes.commandInput) {
                         commandId: input.absoluteID,
                         object: input.obj,
                         config: input.config,
-                        customString: errors.uErr.osu.map.ms.replace('[ID]', mapid)
+                        customString: errors.uErr.osu.map.ms.replace('[ID]', `${setid}`)
                     });
                     return;
                 }
@@ -10187,7 +10191,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.map.m.replace('[ID]', mapid),
                     edit: true
                 }
             }, input.canReply);
@@ -10198,7 +10202,7 @@ export async function map(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
             });
             return;
         }
@@ -10254,7 +10258,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.map.ms.replace('[ID]', `${mapdata.beatmapset_id}`),
                     edit: true
                 }
             }, input.canReply);
@@ -10265,7 +10269,7 @@ export async function map(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.map.ms.replace('[ID]', `${mapdata.beatmapset_id}`)
             });
             return;
         }
@@ -10346,7 +10350,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.map.search,
                     edit: true
                 }
             }, input.canReply);
@@ -10357,7 +10361,7 @@ export async function map(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.map.search
             });
             return;
         }
@@ -10479,7 +10483,7 @@ export async function map(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.map.m.replace('[ID]', usemapidpls),
                     edit: true
                 }
             }, input.canReply);
@@ -10490,7 +10494,7 @@ export async function map(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.map.m.replace('[ID]', usemapidpls)
             });
             return;
         }
@@ -10813,7 +10817,7 @@ HP${baseHP}`;
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.profile.user.replace('[ID]', `${mapdata.beatmapset.user_id}`),
                     edit: true
                 }
             }, input.canReply);
@@ -10824,7 +10828,7 @@ HP${baseHP}`;
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.profile.user.replace('[ID]', `${mapdata.beatmapset.user_id}`)
             });
             return;
         }
@@ -11001,7 +11005,7 @@ HP${baseHP}`;
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: errors.apiError,
+                        content: errors.uErr.osu.profile.user.replace('[ID]', `${mapdata.user_id}`),
                         edit: true
                     }
                 }, input.canReply);
@@ -11012,7 +11016,7 @@ HP${baseHP}`;
                     commandId: input.absoluteID,
                     object: input.obj,
                     config: input.config,
-                    customString: errors.apiError
+                    customString: errors.uErr.osu.profile.user.replace('[ID]', `${mapdata.user_id}`)
                 });
                 return;
             }
@@ -11434,7 +11438,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.map.m.replace('[ID]', mapid),
                     edit: true
                 }
             }, input.canReply);
@@ -11445,7 +11449,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
             });
             return;
         }
@@ -11497,7 +11501,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.map.ms.replace('[ID]', mapdata.beatmapset_id.toString()),
                     edit: true
                 }
             }, input.canReply);
@@ -11508,7 +11512,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.map.ms.replace('[ID]', mapdata.beatmapset_id.toString())
             });
             return;
         }
@@ -11520,7 +11524,7 @@ export async function ppCalc(input: extypes.commandInput) {
                     commandType: input.commandType,
                     obj: input.obj,
                     args: {
-                        content: errors.uErr.osu.map.m.replace('[ID]', mapdata.beatmapset_id.toString()),
+                        content: errors.uErr.osu.map.ms.replace('[ID]', mapdata.beatmapset_id.toString()),
                         edit: true
                     }
                 }, input.canReply);
@@ -11532,7 +11536,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.uErr.osu.map.m.replace('[ID]', mapdata.beatmapset_id.toString())
+                customString: errors.uErr.osu.map.ms.replace('[ID]', mapdata.beatmapset_id.toString())
             });
             return;
         }
@@ -11589,7 +11593,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq),
                     edit: true
                 }
             }, input.canReply);
@@ -11600,7 +11604,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.map.search_nf.replace('[INPUT]', maptitleq)
             });
             return;
         }
@@ -11693,7 +11697,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.map.m.replace('[ID]', mapidtest2[0].id),
                     edit: true
                 }
             }, input.canReply);
@@ -11704,7 +11708,7 @@ export async function ppCalc(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.map.m.replace('[ID]', mapidtest2[0].id)
             });
             return;
         }
@@ -12476,7 +12480,7 @@ export async function recMap(input: extypes.commandInput) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -12487,7 +12491,7 @@ export async function recMap(input: extypes.commandInput) {
             commandId: input.absoluteID,
             object: input.obj,
             config: input.config,
-            customString: errors.apiError
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user)
         });
         return;
     }
@@ -13187,7 +13191,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -13198,7 +13202,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             commandId: input.absoluteID,
             object: input.obj,
             config: input.config,
-            customString: errors.apiError
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user)
         });
         return;
     }
@@ -13263,7 +13267,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.map.group_nf.replace('[TYPE]', filter),
                     edit: true
                 }
             }, input.canReply);
@@ -13274,7 +13278,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.map.group_nf.replace('[TYPE]', filter)
             });
             return;
         }
@@ -13683,7 +13687,7 @@ export async function trackadd(input: extypes.commandInput) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -13694,7 +13698,7 @@ export async function trackadd(input: extypes.commandInput) {
             commandId: input.absoluteID,
             object: input.obj,
             config: input.config,
-            customString: errors.apiError
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user)
         });
         return;
     }
@@ -13912,7 +13916,7 @@ export async function trackremove(input: extypes.commandInput) {
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -13923,7 +13927,7 @@ export async function trackremove(input: extypes.commandInput) {
             commandId: input.absoluteID,
             object: input.obj,
             config: input.config,
-            customString: errors.apiError
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user)
         });
         return;
     }
@@ -14247,7 +14251,6 @@ export async function tracklist(input: extypes.commandInput) {
  * compare stats/plays
  */
 export async function compare(input: extypes.commandInput) {
-
     let commanduser: Discord.User;
     let type: 'profile' | 'top' | 'mapscore' = 'profile';
     let first = null;
@@ -14303,7 +14306,6 @@ export async function compare(input: extypes.commandInput) {
             break;
         case 'button': {
             input.obj = (input.obj as Discord.ButtonInteraction);
-
             if (!input.obj.message.embeds[0]) {
                 return;
             }
@@ -14337,13 +14339,12 @@ export async function compare(input: extypes.commandInput) {
 
             if (page > pagefin) page = pagefin;
 
-
             const firsti = input.obj.message.embeds[0].description.split('and')[0];
             const secondi = input.obj.message.embeds[0].description.split('and')[1].split('have')[0];
 
             //user => [name](url)
-            first = firsti.split('u/')[1].split(')')[0];
-            second = secondi.split('u/')[1].split(')')[0];
+            first = firsti.split('users/')[1].split(')')[0];
+            second = secondi.split('users/')[1].split(')')[0];
         }
             break;
     }
@@ -14352,7 +14353,6 @@ export async function compare(input: extypes.commandInput) {
         if (input.overrides.type != null) type = input.overrides.type;
     }
     //==============================================================================================================================================================================================
-
     log.logCommand({
         event: 'Command',
         commandType: input.commandType,
@@ -14394,7 +14394,6 @@ export async function compare(input: extypes.commandInput) {
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
     let fieldFirst: Discord.EmbedField = {
         name: 'First',
         value: 'Loading...',
@@ -14420,7 +14419,6 @@ export async function compare(input: extypes.commandInput) {
         page = 1;
     }
     page--;
-
     try {
         if (second == null) {
             if (secondsearchid) {
@@ -14480,7 +14478,7 @@ export async function compare(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.profile.user.replace('[ID]', first),
                     edit: true
                 }
             }, input.canReply);
@@ -14491,7 +14489,7 @@ export async function compare(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.profile.user.replace('[ID]', first)
             });
             return;
         }
@@ -14527,7 +14525,7 @@ export async function compare(input: extypes.commandInput) {
                 commandType: input.commandType,
                 obj: input.obj,
                 args: {
-                    content: errors.apiError,
+                    content: errors.uErr.osu.profile.user.replace('[ID]', first),
                     edit: true
                 }
             }, input.canReply);
@@ -14538,7 +14536,7 @@ export async function compare(input: extypes.commandInput) {
                 commandId: input.absoluteID,
                 object: input.obj,
                 config: input.config,
-                customString: errors.apiError
+                customString: errors.uErr.osu.profile.user.replace('[ID]', first)
             });
             return;
         }
@@ -14548,7 +14546,6 @@ export async function compare(input: extypes.commandInput) {
             }
             return;
         }
-
         func.storeFile(firstuserReq, first, 'osudata');
         func.storeFile(firstuserReq, firstuser.id, 'osudata');
         func.storeFile(seconduserReq, seconduser.id, 'osudata');
@@ -14624,7 +14621,7 @@ export async function compare(input: extypes.commandInput) {
                         commandType: input.commandType,
                         obj: input.obj,
                         args: {
-                            content: errors.apiError,
+                            content: errors.uErr.osu.scores.best.replace('[ID]', firstuser.id),
                             edit: true
                         }
                     }, input.canReply);
@@ -14635,7 +14632,7 @@ export async function compare(input: extypes.commandInput) {
                         commandId: input.absoluteID,
                         object: input.obj,
                         config: input.config,
-                        customString: errors.apiError
+                        customString: errors.uErr.osu.scores.best.replace('[ID]', firstuser.id)
                     });
                     return;
                 }
@@ -14670,7 +14667,7 @@ export async function compare(input: extypes.commandInput) {
                         commandType: input.commandType,
                         obj: input.obj,
                         args: {
-                            content: errors.apiError,
+                            content: errors.uErr.osu.scores.best.replace('[ID]', seconduser.id),
                             edit: true
                         }
                     }, input.canReply);
@@ -14681,7 +14678,7 @@ export async function compare(input: extypes.commandInput) {
                         commandId: input.absoluteID,
                         object: input.obj,
                         config: input.config,
-                        customString: errors.apiError
+                        customString: errors.uErr.osu.scores.best.replace('[ID]', seconduser.id)
                     });
                     return;
                 }
@@ -14795,7 +14792,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
         obj: input.obj,
         args: {
             embeds: [embed],
-            components: useComponents
+            components: useComponents,
         }
     }, input.canReply);
 
@@ -15540,7 +15537,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.profile.user.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -15551,7 +15548,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
             commandId: input.absoluteID,
             object: input.obj,
             config: input.config,
-            customString: errors.apiError
+            customString: errors.uErr.osu.profile.user.replace('[ID]', user)
         });
         return;
     }
@@ -15614,7 +15611,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
             commandType: input.commandType,
             obj: input.obj,
             args: {
-                content: errors.apiError,
+                content: errors.uErr.osu.scores.best.replace('[ID]', user),
                 edit: true
             }
         }, input.canReply);
@@ -15625,7 +15622,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
             commandId: input.absoluteID,
             object: input.obj,
             config: input.config,
-            customString: errors.apiError
+            customString: errors.uErr.osu.scores.best.replace('[ID]', user)
         });
         return;
     }

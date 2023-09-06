@@ -34,6 +34,7 @@ export const uErr = {
         },
         rankings: 'Could not fetch rankings',
         datamissing: 'Missing data',
+        rsact: 'Could not fetch recent activity',
         map: {
             lb: 'Could not find leaderboards for [ID]',
             m: 'Could not find beatmap [ID]',
@@ -48,6 +49,7 @@ export const uErr = {
             strains_graph: 'Could not produce strains graph',
             unranked: 'Beatmap is unranked',
             url: 'Invalid URL given',
+            group_nf: 'Could not find [TYPE] beatmaps'
         },
         score: {
             nf: 'Could not find the requested score',
