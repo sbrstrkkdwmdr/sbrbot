@@ -476,3 +476,4 @@ changes:
 [FIX] mania mods being apllied to non-mania maps
 [QOL] change saved mods to `null` (NM) if from a map/ppcalc command (when no args are given, map id and mods are taken from last used)
 [QOL] update helpinfo
+[QOL] add timestamp to time cmd

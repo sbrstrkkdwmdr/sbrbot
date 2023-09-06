@@ -2146,7 +2146,9 @@ export async function time(input: extypes.commandInput) {
                 `\n\`Full Date         | \`${curTime.format("ddd, DD MMM YYYY hh:mm:ssA Z")}` +
                 `\n\`Full Date(24h)    | \`${curTime.format("ddd, DD MMM YYYY HH:mm:ss Z")}` +
                 `\n\`Full Date ISO8601 | \`${curTime.toISOString(true)}` +
-                `\n\`EPOCH(ms)         | \`${curTime.valueOf()}`,
+                `\n\`EPOCH(ms)         | \`${curTime.valueOf()}` +
+                `\n\`Time              | \`<t:${curTime.valueOf()}:F>`
+                ,
             inline: false
         },
     ];
