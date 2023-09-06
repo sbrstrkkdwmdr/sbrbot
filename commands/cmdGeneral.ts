@@ -1909,7 +1909,7 @@ export async function remind(input: extypes.commandInput & { reminders: extypes.
         useEmbeds = [reminder];
     } else {
         const absTime = Math.floor(((new Date().getTime()) + calc.timeToMs(time)) / 1000);
-        remindingText = `Sending reminder in <t:${absTime}:R> (<t:${absTime}:f>)`;
+        remindingText = `Sending reminder <t:${absTime}:R> (<t:${absTime}:f>)`;
         sendremind(reminder, time, sendtochannel, remindertxt, commanduser, absTime);
     }
 
