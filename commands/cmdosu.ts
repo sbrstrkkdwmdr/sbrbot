@@ -1423,7 +1423,7 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
         obj: input.obj,
         args: {
             embeds: [embed],
-            components: [pgbuttons, buttons]
+            components: [pgbuttons, buttons],
         }
     }, input.canReply);
 
@@ -15151,7 +15151,9 @@ export async function saved(input: extypes.commandInput) {
     let show = {
         name: true,
         mode: true,
-        skin: true
+        skin: true,
+        tz: true,
+        weather: true,
     };
     let overrideTitle;
 
@@ -15191,21 +15193,45 @@ export async function saved(input: extypes.commandInput) {
                     show = {
                         name: true,
                         mode: false,
-                        skin: false
+                        skin: false,
+                        tz: false,
+                        weather: false,
                     };
                     break;
                 case 'mode':
                     show = {
                         name: false,
                         mode: true,
-                        skin: false
+                        skin: false,
+                        tz: false,
+                        weather: false,
                     };
                     break;
                 case 'skin':
                     show = {
                         name: false,
                         mode: false,
-                        skin: true
+                        skin: true,
+                        tz: false,
+                        weather: false,
+                    };
+                    break;
+                case 'tz':
+                    show = {
+                        name: false,
+                        mode: false,
+                        skin: false,
+                        tz: true,
+                        weather: false,
+                    };
+                    break;
+                case 'weather':
+                    show = {
+                        name: false,
+                        mode: false,
+                        skin: false,
+                        tz: false,
+                        weather: true,
                     };
                     break;
             }
@@ -15273,12 +15299,28 @@ export async function saved(input: extypes.commandInput) {
             fields.push({
                 name: 'Mode',
                 value: `${cuser.mode && cuser.mode.length > 1 ? cuser.mode : 'osu (default)'}`,
+                inline: true
             });
         }
         if (show.skin == true) {
             fields.push({
                 name: 'Skin',
                 value: `${cuser.skin && cuser.skin.length > 1 ? cuser.skin : 'None'}`,
+                inline: true
+            });
+        }
+        if (show.tz == true) {
+            fields.push({
+                name: 'Timezone',
+                value: `${cuser.timezone && cuser.timezone.length > 1 ? cuser.timezone : 'None'}`,
+                inline: true
+            });
+        }
+        if (show.weather == true) {
+            fields.push({
+                name: 'Location',
+                value: `${cuser.location && cuser.location.length > 1 ? cuser.location : 'None'}`,
+                inline: true
             });
         }
         Embed.addFields(fields);
