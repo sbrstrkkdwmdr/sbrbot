@@ -436,24 +436,24 @@ VERSION 0.5.3
 2023-09-03 
 commit: 40c3b6731e34f42cbff523a015904aa12e4232bd
 changes:
-[QOL] versions are now evenly spaced
+[QOL] versions are now evenly spaced (changelog)
 [QOL] change wind directions to shorthand (west-southwest -> WSW)
-[FIX] page # when requesting to show all versions
-[QOL] show all versions instead of just latest when an invalid input is given
+[FIX] page # when requesting to show all versions (changelog)
+[QOL] show all versions instead of just latest when an invalid input is given (changelog)
 [QOL] changes in changelog are categorised by type
 [QOL] add buttons to turn graph mode to user profile mode on osu cmd
-[QOL] show grade if passed
+[QOL] show grade if passed (recent)
 [FIX] east/west coords being swapped
 [QOL] add sun/moon emojis to day/night
 [QOL] update config checker and README
 [FIX] errors in replayparse
 [FIX] rsbest saying "play" instead of "plays"
 [QOL] switched rank pp to use regression to predict
-[ADD] add reminders list to remind command
-[FIX] east/west being incorrect - i was using the latitude value by accident mbmb
+[ADD] add reminders list if no args (remind)
+[FIX] east/west using latitude instead of longitude
 [QOL] store weather data to reduce api calls needed
 [QOL] put weather precipitation data on the same graph
-[QOL] categories are now shown in tropical storms
+[QOL] categories are now shown in tropical storms selector
 [QOL] override pp/rank predictions if a value is almost the exact same as the input
 [QOL] change map fail graph from line to stacked bar graph
 [QOL] change precipitation graph to bar graph
