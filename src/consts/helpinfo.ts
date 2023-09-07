@@ -1474,7 +1474,7 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'pp',
-        description: 'Estimates the rank of a user from the pp given',
+        description: 'Estimates the rank of a user from the pp given. If a value matches the database, that will be used instead of an estimation.',
         usage: 'pp <value> [-(mode)]',
         slashusage: 'pp <value> [mode]',
         examples: [
@@ -1513,7 +1513,7 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'rank',
-        description: 'Estimates the performance points of a user from the rank given',
+        description: 'Estimates the performance points of a user from the rank given. If a value matches the database, that will be used instead of an estimation.',
         usage: 'rank <value> [-(mode)]',
         slashusage: 'rank <value> [mode]',
         examples: [
