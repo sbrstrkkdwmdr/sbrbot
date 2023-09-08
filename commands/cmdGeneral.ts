@@ -1712,30 +1712,38 @@ ${trueping}`);
         embeds: [pingEmbed],
         allowedMentions: { repliedUser: false },
         failIfNotExists: true
-    }).then((msg: Discord.Message | Discord.CommandInteraction) => {
+    }).then((msg: Discord.Message | Discord.ChatInputCommandInteraction) => {
         const timeToEdit = new Date().getTime() - preEdit.getTime();
         pingEmbed.setDescription(`
 Client latency: ${input.client.ws.ping}ms
 ${trueping}
 ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
 `);
-        switch (input.commandType) {
-            case 'message':
-                //@ts-expect-error 'edit' property does not exist on CommandInteraction
-                msg.edit({
-                    embeds: [pingEmbed],
-                    allowedMentions: { repliedUser: false },
-                });
-                break;
-            case 'interaction':
-                //@ts-expect-error 'editReply' property does not exist on Message
-                input.obj.editReply({
-                    embeds: [pingEmbed],
-                    allowedMentions: { repliedUser: false },
-                });
-                break;
-
-        }
+        msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.commandType == 'message' ? msg : input.obj,
+            args: {
+                embeds: [pingEmbed],
+                edit: true,
+                editAsMsg: true,
+            }
+        }, input.canReply);
+        // switch (input.commandType) {
+        //     case 'message':
+        //         //@ts-expect-error 'edit' property does not exist on CommandInteraction
+        //         msg.edit({
+        //             embeds: [pingEmbed],
+        //             allowedMentions: { repliedUser: false },
+        //         });
+        //         break;
+        //     case 'interaction':
+        //         //@ts-expect-error 'editReply' property does not exist on Message
+        //         input.obj.editReply({
+        //             embeds: [pingEmbed],
+        //             allowedMentions: { repliedUser: false },
+        //         });
+        //         break;
+        // }
     })
         .catch();
 
@@ -2148,7 +2156,7 @@ export async function time(input: extypes.commandInput) {
                 `\n\`Full Date ISO8601 | \`${curTime.toISOString(true)}` +
                 `\n\`EPOCH(ms)         | \`${curTime.valueOf()}` +
                 `\n\`Local             | \`<t:${curTime.valueOf() / 1000}:F>`
-                ,
+            ,
             inline: false
         },
     ];

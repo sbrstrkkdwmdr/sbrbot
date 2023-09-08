@@ -22,6 +22,7 @@ export async function sendMessage(input: {
         ephemeral?: boolean,
         react?: boolean,
         edit?: boolean,
+        editAsMsg?: boolean,
     };
 },
     canReply: boolean
@@ -71,6 +72,17 @@ export async function sendMessage(input: {
                             components: input.args.components ?? [],
                         })
                             .catch(x => console.log(x));
+                    } else if (input.args.editAsMsg) {
+                        try {
+                            (input.obj as Discord.Message<any>).edit({
+                                content: `${input.args.content ?? ''}`,
+                                embeds: input.args.embeds ?? [],
+                                files: input.args.files ?? [],
+                                components: input.args.components ?? [],
+                            });
+                        } catch (err) {
+
+                        }
                     } else {
                         (input.obj as Discord.Message<any>).reply({
                             content: `${input.args.content ?? ''}`,
@@ -92,7 +104,7 @@ export async function sendMessage(input: {
                 case 'interaction': {
                     if (input.args.edit == true) {
                         setTimeout(() => {
-                            (input.obj as Discord.CommandInteraction<any>).editReply({
+                            (input.obj as Discord.ChatInputCommandInteraction<any>).editReply({
                                 content: `${input.args.content ?? ''}`,
                                 embeds: input.args.embeds ?? [],
                                 files: input.args.files ?? [],
@@ -102,7 +114,7 @@ export async function sendMessage(input: {
                                 .catch();
                         }, 1000);
                     } else {
-                        (input.obj as Discord.CommandInteraction<any>).reply({
+                        (input.obj as Discord.ChatInputCommandInteraction<any>).reply({
                             content: `${input.args.content ?? ''}`,
                             embeds: input.args.embeds ?? [],
                             files: input.args.files ?? [],
