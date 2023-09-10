@@ -1111,12 +1111,14 @@ export async function graph(
         showAxisX?: boolean;
         showAxisY?: boolean;
         stacksSeparate?: boolean;
+        reverse?: boolean;
     },
     extra?: {
         data: number[];
         label: string;
         separateAxis: boolean;
         customStack?: number;
+        reverse?: boolean;
     }[]
 ) {
 
@@ -1148,6 +1150,9 @@ export async function graph(
         curx = x;
         cury = y;
     }
+
+    let secondReverse = false;
+
     const datasets = [{
         label: label,
         data: cury,
@@ -1157,8 +1162,8 @@ export async function graph(
         pointRadius: other.pointSize ?? 2,
         yAxisID: '1y'
     }];
-    if(other?.stacked == true){
-        datasets[0]['stack'] = 'Stack 0'
+    if (other?.stacked == true) {
+        datasets[0]['stack'] = 'Stack 0';
     }
     let showSecondAxis = false;
     if (!(extra == null || extra == undefined)) {
@@ -1175,6 +1180,7 @@ export async function graph(
                     pointRadius: other.pointSize ?? 2,
                     yAxisID: newData.separateAxis ? '2y' : '1y'
                 };
+                newData.reverse ? secondReverse = true : null;
                 if (other?.type == 'bar' && other?.stacked == true && other?.stacksSeparate == true) {
                     newData.customStack ?
                         xData['stack'] = `Stack ${newData.customStack}` :
@@ -1230,6 +1236,7 @@ export async function graph(
                     position: 'left',
                     display: true,
                     ticks: {
+                        reverse: other.reverse,
                         beginAtZero: other.startzero
                     },
                 }, {
@@ -1238,6 +1245,7 @@ export async function graph(
                     position: 'right',
                     display: showSecondAxis,
                     ticks: {
+                        reverse: secondReverse,
                         beginAtZero: other.startzero
                     },
                 }
@@ -1266,9 +1274,12 @@ export async function graph(
     chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250);
 
     const filename = `${(new Date).getTime()}`;
-    const curt = `${path}/cache/graphs/${filename}.jpg`;
-
-    await chart.toFile(curt);
+    let curt = `${path}/cache/graphs/${filename}.jpg`;
+    try {
+        await chart.toFile(curt);
+    } catch (err) {
+        curt = `${precomppath}/files/blank.jpg`;
+    }
 
     return {
         path: curt,

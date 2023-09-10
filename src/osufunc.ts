@@ -1,6 +1,6 @@
 import charttoimg from 'chartjs-to-image';
 import fs from 'fs';
-import fetch from 'node-fetch';
+import nfetch from 'node-fetch';
 import * as osuparsers from 'osu-parsers';
 import * as replayparser from 'osureplayparser';
 import perf from 'perf_hooks';
@@ -956,7 +956,7 @@ export async function apiget(input: apiInput) {
         if (mainconst.isTesting) {
             datafirst = apigetOffline(input);
         } else {
-            datafirst = await fetch(url, {
+            datafirst = await nfetch(url, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${access_token}`,
@@ -1614,7 +1614,7 @@ export async function dlMap(mapid: number | string, curCall: number, lastUpdated
             fs.mkdirSync(`${path}/files/maps/`, { recursive: true });
         }
         const writer = fs.createWriteStream(thispath);
-        const res = await fetch(url);
+        const res = await nfetch(url);
         log.toOutput(`Beatmap file download: ${url}`, config);
         res.body.pipe(writer);
         await new Promise((resolve, reject) => {

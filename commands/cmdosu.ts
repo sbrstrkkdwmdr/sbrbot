@@ -2148,9 +2148,24 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             const dataplay = ('start,' + osudata.monthly_playcounts.map(x => x.start_date).join(',')).split(',');
             const datarank = ('start,' + osudata.rank_history.data.map(x => x).join(',')).split(',');
 
-            const play = await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount', false, false, true, true, true, null, true);
-            const rank = await osufunc.graph(datarank, osudata.rank_history.data, 'Rank', null, null, null, null, null, 'rank', true);
+            const play =
+                // await osufunc.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount', false, false, true, true, true, null, true);
+                await func.graph(dataplay, osudata.monthly_playcounts.map(x => x.count), 'Playcount', {
+                    startzero: true,
+                    fill: true,
+                    displayLegend: true,
+                    pointSize: 0,
 
+                });
+            const rank =
+                //  await osufunc.graph(datarank, osudata.rank_history.data, 'Rank', null, null, null, null, null, 'rank', true);
+                await func.graph(datarank, osudata.rank_history.data, 'Rank', {
+                    startzero: false,
+                    fill: false,
+                    displayLegend: true,
+                    reverse: true,
+                    pointSize: 0,
+                });
             const fileplay = new Discord.AttachmentBuilder(`${play.path}`);
             const filerank = new Discord.AttachmentBuilder(`${rank.path}`);
 
@@ -6660,8 +6675,13 @@ export async function replayparse(input: extypes.commandInput) {
         `${passper.toFixed(2)}% passed (${calc.secondsToTime(passper / 100 * mapdata.hit_length)}/${calc.secondsToTime(mapdata.hit_length)})`
         : '';
 
-    const chartInit = await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay');
-
+    const chartInit =
+        // await osufunc.graph(dataLabel, lifebarF, 'Health', null, null, null, null, null, 'replay');
+        await func.graph(dataLabel, lifebarF, 'Health', {
+            fill: false,
+            startzero: true,
+            pointSize: 0,
+        });
     const chartFile = new Discord.AttachmentBuilder(chartInit.path);
 
     const chart = chartInit.filename;
@@ -6912,8 +6932,8 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             obj: input.obj,
             args: {
                 content: errors.uErr.osu.score.nd
-                        .replace('[SID]', scoreid.toString())
-                        .replace('[MODE]', scoremode),
+                    .replace('[SID]', scoreid.toString())
+                    .replace('[MODE]', scoremode),
                 edit: true
             }
         }, input.canReply);
@@ -6924,8 +6944,8 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             commandId: input.absoluteID,
             object: input.obj,
             customString: errors.uErr.osu.score.nd
-                        .replace('[SID]', scoreid.toString())
-                        .replace('[MODE]', scoremode),
+                .replace('[SID]', scoreid.toString())
+                .replace('[MODE]', scoremode),
             config: input.config
         });
         return;
@@ -10186,27 +10206,6 @@ export async function map(input: extypes.commandInput) {
         }
 
         mapdata = mapdataReq.apiData;
-        if (mapdataReq?.error) {
-            await msgfunc.sendMessage({
-                commandType: input.commandType,
-                obj: input.obj,
-                args: {
-                    content: errors.uErr.osu.map.m.replace('[ID]', mapid),
-                    edit: true
-                }
-            }, input.canReply);
-            log.logCommand({
-                event: 'Error',
-                commandName: 'map',
-                commandType: input.commandType,
-                commandId: input.absoluteID,
-                object: input.obj,
-                config: input.config,
-                customString: errors.uErr.osu.map.m.replace('[ID]', mapid)
-            });
-            return;
-        }
-
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
 
         if (mapdata?.hasOwnProperty('error')) {
@@ -10812,27 +10811,6 @@ HP${baseHP}`;
         }
 
         mapperdata = mapperdataReq.apiData;
-        if (mapperdataReq?.error) {
-            await msgfunc.sendMessage({
-                commandType: input.commandType,
-                obj: input.obj,
-                args: {
-                    content: errors.uErr.osu.profile.user.replace('[ID]', `${mapdata.beatmapset.user_id}`),
-                    edit: true
-                }
-            }, input.canReply);
-            log.logCommand({
-                event: 'Error',
-                commandName: 'map',
-                commandType: input.commandType,
-                commandId: input.absoluteID,
-                object: input.obj,
-                config: input.config,
-                customString: errors.uErr.osu.profile.user.replace('[ID]', `${mapdata.beatmapset.user_id}`)
-            });
-            return;
-        }
-
         osufunc.debug(mapperdataReq, 'command', 'map', input.obj.guildId, 'mapperData');
 
         if (mapperdata?.hasOwnProperty('error')) {
@@ -10858,7 +10836,14 @@ HP${baseHP}`;
         }
         let mapgraph;
         if (strains) {
-            const mapgraphInit = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains');
+            const mapgraphInit =
+                // await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains');
+                await func.graph(strains.strainTime, strains.value, 'Strains', {
+                    startzero: true,
+                    type: 'bar',
+                    fill: true,
+                    displayLegend: true,
+                });
             useFiles.push(mapgraphInit.path);
 
             mapgraph = mapgraphInit.filename;
@@ -12687,7 +12672,13 @@ export async function maplocal(input: extypes.commandInput) {
 
     osufunc.debug(strains, 'fileparse', 'map (file)', input.obj.guildId, 'strains');
     try {
-        const mapgraphInit = await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains');
+        const mapgraphInit = await func.graph(strains.strainTime, strains.value, 'Strains', {
+            startzero: true,
+            type: 'bar',
+            fill: true,
+            displayLegend: true,
+        });
+        // await osufunc.graph(strains.strainTime, strains.value, 'Strains', null, null, null, null, null, 'strains');
         useFiles.push(mapgraphInit.path);
 
         mapgraph = mapgraphInit.filename;
