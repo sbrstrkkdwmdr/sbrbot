@@ -6,6 +6,7 @@ import * as replayparser from 'osureplayparser';
 // import strmath from 'math-from-string';
 import * as jimp from 'jimp';
 import * as luxon from 'luxon';
+import * as stat from 'simple-statistics';
 import pkgjson from '../package.json' assert { type: 'json' };
 import { path, precomppath } from '../path.js';
 import * as calc from '../src/calc.js';
@@ -29,7 +30,6 @@ import * as extypes from '../src/types/extratypes.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
 import * as othertypes from '../src/types/othertypes.js';
 import * as msgfunc from './msgfunc.js';
-
 /**
  * 
  */
@@ -329,14 +329,15 @@ export async function convert(input: extypes.commandInput) {
     let cat1: string = '';
     let cat2: string = '';
     let num: number = 1;
-
+    let numAsStr: string = num.toString();
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             cat1 = input.args[0] ?? '';
             cat2 = input.args[1] ?? '';
-            num = parseFloat(input.args[2]) ?? 1;
+            num = +(input.args[2]) ?? 1;
+            numAsStr = input.args[2] ?? '1';
             if (!input.args[0]) {
                 cat1 = 'help';
             }
@@ -345,9 +346,11 @@ export async function convert(input: extypes.commandInput) {
             }
             if (isNaN(num)) {
                 num = 0;
+                numAsStr = '0';
             }
             if (!input.args[2]) {
                 num = 0;
+                numAsStr = '0';
             }
         }
             break;
@@ -360,6 +363,7 @@ export async function convert(input: extypes.commandInput) {
             cat1 = input.obj.options.getString('from') ?? '';
             cat2 = input.obj.options.getString('to') ?? '';
             num = input.obj.options.getNumber('number');
+            numAsStr = `${num}`;
         }
 
             //==============================================================================================================================================================================================
@@ -415,7 +419,7 @@ export async function convert(input: extypes.commandInput) {
             {
                 name: 'Distance',
                 value: [
-                    'inch (in)', 'foot (ft)', 'metre (m)', 'mile (mi)', 'astronomical unit (au)', 'light year (ly)',
+                    'inch (in)', 'foot (ft)', 'metre (m)', 'mile (mi)', 'astronomical unit (au)', 'light year (ly)', 'parsec (pc)'
                 ].join(' | '),
                 inline: true
             },
@@ -659,7 +663,7 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
 
                         conv = curObject.type;
                         convtype = `${fromType} => ${toType}`;
-                        eq = `${finNum}`;
+                        eq = `${calc.toScientificNotation(finNum, `${numAsStr}`.replace(/[\.\-]/gm, '').length)}`;
 
                         const usVol = [];
 

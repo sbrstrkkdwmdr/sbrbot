@@ -77,6 +77,35 @@ export function sigfig(a: number, b: number) {
 }
 
 /**
+ */
+export function toScientificNotation(number: number, significantFigures: number) {
+    // Check if the number is not zero
+    if (number !== 0) {
+        // Calculate the order of magnitude (exponent) of the number
+        const exponent = Math.floor(Math.log10(Math.abs(number)));
+
+        // Calculate the significant digits (mantissa)
+        const mantissa = +(number / Math.pow(10, exponent)).toFixed(significantFigures - 1);
+
+        // Check if converting to scientific notation changes the number
+        const scientificNotation = mantissa * Math.pow(10, exponent);
+
+        if (scientificNotation !== number && exponent !== 1 && exponent !== 0) {
+            return `${mantissa}e${exponent}`;
+        }
+        if (scientificNotation !== number && exponent == 1) {
+            return (mantissa * 10).toString();
+        }
+        if (scientificNotation !== number && exponent == 0) {
+            return mantissa.toString();
+        }
+    }
+
+    // If the number is zero or the conversion didn't change it, return the original number
+    return number.toString();
+}
+
+/**
  *
  * @param {number} number
  * @returns checks if number is under two decimals, then will return the number with two decimals or less

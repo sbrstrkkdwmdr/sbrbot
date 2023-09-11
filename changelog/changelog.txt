@@ -483,3 +483,4 @@ changes:
 [FIX] compare (top plays) not working with page buttons - was looking for `u/id` instead of `users/id`
 [FIX] error messages being unspecific 
 [QOL] add "#" to global rank
+[QOL] convert preserves sig figs
