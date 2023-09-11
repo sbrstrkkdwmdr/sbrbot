@@ -5,6 +5,7 @@ import * as colour from './colourcalc.js';
 import * as embed from './embed.js';
 import * as func from './func.js';
 import * as log from './log.js';
+import * as mapParser from './mapParser.js';
 import * as osufunc from './osufunc.js';
 import * as osumodcalc from './osumodcalc.js';
 import * as osutrack from './trackfunc.js';
@@ -13,7 +14,7 @@ import * as osutrack from './trackfunc.js';
 
 /**
  */
-export const osu = {
+export const omc = {
     user: {
         bws: osumodcalc.bws,
         recdiff: osumodcalc.recdiff
@@ -47,7 +48,8 @@ export const osu = {
         shorten: osumodcalc.shortModName,
         long: osumodcalc.longModName,
         unranked_stable: osumodcalc.unrankedMods_stable,
-        unranked_lazer: osumodcalc.unrankedMods_lazer
+        unranked_lazer: osumodcalc.unrankedMods_lazer,
+        handler: osumodcalc.modHandler
     },
     mode: {
         nameToInt: osumodcalc.ModeNameToInt,
@@ -56,14 +58,18 @@ export const osu = {
 };
 
 export const functions = {
-    osu,
+    osu: {
+        calc: omc,
+        func: osufunc,
+        tracker: osutrack,
+        mparse: mapParser,
+    },
     calc,
     checks,
+    colour,
     embed,
     func,
     log,
-    osufunc,
-    osutrack,
 };
 
 import * as extratypes from './types/extratypes.js';
@@ -101,6 +107,7 @@ import * as tz from './consts/timezones.js';
 
 export const consts = {
     achievements,
+    buttons,
     colours,
     commandopts,
     conversions,
