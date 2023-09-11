@@ -12498,7 +12498,7 @@ export async function recMap(input: extypes.commandInput) {
 
 
 
-    const randomMap = osufunc.recommendMap(JSON.parse((formula.osu.user.recdiff(osudata.statistics.pp)).toFixed(2)), maxRange ?? 1);
+    const randomMap = osufunc.recommendMap(JSON.parse((formula.omc.user.recdiff(osudata.statistics.pp)).toFixed(2)), maxRange ?? 1);
     if (randomMap.err != null) {
         txt = randomMap.err;
     } else {
@@ -12508,7 +12508,7 @@ export async function recMap(input: extypes.commandInput) {
     const embed = new Discord.EmbedBuilder()
         .setTitle('Map recommendation')
         .setDescription(`
-Random map within ${maxRange}⭐ of ${formula.osu.user.recdiff(osudata.statistics.pp)}
+Random map within ${maxRange}⭐ of ${formula.omc.user.recdiff(osudata.statistics.pp)}
 ${txt}
 `);
     if (randomMap.err == null) {
@@ -12516,7 +12516,7 @@ ${txt}
             id: randomMap.returnId,
             commanduser,
             commandAs: input.commandType,
-            ex: `\nRandom map within ${maxRange}⭐ of ${formula.osu.user.recdiff(osudata.statistics.pp)} `
+            ex: `\nRandom map within ${maxRange}⭐ of ${formula.omc.user.recdiff(osudata.statistics.pp)} `
         };
 
         await map(input);
