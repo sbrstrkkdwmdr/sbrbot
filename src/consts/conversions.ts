@@ -1,7 +1,7 @@
-type convVal = {
+export type convVal = {
     name: string,
     names: string[],
-    type: 'Temperature' | 'Distance' | 'Volume' | 'Time' | 'Mass' | 'Pressure' | 'Energy' | 'Angle' | 'N/A',
+    type: 'Temperature' | 'Distance' | 'Volume' | 'Time' | 'Mass' | 'Pressure' | 'Energy' | 'Angle' | 'Area' | 'Speed' | 'N/A',
     system: 'Metric' | 'Imperial' | 'N/A',
     calc: {
         to: string,
@@ -11,11 +11,77 @@ type convVal = {
     }[];
 };
 
-type convValCalc = {
+export type convValCalc = {
     to: string,
     names: string[];
     func: (x: number) => number,
     text: string;
+};
+
+//some values have NULL due to how conversions help embed works
+
+const namesList = {
+    arbitrary: ['Arbitrary units', 'idk', 'wtf', '???', '?'],
+    temp_c: ['Celsius', '℃', 'Celcius', 'Centigrade', 'C',],
+    temp_f: ['Fahrenheit', '℉', 'F'],
+    temp_k: ['Kelvin', '°K', 'L'],
+    dist_in: ['Inch', 'in'],
+    dist_ft: ['Feet', 'ft', 'foot'],
+    dist_m: ['Metre', 'm', 'Meter'],
+    dist_mi: ['Mile', 'mi'],
+    dist_au: ['Astronomical Unit', 'au'],
+    dist_ly: ['Light Year', 'ly'],
+    dist_pc: ['Parsec', 'pc'],
+    time_s: ['Second', 's', 'sec'],
+    time_min: ['Minute', 'min',],
+    time_hr: ['Hour', 'h', 'hr'],
+    time_d: ['Day', 'd',],
+    time_wk: ['Week', 'wk', 'sennight',],
+    time_fn: ['Fortnight'],
+    time_mth: ['Month', 'mth', 'mon'],
+    time_qua: ['Quarantine', null, 'quarantina', 'quarentine'],
+    time_yr: ['Year', 'yr',],
+    time_dec: ['Decade',],
+    time_cen: ['Century',],
+    time_mil: ['Millennium', null, 'Millennia',],
+    time_ma: ['Megaannum',],
+    time_eon: ['Eon',],
+    vol_tsp: ['Teaspoon', 'tsp',],
+    vol_tbp: ['Tablespoon', 'tbp',],
+    vol_floz: ['Fluid Ounce', 'floz'],
+    vol_c: ['Cup', 'c',],
+    vol_pt: ['Pint', 'pt',],
+    vol_l: ['Litre', 'Liter', 'L'],
+    vol_gal: ['Galloon', 'gal',],
+    vol_m3: ['Cubic Metre', 'm³', 'm3', 'm^3'],
+    mass_g: ['Gram', 'g'],
+    mass_oz: ['Ounce', 'oz'],
+    mass_lb: ['Pound', 'lb'],
+    mass_st: ['Stone', 'st'],
+    mass_t: ['Ton', 't', 'US Ton'],
+    mass_mt: ['Tonne', 'mt', 'Metric Tonne'],
+    pres_pa: ['Pascal', 'Pa', 'N m² ⁻¹', 'N/m^2', 'N/m', 'Nm'],
+    pres_mmHg: ['millimetre of Mercury', 'mmHg', 'Torr', 'millimeter of Mercury',],
+    pres_psi: ['Pounds per square inch', 'psi'],
+    pres_bar: ['Bar'],
+    pres_atm: ['Standard Atmosphere', 'atm', 'Atmosphere',],
+    nrg_ev: ['Electron Volt', 'eV', 'Electronvolt'],
+    nrg_j: ['Joule', 'j'],
+    nrg_cal: ['Calorie', 'cal'],
+    area_ft2: ['Square foot', 'ft²', 'ft2', 'sqft'],
+    area_m2: ['Square metre', 'm²', 'm2', 'sqm'],
+    area_ac: ['Acre', 'ac'],
+    area_ha: ['Hectare', 'Ha'],
+    area_km2: ['Square kilometre', 'km²', 'km2', 'sqkm'],
+    area_mi2: ['Square mile', 'mi²', 'mi2', 'sqmi'],
+    angle_grad: ['Gradian', 'grad'],
+    angle_deg: ['Degree', 'deg'],
+    angle_rad: ['Radian', 'rad'],
+    speed_kmh: ['Kilometres per hour', 'km h⁻¹', 'kmh', 'kph', 'km/h'],
+    speed_mph: ['Miles per hour', 'mp h⁻¹', 'mph', 'mih', 'mi/h', 'm/h'],
+    speed_kt: ['Knot', 'kt', 'nmi h⁻¹', 'nmih', 'nmh', 'Nautical miles per hour'],
+    speed_ms: ['Metres per second', 'm s⁻¹', 'ms', 'mps', 'm/s',],
+    speed_c: ['Light', 'c', 'lightspeed'],
 };
 
 const template: convVal[] = [
@@ -79,7 +145,8 @@ const toArbitrary: convValCalc = {
     text: 'x*ư̶̧̨̞̘̙̭̺͚̰̱̼̮͙͕̰͉̜͔̥̳̲̣͇̦̹̪̪̤̜̣̣͓̩̳̺̰͖͉̫̬̮͚̖̗̪̲̓̂̀̏̒͋̒̽͂̒̀̈́͐̒̑͌͋̊̑̐̐̚͘̕̚͠͝͠ͅn̶̢̡̧̧̧̛͖̳̪͓̪̜̣̙̳̼͚̭̲̫͇̘͍͓̮̼̺̞͍̬͈͔͚̮̺̙͙͍̯͙̰͈͙̝̍́̋͆̃̈́̀͌̿̈́͂͌̈̀̌̋̉̾̾̈́͑̉͌̓̈́̿́̑͘͠͝k̷̡̛͔̦̠̲͔̠͉̬͈̝̦̉̅̂͐̈́̇̈́̓̾̈͑͋̾̈́̏͗̓̋͆͊̕͝͝͝͝ṇ̵̢̨̛͕̺͖̗̘̎̏͑͋̿̾͆͗͂͒̏̃͗̽͊̈̂̆̀̏̑̋̑͛̐̌́̋͂́̆̋͂̇͌̌͑̈̓̂̃̉̕̕̚͝͝͝͠ͅǫ̸̡̧̞̦̤͈̺̮̳̤̫̞͈̲͚̤̥̥̖̼͙̤͑̾̽͗̌̌̽̈́̔̈́̓̏̃̕͠w̸̧̧̮͔͙̫̲̲̣̙̝͉͉͙̠̟̰͓̟̲͖̭͉̤͔̬̬̭͕͇̝͍̠͕͔̹̫̤̱̪̉̔͗̈̉̈̽́̋̊̄̂̿͗̉̇͋̒̐̀̇͌̾́͂̿̉̚̕̕ͅn̵̢̡̨̛͍̗̺̤̭̥͕̠̟̞̥͇͉̹̖̞̰̬̼͖̥̹̫̩͓̩̫̦̂̃̑̎́̇̏̒̃̓͑̂̍̿́̇̒̀̉̅̓̆̌͘̚͠͝͠ͅͅ'
 };
 
-/**
+/*
+ *
  * measurements are smallest to largest (excluding temp cos it rlly doesn't matter)
  * temperature - celsius(c), fahrenheit(f), kelvin(k)
  * distance - inch(in), feet(ft), metre(m), mile(mi), astronomical unit(au), light year(ly)
@@ -96,13 +163,13 @@ export const values: convVal[] = [
     // Temperature
     {
         name: 'Celsius',
-        names: ['Celsius', 'Celcius', 'Centigrade', 'C'],
+        names: namesList.temp_c,
         type: 'Temperature',
         system: 'Metric',
         calc: [
             {
                 to: 'Celsius',
-                names: ['Celsius', 'Celcius', 'Centigrade', 'C'],
+                names: namesList.temp_c,
                 func: (x) => {
                     return x;
                 },
@@ -110,7 +177,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Fahrenheit',
-                names: ['Fahrenheit', 'F'],
+                names: namesList.temp_f,
                 func: (x) => {
                     return x * 9 / 5 + 32;
                 },
@@ -118,7 +185,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Kelvin',
-                names: ['Kelvin', 'K'],
+                names: namesList.temp_k,
                 func: (x) => {
                     return x + 273.15;
                 },
@@ -129,13 +196,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Fahrenheit',
-        names: ['Fahrenheit', 'F'],
+        names: namesList.temp_f,
         type: 'Temperature',
         system: 'Imperial',
         calc: [
             {
                 to: 'Celsius',
-                names: ['Celsius', 'Celcius', 'Centigrade', 'C'],
+                names: namesList.temp_c,
                 func: (x) => {
                     return (x - 32) * 5 / 9;
                 },
@@ -143,7 +210,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Fahrenheit',
-                names: ['Fahrenheit', 'F'],
+                names: namesList.temp_f,
                 func: (x) => {
                     return x;
                 },
@@ -151,7 +218,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Kelvin',
-                names: ['Kelvin', 'K'],
+                names: namesList.temp_k,
                 func: (x) => {
                     return (x - 32) * 5 / 9 + 273.15;
                 },
@@ -162,13 +229,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Kelvin',
-        names: ['Kelvin', 'K'],
+        names: namesList.temp_k,
         type: 'Temperature',
         system: 'Metric',
         calc: [
             {
                 to: 'Celsius',
-                names: ['Celsius', 'Celcius', 'Centigrade', 'C'],
+                names: namesList.temp_c,
                 func: (x) => {
                     return x - 273.15;
                 },
@@ -176,7 +243,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Fahrenheit',
-                names: ['Fahreinheit', 'F'],
+                names: namesList.temp_f,
                 func: (x) => {
                     return (x - 273.15) * 9 / 5 + 32;
                 },
@@ -184,7 +251,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Kelvin',
-                names: ['Kelvin', 'K'],
+                names: namesList.temp_k,
                 func: (x) => {
                     return x;
                 },
@@ -196,13 +263,13 @@ export const values: convVal[] = [
     // Distance
     {
         name: 'Inch',
-        names: ['Inch', 'in'],
+        names: namesList.dist_in,
         type: 'Distance',
         system: 'Imperial',
         calc: [
             {
                 to: 'Inch',
-                names: ['Inch', 'in'],
+                names: namesList.dist_in,
                 func: (x) => {
                     return x;
                 },
@@ -210,7 +277,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Feet',
-                names: ['Feet', 'ft', 'foot'],
+                names: namesList.dist_ft,
                 func: (x) => {
                     return x / 12;
                 },
@@ -218,7 +285,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metre',
-                names: ['Metre', 'm', 'Meter'],
+                names: namesList.dist_m,
                 func: (x) => {
                     return x * 0.0254;
                 },
@@ -226,7 +293,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Mile',
-                names: ['Mile', 'mi'],
+                names: namesList.dist_mi,
                 func: (x) => {
                     return x / 63360;
                 },
@@ -234,7 +301,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'au'],
+                names: namesList.dist_au,
                 func: (x) => {
                     return x * 0.0254 / 149597870700;
                 },
@@ -242,7 +309,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Light Year',
-                names: ['Light Year', 'LY'],
+                names: namesList.dist_ly,
                 func: (x) => {
                     return x * 0.0254 / 9460730472580800;
                 },
@@ -250,9 +317,9 @@ export const values: convVal[] = [
             },
             {
                 to: 'Parsec',
-                names: ['Parsec', 'pc'],
+                names: namesList.dist_pc,
                 func: (x) => {
-                    return x/1.215e18;
+                    return x / 1.215e18;
                 },
                 text: 'x/(1.215*10^18)'
             },
@@ -261,13 +328,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Feet',
-        names: ['Feet', 'ft', 'foot'],
+        names: namesList.dist_ft,
         type: 'Distance',
         system: 'Imperial',
         calc: [
             {
                 to: 'Inch',
-                names: ['Inch', 'in'],
+                names: namesList.dist_in,
                 func: (x) => {
                     return x * 12;
                 },
@@ -275,7 +342,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Feet',
-                names: ['Feet', 'ft', 'foot'],
+                names: namesList.dist_ft,
                 func: (x) => {
                     return x;
                 },
@@ -283,7 +350,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metre',
-                names: ['Metre', 'm', 'Meter'],
+                names: namesList.dist_m,
                 func: (x) => {
                     return x * 0.3048;
                 },
@@ -291,7 +358,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Mile',
-                names: ['Mile', 'mi'],
+                names: namesList.dist_mi,
                 func: (x) => {
                     return x / 5280;
                 },
@@ -299,7 +366,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'au'],
+                names: namesList.dist_au,
                 func: (x) => {
                     return x * 0.3048 / 149597870700;
                 },
@@ -307,7 +374,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Light Year',
-                names: ['Light Year', 'LY'],
+                names: namesList.dist_ly,
                 func: (x) => {
                     return x * 0.3048 / 9460730472580800;
                 },
@@ -315,9 +382,9 @@ export const values: convVal[] = [
             },
             {
                 to: 'Parsec',
-                names: ['Parsec', 'pc'],
+                names: namesList.dist_pc,
                 func: (x) => {
-                    return x/1.012e17;
+                    return x / 1.012e17;
                 },
                 text: 'x/(1.012*10^17)'
             },
@@ -326,13 +393,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Metre',
-        names: ['Metre', 'm', 'Meter'],
+        names: namesList.dist_m,
         type: 'Distance',
         system: 'Metric',
         calc: [
             {
                 to: 'Inch',
-                names: ['Inch', 'in'],
+                names: namesList.dist_in,
                 func: (x) => {
                     return x / 0.0254;
                 },
@@ -340,7 +407,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Feet',
-                names: ['Feet', 'ft', 'foot'],
+                names: namesList.dist_ft,
                 func: (x) => {
                     return x / 0.3048;
                 },
@@ -348,7 +415,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metre',
-                names: ['Metre', 'm', 'Meter'],
+                names: namesList.dist_m,
                 func: (x) => {
                     return x;
                 },
@@ -356,7 +423,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Mile',
-                names: ['Mile', 'mi'],
+                names: namesList.dist_mi,
                 func: (x) => {
                     return x / 1609.344;
                 },
@@ -364,7 +431,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'au'],
+                names: namesList.dist_au,
                 func: (x) => {
                     return x / 149597870700;
                 },
@@ -372,7 +439,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Light Year',
-                names: ['Light Year', 'LY'],
+                names: namesList.dist_ly,
                 func: (x) => {
                     return x / 9460730472580800;
                 },
@@ -380,9 +447,9 @@ export const values: convVal[] = [
             },
             {
                 to: 'Parsec',
-                names: ['Parsec', 'pc'],
+                names: namesList.dist_pc,
                 func: (x) => {
-                    return x/3.086e16;
+                    return x / 3.086e16;
                 },
                 text: 'x/(3.086*10^16)'
             },
@@ -391,13 +458,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Mile',
-        names: ['Mile', 'mi'],
+        names: namesList.dist_mi,
         type: 'Distance',
         system: 'Imperial',
         calc: [
             {
                 to: 'Inch',
-                names: ['Inch', 'in'],
+                names: namesList.dist_in,
                 func: (x) => {
                     return x * 63360;
                 },
@@ -405,7 +472,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Feet',
-                names: ['Feet', 'ft', 'foot'],
+                names: namesList.dist_ft,
                 func: (x) => {
                     return x * 5280;
                 },
@@ -413,7 +480,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metre',
-                names: ['Metre', 'm', 'Meter'],
+                names: namesList.dist_m,
                 func: (x) => {
                     return x * 1609.344;
                 },
@@ -421,7 +488,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Mile',
-                names: ['Mile', 'mi'],
+                names: namesList.dist_mi,
                 func: (x) => {
                     return x;
                 },
@@ -429,7 +496,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'au'],
+                names: namesList.dist_au,
                 func: (x) => {
                     return x * 1609.344 / 149597870700;
                 },
@@ -437,7 +504,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Light Year',
-                names: ['Light Year', 'LY'],
+                names: namesList.dist_ly,
                 func: (x) => {
                     return x;
                 },
@@ -445,9 +512,9 @@ export const values: convVal[] = [
             },
             {
                 to: 'Parsec',
-                names: ['Parsec', 'pc'],
+                names: namesList.dist_pc,
                 func: (x) => {
-                    return x/1.917e13;
+                    return x / 1.917e13;
                 },
                 text: 'x/(1.917*10^13)'
             },
@@ -456,13 +523,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Astronomical Unit',
-        names: ['Astronomical Units', 'AU'],
+        names: namesList.dist_au,
         type: 'Distance',
         system: 'N/A',
         calc: [
             {
                 to: 'Inch',
-                names: ['Inch', 'in'],
+                names: namesList.dist_in,
                 func: (x) => {
                     return x * 149597870700 / 0.0254;
                 },
@@ -470,7 +537,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Feet',
-                names: ['Feet', 'ft', 'foot'],
+                names: namesList.dist_ft,
                 func: (x) => {
                     return x * 149597870700 / 0.3048;
                 },
@@ -478,7 +545,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metre',
-                names: ['Metre', 'm', 'Meter'],
+                names: namesList.dist_m,
                 func: (x) => {
                     return x * 149597870700;
                 },
@@ -486,7 +553,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Mile',
-                names: ['Mile', 'mi'],
+                names: namesList.dist_mi,
                 func: (x) => {
                     return x * 149597870700 / 1609.344;
                 },
@@ -494,7 +561,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'au'],
+                names: namesList.dist_au,
                 func: (x) => {
                     return x;
                 },
@@ -502,7 +569,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Light Year',
-                names: ['Light Year', 'LY'],
+                names: namesList.dist_ly,
                 func: (x) => {
                     return x * 149597870700 / 9460730472580800;
                 },
@@ -510,7 +577,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Parsec',
-                names: ['Parsec', 'pc'],
+                names: namesList.dist_pc,
                 func: (x) => {
                     return x / (3.262 * 149597870700 / 9460730472580800);
                 },
@@ -521,13 +588,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Light Year',
-        names: ['Light Year', 'LY'],
+        names: namesList.dist_ly,
         type: 'Distance',
         system: 'N/A',
         calc: [
             {
                 to: 'Inch',
-                names: ['Inch', 'in'],
+                names: namesList.dist_in,
                 func: (x) => {
                     return x * 9460730472580800 / 0.0254;
                 },
@@ -535,7 +602,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Feet',
-                names: ['Feet', 'ft', 'foot'],
+                names: namesList.dist_ft,
                 func: (x) => {
                     return x * 9460730472580800 / 0.3048;
                 },
@@ -543,7 +610,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metre',
-                names: ['Metre', 'm', 'Meter'],
+                names: namesList.dist_m,
                 func: (x) => {
                     return x * 9460730472580800;
                 },
@@ -551,7 +618,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Mile',
-                names: ['Mile', 'mi'],
+                names: namesList.dist_mi,
                 func: (x) => {
                     return x * 9460730472580800 / 1609.344;
                 },
@@ -559,7 +626,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'au'],
+                names: namesList.dist_au,
                 func: (x) => {
                     return x * 9460730472580800 / 149597870700;
                 },
@@ -567,7 +634,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Light Year',
-                names: ['Light Year', 'LY'],
+                names: namesList.dist_ly,
                 func: (x) => {
                     return x;
                 },
@@ -575,7 +642,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Parsec',
-                names: ['Parsec', 'pc'],
+                names: namesList.dist_pc,
                 func: (x) => {
                     return x / 3.262;
                 },
@@ -586,13 +653,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Parsec',
-        names: ['Parsec', 'pc'],
+        names: namesList.dist_pc,
         type: 'Distance',
         system: 'N/A',
         calc: [
             {
                 to: 'Inch',
-                names: ['Inch', 'in'],
+                names: namesList.dist_in,
                 func: (x) => {
                     return x * 1.215e18;
                 },
@@ -600,7 +667,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Feet',
-                names: ['Feet', 'ft', 'foot'],
+                names: namesList.dist_ft,
                 func: (x) => {
                     return x * 1.012e17;
                 },
@@ -608,7 +675,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metre',
-                names: ['Metre', 'm', 'Meter'],
+                names: namesList.dist_m,
                 func: (x) => {
                     return x * 3.086e16;
                 },
@@ -616,7 +683,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Mile',
-                names: ['Mile', 'mi'],
+                names: namesList.dist_mi,
                 func: (x) => {
                     return x * 1.917e13;
                 },
@@ -624,7 +691,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'au'],
+                names: namesList.dist_au,
                 func: (x) => {
                     return x * (3.262 * 9460730472580800 / 149597870700);
                 },
@@ -632,7 +699,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Light Year',
-                names: ['Light Year', 'LY'],
+                names: namesList.dist_ly,
                 func: (x) => {
                     return x * 3.262;
                 },
@@ -640,7 +707,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Parsec',
-                names: ['Parsec', 'pc'],
+                names: namesList.dist_pc,
                 func: (x) => {
                     return x;
                 },
@@ -652,13 +719,13 @@ export const values: convVal[] = [
     // Time
     {
         name: 'Second',
-        names: ['Second', 'sec', 's'],
+        names: namesList.time_s,
         type: 'Time',
         system: 'Metric',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
                     return x;
                 },
@@ -666,7 +733,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: (x) => {
                     return x / 60;
                 },
@@ -674,7 +741,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
                     return x / 3600;
                 },
@@ -682,7 +749,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: (x) => {
                     return x / 86400;
                 },
@@ -690,15 +757,23 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
                     return x / 604800;
                 },
                 text: 'x/604800'
             },
             {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x / 604800 / 2;
+                },
+                text: 'x/604800/2'
+            },
+            {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: (x) => {
                     return x / 86400 / 30.437;
                 },
@@ -706,7 +781,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
                     return x / 86400 / 40;
                 },
@@ -714,7 +789,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr',],
+                names: namesList.time_yr,
                 func: (x) => {
                     return x / 86400 / 365.25;
                 },
@@ -722,7 +797,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
                     return x / 86400 / 365.25 / 10;
                 },
@@ -730,7 +805,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
                     return x / 86400 / 365.25 / 100;
                 },
@@ -738,7 +813,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: (x) => {
                     return x / 86400 / 365.25 / 1000;
                 },
@@ -746,32 +821,32 @@ export const values: convVal[] = [
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: (x) => {
-                    return x / 86400 / 365.25 / 1000000;
+                    return x / 86400 / 365.25 / 1e6;
                 },
-                text: 'x/86400/365.25/1000000'
+                text: 'x/86400/365.25/1e6'
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: (x) => {
-                    return x / 86400 / 365.25 / 1000000000;
+                    return x / 86400 / 365.25 / 1e9;
                 },
-                text: 'x/86400/365.25/1000000000'
+                text: 'x/86400/365.25/1e9'
             },
             toArbitrary
         ]
     },
     {
         name: 'Minute',
-        names: ['Minute', 'min'],
+        names: namesList.time_min,
         type: 'Time',
         system: 'N/A',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
                     return x * 60;
                 },
@@ -779,7 +854,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min'],
+                names: namesList.time_min,
                 func: (x) => {
                     return x;
                 },
@@ -787,7 +862,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
                     return x / 60;
                 },
@@ -795,7 +870,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Day',
-                names: ['Day', 'd'],
+                names: namesList.time_d,
                 func: (x) => {
                     return x / 1440;
                 },
@@ -803,15 +878,23 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
                     return x / 10080;
                 },
                 text: 'x/10080'
             },
             {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x / 10080 / 2;
+                },
+                text: 'x/10080/2'
+            },
+            {
                 to: 'Month',
-                names: ['Month', 'mth'],
+                names: namesList.time_mth,
                 func: (x) => {
                     return x / 1440 / 30.437;
                 },
@@ -819,7 +902,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
                     return x / 1440 / 40;
                 },
@@ -827,7 +910,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr'],
+                names: namesList.time_yr,
                 func: (x) => {
                     return x / 1440 / 365.25;
                 },
@@ -835,7 +918,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
                     return x / 1440 / 365.25 / 10;
                 },
@@ -843,7 +926,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
                     return x / 1440 / 365.25 / 100;
                 },
@@ -851,7 +934,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: (x) => {
                     return x / 1440 / 365.25 / 1000;
                 },
@@ -859,32 +942,32 @@ export const values: convVal[] = [
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: (x) => {
-                    return x / 1440 / 365.25 / 1000000;
+                    return x / 1440 / 365.25 / 1e6;
                 },
-                text: 'x/1440/365.25/1000000'
+                text: 'x/1440/365.25/1e6'
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: (x) => {
-                    return x / 1440 / 365.25 / 1000000000;
+                    return x / 1440 / 365.25 / 1e9;
                 },
-                text: 'x/1440/365.25/1000000000'
+                text: 'x/1440/365.25/1e9'
             },
             toArbitrary
         ]
     },
     {
         name: 'Hour',
-        names: ['Hour', 'hr'],
+        names: namesList.time_hr,
         type: 'Time',
         system: 'N/A',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
                     return x * 3600;
                 },
@@ -892,7 +975,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: (x) => {
                     return x * 60;
                 },
@@ -900,7 +983,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
                     return x;
                 },
@@ -908,7 +991,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: (x) => {
                     return x / 24;
                 },
@@ -916,15 +999,23 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
                     return x / 168;
                 },
                 text: 'x/168'
             },
             {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x / 336;
+                },
+                text: 'x/336'
+            },
+            {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: (x) => {
                     return x / 730.0008;
                 },
@@ -932,7 +1023,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
                     return x / 24 / 40;
                 },
@@ -940,7 +1031,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr',],
+                names: namesList.time_yr,
                 func: (x) => {
                     return x / 8766;
                 },
@@ -948,7 +1039,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
                     return x / 8766 / 10;
                 },
@@ -956,7 +1047,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
                     return x / 8766 / 100;
                 },
@@ -964,7 +1055,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: (x) => {
                     return x / 8766 / 1000;
                 },
@@ -972,32 +1063,32 @@ export const values: convVal[] = [
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: (x) => {
-                    return x / 8766 / 1000000;
+                    return x / 8766 / 1e6;
                 },
-                text: 'x/8766/1000000'
+                text: 'x/8766/1e6'
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: (x) => {
-                    return x / 8766 / 1000000000;
+                    return x / 8766 / 1e9;
                 },
-                text: 'x/8766/1000000000'
+                text: 'x/8766/1e9'
             },
             toArbitrary
         ]
     },
     {
         name: 'Day',
-        names: ['Day', 'd'],
+        names: namesList.time_d,
         type: 'Time',
         system: 'N/A',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
                     return x * 86400;
                 },
@@ -1005,7 +1096,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: (x) => {
                     return x * 1440;
                 },
@@ -1013,7 +1104,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
                     return x * 24;
                 },
@@ -1021,7 +1112,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: (x) => {
                     return x;
                 },
@@ -1029,15 +1120,23 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
                     return x / 7;
                 },
                 text: 'x/7'
             },
             {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x / 14;
+                },
+                text: 'x/14'
+            },
+            {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: (x) => {
                     return x / 30.4167;
                 },
@@ -1045,7 +1144,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
                     return x / 40;
                 },
@@ -1053,7 +1152,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr',],
+                names: namesList.time_yr,
                 func: (x) => {
                     return x / 365.25;
                 },
@@ -1061,7 +1160,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
                     return x / 365.25 / 10;
                 },
@@ -1069,7 +1168,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
                     return x / 365.25 / 100;
                 },
@@ -1077,7 +1176,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: (x) => {
                     return x / 365.25 / 1000;
                 },
@@ -1085,32 +1184,32 @@ export const values: convVal[] = [
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: (x) => {
-                    return x / 365.25 / 1000000;
+                    return x / 365.25 / 1e6;
                 },
-                text: 'x/365.25/1000000'
+                text: 'x/365.25/1e6'
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: (x) => {
-                    return x / 365.25 / 1000000000;
+                    return x / 365.25 / 1e9;
                 },
-                text: 'x/365.25/1000000000'
+                text: 'x/365.25/1e9'
             },
             toArbitrary
         ]
     },
     {
         name: 'Week',
-        names: ['Week', 'wk', 'sennight',],
+        names: namesList.time_wk,
         type: 'Time',
         system: 'N/A',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
                     return x * 604800;
                 },
@@ -1118,7 +1217,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: (x) => {
                     return x * 10080;
                 },
@@ -1126,7 +1225,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
                     return x * 168;
                 },
@@ -1134,7 +1233,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: (x) => {
                     return x * 7;
                 },
@@ -1142,15 +1241,23 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
                     return x;
                 },
                 text: 'x'
             },
             {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x / 2;
+                },
+                text: 'x/2'
+            },
+            {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: (x) => {
                     return x / 4.34524;
                 },
@@ -1158,7 +1265,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
                     return x * 7 / 40;
                 },
@@ -1166,7 +1273,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr',],
+                names: namesList.time_yr,
                 func: (x) => {
                     return x / 52.1785714286;
                 },
@@ -1174,7 +1281,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
                     return x / 52.1785714286 / 10;
                 },
@@ -1182,7 +1289,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
                     return x / 52.1785714286 / 100;
                 },
@@ -1190,7 +1297,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: (x) => {
                     return x / 52.1785714286 / 1000;
                 },
@@ -1198,32 +1305,153 @@ export const values: convVal[] = [
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: (x) => {
-                    return x / 52.1785714286 / 1000000;
+                    return x / 52.1785714286 / 1e6;
                 },
-                text: 'x/52.1785714286/1000000'
+                text: 'x/52.1785714286/1e6'
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: (x) => {
-                    return x / 52.1785714286 / 1000000000;
+                    return x / 52.1785714286 / 1e9;
                 },
-                text: 'x/52.1785714286/1000000000'
+                text: 'x/52.1785714286/1e9'
+            },
+            toArbitrary
+        ]
+    },
+    {
+        name: 'Fortnight',
+        names: namesList.time_fn,
+        type: 'Time',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Second',
+                names: namesList.time_s,
+                func: (x) => {
+                    return x * 604800 * 2;
+                },
+                text: 'x*604800*2'
+            },
+            {
+                to: 'Minute',
+                names: namesList.time_min,
+                func: (x) => {
+                    return x * 10080 * 2;
+                },
+                text: 'x*10080*2'
+            },
+            {
+                to: 'Hour',
+                names: namesList.time_hr,
+                func: (x) => {
+                    return x * 336;
+                },
+                text: 'x*336'
+            },
+            {
+                to: 'Day',
+                names: namesList.time_d,
+                func: (x) => {
+                    return x * 14;
+                },
+                text: 'x*14'
+            },
+            {
+                to: 'Week',
+                names: namesList.time_wk,
+                func: (x) => {
+                    return x * 2;
+                },
+                text: 'x*2'
+            },
+            {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Month',
+                names: namesList.time_mth,
+                func: (x) => {
+                    return x * 2 / 4.34524;
+                },
+                text: 'x*2/4.34524'
+            },
+            {
+                to: 'Quarantine',
+                names: namesList.time_qua,
+                func: (x) => {
+                    return x * 14 / 40;
+                },
+                text: 'x*14/40'
+            },
+            {
+                to: 'Year',
+                names: namesList.time_yr,
+                func: (x) => {
+                    return x / 26.0714285714;
+                },
+                text: 'x/26.0714285714'
+            },
+            {
+                to: 'Decade',
+                names: namesList.time_dec,
+                func: (x) => {
+                    return x / 26.0714285714 / 10;
+                },
+                text: 'x/26.0714285714/10'
+            },
+            {
+                to: 'Century',
+                names: namesList.time_cen,
+                func: (x) => {
+                    return x / 26.0714285714 / 100;
+                },
+                text: 'x/26.0714285714/100'
+            },
+            {
+                to: 'Millennium',
+                names: namesList.time_mil,
+                func: (x) => {
+                    return x / 26.0714285714 / 1000;
+                },
+                text: 'x/26.0714285714/1000'
+            },
+            {
+                to: 'Megaannum',
+                names: namesList.time_ma,
+                func: (x) => {
+                    return x / 26.0714285714 / 1e6;
+                },
+                text: 'x/26.0714285714/1e6'
+            },
+            {
+                to: 'Eon',
+                names: namesList.time_eon,
+                func: (x) => {
+                    return x / 26.0714285714 / 1e9;
+                },
+                text: 'x/26.0714285714/1e9'
             },
             toArbitrary
         ]
     },
     {
         name: 'Month',
-        names: ['Month', 'mth'],
+        names: namesList.time_mth,
         type: 'Time',
         system: 'N/A',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
                     return x * 2628002.88;
                 },
@@ -1231,7 +1459,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: (x) => {
                     return x * 43800.048;
                 },
@@ -1239,7 +1467,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
                     return x * 730.0008;
                 },
@@ -1247,7 +1475,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: (x) => {
                     return x * 30.4167;
                 },
@@ -1255,15 +1483,23 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
                     return x * 4.34524;
                 },
                 text: 'x*4.34524'
             },
             {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x * 4.34524 / 2;
+                },
+                text: 'x*4.34524/2'
+            },
+            {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: (x) => {
                     return x;
                 },
@@ -1271,7 +1507,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
                     return x * 30.4167 / 40;
                 },
@@ -1279,7 +1515,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr',],
+                names: namesList.time_yr,
                 func: (x) => {
                     return x / 12;
                 },
@@ -1287,7 +1523,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
                     return x / 12 / 10;
                 },
@@ -1295,7 +1531,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
                     return x / 12 / 100;
                 },
@@ -1303,7 +1539,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: (x) => {
                     return x / 12 / 1000;
                 },
@@ -1311,32 +1547,32 @@ export const values: convVal[] = [
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: (x) => {
-                    return x / 12 / 1000000;
+                    return x / 12 / 1e6;
                 },
-                text: 'x/12/1000000'
+                text: 'x/12/1e6'
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: (x) => {
-                    return x / 12 / 1000000000;
+                    return x / 12 / 1e9;
                 },
-                text: 'x/12/1000000000'
+                text: 'x/12/1e9'
             },
             toArbitrary
         ]
     },
     { // 40 days
         name: 'Quarantine',
-        names: ['Quarantine', 'quarantina', 'quarentine'],
+        names: namesList.time_qua,
         type: 'Time',
         system: 'N/A',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
                     return x * 86400 * 40;
                 },
@@ -1344,7 +1580,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: (x) => {
                     return x * 1440 * 40;
                 },
@@ -1352,7 +1588,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
                     return x * 24 * 40;
                 },
@@ -1360,7 +1596,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: (x) => {
                     return x * 40;
                 },
@@ -1368,15 +1604,23 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
                     return x * 40 / 7;
                 },
                 text: 'x/7*40'
             },
             {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x / 14 * 40;
+                },
+                text: 'x/14*40'
+            },
+            {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: (x) => {
                     return x * 40 / 30.4167;
                 },
@@ -1384,7 +1628,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
                     return x;
                 },
@@ -1392,7 +1636,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr',],
+                names: namesList.time_yr,
                 func: (x) => {
                     return x * 40 / 365.25;
                 },
@@ -1400,7 +1644,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
                     return x * 40 / 365.25 / 10;
                 },
@@ -1408,7 +1652,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
                     return x * 40 / 365.25 / 100;
                 },
@@ -1416,7 +1660,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Millennium',
-                names: ['Year', 'yr',],
+                names: namesList.time_mil,
                 func: (x) => {
                     return x * 40 / 365.25 / 1000;
                 },
@@ -1424,32 +1668,32 @@ export const values: convVal[] = [
             },
             {
                 to: 'Megaannum',
-                names: ['Year', 'yr',],
+                names: namesList.time_ma,
                 func: (x) => {
-                    return x * 40 / 365.25 / 1000000;
+                    return x * 40 / 365.25 / 1e6;
                 },
-                text: 'x*40/365.25/1000000'
+                text: 'x*40/365.25/1e6'
             },
             {
                 to: 'Eon',
-                names: ['Year', 'yr',],
+                names: namesList.time_eon,
                 func: (x) => {
-                    return x * 40 / 365.25 / 1000000000;
+                    return x * 40 / 365.25 / 1e9;
                 },
-                text: 'x*40/365.25/1000000000'
+                text: 'x*40/365.25/1e9'
             },
             toArbitrary
         ]
     },
     {
         name: 'Year',
-        names: ['Year', 'yr'],
+        names: namesList.time_yr,
         type: 'Time',
         system: 'N/A',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
                     return x * 31557600;
                 },
@@ -1457,7 +1701,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: (x) => {
                     return x * 525960;
                 },
@@ -1465,7 +1709,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
                     return x * 8766;
                 },
@@ -1473,7 +1717,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: (x) => {
                     return x * 365.25;
                 },
@@ -1481,15 +1725,23 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
                     return x * 52.1785714286;
                 },
                 text: 'x*52.1785714286'
             },
             {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x * 26.071;
+                },
+                text: 'x*26.071'
+            },
+            {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: (x) => {
                     return x * 12;
                 },
@@ -1497,7 +1749,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
                     return x * 52.1785714286 / 40;
                 },
@@ -1505,7 +1757,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr',],
+                names: namesList.time_yr,
                 func: (x) => {
                     return x;
                 },
@@ -1513,7 +1765,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
                     return x / 10;
                 },
@@ -1521,7 +1773,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
                     return x / 100;
                 },
@@ -1529,7 +1781,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: (x) => {
                     return x / 1000;
                 },
@@ -1537,32 +1789,32 @@ export const values: convVal[] = [
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: (x) => {
-                    return x / 1000000;
+                    return x / 1e6;
                 },
-                text: 'x/1000000'
+                text: 'x/1e6'
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: (x) => {
-                    return x / 1000000000;
+                    return x / 1e9;
                 },
-                text: 'x/1000000000'
+                text: 'x/1e9'
             },
             toArbitrary
         ]
     },
     { // 10 yr
         name: 'Decade',
-        names: ['Year', 'yr'],
+        names: namesList.time_dec,
         type: 'Time',
         system: 'N/A',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
                     return x * 31557600 * 10;
                 },
@@ -1570,7 +1822,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: (x) => {
                     return x * 525960 * 10;
                 },
@@ -1578,7 +1830,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
                     return x * 8766 * 10;
                 },
@@ -1586,7 +1838,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: (x) => {
                     return x * 365.25 * 10;
                 },
@@ -1594,15 +1846,23 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
                     return x * 52.1785714286 * 10;
                 },
                 text: 'x*52.1785714286*10'
             },
             {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x * 26.0714285714 * 10;
+                },
+                text: 'x*26.0714285714*10'
+            },
+            {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: (x) => {
                     return x * 12 * 10;
                 },
@@ -1610,7 +1870,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
                     return x * 52.1785714286 / 40 * 10;
                 },
@@ -1618,7 +1878,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr',],
+                names: namesList.time_yr,
                 func: (x) => {
                     return x * 10;
                 },
@@ -1626,7 +1886,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
                     return x;
                 },
@@ -1634,7 +1894,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
                     return x / 10;
                 },
@@ -1642,7 +1902,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: (x) => {
                     return x / 100;
                 },
@@ -1650,7 +1910,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: (x) => {
                     return x / 100000;
                 },
@@ -1658,24 +1918,24 @@ export const values: convVal[] = [
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: (x) => {
-                    return x / 100000000;
+                    return x / 1e600;
                 },
-                text: 'x/100000000'
+                text: 'x/1e600'
             },
             toArbitrary
         ]
     },
     { // 100 yr
         name: 'Century',
-        names: ['Century', 'century'],
+        names: namesList.time_cen,
         type: 'Time',
         system: 'N/A',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
                     return x * 31557600 * 100;
                 },
@@ -1683,7 +1943,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: (x) => {
                     return x * 525960 * 100;
                 },
@@ -1691,7 +1951,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
                     return x * 8766 * 100;
                 },
@@ -1699,7 +1959,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: (x) => {
                     return x * 365.25 * 100;
                 },
@@ -1707,15 +1967,23 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
                     return x * 52.1785714286 * 100;
                 },
                 text: 'x*52.1785714286*100'
             },
             {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x * 26.0714285714 * 100;
+                },
+                text: 'x*26.0714285714*100'
+            },
+            {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: (x) => {
                     return x * 12 * 100;
                 },
@@ -1723,7 +1991,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
                     return x * 52.1785714286 / 40 * 100;
                 },
@@ -1731,7 +1999,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr',],
+                names: namesList.time_yr,
                 func: (x) => {
                     return x * 100;
                 },
@@ -1739,7 +2007,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
                     return x * 10;
                 },
@@ -1747,7 +2015,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
                     return x;
                 },
@@ -1755,7 +2023,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: (x) => {
                     return x / 10;
                 },
@@ -1763,7 +2031,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: (x) => {
                     return x / 10000;
                 },
@@ -1771,24 +2039,24 @@ export const values: convVal[] = [
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: (x) => {
-                    return x / 10000000;
+                    return x / 1e60;
                 },
-                text: 'x/10000000'
+                text: 'x/1e60'
             },
             toArbitrary
         ]
     },
     { // 1 000 yr
         name: 'Millennium',
-        names: ['Millennium', 'Millennia'],
+        names: namesList.time_mil,
         type: 'Time',
         system: 'N/A',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
                     return x * 31557600 * 1000;
                 },
@@ -1796,7 +2064,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: (x) => {
                     return x * 525960 * 1000;
                 },
@@ -1804,7 +2072,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
                     return x * 8766 * 1000;
                 },
@@ -1812,7 +2080,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: (x) => {
                     return x * 365.25 * 1000;
                 },
@@ -1820,15 +2088,23 @@ export const values: convVal[] = [
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
                     return x * 52.1785714286 * 1000;
                 },
                 text: 'x*52.1785714286 *1000'
             },
             {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x * 26.0714285714 * 1000;
+                },
+                text: 'x*26.0714285714*1000'
+            },
+            {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: (x) => {
                     return x * 12 * 1000;
                 },
@@ -1836,7 +2112,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
                     return x * 52.1785714286 / 40 * 1000;
                 },
@@ -1844,7 +2120,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr',],
+                names: namesList.time_yr,
                 func: (x) => {
                     return x * 1000;
                 },
@@ -1852,7 +2128,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
                     return x * 100;
                 },
@@ -1860,7 +2136,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
                     return x * 10;
                 },
@@ -1868,7 +2144,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: (x) => {
                     return x;
                 },
@@ -1876,7 +2152,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: (x) => {
                     return x / 1000;
                 },
@@ -1884,80 +2160,88 @@ export const values: convVal[] = [
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: (x) => {
-                    return x / 1000000;
+                    return x / 1e6;
                 },
-                text: 'x/1000000'
+                text: 'x/1e6'
             },
             toArbitrary
         ]
     },
     { // 1 000 000 yr
         name: 'Megaannum',
-        names: ['Megaannum'],
+        names: namesList.time_ma,
         type: 'Time',
         system: 'N/A',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
-                    return x * 31557600 * 1000000;
+                    return x * 31557600 * 1e6;
                 },
-                text: 'x*31557600*1000000'
+                text: 'x*31557600*1e6'
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: (x) => {
-                    return x * 525960 * 1000000;
+                    return x * 525960 * 1e6;
                 },
-                text: 'x*525960*1000000'
+                text: 'x*525960*1e6'
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
-                    return x * 8766 * 1000000;
+                    return x * 8766 * 1e6;
                 },
-                text: 'x*8766*1000000'
+                text: 'x*8766*1e6'
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: (x) => {
-                    return x * 365.25 * 1000000;
+                    return x * 365.25 * 1e6;
                 },
-                text: 'x*365.25*1000000'
+                text: 'x*365.25*1e6'
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
-                    return x * 52.1785714286 * 1000000;
+                    return x * 52.1785714286 * 1e6;
                 },
-                text: 'x*52.1785714286*1000000'
+                text: 'x*52.1785714286*1e6'
+            },
+            {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x * 26.0714285714 * 1e6;
+                },
+                text: 'x*26.0714285714*1e6'
             },
             {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: (x) => {
-                    return x * 12 * 1000000;
+                    return x * 12 * 1e6;
                 },
-                text: 'x*12*1000000'
+                text: 'x*12*1e6'
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
-                    return x * 52.1785714286 / 40 * 1000000;
+                    return x * 52.1785714286 / 40 * 1e6;
                 },
-                text: 'x*52.1785714286/40*1000000'
+                text: 'x*52.1785714286/40*1e6'
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
                     return x * 100000;
                 },
@@ -1965,7 +2249,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
                     return x * 10000;
                 },
@@ -1973,7 +2257,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: (x) => {
                     return x * 1000;
                 },
@@ -1981,7 +2265,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: (x) => {
                     return x;
                 },
@@ -1989,7 +2273,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: (x) => {
                     return x / 1000;
                 },
@@ -2000,101 +2284,109 @@ export const values: convVal[] = [
     },
     { // 1*10^9 yr
         name: 'Eon',
-        names: ['Eon'],
+        names: namesList.time_eon,
         type: 'Time',
         system: 'N/A',
         calc: [
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: (x) => {
-                    return x * 31557600 * 1000000000;
+                    return x * 31557600 * 1e9;
                 },
-                text: 'x*31557600*1000000000'
+                text: 'x*31557600*1e9'
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: (x) => {
-                    return x * 525960 * 1000000000;
+                    return x * 525960 * 1e9;
                 },
-                text: 'x*525960*1000000000'
+                text: 'x*525960*1e9'
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: (x) => {
-                    return x * 8766 * 1000000000;
+                    return x * 8766 * 1e9;
                 },
-                text: 'x*8766*1000000000'
+                text: 'x*8766*1e9'
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: (x) => {
-                    return x * 365.25 * 1000000000;
+                    return x * 365.25 * 1e9;
                 },
-                text: 'x*365.25*1000000000'
+                text: 'x*365.25*1e9'
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: (x) => {
-                    return x * 52.1785714286 * 1000000000;
+                    return x * 52.1785714286 * 1e9;
                 },
-                text: 'x*52.1785714286*1000000000'
+                text: 'x*52.1785714286*1e9'
+            },
+            {
+                to: 'Fortnight',
+                names: namesList.time_fn,
+                func: (x) => {
+                    return x * 26.0714285714 * 1e9;
+                },
+                text: 'x*26.0714285714*1e9'
             },
             {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: (x) => {
-                    return x * 12 * 1000000000;
+                    return x * 12 * 1e9;
                 },
-                text: 'x*12*1000000000'
+                text: 'x*12*1e9'
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: (x) => {
-                    return x * 52.1785714286 / 40 * 1000000000;
+                    return x * 52.1785714286 / 40 * 1e9;
                 },
-                text: 'x*52.1785714286/40*1000000000'
+                text: 'x*52.1785714286/40*1e9'
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr',],
+                names: namesList.time_yr,
                 func: (x) => {
-                    return x * 1000000000;
+                    return x * 1e9;
                 },
-                text: 'x*1000000000'
+                text: 'x*1e9'
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: (x) => {
-                    return x * 100000000;
+                    return x * 1e600;
                 },
-                text: 'x*100000000'
+                text: 'x*1e600'
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: (x) => {
-                    return x * 10000000;
+                    return x * 1e60;
                 },
-                text: 'x*10000000'
+                text: 'x*1e60'
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: (x) => {
-                    return x * 1000000;
+                    return x * 1e6;
                 },
-                text: 'x*1000000'
+                text: 'x*1e6'
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: (x) => {
                     return x * 1000;
                 },
@@ -2102,7 +2394,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: (x) => {
                     return x;
                 },
@@ -2114,13 +2406,13 @@ export const values: convVal[] = [
     // Volume
     {
         name: 'Teaspoon',
-        names: ['Teaspoon', 'tsp'],
+        names: namesList.vol_tsp,
         type: 'Volume',
         system: 'Imperial',
         calc: [
             {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp',],
+                names: namesList.vol_tsp,
                 func: (x) => {
                     return x;
                 },
@@ -2128,7 +2420,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp',],
+                names: namesList.vol_tbp,
                 func: (x) => {
                     return x / 3;
                 },
@@ -2136,7 +2428,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', 'oz'],
+                names: namesList.vol_floz,
                 func: (x) => {
                     return x;
                 },
@@ -2144,7 +2436,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C',],
+                names: namesList.vol_c,
                 func: (x) => {
                     return x / 48.692;
                 },
@@ -2152,7 +2444,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt',],
+                names: namesList.vol_pt,
                 func: (x) => {
                     return x / 96;
                 },
@@ -2160,7 +2452,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L'],
+                names: namesList.vol_l,
                 func: (x) => {
                     return x / 202.884;
                 },
@@ -2168,7 +2460,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal',],
+                names: namesList.vol_gal,
                 func: (x) => {
                     return x / 768;
                 },
@@ -2176,7 +2468,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3'],
+                names: namesList.vol_m3,
                 func: (x) => {
                     return x / 202884.2;
                 },
@@ -2187,13 +2479,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Tablespoon',
-        names: ['Tablespoon', 'tbp'],
+        names: namesList.vol_tbp,
         type: 'Volume',
         system: 'Imperial',
         calc: [
             {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp',],
+                names: namesList.vol_tsp,
                 func: (x) => {
                     return x * 3;
                 },
@@ -2201,7 +2493,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp',],
+                names: namesList.vol_tbp,
                 func: (x) => {
                     return x;
                 },
@@ -2209,7 +2501,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', 'oz'],
+                names: namesList.vol_floz,
                 func: (x) => {
                     return x;
                 },
@@ -2217,7 +2509,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C',],
+                names: namesList.vol_c,
                 func: (x) => {
                     return x / 16.231;
                 },
@@ -2225,7 +2517,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt',],
+                names: namesList.vol_pt,
                 func: (x) => {
                     return x / 32;
                 },
@@ -2233,7 +2525,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L'],
+                names: namesList.vol_l,
                 func: (x) => {
                     return x / 67.628;
                 },
@@ -2241,7 +2533,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal',],
+                names: namesList.vol_gal,
                 func: (x) => {
                     return x / 256;
                 },
@@ -2249,7 +2541,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3'],
+                names: namesList.vol_m3,
                 func: (x) => {
                     return x / 67628.05;
                 },
@@ -2260,13 +2552,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Fluid Ounce',
-        names: ['Fluid Ounce', 'floz'],
+        names: namesList.vol_floz,
         type: 'Volume',
         system: 'Imperial',
         calc: [
             {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp',],
+                names: namesList.vol_tsp,
                 func: (x) => {
                     return x * 6;
                 },
@@ -2274,7 +2566,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp',],
+                names: namesList.vol_tbp,
                 func: (x) => {
                     return x * 2;
                 },
@@ -2282,7 +2574,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', 'oz'],
+                names: namesList.vol_floz,
                 func: (x) => {
                     return x;
                 },
@@ -2290,7 +2582,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C',],
+                names: namesList.vol_c,
                 func: (x) => {
                     return x / 8.115;
                 },
@@ -2298,7 +2590,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt',],
+                names: namesList.vol_pt,
                 func: (x) => {
                     return x / 16;
                 },
@@ -2306,7 +2598,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L'],
+                names: namesList.vol_l,
                 func: (x) => {
                     return x / 33.814;
                 },
@@ -2314,7 +2606,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal',],
+                names: namesList.vol_gal,
                 func: (x) => {
                     return x / 128;
                 },
@@ -2322,7 +2614,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3'],
+                names: namesList.vol_m3,
                 func: (x) => {
                     return x / 33814;
                 },
@@ -2333,13 +2625,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Cup',
-        names: ['Cup', 'C'],
+        names: namesList.vol_c,
         type: 'Volume',
         system: 'Imperial',
         calc: [
             {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp',],
+                names: namesList.vol_tsp,
                 func: (x) => {
                     return x * 48.692;
                 },
@@ -2347,7 +2639,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp',],
+                names: namesList.vol_tbp,
                 func: (x) => {
                     return x * 16.231;
                 },
@@ -2355,7 +2647,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', 'oz'],
+                names: namesList.vol_floz,
                 func: (x) => {
                     return x * 8.115;
                 },
@@ -2363,7 +2655,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C',],
+                names: namesList.vol_c,
                 func: (x) => {
                     return x;
                 },
@@ -2371,7 +2663,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt',],
+                names: namesList.vol_pt,
                 func: (x) => {
                     return x / 1.972;
                 },
@@ -2379,7 +2671,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L'],
+                names: namesList.vol_l,
                 func: (x) => {
                     return x / 4.167;
                 },
@@ -2387,7 +2679,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal',],
+                names: namesList.vol_gal,
                 func: (x) => {
                     return x / 15.772;
                 },
@@ -2395,7 +2687,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3'],
+                names: namesList.vol_m3,
                 func: (x) => {
                     return x / 4167;
                 },
@@ -2406,13 +2698,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Pint',
-        names: ['Pint', 'pt'],
+        names: namesList.vol_pt,
         type: 'Volume',
         system: 'Imperial',
         calc: [
             {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp',],
+                names: namesList.vol_tsp,
                 func: (x) => {
                     return x * 96;
                 },
@@ -2420,7 +2712,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp',],
+                names: namesList.vol_tbp,
                 func: (x) => {
                     return x * 32;
                 },
@@ -2428,7 +2720,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', 'oz'],
+                names: namesList.vol_floz,
                 func: (x) => {
                     return x * 16;
                 },
@@ -2436,7 +2728,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C',],
+                names: namesList.vol_c,
                 func: (x) => {
                     return x * 1.972;
                 },
@@ -2444,7 +2736,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt',],
+                names: namesList.vol_pt,
                 func: (x) => {
                     return x;
                 },
@@ -2452,7 +2744,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L'],
+                names: namesList.vol_l,
                 func: (x) => {
                     return x / 2.113;
                 },
@@ -2460,7 +2752,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal',],
+                names: namesList.vol_gal,
                 func: (x) => {
                     return x / 8;
                 },
@@ -2468,7 +2760,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3'],
+                names: namesList.vol_m3,
                 func: (x) => {
                     return x / 33814;
                 },
@@ -2479,13 +2771,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Litre',
-        names: ['Litre', 'Liter', 'L'],
+        names: namesList.vol_l,
         type: 'Volume',
         system: 'Metric',
         calc: [
             {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp',],
+                names: namesList.vol_tsp,
                 func: (x) => {
                     return x * 202.884;
                 },
@@ -2493,7 +2785,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp',],
+                names: namesList.vol_tbp,
                 func: (x) => {
                     return x * 67.628;
                 },
@@ -2501,7 +2793,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', 'oz'],
+                names: namesList.vol_floz,
                 func: (x) => {
                     return x * 33.814;
                 },
@@ -2509,7 +2801,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C',],
+                names: namesList.vol_c,
                 func: (x) => {
                     return x * 33.814 / 8.115;
                 },
@@ -2517,7 +2809,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt',],
+                names: namesList.vol_pt,
                 func: (x) => {
                     return x * 33.814 / 16;
                 },
@@ -2525,7 +2817,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L'],
+                names: namesList.vol_l,
                 func: (x) => {
                     return x;
                 },
@@ -2533,7 +2825,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal',],
+                names: namesList.vol_gal,
                 func: (x) => {
                     return x * 33.814 / 128;
                 },
@@ -2541,7 +2833,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3'],
+                names: namesList.vol_m3,
                 func: (x) => {
                     return x / 1000;
                 },
@@ -2552,13 +2844,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Gallon',
-        names: ['Gallon', 'gal'],
+        names: namesList.vol_gal,
         type: 'Volume',
         system: 'Imperial',
         calc: [
             {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp',],
+                names: namesList.vol_tsp,
                 func: (x) => {
                     return x * 768;
                 },
@@ -2566,7 +2858,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp',],
+                names: namesList.vol_tbp,
                 func: (x) => {
                     return x * 256;
                 },
@@ -2574,7 +2866,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', 'oz'],
+                names: namesList.vol_floz,
                 func: (x) => {
                     return x * 128;
                 },
@@ -2582,7 +2874,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C',],
+                names: namesList.vol_c,
                 func: (x) => {
                     return x * 15.7725;
                 },
@@ -2590,7 +2882,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt',],
+                names: namesList.vol_pt,
                 func: (x) => {
                     return x * 8;
                 },
@@ -2598,7 +2890,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L'],
+                names: namesList.vol_l,
                 func: (x) => {
                     return x * 3.785;
                 },
@@ -2606,7 +2898,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal',],
+                names: namesList.vol_gal,
                 func: (x) => {
                     return x;
                 },
@@ -2614,7 +2906,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3'],
+                names: namesList.vol_m3,
                 func: (x) => {
                     return x / 264.2;
                 },
@@ -2625,13 +2917,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Cubic Metre',
-        names: ['Cubic Metre', 'm3', 'm^3'],
+        names: namesList.vol_m3,
         type: 'Volume',
         system: 'Metric',
         calc: [
             {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp',],
+                names: namesList.vol_tsp,
                 func: (x) => {
                     return x * 202884;
                 },
@@ -2639,7 +2931,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp',],
+                names: namesList.vol_tbp,
                 func: (x) => {
                     return x * 67628;
                 },
@@ -2647,7 +2939,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', 'oz'],
+                names: namesList.vol_floz,
                 func: (x) => {
                     return x * 33814;
                 },
@@ -2655,7 +2947,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C',],
+                names: namesList.vol_c,
                 func: (x) => {
                     return x * 33814 / 8.115;
                 },
@@ -2663,7 +2955,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt',],
+                names: namesList.vol_pt,
                 func: (x) => {
                     return x * 33814 / 16;
                 },
@@ -2671,7 +2963,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L'],
+                names: namesList.vol_l,
                 func: (x) => {
                     return (x * 1000);
                 },
@@ -2679,7 +2971,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal',],
+                names: namesList.vol_gal,
                 func: (x) => {
                     return x * 33814 / 128;
                 },
@@ -2687,7 +2979,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3'],
+                names: namesList.vol_m3,
                 func: (x) => {
                     return x;
                 },
@@ -2699,13 +2991,13 @@ export const values: convVal[] = [
     // Mass
     {
         name: 'Gram',
-        names: ['Gram', 'g'],
+        names: namesList.mass_g,
         type: 'Mass',
         system: 'Metric',
         calc: [
             {
                 to: 'Gram',
-                names: ['Gram', 'g'],
+                names: namesList.mass_g,
                 func: (x) => {
                     return x;
                 },
@@ -2713,7 +3005,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Ounce',
-                names: ['Ounce', 'oz'],
+                names: namesList.mass_oz,
                 func: (x) => {
                     return x / 28.35;
                 },
@@ -2721,7 +3013,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pound',
-                names: ['Pound', 'lb'],
+                names: namesList.mass_lb,
                 func: (x) => {
                     return x / 453.592;
                 },
@@ -2729,7 +3021,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Stone',
-                names: ['Stone', 'st'],
+                names: namesList.mass_st,
                 func: (x) => {
                     return x / 6350.29;
                 },
@@ -2737,7 +3029,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'US Ton',
-                names: ['Ton', 't', 'US Ton'],
+                names: namesList.mass_t,
                 func: (x) => {
                     return x / 907185;
                 },
@@ -2745,7 +3037,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metric Tonne',
-                names: ['Tonne', 'mt', 'Metric Tonne'],
+                names: namesList.mass_mt,
                 func: (x) => {
                     return x / (10 ** 6);
                 },
@@ -2756,13 +3048,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Ounce',
-        names: ['Ounce', 'oz'],
+        names: namesList.mass_oz,
         type: 'Mass',
         system: 'Imperial',
         calc: [
             {
                 to: 'Gram',
-                names: ['Gram', 'g'],
+                names: namesList.mass_g,
                 func: (x) => {
                     return x * 28.35;
                 },
@@ -2770,7 +3062,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Ounce',
-                names: ['Ounce', 'oz'],
+                names: namesList.mass_oz,
                 func: (x) => {
                     return x;
                 },
@@ -2778,7 +3070,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pound',
-                names: ['Pound', 'lb'],
+                names: namesList.mass_lb,
                 func: (x) => {
                     return x / 16;
                 },
@@ -2786,7 +3078,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Stone',
-                names: ['Stone', 'st'],
+                names: namesList.mass_st,
                 func: (x) => {
                     return x / 224;
                 },
@@ -2794,7 +3086,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'US Ton',
-                names: ['Ton', 't', 'US Ton'],
+                names: namesList.mass_t,
                 func: (x) => {
                     return x / 32000;
                 },
@@ -2802,7 +3094,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metric Tonne',
-                names: ['Tonne', 'mt', 'Metric Tonne'],
+                names: namesList.mass_mt,
                 func: (x) => {
                     return x / 35274;
                 },
@@ -2813,13 +3105,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Pound',
-        names: ['Pound', 'lb'],
+        names: namesList.mass_lb,
         type: 'Mass',
         system: 'Imperial',
         calc: [
             {
                 to: 'Gram',
-                names: ['Gram', 'g'],
+                names: namesList.mass_g,
                 func: (x) => {
                     return x * 453.592;
                 },
@@ -2827,7 +3119,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Ounce',
-                names: ['Ounce', 'oz'],
+                names: namesList.mass_oz,
                 func: (x) => {
                     return x;
                 },
@@ -2835,7 +3127,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pound',
-                names: ['Pound', 'lb'],
+                names: namesList.mass_lb,
                 func: (x) => {
                     return x;
                 },
@@ -2843,7 +3135,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Stone',
-                names: ['Stone', 'st'],
+                names: namesList.mass_st,
                 func: (x) => {
                     return x / 14;
                 },
@@ -2851,7 +3143,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'US Ton',
-                names: ['Ton', 't', 'US Ton'],
+                names: namesList.mass_t,
                 func: (x) => {
                     return x / 2000;
                 },
@@ -2859,7 +3151,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metric Tonne',
-                names: ['Tonne', 'mt', 'Metric Tonne'],
+                names: namesList.mass_mt,
                 func: (x) => {
                     return x / 2205;
                 },
@@ -2870,13 +3162,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Stone',
-        names: ['Stone', 'st'],
+        names: namesList.mass_st,
         type: 'Mass',
         system: 'Imperial',
         calc: [
             {
                 to: 'Gram',
-                names: ['Gram', 'g'],
+                names: namesList.mass_g,
                 func: (x) => {
                     return x * 6350.29;
                 },
@@ -2884,7 +3176,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Ounce',
-                names: ['Ounce', 'oz'],
+                names: namesList.mass_oz,
                 func: (x) => {
                     return x * 224;
                 },
@@ -2892,7 +3184,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pound',
-                names: ['Pound', 'lb'],
+                names: namesList.mass_lb,
                 func: (x) => {
                     return x * 14;
                 },
@@ -2900,7 +3192,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Stone',
-                names: ['Stone', 'st'],
+                names: namesList.mass_st,
                 func: (x) => {
                     return x;
                 },
@@ -2908,7 +3200,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'US Ton',
-                names: ['Ton', 't', 'US Ton'],
+                names: namesList.mass_t,
                 func: (x) => {
                     return x * 0.007;
                 },
@@ -2916,7 +3208,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metric Tonne',
-                names: ['Tonne', 'mt', 'Metric Tonne'],
+                names: namesList.mass_mt,
                 func: (x) => {
                     return x / 157.473;
                 },
@@ -2927,13 +3219,13 @@ export const values: convVal[] = [
     },
     {
         name: 'US Ton',
-        names: ['Ton', 't', 'US Ton'],
+        names: namesList.mass_t,
         type: 'Mass',
         system: 'Imperial',
         calc: [
             {
                 to: 'Gram',
-                names: ['Gram', 'g'],
+                names: namesList.mass_g,
                 func: (x) => {
                     return x * 907185;
                 },
@@ -2941,7 +3233,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Ounce',
-                names: ['Ounce', 'oz'],
+                names: namesList.mass_oz,
                 func: (x) => {
                     return x * 32000;
                 },
@@ -2949,7 +3241,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pound',
-                names: ['Pound', 'lb'],
+                names: namesList.mass_lb,
                 func: (x) => {
                     return x * 2000;
                 },
@@ -2957,7 +3249,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Stone',
-                names: ['Stone', 'st'],
+                names: namesList.mass_st,
                 func: (x) => {
                     return x / 0.007;
                 },
@@ -2965,7 +3257,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'US Ton',
-                names: ['Ton', 't', 'US Ton'],
+                names: namesList.mass_t,
                 func: (x) => {
                     return x;
                 },
@@ -2973,7 +3265,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metric Tonne',
-                names: ['Tonne', 'mt', 'Metric Tonne'],
+                names: namesList.mass_mt,
                 func: (x) => {
                     return x / 1.102;
                 },
@@ -2984,13 +3276,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Metric Tonne',
-        names: ['Tonne', 'mt', 'Metric Tonne'],
+        names: namesList.mass_mt,
         type: 'Mass',
         system: 'Metric',
         calc: [
             {
                 to: 'Gram',
-                names: ['Gram', 'g'],
+                names: namesList.mass_g,
                 func: (x) => {
                     return x * (10 ** 6);
                 },
@@ -2998,7 +3290,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Ounce',
-                names: ['Ounce', 'oz'],
+                names: namesList.mass_oz,
                 func: (x) => {
                     return x * 35274;
                 },
@@ -3006,7 +3298,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Pound',
-                names: ['Pound', 'lb'],
+                names: namesList.mass_lb,
                 func: (x) => {
                     return x * 2204.62;
                 },
@@ -3014,7 +3306,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Stone',
-                names: ['Stone', 'st'],
+                names: namesList.mass_st,
                 func: (x) => {
                     return x * 157.473;
                 },
@@ -3022,7 +3314,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'US Ton',
-                names: ['Ton', 't', 'US Ton'],
+                names: namesList.mass_t,
                 func: (x) => {
                     return x * 1.102;
                 },
@@ -3030,7 +3322,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metric Tonne',
-                names: ['Tonne', 'mt', 'Metric Tonne'],
+                names: namesList.mass_mt,
                 func: (x) => {
                     return x;
                 },
@@ -3042,13 +3334,13 @@ export const values: convVal[] = [
     // Pressure
     {
         name: 'Pascal',
-        names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
+        names: namesList.pres_pa,
         type: 'Pressure',
         system: 'Metric',
         calc: [
             {
                 to: 'Pascal',
-                names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
+                names: namesList.pres_pa,
                 func: (x) => {
                     return x;
                 },
@@ -3056,7 +3348,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'mmHg',
-                names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+                names: namesList.pres_mmHg,
                 func: (x) => {
                     return x / 133.322;
                 },
@@ -3064,7 +3356,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'psi',
-                names: ['Pounds per square inch', 'psi'],
+                names: namesList.pres_psi,
                 func: (x) => {
                     return x / 6894.76;
                 },
@@ -3072,7 +3364,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Bar',
-                names: ['Bar'],
+                names: namesList.pres_bar,
                 func: (x) => {
                     return x / 100000;
                 },
@@ -3080,7 +3372,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Standard Atmosphere',
-                names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
+                names: namesList.pres_atm,
                 func: (x) => {
                     return x / 101325;
                 },
@@ -3091,13 +3383,13 @@ export const values: convVal[] = [
     },
     {
         name: 'mmHg',
-        names: ['millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+        names: namesList.pres_mmHg,
         type: 'Pressure',
         system: 'N/A',
         calc: [
             {
                 to: 'Pascal',
-                names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
+                names: namesList.pres_pa,
                 func: (x) => {
                     return x * 133.322;
                 },
@@ -3105,7 +3397,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'mmHg',
-                names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+                names: namesList.pres_mmHg,
                 func: (x) => {
                     return x;
                 },
@@ -3113,7 +3405,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'psi',
-                names: ['Pounds per square inch', 'psi'],
+                names: namesList.pres_psi,
                 func: (x) => {
                     return x / 51.7149;
                 },
@@ -3121,7 +3413,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Bar',
-                names: ['Bar'],
+                names: namesList.pres_bar,
                 func: (x) => {
                     return x / 750.062;
                 },
@@ -3129,7 +3421,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Standard Atmosphere',
-                names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
+                names: namesList.pres_atm,
                 func: (x) => {
                     return x / 760;
                 },
@@ -3140,13 +3432,13 @@ export const values: convVal[] = [
     },
     {
         name: 'psi',
-        names: ['Pounds per square inch', 'psi'],
+        names: namesList.pres_psi,
         type: 'Pressure',
         system: 'Imperial',
         calc: [
             {
                 to: 'Pascal',
-                names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
+                names: namesList.pres_pa,
                 func: (x) => {
                     return x * 6894.76;
                 },
@@ -3154,7 +3446,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'mmHg',
-                names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+                names: namesList.pres_mmHg,
                 func: (x) => {
                     return x * 51.7149;
                 },
@@ -3162,7 +3454,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'psi',
-                names: ['Pounds per square inch', 'psi'],
+                names: namesList.pres_psi,
                 func: (x) => {
                     return x;
                 },
@@ -3170,7 +3462,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Bar',
-                names: ['Bar'],
+                names: namesList.pres_bar,
                 func: (x) => {
                     return x / 14.504;
                 },
@@ -3178,7 +3470,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Standard Atmosphere',
-                names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
+                names: namesList.pres_atm,
                 func: (x) => {
                     return x / 14.696;
                 },
@@ -3189,13 +3481,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Bar',
-        names: ['Bar'],
+        names: namesList.pres_bar,
         type: 'Pressure',
         system: 'Metric',
         calc: [
             {
                 to: 'Pascal',
-                names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
+                names: namesList.pres_pa,
                 func: (x) => {
                     return x * 100000;
                 },
@@ -3203,7 +3495,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'mmHg',
-                names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+                names: namesList.pres_mmHg,
                 func: (x) => {
                     return x * 750.062;
                 },
@@ -3211,7 +3503,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'psi',
-                names: ['Pounds per square inch', 'psi'],
+                names: namesList.pres_psi,
                 func: (x) => {
                     return x * 14.504;
                 },
@@ -3219,7 +3511,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Bar',
-                names: ['Bar'],
+                names: namesList.pres_bar,
                 func: (x) => {
                     return x;
                 },
@@ -3227,7 +3519,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Standard Atmosphere',
-                names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
+                names: namesList.pres_atm,
                 func: (x) => {
                     return x / 1.013;
                 },
@@ -3238,13 +3530,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Standard Atmosphere',
-        names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
+        names: namesList.pres_atm,
         type: 'Pressure',
         system: 'N/A',
         calc: [
             {
                 to: 'Pascal',
-                names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
+                names: namesList.pres_pa,
                 func: (x) => {
                     return x * 101325;
                 },
@@ -3252,7 +3544,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'mmHg',
-                names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+                names: namesList.pres_mmHg,
                 func: (x) => {
                     return x * 760;
                 },
@@ -3260,7 +3552,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'psi',
-                names: ['Pounds per square inch', 'psi'],
+                names: namesList.pres_psi,
                 func: (x) => {
                     return x * 14.696;
                 },
@@ -3268,7 +3560,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Bar',
-                names: ['Bar'],
+                names: namesList.pres_bar,
                 func: (x) => {
                     return x * 1.013;
                 },
@@ -3276,7 +3568,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Standard Atmosphere',
-                names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
+                names: namesList.pres_atm,
                 func: (x) => {
                     return x;
                 },
@@ -3288,13 +3580,13 @@ export const values: convVal[] = [
     //energy
     {
         name: 'Electron Volt',
-        names: ['Electron Volt', 'eV', 'Electronvolt'],
+        names: namesList.nrg_ev,
         type: 'Energy',
         system: 'N/A',
         calc: [
             {
                 to: 'Electron Volt',
-                names: ['Electron Volt', 'eV', 'Electronvolt'],
+                names: namesList.nrg_ev,
                 func: (x) => {
                     return x;
                 },
@@ -3302,7 +3594,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Joule',
-                names: ['Joule', 'j'],
+                names: namesList.nrg_j,
                 func: (x) => {
                     return x / (6.242 * 10 ** 18);
                 },
@@ -3310,7 +3602,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Calorie',
-                names: ['Calorie', 'cal'],
+                names: namesList.nrg_cal,
                 func: (x) => {
                     return x / (2.611 * 10 ** 19);
                 },
@@ -3321,13 +3613,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Joule',
-        names: ['Joule', 'j'],
+        names: namesList.nrg_j,
         type: 'Energy',
         system: 'Metric',
         calc: [
             {
                 to: 'Electron Volt',
-                names: ['Electron Volt', 'eV', 'Electronvolt'],
+                names: namesList.nrg_ev,
                 func: (x) => {
                     return x * (6.242 * 10 ** 18);
                 },
@@ -3335,7 +3627,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Joule',
-                names: ['Joule', 'j'],
+                names: namesList.nrg_j,
                 func: (x) => {
                     return x;
                 },
@@ -3343,7 +3635,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Calorie',
-                names: ['Calorie', 'cal'],
+                names: namesList.nrg_cal,
                 func: (x) => {
                     return x / 4.184;
                 },
@@ -3354,13 +3646,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Calorie',
-        names: ['Calorie', 'cal'],
+        names: namesList.nrg_cal,
         type: 'Energy',
         system: 'N/A',
         calc: [
             {
                 to: 'Electron Volt',
-                names: ['Electron Volt', 'eV', 'Electronvolt'],
+                names: namesList.nrg_ev,
                 func: (x) => {
                     return x / (2.611 * 10 ** 19);
                 },
@@ -3368,7 +3660,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Joule',
-                names: ['Joule', 'j'],
+                names: namesList.nrg_j,
                 func: (x) => {
                     return x * 4.184;
                 },
@@ -3376,7 +3668,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Calorie',
-                names: ['Calorie', 'cal'],
+                names: namesList.nrg_cal,
                 func: (x) => {
                     return x;
                 },
@@ -3388,13 +3680,13 @@ export const values: convVal[] = [
     //area
     {
         name: 'Square foot',
-        names: ['Square foot', 'ft2'],
-        type: 'Distance',
+        names: namesList.area_ft2,
+        type: 'Area',
         system: 'Imperial',
         calc: [
             {
                 to: 'Square foot',
-                names: ['Square foot', 'ft2'],
+                names: namesList.area_ft2,
                 func: (x) => {
                     return x;
                 },
@@ -3402,7 +3694,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square metre',
-                names: ['Square metre', 'm2'],
+                names: namesList.area_m2,
                 func: (x) => {
                     return x / 10.764;
                 },
@@ -3410,7 +3702,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Acre',
-                names: ['Acre', 'ac'],
+                names: namesList.area_ac,
                 func: (x) => {
                     return x / 43560;
                 },
@@ -3418,7 +3710,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hectare',
-                names: ['Hectare', 'Ha'],
+                names: namesList.area_ha,
                 func: (x) => {
                     return x / 107600;
                 },
@@ -3426,7 +3718,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square kilometre',
-                names: ['Square kilometre', 'km2'],
+                names: namesList.area_km2,
                 func: (x) => {
                     return x / 10764000;
                 },
@@ -3434,7 +3726,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square mile',
-                names: ['Square mile', 'mi2'],
+                names: namesList.area_mi2,
                 func: (x) => {
                     return x / 27880000;
                 },
@@ -3445,13 +3737,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Square metre',
-        names: ['Square metre', 'm2'],
-        type: 'Distance',
+        names: namesList.area_m2,
+        type: 'Area',
         system: 'Metric',
         calc: [
             {
                 to: 'Square foot',
-                names: ['Square foot', 'ft2'],
+                names: namesList.area_ft2,
                 func: (x) => {
                     return x * 10.764;
                 },
@@ -3459,7 +3751,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square metre',
-                names: ['Square metre', 'm2'],
+                names: namesList.area_m2,
                 func: (x) => {
                     return x;
                 },
@@ -3467,7 +3759,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Acre',
-                names: ['Acre', 'ac'],
+                names: namesList.area_ac,
                 func: (x) => {
                     return x / 4047;
                 },
@@ -3475,7 +3767,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hectare',
-                names: ['Hectare', 'Ha'],
+                names: namesList.area_ha,
                 func: (x) => {
                     return x / 10000;
                 },
@@ -3483,7 +3775,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square kilometre',
-                names: ['Square kilometre', 'km2'],
+                names: namesList.area_km2,
                 func: (x) => {
                     return x / 1e+6;
                 },
@@ -3491,7 +3783,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square mile',
-                names: ['Square mile', 'mi2'],
+                names: namesList.area_mi2,
                 func: (x) => {
                     return x / 2.59e+6;
                 },
@@ -3502,13 +3794,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Acre',
-        names: ['Acre', 'ac'],
-        type: 'Distance',
+        names: namesList.area_ac,
+        type: 'Area',
         system: 'Imperial',
         calc: [
             {
                 to: 'Square foot',
-                names: ['Square foot', 'ft2'],
+                names: namesList.area_ft2,
                 func: (x) => {
                     return x * 43560;
                 },
@@ -3516,7 +3808,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square metre',
-                names: ['Square metre', 'm2'],
+                names: namesList.area_m2,
                 func: (x) => {
                     return x * 4046.86;
                 },
@@ -3524,7 +3816,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Acre',
-                names: ['Acre', 'ac'],
+                names: namesList.area_ac,
                 func: (x) => {
                     return x;
                 },
@@ -3532,7 +3824,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hectare',
-                names: ['Hectare', 'Ha'],
+                names: namesList.area_ha,
                 func: (x) => {
                     return x / 2.471;
                 },
@@ -3540,7 +3832,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square kilometre',
-                names: ['Square kilometre', 'km2'],
+                names: namesList.area_km2,
                 func: (x) => {
                     return x / 247.1;
                 },
@@ -3548,7 +3840,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square mile',
-                names: ['Square mile', 'mi2'],
+                names: namesList.area_mi2,
                 func: (x) => {
                     return x / 640;
                 },
@@ -3559,13 +3851,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Hectare',
-        names: ['Hectare', 'ha'],
-        type: 'Distance',
+        names: namesList.area_ha,
+        type: 'Area',
         system: 'Metric',
         calc: [
             {
                 to: 'Square foot',
-                names: ['Square foot', 'ft2'],
+                names: namesList.area_ft2,
                 func: (x) => {
                     return x * 107639;
                 },
@@ -3573,7 +3865,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square metre',
-                names: ['Square metre', 'm2'],
+                names: namesList.area_m2,
                 func: (x) => {
                     return x * 10000;
                 },
@@ -3581,7 +3873,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Acre',
-                names: ['Acre', 'ac'],
+                names: namesList.area_ac,
                 func: (x) => {
                     return x * 2.471;
                 },
@@ -3589,7 +3881,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hectare',
-                names: ['Hectare', 'Ha'],
+                names: namesList.area_ha,
                 func: (x) => {
                     return x;
                 },
@@ -3597,7 +3889,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square kilometre',
-                names: ['Square kilometre', 'km2'],
+                names: namesList.area_km2,
                 func: (x) => {
                     return x / 100;
                 },
@@ -3605,7 +3897,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square mile',
-                names: ['Square mile', 'mi2'],
+                names: namesList.area_mi2,
                 func: (x) => {
                     return x / 258.999;
                 },
@@ -3616,13 +3908,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Square kilometre',
-        names: ['Square kilometre', 'km2'],
-        type: 'Distance',
+        names: namesList.area_km2,
+        type: 'Area',
         system: 'Metric',
         calc: [
             {
                 to: 'Square foot',
-                names: ['Square foot', 'ft2'],
+                names: namesList.area_ft2,
                 func: (x) => {
                     return x * 1.076e+7;
                 },
@@ -3630,7 +3922,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square metre',
-                names: ['Square metre', 'm2'],
+                names: namesList.area_m2,
                 func: (x) => {
                     return x * 1e+6;
                 },
@@ -3638,7 +3930,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Acre',
-                names: ['Acre', 'ac'],
+                names: namesList.area_ac,
                 func: (x) => {
                     return x * 247.105;
                 },
@@ -3646,7 +3938,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hectare',
-                names: ['Hectare', 'Ha'],
+                names: namesList.area_ha,
                 func: (x) => {
                     return x * 100;
                 },
@@ -3654,7 +3946,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square kilometre',
-                names: ['Square kilometre', 'km2'],
+                names: namesList.area_km2,
                 func: (x) => {
                     return x;
                 },
@@ -3662,7 +3954,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square mile',
-                names: ['Square mile', 'mi2'],
+                names: namesList.area_mi2,
                 func: (x) => {
                     return x / 2.59;
                 },
@@ -3673,13 +3965,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Square mile',
-        names: ['Square mile', 'mi2'],
-        type: 'Distance',
+        names: namesList.area_mi2,
+        type: 'Area',
         system: 'Imperial',
         calc: [
             {
                 to: 'Square foot',
-                names: ['Square foot', 'ft2'],
+                names: namesList.area_ft2,
                 func: (x) => {
                     return x * 2.788e+7;
                 },
@@ -3687,7 +3979,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square metre',
-                names: ['Square metre', 'm2'],
+                names: namesList.area_m2,
                 func: (x) => {
                     return x * 2.59e+6;
                 },
@@ -3695,7 +3987,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Acre',
-                names: ['Acre', 'ac'],
+                names: namesList.area_ac,
                 func: (x) => {
                     return x * 640;
                 },
@@ -3703,7 +3995,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Hectare',
-                names: ['Hectare', 'Ha'],
+                names: namesList.area_ha,
                 func: (x) => {
                     return x * 258.999;
                 },
@@ -3711,7 +4003,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square kilometre',
-                names: ['Square kilometre', 'km2'],
+                names: namesList.area_km2,
                 func: (x) => {
                     return x;
                 },
@@ -3719,7 +4011,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Square mile',
-                names: ['Square mile', 'mi2'],
+                names: namesList.area_mi2,
                 func: (x) => {
                     return x;
                 },
@@ -3731,13 +4023,13 @@ export const values: convVal[] = [
     //angle
     {
         name: 'Gradian',
-        names: ['Gradian', 'grad'],
+        names: namesList.angle_grad,
         type: 'Angle',
         system: 'N/A',
         calc: [
             {
                 to: 'Gradian',
-                names: ['Gradian', 'grad'],
+                names: namesList.angle_grad,
                 func: (x) => {
                     return x;
                 },
@@ -3745,7 +4037,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Degree',
-                names: ['Degree', 'deg'],
+                names: namesList.angle_deg,
                 func: (x) => {
                     return x * 0.9;
                 },
@@ -3753,7 +4045,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Radian',
-                names: ['Radian', 'rad'],
+                names: namesList.angle_rad,
                 func: (x) => {
                     return (x * Math.PI) / 200;
                 },
@@ -3764,13 +4056,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Degree',
-        names: ['Degree', 'deg'],
+        names: namesList.angle_deg,
         type: 'Angle',
         system: 'N/A',
         calc: [
             {
                 to: 'Gradian',
-                names: ['Gradian', 'grad'],
+                names: namesList.angle_grad,
                 func: (x) => {
                     return x;
                 },
@@ -3778,7 +4070,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Degree',
-                names: ['Degree', 'deg'],
+                names: namesList.angle_deg,
                 func: (x) => {
                     return x;
                 },
@@ -3786,7 +4078,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Radian',
-                names: ['Radian', 'rad'],
+                names: namesList.angle_rad,
                 func: (x) => {
                     return (x * Math.PI) / 180;
                 },
@@ -3797,13 +4089,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Radian',
-        names: ['Radian', 'rad'],
+        names: namesList.angle_rad,
         type: 'Angle',
         system: 'N/A',
         calc: [
             {
                 to: 'Gradian',
-                names: ['Gradian', 'grad'],
+                names: namesList.angle_grad,
                 func: (x) => {
                     return (x * 200) / Math.PI;
                 },
@@ -3811,7 +4103,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Degree',
-                names: ['Degree', 'deg'],
+                names: namesList.angle_deg,
                 func: (x) => {
                     return (x * 180) / Math.PI;
                 },
@@ -3819,7 +4111,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Radian',
-                names: ['Radian', 'rad'],
+                names: namesList.angle_rad,
                 func: (x) => {
                     return x;
                 },
@@ -3831,13 +4123,13 @@ export const values: convVal[] = [
     //speed
     {
         name: 'Kilometres per hour',
-        names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
-        type: 'Distance',
+        names: namesList.speed_kmh,
+        type: 'Speed',
         system: 'Metric',
         calc: [
             {
                 to: 'Kilometres per hour',
-                names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+                names: namesList.speed_kmh,
                 func: (x) => {
                     return x;
                 },
@@ -3845,7 +4137,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Miles per hour',
-                names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+                names: namesList.speed_mph,
                 func: (x) => {
                     return x / 1.609;
                 },
@@ -3853,7 +4145,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Knot',
-                names: ['Knot', 'kt', 'nmih', 'nmh'],
+                names: namesList.speed_kt,
                 func: (x) => {
                     return x / 1.852;
                 },
@@ -3861,7 +4153,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metres per second',
-                names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                names: namesList.speed_ms,
                 func: (x) => {
                     return x / 3.6;
                 },
@@ -3869,7 +4161,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Light',
-                names: ['Light', 'c', 'lightspeed'],
+                names: namesList.speed_c,
                 func: (x) => {
                     return x / 1079252848.8;
                 },
@@ -3880,13 +4172,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Miles per hour',
-        names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
-        type: 'Distance',
+        names: namesList.speed_mph,
+        type: 'Speed',
         system: 'Imperial',
         calc: [
             {
                 to: 'Kilometres per hour',
-                names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+                names: namesList.speed_kmh,
                 func: (x) => {
                     return x * 1.609;
                 },
@@ -3894,7 +4186,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Miles per hour',
-                names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+                names: namesList.speed_mph,
                 func: (x) => {
                     return x;
                 },
@@ -3902,7 +4194,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Knot',
-                names: ['Knot', 'kt', 'nmih', 'nmh'],
+                names: namesList.speed_kt,
                 func: (x) => {
                     return x / 1.151;
                 },
@@ -3910,7 +4202,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metres per second',
-                names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                names: namesList.speed_ms,
                 func: (x) => {
                     return x / 2.237;
                 },
@@ -3918,7 +4210,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Light',
-                names: ['Light', 'c', 'lightspeed'],
+                names: namesList.speed_c,
                 func: (x) => {
                     return x / 670635728.546;
                 },
@@ -3929,13 +4221,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Knots',
-        names: ['Knots', 'kt', 'nmih', 'nmh'],
-        type: 'Distance',
+        names: namesList.speed_kt,
+        type: 'Speed',
         system: 'N/A',
         calc: [
             {
                 to: 'Kilometres per hour',
-                names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+                names: namesList.speed_kmh,
                 func: (x) => {
                     return x * 1.852;
                 },
@@ -3943,7 +4235,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Miles per hour',
-                names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+                names: namesList.speed_mph,
                 func: (x) => {
                     return x * 1.151;
                 },
@@ -3951,7 +4243,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Knot',
-                names: ['Knot', 'kt', 'nmih', 'nmh'],
+                names: namesList.speed_kt,
                 func: (x) => {
                     return x;
                 },
@@ -3959,7 +4251,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metres per second',
-                names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                names: namesList.speed_ms,
                 func: (x) => {
                     return x / 1.944;
                 },
@@ -3967,7 +4259,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Light',
-                names: ['Light', 'c', 'lightspeed'],
+                names: namesList.speed_c,
                 func: (x) => {
                     return x / 582796538.352;
                 },
@@ -3978,13 +4270,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Metres per second',
-        names: ['Metres per second', 'ms', 'mps', 'm/s',],
-        type: 'Distance',
+        names: namesList.speed_ms,
+        type: 'Speed',
         system: 'Metric',
         calc: [
             {
                 to: 'Kilometres per hour',
-                names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+                names: namesList.speed_kmh,
                 func: (x) => {
                     return x * 3.6;
                 },
@@ -3992,7 +4284,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Miles per hour',
-                names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+                names: namesList.speed_mph,
                 func: (x) => {
                     return x * 2.237;
                 },
@@ -4000,7 +4292,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Knot',
-                names: ['Knot', 'kt', 'nmih', 'nmh'],
+                names: namesList.speed_kt,
                 func: (x) => {
                     return x * 1.944;
                 },
@@ -4008,7 +4300,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metres per second',
-                names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                names: namesList.speed_ms,
                 func: (x) => {
                     return x;
                 },
@@ -4016,7 +4308,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Light',
-                names: ['Light', 'c', 'lightspeed'],
+                names: namesList.speed_c,
                 func: (x) => {
                     return x / 299792458;
                 },
@@ -4027,13 +4319,13 @@ export const values: convVal[] = [
     },
     {
         name: 'Light',
-        names: ['Light', 'c', 'lightspeed'],
-        type: 'Distance',
+        names: namesList.speed_c,
+        type: 'Speed',
         system: 'Metric',
         calc: [
             {
                 to: 'Kilometres per hour',
-                names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+                names: namesList.speed_kmh,
                 func: (x) => {
                     return x * 3.6 * 299792458;
                 },
@@ -4041,7 +4333,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Miles per hour',
-                names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+                names: namesList.speed_mph,
                 func: (x) => {
                     return x * 2.237 * 299792458;
                 },
@@ -4049,7 +4341,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Knot',
-                names: ['Knot', 'kt', 'nmih', 'nmh'],
+                names: namesList.speed_kt,
                 func: (x) => {
                     return x * 1.944 * 299792458;
                 },
@@ -4057,7 +4349,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Metres per second',
-                names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                names: namesList.speed_ms,
                 func: (x) => {
                     return x * 299792458;
                 },
@@ -4065,7 +4357,7 @@ export const values: convVal[] = [
             },
             {
                 to: 'Light',
-                names: ['Light', 'c', 'lightspeed'],
+                names: namesList.speed_c,
                 func: (x) => {
                     return x;
                 },
@@ -4077,319 +4369,319 @@ export const values: convVal[] = [
     //arbitrary units
     {
         name: 'Arbitrary units',
-        names: ['Arbitrary units', 'idk', 'wtf', '???', '?'],
+        names: namesList.arbitrary,
         type: 'N/A',
         system: 'N/A',
         calc: [
             {
                 to: 'Celsius',
-                names: ['Celsius', 'Celcius', 'Centigrade', 'C'],
+                names: namesList.temp_c,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Fahrenheit',
-                names: ['Fahrenheit', 'F'],
+                names: namesList.temp_f,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Kelvin',
-                names: ['Kelvin', 'K'],
+                names: namesList.temp_k,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Inch',
-                names: ['Inch', 'in'],
+                names: namesList.dist_in,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Feet',
-                names: ['Feet', 'ft', 'foot'],
+                names: namesList.dist_ft,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Metre',
-                names: ['Metre', 'm', 'Meter'],
+                names: namesList.dist_m,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Mile',
-                names: ['Mile', 'mi'],
+                names: namesList.dist_mi,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Astronomical Unit',
-                names: ['Astronomical Unit', 'au'],
+                names: namesList.dist_au,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Light Year',
-                names: ['Light Year', 'LY'],
+                names: namesList.dist_ly,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Second',
-                names: ['Second', 'sec', 's'],
+                names: namesList.time_s,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Minute',
-                names: ['Minute', 'min',],
+                names: namesList.time_min,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Hour',
-                names: ['Hour', 'hr'],
+                names: namesList.time_hr,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Day',
-                names: ['Day', 'd',],
+                names: namesList.time_d,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Week',
-                names: ['Week', 'wk', 'sennight',],
+                names: namesList.time_wk,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Quarantine',
-                names: ['Quarantine', 'quarantina', 'quarentine'],
+                names: namesList.time_qua,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Month',
-                names: ['Month', 'mth',],
+                names: namesList.time_mth,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Year',
-                names: ['Year', 'yr',],
+                names: namesList.time_yr,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Decade',
-                names: ['Decade'],
+                names: namesList.time_dec,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Century',
-                names: ['Century'],
+                names: namesList.time_cen,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Millennium',
-                names: ['Millennium', 'Millennia',],
+                names: namesList.time_mil,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Megaannum',
-                names: ['Megaannum',],
+                names: namesList.time_ma,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Eon',
-                names: ['Eon',],
+                names: namesList.time_eon,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Teaspoon',
-                names: ['Teaspoon', 'tsp',],
+                names: namesList.vol_tsp,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Tablespoon',
-                names: ['Tablespoon', 'tbp',],
+                names: namesList.vol_tbp,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Fluid Ounce',
-                names: ['Fluid Ounce', 'floz', 'oz'],
+                names: namesList.vol_floz,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Cup',
-                names: ['Cup', 'C',],
+                names: namesList.vol_c,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Pint',
-                names: ['Pint', 'pt',],
+                names: namesList.vol_pt,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Litre',
-                names: ['Litre', 'Liter', 'L'],
+                names: namesList.vol_l,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Gallon',
-                names: ['Galloon', 'gal',],
+                names: namesList.vol_gal,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Cubic Metre',
-                names: ['Cubic Metre', 'm3', 'm^3'],
+                names: namesList.vol_m3,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Pascal',
-                names: ['Pascal', 'Pa', 'N/m^2', 'N/m', 'Nm'],
+                names: namesList.pres_pa,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'mmHg',
-                names: ['Torr', 'millimetre of Mercury', 'mmHg', 'millimeter of Mercury',],
+                names: namesList.pres_mmHg,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'psi',
-                names: ['Pounds per square inch', 'psi'],
+                names: namesList.pres_psi,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Bar',
-                names: ['Bar'],
+                names: namesList.pres_bar,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Standard Atmosphere',
-                names: ['Atmosphere', 'Standard Atmosphere', 'atm'],
+                names: namesList.pres_atm,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Electron Volt',
-                names: ['Electron Volt', 'eV', 'Electronvolt'],
+                names: namesList.nrg_ev,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Joule',
-                names: ['Joule', 'j'],
+                names: namesList.nrg_j,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Calorie',
-                names: ['Calorie', 'cal'],
+                names: namesList.nrg_cal,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Square foot',
-                names: ['Square foot', 'ft2'],
+                names: namesList.area_ft2,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Square metre',
-                names: ['Square metre', 'm2'],
+                names: namesList.area_m2,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Acre',
-                names: ['Acre', 'ac'],
+                names: namesList.area_ac,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Hectare',
-                names: ['Hectare', 'Ha'],
+                names: namesList.area_ha,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Square kilometre',
-                names: ['Square kilometre', 'km2'],
+                names: namesList.area_km2,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Square mile',
-                names: ['Square mile', 'mi2'],
+                names: namesList.area_mi2,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Gradian',
-                names: ['Gradian', 'grad'],
+                names: namesList.angle_grad,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Degree',
-                names: ['Degree', 'deg'],
+                names: namesList.angle_deg,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Radian',
-                names: ['Radian', 'rad'],
+                names: namesList.angle_rad,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Kilometres per hour',
-                names: ['Kilometres per hour', 'kmh', 'kph', 'km/h'],
+                names: namesList.speed_kmh,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Miles per hour',
-                names: ['Miles per hour', 'mph', 'mih', 'mi/h', 'm/h'],
+                names: namesList.speed_mph,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Knot',
-                names: ['Knot', 'kt', 'nmih', 'nmh'],
+                names: namesList.speed_kt,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Metres per second',
-                names: ['Metres per second', 'ms', 'mps', 'm/s',],
+                names: namesList.speed_ms,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },
             {
                 to: 'Light',
-                names: ['Light', 'c', 'lightspeed'],
+                names: namesList.speed_c,
                 func: toArbitrary.func,
                 text: toArbitrary.text
             },

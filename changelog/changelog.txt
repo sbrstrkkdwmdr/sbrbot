@@ -484,3 +484,5 @@ changes:
 [FIX] error messages being unspecific 
 [QOL] add "#" to global rank
 [QOL] convert preserves sig figs
+[QOL] rewrite convert 
+[ADD] add fortnight conversions

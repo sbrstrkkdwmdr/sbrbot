@@ -404,97 +404,132 @@ export async function convert(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const EmbedList = new Discord.EmbedBuilder()
+    const embedres = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
-        .setTitle('List of measurements')
+        .setDescription('⠀');
 
-        .addFields([
-            {
-                name: 'Temperature',
-                value: [
-                    'celsius (c)', 'fahrenheit (f)', 'kelvin (k)'
-                ].join(' | '),
-                inline: true
-            },
-            {
-                name: 'Distance',
-                value: [
-                    'inch (in)', 'foot (ft)', 'metre (m)', 'mile (mi)', 'astronomical unit (au)', 'light year (ly)', 'parsec (pc)'
-                ].join(' | '),
-                inline: true
-            },
-            {
-                name: 'Time',
-                value: [
-                    'second (s)', 'minute (min)', 'hour (h)', 'day (d)', 'week (wk)', 'month (mth)', 'year (y)',
-                ].join(' | '),
-                inline: true
-            },
-            {
-                name: 'Volume',
-                value: [
-                    'teaspoon (tsp)', 'tablespoon (tbp)', 'fluid ounce (floz)', 'cup (c)', 'pint (pt)', 'litre (l)', 'gallon (gal)', 'cubic metres (m3)',
-                ].join(' | '),
-                inline: true
-            },
-            {
-                name: 'Mass',
-                value: [
-                    'gram (g)', 'ounce (oz)', 'pound (lb)', 'stone (st)', 'us ton (t)', 'metric tonne (mt)',
-                ].join(' | '),
-                inline: true
-            },
-            {
-                name: 'Pressure',
-                value: [
-                    'pascal (Pa)', 'millimetre of mercury/torr (mmHg)', 'pounds per square inch (psi)', 'bar', 'standard atmosphere (atm)',
-                ].join(' | '),
-                inline: true
-            },
-            {
-                name: 'Energy',
-                value: [
-                    'electronvolt (eV)', 'joule (j)', 'calorie (cal)',
-                ].join(' | '),
-                inline: true
-            },
-            {
-                name: 'Area',
-                value: [
-                    'square metre (m2)', 'square kilometre (km2)', 'square mile (mi2)', 'hectare (ha)', 'acre (ac)',
-                ].join(' | '),
-                inline: true
-            },
-            {
-                name: 'Angle',
-                value: [
-                    'degree (deg)', 'gradian (grad)', 'radian (rad)',
-                ].join(' | '),
-                inline: true
-            },
-            {
-                name: 'Speed',
-                value: [
-                    'metres per second (ms)', 'kilometres per hour (kmh)', 'miles per hour (mph)', 'knot/nautical miles per hour (kt)', 'lightspeed (c)'
-                ].join(' | '),
-                inline: true
-            },
-            {
-                name: 'Non-measurements',
-                value: 'help, metricprefixes',
-                inline: false
-            }
+    let useEmbeds = [];
 
-        ])
-        ;
-    const siEmbed = new Discord.EmbedBuilder()
-        .setColor(colours.embedColour.info.dec)
-        .setTitle('List of SI prefixes')
-        .addFields([
-            {
-                name: 'Increments',
-                value:
-                    `\`
+    let conv = 'Unknown';
+    let convtype = `${cat1} to ${cat2}`;
+    let eq = 'Unknown';
+    let formula = 'Unknown';
+    let units = 'Unknown';
+
+    let converting = true;
+
+    const reqHelp: string[] = ['help', 'units'];
+    const reqSlc: string[] = ['slc'];
+    const reqprefix: string[] = ['si', 'metricprefixes', 'prefix'];
+
+    function toName(x: conversions.convVal | conversions.convValCalc) {
+        return x.names[1] ? `${x.names[0]} (${x.names[1]})` : x.names[0];
+    }
+
+    if ((reqHelp.includes(cat1.toLowerCase()) || cat2 == '')
+        && !reqSlc.includes(cat1.toLowerCase())
+        && !reqprefix.includes(cat1.toLowerCase())
+    ) {
+        useEmbeds = [new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.info.dec)
+            .setTitle('List of measurements')
+            .addFields(
+                {
+                    name: 'Temperature',
+                    value: conversions.values.filter(x => x.type == 'Temperature')
+                        .map(x => toName(x)).join(', '),
+                    inline: true
+                },
+                {
+                    name: 'Distance',
+                    value: conversions.values.filter(x => x.type == 'Distance')
+                        .map(x => toName(x)).join(', '),
+                    inline: true
+                },
+                {
+                    name: 'Time',
+                    value: conversions.values.filter(x => x.type == 'Time')
+                        .map(x => toName(x)).join(', '),
+                    inline: true
+                },
+                {
+                    name: 'Volume',
+                    value: conversions.values.filter(x => x.type == 'Volume')
+                        .map(x => toName(x)).join(', '),
+                    inline: true
+                },
+                {
+                    name: 'Mass',
+                    value: conversions.values.filter(x => x.type == 'Mass')
+                        .map(x => toName(x)).join(', '),
+                    inline: true
+                },
+                {
+                    name: 'Pressure',
+                    value: conversions.values.filter(x => x.type == 'Pressure')
+                        .map(x => toName(x)).join(', '),
+                    inline: true
+                },
+                {
+                    name: 'Energy',
+                    value: conversions.values.filter(x => x.type == 'Energy')
+                        .map(x => toName(x)).join(', '),
+                    inline: true
+                },
+                {
+                    name: 'Area',
+                    value: conversions.values.filter(x => x.type == 'Area')
+                        .map(x => toName(x)).join(', '),
+                    inline: true
+                },
+                {
+                    name: 'Angle',
+                    value: conversions.values.filter(x => x.type == 'Angle')
+                        .map(x => toName(x)).join(', '),
+                    inline: true
+                },
+                {
+                    name: 'Speed',
+                    value: conversions.values.filter(x => x.type == 'Speed')
+                        .map(x => toName(x)).join(', '),
+                    inline: true
+                },
+                {
+                    name: 'Non-measurements',
+                    value: 'help, metricprefixes',
+                    inline: false
+                })];
+        converting = false;
+    }
+    if (reqSlc.includes(cat1.toLowerCase())) {
+        useEmbeds = [new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.info.dec)
+            .setTitle('Standard Laboratory Conditions')
+            .addFields([
+                {
+                    name: '25 C (298.15 K) and 1.000 atm (101.325 kPa)',
+                    value:
+                        `100mL H₂O = 100g H₂O`,
+                    inline: false
+                },
+                {
+                    name: '25 C (298.15 K) and 100 kPa (0.986923 atm)',
+                    value:
+                        `100mL H₂O = 99.7g H₂O`,
+                    inline: false
+                }
+            ])];
+        converting = false;
+    }
+    if (reqprefix.includes(cat1.toLowerCase())) {
+        useEmbeds = [new Discord.EmbedBuilder()
+            .setColor(colours.embedColour.info.dec)
+            .setTitle('List of SI prefixes')
+            .addFields([
+                {
+                    name: 'Increments',
+                    value:
+                        `\`
 Q  | quetta | 10^30 | Nonillion   | 1,000,000,000,000,000,000,000,000,000,000
 R  | ronna  | 10^27 | Octillion   | 1,000,000,000,000,000,000,000,000,000
 Y  | yotta  | 10^24 | Septillion  | 1,000,000,000,000,000,000,000,000
@@ -508,12 +543,12 @@ k  | kilo   | 10^3  | Thousand    | 1,000
 h  | hecto  | 10^2  | Hundred     | 100
 da | deca   | 10^1  | Ten         | 10
 \``,
-                inline: false
-            },
-            {
-                name: 'Decrements',
-                value:
-                    `\`
+                    inline: false
+                },
+                {
+                    name: 'Decrements',
+                    value:
+                        `\`
 d | deci   | 10^-1  | Tenth         | 0.1
 c | centi  | 10^-2  | Hundredth     | 0.01
 m | milli  | 10^-3  | Thousandth    | 0.001
@@ -527,57 +562,9 @@ y | yocto  | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
 r | ronto  | 10^-27 | Octillionth   | 0.000 000 000 000 000 000 000 000 001
 q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
 \``,
-                inline: false
-            }
-        ]);
-
-    const EmbedSLC = new Discord.EmbedBuilder()
-        .setColor(colours.embedColour.info.dec)
-        .setTitle('Standard Laboratory Conditions')
-        .addFields([
-            {
-                name: '25 C (298.15 K) and 1.000 atm (101.325 kPa)',
-                value:
-                    `100mL H₂O = 100g H₂O`,
-                inline: false
-            },
-            {
-                name: '25 C (298.15 K) and 100 kPa (0.986923 atm)',
-                value:
-                    `100mL H₂O = 99.7g H₂O`,
-                inline: false
-            }
-        ]);
-    const embedres = new Discord.EmbedBuilder()
-        .setColor(colours.embedColour.info.dec)
-        .setDescription('⠀');
-
-    let useEmbeds = [];
-
-    let conv = 'Unknown';
-    let convtype = `${cat1} to ${cat2}`;
-    let eq = 'Unknown';
-    let formula = 'Unknown';
-
-    let converting = true;
-
-    const reqHelp: string[] = ['help', 'units'];
-    const reqSlc: string[] = ['slc'];
-    const reqprefix: string[] = ['si', 'metricprefixes', 'prefix'];
-
-    if ((reqHelp.includes(cat1.toLowerCase()) || cat2 == '')
-        && !reqSlc.includes(cat1.toLowerCase())
-        && !reqprefix.includes(cat1.toLowerCase())
-    ) {
-        useEmbeds = [EmbedList];
-        converting = false;
-    }
-    if (reqSlc.includes(cat1.toLowerCase())) {
-        useEmbeds = [EmbedSLC];
-        converting = false;
-    }
-    if (reqprefix.includes(cat1.toLowerCase())) {
-        useEmbeds = [siEmbed];
+                    inline: false
+                }
+            ])];
         converting = false;
     }
 
@@ -598,8 +585,11 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
             }
 
             const names: string[] = [];
-            curObject.names.forEach(x =>
-                names.push(x.toUpperCase())
+            curObject.names.forEach(x => {
+                if (x !== null) {
+                    names.push(x.toUpperCase());
+                }
+            }
             );
 
             if (names.includes(tcat1.originalValue.toUpperCase()) || names.includes(cat1.toUpperCase())) {
@@ -615,9 +605,11 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
                     }
 
                     const calcNames: string[] = [];
-                    curCalc.names.forEach(x =>
-                        calcNames.push(x.toUpperCase())
-                    );
+                    curCalc.names.forEach(x => {
+                        if (x !== null) {
+                            calcNames.push(x.toUpperCase());
+                        }
+                    });
                     if (calcNames.includes(tcat2.originalValue.toUpperCase()) || calcNames.includes(cat2.toUpperCase())) {
                         let secondaryMetric = false;
                         formula = curCalc.text;
@@ -633,9 +625,11 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
                                 break;
                             }
                             const names2: string[] = [];
-                            curObject2.names.forEach(x =>
-                                names2.push(x.toUpperCase())
-                            );
+                            curObject2.names.forEach(x => {
+                                if (x !== null) {
+                                    names2.push(x.toUpperCase());
+                                }
+                            });
                             if (names2.includes(tcat2.originalValue.toUpperCase()) && curObject2.system == 'Metric') {
                                 secondaryMetric = true;
                             }
@@ -663,13 +657,18 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
 
                         conv = curObject.type;
                         convtype = `${fromType} => ${toType}`;
-                        
-                        eq = `${calc.toScientificNotation(finNum, `${numAsStr.includes('e') ? numAsStr.split('e')[0] : numAsStr}`.replace(/[\.\-]/gm, '').length)}`;
+                        const sigfig = calc.toScientificNotation(finNum, calc.getSigFigs(numAsStr));
+                        eq = sigfig == `${finNum}` ? `${finNum}` : `\`\nFull: ${finNum}\nSF:   ${sigfig}\``;
 
                         const usVol = [];
 
+                        units = curObject.calc
+                            .filter(x => !x.names.includes('Arbitrary units'))
+                            .map(x => toName(x))
+                            .join(', ');
+
                         if (curObject.type == 'Volume' && (usVol.includes(curObject.name) || usVol.includes(curCalc.to))) {
-                            embedres.setDescription('Using US measurements not Imperial');
+                            embedres.setFooter({ text: 'Using US measurements not Imperial' });
                         }
 
                         break;
@@ -684,7 +683,7 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
             error('nf');
         }
 
-        embedres.setTitle(`${conv}`);
+        embedres.setTitle(`${conv} conversion`);
         embedres.addFields([
             {
                 name: `${convtype}`,
@@ -694,6 +693,11 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
             {
                 name: 'Formula',
                 value: `\`${formula}\``,
+                inline: false
+            },
+            {
+                name: `${conv} units`,
+                value: `${units}`,
                 inline: false
             }
         ]);

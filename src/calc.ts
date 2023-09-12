@@ -76,30 +76,26 @@ export function sigfig(a: number, b: number) {
     };
 }
 
-/**
- */
 export function toScientificNotation(number: number, significantFigures: number) {
-    // Check if the number is not zero
     if (number !== 0) {
-        // Calculate the order of magnitude (exponent) of the number
         const exponent = Math.floor(Math.log10(Math.abs(number)));
-
-        // Calculate the significant digits (mantissa)
         const mantissa = (number / Math.pow(10, exponent)).toFixed(significantFigures - 1);
-
-        // Check if converting to scientific notation changes the number
         const scientificNotation = +mantissa * Math.pow(10, exponent);
         if (scientificNotation !== number) {
-            if (exponent !== 0) {
+            if (exponent !== 0 && exponent !== 1) {
                 return `${mantissa}e${exponent}`;
             } else if (exponent == 0) {
                 return `${mantissa}`;
+            } else if (exponent == 1 && significantFigures > 2) {
+                return `${+mantissa * 10}`;
             }
         }
     }
+    return `${number}`
+}
 
-    // If the number is zero or the conversion didn't change it, return the original number
-    return number.toFixed(significantFigures);
+export function getSigFigs(number: string) {
+    return `${number.includes('e') ? number.split('e')[0] : number}`.replace(/[\.\-]/gm, '').length;
 }
 
 /**
