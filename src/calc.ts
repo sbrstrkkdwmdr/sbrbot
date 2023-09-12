@@ -85,24 +85,21 @@ export function toScientificNotation(number: number, significantFigures: number)
         const exponent = Math.floor(Math.log10(Math.abs(number)));
 
         // Calculate the significant digits (mantissa)
-        const mantissa = +(number / Math.pow(10, exponent)).toFixed(significantFigures - 1);
+        const mantissa = (number / Math.pow(10, exponent)).toFixed(significantFigures - 1);
 
         // Check if converting to scientific notation changes the number
-        const scientificNotation = mantissa * Math.pow(10, exponent);
-
-        if (scientificNotation !== number && exponent !== 1 && exponent !== 0) {
-            return `${mantissa}e${exponent}`;
-        }
-        if (scientificNotation !== number && exponent == 1) {
-            return (mantissa * 10).toString();
-        }
-        if (scientificNotation !== number && exponent == 0) {
-            return mantissa.toString();
+        const scientificNotation = +mantissa * Math.pow(10, exponent);
+        if (scientificNotation !== number) {
+            if (exponent !== 0) {
+                return `${mantissa}e${exponent}`;
+            } else if (exponent == 0) {
+                return `${mantissa}`;
+            }
         }
     }
 
     // If the number is zero or the conversion didn't change it, return the original number
-    return number.toString();
+    return number.toFixed(significantFigures);
 }
 
 /**

@@ -663,7 +663,8 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
 
                         conv = curObject.type;
                         convtype = `${fromType} => ${toType}`;
-                        eq = `${calc.toScientificNotation(finNum, `${numAsStr}`.replace(/[\.\-]/gm, '').length)}`;
+                        
+                        eq = `${calc.toScientificNotation(finNum, `${numAsStr.includes('e') ? numAsStr.split('e')[0] : numAsStr}`.replace(/[\.\-]/gm, '').length)}`;
 
                         const usVol = [];
 
