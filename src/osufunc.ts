@@ -956,6 +956,7 @@ export async function apiget(input: apiInput) {
         if (mainconst.isTesting) {
             datafirst = apigetOffline(input);
         } else {
+            log.toOutput(url, input.config);
             datafirst = await nfetch(url, {
                 method: 'GET',
                 headers: {
@@ -964,7 +965,6 @@ export async function apiget(input: apiInput) {
                     Accept: "application/json"
                 }
             }).then(res => res.json());
-            log.toOutput(url, input.config);
         }
     } catch (error) {
         data = {

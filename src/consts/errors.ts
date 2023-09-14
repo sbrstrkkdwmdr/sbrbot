@@ -9,6 +9,8 @@ export const apiError = `Something went wrong with the osu! api.`;
 
 export const osuTrackApiError = `Something went wrong with the osu!track api.`;
 
+export const timeout = `The connection timed out`
+
 export function anyError() {
     const errs = [
         'Bot is having a skill issue lol.',

@@ -2857,10 +2857,16 @@ export async function weather(input: extypes.commandInput) {
         } else {
             weatherData = await func.getWeather(location.latitude, location.longitude, location, input.config);
         }
+        console.log(weatherData);
         func.storeFile(weatherData, location.id, `weatherdata`);
         if (typeof weatherData == 'string') {
-            weatherEmbed.setDescription(errors.uErr.weather.wrongCoords);
-            logWeatherError(errors.uErr.weather.wrongCoords);
+            if (weatherData.includes("timeout")) {
+                weatherEmbed.setDescription(errors.timeout);
+                logWeatherError(errors.timeout);
+            } else {
+                weatherEmbed.setDescription(errors.uErr.weather.wrongCoords);
+                logWeatherError(errors.uErr.weather.wrongCoords);
+            }
             return;
         } else if (weatherData.hasOwnProperty('reason') || weatherData.hasOwnProperty('error')) {
             weatherEmbed.setDescription(errors.uErr.weather.api);

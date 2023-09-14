@@ -518,8 +518,13 @@ export async function getWeather(
             + "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,precipitation_probability_min,precipitation_probability_mean,windspeed_10m_max,windgusts_10m_max,winddirection_10m_dominant"
             + `&timezone=${location.timezone}`;
         log.toOutput(url, config);
-
-        const data = await nfetch(url).then(x => x.json());
+        let data;
+        try {
+            data = await nfetch(url).then(x => x.json());
+        } catch(err){
+            console.log(err)
+            return "timeout"
+        }
         return data as othertypes.weatherData;
     }
 }
