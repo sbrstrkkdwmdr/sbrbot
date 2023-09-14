@@ -1271,7 +1271,7 @@ export async function graph(
             options: cfgopts
         });
 
-    chart.setBackgroundColor('color: rgb(0,0,0)').setWidth(750).setHeight(250);
+    chart.setBackgroundColor('color: rgb(255,255,255)').setWidth(750).setHeight(250);
 
     const filename = `${(new Date).getTime()}`;
     let curt = `${path}/cache/graphs/${filename}.jpg`;
