@@ -1102,7 +1102,9 @@ export const timezones: timezone[] = [
             'UTC+845',
             'GMT+845',
             'GMT+08:45',
-            '+0845'
+            '+0845',
+            'ACWST',
+            'eucla'
         ]
     },
     {
