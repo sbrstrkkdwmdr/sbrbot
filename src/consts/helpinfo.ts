@@ -2833,7 +2833,23 @@ const buttons: {
             name: 'Random',
             description: 'Picks a random command to display',
             emoji: buttonsObjs.label.extras.random,
-        },
+        }, {
+            name: 'Graph',
+            description: 'Displays any graphs related',
+            emoji: buttonsObjs.label.extras.graph
+        }, {
+            name: 'Map',
+            description: 'Displays the map of the current score(s)',
+            emoji: buttonsObjs.label.extras.map
+        }, {
+            name: 'User',
+            description: 'Displays the user',
+            emoji: buttonsObjs.label.extras.user
+        }, {
+            name: 'Leaderboard',
+            description: 'Displays the leaderboard of the map',
+            emoji: buttonsObjs.label.extras.leaderboard
+        }
     ];
 
 export { admincmds, buttons, cmds, osucmds, othercmds };

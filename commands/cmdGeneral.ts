@@ -769,7 +769,9 @@ export async function help(input: extypes.commandInput) {
 
     let commandCategory: string = 'default';
     let command: string;
-
+    function cmdToTxt(input: helpinfo.commandInfo[]){
+        return '`' + input.map(x => x.name + '`').join(', `')
+    }
     const fullCommandList = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
         .setTitle('Command List')
@@ -777,22 +779,22 @@ export async function help(input: extypes.commandInput) {
         .addFields([
             {
                 name: 'Main commands',
-                value: '`' + helpinfo.cmds.map(x => x.name + '`,').join(' `'),
+                value: cmdToTxt(helpinfo.cmds),
                 inline: false
             },
             {
                 name: 'osu! comands',
-                value: '`' + helpinfo.osucmds.map(x => x.name + '`,').join(' `'),
+                value: cmdToTxt(helpinfo.osucmds),
                 inline: false
             },
             {
                 name: 'Admin commands',
-                value: '`' + helpinfo.admincmds.map(x => x.name + '`,').join(' `'),
+                value: cmdToTxt(helpinfo.admincmds),
                 inline: false
             },
             {
                 name: 'Other/misc commands',
-                value: '`' + helpinfo.othercmds.map(x => x.name + '`,').join(' `'),
+                value: cmdToTxt(helpinfo.othercmds),
                 inline: false
             },
         ])
@@ -1023,7 +1025,6 @@ export async function help(input: extypes.commandInput) {
                 const res = helpinfo.othercmds.find(obj => obj.aliases.includes(fetchcmd));
                 commandEmb(res, commandInfo);
             }
-
             else if (helpinfo.osucmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'osu';
@@ -1037,7 +1038,6 @@ export async function help(input: extypes.commandInput) {
                 const res = helpinfo.osucmds.find(obj => obj.aliases.includes(fetchcmd));
                 commandEmb(res, commandInfo);
             }
-
             else if (helpinfo.admincmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'admin';
