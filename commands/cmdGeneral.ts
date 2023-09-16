@@ -2857,7 +2857,6 @@ export async function weather(input: extypes.commandInput) {
         } else {
             weatherData = await func.getWeather(location.latitude, location.longitude, location, input.config);
         }
-        console.log(weatherData);
         func.storeFile(weatherData, location.id, `weatherdata`);
         if (typeof weatherData == 'string') {
             if (weatherData.includes("timeout")) {

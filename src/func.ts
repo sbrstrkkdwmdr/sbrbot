@@ -521,9 +521,9 @@ export async function getWeather(
         let data;
         try {
             data = await nfetch(url).then(x => x.json());
-        } catch(err){
-            console.log(err)
-            return "timeout"
+        } catch (err) {
+            console.log(err);
+            return "timeout";
         }
         return data as othertypes.weatherData;
     }
@@ -1276,8 +1276,7 @@ export async function graph(
             options: cfgopts
         });
 
-    chart.setBackgroundColor('color: rgb(255,255,255)').setWidth(750).setHeight(250);
-
+    chart.setBackgroundColor('rgb(255,255,255)').setWidth(750).setHeight(250);
     const filename = `${(new Date).getTime()}`;
     let curt = `${path}/cache/graphs/${filename}.jpg`;
     try {
