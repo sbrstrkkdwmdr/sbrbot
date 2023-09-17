@@ -6781,6 +6781,14 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             scorelink = null;
             scoremode = input.args[1] ?? 'osu';
             scoreid = input.args[0];
+            if (input.args[0].includes('https://')) {
+                const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
+                scorelink = messagenohttp.split('/scores/')[1];
+                scoremode = scorelink.split('/')[0];
+                scoreid = scorelink.split('/')[1];
+                scoreid.includes(' ') ?
+                    scoreid = scoreid.split(' ')[0] : null;
+            }
         }
             break;
 
@@ -7304,7 +7312,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             embedStyle = 'LC';
             scoreembed
                 .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**` : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + (input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**`) : ''}
 <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 \`${hitlist}\`
 ${scoredata?.pp?.toFixed(2) ?? 'null '}pp
@@ -7315,7 +7323,7 @@ ${scoredata?.pp?.toFixed(2) ?? 'null '}pp
             embedStyle = 'L';
             scoreembed
                 .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**` : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + (input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**`) : ''}
 <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 [Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
 \`${hitlist}\`
@@ -7378,7 +7386,7 @@ ${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata
                         name: 'Score details',
                         value:
                             `
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**` : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? ('| ' + (input.config.useEmojis.mods == true ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**`)) : ''}
 ${hitlist}
 ${scoredata.max_combo == mapdata.max_combo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mapdata.max_combo}x**
 `                        ,
