@@ -769,8 +769,8 @@ export async function help(input: extypes.commandInput) {
 
     let commandCategory: string = 'default';
     let command: string;
-    function cmdToTxt(input: helpinfo.commandInfo[]){
-        return '`' + input.map(x => x.name + '`').join(', `')
+    function cmdToTxt(input: helpinfo.commandInfo[]) {
+        return '`' + input.map(x => x.name + '`').join(', `');
     }
     const fullCommandList = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
@@ -2183,22 +2183,21 @@ export async function time(input: extypes.commandInput) {
 
     if (fetchtimezone != null && fetchtimezone != '') {
         try {
-            let offset = 0;
             const found: timezoneList.timezone[] = [];
 
             for (let i = 0; i < timezoneList.timezones.length; i++) {
                 const curTimeZone = timezoneList.timezones[i];
                 if (curTimeZone.aliases.slice().map(x => x.trim().toUpperCase()).includes(fetchtimezone.trim().toUpperCase())) {
                     found.push(curTimeZone);
-                    offset = curTimeZone.offsetDirection == '+' ?
-                        curTimeZone.offsetHours :
-                        -curTimeZone.offsetHours;
                 }
             }
 
             if (found.length == 0) {
                 throw new Error("Unrecognised timezone");
             }
+            let offset = found[0].offsetDirection == '+' ?
+                found[0].offsetHours :
+                -found[0].offsetHours;
 
             if (input?.overrides?.overwriteModal) {
                 useComponents = [
