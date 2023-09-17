@@ -488,3 +488,4 @@ changes:
 [ADD] add fortnight conversions
 [FIX] fix help list having an extra , at the end 
 [QOL] add missing buttons to help command
+[QOL] time cmd uses first tz found
