@@ -649,7 +649,7 @@ q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
                         let finNum = curCalc.func(num);
 
                         if (secondaryMetric && tcat2.prefix.removed.length > 0 && usePre2) {
-                            finNum *= tcat2.power;
+                            finNum /= tcat2.power;
                             toType = tcat2.prefix?.long?.length > 0 ? calc.toCapital(tcat2.prefix.long) + curCalc.to.toLowerCase() : curCalc.to;
                             const formEnd = `${tcat2.power}`;
                             formula = `(${formula})/${formEnd}`;

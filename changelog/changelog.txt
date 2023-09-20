@@ -491,3 +491,4 @@ changes:
 [QOL] time cmd uses first tz found
 [FIX] scoreparse using emojis for mods even if `useEmojis.mods: false`
 [QOL] scoreparse can read scores via link when using command version
+[FIX] convert command - multiplying instead of dividing and vice versa
