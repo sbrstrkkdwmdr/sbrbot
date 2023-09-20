@@ -469,8 +469,8 @@ changes:
 [QOL] remove null results from lb
 
 VERSION 0.5.4
-date_time 
-commit: null
+2023-09-20 
+commit: 8f273ea03e3baed6388b033063364e30f9ce84f9
 changes:
 [FIX] server leaderboard when showing global leaderboard
 [FIX] mania mods being apllied to non-mania maps
