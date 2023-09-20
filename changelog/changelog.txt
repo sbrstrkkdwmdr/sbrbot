@@ -468,7 +468,7 @@ changes:
 [ADD] added global and id opts to lb
 [QOL] remove null results from lb
 
-VERSION 0.5.3
+VERSION 0.5.4
 date_time 
 commit: null
 changes:
