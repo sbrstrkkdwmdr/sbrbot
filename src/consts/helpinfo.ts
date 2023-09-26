@@ -385,7 +385,7 @@ const cmds: commandInfo[] = [
                 descriptor: 'Shows information about the recent command'
             }
         ],
-        aliases: [],
+        aliases: ['commands'],
         buttons: [buttonsObjs.label.extras.random, buttonsObjs.label.main.detailed],
         options: [
             {

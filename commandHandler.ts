@@ -307,7 +307,7 @@ export default (input: {
             case 'convert': case 'conv':
                 commands.convert({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
-            case 'help':
+            case 'help': case 'commands':
                 startType(obj);
                 commands.help({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
