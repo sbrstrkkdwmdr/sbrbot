@@ -169,7 +169,6 @@ progress: ${m.progress ? m.progress : 'none'}
         }
 
         const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '');
-
         if (messagenohttp.startsWith('osu.ppy.sh/b/') || messagenohttp.startsWith('osu.ppy.sh/beatmaps/') || messagenohttp.startsWith('osu.ppy.sh/beatmapsets') || messagenohttp.startsWith('osu.ppy.sh/s/') || parse != null) {
             overrides.ex = 'link';
             if (absoluteID == null) {
@@ -183,8 +182,7 @@ progress: ${m.progress ? m.progress : 'none'}
             }
             osucmds.osu({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
         }
-
-        if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osr'))) {
+        if (message.attachments.size > 0 && message.attachments.every(attachment => func.removeURLparams(attachment.url).endsWith('.osr'))) {
             if (settings.osuParseReplays == false) {
                 return;
             }
@@ -203,7 +201,7 @@ progress: ${m.progress ? m.progress : 'none'}
         if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
             osucmds.scoreparse({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
         }
-        if (message.attachments.size > 0 && message.attachments.every(attachment => attachment.url.endsWith('.osu'))) {
+        if (message.attachments.size > 0 && message.attachments.every(attachment => func.removeURLparams(attachment.url).endsWith('.osu'))) {
             // return;
             if (absoluteID == null) {
                 absoluteID = func.generateId();

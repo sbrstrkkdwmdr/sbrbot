@@ -1291,7 +1291,7 @@ export async function graph(
     };
 }
 
-export function censorConfig(config: extypes.config){
+export function censorConfig(config: extypes.config) {
     return {
         "important": {
             "token": "CENSORED",
@@ -1317,5 +1317,15 @@ export function censorConfig(config: extypes.config){
         "enableTracking": config.enableTracking,
         "storeCommandLogs": config.storeCommandLogs,
         "useEmojis": config.useEmojis
-    } as extypes.config
+    } as extypes.config;
+}
+
+/**
+ * remove all bits after the "?" in a url
+ */
+export function removeURLparams(url: string) {
+    if (url.includes('?')) {
+        return url.split('?')[0];
+    }
+    return url;
 }

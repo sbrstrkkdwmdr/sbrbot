@@ -498,3 +498,4 @@ VERSION 0.5.5
 commit: null 
 changes: 
 [QOL] auto-censor config properties in cache
+[FIX] replayparse and mapfileparse not running (discord changed file URLs)
