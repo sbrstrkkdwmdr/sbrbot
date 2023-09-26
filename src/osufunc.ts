@@ -1522,7 +1522,7 @@ export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string
     return;
 }
 
-export function debug(data: any, type: string, name: string, serverId: string | number, params: string) {
+export function debug(data: apiReturn | osuApiTypes.Score[] | rosu.PerformanceAttributes[] | extypes.replay | { error: any; } | (osuApiTypes.Beatmapset[] & osuApiTypes.Error | osuApiTypes.BeatmapPlayCountArr), type: string, name: string, serverId: string | number, params: string) {
     const pars = params.replaceAll(',', '=');
     if (!fs.existsSync(`${path}/cache/debug/${type}`)) {
         fs.mkdirSync(`${path}/cache/debug/${type}`);
@@ -1531,6 +1531,9 @@ export function debug(data: any, type: string, name: string, serverId: string | 
         fs.mkdirSync(`${path}/cache/debug/${type}/${name}`);
     }
     try {
+        if ((data as apiReturn)?.input?.config) {
+            (data as apiReturn).input.config = tools.censorConfig((data as apiReturn)?.input?.config);
+        }
         fs.writeFileSync(`${path}/cache/debug/${type}/${name}/${pars}_${serverId}.json`, JSON.stringify(data, null, 2));
     } catch (error) {
     }

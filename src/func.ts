@@ -1290,3 +1290,32 @@ export async function graph(
         filename
     };
 }
+
+export function censorConfig(config: extypes.config){
+    return {
+        "important": {
+            "token": "CENSORED",
+            "dbd_license": "CENSORED",
+            "redirect_uri": "http://localhost/discord/callback",
+            "client_secret": "CENSORED",
+            "client_id": "CENSORED"
+        },
+        "prefix": config.prefix,
+        "osuClientID": "CENSORED",
+        "osuClientSecret": "CENSORED",
+        "osuApiKey": "CENSORED",
+        "ownerusers": [
+            `${config?.ownerusers?.length} users`
+        ],
+        "google": {
+            "apiKey": "CENSORED",
+            "engineId": "CENSORED"
+        },
+        "useScreenshotParse": config.useScreenshotParse,
+        "LogApiCalls": config.LogApiCalls,
+        "LogApiCallsToFile": config.LogApiCallsToFile,
+        "enableTracking": config.enableTracking,
+        "storeCommandLogs": config.storeCommandLogs,
+        "useEmojis": config.useEmojis
+    } as extypes.config
+}
