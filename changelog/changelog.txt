@@ -499,3 +499,5 @@ commit: null
 changes: 
 [QOL] auto-censor config properties in cache
 [FIX] replayparse and mapfileparse not running (discord changed file URLs)
+[QOL] edit graph colours
+[QOL] strains and failtimes use map cover as background

@@ -122,5 +122,18 @@ export const codeBlockColour = {
     }
 };
 
+/**
+ * all hex
+ */
+export const rainbow = {
+    red: '#FF0000',
+    orange: '#FF7F00',
+    yellow: '#FFFF00',
+    green: '#00FF00',
+    blue: '#0000FF',
+    indigo: '#4B0082',
+    violet: '#9400D3',
+};
+
 export { diffcolour, embedColour };
 

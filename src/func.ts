@@ -2,9 +2,13 @@ import fs = require('fs');
 import https from 'https';
 // import * as nfetch from 'node-fetch';
 import charttoimg from 'chartjs-to-image';
+import * as jimp from 'jimp';
 import nfetch from 'node-fetch';
+import * as quickchart from 'quickchart-js';
 import { filespath, path, precomppath } from '../path.js';
 import * as calc from './calc.js';
+import * as clr from './colourcalc.js';
+import * as clrs from './consts/colours.js';
 import * as mainconst from './consts/main.js';
 import * as log from './log.js';
 import * as osufunc from './osufunc.js';
@@ -1117,6 +1121,8 @@ export async function graph(
         showAxisY?: boolean;
         stacksSeparate?: boolean;
         reverse?: boolean;
+        imgUrl?: string;
+        blurImg?: boolean;
     },
     extra?: {
         data: number[];
@@ -1157,12 +1163,23 @@ export async function graph(
     }
 
     let secondReverse = false;
+    // gradients just make the line invis for some reason
+    // if (other.gradient) {
+    //     const tmp = clrs.rainbow;
+    //     const gradient = `__BEGINFUNCTION__getGradientFillHelper("vertical", ${JSON.stringify([tmp.red, tmp.orange, tmp.yellow, tmp.green, tmp.blue, tmp.indigo, tmp.violet])})__ENDFUNCTION__`;
+    //     // other.lineColour = gradient
+    //     // //@ts-expect-error ts wants "quickchart.default.default" but the second default is undefined when compiled to js
+    //     // other.lineColour = quickchart.default.getGradientFillHelper('vertical', [tmp.red, tmp.orange, tmp.yellow, tmp.green, tmp.blue, tmp.indigo, tmp.violet]);
+    //     // //@ts-expect-error bro
+    //     // console.log(quickchart.default.getGradientFillHelper('vertical', [tmp.red, tmp.orange, tmp.yellow, tmp.green, tmp.blue, tmp.indigo, tmp.violet]));
+    //     // //`__BEGINFUNCTION__getGradientFillHelper(${JSON.stringify(direction)}, ${JSON.stringify(colors)}, ${JSON.stringify(dimensions)})__ENDFUNCTION__`;
+    // }
 
     const datasets = [{
         label: label,
         data: cury,
         fill: other.fill,
-        borderColor: other.lineColour ?? 'rgb(75, 192, 192)',
+        borderColor: other.lineColour ?? 'rgb(101, 101, 135)',
         borderWidth: 1,
         pointRadius: other.pointSize ?? 2,
         yAxisID: '1y'
@@ -1176,11 +1193,13 @@ export async function graph(
         let i = 1;
         for (const newData of extra) {
             if (newData?.data?.length > 0) {
+                const nHSV = clr.rgbToHsv(101, 101, 135);
+                const newclr = clr.hsvToRgb(nHSV.h + (diff * i), nHSV.s, nHSV.v);
                 const xData = {
                     label: newData.label,
                     data: newData.data,
                     fill: other.fill,
-                    borderColor: other.lineColour ?? `rgb(${75 + diff * i}, 192, 192)`,
+                    borderColor: other.lineColour ?? `rgb(${newclr})`,
                     borderWidth: 1,
                     pointRadius: other.pointSize ?? 2,
                     yAxisID: newData.separateAxis ? '2y' : '1y'
@@ -1201,6 +1220,10 @@ export async function graph(
     const cfgopts = {
         legend: {
             display: other.displayLegend
+        },
+        title: {
+            display: other?.title ? true : false,
+            title: other?.title ?? 'No title'
         },
         scales: {
             x: {
@@ -1255,7 +1278,10 @@ export async function graph(
                     },
                 }
             ]
-        }
+        },
+        plugins: {
+            backgroundImageUrl: other?.imgUrl ?? 'https://github.com/sbrstrkkdwmdr/sbrstrkkdwmdr/blob/main/blank.jpg?raw=true',
+        },
     };
 
     if (other?.type == 'bar' && other?.stacked == true) {
@@ -1282,7 +1308,8 @@ export async function graph(
     try {
         await chart.toFile(curt);
     } catch (err) {
-        curt = `${precomppath}/files/blank.jpg`;
+        console.log(err);
+        curt = `${precomppath}/files/blank.png`;
     }
 
     return {

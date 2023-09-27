@@ -2158,7 +2158,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             const rank =
                 await func.graph(datarank, osudata.rank_history.data, 'Rank', {
                     startzero: false,
-                    fill: true,
+                    fill: false,
                     displayLegend: true,
                     reverse: true,
                     pointSize: 0,
@@ -6674,6 +6674,7 @@ export async function replayparse(input: extypes.commandInput) {
         fill: false,
         startzero: true,
         pointSize: 0,
+        gradient: true
     });
 
     const chartFile = new Discord.AttachmentBuilder(chartInit.path);
@@ -10843,7 +10844,10 @@ HP${baseHP}`;
                     startzero: true,
                     type: 'bar',
                     fill: true,
-                    displayLegend: true,
+                    displayLegend: false,
+                    title: 'Strains',
+                    imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
+                    blurImg: true,
                 });
             useFiles.push(mapgraphInit.path);
 
@@ -11089,12 +11093,13 @@ HP${baseHP}`;
             for (let i = 0; i < failval.length; i++) {
                 numofval.push(`${i}s`);
             }
-
             const passInit = await func.graph(numofval, mapdata.failtimes.fail, 'Fails', {
                 stacked: true,
                 type: 'bar',
                 showAxisX: false,
-                title: 'Fail times'
+                title: 'Fail times',
+                imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
+                blurImg: true,
             }, [{
                 data: mapdata.failtimes.exit,
                 label: 'Exits',
