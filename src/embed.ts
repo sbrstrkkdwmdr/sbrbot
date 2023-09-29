@@ -347,7 +347,7 @@ export async function scoreList(
             showtitle = `[Score #${scoreID}](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id})`;
         }
         if (asObj.showUserName == true) {
-            showtitle = `[${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id})`;
+            showtitle = `:flag_${curscore?.user?.country_code.toLowerCase()}: [${curscore?.user?.username ?? 'null'}](https://osu.ppy.sh/u/${curscore.user_id})`;
         }
 
         let weighted;
