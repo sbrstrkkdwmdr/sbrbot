@@ -504,3 +504,5 @@ changes:
 [QOL] show flags in map leaderboards
 [QOL] add server filter to debug commandfiletype
 [QOL] combo is grabbed from pp calc where possible
+[QOL] increase resolution of graphs 
+[QOL] better graph placeholder

@@ -1282,10 +1282,26 @@ export async function graph(
         },
         plugins: {
             backgroundImageUrl: other?.imgUrl ?? 'https://github.com/sbrstrkkdwmdr/sbrstrkkdwmdr/blob/main/blank.jpg?raw=true',
+            // customCanvasBackgroundColor: {
+            //     color: 'rgba(64, 64, 64, 25)',
+            // }
         },
     };
+    // const plugin = {
+    //     id: 'customCanvasBackgroundColor',
+    //     beforeDraw: (chart, args, options) => {
+    //         const { ctx } = chart;
+    //         ctx.save();
+    //         ctx.globalCompositeOperation = 'destination-over';
+    //         ctx.fillStyle = options.color || '#99ffff';
+    //         ctx.fillRect(0, 0, chart.width, chart.height);
+    //         ctx.restore();
+    //     }
+    // };
+
+
     if (other?.type == 'bar') {
-        console.log('owoaosd')
+        console.log('owoaosd');
         cfgopts['elements'] = {
             backgroundColor: other.lineColour ?? 'rgb(101, 101, 135)',
             borderColor: other?.barOutline ? 'rgb(255, 255, 255)' : other.lineColour ?? 'rgb(101, 101, 135)',
@@ -1307,17 +1323,18 @@ export async function graph(
                 labels: curx,
                 datasets: datasets
             },
-            options: cfgopts
+            options: cfgopts,
+            // plugins: [plugin]
         });
 
-    chart.setBackgroundColor('rgb(255,255,255)').setWidth(750).setHeight(250);
+    chart.setBackgroundColor('rgb(255,255,255)').setWidth(1500).setHeight(500);
     const filename = `${(new Date).getTime()}`;
     let curt = `${path}/cache/graphs/${filename}.jpg`;
     try {
         await chart.toFile(curt);
     } catch (err) {
         console.log(err);
-        curt = `${precomppath}/files/blank.png`;
+        curt = `${precomppath}/files/blank_graph.png`;
     }
 
     return {
