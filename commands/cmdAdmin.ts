@@ -611,7 +611,6 @@ export async function debug(input: extypes.commandInput) {
             }
             const files = fs.readdirSync(`${path}\\cache\\debug\\command`);
             if (files.length < 1) {
-                console.log('ichi');
                 usemsgArgs = {
                     content: 'Cache folder is currently empty'
                 };
@@ -621,12 +620,9 @@ export async function debug(input: extypes.commandInput) {
                 let cmdid = null;
                 if (inputstr.includes(' ')) {
                     const temp = inputstr.split(' ');
-                    console.log(temp);
                     inputstr = temp[0];
                     cmdid = temp[1];
                 }
-                console.log(inputstr);
-                console.log(cmdid);
                 switch (inputstr) {
                     case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':
                         resString = 'bws';
