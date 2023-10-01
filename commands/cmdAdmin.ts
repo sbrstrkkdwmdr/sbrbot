@@ -618,6 +618,15 @@ export async function debug(input: extypes.commandInput) {
             } else {
                 //convert to search term
                 let resString;
+                let cmdid = null;
+                if (inputstr.includes(' ')) {
+                    const temp = inputstr.split(' ');
+                    console.log(temp);
+                    inputstr = temp[0];
+                    cmdid = temp[1];
+                }
+                console.log(inputstr);
+                console.log(cmdid);
                 switch (inputstr) {
                     case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':
                         resString = 'bws';
@@ -710,13 +719,13 @@ export async function debug(input: extypes.commandInput) {
                     case 'userbeatmaps':
                     case 'whatif':
                         {
-                            await findAndReturn(`${path}\\cache\\debug\\command`, resString);
+                            await findAndReturn(`${path}\\cache\\debug\\command`, resString, cmdid);
                         }
                         break;
                     case 'map (file)':
                     case 'replay':
                         {
-                            await findAndReturn(`${path}\\cache\\debug\\fileparse`, resString);
+                            await findAndReturn(`${path}\\cache\\debug\\fileparse`, resString, cmdid);
                         }
                         break;
                     default:
@@ -725,13 +734,24 @@ export async function debug(input: extypes.commandInput) {
                         };
                         break;
                 }
-                async function findAndReturn(inpath: string, find: string) {
+                async function findAndReturn(inpath: string, find: string, cmdid: string) {
                     const sFiles = fs.readdirSync(`${inpath}`);
                     const found = sFiles.find(x => x == find);
                     const inFiles = fs.readdirSync(`${inpath}\\${found}`);
+                    let content = `Files found for command \`${inputstr}\``;
+                    let files = inFiles.map(x => `${inpath}\\${found}\\${x}`);
+                    if (!isNaN(+cmdid)) {
+                        const tfiles = inFiles.map(x => `${inpath}\\${found}\\${x}`).filter(x => x.includes(cmdid));
+                        content = `Files found for command \`${inputstr}\`, matching server ID ${cmdid}`;
+                        if (tfiles.length == 0) {
+                            files = inFiles.map(x => `${inpath}\\${found}\\${x}`);
+                            content = `Files found for command \`${inputstr}\`. None found matching ${cmdid}`;
+                        }
+                    }
+
                     usemsgArgs = {
-                        content: `Files found for command \`${inputstr}\``,
-                        files: inFiles.map(x => `${inpath}\\${found}\\${x}`)
+                        content,
+                        files,
                     };
                 }
             }
