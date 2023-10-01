@@ -8,8 +8,8 @@ import * as osufunc from './src/osufunc.js';
 import * as osumodcalc from './src/osumodcalc.js';
 import * as track from './src/trackfunc.js';
 import * as extypes from './src/types/extratypes.js';
-import * as osuapitypes from './src/types/osuApiTypes.js';
 import * as osuApiTypes from './src/types/osuApiTypes.js';
+import * as osuapitypes from './src/types/osuApiTypes.js';
 
 export default (input: {
     userdata,
@@ -337,6 +337,11 @@ export default (input: {
                 } else {
                     if (permanentCache.some(x => file.startsWith(x))) {
                         //do nothing
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24 * 7)) {
+                            //kill after 7d
+                            fs.unlinkSync(`${path}/cache/commandData/` + file);
+                            log.toOutput(`Deleted file ${path}\\cache\\commandData\\` + file, input.config);
+                        }
                     }
                     else if (cacheById.some(x => file.startsWith(x))) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24)) {
