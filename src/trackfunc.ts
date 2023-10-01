@@ -144,7 +144,7 @@ export async function getEmbed(
             break;
     }
 
-    const ppcalc: rosu.OsuPerformanceAttributes[] | rosu.TaikoPerformanceAttributes[] | rosu.CatchPerformanceAttributes[] | rosu.ManiaPerformanceAttributes[]
+    const ppcalc
         =
         await osufunc.scorecalc({
             mods: curscore.mods.join('').length > 1 ?

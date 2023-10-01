@@ -503,3 +503,4 @@ changes:
 [QOL] strains and failtimes use map cover as background
 [QOL] show flags in map leaderboards
 [QOL] add server filter to debug commandfiletype
+[QOL] combo is grabbed from pp calc where possible

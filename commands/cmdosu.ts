@@ -6092,7 +6092,9 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             }
         }
         const trycountstr = `try #${trycount}`;
-
+        const mxcombo =
+            ppcalcing[0].difficulty.maxCombo;
+        mapdata.max_combo;
         rsEmbed
             .setTitle(`#${page + 1} most recent ${showFails == 1 ? 'play' : 'pass'} for ${curscore.user.username} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>`)
             .setURL(`https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}`)
@@ -6110,7 +6112,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 ${totaldiff}⭐ | ${input.config.useEmojis.gamemodes ? emojis.gamemodes[curscore.mode] : curscore.mode}
 <t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}${func.separateNum(curscore.score)} | ${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
-${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\` | ${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo
+${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\` | ${curscore.max_combo == mxcombo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mxcombo}x** combo
 **${rspp}**pp ${fcflag}\n${ppissue}
 `);
             }
@@ -6127,7 +6129,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                         {
                             name: 'SCORE DETAILS',
                             value: `${func.separateNum(curscore.score)}\n${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
-                                `${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\`\n${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo`,
+                                `${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\`\n${curscore.max_combo == mxcombo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mxcombo}x** combo`,
                             inline: true
                         },
                         {
@@ -6177,7 +6179,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                         {
                             name: 'SCORE DETAILS',
                             value: `${func.separateNum(curscore.score)}\n${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
-                                `${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}${hitlist}\n${curscore.max_combo == mapdata.max_combo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mapdata.max_combo}x** combo`,
+                                `${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}${hitlist}\n${curscore.max_combo == mxcombo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mxcombo}x** combo`,
                             inline: true
                         },
                         {
@@ -6570,15 +6572,6 @@ export async function replayparse(input: extypes.commandInput) {
         }
     }, 1) + ` [${mapdata.version}]`;
     let mapdataid: string;
-    try {
-        mapbg = mapdata.beatmapset.covers['list@2x'];
-        mapcombo = mapdata.max_combo ? mapdata.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : NaN;
-        mapdataid = 'https://osu.ppy.sh/b/' + mapdata.id;
-    } catch (error) {
-        mapbg = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
-        mapcombo = NaN;
-        mapdataid = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
-    }
 
     const mods = replay.mods;
     let ifmods: string;
@@ -6589,7 +6582,7 @@ export async function replayparse(input: extypes.commandInput) {
     }
     const gameMode = replay.gameMode;
     let accuracy: number;
-    let xpp: object;
+    let xpp: PerformanceAttributes[];
     let hitlist: string;
     let fcacc: number;
     let ppissue: string;
@@ -6641,13 +6634,51 @@ export async function replayparse(input: extypes.commandInput) {
         }, new Date(mapdata.last_updated), input.config);
         ppissue = '';
     } catch (error) {
-        xpp = [{
-            pp: 0
-        },
-        {
-            pp: 0
-        }];
+        const temp: PerformanceAttributes = {
+            mode: replay.gameMode,
+            pp: 0,
+            difficulty: {
+                mode: replay.gameMode,
+                stars: mapdata.difficulty_rating,
+                maxCombo: mapdata.max_combo ?? 0,
+                aim: 0,
+                speed: 0,
+                flashlight: 0,
+                sliderFactor: 0,
+                speedNoteCount: 0,
+                ar: mapdata.ar,
+                od: mapdata.accuracy,
+                nCircles: mapdata.count_circles,
+                nSliders: mapdata.count_sliders,
+                nSpinners: mapdata.count_spinners,
+                stamina: 0,
+                rhythm: 0,
+                color: 0,
+                peak: 0,
+                hitWindow: mapdata.accuracy,
+                nFruits: mapdata.count_circles,
+                nDroplets: mapdata.count_sliders,
+                nTinyDroplets: mapdata.count_spinners,
+            },
+            ppAcc: 0,
+            ppAim: 0,
+            ppFlashlight: 0,
+            ppSpeed: 0,
+            effectiveMissCount: 0,
+            ppDifficulty: 0,
+        };
+        xpp = [temp, temp];
         ppissue = errors.uErr.osu.performance.mapMissing;
+    }
+
+    try {
+        mapbg = mapdata.beatmapset.covers['list@2x'];
+        mapcombo = xpp[0].difficulty.maxCombo ? xpp[0].difficulty.maxCombo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : NaN;
+        mapdataid = 'https://osu.ppy.sh/b/' + mapdata.id;
+    } catch (error) {
+        mapbg = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
+        mapcombo = NaN;
+        mapdataid = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
     }
 
     const lifebar = replay.life_bar.split('|');
@@ -7295,6 +7326,10 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(mode));
     func.storeFile(osudataReq, scoredata.user.username, 'osudata', osufunc.modeValidator(mode));
 
+    const mxcombo =
+        ppcalcing[0].difficulty.maxCombo;
+    mapdata.max_combo;
+
     const scoreembed = new Discord.EmbedBuilder()
         .setFooter({
             text: `${embedStyle}`
@@ -7328,7 +7363,7 @@ ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.lengt
 <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 [Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
 \`${hitlist}\`
-${scoredata.max_combo == mapdata.max_combo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mapdata.max_combo}x**
+${scoredata.max_combo == mxcombo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mxcombo}x**
 ${pptxt}\n${ppissue}
 `);
         }
@@ -7389,7 +7424,7 @@ ${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata
                             `
 ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? ('| ' + (input.config.useEmojis.mods == true ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**`)) : ''}
 ${hitlist}
-${scoredata.max_combo == mapdata.max_combo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mapdata.max_combo}x**
+${scoredata.max_combo == mxcombo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mxcombo}x**
 `                        ,
                         inline: true
                     },
@@ -7783,7 +7818,7 @@ export async function scorepost(input: extypes.commandInput) {
     scoredata.statistics.count_miss > 0 ?
         nonFcString += `${scoredata.statistics.count_miss}❌` : null;
     scoredata.perfect ? null :
-        nonFcString += ` ${scoredata.max_combo}/${mapdata.max_combo}`;
+        nonFcString += ` ${scoredata.max_combo}/${ppCalc[0].difficulty.maxCombo}`;
 
     if (nonFcString.length < 1) {
         nonFcString = 'FC';
@@ -7798,7 +7833,7 @@ export async function scorepost(input: extypes.commandInput) {
         diff: ppCalc[0].difficulty.stars,
         mapper: mapdata.beatmapset.creator,
         comboMin: scoredata.max_combo,
-        comboMax: mapdata.max_combo,
+        comboMax: ppCalc[0].difficulty.maxCombo,
         pp: ppCalc[0].pp,
         isFullCombo: null,
         unranked: true,
@@ -9596,7 +9631,7 @@ export async function simulate(input: extypes.commandInput) {
         mods = 'NM';
     }
     if (!combo) {
-        combo = mapdata.max_combo;
+        combo = undefined;
     }
 
     if (overrideBpm && !overrideSpeed) {
@@ -9660,7 +9695,7 @@ export async function simulate(input: extypes.commandInput) {
             title: false
         }
     }, 1) + ` [${mapdata.version}]`;
-
+    const mxCombo = score[0].difficulty.maxCombo;
     const scoreEmbed = new Discord.EmbedBuilder()
         .setFooter({
             text: `${embedStyle}`
@@ -9673,7 +9708,7 @@ export async function simulate(input: extypes.commandInput) {
                 name: 'Score Details',
                 value:
                     `${acc ?? 100}% | ${nMiss ?? 0}x misses
-${combo ?? mapdata.max_combo}x/**${mapdata.max_combo}**x
+${combo ?? mxCombo}x/**${mxCombo}**x
 ${mods ?? 'No mods'}
 \`${n300}/${n100}/${n50}/${nMiss}\`
 Speed: ${overrideSpeed ?? 1}x (${overrideBpm ?? mapdata.bpm}BPM)
@@ -10961,7 +10996,7 @@ HP${baseHP}`;
                 }, // [osu!direct](osu://b/${mapdata.id}) - discord doesn't support schemes other than http, https and discord
                 {
                     name: 'MAP DETAILS',
-                    value: `${statusimg} | ${mapimg} | ${mapdata.max_combo}x combo \n ` +
+                    value: `${statusimg} | ${mapimg} | ${ppComputed[0].difficulty.maxCombo ?? mapdata.max_combo}x combo \n ` +
                         `${detailed == 2 ?
                             exMapDetails
                             : ''}`
@@ -12012,7 +12047,7 @@ ${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[10].ppFlashlight?.toFixe
                     `CS${baseCS} AR${baseAR} OD${baseOD} HP${baseHP} ${totaldiff}⭐\n` +
                     `${emojis.mapobjs.bpm}${baseBPM} | ` +
                     `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull} | ` +
-                    `${mapdata.max_combo}x combo\n ` +
+                    `${ppComputed[0].difficulty.maxCombo ?? mapdata.max_combo}x combo\n ` +
                     `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n`,
                 inline: false
             },
@@ -12682,6 +12717,7 @@ export async function maplocal(input: extypes.commandInput) {
                 type: 'bar',
                 fill: true,
                 displayLegend: true,
+                barOutline: true
             });
         useFiles.push(mapgraphInit.path);
 

@@ -1123,6 +1123,7 @@ export async function graph(
         reverse?: boolean;
         imgUrl?: string;
         blurImg?: boolean;
+        barOutline?: true;
     },
     extra?: {
         data: number[];
@@ -1283,7 +1284,14 @@ export async function graph(
             backgroundImageUrl: other?.imgUrl ?? 'https://github.com/sbrstrkkdwmdr/sbrstrkkdwmdr/blob/main/blank.jpg?raw=true',
         },
     };
-
+    if (other?.type == 'bar') {
+        console.log('owoaosd')
+        cfgopts['elements'] = {
+            backgroundColor: other.lineColour ?? 'rgb(101, 101, 135)',
+            borderColor: other?.barOutline ? 'rgb(255, 255, 255)' : other.lineColour ?? 'rgb(101, 101, 135)',
+            borderWidth: 2
+        };
+    }
     if (other?.type == 'bar' && other?.stacked == true) {
         for (const elem of cfgopts['scales']['xAxes']) {
             elem['stacked'] = other.stacked ?? false;

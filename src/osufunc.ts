@@ -84,7 +84,7 @@ export async function mapcalc(
             const mapPath = await dlMap(obj.mapid, 0, lastUpdated, config);
 
             if (!(typeof mapPath == 'string')) {
-                return mapPath;
+                throw new Error(`Map path not a string: ${mapPath}`);
             }
 
             const mods = obj.mods == null || obj.mods.length < 1 ? 'NM' : obj.mods;
@@ -183,7 +183,7 @@ export async function scorecalc(
 
 
                 if (!(typeof mapPath == 'string')) {
-                    return mapPath;
+                    throw new Error(`Map path not a string: ${mapPath}`);
                 }
 
                 const map = new rosu.Beatmap({
@@ -316,13 +316,16 @@ export async function scorecalc(
  * @returns the strains of a beatmap. times given in milliseconds
  */
 export async function straincalc(mapid: number, mods: string, calctype: number, mode: osuApiTypes.GameMode, lastUpdated: Date, config: extypes.config,) {
-    let strains;
+    let strains: {
+        strainTime: string[],
+        value: number[],
+    };
     switch (calctype) {
         case 0: default: {
             const mapPath = await dlMap(mapid, 0, lastUpdated, config);
 
             if (!(typeof mapPath == 'string')) {
-                return mapPath;
+                throw new Error(`Map path not a string: ${mapPath}`);
             }
 
             let strains1 =
@@ -1522,7 +1525,7 @@ export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string
     return;
 }
 
-export function debug(data: apiReturn | osuApiTypes.Score[] | rosu.PerformanceAttributes[] | extypes.replay | { error: any; } | (osuApiTypes.Beatmapset[] & osuApiTypes.Error | osuApiTypes.BeatmapPlayCountArr), type: string, name: string, serverId: string | number, params: string) {
+export function debug(data: apiReturn | osuApiTypes.Score[] | rosu.PerformanceAttributes[] | object | extypes.replay | { error: any; } | (osuApiTypes.Beatmapset[] & osuApiTypes.Error | osuApiTypes.BeatmapPlayCountArr), type: string, name: string, serverId: string | number, params: string) {
     const pars = params.replaceAll(',', '=');
     if (!fs.existsSync(`${path}/cache/debug/${type}`)) {
         fs.mkdirSync(`${path}/cache/debug/${type}`);
