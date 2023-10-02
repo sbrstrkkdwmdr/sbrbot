@@ -917,6 +917,9 @@ export async function help(input: extypes.commandInput) {
         if (command.slashusage) {
             desc += `\nSlash Command: \`/${command.slashusage}\``;
         }
+        if (command.linkusage) {
+            desc += `\nLink Command: ${command.linkusage.map(x => `\`${x}\``).join('\n')}`;
+        }
 
         let exceedTxt = '';
         let exceeds = false;

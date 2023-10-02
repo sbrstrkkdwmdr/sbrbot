@@ -19,6 +19,7 @@ export type commandInfo = {
     description: string,
     usage?: string,
     slashusage?: string,
+    linkusage?: string[],
     examples: {
         text: string,
         descriptor: string;
@@ -404,7 +405,6 @@ const cmds: commandInfo[] = [
         name: 'info',
         description: 'Shows information about the bot',
         usage: 'info',
-        slashusage: 'null',
         examples: [],
         aliases: [],
         options: []
@@ -413,7 +413,6 @@ const cmds: commandInfo[] = [
         name: 'invite',
         description: 'Sends the bot\'s public invite',
         usage: 'invite',
-        slashusage: 'null',
         examples: [],
         aliases: [],
         options: []
@@ -565,7 +564,6 @@ operators: *, /, +, -, (, )
         name: 'stats',
         description: 'Shows the bot\'s statistics',
         usage: 'stats',
-        slashusage: 'null',
         examples: [],
         aliases: [],
         options: []
@@ -857,6 +855,13 @@ const osucmds: commandInfo[] = [
         description: 'Shows information about a beatmap',
         usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
         slashusage: 'map [query] [id] [mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp]',
+        linkusage: [
+            'osu.ppy.sh/b/<id> +[mods]',
+            'osu.ppy.sh/beatmapsets?q=<query> +[mods]',
+            'osu.ppy.sh/beatmapsets/<sid> +[mods]',
+            'osu.ppy.sh/beatmapsets/<sid>#<mode>/<id> +[mods]',
+            'osu.ppy.sh/s/<sid> +[mods]',
+        ],
         examples: [
             {
                 text: 'PREFIXMSGmap "kimi no shiranai monogatari"',
@@ -926,7 +931,7 @@ const osucmds: commandInfo[] = [
                 options: ['1-1000'],
                 defaultValue: 'the map\'s BPM',
                 examples: ['-bpm 200', 'bpm:200'],
-                commandTypes: ['message', 'interaction', 'link']
+                commandTypes: ['message', 'interaction',]
             },
             {
                 name: 'speed',
@@ -936,7 +941,7 @@ const osucmds: commandInfo[] = [
                 options: ['0.1-10'],
                 defaultValue: '1',
                 examples: ['-speed 1.5', 'speed:1.5'],
-                commandTypes: ['message', 'interaction', 'link']
+                commandTypes: ['message', 'interaction',]
             },
             {
                 name: 'cs',
@@ -1138,6 +1143,10 @@ const osucmds: commandInfo[] = [
         description: 'Shows information about a user\'s osu! profile',
         usage: 'osu [user] [-graph/-g] [-detailed/-d] [-(mode)]',
         slashusage: 'osu [user] [detailed] [mode]',
+        linkusage: [
+            'osu.ppy.sh/u/[user]',
+            'osu.ppy.sh/users/[user][/(mode)]',
+        ],
         aliases: ['o', 'profile', 'user', 'taiko', 'drums', 'fruits', 'ctb', 'catch', 'mania'],
         examples: [
             {
@@ -1153,8 +1162,8 @@ const osucmds: commandInfo[] = [
                 descriptor: 'Shows a graph of your osu! rank and playcount'
             },
             {
-                text: 'osu.ppy.sh/u/15222484/osu -d',
-                descriptor: 'Shows SaberStrike\'s osu profile with extra details'
+                text: 'osu.ppy.sh/u/15222484/osu',
+                descriptor: 'Shows SaberStrike\'s osu profile'
             }
         ],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.graph],
@@ -1843,7 +1852,9 @@ const osucmds: commandInfo[] = [
         name: 'scoreparse',
         description: 'Returns information about a score',
         usage: 'scoreparse <id> [mode]',
-        slashusage: 'null',
+        linkusage: [
+            'osu.ppy.sh/scores/<mode>/<id>'
+        ],
         examples: [
             {
                 text: 'PREFIXMSGscoreparse 1234567890',
@@ -1887,7 +1898,6 @@ const osucmds: commandInfo[] = [
         name: 'scorepost',
         description: 'Generates a thumbnail and title for a score',
         usage: 'scorepost <id> [mode]',
-        slashusage: 'null',
         examples: [
             {
                 text: 'PREFIXMSGscorepost 1234567890',
