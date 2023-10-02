@@ -506,3 +506,5 @@ changes:
 [QOL] combo is grabbed from pp calc where possible
 [QOL] increase resolution of graphs 
 [QOL] better graph placeholder
+[QOL] "temperature" as weather cmd alias
+[FIX] tracking files folder being created as an empty file by accident
