@@ -1301,7 +1301,6 @@ export async function graph(
 
 
     if (other?.type == 'bar') {
-        console.log('owoaosd');
         cfgopts['elements'] = {
             backgroundColor: other.lineColour ?? 'rgb(101, 101, 135)',
             borderColor: other?.barOutline ? 'rgb(255, 255, 255)' : other.lineColour ?? 'rgb(101, 101, 135)',

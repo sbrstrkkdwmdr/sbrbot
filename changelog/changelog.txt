@@ -508,3 +508,4 @@ changes:
 [QOL] better graph placeholder
 [QOL] "temperature" as weather cmd alias
 [FIX] tracking files folder being created as an empty file by accident
+[QOL] speed flag (-speed x) modifies map values
