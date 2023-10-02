@@ -7047,7 +7047,6 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     try {
         scoredata.rank.toUpperCase();
     } catch (error) {
-        console.log('uppercase');
         if (input.commandType != 'button' && input.commandType != 'link') {
             await msgfunc.sendMessage({
                 commandType: input.commandType,
@@ -9642,10 +9641,12 @@ export async function simulate(input: extypes.commandInput) {
     }
 
     if (mods.includes('DT') || mods.includes('NC')) {
-        overrideSpeed = overrideSpeed * 1.5;
+        overrideSpeed *= 1.5;
+        overrideBpm *= 1.5;
     }
     if (mods.includes('HT')) {
-        overrideSpeed = overrideSpeed * 0.75;
+        overrideSpeed *= 0.75;
+        overrideBpm *= 1.5;
     }
 
     const score = await osufunc.scorecalc({
@@ -10713,15 +10714,20 @@ export async function map(input: extypes.commandInput) {
             hitlength /= overrideSpeed;
         }
 
-        const allvals = osumodcalc.calcValues(
+        const inallvals = osumodcalc.calcValues(
             +customCS,
             +customAR,
             +customOD,
             +customHP,
-            overrideBpm ?? mapdata.bpm,
+            mapdata.bpm,
             hitlength,
             mapmods
         );
+
+        const allvals = osumodcalc.calcValuesAlt(
+            inallvals.cs, inallvals.ar, inallvals.od, inallvals.hp, inallvals.bpm, hitlength, overrideSpeed
+        )
+
         let mapimg = input.config.useEmojis.gamemodes ?
             emojis.gamemodes[mapdata.mode] :
             mapdata.mode;
@@ -11832,15 +11838,19 @@ export async function ppCalc(input: extypes.commandInput) {
         hitlength /= overrideSpeed;
     }
 
-    const allvals = osumodcalc.calcValues(
+    const inallvals = osumodcalc.calcValues(
         +customCS,
         +customAR,
         +customOD,
         +customHP,
-        overrideBpm ?? mapdata.bpm,
+        mapdata.bpm,
         hitlength,
         mapmods
     );
+
+    const allvals = osumodcalc.calcValuesAlt(
+        inallvals.cs, inallvals.ar, inallvals.od, inallvals.hp, inallvals.bpm, hitlength, overrideSpeed
+    )
     let ppComputed: PerformanceAttributes[];
     let ppissue: string;
     let totaldiff: string | number = mapdata.difficulty_rating;

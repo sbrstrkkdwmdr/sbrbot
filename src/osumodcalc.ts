@@ -23,6 +23,7 @@ export type ValObj = {
     bpm?: number,
     length?: number,
     mods?: string,
+    speedMult?: number,
     error?: string | boolean,
     details?: {
         csRadius: number,
@@ -138,7 +139,7 @@ function ARtoms(ar: number) {
  * @info set a value to a string to ignore
  * @returns od (overall difficulty)
  */
-function msToOD(hitwindow300: number, hitwindow100: number, hitwindow50: number) {
+function msToOD(hitwindow300: number, hitwindow100?: number, hitwindow50?: number) {
     let od: string;
     if (!isNaN(hitwindow300)) {
         od = ((79.5 - hitwindow300) / 6).toFixed(2);
@@ -783,7 +784,6 @@ function calcValues(cs: number, ar: number, od: number, hp: number, bpm: number,
     let error: string | boolean = false;
     const nmods = mods.includes('NC') ? mods.toUpperCase().replace('NC', 'DT') : mods.toUpperCase();
 
-
     switch (true) {
         case ((nmods.includes('HR') && nmods.includes('EZ')) || (nmods.includes('DT') && nmods.includes('HT'))):
             ncs = cs;
@@ -883,8 +883,8 @@ function calcValues(cs: number, ar: number, od: number, hp: number, bpm: number,
         hp: parseFloat(nhp.toFixed(2)),
         bpm: parseFloat(nbpm.toFixed(2)),
         length: parseFloat(nlength.toFixed(2)),
-        mods: mods,
-        error: error,
+        mods,
+        error,
         details: {
             csRadius: csToRadius(ncs),
             arMs: ARtoms(nar),
@@ -902,6 +902,54 @@ function calcValues(cs: number, ar: number, od: number, hp: number, bpm: number,
     };
     return obj;
 }
+
+/**
+ * 
+ * @param cs circle size
+ * @param ar approach rate
+ * @param od overall difficulty
+ * @param hp health
+ * @param bpm beats per minute
+ * @param length length in seconds
+ * @param mods mods
+ */
+export function calcValuesAlt(cs: number, ar: number, od: number, hp: number, bpm: number, length: number, speedMult: number) {
+    speedMult = (speedMult ?? 1);
+    const arMs = ARtoms(ar);
+    const odMs = ODtoms(od);
+    let ncs: number = cs;
+    let nar: number = msToAR(arMs / speedMult);
+    let nod: number = msToOD(odMs.hitwindow_300 / speedMult);
+    let nhp: number = hp;
+    let nbpm: number = bpm / speedMult;
+    let nlength: number = length / speedMult;
+
+    const obj: ValObj = {
+        cs: parseFloat(ncs.toFixed(2)),
+        ar: parseFloat(nar.toFixed(2)),
+        od: parseFloat(nod.toFixed(2)),
+        hp: parseFloat(nhp.toFixed(2)),
+        bpm: parseFloat(nbpm.toFixed(2)),
+        length: parseFloat(nlength.toFixed(2)),
+        speedMult,
+        details: {
+            csRadius: csToRadius(ncs),
+            arMs,
+            odMs,
+            //mm:ss
+            lengthFull: nlength > 60 ?
+                nlength % 60 < 10 ?
+                    Math.floor(nlength / 60) + ':0' + Math.floor(nlength % 60) :
+                    Math.floor(nlength / 60) + ':' + Math.floor(nlength % 60)
+                :
+                nlength % 60 < 10 ?
+                    Math.floor(nlength / 60) + ':0' + Math.floor(nlength % 60) :
+                    Math.floor(nlength / 60) + ':' + Math.floor(nlength % 60)
+        }
+    };
+    return obj;
+}
+
 /**
  * 
  * @param mode mode to convert to its corresponding integer value
