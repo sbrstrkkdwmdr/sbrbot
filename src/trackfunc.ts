@@ -97,8 +97,6 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
             }
 
             for (let i = 0; i < curdata.length; i++) {
-
-
                 if (!previous.find(x => x.id == curdata[i].id)) {
                     log.toOutput(`Found new score for: ${curdata[i]?.user?.username ?? 'null name'}`, config);
                     sendMsg(await getEmbed({
@@ -204,12 +202,11 @@ export async function trackUsers(db, client, guildSettings, totalTime: number, c
     }
 
     const allUsers = await db.findAll();
-    const WaitTime = totalTime;
     for (let i = 0; i < allUsers.length; i++) {
         const user = allUsers[i];
 
         setTimeout(() => {
-            log.toOutput(`Tracking - index ${i}. Next track in ${Math.floor(WaitTime / allUsers.length)}`, config);
+            log.toOutput(`Tracking - index ${i+1}/${allUsers.length}. Next track in ${Math.floor(totalTime / allUsers.length)}`, config);
             let willFetch = false;
             if (!(typeof user.osuid == 'undefined' || user.osuid == null || user.osuid == undefined)) {
                 if (`${user.guildsosu}`.length > 0 && `${user.guildsosu}`.length != 4) {
@@ -252,7 +249,7 @@ export async function trackUsers(db, client, guildSettings, totalTime: number, c
                 log.toOutput(`Tracking cancelled - User ${user.osuid} has no tracked channels`, config);
             }
         },
-            i < 1 ? 0 : (Math.floor(WaitTime / allUsers.length)));
+            i < 1 ? 0 : (Math.floor(totalTime / allUsers.length)));
     }
 }
 

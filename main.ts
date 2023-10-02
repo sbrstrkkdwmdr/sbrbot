@@ -203,7 +203,7 @@ Current Client ID:        ${client.user.id}
     }
     if (!fs.existsSync(`${path}\\trackingFiles`)) {
         console.log(`Creating ${path}\\trackingFiles`);
-        fs.writeFileSync(`${path}\\trackingFiles`, '0', 'utf-8');
+        fs.mkdirSync(`${path}\\trackingFiles`,);
     }
 
     if (!fs.existsSync(`${path}\\debug`)) {
