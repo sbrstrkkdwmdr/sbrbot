@@ -4,11 +4,15 @@ html {
 
 body {
     /* background-image: url(./docbg.jpg); */
-    background: linear-gradient(to right bottom, #FF8C3F, #FF3FE5);
-    background-repeat: repeat;
+    background-image: url(./docbg.jpg);
+    background-repeat: initial;
     background-attachment: fixed;
-    background-size: contain;
+    background-size: fill;
     color: white;
+}
+
+.bodyoverlay {
+    background: rgba(22, 22, 22, 1);
 }
 
 /* h1 {
@@ -152,4 +156,14 @@ pre {
 
 table {
     font-size: 16px;
+}
+
+.tableBG {
+    background-color: rgba(50, 50, 50, 1);;
+    margin-right: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 15px;
+    padding-left: 15px;
+    border-radius: 15px;
 }

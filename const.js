@@ -20,24 +20,24 @@ const template = {
 const buttonsObjs = {
     label: {
         page: {
-            first: '<:first:1025231767067689001>',
-            previous: '<:previous:1025231772943913040>',
-            search: '🔍',
-            next: '<:next:1025231771262001182> ',
-            last: '<:last:1025231769361989642>',
+            first: '.\\img\\buttons\\page_first.png',
+            previous: '.\\img\\buttons\\page_previous.png',
+            search: '.\\img\\buttons\\page_select.png',
+            next: '.\\img\\buttons\\page_next.png ',
+            last: '.\\img\\buttons\\page_last.png',
         },
         main: {
-            refresh: '<:refresh:1025233415383031918>',
-            detailed: '📝',
-            detailDefault: '',
-            detailMore: '<:details_more:1047767495693565973>',
-            detailLess: '<:details_less:1047767494011662416>',
+            refresh: '.\\img\\buttons\\refresh.png',
+            detailed: '.\\img\\buttons\\details_default.png',
+            detailDefault: '.\\img\\buttons\\details_default.png',
+            detailMore: '.\\img\\buttons\\details_more.png',
+            detailLess: '.\\img\\buttons\\details_less.png',
         },
         extras: {
-            random: '🎲',
-            graph: '📈',
-            map: '🗺',
-            user: '<:user:1055261081800552448>'
+            random: '.\\img\\buttons\\random.png', //🎲
+            graph: '.\\img\\buttons\\graph.png', //'📈',
+            map: '.\\img\\buttons\\map.png', //🗺
+            user: '.\\img\\buttons\\user.png'
         },
         page_old: {
             first: '⬅',
@@ -315,7 +315,7 @@ const generalcommands = [
                 descriptor: 'Shows information about the recent command'
             }
         ],
-        aliases: [],
+        aliases: ['commands'],
         buttons: [buttonsObjs.label.extras.random, buttonsObjs.label.main.detailed],
         options: [
             {
@@ -334,7 +334,6 @@ const generalcommands = [
         name: 'info',
         description: 'Shows information about the bot',
         usage: 'info',
-        slashusage: 'null',
         examples: [],
         aliases: [],
         options: []
@@ -343,7 +342,6 @@ const generalcommands = [
         name: 'invite',
         description: 'Sends the bot\'s public invite',
         usage: 'invite',
-        slashusage: 'null',
         examples: [],
         aliases: [],
         options: []
@@ -433,10 +431,14 @@ operators: *, /, +, -, (, )
     },
     {
         name: 'remind',
-        description: 'Sets a reminder',
-        usage: 'remind <time> [reminder]',
+        description: 'Sets a reminder. Leave all args blank or use the reminders alias to return a list of reminders',
+        usage: 'remind [time] [reminder]',
         slashusage: 'remind <time> <reminder> [sendinchannel]',
         examples: [
+            {
+                text: 'PREFIXMSGremind',
+                descriptor: 'Returns a list of reminders.'
+            },
             {
                 text: 'PREFIXMSGremind 1h30m30s reminder',
                 descriptor: 'Sets a reminder for 1 hour, 30 minutes, and 30 seconds'
@@ -450,7 +452,7 @@ operators: *, /, +, -, (, )
                 descriptor: 'Sets a reminder for 1 hour, 30 minutes, and 30 seconds and sends it in the channel'
             }
         ],
-        aliases: [],
+        aliases: ['reminders'],
         options: [
             {
                 name: 'time',
@@ -491,7 +493,6 @@ operators: *, /, +, -, (, )
         name: 'stats',
         description: 'Shows the bot\'s statistics',
         usage: 'stats',
-        slashusage: 'null',
         examples: [],
         aliases: [],
         options: []
@@ -527,31 +528,6 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'settime',
-        description: 'Shows the current time in a specific timezone. ',
-        usage: 'settime <timezone>',
-        slashusage: 'settime <timezone>',
-        examples: [
-            {
-                text: 'PREFIXMSGsettime AEST',
-                descriptor: 'Set\'s the user\'s timezone to Australian Eastern Standard Time'
-            },
-        ],
-        aliases: [],
-        options: [
-            {
-                name: 'timezone',
-                type: 'string',
-                required: false,
-                description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset)',
-                options: ['Formatted as [city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
-                defaultValue: 'UTC',
-                examples: ['Australia/Melbourne', 'Europe/Warsaw'],
-                commandTypes: ['message', 'interaction']
-            }
-        ]
-    },
-    {
         name: 'weather',
         description: 'Shows the weather for a specific region',
         usage: 'weather <region>',
@@ -562,7 +538,7 @@ operators: *, /, +, -, (, )
                 descriptor: 'Returns the weather for Auckland, New Zealand'
             },
         ],
-        aliases: [],
+        aliases: ['temperature', 'temp'],
         options: [
             {
                 name: 'region',
@@ -808,6 +784,13 @@ const osucommands = [
         description: 'Shows information about a beatmap',
         usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
         slashusage: 'map [query] [id] [mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp]',
+        linkusage: [
+            'osu.ppy.sh/b/<id> +[mods]',
+            'osu.ppy.sh/beatmapsets?q=<query> +[mods]',
+            'osu.ppy.sh/beatmapsets/<sid> +[mods]',
+            'osu.ppy.sh/beatmapsets/<sid>#<mode>/<id> +[mods]',
+            'osu.ppy.sh/s/<sid> +[mods]',
+        ],
         examples: [
             {
                 text: 'PREFIXMSGmap "kimi no shiranai monogatari"',
@@ -877,7 +860,7 @@ const osucommands = [
                 options: ['1-1000'],
                 defaultValue: 'the map\'s BPM',
                 examples: ['-bpm 200', 'bpm:200'],
-                commandTypes: ['message', 'interaction', 'link']
+                commandTypes: ['message', 'interaction',]
             },
             {
                 name: 'speed',
@@ -887,7 +870,7 @@ const osucommands = [
                 options: ['0.1-10'],
                 defaultValue: '1',
                 examples: ['-speed 1.5', 'speed:1.5'],
-                commandTypes: ['message', 'interaction', 'link']
+                commandTypes: ['message', 'interaction',]
             },
             {
                 name: 'cs',
@@ -1089,6 +1072,10 @@ const osucommands = [
         description: 'Shows information about a user\'s osu! profile',
         usage: 'osu [user] [-graph/-g] [-detailed/-d] [-(mode)]',
         slashusage: 'osu [user] [detailed] [mode]',
+        linkusage: [
+            'osu.ppy.sh/u/[user]',
+            'osu.ppy.sh/users/[user][/(mode)]',
+        ],
         aliases: ['o', 'profile', 'user', 'taiko', 'drums', 'fruits', 'ctb', 'catch', 'mania'],
         examples: [
             {
@@ -1104,8 +1091,8 @@ const osucommands = [
                 descriptor: 'Shows a graph of your osu! rank and playcount'
             },
             {
-                text: 'osu.ppy.sh/u/15222484/osu -d',
-                descriptor: 'Shows SaberStrike\'s osu profile with extra details'
+                text: 'osu.ppy.sh/u/15222484/osu',
+                descriptor: 'Shows SaberStrike\'s osu profile'
             }
         ],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.graph],
@@ -1154,8 +1141,8 @@ const osucommands = [
     },
     {
         name: 'osuset',
-        description: 'Sets your osu! username/mode/skin',
-        usage: 'osuset <username> [-(mode)] [-skin]',
+        description: 'Sets your osu! username/mode/skin or any setting',
+        usage: 'osuset <username> [-(mode)] [-skin] [-timezone] [-location]',
         slashusage: 'osuset <username> [mode] [skin]',
         examples: [
             {
@@ -1179,7 +1166,7 @@ const osucommands = [
                 descriptor: 'Sets your skin to sbr v11'
             },
         ],
-        aliases: ['setuser', 'set', 'setmode', 'setskin'],
+        aliases: ['setuser', 'set', 'setmode', 'setskin', 'settime', 'settz', 'setweather', 'setlocation'],
         options: [
             {
                 name: 'username',
@@ -1209,6 +1196,26 @@ const osucommands = [
                 options: ['N/A'],
                 defaultValue: 'osu! default 2014',
                 examples: ['-skin sbr v11', 'skin:rafis hddt'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'timezone',
+                type: 'string',
+                required: false,
+                description: 'The timezone to set',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['-timezone auckland', '-tz UTC+6'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'location',
+                type: 'string',
+                required: false,
+                description: 'The location to set',
+                options: ['N/A'],
+                defaultValue: 'null',
+                examples: ['-location melbourne', '-weather melbourne'],
                 commandTypes: ['message', 'interaction']
             }
         ]
@@ -1405,7 +1412,7 @@ const osucommands = [
     },
     {
         name: 'pp',
-        description: 'Estimates the rank of a user from the pp given',
+        description: 'Estimates the rank of a user from the pp given. If a value matches the database, that will be used instead of an estimation.',
         usage: 'pp <value> [-(mode)]',
         slashusage: 'pp <value> [mode]',
         examples: [
@@ -1444,7 +1451,7 @@ const osucommands = [
     },
     {
         name: 'rank',
-        description: 'Estimates the performance points of a user from the rank given',
+        description: 'Estimates the performance points of a user from the rank given. If a value matches the database, that will be used instead of an estimation.',
         usage: 'rank <value> [-(mode)]',
         slashusage: 'rank <value> [mode]',
         examples: [
@@ -1558,7 +1565,7 @@ const osucommands = [
     {
         name: 'recent',
         description: 'Shows the recent score(s) of a user',
-        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-?] [-grade]',
+        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-?] [-grade] [-mods] [-modsx]',
         slashusage: 'recent [user] [page] [mode] [list] [filter] [grade]',
         examples: [
             {
@@ -1574,8 +1581,8 @@ const osucommands = [
                 descriptor: 'Shows the second page of your recent scores in a list'
             },
             {
-                text: '/recent list:true',
-                descriptor: 'Shows your recent scores in a list'
+                text: 'PREFIXMSGrsbest',
+                descriptor: 'Shows your recent scores in a list, sorted by pp'
             },
             {
                 text: 'PREFIXMSGrl -mania',
@@ -1590,14 +1597,14 @@ const osucommands = [
                 descriptor: 'Shows your second most recent taiko score'
             },
             {
-                text: 'PREFIXMSGrl -passes',
-                descriptor: 'Shows your recent scores excluding fails'
+                text: 'PREFIXMSGrl -nf -? "Shinbatsu"',
+                descriptor: 'Shows your recent scores with the map name/difficulty/artist/creator matching "shinbatsu", excluding fails'
             }
         ],
-        aliases: ['rs', 'r', 'rt', 'rf', 'rm', 'rctb', 'rl', 'rlt', 'rlf', 'rlm', 'rlctb'],
+        aliases: ['rs', 'r', 'rt', 'rf', 'rm', 'rctb', 'rl', 'rlt', 'rlf', 'rlm', 'rlctb', 'rsbest', 'recentbest', 'rb'],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.map, buttonsObjs.label.extras.user],
-        options: scoreListCommandOptions.slice()
-            .splice(8, 1) //removes parse param
+        options: scoreListCommandOptions.slice(0, 8).concat(
+            scoreListCommandOptions.slice(10))
             .concat([
                 {
                     name: 'list',
@@ -1609,6 +1616,28 @@ const osucommands = [
                     aliases: ['l'],
                     examples: ['-l', 'list:true'],
                     commandTypes: ['message', 'interaction']
+                },
+                {
+                    name: 'passes',
+                    type: 'boolean',
+                    required: false,
+                    description: 'Whether to show only scores that were passed. If false, all scores will be shown',
+                    options: ['true', 'false'],
+                    defaultValue: 'true',
+                    aliases: ['pass', 'nofail', 'nf'],
+                    examples: ['-pass',],
+                    commandTypes: ['message']
+                },
+                {
+                    name: '-?',
+                    type: 'string',
+                    required: false,
+                    description: 'Filter scores by maps matching the given string',
+                    options: [''],
+                    defaultValue: 'null',
+                    aliases: [],
+                    examples: ['-? "shinbatsu o tadori"',],
+                    commandTypes: ['message']
                 },
                 {
                     name: 'passes',
@@ -1752,7 +1781,9 @@ const osucommands = [
         name: 'scoreparse',
         description: 'Returns information about a score',
         usage: 'scoreparse <id> [mode]',
-        slashusage: 'null',
+        linkusage: [
+            'osu.ppy.sh/scores/<mode>/<id>'
+        ],
         examples: [
             {
                 text: 'PREFIXMSGscoreparse 1234567890',
@@ -1796,7 +1827,6 @@ const osucommands = [
         name: 'scorepost',
         description: 'Generates a thumbnail and title for a score',
         usage: 'scorepost <id> [mode]',
-        slashusage: 'null',
         examples: [
             {
                 text: 'PREFIXMSGscorepost 1234567890',
@@ -2325,7 +2355,7 @@ const misccommands = [
                 descriptor: 'Sends a random gif matching "slap"'
             }
         ],
-        aliases: [],
+        aliases: ['hug', 'kiss', 'lick', 'pet', 'punch', 'slap'],
         options: [
             {
                 name: 'type',

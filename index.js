@@ -31,8 +31,12 @@ function generateCommands() {
         </p>
     
         <pre>
-        <div>Command:</div> <div class="codeblock">sbr-${arrToAscii(cmd.usage)}</div>
-                            <div class="codeblock">/${arrToAscii(cmd.slashusage)}</div>
+        <div>Command:</div>
+<div class="codeblock">sbr-${arrToAscii(cmd.usage)}</div>
+${cmd?.slashusage ? `<div class="codeblock">/${arrToAscii(cmd.slashusage)}</div>` : ''}
+${cmd?.linkusage && cmd.linkusage.length > 0 ?
+                    cmd.linkusage.map(x => `<div class="codeblock">${arrToAscii(x)}</div>`).join('\n') :
+                    ''}
     
         ${cmd.aliases.length > 0 ? `<div>Aliases:</div> ${cmd.aliases.map(x => `<div class="codeblock">${x}</div>`).join('\n')}` : ''}
     
@@ -100,37 +104,18 @@ function toListButtons(commands, div, name) {
         cmddiv.classList.add('command');
         cmddiv.innerHTML =
             `
-
 <details>
 <summary class="divCommandName" id="${name}-${cmd.name}">${cmd.name}</summary>
 <div class="divCommandDetails">
 <p>${cmd.description}
 </p>
 
-<pre>
-${cmd.examples.length > 0 ?
-                `\nExamples:` +
-                `<table class="cmdexample">` +
-                cmd.examples.map(x =>
-                    `<tr>
-<td class="tdEx"><div class="extxt">${x.text.replace('PREFIXMSG', 'sbr-')}</div></td>
-<td class="tdEx"><div class="exdesc">${x.descriptor}</div></td>
-</tr>
-`
-
-                ).join(`\n`) + '</table>' :
-                ''}
-</pre>
-${cmd.imagesrc.length > 0 ? `<img src="${cmd.imagesrc}" alt="${cmd.name}" style="height:10%;width:10%">` : ''}
-${cmd.emojisrc.length > 0 ?
-                `<p style="font-size:50px">${cmd.emojisrc}</p>` : ''
-            }
+${cmd.emoji.length > 0 ? `<img src="${cmd.emoji}" alt="${cmd.name}" style="height:10%;width:10%">` : ''}
 </div>
-
-
 </details>
 </div>
 `
+//name,desc, emoji
         div.appendChild(cmddiv);
     }
 }
@@ -158,7 +143,7 @@ class smoothOpen {
         } else if (this.isExpanding || this.el.open) {
             this.shrink();
         }
-        
+
     }
 
     shrink() {
