@@ -1806,7 +1806,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             user = msgnohttp.includes(' ') ? msgnohttp.split('/')[2].split(' ')[0] : msgnohttp.split('/')[2];
             mode = msgnohttp.includes(' ') ?
                 msgnohttp.split('/')[3] ?
-                    msgnohttp.split('/')[3] : null
+                    msgnohttp.split('/')[3].split(' ')[0] : null
                 :
                 msgnohttp.split('/')[3] ?
                     msgnohttp.split('/')[3] : null;
@@ -6866,23 +6866,6 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         case 'link': {
             input.obj = (input.obj as Discord.Message);
 
-            if (input.args.includes('-detailed')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-detailed'), 1);
-            }
-            if (input.args.includes('-d')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-d'), 1);
-            }
-            if (input.args.includes('-compress')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-compress'), 1);
-            }
-            if (input.args.includes('-c')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-c'), 1);
-            }
-
             commanduser = input.obj.author;
             const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
             try {
@@ -10095,16 +10078,6 @@ export async function map(input: extypes.commandInput) {
                     return;
                 }
             }
-            if (input.args.includes('-bpm')) {
-                const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
-                overrideBpm = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-speed')) {
-                const temp = func.parseArg(input.args, '-speed', 'number', overrideSpeed);
-                overrideSpeed = temp.value;
-                input.args = temp.newArgs;
-            }
         }
             break;
     }
@@ -10726,7 +10699,7 @@ export async function map(input: extypes.commandInput) {
 
         const allvals = osumodcalc.calcValuesAlt(
             inallvals.cs, inallvals.ar, inallvals.od, inallvals.hp, inallvals.bpm, hitlength, overrideSpeed
-        )
+        );
 
         let mapimg = input.config.useEmojis.gamemodes ?
             emojis.gamemodes[mapdata.mode] :
@@ -10835,6 +10808,7 @@ HP${baseHP}`;
                 title: false
             }
         }, 1);
+        mapmods = mapmods.replace(',', '');
         const maptitle: string = mapmods ? `${mapname} [${mapdata.version}] +${mapmods}` : `${mapname} [${mapdata.version}]`;
 
         let mapperdataReq: osufunc.apiReturn;
@@ -11850,7 +11824,7 @@ export async function ppCalc(input: extypes.commandInput) {
 
     const allvals = osumodcalc.calcValuesAlt(
         inallvals.cs, inallvals.ar, inallvals.od, inallvals.hp, inallvals.bpm, hitlength, overrideSpeed
-    )
+    );
     let ppComputed: PerformanceAttributes[];
     let ppissue: string;
     let totaldiff: string | number = mapdata.difficulty_rating;
