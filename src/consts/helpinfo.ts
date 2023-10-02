@@ -611,7 +611,7 @@ operators: *, /, +, -, (, )
                 descriptor: 'Returns the weather for Auckland, New Zealand'
             },
         ],
-        aliases: [],
+        aliases: ['temperature', 'temp'],
         options: [
             {
                 name: 'region',

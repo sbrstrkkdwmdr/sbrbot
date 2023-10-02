@@ -182,7 +182,7 @@ export default (input: {
     ) {
         const requireEmbedCommands: string[] = [
             //gen
-            'convert', 'help', 'info', 'invite', 'ping', 'remind', 'stats', 'time', 'weather', 'tropicalweather', 'ts',
+            'convert', 'help', 'info', 'invite', 'ping', 'remind', 'stats', 'time', 'weather', 'temperature', 'temp', 'tropicalweather', 'ts',
             //misc
             'image', 'imagesearch', 'poll', 'vote', 'ytsearch', 'yt', 'yts',
             'hug', 'kiss', 'lick', 'pet', 'punch', 'slap',
@@ -339,7 +339,7 @@ export default (input: {
             case 'time':
                 commands.time({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
-            case 'weather':
+            case 'weather': case 'temperature': case 'temp':
                 startType(obj);
                 commands.weather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
