@@ -202,7 +202,8 @@ export const timezones: timezone[] = [
             'New Mexico',//^ state
             'Santa Fe', //^ state capital
             'Albuquerque', //^ major city
-            'Texas' //^ state //El Paso area
+            'Texas (El Paso area)', //^ state //El Paso area
+            'El Paso' //^
         ]
     },
     {
@@ -1646,7 +1647,9 @@ export const hasDaylight: {
                 'Texas', //^ state//most of
                 'Austin', //^ state capital
                 'Houston', //^ major city
-                'Florida', //^ state //W
+                'Texas (El Paso area)', //^ state //El Paso area
+                'El Paso', //^
+                'Florida (Pan Handle)', //^ state //W
                 'Maine',//^ state 
                 'Augusta', //^ state capital
                 'New Hampshire',//^ state 
@@ -1782,9 +1785,11 @@ function isDateBeforeOrAfterNthDayOfWeek(date: Date, targetWeekday: number, nthO
     }
 }
 
+/**
+ *  january = 1
+ */
 function isDateBetweenMonths(date: Date, startMonth: number, endMonth: number) {
-    const inputMonth = date.getMonth();
-
+    const inputMonth = date.getMonth() + 1;
     if (startMonth <= endMonth) {
         return startMonth <= inputMonth && inputMonth <= endMonth;
     } else {

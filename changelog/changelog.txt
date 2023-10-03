@@ -510,3 +510,4 @@ changes:
 [FIX] tracking files folder being created as an empty file by accident
 [QOL] speed flag (-speed x) modifies map values
 [ADD] add link usage to link commands
+[FIX] daylight savings being offset by a month
