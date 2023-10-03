@@ -511,3 +511,4 @@ changes:
 [QOL] speed flag (-speed x) modifies map values
 [ADD] add link usage to link commands
 [FIX] daylight savings being offset by a month
+[ADD] added aliases to remind

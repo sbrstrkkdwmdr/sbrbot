@@ -523,7 +523,7 @@ operators: *, /, +, -, (, )
                 descriptor: 'Sets a reminder for 1 hour, 30 minutes, and 30 seconds and sends it in the channel'
             }
         ],
-        aliases: ['reminders'],
+        aliases: ['reminders', 'reminder'],
         options: [
             {
                 name: 'time',

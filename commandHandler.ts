@@ -323,9 +323,12 @@ export default (input: {
             case 'ping':
                 commands.ping({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
-            case 'remind':
+            case 'remind': case 'reminder':
                 commands.remind({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, reminders });
                 break;
+            case 'reminders': {
+                commands.remind({ commandType, obj, args: [], canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, reminders });
+            } break;
             case 'stats':
                 commands.stats({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
