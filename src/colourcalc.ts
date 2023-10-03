@@ -88,7 +88,7 @@ function rgbToHsv(r: number, g: number, b: number) {
     const min = Math.min(r, g, b);
     const delta = max - min;
 
-    let h, s, v;
+    let h: number;
 
     if (delta === 0) {
         h = 0;
@@ -105,8 +105,8 @@ function rgbToHsv(r: number, g: number, b: number) {
         h += 360;
     }
 
-    s = Math.round((max === 0 ? 0 : delta / max) * 100);
-    v = Math.round(max * 100);
+    const s = Math.round((max === 0 ? 0 : delta / max) * 100);
+    const v = Math.round(max * 100);
 
     return { h, s, v };
 }

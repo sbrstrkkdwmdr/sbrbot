@@ -2863,26 +2863,26 @@ export async function apigetOffline(input: apiInput) {
                     break;
             }
         }
-            let skillissue = false;
-            //using spath find file
-            const full = spath.split('\\');
-            const file = full.pop();
-            console.log(full.join('\\'));
-            const dir = fs.readdirSync(full.join('\\'));
-            console.log(dir);
-            const isPresent = dir.filter(x => x.includes(file));
-            console.log(isPresent);
-            console.log(file);
-            if (isPresent.length > 0) {
-                ipath = full.join('\\') + `\\${isPresent[Math.floor(Math.random() * isPresent.length)]}`;
-            } else {
-                skillissue = true;
-            }
-            console.log(skillissue);
-            //else return err
-
-            const d = skillissue ? '{ error: "null" }' : fs.readFileSync(ipath, 'utf-8');
-            return JSON.parse(d) as object;
     }
+    let skillissue = false;
+    //using spath find file
+    const full = spath.split('\\');
+    const file = full.pop();
+    console.log(full.join('\\'));
+    const dir = fs.readdirSync(full.join('\\'));
+    console.log(dir);
+    const isPresent = dir.filter(x => x.includes(file));
+    console.log(isPresent);
+    console.log(file);
+    if (isPresent.length > 0) {
+        ipath = full.join('\\') + `\\${isPresent[Math.floor(Math.random() * isPresent.length)]}`;
+    } else {
+        skillissue = true;
+    }
+    console.log(skillissue);
+    //else return err
+
+    const d = skillissue ? '{ error: "null" }' : fs.readFileSync(ipath, 'utf-8');
+    return JSON.parse(d) as object;
 
 }

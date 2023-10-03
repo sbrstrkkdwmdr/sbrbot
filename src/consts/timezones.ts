@@ -1368,7 +1368,13 @@ export const hasDaylight: {
             ],
             check: ((date) => {
                 if (isPastDayOfWeek(date, 0) && isDateBetweenMonths(date, 10, 4)) {
-                    return true;
+                    if (date.getMonth() == 10 && isPastDayOfWeek(date, 0)) {
+                        return true;
+                    } else if (date.getMonth() == 4 && isLastDayOfWeekMonth(date, 0)) {
+                        return true;
+                    } else if (date.getMonth() !== 10 && date.getMonth() !== 4) {
+                        return true;
+                    }
                 }
                 return false;
             })
@@ -1394,8 +1400,8 @@ export const hasDaylight: {
             })
         },
         {
-            start: 'Last Sunday in March',
-            end: 'First Sunday in October',
+            start: 'First Sunday in October',
+            end: 'Last Sunday in March',
             includes: [
                 'New Zealand', 'Aotearoa', 'NZ', 'NZL',
                 'Wellington', 'Ponoeke', 'Te Whanganui-a-Tara', //^ capital

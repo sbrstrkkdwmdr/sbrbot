@@ -642,7 +642,7 @@ export function wipDiffThing(array: { x: number, y: number; }[], inputX: number)
         //10
         //5
         const init = ((prev.y + next.y) / 2);
-        let mutable = (init - ((nextDis / prevDis) * (init - prev.x))) - (((prevDis / nextDis) * (init - next.x)));
+        const mutable = (init - ((nextDis / prevDis) * (init - prev.x))) - (((prevDis / nextDis) * (init - next.x)));
         return mutable;
     }
 }

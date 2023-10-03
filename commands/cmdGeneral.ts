@@ -35,7 +35,7 @@ import * as msgfunc from './msgfunc.js';
  */
 export async function changelog(input: extypes.commandInput) {
     let commanduser;
-    let offset = 0;
+    const offset = 0;
     let version = null;
     let useNum: number = null;
     let isList = false;
@@ -127,7 +127,7 @@ export async function changelog(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const pgbuttons: Discord.ActionRowBuilder = await msgfunc.pageButtons('changelog', commanduser, input.absoluteID);
-    let buttons = new Discord.ActionRowBuilder();
+    const buttons = new Discord.ActionRowBuilder();
     //get version
     let found: string | number = null;
     let foundBool = true;
@@ -183,7 +183,7 @@ export async function changelog(input: extypes.commandInput) {
         const verdata = mainconst.versions[useNum];
         const commit = cur.split('commit:')[1].split('\n')[0] as string;
         const changesTxt = cur.split('changes:')[1];
-        let changes: { add: string[]; rem: string[]; qol: string[], fix: string[], maj: string[]; min: string[]; } = {
+        const changes: { add: string[]; rem: string[]; qol: string[], fix: string[], maj: string[]; min: string[]; } = {
             add: [],
             rem: [],
             qol: [],
@@ -2198,7 +2198,7 @@ export async function time(input: extypes.commandInput) {
             if (found.length == 0) {
                 throw new Error("Unrecognised timezone");
             }
-            let offset = found[0].offsetDirection == '+' ?
+            const offset = found[0].offsetDirection == '+' ?
                 found[0].offsetHours :
                 -found[0].offsetHours;
 
@@ -2339,384 +2339,6 @@ export async function time(input: extypes.commandInput) {
         });
     }
 
-}
-
-export async function timeset(input: extypes.commandInput) {
-    let commanduser: Discord.User;
-    let fetchtimezone: string;
-    let displayedTimezone: string;
-
-    let useComponents = [];
-    switch (input.commandType) {
-        case 'message': {
-            input.obj = (input.obj as Discord.Message);
-            commanduser = input.obj.author;
-            fetchtimezone = input.args.join(' ');
-        }
-            break;
-
-        //==============================================================================================================================================================================================
-
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
-            commanduser = input.obj.member.user;
-
-            fetchtimezone = input.obj.options.getString('timezone');
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
-    }
-
-
-    displayedTimezone = fetchtimezone;
-    if (input?.overrides) {
-        if (input?.overrides?.ex) {
-            fetchtimezone = input?.overrides?.ex as string;
-        }
-        if (input?.overrides?.id) {
-            displayedTimezone = (input?.overrides?.id ?? fetchtimezone) as string;
-        }
-    }
-
-
-    //==============================================================================================================================================================================================
-
-    log.logCommand({
-        event: 'Command',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        commanduser,
-        object: input.obj,
-        commandName: 'settime',
-        options: [
-            {
-                name: 'Timezone',
-                value: `${fetchtimezone}`
-            }
-        ],
-        config: input.config
-    });
-    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-    const txt = 'null';
-    const fields: Discord.EmbedField[] = [];
-
-    const Embed = new Discord.EmbedBuilder()
-        .setColor(colours.embedColour.info.dec)
-        .setTitle('Set timezone');
-
-    if (fetchtimezone != null && fetchtimezone != '') {
-        try {
-            let offset = 0;
-            const found: timezoneList.timezone[] = [];
-
-            for (let i = 0; i < timezoneList.timezones.length; i++) {
-                const curTimeZone = timezoneList.timezones[i];
-                if (curTimeZone.aliases.slice().map(x => x.trim().toUpperCase()).includes(fetchtimezone.trim().toUpperCase())) {
-                    found.push(curTimeZone);
-                    offset = curTimeZone.offsetDirection == '+' ?
-                        curTimeZone.offsetHours :
-                        -curTimeZone.offsetHours;
-                }
-            }
-
-            if (found.length == 0) {
-                throw new Error("Unrecognised timezone");
-            }
-
-            if (input?.overrides?.overwriteModal) {
-                useComponents = [
-                    new Discord.ActionRowBuilder()
-                        .addComponents(input?.overrides?.overwriteModal as Discord.StringSelectMenuBuilder)
-                ];
-            } else if (found.length > 1) {
-                const buttons = new Discord.ActionRowBuilder();
-                if (input?.overrides?.overwriteModal) {
-                    buttons
-                        .addComponents(input?.overrides?.overwriteModal as Discord.StringSelectMenuBuilder);
-                } else {
-                    const inputModal = new Discord.StringSelectMenuBuilder()
-                        .setCustomId(`${mainconst.version}-Select-settime-${commanduser.id}-${input.absoluteID}-${displayedTimezone}`)
-                        .setPlaceholder('Select a timezone');
-
-                    for (let i = 0; i < found.length && i < 10; i++) {
-                        inputModal.addOptions(
-                            new Discord.StringSelectMenuOptionBuilder()
-                                .setLabel(`#${i + 1}`)
-                                .setDescription(`${found[i].aliases[i]}`)
-                                .setValue(`${found[i].aliases[i]}`)
-                        );
-                    }
-                    buttons.addComponents(inputModal);
-                }
-                useComponents = [buttons];
-            }
-
-            // if (useComponents.length == 0) {
-            //     if (input?.overrides?.overwriteModal) {
-
-            //     }
-            // }
-
-            const updateRows: {
-                userid: string | number,
-                timezone: string;
-            } = {
-                userid: commanduser.id,
-                timezone: displayedTimezone,
-            };
-            const findname = await input.userdata.findOne({ where: { userid: commanduser.id } });
-            let fieldText = 'null';
-            let fieldTitle = 'Updated settings';
-            if (found.length > 1) {
-                fieldTitle = 'There are multiple timezones matching this query';
-                fieldText =
-                    `Please try again with one of the options below:
-${found.map(x => `UTC${x.offsetDirection}${x.offsetHours}\n`).join()}`;
-            } else {
-                if (findname == null) {
-                    try {
-                        await input.userdata.create({
-                            userid: commanduser.id,
-                            timezone: displayedTimezone
-                        });
-                        fieldText = `Changed timezone to: \`${displayedTimezone}\``;
-                    } catch (error) {
-                        fieldText = `There was an error trying to create user settings`;
-
-                    }
-                } else {
-                    const affectedRows = await input.userdata.update(updateRows,
-                        { where: { userid: commanduser.id } }
-                    );
-                    if (affectedRows.length > 0 || affectedRows[0] > 0) {
-                        fieldText = `Changed timezone to: \`${displayedTimezone}\``;
-                    } else {
-                        fieldText = `There was an error trying to update your settings.`;
-                        log.errLog('Database error', `${affectedRows}`, `${input.absoluteID}`);
-                    }
-                }
-            }
-
-            fields.push({
-                name: fieldTitle,
-                value: fieldText,
-                inline: false
-            });
-        } catch (error) {
-            console.log(error);
-            fields.push({
-                name: `UTC/GMT +??:?? (Requested Time)`,
-                value: `\nRecived invalid timezone!` +
-                    `\n\`${fetchtimezone}\` is not a valid timezone` +
-                    `\n Check [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset) for valid timezones`,
-                inline: false
-            });
-            const allTimezones: string[] = [];
-            for (let i = 0; i < timezoneList.timezones.length; i++) {
-                const curTimeZone = timezoneList.timezones[i];
-                for (let j = 0; j < curTimeZone.aliases.length; j++) {
-                    if (!allTimezones.includes(curTimeZone.aliases[j])) {
-                        allTimezones.push(curTimeZone.aliases[j]);
-                    }
-                }
-            }
-
-            const filteredtz = func.filterSearchArray(allTimezones, fetchtimezone);
-            if (filteredtz.length == 0) {
-                useComponents = [];
-            } else {
-                const inputModal = new Discord.StringSelectMenuBuilder()
-                    .setCustomId(`${mainconst.version}-Select-settime-${commanduser.id}-${input.absoluteID}-${displayedTimezone}`)
-                    .setPlaceholder('Select a timezone');
-                for (let i = 0; i < filteredtz.length && i < 25; i++) {
-                    inputModal.addOptions(
-                        new Discord.StringSelectMenuOptionBuilder()
-                            .setLabel(`#${i + 1}`)
-                            .setDescription(`${filteredtz[i]}`)
-                            .setValue(`${filteredtz[i]}`)
-                    );
-                }
-                const buttons = new Discord.ActionRowBuilder();
-                buttons.addComponents(inputModal);
-                useComponents = [buttons];
-            }
-        }
-    }
-
-    Embed.addFields(fields);
-
-    //SEND/EDIT MSG==============================================================================================================================================================================================
-
-    const finalMessage = await msgfunc.sendMessage({
-        commandType: input.commandType,
-        obj: input.obj,
-        args: {
-            embeds: [Embed],
-        }
-    }, input.canReply);
-
-    if (finalMessage == true) {
-        log.logCommand({
-            event: 'Success',
-            commandName: 'settime',
-            commandType: input.commandType,
-            commandId: input.absoluteID,
-            object: input.obj,
-            config: input.config
-        });
-    } else {
-        log.logCommand({
-            event: 'Error',
-            commandName: 'settime',
-            commandType: input.commandType,
-            commandId: input.absoluteID,
-            object: input.obj,
-            customString: 'Message failed to send',
-            config: input.config
-        });
-    }
-}
-
-export async function locationset(input: extypes.commandInput) {
-    let commanduser: Discord.User;
-    let fetchlocate: string;
-
-    let useComponents = [];
-    switch (input.commandType) {
-        case 'message': {
-            input.obj = (input.obj as Discord.Message);
-            commanduser = input.obj.author;
-            fetchlocate = input.args.join(' ');
-        }
-            break;
-
-        //==============================================================================================================================================================================================
-
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
-            commanduser = input.obj.member.user;
-
-            fetchlocate = input.obj.options.getString('timezone');
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
-    }
-
-    if (input?.overrides) {
-        if (input?.overrides?.ex) {
-            fetchlocate = input?.overrides?.ex as string;
-        }
-    }
-
-
-    //==============================================================================================================================================================================================
-
-    log.logCommand({
-        event: 'Command',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        commanduser,
-        object: input.obj,
-        commandName: 'setlocation',
-        options: [
-            {
-                name: 'Locations',
-                value: `${fetchlocate}`
-            }
-        ],
-        config: input.config
-    });
-    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-    const txt = 'null';
-    const fields: Discord.EmbedField[] = [];
-
-    const Embed = new Discord.EmbedBuilder()
-        .setColor(colours.embedColour.info.dec)
-        .setTitle('Set location');
-
-    if (fetchlocate != null && fetchlocate != '') {
-        const updateRows: {
-            userid: string | number,
-            location: string;
-        } = {
-            userid: commanduser.id,
-            location: fetchlocate,
-        };
-        const findname = await input.userdata.findOne({ where: { userid: commanduser.id } });
-        let fieldText = 'null';
-        let fieldTitle = 'Updated settings';
-        if (findname == null) {
-            try {
-                await input.userdata.create({
-                    userid: commanduser.id,
-                    location: fetchlocate
-                });
-                fieldText = `Changed location to: \`${fetchlocate}\``;
-            } catch (error) {
-                fieldText = `There was an error trying to create user settings`;
-
-            }
-        } else {
-            const affectedRows = await input.userdata.update(updateRows,
-                { where: { userid: commanduser.id } }
-            );
-            if (affectedRows.length > 0 || affectedRows[0] > 0) {
-                fieldText = `Changed location to: \`${fetchlocate}\``;
-            } else {
-                fieldText = `There was an error trying to update your settings.`;
-                log.errLog('Database error', `${affectedRows}`, `${input.absoluteID}`);
-            }
-        }
-    }
-
-    Embed.addFields(fields);
-
-    //SEND/EDIT MSG==============================================================================================================================================================================================
-
-    const finalMessage = await msgfunc.sendMessage({
-        commandType: input.commandType,
-        obj: input.obj,
-        args: {
-            embeds: [Embed],
-        }
-    }, input.canReply);
-
-    if (finalMessage == true) {
-        log.logCommand({
-            event: 'Success',
-            commandName: 'setlocation',
-            commandType: input.commandType,
-            commandId: input.absoluteID,
-            object: input.obj,
-            config: input.config
-        });
-    } else {
-        log.logCommand({
-            event: 'Error',
-            commandName: 'setlocation',
-            commandType: input.commandType,
-            commandId: input.absoluteID,
-            object: input.obj,
-            customString: 'Message failed to send',
-            config: input.config
-        });
-    }
 }
 
 export async function weather(input: extypes.commandInput) {
@@ -3190,55 +2812,52 @@ export async function tropicalWeather(input: extypes.commandInput) {
             const yLen = 720;
             const xFactor = xLen / 180 / 2;
             const yFactor = yLen / 90 / 2;
-            async function doShitTw() {
-                return new Promise((resolve, reject) => {
-                    try {
-                        jimp.default.read(worldmapPath).then(async (image) => {
-                            image.brightness(-0.75);
-                            if ((weatherData?.data as othertypes.tsShort[]).length == 0) {
-                                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_64_WHITE), (xLen / 2), (yLen / 2), {
-                                    text: `NO STORMS FOUND`,
-                                    alignmentX: jimp.HORIZONTAL_ALIGN_CENTER
+            const aaaeee = await new Promise((resolve, reject) => {
+                try {
+                    jimp.default.read(worldmapPath).then(async (image) => {
+                        image.brightness(-0.75);
+                        if ((weatherData?.data as othertypes.tsShort[]).length == 0) {
+                            image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_64_WHITE), (xLen / 2), (yLen / 2), {
+                                text: `NO STORMS FOUND`,
+                                alignmentX: jimp.HORIZONTAL_ALIGN_CENTER
+                            },
+                                720, 50
+                            );
+                            resolve(true);
+                        } else {
+                            exInf = `\nStorm locations shown are approximate`;
+                            for (const storm of weatherData?.data as othertypes.tsShort[]) {
+                                let tempData: othertypes.tropicalData;
+                                if (func.findFile(`${storm.id}`, 'storm-tropicalweatherdata') &&
+                                    !('error' in func.findFile(`${storm.id}`, 'storm-tropicalweatherdata')) &&
+                                    input.button != 'Refresh'
+                                ) {
+                                    tempData = func.findFile(`${storm.id}`, 'storm-tropicalweatherdata');
+                                } else {
+                                    tempData = await func.getTropical(input.config, 'storm', storm.id);
+                                }
+                                const inTempData = tempData.data as othertypes.tsData;
+                                func.storeFile((tempData as othertypes.tsData), `${(inTempData as othertypes.tsData).id}`, `storm-tropicalWeatherData`);
+                                const curx = inTempData.position[0];
+                                const cury = inTempData.position[1];
+
+                                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), (xLen / 2) + (curx * xFactor), (yLen / 2) - (cury * yFactor), {
+                                    text: `X\n${storm.id.slice(4, inTempData.id.length)}`,
+                                    alignmentX: jimp.HORIZONTAL_ALIGN_CENTER,
+                                    alignmentY: jimp.VERTICAL_ALIGN_MIDDLE,
                                 },
                                     720, 50
                                 );
-                                resolve(true);
-                            } else {
-                                exInf = `\nStorm locations shown are approximate`;
-                                for (const storm of weatherData?.data as othertypes.tsShort[]) {
-                                    let tempData: othertypes.tropicalData;
-                                    if (func.findFile(`${storm.id}`, 'storm-tropicalweatherdata') &&
-                                        !('error' in func.findFile(`${storm.id}`, 'storm-tropicalweatherdata')) &&
-                                        input.button != 'Refresh'
-                                    ) {
-                                        tempData = func.findFile(`${storm.id}`, 'storm-tropicalweatherdata');
-                                    } else {
-                                        tempData = await func.getTropical(input.config, 'storm', storm.id);
-                                    }
-                                    const inTempData = tempData.data as othertypes.tsData;
-                                    func.storeFile((tempData as othertypes.tsData), `${(inTempData as othertypes.tsData).id}`, `storm-tropicalWeatherData`);
-                                    const curx = inTempData.position[0];
-                                    const cury = inTempData.position[1];
-
-                                    image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), (xLen / 2) + (curx * xFactor), (yLen / 2) - (cury * yFactor), {
-                                        text: `X\n${storm.id.slice(4, inTempData.id.length)}`,
-                                        alignmentX: jimp.HORIZONTAL_ALIGN_CENTER,
-                                        alignmentY: jimp.VERTICAL_ALIGN_MIDDLE,
-                                    },
-                                        720, 50
-                                    );
-                                }
                             }
-                            await image.writeAsync(`${path}\\cache\\commandData\\genStormMap-${input.absoluteID}.png`);
-                            resolve(true);
-                        });
-                    } catch (err) {
-                        console.log(err);
-                        resolve(false);
-                    }
-                });
-            };
-            const aaaeee = await doShitTw();
+                        }
+                        await image.writeAsync(`${path}\\cache\\commandData\\genStormMap-${input.absoluteID}.png`);
+                        resolve(true);
+                    });
+                } catch (err) {
+                    console.log(err);
+                    resolve(false);
+                }
+            });
             if (aaaeee === true) {
                 try {
                     frimg = new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genStormMap-${input.absoluteID}.png`);
@@ -3262,27 +2881,44 @@ export async function tropicalWeather(input: extypes.commandInput) {
             for (const x of (weatherData?.data as othertypes.tsShort[])) {
                 let first = x.name;
                 let second;
-                async function doNames(x) {
-                    return new Promise(async (resolve, reject) => {
-                        let first = calc.toCapital(x.name);
-                        let tempData: othertypes.tropicalData;
-                        if (func.findFile(`${x.id}`, 'storm-tropicalweatherdata') &&
-                            !('error' in func.findFile(`${x.id}`, 'storm-tropicalweatherdata')) &&
-                            input.button != 'Refresh'
-                        ) {
-                            tempData = func.findFile(`${x.id}`, 'storm-tropicalweatherdata');
-                        } else {
-                            tempData = await func.getTropical(input.config, 'storm', x.id);
-                        }
-                        const inTempData = tempData.data as othertypes.tsData;
-                        func.storeFile((tempData as othertypes.tsData), `${(inTempData as othertypes.tsData).id}`, `storm-tropicalweatherdata`);
-                        if (inTempData?.category) {
-                            second = inTempData?.category.toUpperCase() + ' ' + first;
-                        }
-                        resolve(true);
-                    });
-                }
-                const l = await doNames(x);
+                // async function doNames(x) {
+                //     return new Promise(async (resolve, reject) => {
+                //         const ifirst = calc.toCapital(x.name);
+                //         let tempData: othertypes.tropicalData;
+                //         if (func.findFile(`${x.id}`, 'storm-tropicalweatherdata') &&
+                //             !('error' in func.findFile(`${x.id}`, 'storm-tropicalweatherdata')) &&
+                //             input.button != 'Refresh'
+                //         ) {
+                //             tempData = func.findFile(`${x.id}`, 'storm-tropicalweatherdata');
+                //         } else {
+                //             tempData = await func.getTropical(input.config, 'storm', x.id);
+                //         }
+                //         const inTempData = tempData.data as othertypes.tsData;
+                //         func.storeFile((tempData as othertypes.tsData), `${(inTempData as othertypes.tsData).id}`, `storm-tropicalweatherdata`);
+                //         if (inTempData?.category) {
+                //             second = inTempData?.category.toUpperCase() + ' ' + ifirst;
+                //         }
+                //         resolve(true);
+                //     });
+                // }
+                const l = await new Promise(async (resolve, reject) => {
+                    const ifirst = calc.toCapital(x.name);
+                    let tempData: othertypes.tropicalData;
+                    if (func.findFile(`${x.id}`, 'storm-tropicalweatherdata') &&
+                        !('error' in func.findFile(`${x.id}`, 'storm-tropicalweatherdata')) &&
+                        input.button != 'Refresh'
+                    ) {
+                        tempData = func.findFile(`${x.id}`, 'storm-tropicalweatherdata');
+                    } else {
+                        tempData = await func.getTropical(input.config, 'storm', x.id);
+                    }
+                    const inTempData = tempData.data as othertypes.tsData;
+                    func.storeFile((tempData as othertypes.tsData), `${(inTempData as othertypes.tsData).id}`, `storm-tropicalweatherdata`);
+                    if (inTempData?.category) {
+                        second = inTempData?.category.toUpperCase() + ' ' + ifirst;
+                    }
+                    resolve(true);
+                });;
                 if (calc.checkIsNumber(x.name)) {
                     first = x.id.slice(4, x.id.length);
                     second = x.id.slice(4, x.id.length);
@@ -3345,7 +2981,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
 
         const localtype = '';
 
-        let tempPos = [];
+        const tempPos = [];
         if (data.position[0] > 1) {
             tempPos.push('E');
         } else {

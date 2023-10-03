@@ -726,10 +726,11 @@ export async function getTropical(config: extypes.config, type: 'active' | 'stor
             case 'active':
                 data = fs.readFileSync(`${precomppath}\\files\\testfiles\\tropicalweatherdata.json`, 'utf-8');
                 break;
-            case 'storm':
+            case 'storm': {
                 const list = ['05e', '06w', '07w'];
                 const opt = list[Math.floor(Math.random() * list.length)];
                 data = fs.readFileSync(`${precomppath}\\files\\testfiles\\tropicalweatherdata2023${opt}.json`, 'utf-8');
+            }
                 break;
         }
         return JSON.parse(data) as othertypes.tropicalData;

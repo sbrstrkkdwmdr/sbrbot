@@ -947,58 +947,56 @@ export async function lb(input: extypes.commandInput) {
         if (global) {
             (cache as Discord.Collection<string, Discord.User>).forEach(member => {
                 if (`${member.id}` == `${user.userid}` && user != null && !rtxt.includes(`${member.id}`)) {
-                    addUser({ id: member.id, name: member.username });
+                    addUser({ id: member.id, name: member.username }, user);
                 }
             });
         } else {
             (cache as Discord.Collection<string, Discord.GuildMember>).forEach(member => {
                 if (`${member.id}` == `${user.userid}` && user != null && !rtxt.includes(`${member.id}`)) {
-                    addUser({ id: member.user.id, name: member.displayName });
+                    addUser({ id: member.user.id, name: member.displayName }, user);
                 }
             });
         }
-        function addUser(member: { id: string, name: string; }) {
-            if (`${member.id}` == `${user.userid}`) {
-                if (user != null && !rtxt.includes(`${member.id}`)) {
-                    let acc: string | number;
-                    let pp: string | number;
-                    let rank: string | number;
-                    acc = user[`${mode}acc`];
-                    if (isNaN(+acc) || acc == null) {
-                        return;
-                    } else {
-                        acc = user.osuacc.toFixed(2);
-                    }
-                    pp = user[`${mode}pp`];
-                    if (isNaN(+pp) || pp == null) {
-                        return;
-                    } else {
-                        pp = Math.floor(user.osupp);
-                    }
-                    rank = user[`${mode}rank`];
-                    if (isNaN(+rank) || rank == null) {
-                        return;
-                    }
-                    rarr.push(
-                        {
-                            discname:
-                                ((member.name.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.name.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.name.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
-                            osuname:
-                                (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
-                            rank:
-                                `${rank}`.padEnd(10 - 2, ' ').substring(0, 8),
-                            acc:
-                                `${acc}`,
-                            pp:
-                                `${pp}pp`.padEnd(9 - 2, ' '),
-                        }
-                    );
+    }
+    function addUser(member: { id: string, name: string; }, user: extypes.dbUser) {
+        if (`${member.id}` == `${user.userid}`) {
+            if (user != null && !rtxt.includes(`${member.id}`)) {
+                let acc: string | number;
+                let pp: string | number;
+                acc = user[`${mode}acc`];
+                if (isNaN(+acc) || acc == null) {
+                    return;
+                } else {
+                    acc = user.osuacc.toFixed(2);
                 }
-
+                pp = user[`${mode}pp`];
+                if (isNaN(+pp) || pp == null) {
+                    return;
+                } else {
+                    pp = Math.floor(user.osupp);
+                }
+                const rank = user[`${mode}rank`];
+                if (isNaN(+rank) || rank == null) {
+                    return;
+                }
+                rarr.push(
+                    {
+                        discname:
+                            ((member.name.replace(/\W/g, '')).padEnd(17 - 2, ' ').length) > 15 ? member.name.replace(/[^a-z0-9]/gi, '').substring(0, 12) + '...' : member.name.replace(/[^a-z0-9]/gi, '').padEnd(17 - 2, ' '),
+                        osuname:
+                            (user.osuname.padEnd(17 - 2, ' ')).length > 15 ? user.osuname.substring(0, 12) + '...' : user.osuname.padEnd(17 - 2, ' '),
+                        rank:
+                            `${rank}`.padEnd(10 - 2, ' ').substring(0, 8),
+                        acc:
+                            `${acc}`,
+                        pp:
+                            `${pp}pp`.padEnd(9 - 2, ' '),
+                    }
+                );
             }
+
         }
     }
-
     // let iterator = 0;
 
     const another = rarr.slice().sort((b, a) => b.rank - a.rank); //for some reason this doesn't sort even tho it does in testing
@@ -10701,7 +10699,7 @@ export async function map(input: extypes.commandInput) {
             inallvals.cs, inallvals.ar, inallvals.od, inallvals.hp, inallvals.bpm, hitlength, overrideSpeed
         );
 
-        let mapimg = input.config.useEmojis.gamemodes ?
+        const mapimg = input.config.useEmojis.gamemodes ?
             emojis.gamemodes[mapdata.mode] :
             mapdata.mode;
 

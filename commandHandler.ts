@@ -26,7 +26,7 @@ export default (input: {
     statsCache;
 }) => {
     let timeouttime;
-    let reminders: extypes.reminder[] = [];
+    const reminders: extypes.reminder[] = [];
 
     input.client.on('messageCreate', async (message) => {
         const currentDate = new Date();

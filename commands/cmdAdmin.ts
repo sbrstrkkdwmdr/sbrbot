@@ -730,26 +730,6 @@ export async function debug(input: extypes.commandInput) {
                         };
                         break;
                 }
-                async function findAndReturn(inpath: string, find: string, cmdid: string) {
-                    const sFiles = fs.readdirSync(`${inpath}`);
-                    const found = sFiles.find(x => x == find);
-                    const inFiles = fs.readdirSync(`${inpath}\\${found}`);
-                    let content = `Files found for command \`${inputstr}\``;
-                    let files = inFiles.map(x => `${inpath}\\${found}\\${x}`);
-                    if (!isNaN(+cmdid)) {
-                        const tfiles = inFiles.map(x => `${inpath}\\${found}\\${x}`).filter(x => x.includes(cmdid));
-                        content = `Files found for command \`${inputstr}\`, matching server ID ${cmdid}`;
-                        if (tfiles.length == 0) {
-                            files = inFiles.map(x => `${inpath}\\${found}\\${x}`);
-                            content = `Files found for command \`${inputstr}\`. None found matching ${cmdid}`;
-                        }
-                    }
-
-                    usemsgArgs = {
-                        content,
-                        files,
-                    };
-                }
             }
         }
             break;
@@ -903,6 +883,27 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             };
         }
 
+    }
+
+    async function findAndReturn(inpath: string, find: string, cmdid: string) {
+        const sFiles = fs.readdirSync(`${inpath}`);
+        const found = sFiles.find(x => x == find);
+        const inFiles = fs.readdirSync(`${inpath}\\${found}`);
+        let content = `Files found for command \`${inputstr}\``;
+        let files = inFiles.map(x => `${inpath}\\${found}\\${x}`);
+        if (!isNaN(+cmdid)) {
+            const tfiles = inFiles.map(x => `${inpath}\\${found}\\${x}`).filter(x => x.includes(cmdid));
+            content = `Files found for command \`${inputstr}\`, matching server ID ${cmdid}`;
+            if (tfiles.length == 0) {
+                files = inFiles.map(x => `${inpath}\\${found}\\${x}`);
+                content = `Files found for command \`${inputstr}\`. None found matching ${cmdid}`;
+            }
+        }
+
+        usemsgArgs = {
+            content,
+            files,
+        };
     }
 
     function clear(tincan: clearTypes) {

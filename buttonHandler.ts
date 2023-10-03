@@ -299,9 +299,6 @@ export default (input: {
             case 'time':
                 await commands.time({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
-            case 'settime':
-                await commands.timeset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
-                break;
             case 'weather':
                 await commands.weather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;

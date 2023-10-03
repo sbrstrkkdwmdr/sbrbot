@@ -917,23 +917,21 @@ export function calcValuesAlt(cs: number, ar: number, od: number, hp: number, bp
     speedMult = (speedMult ?? 1);
     const arMs = ARtoms(ar);
     const odMs = ODtoms(od);
-    let ncs: number = cs;
-    let nar: number = msToAR(arMs / speedMult);
-    let nod: number = msToOD(odMs.hitwindow_300 / speedMult);
-    let nhp: number = hp;
-    let nbpm: number = bpm / speedMult;
-    let nlength: number = length / speedMult;
+    const nar: number = msToAR(arMs / speedMult);
+    const nod: number = msToOD(odMs.hitwindow_300 / speedMult);
+    const nbpm: number = bpm / speedMult;
+    const nlength: number = length / speedMult;
 
     const obj: ValObj = {
-        cs: parseFloat(ncs.toFixed(2)),
-        ar: parseFloat(nar.toFixed(2)),
-        od: parseFloat(nod.toFixed(2)),
-        hp: parseFloat(nhp.toFixed(2)),
-        bpm: parseFloat(nbpm.toFixed(2)),
-        length: parseFloat(nlength.toFixed(2)),
+        cs: +cs.toFixed(2),
+        ar: +nar.toFixed(2),
+        od: +nod.toFixed(2),
+        hp: +hp.toFixed(2),
+        bpm: +nbpm.toFixed(2),
+        length: +nlength.toFixed(2),
         speedMult,
         details: {
-            csRadius: csToRadius(ncs),
+            csRadius: csToRadius(cs),
             arMs,
             odMs,
             //mm:ss
