@@ -1381,3 +1381,37 @@ export function removeURLparams(url: string) {
     }
     return url;
 }
+
+export function searchMatch(input: string, list: string[]) {
+    const sort: {
+        factor: number,
+        text: string;
+    }[] = [];
+    for (const word of list) {
+        let tempFactor = 0;
+        //if length match add 1
+        if (input.length == word.length) {
+            tempFactor += 1;
+        }
+        //for each letter in the word that is found in the word, add 1, dont repeat
+        const tempArr = word.split('');
+        const tempArrIn = input.split('');
+        for (let i = 0; i < tempArr.length; i++) {
+            for (let j = 0; j < tempArrIn.length; j++) {
+                if (tempArr[i] == tempArrIn[j]) {
+                    tempFactor += 1;
+                    tempArr.splice(tempArr.indexOf(tempArr[i]), 1);
+                    tempArrIn.splice(tempArrIn.indexOf(tempArrIn[j]), 1);
+                }
+            }
+        }
+        //for each letter with same pos add 1, dont repeat
+        for (let i = 0; i < input.length; i++) {
+            if (input.charAt(i) == word.charAt(i)) {
+                tempFactor += 1;
+            }
+        }
+        sort.push({ factor: tempFactor, text: word });
+    }
+    sort.sort((a, b) => b.factor - a.factor);
+}
