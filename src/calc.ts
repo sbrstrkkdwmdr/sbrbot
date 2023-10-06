@@ -77,21 +77,28 @@ export function sigfig(a: number, b: number) {
 }
 
 export function toScientificNotation(number: number, significantFigures: number) {
+    let tNum: string = null;
     if (number !== 0) {
         const exponent = Math.floor(Math.log10(Math.abs(number)));
         const mantissa = (number / Math.pow(10, exponent)).toFixed(significantFigures - 1);
         const scientificNotation = +mantissa * Math.pow(10, exponent);
         if (scientificNotation !== number) {
             if (exponent !== 0 && exponent !== 1) {
-                return `${mantissa}e${exponent}`;
+                tNum = `${mantissa}e${exponent}`;
             } else if (exponent == 0) {
-                return `${mantissa}`;
+                tNum = `${mantissa}`;
             } else if (exponent == 1 && significantFigures > 2) {
-                return `${+mantissa * 10}`;
+                tNum = `${+mantissa * 10}`;
             }
         }
     }
-    return `${number}`
+    tNum = `${number}`;
+    if (tNum.replaceAll('-', '').replaceAll('.', '').length != significantFigures) {
+        let xFig = significantFigures + (tNum.match(/[-.]/g) || []).length;
+        //cut number to be xFig long
+        tNum = tNum.slice(0, xFig);
+    }
+    return tNum;
 }
 
 export function getSigFigs(number: string) {
