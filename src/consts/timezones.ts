@@ -146,7 +146,7 @@ export const timezones: timezone[] = [
             'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
             'Washington',//^ state
             'Olympia', //^ state capital
-            'Idaho', //^ state //north
+            'Idaho (North)', //^ state //north
             'Oregon',//^ state
             'Salem', //^ state capital
             'California',//^ state
@@ -155,6 +155,7 @@ export const timezones: timezone[] = [
             'San Francisco', //^ major city
             'Silicon Valley', //^ part of san francisco
             'Nevada', //^ state
+            'Nevada (Eastern)', //^ state
             'Carson City', //^ state capital
             'Las Vegas', //^ major city
         ]
@@ -170,26 +171,30 @@ export const timezones: timezone[] = [
             '-07',
             'PDT',
             'MST',
+            'MT',
             'Canada',
             'Alberta',//^ province/territory
             'Edmonton', //^ province/territory capital
             'Calgary', //^ major city
-            'British Columbia',//^ province/territory
+            'British Columbia (Eastern)',//^ province/territory
             'Lloydminster',//^ 
+            'Northwest Territories', //^
+            'Nunavut (Western)',//^ 
             'Mexico', 'México', 'Mēxihco', 'MX', 'MEX',
             'Baja California Sur',//^ 
             'Nayarit',//^ 
             'Sinaloa',//^ 
             'Sonora',//^ 
             'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
-            'North Dakota', //^state //SW
-            'South Dakota', //^state //W
-            'Nebraska', //^ state//W
-            'Kansas', //^ state//small bit
+            'North Dakota (SW)', //^state //SW
+            'South Dakota (Western)', //^state //W
+            'Nebraska (Western)', //^ state//W
+            'Kansas (Sherman, Wallace, Greeley and Hamilton)', //^ state//small bit
             'Montana',//^ state
             'Helena', //^ state capital
-            'Oregon', //^ state//small bit
-            'Idaho', //^state //southern
+            'Nevada (Eastern)', //^ state
+            'Oregon (Malheur County)', //^ state//small bit
+            'Idaho (Southern)', //^state //southern
             'Boise', //^ state capital
             'Wyoming',//^ state
             'Cheyenne', //^ state capital
@@ -202,8 +207,7 @@ export const timezones: timezone[] = [
             'New Mexico',//^ state
             'Santa Fe', //^ state capital
             'Albuquerque', //^ major city
-            'Texas (El Paso area)', //^ state //El Paso area
-            'El Paso' //^
+            'Texas (El Paso and Hudspeth)', //^ state //El Paso area
         ]
     },
     {
@@ -222,6 +226,7 @@ export const timezones: timezone[] = [
             'Canada',
             'Manitoba',//^ province/territory
             'Winnipeg', //^ province/territory capital
+            'Nunavut (Central)',//^ 
             'Saskatchewan',//^ province/territory
             'Regina', //^ province/territory capital
             'Saskatoom', //^ major city
@@ -267,9 +272,10 @@ export const timezones: timezone[] = [
             'Madison', //^ state capital
             'Illinois',//^ state
             'Springfield', //^ state capital
-            'Indiana', //^ state//SW and NW corners
-            'Kentucky',//^  state//W
+            'Indiana (Western Corners)', //^ state//SW and NW corners
+            'Kentucky (Western)',//^  state//W
             'Tennessee',//^  state//W and central
+            'Michigan (Gogebic, Iron, Dickinson, and Menominee)', //^ state (W)
             'Mississippi',//^ state
             'Jackson', //^ state capital
             'Alabama',//^ state
@@ -316,7 +322,7 @@ export const timezones: timezone[] = [
             'Brazil', 'Brasil', 'BR', 'BRA',
             'Acre', //^ 
             'Canada',
-            'Nunavut',//^ 
+            'Nunavut (Eastern)',//^ 
             'Ontario', //^ //most of
             'Toronto', //^ province/territory capital
             'Quebec', //^ province/territory //most of
@@ -378,7 +384,7 @@ export const timezones: timezone[] = [
             'Annapolis', //^ state capital
             'Delaware',//^ state
             'Dover', //^ state capital
-            'Tennessee', //^state //E
+            'Tennessee (Eastern)', //^state //E
             'Nashville', //^ state capital
             'North Carolina',//^ state
             'Raleigh', //^ state capital
@@ -1541,11 +1547,12 @@ export const hasDaylight: {
                 'Vancouver', //^ major city
                 'Edmonton', //^ province/territory capital
                 'Calgary', //^ major city
-                'British Columbia',//^ province/territory
+                'British Columbia (Eastern)',//^ province/territory
                 'Lloydminster',//^ 
                 'Manitoba',//^ province/territory
                 'Winnipeg', //^ province/territory capital
                 'Saskatoom', //^ major city
+                'Northwest Territories', //^
                 'Ontario', //^ provincce //NW
                 'Ottawa', //^ capital
                 'Nunavut',//^ 
@@ -1581,9 +1588,13 @@ export const hasDaylight: {
                 'Turks and Caicos Islands', 'TC', 'TCA',
                 'Cockburn Town', //^ capital
                 'USA', 'US', 'United States of America', 'America', 'Estados Unidos', 'États-Unis', '‘Amelika Hui Pū ‘ia',
+                'Aleutian Islands',
+                'Adak', //^ capital
+                'Alaska', //^ state
+                'Juneau', //^ state capital
                 'Washington',//^ state
                 'Olympia', //^ state capital
-                'Idaho', //^ state //north
+                'Idaho (Northern)', //^ state //north
                 'Oregon',//^ state
                 'Salem', //^ state capital
                 'California',//^ state
@@ -1594,14 +1605,14 @@ export const hasDaylight: {
                 'Nevada', //^ state
                 'Carson City', //^ state capital
                 'Las Vegas', //^ major city
-                'North Dakota', //^state //SW
-                'South Dakota', //^state //W
-                'Nebraska', //^ state//W
-                'Kansas', //^ state//small bit
+                'North Dakota (SW)', //^state //SW
+                'South Dakota (Western)', //^state //W
+                'Nebraska (Western)', //^ state//W
+                'Kansas (Sherman, Wallace, Greeley and Hamilton)', //^ state//small bit
                 'Montana',//^ state
                 'Helena', //^ state capital
-                'Oregon', //^ state//small bit
-                'Idaho', //^state //southern
+                'Oregon (Malheur County)', //^ state//small bit
+                'Idaho (Southern)', //^state //southern
                 'Boise', //^ state capital
                 'Wyoming',//^ state
                 'Cheyenne', //^ state capital
@@ -1612,13 +1623,13 @@ export const hasDaylight: {
                 'New Mexico',//^ state
                 'Santa Fe', //^ state capital
                 'Albuquerque', //^ major city
-                'Texas', //^ state //El Paso area
+                'Texas (El Paso and Hudspeth)', //^ state //El Paso area
                 'Wisconsin',//^ state
                 'Madison', //^ state capital
                 'Illinois',//^ state
                 'Springfield', //^ state capital
-                'Indiana', //^ state//SW and NW corners
-                'Kentucky',//^  state//W
+                'Indiana (Western Corners)', //^ state//SW and NW corners
+                'Kentucky (Western)',//^  state//W
                 'Tennessee',//^  state//W and central
                 'Mississippi',//^ state
                 'Jackson', //^ state capital
@@ -1637,7 +1648,7 @@ export const hasDaylight: {
                 'North Dakota',//^  state//N and E
                 'Bismark', //^ state capital
                 'South Dakota',//^state //E
-                'Pierre', //^ state capital
+                'Pierre', //^ state capital 
                 'Nebraska', //^ state//E and central
                 'Lincoln', //^ state capital
                 'Kansas',//^ state //most of
@@ -1647,8 +1658,6 @@ export const hasDaylight: {
                 'Texas', //^ state//most of
                 'Austin', //^ state capital
                 'Houston', //^ major city
-                'Texas (El Paso area)', //^ state //El Paso area
-                'El Paso', //^
                 'Florida (Pan Handle)', //^ state //W
                 'Maine',//^ state 
                 'Augusta', //^ state capital
@@ -1666,6 +1675,7 @@ export const hasDaylight: {
                 'Rhode Island',//^ state 
                 'Providence', //^ state capital
                 'Michigan', //^state  //excl. few north west
+                'Michigan (Gogebic, Iron, Dickinson, and Menominee)', //^ state (W)
                 'Lansing', //^ state capital  
                 'Indiana', //^ state //excl. NW and SW corners
                 'Indianapolis', //^ state capital            
@@ -1686,7 +1696,7 @@ export const hasDaylight: {
                 'Annapolis', //^ state capital
                 'Delaware',//^ state
                 'Dover', //^ state capital
-                'Tennessee', //^state //E
+                'Tennessee (Eastern)', //^state //E
                 'Nashville', //^ state capital
                 'North Carolina',//^ state
                 'Raleigh', //^ state capital

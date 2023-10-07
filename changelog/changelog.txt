@@ -514,3 +514,4 @@ changes:
 [ADD] added aliases to remind
 [FIX] sig figs returning long values (ie instead of 68.9 it gives 68.89999999999999 when converting 175 cm to inches)
 [QOL] edit time command StringSelectMenuBuilder
+[QOL] edit timezones
