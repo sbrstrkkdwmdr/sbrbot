@@ -1382,6 +1382,9 @@ export function removeURLparams(url: string) {
     return url;
 }
 
+/**
+ * sort list by closest match to input
+ */
 export function searchMatch(input: string, list: string[]) {
     const sort: {
         factor: number,
@@ -1391,7 +1394,7 @@ export function searchMatch(input: string, list: string[]) {
         let tempFactor = 0;
         //if length match add 1
         if (input.length == word.length) {
-            tempFactor += 1;
+            tempFactor += 2;
         }
         //for each letter in the word that is found in the word, add 1, dont repeat
         const tempArr = word.split('');
@@ -1408,10 +1411,20 @@ export function searchMatch(input: string, list: string[]) {
         //for each letter with same pos add 1, dont repeat
         for (let i = 0; i < input.length; i++) {
             if (input.charAt(i) == word.charAt(i)) {
-                tempFactor += 1;
+                tempFactor += 2;
             }
         }
         sort.push({ factor: tempFactor, text: word });
     }
     sort.sort((a, b) => b.factor - a.factor);
+    return sort.map(x => x.text);
+}
+
+/**
+ * remove duplicate elements from an array
+ */
+export function removeDupes(arr: any[]) {
+    return arr.filter((value, index, self) => {
+        return self.indexOf(value) === index;
+    });
 }

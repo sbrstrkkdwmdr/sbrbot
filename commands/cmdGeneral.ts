@@ -2188,16 +2188,32 @@ export async function time(input: extypes.commandInput) {
         try {
             const found: timezoneList.timezone[] = [];
 
-            for (let i = 0; i < timezoneList.timezones.length; i++) {
-                const curTimeZone = timezoneList.timezones[i];
-                if (curTimeZone.aliases.slice().map(x => x.trim().toUpperCase()).includes(fetchtimezone.trim().toUpperCase())) {
-                    found.push(curTimeZone);
+            let frTemp: string[] = [];
+            for (const tz of timezoneList.timezones) {
+                frTemp = frTemp.concat(tz.aliases);
+            }
+            const frWords = func.searchMatch(fetchtimezone, func.removeDupes(frTemp));
+            //convert frWords to tzlist
+
+            for (let i = 0; i < timezoneList.timezones.length && i < 25; i++) {
+                for (const tz of timezoneList.timezones) {
+                    if (tz.aliases.includes(frWords[i])) {
+                        found.push(tz);
+                    }
                 }
             }
+
+            // for (let i = 0; i < timezoneList.timezones.length; i++) {
+            //     const curTimeZone = timezoneList.timezones[i];
+            //     if (curTimeZone.aliases.slice().map(x => x.trim().toUpperCase()).includes(fetchtimezone.trim().toUpperCase())) {
+            //         found.push(curTimeZone);
+            //     }
+            // }
 
             if (found.length == 0) {
                 throw new Error("Unrecognised timezone");
             }
+
             const offset = found[0].offsetDirection == '+' ?
                 found[0].offsetHours :
                 -found[0].offsetHours;
@@ -2216,14 +2232,22 @@ export async function time(input: extypes.commandInput) {
                     const inputModal = new Discord.StringSelectMenuBuilder()
                         .setCustomId(`${mainconst.version}-Select-time-${commanduser.id}-${input.absoluteID}-${displayedTimezone}`)
                         .setPlaceholder('Select a timezone');
-
-                    for (let i = 0; i < found.length && i < 10; i++) {
-                        inputModal.addOptions(
-                            new Discord.StringSelectMenuOptionBuilder()
-                                .setLabel(`#${i + 1}`)
-                                .setDescription(`${found[i].aliases[i]}`)
-                                .setValue(`${found[i].aliases[i]}`)
-                        );
+                    const usedVals = [];
+                    let t = 25
+                    for (let i = 0; i < found.length && i < t; i++) {
+                        const al = func.searchMatch(fetchtimezone, func.removeDupes(found[i].aliases));
+                        const utcTemp = func.searchMatch('UTC+-:', func.removeDupes(found[i].aliases));
+                        if (!usedVals.includes(utcTemp[0])) {
+                            inputModal.addOptions(
+                                new Discord.StringSelectMenuOptionBuilder()
+                                    .setLabel(`#${i + 1} ${al[0]}`)
+                                    .setDescription(`${utcTemp[0]}`)
+                                    .setValue(`${utcTemp[0]}`)
+                            );
+                        } else {
+                            t++
+                        }
+                        usedVals.push(utcTemp[0]);
                     }
                     buttons.addComponents(inputModal);
                 }
