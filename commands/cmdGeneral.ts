@@ -196,7 +196,7 @@ export async function changelog(input: extypes.commandInput) {
             releaseDateFormatted: 'Soon'
 
         } : mainconst.versions[useNum];
-        const commit = cur.split('commit:')[1].split('\n')[0] as string;
+        const commit = useGit ? 'null' : cur.split('commit:')[1].split('\n')[0] as string;
         const changesTxt = cur.split('changes:')[1];
         const changes: { add: string[]; rem: string[]; qol: string[], fix: string[], maj: string[]; min: string[]; } = {
             add: [],
@@ -259,7 +259,7 @@ export async function changelog(input: extypes.commandInput) {
             txt = '\nNo changes recorded';
         }
 
-        const url = commit?.toString()?.includes('null') ?
+        const url = commit?.toString()?.includes('null') || useGit ?
             `https://github.com/sbrstrkkdwmdr/sbrbot/`
             :
             `https://github.com/sbrstrkkdwmdr/sbrbot/commit/${commit.trim()}`;
