@@ -472,8 +472,8 @@ VERSION 0.5.4
 2023-09-20 
 commit: 8f273ea03e3baed6388b033063364e30f9ce84f9
 changes:
-[FIX] server leaderboard when showing global leaderboard
-[FIX] mania mods being apllied to non-mania maps
+[FIX] server name when showing global leaderboard
+[FIX] mania mods being applied to non-mania maps
 [QOL] change saved mods to `null` (NM) if from a map/ppcalc command (when no args are given, map id and mods are taken from last used)
 [QOL] update helpinfo
 [QOL] add timestamp to time cmd
@@ -515,3 +515,5 @@ changes:
 [FIX] sig figs returning long values (ie instead of 68.9 it gives 68.89999999999999 when converting 175 cm to inches)
 [QOL] edit time command StringSelectMenuBuilder
 [QOL] edit timezones
+[FIX] map crashing if api data was null
+[MIN] switch from node-fetch to axios

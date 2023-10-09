@@ -1,3 +1,4 @@
+import axios from 'axios';
 import charttoimg from 'chartjs-to-image';
 import fs from 'fs';
 import nfetch from 'node-fetch';
@@ -960,14 +961,21 @@ export async function apiget(input: apiInput) {
             datafirst = apigetOffline(input);
         } else {
             log.toOutput(url, input.config);
-            datafirst = await nfetch(url, {
-                method: 'GET',
+            datafirst = (await axios.get(url, {
                 headers: {
                     Authorization: `Bearer ${access_token}`,
                     "Content-Type": "application/json",
                     Accept: "application/json"
                 }
-            }).then(res => res.json());
+            })).data;
+            // datafirst = await nfetch(url, {
+            //     method: 'GET',
+            //     headers: {
+            //         Authorization: `Bearer ${access_token}`,
+            //         "Content-Type": "application/json",
+            //         Accept: "application/json"
+            //     }
+            // }).then(res => res.json());
         }
     } catch (error) {
         data = {

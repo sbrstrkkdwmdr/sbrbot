@@ -10217,7 +10217,26 @@ export async function map(input: extypes.commandInput) {
 
         mapdata = mapdataReq.apiData;
         osufunc.debug(mapdataReq, 'command', 'map', input.obj.guildId, 'mapData');
-
+        if (mapdataReq?.error) {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.map.m.replace('[ID]', `${mapid}`),
+                    edit: true
+                }
+            }, input.canReply);
+            log.logCommand({
+                event: 'Error',
+                commandName: 'recent',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.uErr.osu.map.m.replace('[ID]', `${mapid}`),
+                config: input.config
+            });
+            return;
+        }
         if (mapdata?.hasOwnProperty('error')) {
             if (input.commandType != 'button' && input.commandType != 'link') {
                 await msgfunc.sendMessage({
@@ -10828,8 +10847,7 @@ HP${baseHP}`;
 
         mapperdata = mapperdataReq.apiData;
         osufunc.debug(mapperdataReq, 'command', 'map', input.obj.guildId, 'mapperData');
-
-        if (mapperdata?.hasOwnProperty('error')) {
+        if (mapperdataReq?.error || mapperdata?.hasOwnProperty('error')) {
             mapperdata = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
             log.logCommand({
                 event: 'Error',

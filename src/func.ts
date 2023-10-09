@@ -1,9 +1,8 @@
 import fs = require('fs');
-import https from 'https';
-// import * as nfetch from 'node-fetch';
+import axios from 'axios';
 import charttoimg from 'chartjs-to-image';
+import https from 'https';
 import * as jimp from 'jimp';
-import nfetch from 'node-fetch';
 import * as quickchart from 'quickchart-js';
 import { filespath, path, precomppath } from '../path.js';
 import * as calc from './calc.js';
@@ -361,10 +360,7 @@ export function downloadIMG(
 }
 
 export async function fetch(url: string) {
-    const data = await nfetch(url, {
-        method: 'GET',
-    }).then(res => res.json());
-    return data;
+    return ((await axios.get(url)).data);
 }
 
 export function appendUrlParams(url: string, params: { name: string, value: string; }[]) {
@@ -499,8 +495,7 @@ export async function getLocation(name: string, config: extypes.config) {
     }
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${name.replaceAll(' ', '+')}&count=10&language=en&format=json`;
     log.toOutput(url, config);
-    const data = await nfetch(url).then(x => x.json());
-    return data as { results: othertypes.geoLocale[]; };
+    return (await axios.get(url)).data as { results: othertypes.geoLocale[]; };
 }
 
 export async function getWeather(
@@ -524,7 +519,7 @@ export async function getWeather(
         log.toOutput(url, config);
         let data;
         try {
-            data = await nfetch(url).then(x => x.json());
+            data = (await axios.get(url)).data;
         } catch (err) {
             console.log(err);
             return "timeout";
@@ -736,7 +731,7 @@ export async function getTropical(config: extypes.config, type: 'active' | 'stor
         return JSON.parse(data) as othertypes.tropicalData;
     } else {
         log.toOutput(reqURL, config);
-        const data = await nfetch(reqURL).then(x => x.json());
+        const data = (await axios.get(reqURL)).data;
         return data as othertypes.tropicalData;
     }
 }
