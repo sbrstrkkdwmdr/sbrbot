@@ -288,6 +288,10 @@ const cmds: commandInfo[] = [
                 descriptor: 'Returns the changelog for the first version'
             },
             {
+                text: 'PREFIXMSGchangelog pending',
+                descriptor: 'Returns the changelog for the next version'
+            },
+            {
                 text: 'PREFIXMSGchangelog versions',
                 descriptor: 'Returns a list of all versions'
             },

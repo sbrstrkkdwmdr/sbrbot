@@ -39,12 +39,16 @@ export async function changelog(input: extypes.commandInput) {
     let version = null;
     let useNum: number = null;
     let isList = false;
+    let useGit = false;
 
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             version = input.args[0] ?? null;
+            if (input.args.includes('pending')) {
+                useGit = true;
+            }
         }
             break;
 
@@ -168,7 +172,7 @@ export async function changelog(input: extypes.commandInput) {
             (found as number) :
             mainconst.versions.length - 1 - offset;
     const Embed = new Discord.EmbedBuilder();
-    if (typeof found == 'string') {
+    if (typeof found == 'string' && useGit == false) {
         isList = true;
         Embed.setTitle('ALL VERSIONS')
             .setDescription(`${mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n')}${foundBool ? '' : `\nThere was an error trying to find version ${version}`}`)
@@ -176,11 +180,22 @@ export async function changelog(input: extypes.commandInput) {
                 text: `${useNum + 1}/${mainconst.versions.length}`
             });
     } else {
-        const document = fs.readFileSync(`${precomppath}\\changelog\\changelog.txt`, 'utf-8');
+        const document = useGit ?
+            fs.readFileSync(`${path}\\cache\\changelog.txt`, 'utf-8')
+            :
+            fs.readFileSync(`${precomppath}\\changelog\\changelog.txt`, 'utf-8');
         const list = document.split('VERSION');
         list.shift();
+        if (useGit) {
+            useNum = list.length - 1;
+        }
         const cur = list[useNum] as string;
-        const verdata = mainconst.versions[useNum];
+        const verdata = useGit ? {
+            name: 'Pending',
+            releaseDate: NaN,
+            releaseDateFormatted: 'Soon'
+
+        } : mainconst.versions[useNum];
         const commit = cur.split('commit:')[1].split('\n')[0] as string;
         const changesTxt = cur.split('changes:')[1];
         const changes: { add: string[]; rem: string[]; qol: string[], fix: string[], maj: string[]; min: string[]; } = {
@@ -240,6 +255,9 @@ export async function changelog(input: extypes.commandInput) {
         }
 
         txt = txt.slice(0, 2000);
+        if (txt.trim().length == 0) {
+            txt = '\nNo changes recorded';
+        }
 
         const url = commit?.toString()?.includes('null') ?
             `https://github.com/sbrstrkkdwmdr/sbrbot/`
@@ -2233,7 +2251,7 @@ export async function time(input: extypes.commandInput) {
                         .setCustomId(`${mainconst.version}-Select-time-${commanduser.id}-${input.absoluteID}-${displayedTimezone}`)
                         .setPlaceholder('Select a timezone');
                     const usedVals = [];
-                    let t = 25
+                    let t = 25;
                     for (let i = 0; i < found.length && i < t; i++) {
                         const al = func.searchMatch(fetchtimezone, func.removeDupes(found[i].aliases));
                         const utcTemp = func.searchMatch('UTC+-:', func.removeDupes(found[i].aliases));
@@ -2245,7 +2263,7 @@ export async function time(input: extypes.commandInput) {
                                     .setValue(`${utcTemp[0]}`)
                             );
                         } else {
-                            t++
+                            t++;
                         }
                         usedVals.push(utcTemp[0]);
                     }

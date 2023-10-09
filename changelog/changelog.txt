@@ -517,3 +517,4 @@ changes:
 [QOL] edit timezones
 [FIX] map crashing if api data was null
 [MIN] switch from node-fetch to axios
+[ADD] add "pending" argument to changelog

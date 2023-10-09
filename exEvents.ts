@@ -1,6 +1,6 @@
+import axios from 'axios';
 import Discord from 'discord.js';
 import fs from 'fs';
-import fetch from 'node-fetch';
 import Sequelize from 'sequelize';
 import { path } from './path.js';
 import * as log from './src/log.js';
@@ -29,8 +29,11 @@ export default (input: {
     }, 1000 * 60);
 
     setInterval(async () => {
+        getOnlineChangelog();
         //rankings
     }, 1000 * 60 * 60 * 24);
+
+    getOnlineChangelog();
 
     //status updates
     const activities = [];
@@ -300,6 +303,11 @@ export default (input: {
             });
 
         }
+    }
+
+    async function getOnlineChangelog() {
+        const data = await axios.get(`https://raw.githubusercontent.com/sbrstrkkdwmdr/sbrbot/main/changelog/changelog.txt`);
+        fs.writeFileSync(`${path}\\cache\\changelog.txt`, data.data);
     }
 
     /**
