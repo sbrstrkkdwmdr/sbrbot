@@ -494,8 +494,8 @@ changes:
 [FIX] convert command - multiplying instead of dividing and vice versa
 
 VERSION 0.5.5
-2023-xx-xx
-commit: null 
+2023-10-09
+commit: 0fb571588c6253e7ebc03f03bda1441f367142c3 
 changes: 
 [QOL] auto-censor config properties in cache
 [FIX] replayparse and mapfileparse not running (discord changed file URLs)
