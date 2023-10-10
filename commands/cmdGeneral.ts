@@ -1941,7 +1941,7 @@ export async function remind(input: extypes.commandInput & { reminders: extypes.
         remindingText = null;
         const useReminders = input.reminders.filter(x => `${x.userID}` === `${commanduser.id}`);
         reminder.setDescription(useReminders.length > 0 ?
-            useReminders.map(x => `Reminder sending in <t:${x.time}:R>: ${x.text}`).join('\n').slice(0, 2000)
+            useReminders.map(x => `Reminder sending <t:${x.time}:R>: ${x.text}`).join('\n').slice(0, 2000)
             : 'You have no reminders'
         );
         useEmbeds = [reminder];

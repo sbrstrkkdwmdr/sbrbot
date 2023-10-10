@@ -506,7 +506,7 @@ changes:
 [QOL] combo is grabbed from pp calc where possible
 [QOL] increase resolution of graphs 
 [QOL] better graph placeholder
-[QOL] "temperature" as weather cmd alias
+[ADD] "temperature" as weather cmd alias
 [FIX] tracking files folder being created as an empty file by accident
 [QOL] speed flag (-speed x) modifies map values
 [ADD] add link usage to link commands
@@ -518,3 +518,9 @@ changes:
 [FIX] map crashing if api data was null
 [MIN] switch from node-fetch to axios
 [ADD] add "pending" argument to changelog
+
+VERSION 0.5.6
+2023-xx-xx
+commit: null 
+changes:
+[FIX] reminder list saying "sending reminder *in in*"
