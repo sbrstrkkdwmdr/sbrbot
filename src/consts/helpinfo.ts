@@ -2542,7 +2542,7 @@ const othercmds: commandInfo[] = [
                 descriptor: 'Rolls a random number between 50 and 100'
             }
         ],
-        aliases: [],
+        aliases: ['rng', 'randomnumber', 'randomnumbergenerator', 'pickanumber', 'pickanum'],
         options: [
             {
                 name: 'max',
