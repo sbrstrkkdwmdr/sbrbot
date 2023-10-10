@@ -86,7 +86,7 @@ export default (input: {
         const PageOnlyCommands = [
             'firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'recentactivity', 'scores', 'userbeatmaps',
             'changelog'
-    ];
+        ];
         const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores'];
         if (button == 'Search' && PageOnlyCommands.includes(command)) {
             const menu = new Discord.ModalBuilder()
@@ -134,11 +134,12 @@ export default (input: {
                     break;
                 case 'time':
                     {
-                        overrides.ex = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
+                        const temp = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0].split('_');
+                        overrides.ex = temp[0]; //fetch tz
                         if (interaction?.message?.components[0]?.components[0]) {
                             overrides.overwriteModal = interaction.message.components[0].components[0] as any;
                         }
-                        overrides.id = buttonsplit[5];
+                        overrides.id = temp[1]; //displayed name
                     }
                     break;
                 case 'weather':

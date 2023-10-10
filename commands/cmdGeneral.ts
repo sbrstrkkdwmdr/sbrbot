@@ -2260,7 +2260,7 @@ export async function time(input: extypes.commandInput) {
                                 new Discord.StringSelectMenuOptionBuilder()
                                     .setLabel(`#${i + 1} ${al[0]}`)
                                     .setDescription(`${utcTemp[0]}`)
-                                    .setValue(`${utcTemp[0]}`)
+                                    .setValue(`${utcTemp[0]}_${al[0]}`)
                             );
                         } else {
                             t++;
@@ -2288,9 +2288,8 @@ export async function time(input: extypes.commandInput) {
                 Math.floor(isOffset ? offset + 1 : offset).toString().replace('-', '').padStart(3, '-0');
 
             const offsetReadable = `UTC${Hrs}:${(Math.abs(offsetToMinutes % 60)).toString().padStart(2, '0')}`;
-
             fields.push({
-                name: `${calc.toCapital(displayedTimezone)}/${offsetReadable} ${isOffset ? '(DST)' : ''}`,
+                name: `${displayedTimezone}/${offsetReadable} ${isOffset ? '(DST)' : ''}`,
                 value:
                     `\n\`Date              | \`${reqTime.format("DD/MM/YYYY")}` +
                     `\n\`Full Date         | \`${reqTime.format("ddd, DD MMM YYYY hh:mm:ssA Z")}` +

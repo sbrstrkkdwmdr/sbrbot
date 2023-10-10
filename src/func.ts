@@ -1389,7 +1389,7 @@ export function searchMatch(input: string, list: string[]) {
         let tempFactor = 0;
         //if length match add 1
         if (input.length == word.length) {
-            tempFactor += 2;
+            tempFactor += 1;
         }
         //for each letter in the word that is found in the word, add 1, dont repeat
         const tempArr = word.split('');
@@ -1405,9 +1405,15 @@ export function searchMatch(input: string, list: string[]) {
         }
         //for each letter with same pos add 1, dont repeat
         for (let i = 0; i < input.length; i++) {
-            if (input.charAt(i) == word.charAt(i)) {
+            if (input.trim().toLowerCase().charAt(i) == word.trim().toLowerCase().charAt(i)) {
                 tempFactor += 2;
             }
+        }
+        if (word.trim().toLowerCase().includes(input.trim().toLowerCase()) || input.trim().toLowerCase().includes(word.trim().toLowerCase())) {
+            tempFactor += 5;
+        }
+        if (word.trim().toLowerCase() == input.trim().toLowerCase()) {
+            tempFactor = 1e16
         }
         sort.push({ factor: tempFactor, text: word });
     }
