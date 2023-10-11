@@ -2547,11 +2547,11 @@ export async function weather(input: extypes.commandInput) {
             const curData = weatherData.current_weather;
 
             const weatherAtmfr = func.weatherCodeToString(curData.weathercode);
-            const predictedWeatherFr = func.weatherCodeToString(dailyData.weathercode[0]);
+            const predictedWeatherFr = func.weatherCodeToString(dailyData.weathercode[2]);
             const usePredictWeather = predictedWeatherFr.string != weatherAtmfr.string ? true : false;
 
             const windDir = func.windToDirection(curData.winddirection);
-            const maxWindDir = func.windToDirection(dailyData.winddirection_10m_dominant[0]);
+            const maxWindDir = func.windToDirection(dailyData.winddirection_10m_dominant[2]);
 
             // - => S or W
             let latSide: 'N' | 'S' = 'N';
@@ -2564,7 +2564,9 @@ export async function weather(input: extypes.commandInput) {
                 lonSide = 'W';
             }
 
-            const windGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.windspeed_10m, `Wind speed (${weatherData.hourly_units.windspeed_10m})`,
+            const weatherTime = func.timeForGraph(weatherData.hourly.time);
+
+            const windGraph = await func.graph(weatherTime, weatherData.hourly.windspeed_10m, `Wind speed (${weatherData.hourly_units.windspeed_10m})`,
                 {
                     startzero: true,
                     fill: false,
@@ -2577,7 +2579,7 @@ export async function weather(input: extypes.commandInput) {
                     separateAxis: false,
                 }]
             );
-            const tempGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.temperature_2m, `Temperature (${weatherData.hourly_units.temperature_2m})`,
+            const tempGraph = await func.graph(weatherTime, weatherData.hourly.temperature_2m, `Temperature (${weatherData.hourly_units.temperature_2m})`,
                 {
                     startzero: true,
                     fill: true,
@@ -2610,7 +2612,7 @@ export async function weather(input: extypes.commandInput) {
                     customStack: 2
                 });
             }
-            const precGraph = await func.graph(weatherData.hourly.time, weatherData.hourly.precipitation_probability, `(${weatherData.hourly_units.precipitation_probability}) Chance of Precipitation`,
+            const precGraph = await func.graph(weatherTime, weatherData.hourly.precipitation_probability, `(${weatherData.hourly_units.precipitation_probability}) Chance of Precipitation`,
                 {
                     startzero: true,
                     fill: true,
@@ -2645,7 +2647,7 @@ export async function weather(input: extypes.commandInput) {
             weatherEmbed
                 .setFooter({ text: `input: ${name}` })
                 .setTitle(`Weather for ${location.name}`);
-
+            const curDay = 2;
             const fields: Discord.EmbedField[] = [
                 {
                     name: `Information`,
@@ -2658,8 +2660,8 @@ ${weatherData.current_weather.is_day == 0 ? '🌒Nighttime' : '☀Daytime'}
 Status: ${weatherAtmfr.icon} ${weatherAtmfr.string} ${usePredictWeather ?
                             '(' + predictedWeatherFr.icon + ' ' + predictedWeatherFr.string + ' predicted)'
                             : ''}
-Sunrise: ${dailyData.sunrise[0]}
-Sunset: ${dailyData.sunset[0]}
+Sunrise: ${dailyData.sunrise[2]}
+Sunset: ${dailyData.sunset[2]}
 `,
                     inline: false
                 },
@@ -2667,25 +2669,25 @@ Sunset: ${dailyData.sunset[0]}
                     name: `Temperature`,
                     value: `
 Current: ${curData.temperature}${weatherUnits.temperature_2m_max}
-Min: ${dailyData.temperature_2m_min[0]}${weatherUnits.temperature_2m_max}
-Max: ${dailyData.temperature_2m_max[0]}${weatherUnits.temperature_2m_max}
+Min: ${dailyData.temperature_2m_min[2]}${weatherUnits.temperature_2m_max}
+Max: ${dailyData.temperature_2m_max[2]}${weatherUnits.temperature_2m_max}
 `,
                     inline: true
                 },
                 {
                     name: `Precipitation`,
                     value: `
-Probability: (${dailyData.precipitation_probability_min}% - ${dailyData.precipitation_probability_max}%)
-${dailyData.rain_sum[0] > 0 ? `Rain: ${dailyData.rain_sum[0]}${weatherUnits.rain_sum}\n` : ''}${dailyData.showers_sum[0] > 0 ? `Showers: ${dailyData.showers_sum[0]}${weatherUnits.showers_sum}\n` : ''}${dailyData.snowfall_sum[0] > 0 ? `Snowfall: ${dailyData.snowfall_sum[0]}${weatherUnits.snowfall_sum}\n` : ''}${dailyData.precipitation_sum[0] > 0 ? `Total: ${dailyData.precipitation_sum[0]}${weatherUnits.precipitation_sum}\n` : ''}${dailyData.precipitation_hours[0] > 0 ? `Hours: ${dailyData.precipitation_hours[0]}${weatherUnits.precipitation_hours}\n` : ''}`,
+Probability: (${dailyData.precipitation_probability_min[2]}% - ${dailyData.precipitation_probability_max[2]}%)
+${dailyData.rain_sum[2] > 0 ? `Rain: ${dailyData.rain_sum[2]}${weatherUnits.rain_sum}\n` : ''}${dailyData.showers_sum[2] > 0 ? `Showers: ${dailyData.showers_sum[2]}${weatherUnits.showers_sum}\n` : ''}${dailyData.snowfall_sum[2] > 0 ? `Snowfall: ${dailyData.snowfall_sum[2]}${weatherUnits.snowfall_sum}\n` : ''}${dailyData.precipitation_sum[2] > 0 ? `Total: ${dailyData.precipitation_sum[2]}${weatherUnits.precipitation_sum}\n` : ''}${dailyData.precipitation_hours[2] > 0 ? `Hours: ${dailyData.precipitation_hours[2]}${weatherUnits.precipitation_hours}\n` : ''}`,
                     inline: true
                 },
                 {
                     name: `Wind`,
                     value: `
 Current: ${curData.windspeed}${weatherUnits.windspeed_10m_max} ${windDir.short}${windDir.emoji} (${curData.winddirection}°)
-Max speed: ${dailyData.windspeed_10m_max[0]}${weatherUnits.windspeed_10m_max}
-Max Gusts: ${dailyData.windgusts_10m_max[0]}${weatherUnits.windgusts_10m_max}
-Dominant Direction: ${maxWindDir.short}${maxWindDir.emoji} (${dailyData.winddirection_10m_dominant[0]}°)
+Max speed: ${dailyData.windspeed_10m_max[2]}${weatherUnits.windspeed_10m_max}
+Max Gusts: ${dailyData.windgusts_10m_max[2]}${weatherUnits.windgusts_10m_max}
+Dominant Direction: ${maxWindDir.short}${maxWindDir.emoji} (${dailyData.winddirection_10m_dominant[2]}°)
 `,
                     inline: true
                 },

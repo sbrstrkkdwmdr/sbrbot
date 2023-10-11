@@ -528,3 +528,4 @@ changes:
 [QOL] improve time command tz selector 
 [QOL] time command capitalising multi-word names
 [FIX] usa dst
+[QOL] weather command shows past 2 days and next 3 days
