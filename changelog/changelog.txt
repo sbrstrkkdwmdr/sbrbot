@@ -529,3 +529,4 @@ changes:
 [QOL] time command capitalising multi-word names
 [FIX] usa dst
 [QOL] weather command shows past 2 days and next 3 days
+[FIX] osu!auth token not updating - forgot to change auto updater from fetch to axios

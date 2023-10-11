@@ -1119,8 +1119,8 @@ export async function apigetOT(input: {
 
     const before = perf.performance.now();
     try {
-        datafirst = await fetch(baseurl, {
-        }).then(res => res.json());
+        datafirst = (await axios.get(baseurl, {
+        })).data
     } catch (error) {
         data = {
             url: baseurl,
@@ -1164,8 +1164,7 @@ export async function apigetOT(input: {
 export async function updateToken(config: extypes.config) {
     const clientId = config.osuClientID;
     const clientSecret = config.osuClientSecret;
-    const newtoken: osuApiTypes.OAuth = await fetch('https://osu.ppy.sh/oauth/token', {
-        method: 'POST',
+    const newtoken: osuApiTypes.OAuth = (await axios.post('https://osu.ppy.sh/oauth/token', {
         headers: {
             'Content-Type': 'application/json'
         }
@@ -1177,16 +1176,7 @@ export async function updateToken(config: extypes.config) {
             scope: 'public'
         })
 
-    }).then(res => res.json() as any)
-        .catch(error => {
-            fs.appendFileSync(`logs/updates.log`,
-                `
-    ----------------------------------------------------
-    ERROR
-    node-fetch error: ${error}
-    ----------------------------------------------------
-    `, 'utf-8');
-        });
+    })).data;
     if (newtoken.access_token) {
         fs.writeFileSync(`${path}/config/osuauth.json`, JSON.stringify(newtoken));
         fs.appendFileSync(`${path}/logs/updates.log`, '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
