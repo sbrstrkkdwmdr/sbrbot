@@ -521,7 +521,7 @@ changes:
 
 VERSION 0.5.5b
 2023-10-12
-commit: null 
+commit: af0906ee036b8a140884fa77ab0db78889a46823 
 changes:
 [FIX] reminder list saying "sending reminder *in in*"
 [ADD] add aliases to roll
@@ -530,3 +530,8 @@ changes:
 [FIX] usa dst
 [QOL] weather command shows past 2 days and next 3 days
 [FIX] osu!auth token not updating - forgot to change auto updater from fetch to axios
+
+VERSION 0.5.6
+date_time
+commit: null
+changes: 
