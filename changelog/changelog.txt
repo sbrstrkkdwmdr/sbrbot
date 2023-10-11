@@ -527,3 +527,4 @@ changes:
 [ADD] add aliases to roll
 [QOL] improve time command tz selector 
 [QOL] time command capitalising multi-word names
+[FIX] usa dst

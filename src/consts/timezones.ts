@@ -1538,7 +1538,7 @@ export const hasDaylight: {
         },
         {
             start: 'Second Sunday in March',
-            end: 'First Sunday in October',
+            end: 'First Sunday in November',
             includes: [
                 'Bermuda', 'BM', 'BMU',
                 'Hamilton', //^ capital
@@ -1709,12 +1709,12 @@ export const hasDaylight: {
                 'Miami', //^ major city
             ],
             check: ((date) => {
-                if (isDateBetweenMonths(date, 4, 10)) {
+                if (isDateBetweenMonths(date, 4, 11)) {
                     if (date.getMonth() == 10 && isPastDayOfWeek(date, 0)) {
                         return true;
                     } else if (date.getMonth() == 4 && isDateBeforeOrAfterNthDayOfWeek(date, 0, 2, "before")) {
                         return true;
-                    } else if (date.getMonth() !== 10 && date.getMonth() !== 4) {
+                    } else if (date.getMonth() !== 11 && date.getMonth() !== 4) {
                         return true;
                     }
                 }
