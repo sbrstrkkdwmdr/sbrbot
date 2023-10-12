@@ -46,7 +46,7 @@ export async function changelog(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             version = input.args[0] ?? null;
-            if (input.args.includes('pending')) {
+            if (input.args.includes('pending') || input.args.includes('next')) {
                 useGit = true;
             }
         }
@@ -2961,7 +2961,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
                         second = inTempData?.category.toUpperCase() + ' ' + ifirst;
                     }
                     resolve(true);
-                });;
+                });
                 if (calc.checkIsNumber(x.name)) {
                     first = x.id.slice(4, x.id.length);
                     second = x.id.slice(4, x.id.length);

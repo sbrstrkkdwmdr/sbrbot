@@ -256,7 +256,7 @@ const cmds: commandInfo[] = [
             },
             {
                 text: 'PREFIXMSGchangelog pending',
-                descriptor: 'Returns the changelog for the next version'
+                descriptor: 'Returns the changelog for the upcoming version'
             },
             {
                 text: 'PREFIXMSGchangelog versions',
@@ -270,7 +270,7 @@ const cmds: commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The version',
-                options: ['formatted as major.minor.patch (`0.4.1`) or `first`, `second` etc. `versions` also works'],
+                options: ['formatted as major.minor.patch (`0.4.1`) or `first`, `second` etc. `pending` shows upcoming changes'],
                 defaultValue: 'latest',
                 examples: ['0.4.1', 'version:0.4.1', 'first'],
                 commandTypes: ['message', 'interaction']

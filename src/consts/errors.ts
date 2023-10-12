@@ -93,6 +93,7 @@ export const uErr = {
         api: "Something went wrong with the weather api",
         locateNF: "The requested location was not found",
         wrongCoords: "Something went wrong with the weather api (NaN coordinates)",
-        input_ms: "Missing <region> argument"
+        input_ms: "Missing <region> argument",
+        stormNF: "Data for [SID] was not found"
     }
 };
