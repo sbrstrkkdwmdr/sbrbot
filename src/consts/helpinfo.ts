@@ -41,40 +41,7 @@ export type commandInfoOptions = {
     aliases?: string[];
 };
 
-const mods = [
-    'NM',
-    'NF',
-    'EZ',
-    'TD',
-    'HD',
-    'HR',
-    'SD',
-    'DT',
-    'RX',
-    'HT',
-    'NC',
-    'FL',
-    'AT',
-    'SO',
-    'AP',
-    'PF',
-    '1K',
-    '2K',
-    '3K',
-    '4K',
-    '5K',
-    '6K',
-    '7K',
-    '8K',
-    '9K',
-    'FI',
-    'RD',
-    'CN',
-    'TP',
-    'KC',
-    'S2', 'V2', 'SV2',
-    'MR'
-];
+const mods = 'See [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.html#mods)';
 
 
 '&lt';
@@ -152,7 +119,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         type: 'string',
         required: false,
         description: 'Filter scores including these mods',
-        options: mods,
+        options: [mods],
         defaultValue: 'null',
         examples: ['mods:HDHR', '-mods HDHR'],
         commandTypes: ['interaction']
@@ -162,7 +129,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         type: 'string',
         required: false,
         description: 'Filter scores with these exact mods',
-        options: mods,
+        options: [mods],
         defaultValue: 'null',
         examples: ['-modx HDHR'],
         commandTypes: ['interaction']
@@ -342,19 +309,8 @@ const cmds: commandInfo[] = [
                 type: 'string',
                 required: true,
                 description: 'The unit to convert to',
-                options: [
-                    'celsius (c)', 'fahrenheit (f)', 'kelvin (k)',
-                    'inch (in)', 'foot (ft)', 'metre (m)', 'mile (mi)', 'astronomical unit (au)', 'light year (ly)',
-                    'second (s)', 'minute (min)', 'hour (h)', 'day (d)', 'week (wk)', 'month (mth)', 'year (y)',
-                    'teaspoon (tsp)', 'tablespoon (tbp)', 'fluid ounce (floz)', 'cup (c)', 'pint (pt)', 'litre (l)', 'gallon (gal)', 'cubic metres (m3)',
-                    'gram (g)', 'ounce (oz)', 'pound (lb)', 'stone (st)', 'us ton (t)', 'metric tonne (mt)',
-                    'pascal (Pa)', 'millimetre of mercury/torr (mmHg)', 'pounds per square inch (psi)', 'bar', 'standard atmosphere (atm)',
-                    'electronvolt (eV)', 'joule (j)', 'calorie (cal)',
-                    'square metre (m2)', 'square kilometre (km2)', 'square mile (mi2)', 'hectare (ha)', 'acre (ac)',
-                    'degree (deg)', 'gradian (grad)', 'radian (rad)',
-                    'metres per second (ms)', 'kilometres per hour (kmh)', 'miles per hour (mph)', 'knot/nautical miles per hour (kt)', 'lightspeed (c)',
-                    'help', 'SI units',
-                ],
+                options: ['see [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.html#conv) for units',
+                    'help', 'SI units',],
                 defaultValue: 'N/A',
                 examples: ['c', 'to:celsius'],
                 commandTypes: ['message', 'interaction']
@@ -594,7 +550,7 @@ operators: *, /, +, -, (, )
                 name: 'timezone',
                 type: 'string',
                 required: false,
-                description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset)',
+                description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset )',
                 options: ['Formatted as [city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
                 defaultValue: 'UTC',
                 examples: ['Australia/Melbourne', 'Europe/Warsaw'],
@@ -912,7 +868,7 @@ const osucmds: commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The mods to calculate the map with',
-                options: mods,
+                options: [mods],
                 defaultValue: 'none',
                 examples: ['+HDHR', 'mods:HDDTHR'],
                 commandTypes: ['message', 'interaction', 'link']
@@ -1032,7 +988,7 @@ const osucmds: commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The mods to filter the leaderboard by',
-                options: mods,
+                options: [mods],
                 defaultValue: 'none',
                 examples: ['+HDHR', 'mods:EZFL'],
                 commandTypes: ['message', 'interaction']
@@ -1418,7 +1374,7 @@ const osucmds: commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The mods to calculate the map with',
-                options: mods,
+                options: [mods],
                 defaultValue: 'none',
                 examples: ['+HDHR', 'mods:HDDTHR'],
                 commandTypes: ['message', 'interaction', 'link']
@@ -2068,7 +2024,7 @@ const osucmds: commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The mods to simulate the score with',
-                options: mods,
+                options: [mods],
                 defaultValue: 'none',
                 examples: ['+HDDT', 'mods:HDDT'],
                 commandTypes: ['message', 'interaction']
