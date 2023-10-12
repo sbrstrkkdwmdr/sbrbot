@@ -2643,6 +2643,17 @@ export async function weather(input: extypes.commandInput) {
             //     .setURL(`https://open-meteo.com/en/docs`)
             //     .setImage(`attachment://${prChGraph.filename}.jpg`);
 
+            //get hours 
+            const useHrs = weatherData.hourly.precipitation.slice(48, 71);
+            let hrArr = []
+            let i = 0;
+            for (const hour of useHrs) {
+                if (hour > 0) {
+                    hrArr.push(`${i}`.length == 1 ? `0${i}:00` : `${i}:00`);
+                    i++;
+                }
+            }
+            const hrTxt = func.formatHours(hrArr);
 
             weatherEmbed
                 .setFooter({ text: `input: ${name}` })
@@ -2678,7 +2689,7 @@ Max: ${dailyData.temperature_2m_max[2]}${weatherUnits.temperature_2m_max}
                     name: `Precipitation`,
                     value: `
 Probability: (${dailyData.precipitation_probability_min[2]}% - ${dailyData.precipitation_probability_max[2]}%)
-${dailyData.rain_sum[2] > 0 ? `Rain: ${dailyData.rain_sum[2]}${weatherUnits.rain_sum}\n` : ''}${dailyData.showers_sum[2] > 0 ? `Showers: ${dailyData.showers_sum[2]}${weatherUnits.showers_sum}\n` : ''}${dailyData.snowfall_sum[2] > 0 ? `Snowfall: ${dailyData.snowfall_sum[2]}${weatherUnits.snowfall_sum}\n` : ''}${dailyData.precipitation_sum[2] > 0 ? `Total: ${dailyData.precipitation_sum[2]}${weatherUnits.precipitation_sum}\n` : ''}${dailyData.precipitation_hours[2] > 0 ? `Hours: ${dailyData.precipitation_hours[2]}${weatherUnits.precipitation_hours}\n` : ''}`,
+${dailyData.rain_sum[2] > 0 ? `Rain: ${dailyData.rain_sum[2]}${weatherUnits.rain_sum}\n` : ''}${dailyData.showers_sum[2] > 0 ? `Showers: ${dailyData.showers_sum[2]}${weatherUnits.showers_sum}\n` : ''}${dailyData.snowfall_sum[2] > 0 ? `Snowfall: ${dailyData.snowfall_sum[2]}${weatherUnits.snowfall_sum}\n` : ''}${dailyData.precipitation_sum[2] > 0 ? `Total: ${dailyData.precipitation_sum[2]}${weatherUnits.precipitation_sum}\n` : ''}${dailyData.precipitation_hours[2] > 0 ? `Hours: ${hrTxt}\n` : ''}`,
                     inline: true
                 },
                 {

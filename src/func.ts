@@ -1449,3 +1449,34 @@ export function timeForGraph(times: string[]) {
     }
     return reformattedTimes;
 }
+
+//thanks chatgpt
+export function formatHours(arr: string[]) {
+    if (!Array.isArray(arr) || arr.length === 0) {
+        return "";
+    }
+
+    arr = arr.map(time => time.trim()).sort();
+    let formattedHours = [];
+    let startHour = arr[0];
+    let endHour = arr[0];
+
+    for (let i = 1; i < arr.length; i++) {
+        const currentHour = arr[i];
+        const previousHour = arr[i - 1];
+
+        const currentTimestamp = new Date(`2000-01-01T${currentHour}:00`).getTime();
+        const previousTimestamp = new Date(`2000-01-01T${previousHour}:00`).getTime();
+
+        if (currentTimestamp - previousTimestamp === 3600000) {
+            endHour = currentHour;
+        } else {
+            formattedHours.push(startHour === endHour ? startHour : `${startHour} - ${endHour}`);
+            startHour = endHour = currentHour;
+        }
+    }
+
+    formattedHours.push(startHour === endHour ? startHour : `${startHour} - ${endHour}`);
+
+    return formattedHours.join(", ");
+}
