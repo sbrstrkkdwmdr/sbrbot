@@ -50,40 +50,7 @@ const buttonsObjs = {
 }
 
 
-const mods = [
-    'NM',
-    'NF',
-    'EZ',
-    'TD',
-    'HD',
-    'HR',
-    'SD',
-    'DT',
-    'RX',
-    'HT',
-    'NC',
-    'FL',
-    'AT',
-    'SO',
-    'AP',
-    'PF',
-    '1K',
-    '2K',
-    '3K',
-    '4K',
-    '5K',
-    '6K',
-    '7K',
-    '8K',
-    '9K',
-    'FI',
-    'RD',
-    'CN',
-    'TP',
-    'KC',
-    'S2', 'V2', 'SV2',
-    'MR'
-]
+const mods = 'See [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.html#mods)';
 
 const scoreListCommandOptions = [
     {
@@ -217,6 +184,10 @@ const generalcommands = [
                 descriptor: 'Returns the changelog for the first version'
             },
             {
+                text: 'PREFIXMSGchangelog pending',
+                descriptor: 'Returns the changelog for the next version'
+            },
+            {
                 text: 'PREFIXMSGchangelog versions',
                 descriptor: 'Returns a list of all versions'
             },
@@ -267,19 +238,8 @@ const generalcommands = [
                 type: 'string',
                 required: true,
                 description: 'The unit to convert to',
-                options: [
-                    'celsius (c)', 'fahrenheit (f)', 'kelvin (k)',
-                    'inch (in)', 'foot (ft)', 'metre (m)', 'mile (mi)', 'astronomical unit (au)', 'light year (ly)',
-                    'second (s)', 'minute (min)', 'hour (h)', 'day (d)', 'week (wk)', 'month (mth)', 'year (y)',
-                    'teaspoon (tsp)', 'tablespoon (tbp)', 'fluid ounce (floz)', 'cup (c)', 'pint (pt)', 'litre (l)', 'gallon (gal)', 'cubic metres (m3)',
-                    'gram (g)', 'ounce (oz)', 'pound (lb)', 'stone (st)', 'us ton (t)', 'metric tonne (mt)',
-                    'pascal (Pa)', 'millimetre of mercury/torr (mmHg)', 'pounds per square inch (psi)', 'bar', 'standard atmosphere (atm)',
-                    'electronvolt (eV)', 'joule (j)', 'calorie (cal)',
-                    'square metre (m2)', 'square kilometre (km2)', 'square mile (mi2)', 'hectare (ha)', 'acre (ac)',
-                    'degree (deg)', 'gradian (grad)', 'radian (rad)',
-                    'metres per second (ms)', 'kilometres per hour (kmh)', 'miles per hour (mph)', 'knot/nautical miles per hour (kt)', 'lightspeed (c)',
-                    'help', 'SI units',
-                ],
+                options: ['see [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.html#conv) for units',
+                    'help', 'SI units',],
                 defaultValue: 'N/A',
                 examples: ['c', 'to:celsius'],
                 commandTypes: ['message', 'interaction']
@@ -452,7 +412,7 @@ operators: *, /, +, -, (, )
                 descriptor: 'Sets a reminder for 1 hour, 30 minutes, and 30 seconds and sends it in the channel'
             }
         ],
-        aliases: ['reminders'],
+        aliases: ['reminders', 'reminder'],
         options: [
             {
                 name: 'time',
@@ -519,8 +479,8 @@ operators: *, /, +, -, (, )
                 name: 'timezone',
                 type: 'string',
                 required: false,
-                description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset)',
-                options: ['Formatted as [city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
+                description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset )',
+                options: ['Formatted as city, UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
                 defaultValue: 'UTC',
                 examples: ['Australia/Melbourne', 'Europe/Warsaw'],
                 commandTypes: ['message', 'interaction']
@@ -837,7 +797,7 @@ const osucommands = [
                 type: 'string',
                 required: false,
                 description: 'The mods to calculate the map with',
-                options: mods,
+                options: [mods],
                 defaultValue: 'none',
                 examples: ['+HDHR', 'mods:HDDTHR'],
                 commandTypes: ['message', 'interaction', 'link']
@@ -957,7 +917,7 @@ const osucommands = [
                 type: 'string',
                 required: false,
                 description: 'The mods to filter the leaderboard by',
-                options: mods,
+                options: [mods],
                 defaultValue: 'none',
                 examples: ['+HDHR', 'mods:EZFL'],
                 commandTypes: ['message', 'interaction']
@@ -1343,7 +1303,7 @@ const osucommands = [
                 type: 'string',
                 required: false,
                 description: 'The mods to calculate the map with',
-                options: mods,
+                options: [mods],
                 defaultValue: 'none',
                 examples: ['+HDHR', 'mods:HDDTHR'],
                 commandTypes: ['message', 'interaction', 'link']
@@ -1993,7 +1953,7 @@ const osucommands = [
                 type: 'string',
                 required: false,
                 description: 'The mods to simulate the score with',
-                options: mods,
+                options: [mods],
                 defaultValue: 'none',
                 examples: ['+HDDT', 'mods:HDDT'],
                 commandTypes: ['message', 'interaction']
@@ -2770,3 +2730,66 @@ const buttons = [
         emoji: buttonsObjs.label.extras.random,
     },
 ];
+
+const conversionData = {
+    temp_c: ['Celsius', '℃', 'Celcius', 'Centigrade', 'C',],
+    temp_f: ['Fahrenheit', '℉', 'F'],
+    temp_k: ['Kelvin', '°K', 'L'],
+    dist_in: ['Inch', 'in', '\'', '`'],
+    dist_ft: ['Feet', 'ft', 'foot', '"', "''", '``'],
+    dist_m: ['Metre', 'm', 'Meter'],
+    dist_mi: ['Mile', 'mi'],
+    dist_au: ['Astronomical Unit', 'au'],
+    dist_ly: ['Light Year', 'ly'],
+    dist_pc: ['Parsec', 'pc'],
+    time_s: ['Second', 's', 'sec'],
+    time_min: ['Minute', 'min',],
+    time_hr: ['Hour', 'h', 'hr'],
+    time_d: ['Day', 'd',],
+    time_wk: ['Week', 'wk', 'sennight',],
+    time_fn: ['Fortnight', 'fn'],
+    time_mth: ['Month', 'mth', 'mon'],
+    time_qua: ['Quarantine', null, 'quarantina', 'quarentine'],
+    time_yr: ['Year', 'yr',],
+    time_dec: ['Decade',],
+    time_cen: ['Century', 'cent'],
+    time_mil: ['Millennium', null, 'Millennia',],
+    time_ma: ['Megaannum',],
+    time_eon: ['Eon',],
+    vol_tsp: ['Teaspoon', 'tsp',],
+    vol_tbp: ['Tablespoon', 'tbp',],
+    vol_floz: ['Fluid Ounce', 'floz'],
+    vol_c: ['Cup', 'c',],
+    vol_pt: ['Pint', 'pt',],
+    vol_l: ['Litre', 'Liter', 'L'],
+    vol_gal: ['Galloon', 'gal',],
+    vol_m3: ['Cubic Metre', 'm³', 'm3', 'm^3'],
+    mass_g: ['Gram', 'g'],
+    mass_oz: ['Ounce', 'oz'],
+    mass_lb: ['Pound', 'lb'],
+    mass_st: ['Stone', 'st'],
+    mass_t: ['US Ton', 't', 'Ton',],
+    mass_mt: ['Metric Tonne', 'mt', 'Tonne',],
+    pres_pa: ['Pascal', 'Pa', 'N m² ⁻¹', 'N/m^2', 'N/m', 'Nm'],
+    pres_mmHg: ['millimetre of Mercury', 'mmHg', 'Torr', 'millimeter of Mercury',],
+    pres_psi: ['Pounds per square inch', 'psi'],
+    pres_bar: ['Bar'],
+    pres_atm: ['Standard Atmosphere', 'atm', 'Atmosphere',],
+    nrg_ev: ['Electron Volt', 'eV', 'Electronvolt'],
+    nrg_j: ['Joule', 'j'],
+    nrg_cal: ['Calorie', 'cal'],
+    area_ft2: ['Square foot', 'ft²', 'ft2', 'sqft'],
+    area_m2: ['Square metre', 'm²', 'm2', 'sqm'],
+    area_ac: ['Acre', 'ac'],
+    area_ha: ['Hectare', 'Ha'],
+    area_km2: ['Square kilometre', 'km²', 'km2', 'sqkm'],
+    area_mi2: ['Square mile', 'mi²', 'mi2', 'sqmi'],
+    angle_grad: ['Gradian', 'grad'],
+    angle_deg: ['Degree', 'deg'],
+    angle_rad: ['Radian', 'rad'],
+    speed_kmh: ['Kilometres per hour', 'km h⁻¹', 'kmh', 'kph', 'km/h'],
+    speed_mph: ['Miles per hour', 'mp h⁻¹', 'mph', 'mih', 'mi/h', 'm/h'],
+    speed_kt: ['Knot', 'kt', 'nmi h⁻¹', 'nmih', 'nmh', 'Nautical miles per hour'],
+    speed_ms: ['Metres per second', 'm s⁻¹', 'ms', 'mps', 'm/s',],
+    speed_c: ['Light', 'c', 'lightspeed'],
+}

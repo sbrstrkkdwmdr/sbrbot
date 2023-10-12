@@ -27,7 +27,8 @@ function generateCommands() {
         <details>
         <summary class="divCommandName" id="${name}-${cmd.name}">${cmd.name}</summary>
         <div class="divCommandDetails">
-        <p>${cmd.description}
+        <p>${cmd.description.includes('http') ?
+                    urlToHTML(cmd.description) : cmd.description}
         </p>
     
         <pre>
@@ -70,13 +71,31 @@ ${cmd?.linkusage && cmd.linkusage.length > 0 ?
     
         ${cmd.options ?
                         cmd.options.map(option => {
+                            let opStr = ''
+                            for (const opt of option.options) {
+                                if (opt.includes('[') && opt.includes(']') && opt.includes('(') && opt.includes(')')) {
+                                    opStr += markdownURLtoHTML(opt) + ', '
+                                } else {
+                                    opStr += opt + ', '
+                                }
+                            }
+                            let optDesc = ''
+                            if (option.description.includes('[') && option.description.includes(']') && option.description.includes('(') && option.description.includes(')')) {
+                                optDesc = markdownURLtoHTML(opt) + ', '
+                            } else if (option.description.includes('http')) {
+                                optDesc = urlToHTML(option.description)
+                            } else {
+                                optDesc = option.description
+                            }
+
+
                             return `
                 <tr>
                     <td class="tdOpts">${option.name}</td>
                     <td class="tdOpts">${option.type}</td>
                     <td class="tdOpts">${option.required}</td>
-                    <td class="tdOpts">${option.description}</td>
-                    <td class="tdOpts">${option.options ? option.options.join(', ') : ''}</td>
+                    <td class="tdOpts">${optDesc}</td>
+                    <td class="tdOpts">${opStr}</td>
                     <td class="tdOpts">${option.defaultValue}</td>
                     <td class="tdOpts">${option.examples ? option.examples.join('\n') : ''}</td>
                     <td class="tdOpts">${option.commandTypes ? option.commandTypes.join(', ') : ''}</td>
@@ -95,6 +114,35 @@ ${cmd?.linkusage && cmd.linkusage.length > 0 ?
         }
     }
 }
+
+function markdownURLtoHTML(str) {
+    const int = str.split('[')[0]
+    const fin = str.split(')')[1]
+    const namae = str.split('[')[1].split(']')[0]
+    const url = str.split('(')[1].split(')')[0]
+    return `${int} <a class="minA" href=${url}>${namae}</a> ${fin}`
+}
+
+/**
+ * 
+ * @param {string} str 
+ * @returns 
+ */
+function urlToHTML(str) {
+    //split 
+    const args = str.split(' ')
+    //get index of URL
+    let i = 0
+    for (null; i < args.length; i++) {
+        console.log(args[i])
+        if (args[i].includes('http')) break;
+    }
+    const init = args.slice(0, i-1).join(' ');
+    const fin = args.slice(i+1, args.length).join(' ');
+    console.log(`${init} <a class="minA" href=${args[i]}>url</a> ${fin}`)
+    return `${init} <a class="minA" href=${args[i]}>url</a> ${fin}`
+}
+
 
 function toListButtons(commands, div, name) {
     // console.log('Generating command list for ' + name ?? 'null name');
@@ -115,7 +163,7 @@ ${cmd.emoji.length > 0 ? `<img src="${cmd.emoji}" alt="${cmd.name}" style="heigh
 </details>
 </div>
 `
-//name,desc, emoji
+        //name,desc, emoji
         div.appendChild(cmddiv);
     }
 }
