@@ -3,7 +3,6 @@ const initdate = new Date();
 
 import Discord, { Client, GatewayIntentBits, Partials } from 'discord.js';
 import fs from 'fs';
-import fetch from 'node-fetch';
 import Sequelize from 'sequelize';
 import * as extypes from './src/types/extratypes.js';
 
@@ -306,42 +305,6 @@ Current Client ID:        ${client.user.id}
     fs.appendFileSync(`${path}\\logs\\general.log`, `\n\n\n${initlog}\n\n\n`, 'utf-8');
 
     fs.writeFileSync(`${path}\\debug\\starttime.txt`, currentDate.toString());
-    fetch('https://osu.ppy.sh/oauth/token', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-        ,
-        body: JSON.stringify({
-            grant_type: 'client_credentials',
-            client_id: config.osuClientID,
-            client_secret: config.osuClientSecret,
-            scope: 'public'
-        })
-
-    }).then(res => res.json())
-        .then(res => {
-            fs.writeFileSync(`${path}\\config\\osuauth.json`, JSON.stringify(res));
-            fs.appendFileSync(`${path}\\logs\\updates.log`, '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
-
-        }
-        )
-        .catch(error => {
-            const rn = new Date();
-            fs.appendFileSync(`${path}\\logs\\updates.log`,
-                `
-====================================================
-ERROR
-----------------------------------------------------
-Date:             ${rn}
-Date (ISO):       ${rn.toISOString()}
-Date (epoch, ms): ${rn.getTime()}
-----------------------------------------------------
-node-fetch error: ${error}
-====================================================
-`, 'utf-8');
-            return;
-        });
 });
 
 client.on('debug', (info) => {

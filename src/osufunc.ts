@@ -967,7 +967,20 @@ export async function apiget(input: apiInput) {
                     "Content-Type": "application/json",
                     Accept: "application/json"
                 }
-            })).data;
+            }).catch(err => {
+                if (err?.response?.data?.authentication == 'basic') {
+                    return {
+                        data: {
+                            authentication: "basic"
+                        }
+                    };
+                } else {
+                    return {
+                        data: { error: null, }
+                    };
+                }
+            })
+            ).data;
             // datafirst = await nfetch(url, {
             //     method: 'GET',
             //     headers: {
@@ -993,7 +1006,6 @@ export async function apiget(input: apiInput) {
             await updateToken(input.config);
             input.callNum ? input.callNum = input.callNum + 1 : input.callNum = 1;
             datafirst = await apiget(input);
-
         }
         if ('error' in datafirst && !input.type.includes('search')) {
             throw new Error(errors.apiError);
@@ -1120,7 +1132,7 @@ export async function apigetOT(input: {
     const before = perf.performance.now();
     try {
         datafirst = (await axios.get(baseurl, {
-        })).data
+        })).data;
     } catch (error) {
         data = {
             url: baseurl,
@@ -1162,26 +1174,23 @@ export async function apigetOT(input: {
 
 
 export async function updateToken(config: extypes.config) {
-    const clientId = config.osuClientID;
-    const clientSecret = config.osuClientSecret;
-    const newtoken: osuApiTypes.OAuth = (await axios.post('https://osu.ppy.sh/oauth/token', {
-        headers: {
-            'Content-Type': 'application/json'
+    return new Promise(async (resolve, reject) => {
+        const newtoken: osuApiTypes.OAuth = await fetch('https://osu.ppy.sh/oauth/token', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body:
+                `grant_type=client_credentials&client_id=${config.osuClientID}&client_secret=${config.osuClientSecret}&scope=public`
+        }).then(res => res.json() as any);
+        if (newtoken?.access_token) {
+            fs.writeFileSync(`${path}/config/osuauth.json`, JSON.stringify(newtoken));
+            fs.appendFileSync(`${path}/logs/updates.log`, '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
         }
-        ,
-        body: JSON.stringify({
-            grant_type: 'client_credentials',
-            client_id: clientId,
-            client_secret: clientSecret,
-            scope: 'public'
-        })
-
-    })).data;
-    if (newtoken.access_token) {
-        fs.writeFileSync(`${path}/config/osuauth.json`, JSON.stringify(newtoken));
-        fs.appendFileSync(`${path}/logs/updates.log`, '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
-    }
-    log.toOutput('Update token: https://osu.ppy.sh/oauth/token', config);
+        log.toOutput('Update token: https://osu.ppy.sh/oauth/token', config);
+        resolve(true);
+    });
 }
 
 // export function log.toOutput(data: string, title?: string) {
