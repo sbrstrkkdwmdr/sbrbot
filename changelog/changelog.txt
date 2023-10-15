@@ -535,3 +535,4 @@ VERSION 0.5.6
 date_time
 commit: null
 changes: 
+[FIX] incorrect capitalisation in tz

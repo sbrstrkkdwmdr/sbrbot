@@ -2289,14 +2289,13 @@ export async function time(input: extypes.commandInput) {
 
             const offsetReadable = `UTC${Hrs}:${(Math.abs(offsetToMinutes % 60)).toString().padStart(2, '0')}`;
             fields.push({
-                name: `${displayedTimezone}/${offsetReadable} ${isOffset ? '(DST)' : ''}`,
+                name: `${func.searchMatch(displayedTimezone, func.removeDupes(frTemp))[0]}/${offsetReadable} ${isOffset ? '(DST)' : ''}`,
                 value:
                     `\n\`Date              | \`${reqTime.format("DD/MM/YYYY")}` +
                     `\n\`Full Date         | \`${reqTime.format("ddd, DD MMM YYYY hh:mm:ssA Z")}` +
                     `\n\`Full Date(24h)    | \`${reqTime.format("ddd, DD MMM YYYY HH:mm:ss Z")}` +
                     `\n\`Full Date ISO8601 | \`${reqTime.toISOString(true)}` +
                     `\n\`EPOCH(ms)         | \`${curTime.valueOf()}`,
-
                 inline: false
             });
         } catch (error) {
