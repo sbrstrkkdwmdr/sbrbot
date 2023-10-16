@@ -1,5 +1,6 @@
 import * as stats from 'simple-statistics';
-
+import * as conversions from './consts/conversions.js';
+import * as func from './func.js';
 /**
  * 
  * @param {number} x first number
@@ -97,6 +98,9 @@ export function toScientificNotation(number: number, significantFigures: number)
         let xFig = significantFigures + (tNum.match(/[-.]/g) || []).length;
         //cut number to be xFig long
         tNum = tNum.slice(0, xFig);
+    }
+    if (tNum.endsWith('.')) {
+        tNum = tNum.replace('.', '');
     }
     return tNum;
 }
@@ -676,6 +680,133 @@ export function isWithinValue(input: number, value: number, against: number) {
     const upperBound = against + value;
     return input >= lowerBound && input <= upperBound;
 }
+
+export function convert(input: string, output: string, value: number) {
+    const tcat1 = func.removeSIPrefix(input);
+    const tcat2 = func.removeSIPrefix(output);
+    let hasErr = false;
+    let usePre1 = true;
+    let usePre2 = true;
+    let formula: string, type: string, outvalue: number, extra: string, significantFigures: string, change: string, otherUnits: string;
+    const numAsStr: string = value.toString();
+    function inval() {
+        formula = 'Conversion not found';
+        outvalue = NaN;
+        type = 'INVALID';
+        significantFigures = 'NaN';
+        change = 'ERR';
+        hasErr = true;
+    }
+    function toName(x: conversions.convVal | conversions.convValCalc) {
+        return x.names[1] ? `${x.names[0]} (${x.names[1]})` : x.names[0];
+    }
+    for (let i = 0; i < conversions.values.length; i++) {
+        const curObject = conversions.values[i];
+        if (!curObject) {
+            inval();
+            break;
+        }
+
+        const names: string[] = [];
+        curObject.names.forEach(x => {
+            if (x !== null) {
+                names.push(x.toUpperCase());
+            }
+        }
+        );
+
+        if (names.includes(tcat1.originalValue.toUpperCase()) || names.includes(input.toUpperCase())) {
+            if (names.includes(input.toUpperCase()) && !names.includes(tcat1.originalValue.toUpperCase())) {
+                usePre1 = false;
+            }
+            for (let j = 0; j < curObject.calc.length; j++) {
+                const curCalc = curObject.calc[j];
+                if (!curCalc) {
+                    inval();
+                    break;
+                }
+
+                const calcNames: string[] = [];
+                curCalc.names.forEach(x => {
+                    if (x !== null) {
+                        calcNames.push(x.toUpperCase());
+                    }
+                });
+                if (calcNames.includes(tcat2.originalValue.toUpperCase()) || calcNames.includes(output.toUpperCase())) {
+                    let secondaryMetric = false;
+                    formula = curCalc.text;
+
+                    if (calcNames.includes(output.toUpperCase()) && !calcNames.includes(tcat2.originalValue.toUpperCase())) {
+                        usePre2 = false;
+                    }
+
+                    for (let i = 0; i < conversions.values.length; i++) {
+                        const curObject2 = conversions.values[i];
+                        if (!curObject2) {
+                            inval();
+                            break;
+                        }
+                        const names2: string[] = [];
+                        curObject2.names.forEach(x => {
+                            if (x !== null) {
+                                names2.push(x.toUpperCase());
+                            }
+                        });
+                        if (names2.includes(tcat2.originalValue.toUpperCase()) && curObject2.system == 'Metric') {
+                            secondaryMetric = true;
+                        }
+                    }
+
+                    let fromType = curObject.name;
+
+                    let toType = curCalc.to;
+
+                    if (curObject.system == 'Metric' && tcat1.prefix.removed.length > 0 && usePre1) {
+                        value *= tcat1.power;
+                        fromType = tcat1.prefix?.long?.length > 0 ? toCapital(tcat1.prefix.long) + curObject.name.toLowerCase() : curObject.name;
+                        const formStart = `${tcat1.power}`;
+                        formula = `${formStart}*(${formula})`;
+                    }
+
+                    let outvalue = curCalc.func(value);
+
+                    if (secondaryMetric && tcat2.prefix.removed.length > 0 && usePre2) {
+                        outvalue /= tcat2.power;
+                        toType = tcat2.prefix?.long?.length > 0 ? toCapital(tcat2.prefix.long) + curCalc.to.toLowerCase() : curCalc.to;
+                        const formEnd = `${tcat2.power}`;
+                        formula = `(${formula})/${formEnd}`;
+                    }
+
+                    type = curObject.type;
+                    change = `${fromType} => ${toType}`;
+                    significantFigures = toScientificNotation(outvalue, getSigFigs(numAsStr));
+                    const usVol = [];
+
+                    otherUnits = curObject.calc
+                        .filter(x => !x.names.includes('Arbitrary units'))
+                        .map(x => toName(x))
+                        .join(', ');
+
+                    if (curObject.type == 'Volume' && (usVol.includes(curObject.name) || usVol.includes(curCalc.to))) {
+                        extra = 'Using US measurements not Imperial';
+                    }
+                    return {
+                        formula,
+                        outvalue,
+                        type,
+                        hasErr,
+                        extra,
+                        significantFigures,
+                        change,
+                        otherUnits,
+                    };
+                    break;
+                }
+            }
+        }
+    }
+}
+
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
 // export {

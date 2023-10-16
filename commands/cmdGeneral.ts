@@ -586,136 +586,34 @@ q | quecto | 10^-30 | Nonillionth
         converting = false;
     }
 
-    let foundOne = false;
-
-    const tcat1 = func.removeSIPrefix(cat1);
-    const tcat2 = func.removeSIPrefix(cat2);
-    let usePre1 = true;
-    let usePre2 = true;
-
     if (converting == true) {
         //find
-        for (let i = 0; i < conversions.values.length; i++) {
-            const curObject = conversions.values[i];
-            if (!curObject) {
-                error('nf');
-                break;
-            }
+        const data = calc.convert(cat1, cat2, num);
 
-            const names: string[] = [];
-            curObject.names.forEach(x => {
-                if (x !== null) {
-                    names.push(x.toUpperCase());
-                }
-            }
-            );
-
-            if (names.includes(tcat1.originalValue.toUpperCase()) || names.includes(cat1.toUpperCase())) {
-                foundOne = true;
-                if (names.includes(cat1.toUpperCase()) && !names.includes(tcat1.originalValue.toUpperCase())) {
-                    usePre1 = false;
-                }
-                for (let j = 0; j < curObject.calc.length; j++) {
-                    const curCalc = curObject.calc[j];
-                    if (!curCalc) {
-                        error('invalid', curObject.name);
-                        break;
-                    }
-
-                    const calcNames: string[] = [];
-                    curCalc.names.forEach(x => {
-                        if (x !== null) {
-                            calcNames.push(x.toUpperCase());
-                        }
-                    });
-                    if (calcNames.includes(tcat2.originalValue.toUpperCase()) || calcNames.includes(cat2.toUpperCase())) {
-                        let secondaryMetric = false;
-                        formula = curCalc.text;
-
-                        if (calcNames.includes(cat2.toUpperCase()) && !calcNames.includes(tcat2.originalValue.toUpperCase())) {
-                            usePre2 = false;
-                        }
-
-                        for (let i = 0; i < conversions.values.length; i++) {
-                            const curObject2 = conversions.values[i];
-                            if (!curObject2) {
-                                error('nf');
-                                break;
-                            }
-                            const names2: string[] = [];
-                            curObject2.names.forEach(x => {
-                                if (x !== null) {
-                                    names2.push(x.toUpperCase());
-                                }
-                            });
-                            if (names2.includes(tcat2.originalValue.toUpperCase()) && curObject2.system == 'Metric') {
-                                secondaryMetric = true;
-                            }
-                        }
-
-                        let fromType = curObject.name;
-
-                        let toType = curCalc.to;
-
-                        if (curObject.system == 'Metric' && tcat1.prefix.removed.length > 0 && usePre1) {
-                            num *= tcat1.power;
-                            fromType = tcat1.prefix?.long?.length > 0 ? calc.toCapital(tcat1.prefix.long) + curObject.name.toLowerCase() : curObject.name;
-                            const formStart = `${tcat1.power}`;
-                            formula = `${formStart}*(${formula})`;
-                        }
-
-                        let finNum = curCalc.func(num);
-
-                        if (secondaryMetric && tcat2.prefix.removed.length > 0 && usePre2) {
-                            finNum /= tcat2.power;
-                            toType = tcat2.prefix?.long?.length > 0 ? calc.toCapital(tcat2.prefix.long) + curCalc.to.toLowerCase() : curCalc.to;
-                            const formEnd = `${tcat2.power}`;
-                            formula = `(${formula})/${formEnd}`;
-                        }
-
-                        conv = curObject.type;
-                        convtype = `${fromType} => ${toType}`;
-                        const sigfig = calc.toScientificNotation(finNum, calc.getSigFigs(numAsStr));
-                        eq = sigfig == `${finNum}` ? `${finNum}` : `\`\nFull: ${finNum}\nSF:   ${sigfig}\``;
-
-                        const usVol = [];
-
-                        units = curObject.calc
-                            .filter(x => !x.names.includes('Arbitrary units'))
-                            .map(x => toName(x))
-                            .join(', ');
-
-                        if (curObject.type == 'Volume' && (usVol.includes(curObject.name) || usVol.includes(curCalc.to))) {
-                            embedres.setFooter({ text: 'Using US measurements not Imperial' });
-                        }
-
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (foundOne && eq == 'Unknown') {
-            error('invalid');
-        } else if (eq == 'Unknown') {
+        if (data.hasErr) {
             error('nf');
         }
-
         embedres.setTitle(`${conv} conversion`);
         embedres.addFields([
             {
-                name: `${convtype}`,
-                value: `${eq}`,
+                name: `${data.change}`,
+                value:
+                    `
+\`
+Full: ${data.outvalue}
+SF:   ${data.significantFigures}
+\`   
+`,
                 inline: false
             },
             {
                 name: 'Formula',
-                value: `\`${formula}\``,
+                value: `\`${data.formula}\``,
                 inline: false
             },
             {
-                name: `${conv} units`,
-                value: `${units}`,
+                name: `${data.type} units`,
+                value: `${data.otherUnits}`,
                 inline: false
             }
         ]);
@@ -2644,7 +2542,7 @@ export async function weather(input: extypes.commandInput) {
 
             //get hours 
             const useHrs = weatherData.hourly.precipitation.slice(48, 71);
-            let hrArr = []
+            let hrArr = [];
             let i = 0;
             for (const hour of useHrs) {
                 if (hour > 0) {
