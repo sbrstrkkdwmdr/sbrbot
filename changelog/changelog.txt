@@ -536,3 +536,4 @@ date_time
 commit: null
 changes: 
 [FIX] incorrect capitalisation in tz
+[REM] remove full numbers from convert SI prefix list

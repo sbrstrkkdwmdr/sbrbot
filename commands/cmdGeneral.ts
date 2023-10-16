@@ -548,18 +548,18 @@ export async function convert(input: extypes.commandInput) {
                     name: 'Increments',
                     value:
                         `\`
-Q  | quetta | 10^30 | Nonillion   | 1,000,000,000,000,000,000,000,000,000,000
-R  | ronna  | 10^27 | Octillion   | 1,000,000,000,000,000,000,000,000,000
-Y  | yotta  | 10^24 | Septillion  | 1,000,000,000,000,000,000,000,000
-Z  | zetta  | 10^21 | Sextillion  | 1,000,000,000,000,000,000,000
-E  | exa    | 10^18 | Quintillion | 1,000,000,000,000,000,000
-P  | peta   | 10^15 | Quadrillion | 1,000,000,000,000,000
-T  | tera   | 10^12 | Trillion    | 1,000,000,000,000
-G  | giga   | 10^9  | Billion     | 1,000,000,000
-M  | mega   | 10^6  | Million     | 1,000,000
-k  | kilo   | 10^3  | Thousand    | 1,000
-h  | hecto  | 10^2  | Hundred     | 100
-da | deca   | 10^1  | Ten         | 10
+Q  | quetta | 10^30 | Nonillion  
+R  | ronna  | 10^27 | Octillion  
+Y  | yotta  | 10^24 | Septillion 
+Z  | zetta  | 10^21 | Sextillion 
+E  | exa    | 10^18 | Quintillion
+P  | peta   | 10^15 | Quadrillion
+T  | tera   | 10^12 | Trillion   
+G  | giga   | 10^9  | Billion    
+M  | mega   | 10^6  | Million    
+k  | kilo   | 10^3  | Thousand   
+h  | hecto  | 10^2  | Hundred    
+da | deca   | 10^1  | Ten        
 \``,
                     inline: false
                 },
@@ -567,18 +567,18 @@ da | deca   | 10^1  | Ten         | 10
                     name: 'Decrements',
                     value:
                         `\`
-d | deci   | 10^-1  | Tenth         | 0.1
-c | centi  | 10^-2  | Hundredth     | 0.01
-m | milli  | 10^-3  | Thousandth    | 0.001
-μ | micro  | 10^-6  | Millionth     | 0.000 001
-n | nano   | 10^-9  | Billionth     | 0.000 000 001 
-p | pico   | 10^-12 | Trillionth    | 0.000 000 000 001
-f | femto  | 10^-15 | Quadrillionth | 0.000 000 000 000 001
-a | atto   | 10^-18 | Quintillionth | 0.000 000 000 000 000 001
-z | zepto  | 10^-21 | Sextillionth  | 0.000 000 000 000 000 000 001
-y | yocto  | 10^-24 | Septillionth  | 0.000 000 000 000 000 000 000 001
-r | ronto  | 10^-27 | Octillionth   | 0.000 000 000 000 000 000 000 000 001
-q | quecto | 10^-30 | Nonillionth   | 0.000 000 000 000 000 000 000 000 000 001
+d | deci   | 10^-1  | Tenth        
+c | centi  | 10^-2  | Hundredth    
+m | milli  | 10^-3  | Thousandth   
+μ | micro  | 10^-6  | Millionth    
+n | nano   | 10^-9  | Billionth     
+p | pico   | 10^-12 | Trillionth   
+f | femto  | 10^-15 | Quadrillionth
+a | atto   | 10^-18 | Quintillionth
+z | zepto  | 10^-21 | Sextillionth 
+y | yocto  | 10^-24 | Septillionth 
+r | ronto  | 10^-27 | Octillionth  
+q | quecto | 10^-30 | Nonillionth  
 \``,
                     inline: false
                 }
