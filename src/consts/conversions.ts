@@ -22,8 +22,8 @@ export type convValCalc = {
 
 const namesList = {
     arbitrary: ['Arbitrary units', 'idk', 'wtf', '???', '?'],
-    temp_c: ['Celsius', '℃', 'Celcius', 'Centigrade', 'C',],
-    temp_f: ['Fahrenheit', '℉', 'F'],
+    temp_c: ['Celsius', '℃', '°C', 'Celcius', 'Centigrade', 'C',],
+    temp_f: ['Fahrenheit', '℉', '°F', 'F'],
     temp_k: ['Kelvin', '°K', 'L'],
     dist_in: ['Inch', 'in', '\'', '`'],
     dist_ft: ['Feet', 'ft', 'foot', '"', "''", '``'],

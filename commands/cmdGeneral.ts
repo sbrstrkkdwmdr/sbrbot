@@ -2551,7 +2551,30 @@ export async function weather(input: extypes.commandInput) {
                 }
             }
             const hrTxt = func.formatHours(hrArr);
+            let precip = '';
+            precip += dailyData.rain_sum[2] > 0 ? `Rain: ${dailyData.rain_sum[2]}${weatherUnits.rain_sum}`
+                + `(${calc.convert(weatherUnits.rain_sum, 'inch', dailyData.rain_sum[2]).significantFigures} in)\n`
+                : '';
+            precip += dailyData.showers_sum[2] > 0 ? `Showers: ${dailyData.showers_sum[2]}${weatherUnits.showers_sum}`
+                + `(${calc.convert(weatherUnits.showers_sum, 'inch', dailyData.showers_sum[2]).significantFigures} in)\n`
+                : '';
+            precip += dailyData.snowfall_sum[2] > 0 ? `Snowfall: ${dailyData.snowfall_sum[2]}${weatherUnits.snowfall_sum}`
+                + `(${calc.convert(weatherUnits.snowfall_sum, 'inch', dailyData.snowfall_sum[2]).significantFigures} in)\n`
+                : '';
+            precip += dailyData.precipitation_sum[2] > 0 ? `Total: ${dailyData.precipitation_sum[2]}${weatherUnits.precipitation_sum}`
+                + `(${calc.convert(weatherUnits.precipitation_sum, 'inch', dailyData.precipitation_sum[2]).significantFigures} in)\n`
+                : '';
+            precip += dailyData.precipitation_hours[2] > 0 ? `Hours: ${hrTxt}` : '';
 
+            const windtxt =
+                `Current: ${curData.windspeed}${weatherUnits.windspeed_10m_max} (${calc.convert(weatherUnits.windspeed_10m_max, 'mph', curData.windspeed).significantFigures} mph) ${windDir.short}${windDir.emoji} ${curData.winddirection}°
+Max speed: ${dailyData.windspeed_10m_max[2]}${weatherUnits.windspeed_10m_max} (${calc.convert(weatherUnits.windspeed_10m_max, 'mph', dailyData.windspeed_10m_max[2]).significantFigures} mph)
+Max Gusts: ${dailyData.windgusts_10m_max[2]}${weatherUnits.windgusts_10m_max} (${calc.convert(weatherUnits.windgusts_10m_max, 'mph', dailyData.windgusts_10m_max[2]).significantFigures} mph)`;
+const temptxt = `
+Current: ${curData.temperature}${weatherUnits.temperature_2m_max} (${calc.convert(weatherUnits.temperature_2m_max, `fahrenheit`, curData.temperature).significantFigures}℉)
+Min: ${dailyData.temperature_2m_min[2]}${weatherUnits.temperature_2m_max} (${calc.convert(weatherUnits.temperature_2m_max, `fahrenheit`, dailyData.temperature_2m_min[2]).significantFigures}℉)
+Max: ${dailyData.temperature_2m_max[2]}${weatherUnits.temperature_2m_max} (${calc.convert(weatherUnits.temperature_2m_max, `fahrenheit`, dailyData.temperature_2m_max[2]).significantFigures}℉)
+`
             weatherEmbed
                 .setFooter({ text: `input: ${name}` })
                 .setTitle(`Weather for ${location.name}`);
@@ -2575,26 +2598,19 @@ Sunset: ${dailyData.sunset[2]}
                 },
                 {
                     name: `Temperature`,
-                    value: `
-Current: ${curData.temperature}${weatherUnits.temperature_2m_max}
-Min: ${dailyData.temperature_2m_min[2]}${weatherUnits.temperature_2m_max}
-Max: ${dailyData.temperature_2m_max[2]}${weatherUnits.temperature_2m_max}
-`,
+                    value: temptxt,
                     inline: true
                 },
                 {
                     name: `Precipitation`,
                     value: `
 Probability: (${dailyData.precipitation_probability_min[2]}% - ${dailyData.precipitation_probability_max[2]}%)
-${dailyData.rain_sum[2] > 0 ? `Rain: ${dailyData.rain_sum[2]}${weatherUnits.rain_sum}\n` : ''}${dailyData.showers_sum[2] > 0 ? `Showers: ${dailyData.showers_sum[2]}${weatherUnits.showers_sum}\n` : ''}${dailyData.snowfall_sum[2] > 0 ? `Snowfall: ${dailyData.snowfall_sum[2]}${weatherUnits.snowfall_sum}\n` : ''}${dailyData.precipitation_sum[2] > 0 ? `Total: ${dailyData.precipitation_sum[2]}${weatherUnits.precipitation_sum}\n` : ''}${dailyData.precipitation_hours[2] > 0 ? `Hours: ${hrTxt}\n` : ''}`,
+${precip}`,
                     inline: true
                 },
                 {
                     name: `Wind`,
-                    value: `
-Current: ${curData.windspeed}${weatherUnits.windspeed_10m_max} ${windDir.short}${windDir.emoji} (${curData.winddirection}°)
-Max speed: ${dailyData.windspeed_10m_max[2]}${weatherUnits.windspeed_10m_max}
-Max Gusts: ${dailyData.windgusts_10m_max[2]}${weatherUnits.windgusts_10m_max}
+                    value: `${windtxt}
 Dominant Direction: ${maxWindDir.short}${maxWindDir.emoji} (${dailyData.winddirection_10m_dominant[2]}°)
 `,
                     inline: true

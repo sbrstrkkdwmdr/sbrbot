@@ -805,6 +805,16 @@ export function convert(input: string, output: string, value: number) {
             }
         }
     }
+    return {
+        formula,
+        outvalue,
+        type,
+        hasErr,
+        extra,
+        significantFigures,
+        change,
+        otherUnits,
+    };
 }
 
 

@@ -539,3 +539,5 @@ changes:
 [REM] remove full numbers from convert SI prefix list
 [QOL] move conversions to a separate function
 [FIX] remove "." at the ends of sig fig numbers if there are no trailing digits
+[QOL] added imperial units to weather cmd
+[ADD] added aliases to temp conversions
