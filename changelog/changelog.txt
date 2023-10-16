@@ -541,3 +541,4 @@ changes:
 [FIX] remove "." at the ends of sig fig numbers if there are no trailing digits
 [QOL] added imperial units to weather cmd
 [ADD] added aliases to temp conversions
+[FIX] weather precipitation hours being incorrect - hours would always be consecutive (ie 01:00, 02:00, 03:00 instead of 01:00, 03:00, 04:00)

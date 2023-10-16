@@ -2547,9 +2547,11 @@ export async function weather(input: extypes.commandInput) {
             for (const hour of useHrs) {
                 if (hour > 0) {
                     hrArr.push(`${i}`.length == 1 ? `0${i}:00` : `${i}:00`);
-                    i++;
                 }
+                i++;
             }
+            console.log(hrArr);
+            console.log(useHrs);
             const hrTxt = func.formatHours(hrArr);
             let precip = '';
             precip += dailyData.rain_sum[2] > 0 ? `Rain: ${dailyData.rain_sum[2]}${weatherUnits.rain_sum}`
@@ -2559,7 +2561,7 @@ export async function weather(input: extypes.commandInput) {
                 + `(${calc.convert(weatherUnits.showers_sum, 'inch', dailyData.showers_sum[2]).significantFigures} in)\n`
                 : '';
             precip += dailyData.snowfall_sum[2] > 0 ? `Snowfall: ${dailyData.snowfall_sum[2]}${weatherUnits.snowfall_sum}`
-                + `(${calc.convert(weatherUnits.snowfall_sum, 'inch', dailyData.snowfall_sum[2]).significantFigures} in)\n`
+                + `(${calc.convert(weatherUnits.snowfall_sum, 'ft', dailyData.snowfall_sum[2]).significantFigures} ft)\n`
                 : '';
             precip += dailyData.precipitation_sum[2] > 0 ? `Total: ${dailyData.precipitation_sum[2]}${weatherUnits.precipitation_sum}`
                 + `(${calc.convert(weatherUnits.precipitation_sum, 'inch', dailyData.precipitation_sum[2]).significantFigures} in)\n`
@@ -2570,11 +2572,11 @@ export async function weather(input: extypes.commandInput) {
                 `Current: ${curData.windspeed}${weatherUnits.windspeed_10m_max} (${calc.convert(weatherUnits.windspeed_10m_max, 'mph', curData.windspeed).significantFigures} mph) ${windDir.short}${windDir.emoji} ${curData.winddirection}°
 Max speed: ${dailyData.windspeed_10m_max[2]}${weatherUnits.windspeed_10m_max} (${calc.convert(weatherUnits.windspeed_10m_max, 'mph', dailyData.windspeed_10m_max[2]).significantFigures} mph)
 Max Gusts: ${dailyData.windgusts_10m_max[2]}${weatherUnits.windgusts_10m_max} (${calc.convert(weatherUnits.windgusts_10m_max, 'mph', dailyData.windgusts_10m_max[2]).significantFigures} mph)`;
-const temptxt = `
+            const temptxt = `
 Current: ${curData.temperature}${weatherUnits.temperature_2m_max} (${calc.convert(weatherUnits.temperature_2m_max, `fahrenheit`, curData.temperature).significantFigures}℉)
 Min: ${dailyData.temperature_2m_min[2]}${weatherUnits.temperature_2m_max} (${calc.convert(weatherUnits.temperature_2m_max, `fahrenheit`, dailyData.temperature_2m_min[2]).significantFigures}℉)
 Max: ${dailyData.temperature_2m_max[2]}${weatherUnits.temperature_2m_max} (${calc.convert(weatherUnits.temperature_2m_max, `fahrenheit`, dailyData.temperature_2m_max[2]).significantFigures}℉)
-`
+`;
             weatherEmbed
                 .setFooter({ text: `input: ${name}` })
                 .setTitle(`Weather for ${location.name}`);
