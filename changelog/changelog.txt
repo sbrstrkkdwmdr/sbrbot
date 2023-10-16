@@ -542,3 +542,4 @@ changes:
 [QOL] added imperial units to weather cmd
 [ADD] added aliases to temp conversions
 [FIX] weather precipitation hours being incorrect - hours would always be consecutive (ie 01:00, 02:00, 03:00 instead of 01:00, 03:00, 04:00)
+[FIX] remove starting 0s on sig figs

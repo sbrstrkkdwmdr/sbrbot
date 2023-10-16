@@ -79,31 +79,54 @@ export function sigfig(a: number, b: number) {
 
 export function toScientificNotation(number: number, significantFigures: number) {
     let tNum: string = null;
-    if (number !== 0) {
-        const exponent = Math.floor(Math.log10(Math.abs(number)));
-        const mantissa = (number / Math.pow(10, exponent)).toFixed(significantFigures - 1);
-        const scientificNotation = +mantissa * Math.pow(10, exponent);
-        if (scientificNotation !== number) {
-            if (exponent !== 0 && exponent !== 1) {
-                tNum = `${mantissa}e${exponent}`;
-            } else if (exponent == 0) {
-                tNum = `${mantissa}`;
-            } else if (exponent == 1 && significantFigures > 2) {
-                tNum = `${+mantissa * 10}`;
+    const numString = number.toString().replace(/[-.]/g, ''); // Remove "-" and "."
+    const eIndex = numString.indexOf('e');
+    const numLength = eIndex !== -1 ? eIndex : numString.length;
+
+
+    if (numLength <= significantFigures) {
+        tNum = `${number}`;
+    } else if (number !== 0) {
+        let exponent = 0;
+        while (number < 1 || number >= 10) {
+            if (number < 1) {
+                number *= 10;
+                exponent--;
+            } else if (number >= 10) {
+                number /= 10;
+                exponent++;
             }
         }
+        if (exponent == 1) {
+            number *= 10;
+            exponent = 0;
+        } else if (exponent == -1) {
+            number /= 10;
+            exponent = 0;
+        }
+
+        let mantissa = number.toFixed(significantFigures - 1);
+        // Code to ensure the number has the correct number of significant figures
+        let xFig = significantFigures + (mantissa.match(/[-.]/g) || []).length;
+        mantissa = mantissa.slice(0, xFig);
+        if (exponent !== 0) {
+            tNum = `${mantissa}e${exponent}`;
+        } else {
+            tNum = mantissa;
+        }
+    } else {
+        tNum = '0';
     }
-    tNum = `${number}`;
-    if (tNum.replaceAll('-', '').replaceAll('.', '').length != significantFigures) {
-        let xFig = significantFigures + (tNum.match(/[-.]/g) || []).length;
-        //cut number to be xFig long
-        tNum = tNum.slice(0, xFig);
-    }
+
+
     if (tNum.endsWith('.')) {
         tNum = tNum.replace('.', '');
     }
+
     return tNum;
 }
+
+
 
 export function getSigFigs(number: string) {
     return `${number.includes('e') ? number.split('e')[0] : number}`.replace(/[\.\-]/gm, '').length;
