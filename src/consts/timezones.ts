@@ -1527,7 +1527,12 @@ export const hasDaylight: {
                 'England', //^ 
                 'Scotland', //^ 
                 'Wales', //^ 
-                'Vatican City', 'Civitas Vaticana', 'Città del Vaticano', 'Holy See', 'VA', 'VAT'
+                'Vatican City', 'Civitas Vaticana', 'Città del Vaticano', 'Holy See', 'VA', 'VAT',
+                'WET',
+                'GMT',
+                'CET',
+                'EET',
+                'MSK'
             ],
             check: ((date) => {
                 if (isLastDayOfWeekMonth(date, 0) && isDateBetweenMonths(date, 3, 10)) {
@@ -1707,6 +1712,15 @@ export const hasDaylight: {
                 'Florida',//^ state //excl. W panhandle
                 'Tallahassee', //^ state capital
                 'Miami', //^ major city
+                'AKST',
+                'PST',
+                'PT',
+                'MST',
+                'MT',
+                'CST',
+                'CT',
+                'EST',
+                'ET',
             ],
             check: ((date) => {
                 if (isDateBetweenMonths(date, 4, 11)) {

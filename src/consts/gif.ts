@@ -83,4 +83,5 @@ export const pet: string[] = [
     'https://media.tenor.com/GPeAwtOCjY8AAAAM/anime-pet.gif',
     'https://media.tenor.com/v_2iFqgV904AAAAM/anime-pat.gif',
     'https://media.tenor.com/bfpRP4Feg3oAAAAM/pet-anime.gif',
+    'https://tenor.com/view/kitten-kittens-cute-pet-give-me-attention-gif-12816949',
 ];
