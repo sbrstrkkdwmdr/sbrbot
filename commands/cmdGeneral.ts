@@ -2938,7 +2938,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
         const hurname = basinType == 'Cyclone' ?
             catData.name_auid : basinType == 'Typhoon' ? catData.name_asia :
                 catData.name;
-        const windDir = func.windToDirection(data.movement.bearing, true);
+        const windDir = func.windToDirection(data?.movement?.bearing ?? 0, true);
         const altName = data.id.slice(4, data.id.length);
         const fullname = calc.checkIsNumber(data.name) ? altName :
             `${data.name} (${altName})`;
@@ -2961,7 +2961,6 @@ export async function tropicalWeather(input: extypes.commandInput) {
         } else {
             tempPos.push('S');
         }
-
         const pos = `${Math.abs(data.position[0])}${tempPos[0]}, ${Math.abs(data.position[1])}${tempPos[1]}`;
         // switch (basin) {
         //     case 'North Atlantic': case 'Northeast Pacific': case 'Central Pacific':
@@ -2981,15 +2980,13 @@ export async function tropicalWeather(input: extypes.commandInput) {
         //         break;
         // }
 
-
         embed.setTitle(`${hurname} ${fullname}`)
             .setDescription(`Location: ${basin} Basin (${pos})
-Direction: ${windDir.emoji} ${data.movement.KPH}km/h ${data.movement.MPH}mi/h ${data.movement.KTS}kt/s
+Direction: ${windDir.emoji} ${data?.movement?.KPH ?? 'NaN '}km/h ${data?.movement?.MPH ?? 'NaN '}mi/h ${data?.movement?.KTS ?? 'NaN '}kt/s
 Peak: ${phurname}
 `)
             .setImage(`https://www.force-13.com/floaters/${altName.replace('N', 'L')}/imagery/rb-animated.gif`)
             .setURL(`https://www.force-13.com/satellite?flt=${altName.replace('N', 'L')}`)
-            //.png
             //-animated.gif
             /**
              * types
@@ -2999,10 +2996,8 @@ Peak: ${phurname}
              * rgb:
              * 
              */
-            .setColor(colourfunc.hexToDec(`#${catData.colour}`))
-            ;
+            .setColor(colourfunc.hexToDec(`#${catData.colour}`));
     }
-
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({

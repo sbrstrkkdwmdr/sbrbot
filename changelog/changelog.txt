@@ -544,3 +544,4 @@ changes:
 [FIX] weather precipitation hours being incorrect - hours would always be consecutive (ie 01:00, 02:00, 03:00 instead of 01:00, 03:00, 04:00)
 [FIX] remove leading 0s on sig figs
 [QOL] fixed missing timezones from dst
+[FIX] ts endlessly hanging when selecting a storm
