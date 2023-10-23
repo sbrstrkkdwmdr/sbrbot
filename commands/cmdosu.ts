@@ -3371,10 +3371,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
     } else {
         switch (scoredetailed) {
             case 0: case 2: {
-                let temptxt = '\n';
-                for (let i = 0; i < scoresarg.string.length; i++) {
-                    temptxt += scoresarg.string[i];
-                }
+                let temptxt = '\n' + scoresarg.string.join('');
                 firstsEmbed.setDescription(
                     `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
                     + temptxt
@@ -4590,15 +4587,15 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             filteredMapper,
             filteredMods,
             filterMapTitle: filterTitle,
-            filterRank: filterRank,
-            reverse: reverse,
-            exactMods: exactMods,
-            pp: pp,
-            score: score,
-            acc: acc,
-            combo: combo,
-            miss: miss,
-            bpm: bpm
+            filterRank,
+            reverse,
+            exactMods,
+            pp,
+            score,
+            acc,
+            combo,
+            miss,
+            bpm
         },
         {
             useScoreMap: true
@@ -4619,10 +4616,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     } else {
         switch (scoredetailed) {
             case 0: case 2: {
-                let temptxt = '\n';
-                for (let i = 0; i < scoresarg.string.length; i++) {
-                    temptxt += scoresarg.string[i];
-                }
+                let temptxt = '\n' + scoresarg.string.join('');
                 topEmbed.setDescription(
                     `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}`
                     + temptxt
@@ -5154,10 +5148,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     } else {
         switch (scoredetailed) {
             case 0: case 2: {
-                let temptxt = '\n';
-                for (let i = 0; i < scoresarg.string.length; i++) {
-                    temptxt += scoresarg.string[i];
-                }
+                let temptxt = '\n' + scoresarg.string.join('');
                 pinnedEmbed.setDescription(
                     `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
                     + temptxt
@@ -6285,10 +6276,10 @@ ${srStr}
                 scores: rsdata,
                 detailed: scoredetailed,
                 showWeights: false,
-                page: page,
+                page,
                 showMapTitle: true,
                 showTruePosition: (sort != 'recent'),
-                sort: sort,
+                sort,
                 truePosType: 'recent',
                 filteredMapper: null,
                 filteredMods: null,
@@ -6318,14 +6309,26 @@ ${srStr}
             (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
             (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         } else {
-            for (let i = 0; scoresarg.fields.length > i; i++) {
-                rsEmbed.addFields(scoresarg.fields[i]);
+            switch (scoredetailed) {
+                case 0: case 2: {
+                    let txt = `Page: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
+                    ${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}
+                    ${filterTitle ? `Filter: ${filterTitle}\n` : ''}` + scoresarg.string.join('');
+                    rsEmbed.setDescription(txt);
+                }
+                    break;
+                case 1: default: {
+                    rsEmbed.setDescription(`Page: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
+                    ${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}
+                    ${filterTitle ? `Filter: ${filterTitle}` : ''}
+                    `);
+                    for (let i = 0; i < scoresarg.fields.length; i++) {
+                        rsEmbed.addFields([scoresarg.fields[i]]);
+                    }
+                }
+                    break;
             }
         }
-        rsEmbed.setDescription(`Page: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
-${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}
-${filterTitle ? `Filter: ${filterTitle}` : ''}
-`);
         if (scoresarg.isFirstPage) {
             (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
             (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
@@ -8679,10 +8682,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     } else {
         switch (scoredetailed) {
             case 0: case 2: {
-                let temptxt = '\n';
-                for (let i = 0; i < scoresarg.string.length; i++) {
-                    temptxt += scoresarg.string[i];
-                }
+                let temptxt = '\n' + scoresarg.string.join('');
                 scoresEmbed.setDescription(
                     `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}`
                     + temptxt
@@ -13496,10 +13496,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
     } else {
         switch (mapDetailed) {
             case 0: case 2: {
-                let temptxt = '\n';
-                for (let i = 0; i < mapsarg.string.length; i++) {
-                    temptxt += mapsarg.string[i];
-                }
+                let temptxt = '\n' + mapsarg.string.join('');
                 mapList.setDescription(
                     `
 ${mapsarg.filter}

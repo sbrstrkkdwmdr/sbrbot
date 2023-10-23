@@ -545,3 +545,4 @@ changes:
 [FIX] remove leading 0s on sig figs
 [QOL] fixed missing timezones from dst
 [FIX] ts endlessly hanging when selecting a storm
+[QOL] make rs embeds use string ver like other score list commands
