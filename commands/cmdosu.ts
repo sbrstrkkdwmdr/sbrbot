@@ -3379,9 +3379,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
             }
                 break;
             case 1: default: {
-                for (let i = 0; i < scoresarg.fields.length; i++) {
-                    firstsEmbed.addFields([scoresarg.fields[i]]);
-                }
+                firstsEmbed.addFields(scoresarg.fields);
             }
                 break;
         }
@@ -3876,9 +3874,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
 
         } else {
-            for (let i = 0; i < scoresarg.fields.length; i++) {
-                lbEmbed.addFields([scoresarg.fields[i]]);
-            }
+            lbEmbed.addFields(scoresarg.fields);
         }
 
         lbEmbed.setDescription(`Page: ${scoresarg.usedPage + 1}/${Math.ceil(scoresarg.maxPages)}`);
@@ -4624,9 +4620,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             }
                 break;
             case 1: default: {
-                for (let i = 0; i < scoresarg.fields.length; i++) {
-                    topEmbed.addFields([scoresarg.fields[i]]);
-                }
+                topEmbed.addFields(scoresarg.fields);
             }
                 break;
         }
@@ -6322,9 +6316,7 @@ ${srStr}
                     ${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}
                     ${filterTitle ? `Filter: ${filterTitle}` : ''}
                     `);
-                    for (let i = 0; i < scoresarg.fields.length; i++) {
-                        rsEmbed.addFields([scoresarg.fields[i]]);
-                    }
+                    rsEmbed.addFields(scoresarg.fields);
                 }
                     break;
             }
@@ -8690,9 +8682,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             }
                 break;
             case 1: default: {
-                for (let i = 0; i < scoresarg.fields.length; i++) {
-                    scoresEmbed.addFields([scoresarg.fields[i]]);
-                }
+                scoresEmbed.addFields(scoresarg.fields);
             }
                 break;
         }
