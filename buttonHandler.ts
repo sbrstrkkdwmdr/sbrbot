@@ -85,7 +85,8 @@ export default (input: {
 
         const PageOnlyCommands = [
             'firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'recentactivity', 'scores', 'userbeatmaps',
-            'changelog'
+            'changelog', 
+            'ytsearch',
         ];
         const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores'];
         if (button == 'Search' && PageOnlyCommands.includes(command)) {
