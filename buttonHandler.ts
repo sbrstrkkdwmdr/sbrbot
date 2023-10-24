@@ -85,7 +85,7 @@ export default (input: {
 
         const PageOnlyCommands = [
             'firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'recentactivity', 'scores', 'userbeatmaps',
-            'changelog', 
+            'changelog',
             'ytsearch',
         ];
         const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores'];
@@ -306,6 +306,9 @@ export default (input: {
                 break;
             case 'tropicalweather':
                 await commands.tropicalWeather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
+            case 'ytsearch':
+                await misccmds.ytsearch({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
         }
         fs.appendFileSync(`${path}/logs/totalcommands.txt`, 'x');

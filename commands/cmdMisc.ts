@@ -1089,7 +1089,7 @@ export async function ytsearch(input: extypes.commandInput) {
 
     let commanduser;
     let query: string;
-
+    let pg = 1;
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
@@ -1112,13 +1112,34 @@ export async function ytsearch(input: extypes.commandInput) {
         case 'button': {
             input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
+            switch (input.button) {
+                //pg says 
+                case 'BigLeftArrow':
+                    pg = 1;
+                    break;
+                case 'LeftArrow':
+                    pg = +((input.obj.message.embeds[0].footer.text).split('Page: ')[1].split('/')[0]) - 1;
+                    break;
+                case 'RightArrow':
+                    pg = +((input.obj.message.embeds[0].footer.text).split('Page: ')[1].split('/')[0]) + 1;
+                    break;
+                case 'BigRightArrow':
+                    pg = +((input.obj.message.embeds[0].footer.text).split('Page: ')[1].split('/')[1].split('\n')[0]);
+                    break;
+                default:
+                    pg = +((input.obj.message.embeds[0].footer.text).split('Page: ')[1].split('/')[0]);
+                    break;
+            }
+            if (isNaN(+(input.obj.message.embeds[0].footer.text).split('Page: ')[1].split('/')[0]) || ((input.obj.message.embeds[0].footer.text).split('Page: ')[1].split('/')[0]) == 'NaN') {
+                pg = 1;
+            }
+            query = input.obj.message.embeds[0].footer.text.split('Query: ')[1];
         }
             break;
     }
 
 
     //==============================================================================================================================================================================================
-
     log.logCommand({
         event: 'Command',
         commandType: input.commandType,
@@ -1130,12 +1151,31 @@ export async function ytsearch(input: extypes.commandInput) {
             {
                 name: 'Query',
                 value: query
+            },
+            {
+                name: 'Page',
+                value: pg
             }
         ],
         config: input.config
     });
 
+    if (input.overrides != null) {
+        if (input.overrides.page != null) {
+            pg = input.overrides.page;
+        }
+    }
+
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+    const pgbuttons = await msgfunc.pageButtons('ytsearch', commanduser, input.absoluteID);
+    if (pg <= 1) {
+        pg = 1;
+    }
+    if (input.commandType == 'button' && pg >= +(((input.obj as Discord.ButtonInteraction).message.embeds[0].footer.text).split('Page: ')[1].split('/')[1].split('\n')[0])) {
+        pg = +(((input.obj as Discord.ButtonInteraction).message.embeds[0].footer.text).split('Page: ')[1].split('/')[1].split('\n')[0]);
+    }
+    pg--;
+
 
     if (!query || query.length < 1) {
         await msgfunc.sendMessage({
@@ -1152,30 +1192,50 @@ export async function ytsearch(input: extypes.commandInput) {
         .setTitle(`YouTube search results for: ${query}`)
         .setColor(colours.embedColour.query.dec);
 
-    const initSearch: extypes.ytSearch = await yts.search(query);
-    fs.writeFileSync(`debug/command-ytsearch=ytsSearch=${input.obj.guildId}.json`, JSON.stringify(initSearch, null, 4), 'utf-8');
+    let initSearch: extypes.ytSearch;
+    if (func.findFile(`${query.replaceAll(/[^a-zA-Z0-9-]/g, '+')}`, 'ytsearch') &&
+        !('error' in func.findFile(`${query.replaceAll(/[^a-zA-Z0-9-]/g, '+')}`, 'ytsearch')) &&
+        input.button != 'Refresh'
+    ) {
+        initSearch = func.findFile(`${query.replaceAll(/[^a-zA-Z0-9-]/g, '+')}`, 'ytsearch');
+    } else {
+        initSearch = await yts.search(query);
+    }
 
+    fs.writeFileSync(`debug/command-ytsearch=ytsSearch=${input.obj.guildId}.json`, JSON.stringify(initSearch, null, 4), 'utf-8');
+    func.storeFile(initSearch as any, `${query.replaceAll(/[^a-zA-Z0-9-]/g, '+')}`, 'ytsearch');
 
     if (initSearch.videos.length < 1) {
         searchEmbed.setDescription('No results found.');
     } else {
         const objs = initSearch.videos;
-        for (let i = 0; i < 5 && i < objs.length; i++) {
-            const curItem = objs[i];
+        for (let i = 0; i < 5 && i + (pg * 5) < objs.length; i++) {
+            const curItem = objs[i + (pg * 5)];
+            if (!curItem) break;
+            const desc = curItem.description.length > 50 ?
+                curItem.description.slice(0, 50) + '...' : curItem.description;
             searchEmbed.addFields([
                 {
-                    name: `#${i + 1}`,
+                    name: `#${i + (pg * 5) + 1}`,
                     value: `[${curItem.title}](${curItem.url})
 Published by [${curItem.author.name}](${curItem.author.url}) ${curItem.ago}
 Duration: ${curItem.timestamp} (${curItem.duration.seconds}s)
-Description: \`${curItem.description}\`
+Description: \`${desc}\`
 `,
                     inline: false
                 }
             ]);
         }
+        searchEmbed.setFooter({ text: `Page: ${pg + 1}/${Math.ceil(objs.length / 5)}\nQuery: ${query}` });
     }
-
+    if (pg <= 1) {
+        (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
+    }
+    if (pg + 1 >= Math.ceil(initSearch.videos.length / 5)) {
+        (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
+        (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
+    }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
@@ -1183,7 +1243,8 @@ Description: \`${curItem.description}\`
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [searchEmbed]
+            embeds: [searchEmbed],
+            components: [pgbuttons]
         }
     }, input.canReply);
 

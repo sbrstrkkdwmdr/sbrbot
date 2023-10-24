@@ -546,3 +546,4 @@ changes:
 [QOL] fixed missing timezones from dst
 [FIX] ts endlessly hanging when selecting a storm
 [QOL] make rs embeds use string ver like other score list commands
+[ADD] added page buttons to ytsearch

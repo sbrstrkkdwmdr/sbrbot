@@ -1013,7 +1013,6 @@ export async function lb(input: extypes.commandInput) {
     const timeelapsed = endofcommand - input.currentDate.getTime();
 
     if (page <= 1) {
-
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
