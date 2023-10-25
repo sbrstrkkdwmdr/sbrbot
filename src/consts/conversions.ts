@@ -3729,7 +3729,7 @@ export const values: convVal[] = [
     },
     {
         name: 'British Thermal Unit',
-        names: namesList.nrg_cal,
+        names: namesList.nrg_btu,
         type: 'Energy',
         system: 'Imperial',
         calc: [
@@ -3778,9 +3778,9 @@ export const values: convVal[] = [
     },
     {
         name: 'Watt hour',
-        names: namesList.nrg_cal,
+        names: namesList.nrg_wh,
         type: 'Energy',
-        system: 'N/A',
+        system: 'Metric',
         calc: [
             {
                 to: 'Electron Volt',

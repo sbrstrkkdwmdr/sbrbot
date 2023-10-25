@@ -710,14 +710,15 @@ export function convert(input: string, output: string, value: number) {
     let hasErr = false;
     let usePre1 = true;
     let usePre2 = true;
-    let formula: string, type: string, outvalue: number, extra: string, significantFigures: string, change: string, otherUnits: string;
+    let formula: string = 'Conversion not found';
+    let type: string = 'Invalid';
+    let outvalue: number = NaN;
+    let extra: string;
+    let otherUnits: string = '-';
+    let significantFigures: string = 'NaN';
+    let change: string = 'Error';
     const numAsStr: string = value.toString();
     function inval() {
-        formula = 'Conversion not found';
-        outvalue = NaN;
-        type = 'INVALID';
-        significantFigures = 'NaN';
-        change = 'ERR';
         hasErr = true;
     }
     function toName(x: conversions.convVal | conversions.convValCalc) {

@@ -424,15 +424,9 @@ export async function convert(input: extypes.commandInput) {
 
     const embedres = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
-        .setDescription('⠀');
+        // .setDescription('⠀');
 
     let useEmbeds = [];
-
-    let conv = 'Unknown';
-    let convtype = `${cat1} to ${cat2}`;
-    let eq = 'Unknown';
-    let formula = 'Unknown';
-    let units = 'Unknown';
 
     let converting = true;
 
@@ -590,19 +584,14 @@ q | quecto | 10^-30 | Nonillionth
         //find
         const data = calc.convert(cat1, cat2, num);
 
-        if (data.hasErr) {
-            error('nf');
-        }
-        embedres.setTitle(`${conv} conversion`);
+        embedres.setTitle(`${data.type} conversion`);
         embedres.addFields([
             {
                 name: `${data.change}`,
                 value:
                     `
-\`
-Full: ${data.outvalue}
-SF:   ${data.significantFigures}
-\`   
+\`Full: ${data.outvalue}
+SF:   ${data.significantFigures}\`   
 `,
                 inline: false
             },
@@ -618,26 +607,6 @@ SF:   ${data.significantFigures}
             }
         ]);
         useEmbeds.push(embedres);
-    }
-
-
-    function error(string: 'nf' | 'invalid', c1?: string, c2?: string) {
-        switch (string) {
-            case 'nf': default: {
-                conv = 'Invalid conversion';
-                convtype = 'Error';
-                eq = `Could not find \`${c1 ?? cat1}\` and/or \`${c2 ?? cat2}\``;
-                formula = '???';
-            }
-                break;
-            case 'invalid': {
-                conv = 'Invalid conversion';
-                convtype = 'Error';
-                eq = `Cannot convert \`${c1 ?? cat1}\` to \`${c2 ?? cat2}\``;
-                formula = '???';
-            }
-                break;
-        }
     }
 
     //SEND/EDIT MSG==============================================================================================================================================================================================

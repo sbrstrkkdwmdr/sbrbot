@@ -306,8 +306,17 @@ export default (input: {
     }
 
     async function getOnlineChangelog() {
-        const data = await axios.get(`https://raw.githubusercontent.com/sbrstrkkdwmdr/sbrbot/main/changelog/changelog.txt`);
-        fs.writeFileSync(`${path}\\cache\\changelog.txt`, data.data);
+        await axios.get(`https://raw.githubusercontent.com/sbrstrkkdwmdr/sbrbot/main/changelog/changelog.txt`)
+            .then(data => {
+                fs.writeFileSync(`${path}\\cache\\changelog.txt`, data.data);
+            })
+            .catch(error => {
+                console.log('ERROR FETCHING GIT');
+                log.logFile(
+                    'err',
+                    log.errLog('err', JSON.stringify(error))
+                )
+            });
     }
 
     /**
