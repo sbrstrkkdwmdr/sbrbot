@@ -510,16 +510,16 @@ export function shorthandNumber(number: number, decimal?: number) {
     if (!decimal) {
         decimal = 2;
     }
-    if (number > 10 ** 12) {
+    if (number > 10e12) {
         newNum = (number / 1000).toFixed(decimal) + 'T';
     }
-    if (number > 10 ** 9) {
+    if (number > 10e9) {
         newNum = (number / 1000).toFixed(decimal) + 'B';
     }
-    if (number > 10 ** 6) {
+    if (number > 10e6) {
         newNum = (number / 1000).toFixed(decimal) + 'M';
     }
-    if (number > 10 ** 3) {
+    if (number > 10e3) {
         newNum = (number / 1000).toFixed(decimal) + 'k';
     }
     return newNum;

@@ -68,6 +68,8 @@ const namesList = {
     nrg_ev: ['Electron Volt', 'eV', 'Electronvolt'],
     nrg_j: ['Joule', 'j'],
     nrg_cal: ['Calorie', 'cal'],
+    nrg_btu: ['British Thermal Unit', 'btu'],
+    nrg_wh: ['Watt Hour', 'wH'],
     area_ft2: ['Square foot', 'ft²', 'ft2', 'sqft'],
     area_m2: ['Square metre', 'm²', 'm2', 'sqm'],
     area_ac: ['Acre', 'ac'],
@@ -3039,7 +3041,7 @@ export const values: convVal[] = [
                 to: 'Metric Tonne',
                 names: namesList.mass_mt,
                 func: (x) => {
-                    return x / (10 ** 6);
+                    return x / 10e6;
                 },
                 text: 'x/10^6'
             },
@@ -3284,7 +3286,7 @@ export const values: convVal[] = [
                 to: 'Gram',
                 names: namesList.mass_g,
                 func: (x) => {
-                    return x * (10 ** 6);
+                    return x * 10e6;
                 },
                 text: 'x*10^6'
             },
@@ -3596,7 +3598,7 @@ export const values: convVal[] = [
                 to: 'Joule',
                 names: namesList.nrg_j,
                 func: (x) => {
-                    return x / (6.242 * 10 ** 18);
+                    return x / 6.242e18;
                 },
                 text: 'x/(6.242*10^18)'
             },
@@ -3604,9 +3606,25 @@ export const values: convVal[] = [
                 to: 'Calorie',
                 names: namesList.nrg_cal,
                 func: (x) => {
-                    return x / (2.611 * 10 ** 19);
+                    return x / 2.611e19;
                 },
                 text: 'x/(2.611*10^19)'
+            },
+            {
+                to: 'British Thermal Unit',
+                names: namesList.nrg_btu,
+                func: (x) => {
+                    return x / 6.585e21;
+                },
+                text: 'x/(6.585*10^21)'
+            },
+            {
+                to: 'Watt Hour',
+                names: namesList.nrg_wh,
+                func: (x) => {
+                    return x / 2.247e22;
+                },
+                text: 'x/(2.247*10^22)'
             },
             toArbitrary
         ]
@@ -3621,7 +3639,7 @@ export const values: convVal[] = [
                 to: 'Electron Volt',
                 names: namesList.nrg_ev,
                 func: (x) => {
-                    return x * (6.242 * 10 ** 18);
+                    return x * 6.242e18;
                 },
                 text: 'x*(6.242*10^18)'
             },
@@ -3641,6 +3659,22 @@ export const values: convVal[] = [
                 },
                 text: 'x/4.184'
             },
+            {
+                to: 'British Thermal Unit',
+                names: namesList.nrg_btu,
+                func: (x) => {
+                    return x / 1055.06;
+                },
+                text: 'x/1055.06'
+            },
+            {
+                to: 'Watt Hour',
+                names: namesList.nrg_wh,
+                func: (x) => {
+                    return x / 3600;
+                },
+                text: 'x/3600'
+            },
             toArbitrary
         ]
     },
@@ -3654,7 +3688,7 @@ export const values: convVal[] = [
                 to: 'Electron Volt',
                 names: namesList.nrg_ev,
                 func: (x) => {
-                    return x / (2.611 * 10 ** 19);
+                    return x / 2.611e19;
                 },
                 text: 'x/(2.611*10^19)'
             },
@@ -3669,6 +3703,120 @@ export const values: convVal[] = [
             {
                 to: 'Calorie',
                 names: namesList.nrg_cal,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'British Thermal Unit',
+                names: namesList.nrg_btu,
+                func: (x) => {
+                    return x / 252.164;
+                },
+                text: 'x/252.164'
+            },
+            {
+                to: 'Watt Hour',
+                names: namesList.nrg_wh,
+                func: (x) => {
+                    return x / 860.421;
+                },
+                text: 'x/860.421'
+            },
+            toArbitrary
+        ]
+    },
+    {
+        name: 'British Thermal Unit',
+        names: namesList.nrg_cal,
+        type: 'Energy',
+        system: 'Imperial',
+        calc: [
+            {
+                to: 'Electron Volt',
+                names: namesList.nrg_ev,
+                func: (x) => {
+                    return x * 6.585e21;
+                },
+                text: 'x*6.585*10^21'
+            },
+            {
+                to: 'Joule',
+                names: namesList.nrg_j,
+                func: (x) => {
+                    return x * 1055.05;
+                },
+                text: 'x*1055.06'
+            },
+            {
+                to: 'Calorie',
+                names: namesList.nrg_cal,
+                func: (x) => {
+                    return x * 252.164;
+                },
+                text: 'x*252.164'
+            },
+            {
+                to: 'British Thermal Unit',
+                names: namesList.nrg_btu,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Watt Hour',
+                names: namesList.nrg_wh,
+                func: (x) => {
+                    return x / 3.41214;
+                },
+                text: 'x/3.41214'
+            },
+            toArbitrary
+        ]
+    },
+    {
+        name: 'Watt hour',
+        names: namesList.nrg_cal,
+        type: 'Energy',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Electron Volt',
+                names: namesList.nrg_ev,
+                func: (x) => {
+                    return x * 2.247e22;
+                },
+                text: 'x*2.247*10^22'
+            },
+            {
+                to: 'Joule',
+                names: namesList.nrg_j,
+                func: (x) => {
+                    return x * 3600;
+                },
+                text: 'x*3600'
+            },
+            {
+                to: 'Calorie',
+                names: namesList.nrg_cal,
+                func: (x) => {
+                    return x * 860.421;
+                },
+                text: 'x*860.421'
+            },
+            {
+                to: 'British Thermal Unit',
+                names: namesList.nrg_btu,
+                func: (x) => {
+                    return x * 3.41214;
+                },
+                text: 'x*3.41214'
+            },
+            {
+                to: 'Watt Hour',
+                names: namesList.nrg_wh,
                 func: (x) => {
                     return x;
                 },
