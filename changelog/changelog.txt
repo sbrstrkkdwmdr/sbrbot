@@ -547,8 +547,9 @@ changes:
 [FIX] ts endlessly hanging when selecting a storm
 [QOL] make rs embeds use string ver like other score list commands
 [ADD] added page buttons to ytsearch
-[ADD] added btu and watt hours to conversions
+[ADD] added btu, watt hours and square inches to conversions
 [QOL] changed functions that use x * 10** y to xey
 [FIX] all conversions being labelled as "Unknown conversion"
 [QOL] edit invalid conversion message
 [FIX] crashing on axios timeout error when updating changelog
+[FIX] urls in help command not embedding properly
