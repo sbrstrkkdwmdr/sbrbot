@@ -149,7 +149,7 @@ export function storeFile(data: string | osufunc.apiReturn | ((osuApiTypes.Score
                             status = 'Graveyard';
                             break;
                     }
-                    fs.writeFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
+                    fs.writeFileSync(`${path}/cache/commandData/${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
                 } break;
                 case (name.includes('bmsdata')): {
                     const datamap: osuApiTypes.Beatmapset = (data as osufunc.apiReturn).apiData as any;
@@ -171,23 +171,23 @@ export function storeFile(data: string | osufunc.apiReturn | ((osuApiTypes.Score
                             status = 'Graveyard';
                             break;
                     }
-                    fs.writeFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
+                    fs.writeFileSync(`${path}/cache/commandData/${name.toLowerCase()}${calc.toCapital(status)}${id}.json`, JSON.stringify(data, null, 2));
                 } break;
                 case (name.includes('osudata')): case (name.includes('scoredata')): {
-                    fs.writeFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, JSON.stringify(data, null, 2));
+                    fs.writeFileSync(`${path}/cache/commandData/${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, JSON.stringify(data, null, 2));
                 } break;
                 case (name.includes('maplistdata')): {
-                    fs.writeFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2));
+                    fs.writeFileSync(`${path}/cache/commandData/${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2));
                 } break;
                 // case (name.includes('scoredata')): {
-                //     fs.writeFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2));
+                //     fs.writeFileSync(`${path}/cache/commandData/${name.toLowerCase()}${id}_${type}.json`, JSON.stringify(data, null, 2));
                 // } break;
                 default: {
-                    fs.writeFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2));
+                    fs.writeFileSync(`${path}/cache/commandData/${name.toLowerCase()}${id}.json`, JSON.stringify(data, null, 2));
                 } break;
             }
         } else {
-            fs.writeFileSync(`${path}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, JSON.stringify(data, null, 2));
+            fs.writeFileSync(`${path}/cache/commandData/${id}-${name.toLowerCase()}.json`, JSON.stringify(data, null, 2));
         }
         return true;
     } catch (error) {
@@ -203,45 +203,45 @@ export function storeFile(data: string | osufunc.apiReturn | ((osuApiTypes.Score
  */
 export function findFile(id: string | number, name: string, mode?: osuApiTypes.GameMode, type?: string) {
     if (cacheById.some(x => name.includes(x))) {
-        if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}.json`)) {
-            return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}.json`, 'utf-8'));
+        if (fs.existsSync(`${path}/cache/commandData/${name.toLowerCase()}${id}.json`)) {
+            return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${name.toLowerCase()}${id}.json`, 'utf-8'));
         }
         if (name.includes('osudata')) {
-            if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`)) {
-                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, 'utf-8'));
+            if (fs.existsSync(`${path}/cache/commandData/${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${name.toLowerCase()}${id}_${mode ?? 'osu'}.json`, 'utf-8'));
             }
         }
         else if (name.includes('mapdata')) {
-            if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`, 'utf-8'));
-            } else if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`, 'utf-8'));
-            } else if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`, 'utf-8'));
-            } else if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`, 'utf-8'));
+            if (fs.existsSync(`${path}/cache/commandData/${name.toLowerCase()}Ranked${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${name.toLowerCase()}Ranked${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${path}/cache/commandData/${name.toLowerCase()}Loved${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${name.toLowerCase()}Loved${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${path}/cache/commandData/${name.toLowerCase()}Approved${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${name.toLowerCase()}Approved${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${path}/cache/commandData/${name.toLowerCase()}Graveyard${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${name.toLowerCase()}Graveyard${id}.json`, 'utf-8'));
             }
         } else if (name.includes('bmsdata')) {
-            if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Ranked${id}.json`, 'utf-8'));
-            } else if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Loved${id}.json`, 'utf-8'));
-            } else if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Approved${id}.json`, 'utf-8'));
-            } else if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`)) {
-                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}Graveyard${id}.json`, 'utf-8'));
+            if (fs.existsSync(`${path}/cache/commandData/${name.toLowerCase()}Ranked${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${name.toLowerCase()}Ranked${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${path}/cache/commandData/${name.toLowerCase()}Loved${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${name.toLowerCase()}Loved${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${path}/cache/commandData/${name.toLowerCase()}Approved${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${name.toLowerCase()}Approved${id}.json`, 'utf-8'));
+            } else if (fs.existsSync(`${path}/cache/commandData/${name.toLowerCase()}Graveyard${id}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${name.toLowerCase()}Graveyard${id}.json`, 'utf-8'));
             }
         } else if (name.includes('maplistdata')) {
-            if (fs.existsSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`)) {
-                return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${name.toLowerCase()}${id}_${type}.json`, 'utf-8'));
+            if (fs.existsSync(`${path}/cache/commandData/${name.toLowerCase()}${id}_${type}.json`)) {
+                return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${name.toLowerCase()}${id}_${type}.json`, 'utf-8'));
             }
         }
         else {
             return false;
         }
     } else {
-        if (fs.existsSync(`${path}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`)) {
-            return JSON.parse(fs.readFileSync(`${path}\\cache\\commandData\\${id}-${name.toLowerCase()}.json`, 'utf-8'));
+        if (fs.existsSync(`${path}/cache/commandData/${id}-${name.toLowerCase()}.json`)) {
+            return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${id}-${name.toLowerCase()}.json`, 'utf-8'));
         } else {
             return false;
         }
@@ -410,7 +410,7 @@ export function randomString(useSymbols: boolean, length?: number, string?: stri
     if (useSymbols) {
         const symbols = [
             '`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+',
-            '{', '}', '[', ']', '|', '\\', ';', ':', '\'', '"', ',', '.', '<', '>', '/', '?'
+            '{', '}', '[', ']', '|', '/', ';', ':', '\'', '"', ',', '.', '<', '>', '/', '?'
         ];
         symbols.forEach(x =>
             list.push(x)
@@ -488,7 +488,7 @@ export function removeSIPrefix(str: string) {
 
 export async function getLocation(name: string, config: extypes.config) {
     if (mainconst.isTesting) {
-        const init = fs.readFileSync(`${precomppath}\\files\\testfiles\\weatherlocationdata.json`, 'utf-8');
+        const init = fs.readFileSync(`${precomppath}/files/testfiles/weatherlocationdata.json`, 'utf-8');
         return JSON.parse(init) as {
             results: othertypes.geoLocale[];
         };
@@ -505,7 +505,7 @@ export async function getWeather(
     config: extypes.config
 ) {
     if (mainconst.isTesting) {
-        const init = fs.readFileSync(`${precomppath}\\files\\testfiles\\weatherdata.json`, 'utf-8');
+        const init = fs.readFileSync(`${precomppath}/files/testfiles/weatherdata.json`, 'utf-8');
         return JSON.parse(init) as othertypes.weatherData;
     } else {
         if (isNaN(latitude) || isNaN(longitude)) {
@@ -719,12 +719,12 @@ export async function getTropical(config: extypes.config, type: 'active' | 'stor
         let data;
         switch (type) {
             case 'active':
-                data = fs.readFileSync(`${precomppath}\\files\\testfiles\\tropicalweatherdata.json`, 'utf-8');
+                data = fs.readFileSync(`${precomppath}/files/testfiles/tropicalweatherdata.json`, 'utf-8');
                 break;
             case 'storm': {
                 const list = ['05e', '06w', '07w'];
                 const opt = list[Math.floor(Math.random() * list.length)];
-                data = fs.readFileSync(`${precomppath}\\files\\testfiles\\tropicalweatherdata2023${opt}.json`, 'utf-8');
+                data = fs.readFileSync(`${precomppath}/files/testfiles/tropicalweatherdata2023${opt}.json`, 'utf-8');
             }
                 break;
         }

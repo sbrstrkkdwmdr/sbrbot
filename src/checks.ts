@@ -523,24 +523,13 @@ export function isNotNull(property: string) {
     nthIndexLast
 } */
 export {
-    audiofiletype,
-    checkisaudio,
+    audiofiletype, botHasPerms, checkisaudio,
     checkisimage,
     checkisvideo,
     discshort,
-    exec,
-    imgfiletype,
+    exec, getMentionId, imgfiletype,
     isAdmin,
-    isOwner,
-    botHasPerms,
-    getMentionId,
-    lengthshorten,
-    shorten,
-    vidfiletypes,
-    nthIndex,
-    nthIndexLast,
-    toHexadecimal,
-    toAlphaNum,
-    toMath
+    isOwner, lengthshorten, nthIndex,
+    nthIndexLast, shorten, toAlphaNum, toHexadecimal, toMath, vidfiletypes
 };
 

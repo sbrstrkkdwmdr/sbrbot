@@ -181,9 +181,9 @@ export async function changelog(input: extypes.commandInput) {
             });
     } else {
         const document = useGit ?
-            fs.readFileSync(`${path}\\cache\\changelog.txt`, 'utf-8')
+            fs.readFileSync(`${path}/cache/changelog.txt`, 'utf-8')
             :
-            fs.readFileSync(`${precomppath}\\changelog\\changelog.txt`, 'utf-8');
+            fs.readFileSync(`${precomppath}/changelog/changelog.txt`, 'utf-8');
         const list = document.split('VERSION');
         list.shift();
         if (useGit) {
@@ -1187,7 +1187,7 @@ export async function info(input: extypes.commandInput) {
     const curGuildSettings = await input.guildSettings.findOne({ where: { guildid: input.obj.guildId } });
     const serverpfx = curGuildSettings.dataValues.prefix;
 
-    // const starttime = new Date((fs.readFileSync(`${path}\\debug\\starttime.txt`)).toString());
+    // const starttime = new Date((fs.readFileSync(`${path}/debug/starttime.txt`)).toString());
 
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
@@ -1904,7 +1904,7 @@ export async function stats(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const starttime = new Date((fs.readFileSync(`${path}\\debug\\starttime.txt`)).toString());
+    const starttime = new Date((fs.readFileSync(`${path}/debug/starttime.txt`)).toString());
     const trueping = input.obj.createdAt.getTime() - new Date().getTime() + 'ms';
 
     const uptime = Math.round((new Date().getTime() - starttime.getTime()) / 1000);
@@ -2741,7 +2741,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
     const embed = new Discord.EmbedBuilder();
     let useComponents = [];
     let useAttach = [];
-    const worldmapPath = `${precomppath}\\files\\img\\map\\base.png`;
+    const worldmapPath = `${precomppath}/files/img/map/base.png`;
     let exInf = '';
     switch (type) {
         case 'active': default: {
@@ -2791,7 +2791,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
                                 );
                             }
                         }
-                        await image.writeAsync(`${path}\\cache\\commandData\\genStormMap-${input.absoluteID}.png`);
+                        await image.writeAsync(`${path}/cache/commandData/genStormMap-${input.absoluteID}.png`);
                         resolve(true);
                     });
                 } catch (err) {
@@ -2801,7 +2801,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
             });
             if (aaaeee === true) {
                 try {
-                    frimg = new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genStormMap-${input.absoluteID}.png`);
+                    frimg = new Discord.AttachmentBuilder(`${path}/cache/commandData/genStormMap-${input.absoluteID}.png`);
                     useAttach = [frimg];
                     embed.setImage(`attachment://genStormMap-${input.absoluteID}.png`);
                 } catch (err) {

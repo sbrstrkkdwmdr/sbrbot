@@ -6039,7 +6039,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         }
 
         const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
-        const msToFail = await osufunc.getFailPoint(totalhits, `${path}\\files\\maps\\${curbm.id}.osu`);
+        const msToFail = await osufunc.getFailPoint(totalhits, `${path}/files/maps/${curbm.id}.osu`);
 
         const curbmpasstime = Math.floor(msToFail / 1000);
         const guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
@@ -6434,7 +6434,7 @@ export async function replayparse(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     try {
-        replay = replayparser.parseReplay(`${filespath}\\replays\\${input.absoluteID}.osr`);
+        replay = replayparser.parseReplay(`${filespath}/replays/${input.absoluteID}.osr`);
     } catch (err) {
         log.logCommand(
             {
@@ -6707,7 +6707,7 @@ export async function replayparse(input: extypes.commandInput) {
     // const UR =
     //     mapdata.id ?
     //         await osufunc.calcUr(
-    //             `${filespath}\\replays\\${input.absoluteID}.osr`,
+    //             `${filespath}/replays/${input.absoluteID}.osr`,
     //             `${path}/files/maps/${mapdata.id}.osu`
     //         ) : null;
 
@@ -7828,18 +7828,18 @@ export async function scorepost(input: extypes.commandInput) {
         }
     }
     //download beatmap bg
-    await func.downloadIMG(osufunc.getMapImages(scoredata.beatmapset.id).raw, `${path}\\cache\\graphs\\${scoredata.id ?? input.absoluteID}a.jpg`) as unknown as string;
-    await func.downloadIMG(`https://a.ppy.sh/${scoredata.user_id}`, `${path}\\cache\\graphs\\${scoredata.id ?? scoredata.user_id ?? input.absoluteID}b.png`) as unknown as string;
-    let bimg = `${path}\\cache\\graphs\\${scoredata.id ?? input.absoluteID}a.jpg`;
-    let aimg = `${path}\\cache\\graphs\\${scoredata.id ?? scoredata.user_id ?? input.absoluteID}b.png`;
+    await func.downloadIMG(osufunc.getMapImages(scoredata.beatmapset.id).raw, `${path}/cache/graphs/${scoredata.id ?? input.absoluteID}a.jpg`) as unknown as string;
+    await func.downloadIMG(`https://a.ppy.sh/${scoredata.user_id}`, `${path}/cache/graphs/${scoredata.id ?? scoredata.user_id ?? input.absoluteID}b.png`) as unknown as string;
+    let bimg = `${path}/cache/graphs/${scoredata.id ?? input.absoluteID}a.jpg`;
+    let aimg = `${path}/cache/graphs/${scoredata.id ?? scoredata.user_id ?? input.absoluteID}b.png`;
     if (!fs.existsSync(bimg)) {
-        bimg = `${precomppath}\\files\\img\\background-1.png`;
+        bimg = `${precomppath}/files/img/background-1.png`;
     }
     if (!fs.existsSync(aimg)) {
-        aimg = `${precomppath}\\files\\blank.png`;
+        aimg = `${precomppath}/files/blank.png`;
     }
     //create scorepost img
-    let frimg: Discord.AttachmentBuilder = new Discord.AttachmentBuilder(`${precomppath}\\files\\img\\background-1.png`);
+    let frimg: Discord.AttachmentBuilder = new Discord.AttachmentBuilder(`${precomppath}/files/img/background-1.png`);
     async function doShit() {
         try {
             await jimp.default.read(bimg).then(async (image) => {
@@ -7850,7 +7850,7 @@ export async function scorepost(input: extypes.commandInput) {
                     image.blit((await jimp.default.read(aimg).then(async (image) => { image.resize(256, 256); return image; })), (1280 / 2) - 128, (720 / 2) - 128,);
                 } catch (error) {
                     console.log(error);
-                    aimg = `${precomppath}\\files\\blank.png`;
+                    aimg = `${precomppath}/files/blank.png`;
                     return await doShit();
                 }
                 //ctx
@@ -7897,38 +7897,38 @@ export async function scorepost(input: extypes.commandInput) {
                 },
                     960, 50
                 );
-                let statusimg = `${precomppath}\\files\\img\\osu\\status-graveyard.png`;
-                let modeimg = `${precomppath}\\files\\img\\osu\\modeosu.png`;
+                let statusimg = `${precomppath}/files/img/osu/status-graveyard.png`;
+                let modeimg = `${precomppath}/files/img/osu/modeosu.png`;
                 switch (mapdata.status) {
                     case 'ranked':
-                        statusimg = `${precomppath}\\files\\img\\osu\\status-ranked.png`;
+                        statusimg = `${precomppath}/files/img/osu/status-ranked.png`;
                         break;
                     case 'approved': case 'qualified':
-                        statusimg = `${precomppath}\\files\\img\\osu\\status-approved.png`;
+                        statusimg = `${precomppath}/files/img/osu/status-approved.png`;
                         break;
                     case 'loved':
-                        statusimg = `${precomppath}\\files\\img\\osu\\status-loved.png`;
+                        statusimg = `${precomppath}/files/img/osu/status-loved.png`;
                         break;
                 }
                 switch (scoredata.mode) {
                     case 'taiko':
-                        modeimg = `${precomppath}\\files\\img\\osu\\modetaiko.png`;
+                        modeimg = `${precomppath}/files/img/osu/modetaiko.png`;
                         break;
                     case 'fruits':
-                        modeimg = `${precomppath}\\files\\img\\osu\\modefruits.png`;
+                        modeimg = `${precomppath}/files/img/osu/modefruits.png`;
                         break;
                     case 'mania':
-                        modeimg = `${precomppath}\\files\\img\\osu\\modemania.png`;
+                        modeimg = `${precomppath}/files/img/osu/modemania.png`;
                         break;
                 }
                 try {
-                    image.blit((await jimp.default.read(`${precomppath}\\files\\img\\grades\\Ranking-${scoredata.rank}.png`).then(async (image) => {
+                    image.blit((await jimp.default.read(`${precomppath}/files/img/grades/Ranking-${scoredata.rank}.png`).then(async (image) => {
                         image.scale(0.6);
                         return image;
                     })), 0, (720 / 2) - (150 * 0.6));
                 } catch (error) {
                     console.log(error);
-                    aimg = `${precomppath}\\files\\blank.png`;
+                    aimg = `${precomppath}/files/blank.png`;
                     return await doShit();
                 }
                 try {
@@ -7938,7 +7938,7 @@ export async function scorepost(input: extypes.commandInput) {
                     })), 0, 0);
                 } catch (error) {
                     console.log(error);
-                    aimg = `${precomppath}\\files\\blank.png`;
+                    aimg = `${precomppath}/files/blank.png`;
                     return await doShit();
                 }
                 try {
@@ -7948,28 +7948,28 @@ export async function scorepost(input: extypes.commandInput) {
                     })), +128, 0);
                 } catch (error) {
                     console.log(error);
-                    aimg = `${precomppath}\\files\\blank.png`;
+                    aimg = `${precomppath}/files/blank.png`;
                     return await doShit();
                 }
-                image.writeAsync(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
+                image.writeAsync(`${path}/cache/commandData/genThumb-${input.absoluteID}.png`);
             });
         } catch (error) {
-            bimg = `${precomppath}\\files\\img\\background-1.png`;
+            bimg = `${precomppath}/files/img/background-1.png`;
             return await doShit();
         }
     }
     await doShit();
     // await new Promise((resolve, reject) => {
-    //     if (fs.existsSync(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`)) {
-    //         frimg = new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
+    //     if (fs.existsSync(`${path}/cache/commandData/genThumb-${input.absoluteID}.png`)) {
+    //         frimg = new Discord.AttachmentBuilder(`${path}/cache/commandData/genThumb-${input.absoluteID}.png`);
     //         resolve('yes');
     //     } else {
-    //         console.log(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
+    //         console.log(`${path}/cache/commandData/genThumb-${input.absoluteID}.png`);
     //         reject('err');
     //     }
 
     // });
-    frimg = new Discord.AttachmentBuilder(`${path}\\cache\\commandData\\genThumb-${input.absoluteID}.png`);
+    frimg = new Discord.AttachmentBuilder(`${path}/cache/commandData/genThumb-${input.absoluteID}.png`);
     /**
      * formatted as
      * name | artist - title [version] +mods acc% sr | pp mode | custom
@@ -12646,8 +12646,8 @@ export async function maplocal(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let mapPath: string = '';
-    if (fs.existsSync(`${filespath} \\localmaps\\${input.absoluteID}.osu`)) {
-        mapPath = `${filespath} \\localmaps\\${input.absoluteID}.osu`;
+    if (fs.existsSync(`${filespath} /localmaps/${input.absoluteID}.osu`)) {
+        mapPath = `${filespath} /localmaps/${input.absoluteID}.osu`;
     } else {
         return;
     }

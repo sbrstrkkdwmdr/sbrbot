@@ -54,13 +54,13 @@ function logFile(type: string, text: string, opts?: {
 }) {
     switch (type) {
         case 'err': case 'error':
-            fs.appendFileSync(`${path}\\logs\\err.log`, text, 'utf-8');
+            fs.appendFileSync(`${path}/logs/err.log`, text, 'utf-8');
             break;
         default:
-            fs.appendFileSync(`${path}\\logs\\general.log`, text, 'utf-8');
+            fs.appendFileSync(`${path}/logs/general.log`, text, 'utf-8');
             break;
         case 'command':
-            fs.appendFileSync(`${path}\\logs\\cmd\\commands${opts?.guildId ?? null}.log`, text, 'utf-8');
+            fs.appendFileSync(`${path}/logs/cmd/commands${opts?.guildId ?? null}.log`, text, 'utf-8');
     }
 }
 

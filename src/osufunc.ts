@@ -998,7 +998,7 @@ export async function apiget(input: apiInput) {
             apiData: datafirst,
             error
         };
-        fs.writeFileSync(`${path}\\cache\\errors\\osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
+        fs.writeFileSync(`${path}/cache/errors/osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
     const after = perf.performance.now();
     try {
@@ -1024,7 +1024,7 @@ export async function apiget(input: apiInput) {
             apiData: datafirst,
             error: error ?? 'Unknown error'
         };
-        fs.writeFileSync(`${path}\\cache\\errors\\osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
+        fs.writeFileSync(`${path}/cache/errors/osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
 
     if (data?.apiData?.apiData) {
@@ -1506,7 +1506,7 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
                     case 'score':
                         data = {
                             id: null,
-                            apiData: JSON.parse(fs.readFileSync(`${precomppath}\\src\\template\\score.json`, 'utf-8')),
+                            apiData: JSON.parse(fs.readFileSync(`${precomppath}/src/template/score.json`, 'utf-8')),
                             mods: null,
                             default: true,
                         };
@@ -2301,9 +2301,9 @@ export function randomMap(type?: 'Ranked' | 'Loved' | 'Approved' | 'Qualified' |
     let returnId = 4204;
     let errormsg = null;
     //check if cache exists
-    const cache = fs.existsSync(`${path}\\cache\\commandData`);
+    const cache = fs.existsSync(`${path}/cache/commandData`);
     if (cache) {
-        let mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
+        let mapsExist = fs.readdirSync(`${path}/cache/commandData`).filter(x => x.includes('mapdata'));
         const maps: apiReturn[] = [];
         if (type) {
             mapsExist = mapsExist.filter(x => x.includes(type));
@@ -2311,7 +2311,7 @@ export function randomMap(type?: 'Ranked' | 'Loved' | 'Approved' | 'Qualified' |
 
         for (let i = 0; i < mapsExist.length; i++) {
             if (mapsExist[i].includes('.json')) {
-                const dataAsStr = fs.readFileSync(`${path}\\cache\\commandData\\${mapsExist[i]}`, 'utf-8');
+                const dataAsStr = fs.readFileSync(`${path}/cache/commandData/${mapsExist[i]}`, 'utf-8');
                 maps.push(JSON.parse(dataAsStr) as apiReturn);
             }
         }
@@ -2338,14 +2338,14 @@ export function recommendMap(baseRating: number, maxDifference: number) {
     let returnId = 4204;
     let errormsg = null;
     //check if cache exists
-    const cache = fs.existsSync(`${path}\\cache\\commandData`);
+    const cache = fs.existsSync(`${path}/cache/commandData`);
     if (cache) {
-        const mapsExist = fs.readdirSync(`${path}\\cache\\commandData`).filter(x => x.includes('mapdata'));
+        const mapsExist = fs.readdirSync(`${path}/cache/commandData`).filter(x => x.includes('mapdata'));
         const maps: apiReturn[] = [];
 
         for (let i = 0; i < mapsExist.length; i++) {
             if (mapsExist[i].includes('.json')) {
-                const dataAsStr = fs.readFileSync(`${path}\\cache\\commandData\\${mapsExist[i]}`, 'utf-8');
+                const dataAsStr = fs.readFileSync(`${path}/cache/commandData/${mapsExist[i]}`, 'utf-8');
                 maps.push(JSON.parse(dataAsStr) as apiReturn);
             }
         }
@@ -2797,14 +2797,14 @@ ${input.artist_unicode} - ${input.title_unicode}`;
  * @property
  */
 export async function apigetOffline(input: apiInput) {
-    const basePath = `${path}\\cache\\debug`;
+    const basePath = `${path}/cache/debug`;
     let ipath = basePath;
     let spath = basePath;
     switch (input.version) {
         case 1: {
             switch (input.type) {
                 case 'scores_get_map':
-                    spath = `${basePath}\\command\\maplb\\lbDataO`;
+                    spath = `${basePath}/command/maplb/lbDataO`;
                     break;
             }
         }
@@ -2812,77 +2812,77 @@ export async function apigetOffline(input: apiInput) {
         case 2: {
             switch (input.type) {
                 case 'map_get': case 'map':
-                    spath = `${basePath}\\command\\map\\mapData`;
+                    spath = `${basePath}/command/map/mapData`;
                     break;
                 case 'map_get_md5':
-                    spath = `${basePath}\\command\\map\\mapData`;
+                    spath = `${basePath}/command/map/mapData`;
                     break;
                 case 'mapset_get': case 'mapset':
-                    spath = `${basePath}\\command\\map\\bmsData`;
+                    spath = `${basePath}/command/map/bmsData`;
                     break;
                 case 'mapset_search':
-                    spath = `${basePath}\\command\\map\\mapIdTestData`;
+                    spath = `${basePath}/command/map/mapIdTestData`;
                     break;
                 case 'score_get': case 'score':
-                    spath = `${basePath}\\command\\scoreparse\\scoreData`;
+                    spath = `${basePath}/command/scoreparse/scoreData`;
                     break;
                 case 'scores_get_best': case 'osutop': case 'best':
-                    spath = `${basePath}\\command\\osutop\\osuTopData`;
+                    spath = `${basePath}/command/osutop/osuTopData`;
                     break;
                 case 'scores_get_first': case 'firsts':
-                    spath = `${basePath}\\command\\firsts\\firstsScoresData`;
+                    spath = `${basePath}/command/firsts/firstsScoresData`;
                     break;
                 case 'firsts_alt':
-                    spath = `${basePath}\\command\\firsts\\firstsScoresData`;
+                    spath = `${basePath}/command/firsts/firstsScoresData`;
                     break;
                 case 'scores_get_map': case 'maplb':
-                    spath = `${basePath}\\command\\maplb\\lbData`;
+                    spath = `${basePath}/command/maplb/lbData`;
                     break;
                 case 'scores_get_pinned': case 'pinned':
-                    spath = `${basePath}\\command\\pinned\\pinnedScoresData`;
+                    spath = `${basePath}/command/pinned/pinnedScoresData`;
                     break;
                 case 'pinned_alt':
-                    spath = `${basePath}\\command\\pinned\\pinnedScoresData`;
+                    spath = `${basePath}/command/pinned/pinnedScoresData`;
                     break;
                 case 'scores_get_recent': case 'recent':
-                    spath = `${basePath}\\command\\recent\\rsData`;
+                    spath = `${basePath}/command/recent/rsData`;
                     break;
                 case 'recent_alt':
-                    spath = `${basePath}\\command\\recent\\rsData`;
+                    spath = `${basePath}/command/recent/rsData`;
                     break;
                 case 'user_get': case 'user':
-                    spath = `${basePath}\\command\\osu\\osuData`;
+                    spath = `${basePath}/command/osu/osuData`;
                     break;
                 case 'user_get_most_played': case 'most_played':
-                    spath = `${basePath}\\command\\osu\\mostPlayedData`;
+                    spath = `${basePath}/command/osu/mostPlayedData`;
                     break;
                 case 'user_get_scores_map':
-                    spath = `${basePath}\\command\\scores\\scoreDataPresort`;
+                    spath = `${basePath}/command/scores/scoreDataPresort`;
                     break;
                 case 'user_get_maps':
-                    spath = `${basePath}\\command\\userbeatmaps\\mapListData`;
+                    spath = `${basePath}/command/userbeatmaps/mapListData`;
                     break;
                 case 'user_get_maps_alt':
-                    spath = `${basePath}\\command\\userbeatmaps\\mapListDataF`;
+                    spath = `${basePath}/command/userbeatmaps/mapListDataF`;
                     break;
                 case 'user_recent_activity':
-                    spath = `${basePath}\\command\\recent_activity\\rsactData`;
+                    spath = `${basePath}/command/recent_activity/rsactData`;
                     break;
             }
         }
     }
     let skillissue = false;
     //using spath find file
-    const full = spath.split('\\');
+    const full = spath.split('/');
     const file = full.pop();
-    console.log(full.join('\\'));
-    const dir = fs.readdirSync(full.join('\\'));
+    console.log(full.join('/'));
+    const dir = fs.readdirSync(full.join('/'));
     console.log(dir);
     const isPresent = dir.filter(x => x.includes(file));
     console.log(isPresent);
     console.log(file);
     if (isPresent.length > 0) {
-        ipath = full.join('\\') + `\\${isPresent[Math.floor(Math.random() * isPresent.length)]}`;
+        ipath = full.join('/') + `/${isPresent[Math.floor(Math.random() * isPresent.length)]}`;
     } else {
         skillissue = true;
     }

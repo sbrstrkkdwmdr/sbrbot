@@ -609,7 +609,7 @@ export async function debug(input: extypes.commandInput) {
                     content: `No search query given`
                 };
             }
-            const files = fs.readdirSync(`${path}\\cache\\debug\\command`);
+            const files = fs.readdirSync(`${path}/cache/debug/command`);
             if (files.length < 1) {
                 usemsgArgs = {
                     content: 'Cache folder is currently empty'
@@ -715,13 +715,13 @@ export async function debug(input: extypes.commandInput) {
                     case 'userbeatmaps':
                     case 'whatif':
                         {
-                            await findAndReturn(`${path}\\cache\\debug\\command`, resString, cmdid);
+                            await findAndReturn(`${path}/cache/debug/command`, resString, cmdid);
                         }
                         break;
                     case 'map (file)':
                     case 'replay':
                         {
-                            await findAndReturn(`${path}\\cache\\debug\\fileparse`, resString, cmdid);
+                            await findAndReturn(`${path}/cache/debug/fileparse`, resString, cmdid);
                         }
                         break;
                     default:
@@ -855,7 +855,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             } else {
                 serverId = inputstr;
             }
-            const curServer = fs.existsSync(`${path}\\logs\\cmd\\commands${serverId}.log`);
+            const curServer = fs.existsSync(`${path}/logs/cmd/commands${serverId}.log`);
             if (!curServer) {
                 usemsgArgs = {
                     content: `Server ${serverId} not found - does not exist or bot is not in the guild`
@@ -888,14 +888,14 @@ Joined(EPOCH):  ${member.joinedTimestamp}
     async function findAndReturn(inpath: string, find: string, cmdid: string) {
         const sFiles = fs.readdirSync(`${inpath}`);
         const found = sFiles.find(x => x == find);
-        const inFiles = fs.readdirSync(`${inpath}\\${found}`);
+        const inFiles = fs.readdirSync(`${inpath}/${found}`);
         let content = `Files found for command \`${inputstr}\``;
-        let files = inFiles.map(x => `${inpath}\\${found}\\${x}`);
+        let files = inFiles.map(x => `${inpath}/${found}/${x}`);
         if (!isNaN(+cmdid)) {
-            const tfiles = inFiles.map(x => `${inpath}\\${found}\\${x}`).filter(x => x.includes(cmdid));
+            const tfiles = inFiles.map(x => `${inpath}/${found}/${x}`).filter(x => x.includes(cmdid));
             content = `Files found for command \`${inputstr}\`, matching server ID ${cmdid}`;
             if (tfiles.length == 0) {
-                files = inFiles.map(x => `${inpath}\\${found}\\${x}`);
+                files = inFiles.map(x => `${inpath}/${found}/${x}`);
                 content = `Files found for command \`${inputstr}\`. None found matching ${cmdid}`;
             }
         }
@@ -909,31 +909,31 @@ Joined(EPOCH):  ${member.joinedTimestamp}
     function clear(tincan: clearTypes) {
         switch (tincan) {
             case 'normal': default: { //clears all temprary files (cache/commandData)
-                log.toOutput(`manually clearing temporary files in ${path}\\cache\\commandData\\`, input.config);
-                const curpath = `${path}\\cache\\commandData`;
+                log.toOutput(`manually clearing temporary files in ${path}/cache/commandData/`, input.config);
+                const curpath = `${path}/cache/commandData`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     const keep = ['Approved', 'Ranked', 'Loved', 'Qualified'];
                     if (!keep.some(x => file.includes(x))) {
-                        fs.unlinkSync(`${curpath}\\` + file);
-                        log.toOutput(`${curpath}\\` + file, input.config);
+                        fs.unlinkSync(`${curpath}/` + file);
+                        log.toOutput(`${curpath}/` + file, input.config);
                     }
                 }
                 usemsgArgs = {
-                    content: `Clearing temporary files in .\\cache\\commandData\\`
+                    content: `Clearing temporary files in ./cache/commandData/`
                 };
             }
                 break;
             case 'all': { //clears all files in commandData
-                log.toOutput(`manually clearing all files in ${path}\\cache\\commandData\\`, input.config);
-                const curpath = `${path}\\cache\\commandData`;
+                log.toOutput(`manually clearing all files in ${path}/cache/commandData/`, input.config);
+                const curpath = `${path}/cache/commandData`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
-                    fs.unlinkSync(`${curpath}\\` + file);
-                    log.toOutput(`${curpath}\\` + file, input.config);
+                    fs.unlinkSync(`${curpath}/` + file);
+                    log.toOutput(`${curpath}/` + file, input.config);
                 }
                 usemsgArgs = {
-                    content: `Clearing all files in .\\cache\\commandData\\`
+                    content: `Clearing all files in ./cache/commandData/`
                 };
             }
                 break;
@@ -943,126 +943,126 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                 clear('errors');
                 clear('map');
                 usemsgArgs = {
-                    content: `Clearing all files in .\\cache\\commandData\\`
+                    content: `Clearing all files in ./cache/commandData/`
                 };
             }
                 break;
             case 'map': case 'maps': { // clears all maps and mapset files
-                log.toOutput(`manually clearing all map and mapset files in ${path}\\cache\\commandData\\ and ${path}\\files\\maps\\`, input.config);
-                const curpath1 = `${path}\\cache\\commandData`;
+                log.toOutput(`manually clearing all map and mapset files in ${path}/cache/commandData/ and ${path}/files/maps/`, input.config);
+                const curpath1 = `${path}/cache/commandData`;
                 const files1 = fs.readdirSync(curpath1);
                 for (const file of files1) {
                     if (file.includes('bmsdata') || file.includes('mapdata')) {
-                        fs.unlinkSync(`${curpath1}\\` + file);
-                        log.toOutput(`${curpath1}\\` + file, input.config);
+                        fs.unlinkSync(`${curpath1}/` + file);
+                        log.toOutput(`${curpath1}/` + file, input.config);
                     }
                 }
-                const curpath2 = `${path}\\files\\maps`;
+                const curpath2 = `${path}/files/maps`;
                 const files2 = fs.readdirSync(curpath2);
                 for (const file of files2) {
-                    fs.unlinkSync(`${curpath2}\\` + file);
-                    log.toOutput(`${curpath2}\\` + file, input.config);
+                    fs.unlinkSync(`${curpath2}/` + file);
+                    log.toOutput(`${curpath2}/` + file, input.config);
                 }
                 usemsgArgs = {
-                    content: `Clearing all map-related files in .\\cache\\commandData\\ and .\\files\\maps\\`
+                    content: `Clearing all map-related files in ./cache/commandData/ and ./files/maps/`
                 };
             }
                 break;
             case 'users': { //clears all osudata files
-                log.toOutput(`manually clearing all osudata files in ${path}\\cache\\commandData\\`, input.config);
-                const curpath = `${path}\\cache\\commandData`;
+                log.toOutput(`manually clearing all osudata files in ${path}/cache/commandData/`, input.config);
+                const curpath = `${path}/cache/commandData`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     if (file.includes('osudata')) {
-                        fs.unlinkSync(`${curpath}\\` + file);
-                        log.toOutput(`${curpath}\\` + file, input.config);
+                        fs.unlinkSync(`${curpath}/` + file);
+                        log.toOutput(`${curpath}/` + file, input.config);
                     }
                 }
                 usemsgArgs = {
-                    content: `Clearing all osudata files in .\\cache\\commandData\\`
+                    content: `Clearing all osudata files in ./cache/commandData/`
                 };
             }
                 break;
             case 'previous': { // clears all previous files
-                log.toOutput(`manually clearing all prev files in ${path}\\cache\\previous\\`, input.config);
-                const curpath = `${path}\\cache\\previous`;
+                log.toOutput(`manually clearing all prev files in ${path}/cache/previous/`, input.config);
+                const curpath = `${path}/cache/previous`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
-                    fs.unlinkSync(`${curpath}\\` + file);
-                    log.toOutput(`${curpath}\\` + file, input.config);
+                    fs.unlinkSync(`${curpath}/` + file);
+                    log.toOutput(`${curpath}/` + file, input.config);
                 }
                 usemsgArgs = {
-                    content: `Clearing all previous files in .\\cache\\previous\\`
+                    content: `Clearing all previous files in ./cache/previous/`
                 };
             }
                 break;
             case 'pmaps': { // clears all previous map files
-                log.toOutput(`manually clearing all prevmap files in ${path}\\cache\\previous\\`, input.config);
-                const curpath = `${path}\\cache\\previous`;
+                log.toOutput(`manually clearing all prevmap files in ${path}/cache/previous/`, input.config);
+                const curpath = `${path}/cache/previous`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     if (file.includes('map')) {
-                        fs.unlinkSync(`${curpath}\\` + file);
-                        log.toOutput(`${curpath}\\` + file, input.config);
+                        fs.unlinkSync(`${curpath}/` + file);
+                        log.toOutput(`${curpath}/` + file, input.config);
                     }
                 }
                 usemsgArgs = {
-                    content: `Clearing all previous map files in .\\cache\\previous\\`
+                    content: `Clearing all previous map files in ./cache/previous/`
                 };
             }
                 break;
             case 'pscores': { // clears all previous score files
-                log.toOutput(`manually clearing all prev score files in ${path}\\cache\\previous\\`, input.config);
-                const curpath = `${path}\\cache\\previous`;
+                log.toOutput(`manually clearing all prev score files in ${path}/cache/previous/`, input.config);
+                const curpath = `${path}/cache/previous`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     if (file.includes('score')) {
-                        fs.unlinkSync(`${curpath}\\` + file);
-                        log.toOutput(`${curpath}\\` + file, input.config);
+                        fs.unlinkSync(`${curpath}/` + file);
+                        log.toOutput(`${curpath}/` + file, input.config);
                     }
                 }
                 usemsgArgs = {
-                    content: `Clearing all previous score files in .\\cache\\previous\\`
+                    content: `Clearing all previous score files in ./cache/previous/`
                 };
             }
             case 'pusers': { // clears all previous user files
-                log.toOutput(`manually clearing all prev user files in ${path}\\cache\\previous\\`, input.config);
-                const curpath = `${path}\\cache\\previous`;
+                log.toOutput(`manually clearing all prev user files in ${path}/cache/previous/`, input.config);
+                const curpath = `${path}/cache/previous`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
                     if (file.includes('user')) {
-                        fs.unlinkSync(`${curpath}\\` + file);
-                        log.toOutput(`${curpath}\\` + file, input.config);
+                        fs.unlinkSync(`${curpath}/` + file);
+                        log.toOutput(`${curpath}/` + file, input.config);
                     }
                 }
                 usemsgArgs = {
-                    content: `Clearing all previous user files in .\\cache\\previous\\`
+                    content: `Clearing all previous user files in ./cache/previous/`
                 };
             }
                 break;
             case 'errors': { //clears all errors
-                log.toOutput(`manually clearing all err files in ${path}\\cache\\errors\\`, input.config);
-                const curpath = `${path}\\cache\\errors`;
+                log.toOutput(`manually clearing all err files in ${path}/cache/errors/`, input.config);
+                const curpath = `${path}/cache/errors`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
-                    fs.unlinkSync(`${curpath}\\` + file);
-                    log.toOutput(`${curpath}\\` + file, input.config);
+                    fs.unlinkSync(`${curpath}/` + file);
+                    log.toOutput(`${curpath}/` + file, input.config);
                 }
                 usemsgArgs = {
-                    content: `Clearing error files in .\\cache\\errors\\`
+                    content: `Clearing error files in ./cache/errors/`
                 };
             }
                 break;
             case 'graph': {
-                log.toOutput(`manually clearing all graph files in ${path}\\cache\\graphs\\`, input.config);
-                const curpath = `${path}\\cache\\graphs`;
+                log.toOutput(`manually clearing all graph files in ${path}/cache/graphs/`, input.config);
+                const curpath = `${path}/cache/graphs`;
                 const files = fs.readdirSync(curpath);
                 for (const file of files) {
-                    fs.unlinkSync(`${curpath}\\` + file);
-                    log.toOutput(`${curpath}\\` + file, input.config);
+                    fs.unlinkSync(`${curpath}/` + file);
+                    log.toOutput(`${curpath}/` + file, input.config);
                 }
                 usemsgArgs = {
-                    content: `Clearing graph files in .\\cache\\graphs\\`
+                    content: `Clearing graph files in ./cache/graphs/`
                 };
             }
         }

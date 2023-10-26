@@ -160,7 +160,7 @@ export async function coin(input: extypes.commandInput) {
 
     const msg = arr[Math.floor(Math.random() * arr.length)];
 
-    const file = new Discord.AttachmentBuilder(`${precomppath}\\files\\img\\coin\\${msg}.png`);
+    const file = new Discord.AttachmentBuilder(`${precomppath}/files/img/coin/${msg}.png`);
 
     const embed = new Discord.EmbedBuilder()
         .setTitle(msg)

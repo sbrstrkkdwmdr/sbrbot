@@ -196,102 +196,102 @@ Current Client ID:        ${client.user.id}
     const oncooldown = new Set();
 
 
-    if (!fs.existsSync(`${path}\\id.txt`)) {
-        console.log(`Creating ${path}\\id.txt`);
-        fs.writeFileSync(`${path}\\id.txt`, '0', 'utf-8');
+    if (!fs.existsSync(`${path}/id.txt`)) {
+        console.log(`Creating ${path}/id.txt`);
+        fs.writeFileSync(`${path}/id.txt`, '0', 'utf-8');
     }
-    if (!fs.existsSync(`${path}\\trackingFiles`)) {
-        console.log(`Creating ${path}\\trackingFiles`);
-        fs.mkdirSync(`${path}\\trackingFiles`,);
-    }
-
-    if (!fs.existsSync(`${path}\\debug`)) {
-        console.log(`Creating ${path}\\debug folder`);
-        fs.mkdirSync(`${path}\\debug`);
-    }
-    if (!fs.existsSync(`${path}\\logs`)) {
-        console.log(`Creating ${path}\\logs folder`);
-        fs.mkdirSync(`${path}\\logs`);
-    }
-    if (!fs.existsSync(`${path}\\logs\\totalcommands.txt`)) {
-        console.log(`Creating ${path}\\logs\\totalcommands.txt`);
-        fs.writeFileSync(`${path}\\logs\\totalcommands.txt`, '0', 'utf-8');
-    }
-    if (!fs.existsSync(`${path}\\logs\\gen`)) {
-        console.log(`Creating ${path}\\logs\\gen folder`);
-        fs.mkdirSync(`${path}\\logs\\gen`);
-    }
-    if (!fs.existsSync(`${path}\\logs\\cmd`)) {
-        console.log(`Creating ${path}\\logs\\cmd folder`);
-        fs.mkdirSync(`${path}\\logs\\cmd`);
-    }
-    if (!fs.existsSync(`${path}\\logs\\moderator`)) {
-        console.log(`Creating ${path}\\logs\\moderator folder`);
-        fs.mkdirSync(`${path}\\logs\\moderator`);
-    }
-    if (!fs.existsSync(`${path}\\trackingFiles`)) {
-        console.log(`Creating ${path}\\trackingFiles folder`);
-        fs.mkdirSync(`${path}\\trackingFiles`);
-    }
-    if (!fs.existsSync(`${path}\\cache`)) {
-        console.log(`Creating ${path}\\cache folder`);
-        fs.mkdirSync(`${path}\\cache`);
-    }
-    if (!fs.existsSync(`${path}\\cache\\commandData`)) {
-        console.log(`Creating ${path}\\cache\\commandData folder`);
-        fs.mkdirSync(`${path}\\cache\\commandData`);
-    }
-    if (!fs.existsSync(`${path}\\cache\\debug`)) {
-        console.log(`Creating ${path}\\cache\\debug folder`);
-        fs.mkdirSync(`${path}\\cache\\debug`);
-    }
-    if (!fs.existsSync(`${path}\\cache\\debug\\command`)) {
-        console.log(`Creating ${path}\\cache\\debug\\command folder`);
-        fs.mkdirSync(`${path}\\cache\\debug\\command`);
-    }
-    if (!fs.existsSync(`${path}\\cache\\previous`)) {
-        console.log(`Creating previous IDs folder (${path}\\previous)`);
-        fs.mkdirSync(`${path}\\cache\\previous`);
-    }
-    if (!fs.existsSync(`${path}\\cache\\graphs`)) {
-        console.log(`Creating ${path}\\cache\\graphs\\ folder`);
-        fs.mkdirSync(`${path}\\cache\\graphs`);
-    }
-    if (!fs.existsSync(`${path}\\cache\\errors`)) {
-        console.log(`Creating ${path}\\cache\\errors\\ folder`);
-        fs.mkdirSync(`${path}\\cache\\errors`);
-    }
-    if (!fs.existsSync(`${path}\\files`)) {
-        console.log(`Creating ${path}\\files folder`);
-        fs.mkdirSync(`${path}\\files`);
-    }
-    if (!fs.existsSync(`${path}\\files\\maps`)) {
-        console.log(`Creating ${path}\\files\\maps folder`);
-        fs.mkdirSync(`${path}\\files\\maps`);
-    }
-    if (!fs.existsSync(`${path}\\files\\replays`)) {
-        console.log(`Creating ${path}\\files\\replays folder`);
-        fs.mkdirSync(`${path}\\files\\replays`);
-    }
-    if (!fs.existsSync(`${path}\\files\\localmaps`)) {
-        console.log(`Creating ${path}\\files\\localmaps folder`);
-        fs.mkdirSync(`${path}\\files\\localmaps`);
+    if (!fs.existsSync(`${path}/trackingFiles`)) {
+        console.log(`Creating ${path}/trackingFiles`);
+        fs.mkdirSync(`${path}/trackingFiles`,);
     }
 
-    if (!fs.existsSync(`${path}\\logs\\debug.log`)) {
-        fs.writeFileSync(`${path}\\logs\\debug.log`, '');
+    if (!fs.existsSync(`${path}/debug`)) {
+        console.log(`Creating ${path}/debug folder`);
+        fs.mkdirSync(`${path}/debug`);
     }
-    if (!fs.existsSync(`${path}\\logs\\updates.log`)) {
-        fs.writeFileSync(`${path}\\logs\\updates.log`, '');
+    if (!fs.existsSync(`${path}/logs`)) {
+        console.log(`Creating ${path}/logs folder`);
+        fs.mkdirSync(`${path}/logs`);
     }
-    if (!fs.existsSync(`${path}\\logs\\err.log`)) {
-        fs.writeFileSync(`${path}\\logs\\err.log`, '');
+    if (!fs.existsSync(`${path}/logs/totalcommands.txt`)) {
+        console.log(`Creating ${path}/logs/totalcommands.txt`);
+        fs.writeFileSync(`${path}/logs/totalcommands.txt`, '0', 'utf-8');
     }
-    if (!fs.existsSync(`${path}\\logs\\warn.log`)) {
-        fs.writeFileSync(`${path}\\logs\\warn.log`, '');
+    if (!fs.existsSync(`${path}/logs/gen`)) {
+        console.log(`Creating ${path}/logs/gen folder`);
+        fs.mkdirSync(`${path}/logs/gen`);
     }
-    if (!fs.existsSync(`${path}\\logs\\general.log`)) {
-        fs.writeFileSync(`${path}\\logs\\general.log`, '');
+    if (!fs.existsSync(`${path}/logs/cmd`)) {
+        console.log(`Creating ${path}/logs/cmd folder`);
+        fs.mkdirSync(`${path}/logs/cmd`);
+    }
+    if (!fs.existsSync(`${path}/logs/moderator`)) {
+        console.log(`Creating ${path}/logs/moderator folder`);
+        fs.mkdirSync(`${path}/logs/moderator`);
+    }
+    if (!fs.existsSync(`${path}/trackingFiles`)) {
+        console.log(`Creating ${path}/trackingFiles folder`);
+        fs.mkdirSync(`${path}/trackingFiles`);
+    }
+    if (!fs.existsSync(`${path}/cache`)) {
+        console.log(`Creating ${path}/cache folder`);
+        fs.mkdirSync(`${path}/cache`);
+    }
+    if (!fs.existsSync(`${path}/cache/commandData`)) {
+        console.log(`Creating ${path}/cache/commandData folder`);
+        fs.mkdirSync(`${path}/cache/commandData`);
+    }
+    if (!fs.existsSync(`${path}/cache/debug`)) {
+        console.log(`Creating ${path}/cache/debug folder`);
+        fs.mkdirSync(`${path}/cache/debug`);
+    }
+    if (!fs.existsSync(`${path}/cache/debug/command`)) {
+        console.log(`Creating ${path}/cache/debug/command folder`);
+        fs.mkdirSync(`${path}/cache/debug/command`);
+    }
+    if (!fs.existsSync(`${path}/cache/previous`)) {
+        console.log(`Creating previous IDs folder (${path}/previous)`);
+        fs.mkdirSync(`${path}/cache/previous`);
+    }
+    if (!fs.existsSync(`${path}/cache/graphs`)) {
+        console.log(`Creating ${path}/cache/graphs/ folder`);
+        fs.mkdirSync(`${path}/cache/graphs`);
+    }
+    if (!fs.existsSync(`${path}/cache/errors`)) {
+        console.log(`Creating ${path}/cache/errors/ folder`);
+        fs.mkdirSync(`${path}/cache/errors`);
+    }
+    if (!fs.existsSync(`${path}/files`)) {
+        console.log(`Creating ${path}/files folder`);
+        fs.mkdirSync(`${path}/files`);
+    }
+    if (!fs.existsSync(`${path}/files/maps`)) {
+        console.log(`Creating ${path}/files/maps folder`);
+        fs.mkdirSync(`${path}/files/maps`);
+    }
+    if (!fs.existsSync(`${path}/files/replays`)) {
+        console.log(`Creating ${path}/files/replays folder`);
+        fs.mkdirSync(`${path}/files/replays`);
+    }
+    if (!fs.existsSync(`${path}/files/localmaps`)) {
+        console.log(`Creating ${path}/files/localmaps folder`);
+        fs.mkdirSync(`${path}/files/localmaps`);
+    }
+
+    if (!fs.existsSync(`${path}/logs/debug.log`)) {
+        fs.writeFileSync(`${path}/logs/debug.log`, '');
+    }
+    if (!fs.existsSync(`${path}/logs/updates.log`)) {
+        fs.writeFileSync(`${path}/logs/updates.log`, '');
+    }
+    if (!fs.existsSync(`${path}/logs/err.log`)) {
+        fs.writeFileSync(`${path}/logs/err.log`, '');
+    }
+    if (!fs.existsSync(`${path}/logs/warn.log`)) {
+        fs.writeFileSync(`${path}/logs/warn.log`, '');
+    }
+    if (!fs.existsSync(`${path}/logs/general.log`)) {
+        fs.writeFileSync(`${path}/logs/general.log`, '');
     }
 
     //commandHandler(blahblahblah) //loop
@@ -302,9 +302,9 @@ Current Client ID:        ${client.user.id}
     exEvents({ userdata, client, config, oncooldown, guildSettings, statsCache });
     osutrack({ userdata, client, config, oncooldown, trackDb, guildSettings });
 
-    fs.appendFileSync(`${path}\\logs\\general.log`, `\n\n\n${initlog}\n\n\n`, 'utf-8');
+    fs.appendFileSync(`${path}/logs/general.log`, `\n\n\n${initlog}\n\n\n`, 'utf-8');
 
-    fs.writeFileSync(`${path}\\debug\\starttime.txt`, currentDate.toString());
+    fs.writeFileSync(`${path}/debug/starttime.txt`, currentDate.toString());
 });
 
 client.on('debug', (info) => {
@@ -320,11 +320,11 @@ Date (epoch, ms): ${rn.getTime()}
 ${info}
 ====================================================
 `;
-    if (fs.existsSync(`${path}\\logs`)) {
-        if (fs.existsSync(`${path}\\logs\\debug.log`)) {
-            fs.appendFileSync(`${path}\\logs\\debug.log`, text + '\n', 'utf-8');
+    if (fs.existsSync(`${path}/logs`)) {
+        if (fs.existsSync(`${path}/logs/debug.log`)) {
+            fs.appendFileSync(`${path}/logs/debug.log`, text + '\n', 'utf-8');
         } else {
-            fs.writeFileSync(`${path}\\logs\\debug.log`, text + '\n', 'utf-8');
+            fs.writeFileSync(`${path}/logs/debug.log`, text + '\n', 'utf-8');
         }
     }
 });
@@ -341,11 +341,11 @@ Date (epoch, ms): ${rn.getTime()}
 ${info}
 ====================================================
 `;
-    if (fs.existsSync(`${path}\\logs`)) {
-        if (fs.existsSync(`${path}\\logs\\warn.log`)) {
-            fs.appendFileSync(`${path}\\logs\\warn.log`, text + '\n', 'utf-8');
+    if (fs.existsSync(`${path}/logs`)) {
+        if (fs.existsSync(`${path}/logs/warn.log`)) {
+            fs.appendFileSync(`${path}/logs/warn.log`, text + '\n', 'utf-8');
         } else {
-            fs.writeFileSync(`${path}\\logs\\warn.log`, text + '\n', 'utf-8');
+            fs.writeFileSync(`${path}/logs/warn.log`, text + '\n', 'utf-8');
         }
     }
 });
@@ -362,11 +362,11 @@ Date (epoch, ms): ${rn.getTime()}
 ${error}
 ====================================================
 `;
-    if (fs.existsSync(`${path}\\logs`)) {
-        if (fs.existsSync(`${path}\\logs\\err.log`)) {
-            fs.appendFileSync(`${path}\\logs\\err.log`, text + '\n', 'utf-8');
+    if (fs.existsSync(`${path}/logs`)) {
+        if (fs.existsSync(`${path}/logs/err.log`)) {
+            fs.appendFileSync(`${path}/logs/err.log`, text + '\n', 'utf-8');
         } else {
-            fs.writeFileSync(`${path}\\logs\\err.log`, text + '\n', 'utf-8');
+            fs.writeFileSync(`${path}/logs/err.log`, text + '\n', 'utf-8');
         }
     }
 });

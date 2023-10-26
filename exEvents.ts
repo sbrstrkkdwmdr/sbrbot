@@ -40,13 +40,13 @@ export default (input: {
 
     //get map url
     function getMap() {
-        const filesPathing = `${path}\\cache\\commandData`;
+        const filesPathing = `${path}/cache/commandData`;
         const maps = fs.readdirSync(`${filesPathing}`).filter(x => x.includes('mapdata'));
         if (maps.length == 0) {
             return false;
         }
         const mapFile = maps[Math.floor(Math.random() * maps.length)];
-        const map = (JSON.parse(fs.readFileSync(`${filesPathing}\\${mapFile}`, 'utf-8'))).apiData as osuapitypes.Beatmap;
+        const map = (JSON.parse(fs.readFileSync(`${filesPathing}/${mapFile}`, 'utf-8'))).apiData as osuapitypes.Beatmap;
         return map;
     }
 
@@ -295,7 +295,7 @@ export default (input: {
                     if (file.includes('undefined')) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
                             fs.unlinkSync(`${path}/files/maps/` + file);
-                            log.toOutput(`Deleted file ${path}\\files\\maps\\` + file, input.config);
+                            log.toOutput(`Deleted file ${path}/files/maps/` + file, input.config);
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     }
@@ -308,7 +308,7 @@ export default (input: {
     async function getOnlineChangelog() {
         await axios.get(`https://raw.githubusercontent.com/sbrstrkkdwmdr/sbrbot/main/changelog/changelog.txt`)
             .then(data => {
-                fs.writeFileSync(`${path}\\cache\\changelog.txt`, data.data);
+                fs.writeFileSync(`${path}/cache/changelog.txt`, data.data);
             })
             .catch(error => {
                 console.log('ERROR FETCHING GIT');
@@ -331,7 +331,7 @@ export default (input: {
                 } else {
                     if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 12)) {
                         fs.unlinkSync(`${path}/files/maps/` + file);
-                        log.toOutput(`Deleted file ${path}\\files\\maps\\` + file, input.config);
+                        log.toOutput(`Deleted file ${path}/files/maps/` + file, input.config);
                         // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                     }
                 }
@@ -357,26 +357,26 @@ export default (input: {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24 * 7)) {
                             //kill after 7d
                             fs.unlinkSync(`${path}/cache/commandData/` + file);
-                            log.toOutput(`Deleted file ${path}\\cache\\commandData\\` + file, input.config);
+                            log.toOutput(`Deleted file ${path}/cache/commandData/` + file, input.config);
                         }
                     }
                     else if (cacheById.some(x => file.startsWith(x))) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24)) {
                             fs.unlinkSync(`${path}/cache/commandData/` + file);
-                            log.toOutput(`Deleted file ${path}\\cache\\commandData\\` + file, input.config);
+                            log.toOutput(`Deleted file ${path}/cache/commandData/` + file, input.config);
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     } else if (file.includes('weatherdata')) {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 15)) {
                             fs.unlinkSync(`${path}/cache/commandData/` + file);
-                            log.toOutput(`Deleted file ${path}\\cache\\commandData\\` + file, input.config);
+                            log.toOutput(`Deleted file ${path}/cache/commandData/` + file, input.config);
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     }
                     else {
                         if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 3)) {
                             fs.unlinkSync(`${path}/cache/commandData/` + file);
-                            log.toOutput(`Deleted file ${path}\\cache\\commandData\\` + file, input.config);
+                            log.toOutput(`Deleted file ${path}/cache/commandData/` + file, input.config);
                             // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
                         }
                     }

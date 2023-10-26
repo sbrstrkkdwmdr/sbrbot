@@ -5,11 +5,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const path = `${__dirname}`;
 
-export const filespath = `${__dirname}\\files`;
+export const filespath = `${__dirname}/files`;
 
 
 export function getParentFolderPath(filePath: string) {
-    const separator = filePath.includes('/') ? '/' : '\\';
+    const separator = filePath.includes('/') ? '/' : '/';
     const lastIndex = filePath.lastIndexOf(separator);
     if (lastIndex === -1) {
         return filePath; // Parent folder does not exist
@@ -18,6 +18,6 @@ export function getParentFolderPath(filePath: string) {
 }
 
 export const precomppath = getParentFolderPath(path);
-//let path = x\\y\\
-//want x\\z\\
+//let path = x/y/
+//want x/z/
 //get
