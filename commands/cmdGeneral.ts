@@ -423,8 +423,8 @@ export async function convert(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     const embedres = new Discord.EmbedBuilder()
-        .setColor(colours.embedColour.info.dec)
-        // .setDescription('⠀');
+        .setColor(colours.embedColour.info.dec);
+    // .setDescription('⠀');
 
     let useEmbeds = [];
 
@@ -815,7 +815,10 @@ export async function help(input: extypes.commandInput) {
             const reqtxt = opts[i].required ? 'required' : 'optional';
             const newtxt = `\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options &&
                 !opts[i].options.includes('N/A') && !opts[i].options.includes('null') && !opts[i].options.includes('true') && !opts[i].options.includes('false')
-                ? `(${opts[i].options.map(x => `\`${x}\``).join('/')})` : ''}\n`;
+                ? `(${opts[i].options.map(x =>
+                    x.includes('[') && x.includes(']') && x.includes('(') && x.includes(')')
+                        ? x : `\`${x}\``
+                ).join('/')})` : ''}\n`;
 
             if ((opttxt + newtxt).length > 1000) {
                 exceeds = true;
