@@ -284,15 +284,15 @@ export const values: convVal[] = [
                 func: (x) => {
                     return x / 12;
                 },
-                text: 'x*12'
+                text: 'x/12'
             },
             {
                 to: 'Metre',
                 names: namesList.dist_m,
                 func: (x) => {
-                    return x * 0.0254;
+                    return x / 39.37;
                 },
-                text: 'x*0.0254 '
+                text: 'x/39.37'
             },
             {
                 to: 'Mile',
@@ -355,9 +355,9 @@ export const values: convVal[] = [
                 to: 'Metre',
                 names: namesList.dist_m,
                 func: (x) => {
-                    return x * 0.3048;
+                    return x / 3.28084;
                 },
-                text: 'x*0.3048'
+                text: 'x/3.28084'
             },
             {
                 to: 'Mile',
@@ -3853,9 +3853,9 @@ export const values: convVal[] = [
                 to: 'Square metre',
                 names: namesList.area_m2,
                 func: (x) => {
-                    return x / 1550;
+                    return x / (39.37 ** 2);
                 },
-                text: 'x/1550'
+                text: 'x/(39.37^2)'
             },
             {
                 to: 'Acre',
@@ -3869,25 +3869,25 @@ export const values: convVal[] = [
                 to: 'Hectare',
                 names: namesList.area_ha,
                 func: (x) => {
-                    return x / 1.55e7;
+                    return x / (39.37 ** 2 * 10e4);
                 },
-                text: 'x/(1.55e7)'
+                text: 'x/(39.37^2 * 10e4)'
             },
             {
                 to: 'Square kilometre',
                 names: namesList.area_km2,
                 func: (x) => {
-                    return x / 1.55e9;
+                    return x / (39.37 ** 2 * 10e6);
                 },
-                text: 'x/(1.55e9)'
+                text: 'x/(39.37 ** 2 * 10e6)'
             },
             {
                 to: 'Square mile',
                 names: namesList.area_mi2,
                 func: (x) => {
-                    return x / 4.014e9;
+                    return x / 63360 ** 2;
                 },
-                text: 'x/(4.014e9)'
+                text: 'x/(63360^2)'
             },
             toArbitrary
         ]
@@ -3918,9 +3918,9 @@ export const values: convVal[] = [
                 to: 'Square metre',
                 names: namesList.area_m2,
                 func: (x) => {
-                    return x / 10.764;
+                    return x / 3.28084 ** 2;
                 },
-                text: 'x/10.764'
+                text: 'x/3.28084^2'
             },
             {
                 to: 'Acre',
@@ -3934,17 +3934,17 @@ export const values: convVal[] = [
                 to: 'Hectare',
                 names: namesList.area_ha,
                 func: (x) => {
-                    return x / 107600;
+                    return x / 3.28084 ** 2 * 10e4;
                 },
-                text: 'x/107600'
+                text: 'x/3.28084^2*10e4'
             },
             {
                 to: 'Square kilometre',
                 names: namesList.area_km2,
                 func: (x) => {
-                    return x / 1.0764e7;
+                    return x / 3.28084 ** 2 * 10e6;
                 },
-                text: 'x/(1.0764e7)'
+                text: 'x/3.28084^2*10e6'
             },
             {
                 to: 'Square mile',
@@ -3967,17 +3967,17 @@ export const values: convVal[] = [
                 to: 'Square inch',
                 names: namesList.area_in2,
                 func: (x) => {
-                    return x * 1550;
+                    return x * 39.37 ** 2;
                 },
-                text: 'x*1550'
+                text: 'x*39.37^2'
             },
             {
                 to: 'Square foot',
                 names: namesList.area_ft2,
                 func: (x) => {
-                    return x * 10.764;
+                    return x * 3.28084 ** 2;
                 },
-                text: 'x*10.764'
+                text: 'x*3.28084^2'
             },
             {
                 to: 'Square metre',
@@ -3999,9 +3999,9 @@ export const values: convVal[] = [
                 to: 'Hectare',
                 names: namesList.area_ha,
                 func: (x) => {
-                    return x / 10000;
+                    return x / 1e4;
                 },
-                text: 'x/10000'
+                text: 'x/1e4'
             },
             {
                 to: 'Square kilometre',
@@ -4015,9 +4015,9 @@ export const values: convVal[] = [
                 to: 'Square mile',
                 names: namesList.area_mi2,
                 func: (x) => {
-                    return x / 2.59e+6;
+                    return x / 1609.344 ** 2;
                 },
-                text: 'x/2.59e+6'
+                text: 'x/1609.344^2'
             },
             toArbitrary
         ]
@@ -4162,41 +4162,41 @@ export const values: convVal[] = [
                 to: 'Square inch',
                 names: namesList.area_in2,
                 func: (x) => {
-                    return x*1.55e9;
+                    return x * 39.37 ** 2 * 10e6;
                 },
-                text: 'x*1.55e9'
+                text: 'x*39.37^2*10e6'
             },
             {
                 to: 'Square foot',
                 names: namesList.area_ft2,
                 func: (x) => {
-                    return x * 1.076e+7;
+                    return x * 3.28084 ** 2 * 10e6;
                 },
-                text: 'x*1.076e+7'
+                text: 'x*3.28084^2*10e6'
             },
             {
                 to: 'Square metre',
                 names: namesList.area_m2,
                 func: (x) => {
-                    return x * 1e+6;
+                    return x * 10e6;
                 },
-                text: 'x*1e+6'
+                text: 'x*10e6'
             },
             {
                 to: 'Acre',
                 names: namesList.area_ac,
                 func: (x) => {
-                    return x * 247.105;
+                    return x / 4047 * 10e6;
                 },
-                text: 'x*247.105'
+                text: 'x/4047*10e6'
             },
             {
                 to: 'Hectare',
                 names: namesList.area_ha,
                 func: (x) => {
-                    return x * 100;
+                    return x * 1e2;
                 },
-                text: 'x*100'
+                text: 'x*1e2'
             },
             {
                 to: 'Square kilometre',
@@ -4210,9 +4210,9 @@ export const values: convVal[] = [
                 to: 'Square mile',
                 names: namesList.area_mi2,
                 func: (x) => {
-                    return x / 2.59;
+                    return (x / 5280 ** 2) * 10e6;
                 },
-                text: 'x/2.59'
+                text: '(x/5280^2)*10e6'
             },
             toArbitrary
         ]
@@ -4227,25 +4227,25 @@ export const values: convVal[] = [
                 to: 'Square inch',
                 names: namesList.area_in2,
                 func: (x) => {
-                    return x*4.014e9;
+                    return x * 63360 ** 2;
                 },
-                text: 'x*4.014e9'
+                text: 'x*63360^2'
             },
             {
                 to: 'Square foot',
                 names: namesList.area_ft2,
                 func: (x) => {
-                    return x * 2.788e+7;
+                    return x * 5280 ** 2;
                 },
-                text: 'x*2.788e+7'
+                text: 'x*5280^2'
             },
             {
                 to: 'Square metre',
                 names: namesList.area_m2,
                 func: (x) => {
-                    return x * 2.59e+6;
+                    return x * 1609.344 ** 2;
                 },
-                text: 'x*2.59e+6'
+                text: 'x*1609.344^2'
             },
             {
                 to: 'Acre',
@@ -4267,9 +4267,9 @@ export const values: convVal[] = [
                 to: 'Square kilometre',
                 names: namesList.area_km2,
                 func: (x) => {
-                    return x;
+                    return x * 5280 ** 2 / 10e6;
                 },
-                text: 'x*2.59'
+                text: 'x*5280^2/10e6'
             },
             {
                 to: 'Square mile',

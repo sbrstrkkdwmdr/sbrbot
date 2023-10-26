@@ -553,3 +553,4 @@ changes:
 [QOL] edit invalid conversion message
 [FIX] crashing on axios timeout error when updating changelog
 [FIX] urls in help command not embedding properly
+[QOL] fix up conversions - accuracy, formulae etc.
