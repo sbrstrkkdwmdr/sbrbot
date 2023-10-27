@@ -557,7 +557,7 @@ changes:
 
 VERSION 0.5.6_b
 2023-10-26
-commit: null
+commit: 6a1cb29237822513fe2b234b755639b9a317ae4e
 changes:
 [FIX] avatar no longer requires admin
 [FIX] error handling for weather
