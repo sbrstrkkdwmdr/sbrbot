@@ -495,7 +495,16 @@ export async function getLocation(name: string, config: extypes.config) {
     }
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${name.replaceAll(' ', '+')}&count=10&language=en&format=json`;
     log.toOutput(url, config);
-    return (await axios.get(url)).data as { results: othertypes.geoLocale[]; };
+    const data = await axios.get(url)
+        .then(x => x.data)
+        .catch(err => {
+            console.log(err);
+            return { error: true };
+        }
+        );
+
+
+    return data as { results: othertypes.geoLocale[]; };
 }
 
 export async function getWeather(
@@ -517,13 +526,12 @@ export async function getWeather(
             + "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,precipitation_probability_min,precipitation_probability_mean,windspeed_10m_max,windgusts_10m_max,winddirection_10m_dominant"
             + `&timezone=${location.timezone}`;
         log.toOutput(url, config);
-        let data;
-        try {
-            data = (await axios.get(url)).data;
-        } catch (err) {
-            console.log(err);
-            return "timeout";
-        }
+        const data = await axios.get(url)
+            .then(x => x.data)
+            .catch(err => {
+                console.log(err);
+                return { error: true, reason: "timeout" };
+            });
         return data as othertypes.weatherData;
     }
 }

@@ -560,3 +560,4 @@ date_time
 commit: null
 changes:
 [FIX] avatar no longer requires admin
+[FIX] error handling for weather

@@ -2377,8 +2377,9 @@ export async function weather(input: extypes.commandInput) {
         }
     } else {
         weatherEmbed
-            .setDescription(errors.uErr.weather.api);
-        logWeatherError(errors.uErr.weather.api);
+            .setDescription(errors.uErr.weather.api + " (Location)");
+        logWeatherError(errors.uErr.weather.api + " (Location)");
+        useEmbeds.push(weatherEmbed);
     }
 
     async function toWeather(location: othertypes.geoLocale) {
@@ -2396,14 +2397,22 @@ export async function weather(input: extypes.commandInput) {
             if (weatherData.includes("timeout")) {
                 weatherEmbed.setDescription(errors.timeout);
                 logWeatherError(errors.timeout);
+                useEmbeds.push(weatherEmbed);
             } else {
                 weatherEmbed.setDescription(errors.uErr.weather.wrongCoords);
                 logWeatherError(errors.uErr.weather.wrongCoords);
+                useEmbeds.push(weatherEmbed);
             }
             return;
         } else if (weatherData.hasOwnProperty('reason') || weatherData.hasOwnProperty('error')) {
             weatherEmbed.setDescription(errors.uErr.weather.api);
             logWeatherError(errors.uErr.weather.api);
+            if (weatherData?.reason == "timeout") {
+                weatherEmbed.setDescription(errors.timeout);
+                logWeatherError(errors.timeout);
+                useEmbeds.push(weatherEmbed);
+            }
+            useEmbeds.push(weatherEmbed);
             return;
         } else {
             const utctime = moment().utc()
