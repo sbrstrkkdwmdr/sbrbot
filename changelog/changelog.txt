@@ -555,8 +555,8 @@ changes:
 [FIX] urls in help command not embedding properly
 [QOL] fix up conversions - accuracy, formulae etc.
 
-VERSION 0.5.7
-date_time
+VERSION 0.5.6_b
+2023-10-26
 commit: null
 changes:
 [FIX] avatar no longer requires admin
