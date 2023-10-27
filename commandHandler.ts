@@ -238,7 +238,6 @@ export default (input: {
             'poll', 'vote'
         ];
         const botRequireAdmin: string[] = [
-            'avatar', 'av', 'pfp',
             'checkperms', 'fetchperms', 'checkpermissions', 'permissions', 'perms',
             'userinfo'
         ];
