@@ -1468,7 +1468,7 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
     try {
         const init = JSON.parse(fs.readFileSync(`${path}/cache/previous/${type}${serverId}.json`, 'utf-8')) as {
             id: string | false,
-            apiData: object,
+            apiData: osuApiTypes.Score,
             mods: string,
             default: boolean,
         };
@@ -1476,7 +1476,7 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
     } catch (error) {
         const data: {
             id: string | false,
-            apiData: object,
+            apiData: osuApiTypes.Score,
             mods: string;
             default: boolean,
         } = {
@@ -1519,7 +1519,7 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
 }
 export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string, data: {
     id: string,
-    apiData: object,
+    apiData: osuApiTypes.Score,
     mods: string,
     default?: boolean;
 }) {

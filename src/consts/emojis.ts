@@ -14,6 +14,7 @@ export const mapobjs = {
     ar: '🏃‍♀️',
     od: '🎯',
     hp: '♥',
+    star: '⭐'
 };
 
 // files/img/osu/mode(x).png

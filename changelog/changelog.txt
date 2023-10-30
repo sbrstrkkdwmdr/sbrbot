@@ -561,3 +561,12 @@ commit: 6a1cb29237822513fe2b234b755639b9a317ae4e
 changes:
 [FIX] avatar no longer requires admin
 [FIX] error handling for weather
+
+VERSION 0.5.7
+date_time
+commit:
+changes:
+[QOL] simulate - pull values from previously used score if map id matches 
+[FIX] simulate - map predicted pp being too high/low (forced clockrate of 1 instead of matching DT/HT/specified)
+[ADD] simulate - show star rating
+[QOL] simulate - force acc to be 2 decimal places

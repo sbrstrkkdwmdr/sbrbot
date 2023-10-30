@@ -9531,6 +9531,26 @@ export async function simulate(input: extypes.commandInput) {
         }, input.canReply);
     }
 
+    const tempscore = osufunc.getPreviousId('score', input.obj.guildId);
+    if (tempscore?.apiData && tempscore?.apiData.beatmap.id == mapid) {
+        if (!n300 && !n100 && !n50 && !acc) {
+            n300 = tempscore.apiData.statistics.count_300;
+            n100 = tempscore.apiData.statistics.count_100;
+            n50 = tempscore.apiData.statistics.count_50;
+            acc = tempscore.apiData.accuracy * 100;
+        }
+        if (!nMiss) {
+            nMiss = tempscore.apiData.statistics.count_miss;
+        }
+        if (!combo) {
+            combo = tempscore.apiData.max_combo;
+        }
+        if (!mods) {
+            mods = tempscore.apiData.mods.join('');
+        }
+    }
+
+
     let mapdataReq: osufunc.apiReturn;
 
     if (func.findFile(mapid, 'mapdata') &&
@@ -9627,7 +9647,7 @@ export async function simulate(input: extypes.commandInput) {
         hit100: n100,
         hit50: n50,
         miss: nMiss,
-        acc: acc / 100,
+        acc: acc,
         maxcombo: combo,
         score: null,
         calctype: 0,
@@ -9653,7 +9673,7 @@ export async function simulate(input: extypes.commandInput) {
         gamemode: 'osu',
         mapid,
         calctype: 0,
-        clockRate: 1
+        clockRate: overrideSpeed
     }, new Date(mapdata.last_updated), input.config);
 
     const title = osufunc.parseUnicodeStrings({
@@ -9678,7 +9698,7 @@ export async function simulate(input: extypes.commandInput) {
             {
                 name: 'Score Details',
                 value:
-                    `${acc ?? 100}% | ${nMiss ?? 0}x misses
+                    `${(acc ?? 100)?.toFixed(2)}% | ${nMiss ?? 0}x misses
 ${combo ?? mxCombo}x/**${mxCombo}**x
 ${mods ?? 'No mods'}
 \`${n300}/${n100}/${n50}/${nMiss}\`
@@ -9719,6 +9739,7 @@ ${emojis.mapobjs.circle}${mapdata.count_circles}
 ${emojis.mapobjs.slider}${mapdata.count_sliders}
 ${emojis.mapobjs.spinner}${mapdata.count_spinners}
 ${emojis.mapobjs.bpm}${mapdata.bpm}
+${emojis.mapobjs.star}${(score[0]?.difficulty?.stars ?? mapdata.difficulty_rating)?.toFixed(2)}
                 `,
                 inline: true
             },
