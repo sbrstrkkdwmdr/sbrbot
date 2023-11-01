@@ -583,7 +583,6 @@ q | quecto | 10^-30 | Nonillionth
     if (converting == true) {
         //find
         const data = calc.convert(cat1, cat2, num);
-
         embedres.setTitle(`${data.type} conversion`);
         embedres.addFields([
             {

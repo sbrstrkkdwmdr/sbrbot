@@ -24,7 +24,7 @@ const namesList = {
     arbitrary: ['Arbitrary units', 'idk', 'wtf', '???', '?'],
     temp_c: ['Celsius', '℃', '°C', 'Celcius', 'Centigrade', 'C',],
     temp_f: ['Fahrenheit', '℉', '°F', 'F'],
-    temp_k: ['Kelvin', '°K', 'L'],
+    temp_k: ['Kelvin', '°K', 'K'],
     dist_in: ['Inch', 'in', '\'', '`'],
     dist_ft: ['Feet', 'ft', 'foot', '"', "''", '``'],
     dist_m: ['Metre', 'm', 'Meter'],

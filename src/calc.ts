@@ -88,11 +88,14 @@ export function toScientificNotation(number: number, significantFigures: number)
         tNum = `${number}`;
     } else if (number !== 0) {
         let exponent = 0;
-        while (number < 1 || number >= 10) {
-            if (number < 1) {
+        let i = 0
+        while (Math.abs(number) < 1 || Math.abs(number) >= 10) {
+            console.log(i)
+            i++
+            if (Math.abs(number) < 1) {
                 number *= 10;
                 exponent--;
-            } else if (number >= 10) {
+            } else if (Math.abs(number) >= 10) {
                 number /= 10;
                 exponent++;
             }
@@ -736,8 +739,7 @@ export function convert(input: string, output: string, value: number) {
             if (x !== null) {
                 names.push(x.toUpperCase());
             }
-        }
-        );
+        });
 
         if (names.includes(tcat1.originalValue.toUpperCase()) || names.includes(input.toUpperCase())) {
             if (names.includes(input.toUpperCase()) && !names.includes(tcat1.originalValue.toUpperCase())) {
@@ -749,7 +751,6 @@ export function convert(input: string, output: string, value: number) {
                     inval();
                     break;
                 }
-
                 const calcNames: string[] = [];
                 curCalc.names.forEach(x => {
                     if (x !== null) {
@@ -780,11 +781,8 @@ export function convert(input: string, output: string, value: number) {
                             secondaryMetric = true;
                         }
                     }
-
                     let fromType = curObject.name;
-
                     let toType = curCalc.to;
-
                     if (curObject.system == 'Metric' && tcat1.prefix.removed.length > 0 && usePre1) {
                         value *= tcat1.power;
                         fromType = tcat1.prefix?.long?.length > 0 ? toCapital(tcat1.prefix.long) + curObject.name.toLowerCase() : curObject.name;
@@ -793,24 +791,20 @@ export function convert(input: string, output: string, value: number) {
                     }
 
                     let outvalue = curCalc.func(value);
-
                     if (secondaryMetric && tcat2.prefix.removed.length > 0 && usePre2) {
                         outvalue /= tcat2.power;
                         toType = tcat2.prefix?.long?.length > 0 ? toCapital(tcat2.prefix.long) + curCalc.to.toLowerCase() : curCalc.to;
                         const formEnd = `${tcat2.power}`;
                         formula = `(${formula})/${formEnd}`;
                     }
-
                     type = curObject.type;
                     change = `${fromType} => ${toType}`;
                     significantFigures = toScientificNotation(outvalue, getSigFigs(numAsStr));
                     const usVol = [];
-
                     otherUnits = curObject.calc
                         .filter(x => !x.names.includes('Arbitrary units'))
                         .map(x => toName(x))
                         .join(', ');
-
                     if (curObject.type == 'Volume' && (usVol.includes(curObject.name) || usVol.includes(curCalc.to))) {
                         extra = 'Using US measurements not Imperial';
                     }
