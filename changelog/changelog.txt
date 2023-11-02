@@ -571,3 +571,4 @@ changes:
 [ADD] simulate - show star rating
 [QOL] simulate - force acc to be 2 decimal places
 [FIX] sig figs - negative numbers would cause loops to infinitely recur. Changed n to Math.abs(n)
+[FIX] simulate - displayed accuracy only changing from `-acc` param (n300,100 etc. would be ignored)

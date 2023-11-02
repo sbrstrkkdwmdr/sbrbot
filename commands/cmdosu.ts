@@ -9655,13 +9655,29 @@ export async function simulate(input: extypes.commandInput) {
     }, new Date(mapdata.last_updated), input.config);
     osufunc.debug(score, 'command', 'simulate', input.obj.guildId, 'ppCalc');
 
+    let use300s = (n300 ?? 0);
+    let gotTot = (n300 ?? 0) + (n100 ?? 0) + (n50 ?? 0) + (nMiss ?? 0);
+    if (gotTot != mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) {
+        while (use300s < (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners)) {
+            use300s++;
+        }
+    }
+
+    const useAcc = osumodcalc.calcgrade(
+        use300s,
+        n100 ?? 0,
+        n50 ?? 0,
+        nMiss ?? 0
+    );
     const fcaccgr =
         osumodcalc.calcgrade(
-            n300,
-            n100,
-            n50,
+            use300s,
+            n100 ?? 0,
+            n50 ?? 0,
             0
         );
+
+
     const specAcc = isNaN(fcaccgr.accuracy) ?
         acc ?
             acc :
@@ -9698,7 +9714,7 @@ export async function simulate(input: extypes.commandInput) {
             {
                 name: 'Score Details',
                 value:
-                    `${(acc ?? 100)?.toFixed(2)}% | ${nMiss ?? 0}x misses
+                    `${useAcc?.accuracy?.toFixed(2)}% | ${nMiss ?? 0}x misses
 ${combo ?? mxCombo}x/**${mxCombo}**x
 ${mods ?? 'No mods'}
 \`${n300}/${n100}/${n50}/${nMiss}\`
