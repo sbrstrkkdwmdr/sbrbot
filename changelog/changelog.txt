@@ -572,3 +572,5 @@ changes:
 [QOL] simulate - force acc to be 2 decimal places
 [FIX] sig figs - negative numbers would cause loops to infinitely recur. Changed n to Math.abs(n)
 [FIX] simulate - displayed accuracy only changing from `-acc` param (n300,100 etc. would be ignored)
+[FIX] scorelist command filters would be removed when changing pages - some variable checkers missing
+[FIX] using multiple args for scorelist commands would result in omissions of some params

@@ -70,7 +70,7 @@ export async function scoreList(
     }
     if (asObj.filteredMods != null) {
         filtereddata = filtereddata.filter(array => array.score.mods.join('').toUpperCase().includes(calcmods.toUpperCase()));
-        filterinfo += `\nmods: ${calcmods}`;
+        filterinfo += `\ninclude mods: ${calcmods}`;
     }
     if (asObj.exactMods?.toUpperCase() == 'NM') {
         filtereddata = filtereddata.filter(array => array.score.mods.length == 0);

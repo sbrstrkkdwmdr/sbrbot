@@ -439,37 +439,31 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
     if (input.args.includes('-score')) {
         const temp = func.parseArg(input.args, '-score', 'string', score, false);
         score = temp.value;
-        input.args.splice(input.args.indexOf('-score'), 1);
     }
     if (input.args.includes('-acc')) {
         const temp = func.parseArg(input.args, '-acc', 'string', acc, false);
         acc = temp.value;
-        input.args.splice(input.args.indexOf('-acc'), 1);
     }
     if (input.args.includes('-combo')) {
         const temp = func.parseArg(input.args, '-combo', 'string', combo, false);
         combo = temp.value;
-        input.args.splice(input.args.indexOf('-combo'), 1);
     }
     if (input.args.includes('-misses')) {
         const temp = func.parseArg(input.args, '-misses', 'string', miss, false);
         miss = temp.value;
-        input.args.splice(input.args.indexOf('-misses'), 1);
     }
     if (input.args.includes('-miss')) {
         const temp = func.parseArg(input.args, '-miss', 'string', miss, false);
         miss = temp.value;
-        input.args.splice(input.args.indexOf('-miss'), 1);
     }
     if (input.args.includes('-rank')) {
         const temp = func.parseArg(input.args, '-rank', 'string', filterRank, false);
-        filterRank = temp.value;
+        filterRank = osumodcalc.checkGrade(temp.value);
         input.args.splice(input.args.indexOf('-rank'), 1);
     }
     if (input.args.includes('-bpm')) {
         const temp = func.parseArg(input.args, '-bpm', 'string', bpm, false);
         bpm = temp.value;
-        input.args.splice(input.args.indexOf('-bpm'), 1);
     }
     if (input.args.includes('-grade')) {
         const temp = func.parseArg(input.args, '-grade', 'string', filterRank, false);
@@ -538,12 +532,18 @@ export async function parseArgs_scoreList_button(input: extypes.commandInput) {
 
     let filteredMapper = null;
     let filteredMods = null;
+    let exactMods = null;
     let filterTitle = null;
     let filterRank: osuApiTypes.Rank = null;
 
     const parseScore = false;
     const parseId = null;
-
+    let pp = null;
+    let score = null;
+    let acc = null;
+    let combo = null;
+    let miss = null;
+    let bpm = null;
     input.obj = (input.obj as Discord.ButtonInteraction);
 
     if (!input.obj.message.embeds[0]) {
@@ -560,8 +560,12 @@ export async function parseArgs_scoreList_button(input: extypes.commandInput) {
             filteredMapper = input.obj.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
         }
 
-        if (input.obj.message.embeds[0].description.includes('mods')) {
-            filteredMods = input.obj.message.embeds[0].description.split('mods: ')[1].split('\n')[0];
+        if (input.obj.message.embeds[0].description.includes('include mods')) {
+            filteredMods = input.obj.message.embeds[0].description.split('include mods: ')[1].split('\n')[0];
+        }
+
+        if (input.obj.message.embeds[0].description.includes('exact mods')) {
+            filteredMods = input.obj.message.embeds[0].description.split('exact mods: ')[1].split('\n')[0];
         }
 
         if (input.obj.message.embeds[0].description.includes('map')) {
@@ -570,6 +574,26 @@ export async function parseArgs_scoreList_button(input: extypes.commandInput) {
 
         if (input.obj.message.embeds[0].description.includes('rank')) {
             filterRank = osumodcalc.checkGrade(input.obj.message.embeds[0].description.split('rank: ')[1].split('\n')[0]);
+        }
+
+        if (input.obj.message.embeds[0].description.includes('rank')) {
+            filterRank = osumodcalc.checkGrade(input.obj.message.embeds[0].description.split('rank: ')[1].split('\n')[0]);
+        }
+
+        if (input.obj.message.embeds[0].description.includes('pp:')) {
+            pp = input.obj.message.embeds[0].description.split('pp: ')[1].split('\n')[0];
+        }
+        if (input.obj.message.embeds[0].description.includes('score:')) {
+            score = input.obj.message.embeds[0].description.split('score: ')[1].split('\n')[0];
+        }
+        if (input.obj.message.embeds[0].description.includes('acc:')) {
+            acc = input.obj.message.embeds[0].description.split('acc: ')[1].split('\n')[0];
+        }
+        if (input.obj.message.embeds[0].description.includes('combo:')) {
+            combo = input.obj.message.embeds[0].description.split('combo: ')[1].split('\n')[0];
+        }
+        if (input.obj.message.embeds[0].description.includes('miss:')) {
+            miss = input.obj.message.embeds[0].description.split('miss: ')[1].split('\n')[0];
         }
 
 
@@ -652,6 +676,8 @@ export async function parseArgs_scoreList_button(input: extypes.commandInput) {
         sort, reverse, mode,
         filteredMapper, filteredMods, filterTitle, filterRank,
         parseScore, parseId,
+        exactMods, pp, score, acc, combo, miss, bpm
+
     };
 }
 
@@ -759,6 +785,13 @@ export async function parseArgs_scoreList(input: extypes.commandInput) {
             parseScore = temp.parseScore;
             parseId = temp.parseId;
             filterRank = temp.filterRank;
+            exactMods = temp.exactMods;
+            pp = temp.pp;
+            score = temp.score;
+            acc = temp.acc;
+            combo = temp.combo;
+            miss = temp.miss;
+            bpm = temp.bpm;
         }
             break;
     }
