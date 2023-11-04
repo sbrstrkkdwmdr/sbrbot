@@ -576,3 +576,4 @@ changes:
 [FIX] using multiple args for scorelist commands would result in omissions of some params
 [ADD] added aliases
 [QOL] add more stats to info command
+[FIX] sig figs of 1 cutting off trailing digits (ie 35.6 -> 3 instead of 4e1 or 40)

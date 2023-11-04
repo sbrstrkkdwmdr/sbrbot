@@ -88,10 +88,9 @@ export function toScientificNotation(number: number, significantFigures: number)
         tNum = `${number}`;
     } else if (number !== 0) {
         let exponent = 0;
-        let i = 0
+        let i = 0;
         while (Math.abs(number) < 1 || Math.abs(number) >= 10) {
-            console.log(i)
-            i++
+            i++;
             if (Math.abs(number) < 1) {
                 number *= 10;
                 exponent--;
@@ -100,18 +99,19 @@ export function toScientificNotation(number: number, significantFigures: number)
                 exponent++;
             }
         }
-        if (exponent == 1) {
-            number *= 10;
-            exponent = 0;
-        } else if (exponent == -1) {
-            number /= 10;
-            exponent = 0;
-        }
-
         let mantissa = number.toFixed(significantFigures - 1);
         // Code to ensure the number has the correct number of significant figures
         let xFig = significantFigures + (mantissa.match(/[-.]/g) || []).length;
         mantissa = mantissa.slice(0, xFig);
+
+        if (exponent == 1) {
+            mantissa = `${(+mantissa * 10)}`;
+            exponent = 0;
+        } else if (exponent == -1) {
+            mantissa = `${(+mantissa / 10)}`;
+            exponent = 0;
+        }
+
         if (exponent !== 0) {
             tNum = `${mantissa}e${exponent}`;
         } else {
