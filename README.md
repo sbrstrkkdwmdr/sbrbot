@@ -84,19 +84,23 @@ copy the key and paste it into the google.apiKey field </br>
 
 ## credits n stuff
 
-- Discord API wrapper: [Discord.js](https://discord.js.org/)</br>
-- Performance/SR calculations: [rosu-pp](https://github.com/MaxOhn/rosu-pp-js)</br>
-- Image to text parser: [tesseract.js](https://github.com/naptha/tesseract.js)</br>
-- Youtube search: [yt-search](https://www.npmjs.com/package/yt-search)</br>
-- Database: [Sequelize](https://www.npmjs.com/package/sequelize)</br>
-- Mod calculations: [osumodcalculator](https://www.npmjs.com/package/osumodcalculator)</br>
-- Graph/chart generator: [chartjs-to-image](https://www.npmjs.com/package/chartjs-to-image)</br>
-- [osu! api v2](https://osu.ppy.sh/docs/index.html?javascript#introduction) </br>
-- [osu!stats api](https://github.com/respektive/osustats)</br>
-- [node-fetch](https://www.npmjs.com/package/node-fetch)</br>
-- [osureplayparser](https://www.npmjs.com/package/osureplayparser)</br>
-- Weather API: [open-meteo](https://open-meteo.com)</br>
-- Tropical Weather API: [tidetech](https://docs.tidetech.org/storm-api/)</br>
+<!-- - [osu!stats api](https://github.com/respektive/osustats)</br> -->
+
+| Function | URL |
+| --- | --- |
+| Discord API Wrapper | [Discord.js](https://discord.js.org/) |
+| Performance/SR calculations | [rosu-pp](https://github.com/MaxOhn/rosu-pp-js) |
+| Image to text parser | [tesseract.js](https://github.com/naptha/tesseract.js) |
+| Youtube search | [yt-search](https://www.npmjs.com/package/yt-search) |
+| Database | [Sequelize](https://www.npmjs.com/package/sequelize) |
+| Mod calculations | [osumodcalculator](https://www.npmjs.com/package/osumodcalculator) |
+| Graph/chart generator | [chartjs-to-image](https://www.npmjs.com/package/chartjs-to-image) |
+| osu!api | [osu! api v2](https://osu.ppy.sh/docs/index.html?javascript#introduction) |
+| Api caller | [Axios](https://github.com/axios/axios) |
+| Api caller | [node-fetch](https://www.npmjs.com/package/node-fetch) |
+| osr handler | [osureplayparser](https://www.npmjs.com/package/osureplayparser) |
+| Weather API | [open-meteo](https://open-meteo.com) |
+| Tropical Weather API | [tidetech](https://docs.tidetech.org/storm-api/) |
 
 ## config properties
 
