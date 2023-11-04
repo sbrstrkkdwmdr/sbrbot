@@ -345,7 +345,7 @@ const cmds: commandInfo[] = [
                 descriptor: 'Shows information about the recent command'
             }
         ],
-        aliases: ['commands'],
+        aliases: ['commands', 'list', 'command'],
         buttons: [buttonsObjs.label.extras.random, buttonsObjs.label.main.detailed],
         options: [
             {
@@ -543,7 +543,7 @@ operators: *, /, +, -, (, )
                 descriptor: 'Shows the current time in AEST (UTC+10, Australian Eastern Standard Time)'
             },
         ],
-        aliases: [],
+        aliases: ['tz'],
         options: [
             {
                 name: 'timezone',
@@ -2567,7 +2567,7 @@ const othercmds: commandInfo[] = [
                 descriptor: 'Searches youtube for "never gonna give you up"'
             }
         ],
-        aliases: ['yt'],
+        aliases: ['yt', 'yts'],
         options: [
             {
                 name: 'query',

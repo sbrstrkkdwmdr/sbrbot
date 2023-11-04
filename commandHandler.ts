@@ -182,11 +182,23 @@ export default (input: {
     ) {
         const requireEmbedCommands: string[] = [
             //gen
-            'convert', 'help', 'info', 'invite', 'ping', 'remind', 'stats', 'time', 'weather', 'temperature', 'temp', 'tropicalweather', 'ts',
+            'convert', 'conv',
+            'help', 'commands', 'list', 'command',
+            'info',
+            'invite',
+            'ping',
+            'remind', 'reminders', 'reminder',
+            'stats',
+            'time', 'tz',
+            'weather', 'temperature', 'temp',
+            'tropicalweather', 'ts',
             //misc
-            'image', 'imagesearch', 'poll', 'vote', 'ytsearch', 'yt', 'yts',
+            'coin', 'coinflip', 'flip',
             'hug', 'kiss', 'lick', 'pet', 'punch', 'slap',
+            'image', 'imagesearch',
             'inspire', 'insp',
+            'poll', 'vote',
+            'ytsearch', 'yt', 'yts',
             //osu
             'bws', 'badgeweightsystem', 'badgeweight', 'badgeweightseed', 'badgerank',
             'compare', 'common',
@@ -306,7 +318,7 @@ export default (input: {
             case 'convert': case 'conv':
                 commands.convert({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
-            case 'help': case 'commands':
+            case 'help': case 'commands': case 'list': case 'command':
                 startType(obj);
                 commands.help({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
@@ -338,7 +350,7 @@ export default (input: {
             //     startType(obj);
             //     commands.locationset({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
             //     break;
-            case 'time':
+            case 'time': case 'tz':
                 commands.time({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
             case 'weather': case 'temperature': case 'temp':

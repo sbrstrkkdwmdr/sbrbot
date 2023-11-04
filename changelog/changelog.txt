@@ -574,3 +574,4 @@ changes:
 [FIX] simulate - displayed accuracy only changing from `-acc` param (n300,100 etc. would be ignored)
 [FIX] scorelist command filters would be removed when changing pages - some variable checkers missing
 [FIX] using multiple args for scorelist commands would result in omissions of some params
+[ADD] added aliases
