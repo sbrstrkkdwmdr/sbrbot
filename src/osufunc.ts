@@ -1175,6 +1175,27 @@ export async function apigetOT(input: {
 
 export async function updateToken(config: extypes.config) {
     return new Promise(async (resolve, reject) => {
+        /**
+         * error: 'unsupported_grant_type',
+         * error_description: 'The authorization grant type is not supported by the authorization server.',
+         * hint: 'Check that all required parameters have been provided',
+         * message: 'The authorization grant type is not supported by the authorization server.'
+         */
+        // let nToken = await axios.post('https://osu.ppy.sh/oauth/token',
+        //     {
+        //         body: `grant_type=client_credentials&client_id=${config.osuClientID}&client_secret=${config.osuClientSecret}&scope=public`
+        //     },
+        //     {
+        //         headers: {
+        //             'Accept': 'application/json',
+        //             'Content-Type': 'application/x-www-form-urlencoded'
+        //         },
+        //     },
+        // ).catch(err => {
+        //     return console.log(err);
+        // });
+        // console.log(nToken)
+
         const newtoken: osuApiTypes.OAuth = await fetch('https://osu.ppy.sh/oauth/token', {
             method: 'POST',
             headers: {
