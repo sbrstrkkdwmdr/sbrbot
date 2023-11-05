@@ -2616,7 +2616,8 @@ export async function calcUr(
  */
 export async function getFailPoint(
     objectsPassed: number,
-    mapPath: string
+    mapPath: string,
+    config: extypes.config
 ) {
     let time = 1000;
     if (fs.existsSync(mapPath)) {
@@ -2629,9 +2630,10 @@ export async function getFailPoint(
             const objectOfFail = beatmap.hitObjects[objectsPassed - 1];
             time = objectOfFail.startTime;
         } catch (error) {
-            console.log("passed: " + objectsPassed);
-            console.log("path: " + mapPath);
-            console.log(error);
+            log.toOutput(
+                log.errLog('Failed to get score failpoint', `passed: ${objectsPassed}\nmapPath: ${mapPath}\n${error}`),
+                config
+            )
         }
     } else {
         console.log("Path does not exist:" + mapPath);

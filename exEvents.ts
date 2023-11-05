@@ -32,7 +32,8 @@ export default (input: {
         getOnlineChangelog();
         //rankings
     }, 1000 * 60 * 60 * 24);
-
+    clearMapFiles();
+    clearCommandCache();
     getOnlineChangelog();
 
     //status updates
@@ -315,7 +316,7 @@ export default (input: {
                 log.logFile(
                     'err',
                     log.errLog('err', JSON.stringify(error))
-                )
+                );
             });
     }
 
@@ -350,6 +351,7 @@ export default (input: {
         for (const file of files) {
             fs.stat(`${path}/cache/commandData/` + file, (err, stat) => {
                 if (err) {
+                    console.log(err);
                     return;
                 } else {
                     if (permanentCache.some(x => file.startsWith(x))) {

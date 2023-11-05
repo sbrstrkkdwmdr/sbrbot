@@ -6039,7 +6039,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         }
 
         const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
-        const msToFail = await osufunc.getFailPoint(totalhits, `${path}/files/maps/${curbm.id}.osu`);
+        const msToFail = await osufunc.getFailPoint(totalhits, `${path}/files/maps/${curbm.id}.osu`, input.config);
 
         const curbmpasstime = Math.floor(msToFail / 1000);
         const guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
