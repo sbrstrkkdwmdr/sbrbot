@@ -419,6 +419,9 @@ export default (input: {
             case 'roll': case 'rng': case 'randomnumber': case 'randomnumbergenerator': case 'pickanumber': case 'pickanum':
                 misccmds.roll({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
+            case 'sex':
+                misccmds.sex({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
             case 'ytsearch': case 'yt': case 'yts':
                 startType(obj);
                 misccmds.ytsearch({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });

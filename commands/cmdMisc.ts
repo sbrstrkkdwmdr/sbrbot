@@ -1083,6 +1083,91 @@ export function say(input: extypes.commandInput) {
 }
 
 /**
+ * fuck you alex
+ */
+export async function sex(input: extypes.commandInput){
+    let commanduser: Discord.User;
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'sex',
+        options: [],
+        config: input.config,
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    const attachment = new Discord.AttachmentBuilder(`${precomppath}/files/img/smex.png`)
+    console.log(precomppath)
+    console.log(`${precomppath}/files/img/smex.png`)
+    console.log(path)
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            files: [attachment]
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'sex',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            config: input.config,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'sex',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send',
+            config: input.config,
+        });
+    }
+
+}
+
+/**
  * search youtube
  */
 export async function ytsearch(input: extypes.commandInput) {

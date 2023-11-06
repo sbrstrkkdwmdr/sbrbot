@@ -9,7 +9,7 @@ export const filespath = `${__dirname}/files`;
 
 
 export function getParentFolderPath(filePath: string) {
-    const separator = filePath.includes('/') ? '/' : '/';
+    const separator = filePath.includes('/') ? '/' : '\\';
     const lastIndex = filePath.lastIndexOf(separator);
     if (lastIndex === -1) {
         return filePath; // Parent folder does not exist
