@@ -577,3 +577,5 @@ changes:
 [ADD] added aliases
 [QOL] add more stats to info command
 [FIX] sig figs of 1 cutting off trailing digits (ie 35.6 -> 3 instead of 4e1 or 40)
+[QOL] osu - automatically refreshes user data
+[ADD] osu - add average daily and monthly play count to detailed

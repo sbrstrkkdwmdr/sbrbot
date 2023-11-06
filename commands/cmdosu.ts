@@ -1939,7 +1939,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
     if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
         !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
-        input.button != 'Refresh'
+        input.button != 'Refresh' && input.commandType == 'button'
     ) {
         osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
@@ -2346,6 +2346,11 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                 const bmpc = mostplayeddata[i2];
                 mostplaytxt += `\`${(bmpc.count.toString() + ' plays').padEnd(15, ' ')}\` | [${bmpc.beatmapset.title}[${bmpc.beatmap.version}]](https://osu.ppy.sh/b/${bmpc.beatmap_id})\n`;
             }
+
+            const dailies = (osustats.play_count / (calc.convert('month', 'day', osudata.monthly_playcounts.length).outvalue)).toFixed(2);
+            const monthlies =
+                (osustats.play_count / osudata.monthly_playcounts.length).toFixed(2);
+            // osudata.monthly_playcounts.map(x => x.count).reduce((a, b) => b + a)
             osuEmbed.addFields([
                 {
                     name: 'Stats',
@@ -2368,6 +2373,8 @@ ${gradeCounts}
 ${prevnames}
 ${supporter} ${onlinestatus}
 **Avg time per play:** ${calc.secondsToTime(secperplay)}
+**Avg daily playcount:**: ${dailies}
+**Avg monthly playcount:**: ${monthlies}
 `,
                     inline: true
                 }
