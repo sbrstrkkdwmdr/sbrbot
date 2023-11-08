@@ -581,3 +581,9 @@ changes:
 [ADD] osu - add average daily and monthly play count to detailed
 [ADD] sex 😈
 [FIX] `precomppath` being the same as `path`
+
+VERSION 0.5.8
+date_time
+commit: null 
+changes:
+[FIX] math od to ms returning undefined

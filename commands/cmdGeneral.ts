@@ -1345,7 +1345,7 @@ export async function math(input: extypes.commandInput) {
 
     let commanduser;
 
-    let odcalc;
+    let odcalc: osumodcalc.OverallDifficultyObj;
     let type;
     let num1;
     let num2;
@@ -1489,16 +1489,16 @@ export async function math(input: extypes.commandInput) {
                 equation = (`AR${osumodcalc.HalfTimeAR(num1).ar}, ${osumodcalc.HalfTimeAR(num1).ms}ms`);
                 break;
             case 'oddt':
-                odcalc = osumodcalc.odDT(num1);
+                odcalc = osumodcalc.odDT(num1) as osumodcalc.OverallDifficultyObj;
                 equation = (`OD${odcalc.od_num}\n300:+-${odcalc.hitwindow_300}\n100:+-${odcalc.hitwindow_100}\n50:+-${odcalc.hitwindow_50}`);
                 break;
             case 'odht':
-                odcalc = osumodcalc.odHT(num1);
+                odcalc = osumodcalc.odHT(num1) as osumodcalc.OverallDifficultyObj;
                 equation = (`OD${odcalc.od_num}\n300:+-${odcalc.hitwindow_300}\n100:+-${odcalc.hitwindow_100}\n50:+-${odcalc.hitwindow_50}`);
                 break;
             case 'odms':
-                odcalc = osumodcalc.ODtoms(num1);
-                equation = (`300:+-${odcalc.range300}\n100:+-${odcalc.range100}\n50:+-${odcalc.range50}`);
+                odcalc = osumodcalc.ODtoms(num1) as osumodcalc.OverallDifficultyObj;
+                equation = (`300:+-${odcalc.hitwindow_300}\n100:+-${odcalc.hitwindow_100}\n50:+-${odcalc.hitwindow_50}`);
                 break;
             case 'arms':
                 equation = (`${osumodcalc.ARtoms(num1)}ms`);
