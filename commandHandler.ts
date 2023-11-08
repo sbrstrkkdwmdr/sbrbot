@@ -470,6 +470,14 @@ export default (input: {
                 startType(obj);
                 osucmds.map({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
+            case 'ppcalc': case 'mapcalc': case 'mapperf': case 'maperf': case 'mappp': {
+                startType(obj);
+                overrides = {
+                    type: 'ppcalc'
+                };
+                osucmds.map({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+            }
+                break;
             case 'maprandom': case 'f2': case 'maprand': case 'randommap': case 'randmap':
                 startType(obj);
                 osucmds.randomMap({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
@@ -624,11 +632,6 @@ export default (input: {
             case 'pinned': {
                 startType(obj);
                 osucmds.pinned({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            }
-                break;
-            case 'ppcalc': case 'mapcalc': case 'mapperf': case 'maperf': case 'mappp': {
-                startType(obj);
-                osucmds.ppCalc({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
             }
                 break;
             case 'pp': {

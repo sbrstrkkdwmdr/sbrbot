@@ -29,7 +29,7 @@ export type config = {
         gamemodes: boolean,
         scoreGrades: boolean,
         mods: boolean,
-    }
+    };
 };
 
 export type guildSettings = {
@@ -270,6 +270,7 @@ export type osuCmdStyle =
     'M' | //map
     'MC' | //map compressed
     'ME' |//map expanded
+    'MP' | //map pp calc
     'P' | // profile
     'PE' | // profile expanded
     'PC' | // profile compressed
@@ -307,15 +308,15 @@ export type replay = {
         };
     }[],
     raw_replay_data: string;
-}
+};
 
 export type SortedScore = {
     index: number,
-    score: osuapitypes.Score
-}
+    score: osuapitypes.Score;
+};
 
 export type reminder = {
     time: number,
-    text: string, 
+    text: string,
     userID: string,
-}
+};

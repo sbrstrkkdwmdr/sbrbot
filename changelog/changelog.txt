@@ -587,3 +587,7 @@ date_time
 commit: null 
 changes:
 [FIX] math od to ms returning undefined
+[QOL] move pp calc to be part of map cmd 
+[ADD] add a "select difficulty" tab to map
+[QOL] separate the "select map" tab into separate difficulty and map tabs
+[REM] remove multiple difficulties from the same set and only show the first in search tabs

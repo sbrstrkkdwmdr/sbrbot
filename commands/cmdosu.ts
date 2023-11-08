@@ -9814,6 +9814,7 @@ export async function map(input: extypes.commandInput) {
     let mapmods: string;
     let maptitleq: string = null;
     let detailed: number = 1;
+    let isppCalc: boolean = false;
     const searchRestrict = 'any';
     let overrideSpeed = 1;
     let overrideBpm: number = null;
@@ -9912,6 +9913,15 @@ export async function map(input: extypes.commandInput) {
                 showBg = true;
             }
 
+            if (input.args.includes('-calc')) {
+                isppCalc = true;
+                input.args.splice(input.args.indexOf('-calc'), 1);
+            }
+            if (input.args.includes('-pp')) {
+                isppCalc = true;
+                input.args.splice(input.args.indexOf('-pp'), 1);
+            }
+
             input.args = msgfunc.cleanArgs(input.args);
 
             mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true, input.config)).map;
@@ -9962,6 +9972,9 @@ export async function map(input: extypes.commandInput) {
             }
             if (input.obj.message.embeds[0].fields[0].value.includes('=>')) {
                 overrideBpm = parseFloat(input.obj.message.embeds[0].fields[0].value.split('=>')[1].split('\n')[0]);
+            }
+            if (input.obj.message.embeds[0].footer.text.includes('MP')) {
+                isppCalc = true;
             }
         }
             break;
@@ -10132,6 +10145,9 @@ export async function map(input: extypes.commandInput) {
         if (input.overrides?.ex != null) {
             useContent += input.overrides?.ex;
         }
+        if (input.overrides?.type != null) {
+            isppCalc = true;
+        }
     }
 
     //==============================================================================================================================================================================================
@@ -10192,6 +10208,10 @@ export async function map(input: extypes.commandInput) {
                 name: 'hp',
                 value: customHP
             },
+            {
+                name: 'ppCalc',
+                value: isppCalc
+            }
         ],
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
@@ -10208,28 +10228,40 @@ export async function map(input: extypes.commandInput) {
         msgfunc.missingPrevID_map(input);
         return;
     }
-    if (detailed == 2) {
+    if (isppCalc) {
         buttons.addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-DetailDisable-map-${commanduser.id}-${input.absoluteID}`)
+                .setCustomId(`${mainconst.version}-Map-map-${commanduser.id}-${input.absoluteID}-${mapid}${mapmods && mapmods != 'NM' ? '+' + mapmods : ''}`)
                 .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailLess)
+                .setEmoji(buttonsthing.label.extras.map)
         );
     } else {
-        buttons.addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-DetailEnable-map-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.main.detailMore)
-        );
+        if (detailed == 2) {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-DetailDisable-map-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailLess)
+            );
+        } else {
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-DetailEnable-map-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.main.detailMore)
+            );
+        }
     }
     let mapdataReq: osufunc.apiReturn;
     let mapdata: osuApiTypes.Beatmap;
     let bmsdataReq: osufunc.apiReturn;
     let bmsdata: osuApiTypes.Beatmapset;
 
-    const inputModal = new Discord.StringSelectMenuBuilder()
-        .setCustomId(`${mainconst.version}-Select-map-${commanduser.id}-${input.absoluteID}`)
+    const inputModalDiff = new Discord.StringSelectMenuBuilder()
+        .setCustomId(`${mainconst.version}-Select-map-${commanduser.id}-${input.absoluteID}-diff`)
+        .setPlaceholder('Select a difficulty');
+    const inputModalSearch = new Discord.StringSelectMenuBuilder()
+        .setCustomId(`${mainconst.version}-Select-map-${commanduser.id}-${input.absoluteID}-search`)
         .setPlaceholder('Select a map');
 
     //fetch map data and mapset data from id
@@ -10360,39 +10392,6 @@ export async function map(input: extypes.commandInput) {
         }
 
         func.storeFile(bmsdataReq, mapdata.beatmapset_id, `bmsdata`);
-
-        //options thing to switch to other maps in the mapset
-        if (typeof bmsdata?.beatmaps == 'undefined' || bmsdata?.beatmaps?.length < 2) {
-            inputModal.addOptions(
-                new Discord.StringSelectMenuOptionBuilder()
-                    .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
-                        mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
-                            mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
-                                mapdata.mode_int == 3 ? emojis.gamemodes.mania :
-                                    emojis.gamemodes.standard
-                        }` as Discord.APIMessageComponentEmoji)
-                    .setLabel(`#${1}`)
-                    .setDescription(`${mapdata.version} ${mapdata.difficulty_rating}⭐`)
-                    .setValue(`${mapdata.id}`)
-            );
-        } else {
-            for (let i = 0; i < bmsdata.beatmaps.length && i < 25; i++) {
-                const curmap = bmsdata.beatmaps.slice().sort((a, b) => b.difficulty_rating - a.difficulty_rating)[i];
-                if (!curmap) break;
-                inputModal.addOptions(
-                    new Discord.StringSelectMenuOptionBuilder()
-                        .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
-                            mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
-                                mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
-                                    mapdata.mode_int == 3 ? emojis.gamemodes.mania :
-                                        emojis.gamemodes.standard
-                            }` as Discord.APIMessageComponentEmoji)
-                        .setLabel(`#${i + 1} | ${bmsdata.title}`)
-                        .setDescription(`${curmap.version} ${curmap.difficulty_rating}⭐`)
-                        .setValue(`${curmap.id}`)
-                );
-            }
-        }
     }
 
     //fetch mapdata and mapset data from title query
@@ -10506,21 +10505,6 @@ export async function map(input: extypes.commandInput) {
             });
             return;
         }
-        const allmaps: { mode_int: number, map: osuApiTypes.BeatmapCompact, mapset: osuApiTypes.Beatmapset; }[] = [];
-
-        //get maps to add to options menu
-        for (let i = 0; i < mapidtest.beatmapsets.length; i++) {
-            if (!mapidtest.beatmapsets[i]) break;
-
-            for (let j = 0; j < mapidtest.beatmapsets[i].beatmaps.length; j++) {
-                if (!mapidtest.beatmapsets[i].beatmaps[j]) break;
-                allmaps.push({
-                    mode_int: mapidtest.beatmapsets[i].beatmaps[j].mode_int,
-                    map: mapidtest.beatmapsets[i].beatmaps[j],
-                    mapset: mapidtest.beatmapsets[i]
-                });
-            }
-        }
 
         if (func.findFile(usemapidpls, 'mapdata') &&
             input.commandType == 'button' &&
@@ -10586,10 +10570,14 @@ export async function map(input: extypes.commandInput) {
         func.storeFile(mapdataReq, mapidtest2[0].id, 'mapdata');
 
         //options menu to switch to other maps
-        for (let i = 0; i < allmaps.length && i < 25; i++) {
-            const curmap = allmaps[i];
-            if (!curmap.map) break;
-            inputModal.addOptions(
+
+        for (let i = 0; i < mapidtest?.beatmapsets?.length && i < 25; i++) {
+            const curmapset = mapidtest?.beatmapsets?.[i];
+            // console.log(curmapset);
+            if (!curmapset) break;
+            const curmap = curmapset.beatmaps.sort((a,b) => b.difficulty_rating - a.difficulty_rating)[0];
+            console.log(curmap);
+            inputModalSearch.addOptions(
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(`${curmap.mode_int == 0 ? emojis.gamemodes.standard :
                         curmap.mode_int == 1 ? emojis.gamemodes.taiko :
@@ -10597,9 +10585,42 @@ export async function map(input: extypes.commandInput) {
                                 curmap.mode_int == 3 ? emojis.gamemodes.mania :
                                     emojis.gamemodes.standard
                         }` as Discord.APIMessageComponentEmoji)
-                    .setLabel(`#${i + 1} | ${curmap.mapset?.title} // ${curmap.mapset?.creator}`)
-                    .setDescription(`[${curmap.map.version}] ${curmap.map.difficulty_rating}⭐`)
-                    .setValue(`${curmap.map.id}`)
+                    .setLabel(`#${i + 1} | ${curmapset.title} // ${curmapset.creator}`)
+                    .setDescription(`[${curmap.version}] ${curmap.difficulty_rating}⭐`)
+                    .setValue(`${curmap.id}`)
+            );
+        }
+    }
+
+    //options thing to switch to other maps in the mapset
+    if (typeof bmsdata?.beatmaps == 'undefined' || bmsdata?.beatmaps?.length < 2) {
+        inputModalDiff.addOptions(
+            new Discord.StringSelectMenuOptionBuilder()
+                .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
+                    mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
+                        mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
+                            mapdata.mode_int == 3 ? emojis.gamemodes.mania :
+                                emojis.gamemodes.standard
+                    }` as Discord.APIMessageComponentEmoji)
+                .setLabel(`#${1}`)
+                .setDescription(`${mapdata.version} ${mapdata.difficulty_rating}⭐`)
+                .setValue(`${mapdata.id}`)
+        );
+    } else {
+        for (let i = 0; i < bmsdata.beatmaps.length && i < 25; i++) {
+            const curmap = bmsdata.beatmaps.slice().sort((a, b) => b.difficulty_rating - a.difficulty_rating)[i];
+            if (!curmap) break;
+            inputModalDiff.addOptions(
+                new Discord.StringSelectMenuOptionBuilder()
+                    .setEmoji(`${mapdata.mode_int == 0 ? emojis.gamemodes.standard :
+                        mapdata.mode_int == 1 ? emojis.gamemodes.taiko :
+                            mapdata.mode_int == 2 ? emojis.gamemodes.fruits :
+                                mapdata.mode_int == 3 ? emojis.gamemodes.mania :
+                                    emojis.gamemodes.standard
+                        }` as Discord.APIMessageComponentEmoji)
+                    .setLabel(`#${i + 1} | ${bmsdata.title}`)
+                    .setDescription(`${curmap.version} ${curmap.difficulty_rating}⭐`)
+                    .setValue(`${curmap.id}`)
             );
         }
     }
@@ -10660,7 +10681,6 @@ export async function map(input: extypes.commandInput) {
             edit: true
         };
     } else {
-
         switch (detailed) {
             case 0:
                 embedStyle = 'MC';
@@ -10769,7 +10789,8 @@ export async function map(input: extypes.commandInput) {
                 customCS,
                 customAR,
                 customOD,
-                customHP
+                customHP,
+                maxLimit: 21
             }, new Date(mapdata.last_updated), input.config);
             ppissue = '';
             try {
@@ -10840,13 +10861,6 @@ export async function map(input: extypes.commandInput) {
         const baseBPM = mapdata.bpm * (overrideSpeed ?? 1) != mapdata.bpm ? `${mapdata.bpm}=>${mapdata.bpm * (overrideSpeed ?? 1)}` : mapdata.bpm;
 
         let basicvals = `CS${baseCS}\n AR${baseAR}\n OD${baseOD}\n HP${baseHP}\n`;
-        if (detailed == 2) {
-            basicvals =
-                `CS${baseCS} (${allvals.details.csRadius?.toFixed(2)}r)
-AR${baseAR}  (${allvals.details.arMs?.toFixed(2)}ms)
-OD${baseOD} (300: ${allvals.details.odMs.hitwindow_300?.toFixed(2)}ms 100: ${allvals.details.odMs.hitwindow_100?.toFixed(2)}ms 50:  ${allvals.details.odMs.hitwindow_50?.toFixed(2)}ms)
-HP${baseHP}`;
-        }
 
         const mapname = osufunc.parseUnicodeStrings({
             title: mapdata.beatmapset.title,
@@ -10860,265 +10874,11 @@ HP${baseHP}`;
         }, 1);
         mapmods = mapmods.replace(',', '');
         const maptitle: string = mapmods ? `${mapname} [${mapdata.version}] +${mapmods}` : `${mapname} [${mapdata.version}]`;
-
-        let mapperdataReq: osufunc.apiReturn;
-        let mapperdata: osuApiTypes.User;
-        if (func.findFile(mapdata.beatmapset.user_id, `osudata`) &&
-            !('error' in func.findFile(mapdata.beatmapset.user_id, `osudata`)) &&
-            input.button != 'Refresh') {
-            mapperdataReq = func.findFile(mapdata.beatmapset.user_id, `osudata`);
-        } else {
-            mapperdataReq = await osufunc.apiget(
-                {
-                    type: 'user',
-                    config: input.config,
-                    params: {
-                        userid: mapdata.beatmapset.user_id,
-                    }
-                });
-        }
-
-        mapperdata = mapperdataReq.apiData;
-        osufunc.debug(mapperdataReq, 'command', 'map', input.obj.guildId, 'mapperData');
-        if (mapperdataReq?.error || mapperdata?.hasOwnProperty('error')) {
-            mapperdata = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
-            log.logCommand({
-                event: 'Error',
-                commandName: 'map',
-                commandType: input.commandType,
-                commandId: input.absoluteID,
-                object: input.obj,
-                config: input.config,
-                customString: `Could not find user ${mapdata.beatmapset.user_id} (map creator).\nUsing default json file`
-            });
-        }
-        func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
-
-        const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode, new Date(mapdata.last_updated), input.config);
-        try {
-            osufunc.debug(strains, 'command', 'map', input.obj.guildId, 'strains');
-
-        } catch (error) {
-            osufunc.debug({ error: error }, 'command', 'map', input.obj.guildId, 'strains');
-        }
-        let mapgraph;
-        if (strains) {
-            const mapgraphInit =
-                await func.graph(strains.strainTime, strains.value, 'Strains', {
-                    startzero: true,
-                    type: 'bar',
-                    fill: true,
-                    displayLegend: false,
-                    title: 'Strains',
-                    imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
-                    blurImg: true,
-                });
-            useFiles.push(mapgraphInit.path);
-
-            mapgraph = mapgraphInit.filename;
-        } else {
-            mapgraph = null;
-        }
-        let detailedmapdata = '-';
-        if (detailed == 2) {
-            switch (mapdata.mode) {
-                case 'osu': {
-                    const curattr = ppComputed as OsuPerformanceAttributes[];
-                    detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Aim: ${curattr[0].ppAim?.toFixed(2)} | Speed: ${curattr[0].ppSpeed?.toFixed(2)} | Acc: ${curattr[0].ppAcc?.toFixed(2)} \n ` +
-                        `**99**: ${curattr[1].pp?.toFixed(2)} | Aim: ${curattr[1].ppAim?.toFixed(2)} | Speed: ${curattr[1].ppSpeed?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} \n ` +
-                        `**97**: ${curattr[3].pp?.toFixed(2)} | Aim: ${curattr[3].ppAim?.toFixed(2)} | Speed: ${curattr[3].ppSpeed?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} \n ` +
-                        `**95**: ${curattr[5].pp?.toFixed(2)} | Aim: ${curattr[5].ppAim?.toFixed(2)} | Speed: ${curattr[5].ppSpeed?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} \n ` +
-                        `${ppissue}`;
-                }
-                    break;
-                case 'taiko': {
-                    const curattr = ppComputed as TaikoPerformanceAttributes[];
-                    detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Acc: ${curattr[0].ppAcc?.toFixed(2)} | Strain: ${curattr[0].ppDifficulty?.toFixed(2)} \n ` +
-                        `**99**: ${curattr[1].pp?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
-                        `**97**: ${curattr[3].pp?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
-                        `**95**: ${curattr[5].pp?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
-                        `${ppissue}`;
-                }
-                    break;
-                case 'fruits': {
-                    const curattr = ppComputed as CatchPerformanceAttributes[];
-                    detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Strain: ${curattr[0].ppDifficulty?.toFixed(2)} \n ` +
-                        `**99**: ${curattr[1].pp?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
-                        `**97**: ${curattr[3].pp?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
-                        `**95**: ${curattr[5].pp?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
-                        `${ppissue}`;
-                }
-                    break;
-                case 'mania': {
-                    const curattr = ppComputed as ManiaPerformanceAttributes[];
-                    detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} \n ` +
-                        `**99**: ${curattr[1].pp?.toFixed(2)} \n ` +
-                        `**98**: ${curattr[2].pp?.toFixed(2)} \n ` +
-                        `**97**: ${curattr[3].pp?.toFixed(2)} \n ` +
-                        `**96**: ${curattr[4].pp?.toFixed(2)} \n ` +
-                        `**95**: ${curattr[5].pp?.toFixed(2)} \n ` +
-                        `${ppissue}`;
-                }
-                    break;
-
-            }
-        }
-
-        const exMapDetails = `${func.separateNum(mapdata.playcount)} plays | ${func.separateNum(mapdata.beatmapset.play_count)} mapset plays | ${func.separateNum(mapdata.passcount)} passes | ${func.separateNum(mapdata.beatmapset.favourite_count)} favourites\n` +
-            `Submitted <t:${new Date(mapdata.beatmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(mapdata.beatmapset.last_updated).getTime() / 1000}:R>
-    ${mapdata.status == 'ranked' ?
-                `Ranked <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
-            }${mapdata.status == 'approved' || mapdata.status == 'qualified' ?
-                `Approved/Qualified <t: ${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
-            }${mapdata.status == 'loved' ?
-                `Loved <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
-            }\n` +
-            `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`;
-
         const Embed = new Discord.EmbedBuilder()
-            .setFooter({
-                text: `${embedStyle}`
-            })
-            .setColor(0x91ff9a)
-            .setTitle(maptitle)
             .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
-            .setAuthor({
-                name: `${mapdata.beatmapset.creator}`,
-                url: `https://osu.ppy.sh/users/${mapperdata.id}`,
-                iconURL: `${mapperdata?.avatar_url ?? def.images.any.url}`,
-            })
             .setThumbnail(osufunc.getMapImages(mapdata.beatmapset_id).list2x)
-            .addFields([
-                {
-                    name: 'MAP VALUES',
-                    value:
-                        `${basicvals} ⭐${totaldiff}\n`,
-                    inline: true
-                },
-                {
-                    name: def.invisbleChar,
-                    value: `${emojis.mapobjs.bpm}${baseBPM}\n` +
-                        `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
-                        `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull}\n`,
-                    inline: true
-                },
-                {
-                    name: 'PP',
-                    value:
-                        detailed != 2 ?
-                            `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
-                            `99: ${ppComputed[1].pp?.toFixed(2)} \n ` +
-                            `98: ${ppComputed[2].pp?.toFixed(2)} \n ` +
-                            `97: ${ppComputed[3].pp?.toFixed(2)} \n ` +
-                            `96: ${ppComputed[4].pp?.toFixed(2)} \n ` +
-                            `95: ${ppComputed[5].pp?.toFixed(2)} \n ` +
-                            `${ppissue}` :
-                            detailedmapdata
-                    ,
-                    inline: detailed != 2
-                },
-                {
-                    name: 'DOWNLOAD',
-                    value: `[osu!](https://osu.ppy.sh/b/${mapdata.id}) | [Chimu](https://api.chimu.moe/v1/download${mapdata.beatmapset_id}) | [Beatconnect](https://beatconnect.io/b/${mapdata.beatmapset_id}) | [Kitsu](https://kitsu.io/d/${mapdata.beatmapset_id})\n` +
-                        `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapdata.id})`,
-                    inline: false
-                }, // [osu!direct](osu://b/${mapdata.id}) - discord doesn't support schemes other than http, https and discord
-                {
-                    name: 'MAP DETAILS',
-                    value: `${statusimg} | ${mapimg} | ${ppComputed[0].difficulty.maxCombo ?? mapdata.max_combo}x combo \n ` +
-                        `${detailed == 2 ?
-                            exMapDetails
-                            : ''}`
-
-                    ,
-                    inline: false
-                }
-            ]);
-
-        if (mapdata.user_id != mapdata.beatmapset.user_id) {
-            let gdReq: osufunc.apiReturn;
-            let gdData: osuApiTypes.User;
-            if (func.findFile(mapdata.user_id, `osudata`) &&
-                !('error' in func.findFile(mapdata.user_id, `osudata`)) &&
-                input.button != 'Refresh') {
-                gdReq = func.findFile(mapdata.user_id, `osudata`);
-            } else {
-                gdReq = await osufunc.apiget(
-                    {
-                        type: 'user',
-                        config: input.config,
-                        params: {
-                            userid: mapdata.user_id,
-                        }
-                    });
-            }
-
-            gdData = gdReq.apiData;
-            if (gdReq?.error) {
-                await msgfunc.sendMessage({
-                    commandType: input.commandType,
-                    obj: input.obj,
-                    args: {
-                        content: errors.uErr.osu.profile.user.replace('[ID]', `${mapdata.user_id}`),
-                        edit: true
-                    }
-                }, input.canReply);
-                log.logCommand({
-                    event: 'Error',
-                    commandName: 'map',
-                    commandType: input.commandType,
-                    commandId: input.absoluteID,
-                    object: input.obj,
-                    config: input.config,
-                    customString: errors.uErr.osu.profile.user.replace('[ID]', `${mapdata.user_id}`)
-                });
-                return;
-            }
-
-            osufunc.debug(gdReq, 'command', 'map', input.obj.guildId, 'guestData');
-
-            if (gdData?.hasOwnProperty('error')) {
-                gdData = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
-                log.logCommand({
-                    event: 'Error',
-                    commandName: 'map',
-                    commandType: input.commandType,
-                    commandId: input.absoluteID,
-                    object: input.obj,
-                    config: input.config,
-                    customString: `Could not find user ${mapdata.user_id} (guest mapper).\nUsing default json file.`
-                });
-            }
-            func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
-            Embed.setDescription(`Guest difficulty by [${gdData?.username}](https://osu.ppy.sh/users/${mapdata.user_id})`);
-
-            buttons
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`${mainconst.version}-User-map-any-${input.absoluteID}-${gdData.id}+${gdData.playmode}`)
-                        .setStyle(buttonsthing.type.current)
-                        .setEmoji(buttonsthing.label.extras.user),
-                );
-        } else {
-            buttons
-                .addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId(`${mainconst.version}-User-map-any-${input.absoluteID}-${mapperdata.id}+${mapperdata.playmode}`)
-                        .setStyle(buttonsthing.type.current)
-                        .setEmoji(buttonsthing.label.extras.user),
-                );
-        }
-
-        buttons.addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${mainconst.version}-Leaderboard-map-${commanduser.id}-${input.absoluteID}`)
-                .setStyle(buttonsthing.type.current)
-                .setEmoji(buttonsthing.label.extras.leaderboard)
-        );
-
-        if (mapgraph) {
-            Embed.setImage(`attachment://${mapgraph}.jpg`);
-        }
+            .setTitle(maptitle);
+        const embeds: Discord.EmbedBuilder[] = [];
         switch (true) {
             case parseFloat(totaldiff.toString()) >= 8:
                 Embed.setColor(colours.diffcolour[7].dec);
@@ -11148,39 +10908,485 @@ HP${baseHP}`;
                 Embed.setColor(colours.diffcolour[0].dec);
                 break;
         }
-        const embeds = [Embed];
+        if (isppCalc) {
+            embedStyle = 'MP';
+            let extras = '';
 
-        if (detailed == 2) {
-            const failval = mapdata.failtimes.fail;
-            const exitval = mapdata.failtimes.exit;
-            const numofval = [];
-            for (let i = 0; i < failval.length; i++) {
-                numofval.push(`${i}s`);
+            switch (mapdata.mode) {
+                case 'osu': {
+                    const curattr = ppComputed as OsuPerformanceAttributes[];
+
+                    extras = `
+        ---===SS===---  
+        \`Aim        ${curattr[0].ppAim?.toFixed(3)}\`
+        \`Speed      ${curattr[0].ppSpeed?.toFixed(3)}\`
+        \`Acc        ${curattr[0].ppAcc?.toFixed(3)}\`
+        ${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[0].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[0].pp?.toFixed(3)}\`
+        ---===97%===---
+        \`Aim        ${curattr[3].ppAim?.toFixed(3)}\`
+        \`Speed      ${curattr[3].ppSpeed?.toFixed(3)}\`
+        \`Acc        ${curattr[3].ppAcc?.toFixed(3)}\`
+        ${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[3].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[3].pp?.toFixed(3)}\`
+        ---===95%===---
+        \`Aim        ${curattr[5].ppAim?.toFixed(3)}\`
+        \`Speed      ${curattr[5].ppSpeed?.toFixed(3)}\`
+        \`Acc        ${curattr[5].ppAcc?.toFixed(3)}\`
+        ${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[5].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[5].pp?.toFixed(3)}\`
+        ---===93%===---
+        \`Aim        ${curattr[7].ppAim?.toFixed(3)}\`
+        \`Speed      ${curattr[7].ppSpeed?.toFixed(3)}\`
+        \`Acc        ${curattr[7].ppAcc?.toFixed(3)}\`
+        ${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[7].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[7].pp?.toFixed(3)}\`
+        ---===90%===---
+        \`Aim        ${curattr[10].ppAim?.toFixed(3)}\`
+        \`Speed      ${curattr[10].ppSpeed?.toFixed(3)}\`
+        \`Acc        ${curattr[10].ppAcc?.toFixed(3)}\`
+        ${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[10].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[10].pp?.toFixed(3)}\`
+        `;
+                }
+                    break;
+                case 'taiko': {
+                    const curattr = ppComputed as TaikoPerformanceAttributes[];
+                    extras = `
+        ---===SS===---  
+        - Strain: ${curattr[0].ppDifficulty}
+        - Acc: ${curattr[0].ppAcc}
+        - Total: ${curattr[0].pp} 
+        ---===97%===---
+        - Strain: ${curattr[3].ppDifficulty}
+        - Acc: ${curattr[3].ppAcc}
+        - Total: ${curattr[3].pp} 
+        ---===95%===---
+        - Strain: ${curattr[5].ppDifficulty}
+        - Acc: ${curattr[5].ppAcc}
+        - Total: ${curattr[5].pp} 
+        ---===93%===---
+        - Strain: ${curattr[7].ppDifficulty}
+        - Acc: ${curattr[7].ppAcc}
+        - Total: ${curattr[7].pp} 
+        ---===90%===---
+        - Strain: ${curattr[10].ppDifficulty}
+        - Acc: ${curattr[10].ppAcc}
+        - Total: ${curattr[10].pp}                 
+        `;
+                }
+                    break;
+                case 'fruits': {
+                    const curattr = ppComputed as CatchPerformanceAttributes[];
+                    extras = `
+        ---===SS===---  
+        - Strain: ${curattr[0].ppDifficulty}
+        - Total: ${curattr[0].pp} 
+        ---===97%===---
+        - Strain: ${curattr[3].ppDifficulty}
+        - Total: ${curattr[3].pp} 
+        ---===95%===---
+        - Strain: ${curattr[5].ppDifficulty}
+        - Total: ${curattr[5].pp} 
+        ---===93%===---
+        - Strain: ${curattr[7].ppDifficulty}
+        - Total: ${curattr[7].pp} 
+        ---===90%===---
+        - Strain: ${curattr[10].ppDifficulty}
+        - Total: ${curattr[10].pp}                 
+        `;
+                }
+                    break;
+                case 'mania': {
+                    const curattr = ppComputed as ManiaPerformanceAttributes[];
+                    extras = `
+        ---===SS===---  
+        - Total: ${curattr[0].pp} 
+        ---===97%===---
+        - Total: ${curattr[3].pp} 
+        ---===95%===---
+        - Total: ${curattr[5].pp} 
+        ---===93%===---
+        - Total: ${curattr[7].pp} 
+        ---===90%===---
+        - Total: ${curattr[10].pp}                 
+        `;
+                }
+                    break;
             }
-            const passInit = await func.graph(numofval, mapdata.failtimes.fail, 'Fails', {
-                stacked: true,
-                type: 'bar',
-                showAxisX: false,
-                title: 'Fail times',
-                imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
-                blurImg: true,
-            }, [{
-                data: mapdata.failtimes.exit,
-                label: 'Exits',
-                separateAxis: false,
-            }]);
-            useFiles.push(passInit.path);
 
-            const passurl = passInit.filename;
-            const passEmbed = new Discord.EmbedBuilder()
-                .setFooter({
-                    text: `${embedStyle}`
+            Embed
+                .setTitle(maptitle)
+                .addFields([
+                    {
+                        name: 'MAP VALUES',
+                        value:
+                            `CS${baseCS} AR${baseAR} OD${baseOD} HP${baseHP} ${totaldiff}⭐\n` +
+                            `${emojis.mapobjs.bpm}${baseBPM} | ` +
+                            `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull} | ` +
+                            `${ppComputed[0].difficulty.maxCombo ?? mapdata.max_combo}x combo\n ` +
+                            `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n`,
+                        inline: false
+                    },
+                    {
+                        name: 'PP',
+                        value:
+                            `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
+                            `99%: ${ppComputed[1].pp?.toFixed(2)} \n ` +
+                            `98%: ${ppComputed[2].pp?.toFixed(2)} \n ` +
+                            `97%: ${ppComputed[3].pp?.toFixed(2)} \n ` +
+                            `96%: ${ppComputed[4].pp?.toFixed(2)} \n ` +
+                            `95%: ${ppComputed[5].pp?.toFixed(2)} \n ` +
+                            `94%: ${ppComputed[6].pp?.toFixed(2)} \n ` +
+                            `93%: ${ppComputed[7].pp?.toFixed(2)} \n ` +
+                            `92%: ${ppComputed[8].pp?.toFixed(2)} \n ` +
+                            `91%: ${ppComputed[9].pp?.toFixed(2)} \n ` +
+                            `90%: ${ppComputed[10].pp?.toFixed(2)} \n ` +
+                            `89%: ${ppComputed[11].pp?.toFixed(2)} \n ` +
+                            `88%: ${ppComputed[12].pp?.toFixed(2)} \n ` +
+                            `87%: ${ppComputed[13].pp?.toFixed(2)} \n ` +
+                            `86%: ${ppComputed[14].pp?.toFixed(2)} \n ` +
+                            `85%: ${ppComputed[15].pp?.toFixed(2)} \n ` +
+                            `84%: ${ppComputed[16].pp?.toFixed(2)} \n ` +
+                            `83%: ${ppComputed[17].pp?.toFixed(2)} \n ` +
+                            `82%: ${ppComputed[18].pp?.toFixed(2)} \n ` +
+                            `81%: ${ppComputed[19].pp?.toFixed(2)} \n ` +
+                            `80%: ${ppComputed[20].pp?.toFixed(2)} \n ` +
+                            `\n${ppissue}`
+                        ,
+                        inline: true
+                    },
+                    {
+                        name: 'Full',
+                        value: extras,
+                        inline: true
+                    }
+                ]);
+        } else {
+
+
+            if (detailed == 2) {
+                basicvals =
+                    `CS${baseCS} (${allvals.details.csRadius?.toFixed(2)}r)
+AR${baseAR}  (${allvals.details.arMs?.toFixed(2)}ms)
+OD${baseOD} (300: ${allvals.details.odMs.hitwindow_300?.toFixed(2)}ms 100: ${allvals.details.odMs.hitwindow_100?.toFixed(2)}ms 50:  ${allvals.details.odMs.hitwindow_50?.toFixed(2)}ms)
+HP${baseHP}`;
+            }
+
+
+            let mapperdataReq: osufunc.apiReturn;
+            let mapperdata: osuApiTypes.User;
+            if (func.findFile(mapdata.beatmapset.user_id, `osudata`) &&
+                !('error' in func.findFile(mapdata.beatmapset.user_id, `osudata`)) &&
+                input.button != 'Refresh') {
+                mapperdataReq = func.findFile(mapdata.beatmapset.user_id, `osudata`);
+            } else {
+                mapperdataReq = await osufunc.apiget(
+                    {
+                        type: 'user',
+                        config: input.config,
+                        params: {
+                            userid: mapdata.beatmapset.user_id,
+                        }
+                    });
+            }
+
+            mapperdata = mapperdataReq.apiData;
+            osufunc.debug(mapperdataReq, 'command', 'map', input.obj.guildId, 'mapperData');
+            if (mapperdataReq?.error || mapperdata?.hasOwnProperty('error')) {
+                mapperdata = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
+                log.logCommand({
+                    event: 'Error',
+                    commandName: 'map',
+                    commandType: input.commandType,
+                    commandId: input.absoluteID,
+                    object: input.obj,
+                    config: input.config,
+                    customString: `Could not find user ${mapdata.beatmapset.user_id} (map creator).\nUsing default json file`
+                });
+            }
+            func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
+
+            const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode, new Date(mapdata.last_updated), input.config);
+            try {
+                osufunc.debug(strains, 'command', 'map', input.obj.guildId, 'strains');
+
+            } catch (error) {
+                osufunc.debug({ error: error }, 'command', 'map', input.obj.guildId, 'strains');
+            }
+            let mapgraph;
+            if (strains) {
+                const mapgraphInit =
+                    await func.graph(strains.strainTime, strains.value, 'Strains', {
+                        startzero: true,
+                        type: 'bar',
+                        fill: true,
+                        displayLegend: false,
+                        title: 'Strains',
+                        imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
+                        blurImg: true,
+                    });
+                useFiles.push(mapgraphInit.path);
+
+                mapgraph = mapgraphInit.filename;
+            } else {
+                mapgraph = null;
+            }
+            let detailedmapdata = '-';
+            if (detailed == 2) {
+                switch (mapdata.mode) {
+                    case 'osu': {
+                        const curattr = ppComputed as OsuPerformanceAttributes[];
+                        detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Aim: ${curattr[0].ppAim?.toFixed(2)} | Speed: ${curattr[0].ppSpeed?.toFixed(2)} | Acc: ${curattr[0].ppAcc?.toFixed(2)} \n ` +
+                            `**99**: ${curattr[1].pp?.toFixed(2)} | Aim: ${curattr[1].ppAim?.toFixed(2)} | Speed: ${curattr[1].ppSpeed?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} \n ` +
+                            `**97**: ${curattr[3].pp?.toFixed(2)} | Aim: ${curattr[3].ppAim?.toFixed(2)} | Speed: ${curattr[3].ppSpeed?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} \n ` +
+                            `**95**: ${curattr[5].pp?.toFixed(2)} | Aim: ${curattr[5].ppAim?.toFixed(2)} | Speed: ${curattr[5].ppSpeed?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} \n ` +
+                            `${ppissue}`;
+                    }
+                        break;
+                    case 'taiko': {
+                        const curattr = ppComputed as TaikoPerformanceAttributes[];
+                        detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Acc: ${curattr[0].ppAcc?.toFixed(2)} | Strain: ${curattr[0].ppDifficulty?.toFixed(2)} \n ` +
+                            `**99**: ${curattr[1].pp?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
+                            `**97**: ${curattr[3].pp?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
+                            `**95**: ${curattr[5].pp?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
+                            `${ppissue}`;
+                    }
+                        break;
+                    case 'fruits': {
+                        const curattr = ppComputed as CatchPerformanceAttributes[];
+                        detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Strain: ${curattr[0].ppDifficulty?.toFixed(2)} \n ` +
+                            `**99**: ${curattr[1].pp?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
+                            `**97**: ${curattr[3].pp?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
+                            `**95**: ${curattr[5].pp?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
+                            `${ppissue}`;
+                    }
+                        break;
+                    case 'mania': {
+                        const curattr = ppComputed as ManiaPerformanceAttributes[];
+                        detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} \n ` +
+                            `**99**: ${curattr[1].pp?.toFixed(2)} \n ` +
+                            `**98**: ${curattr[2].pp?.toFixed(2)} \n ` +
+                            `**97**: ${curattr[3].pp?.toFixed(2)} \n ` +
+                            `**96**: ${curattr[4].pp?.toFixed(2)} \n ` +
+                            `**95**: ${curattr[5].pp?.toFixed(2)} \n ` +
+                            `${ppissue}`;
+                    }
+                        break;
+
+                }
+            }
+
+            const exMapDetails = `${func.separateNum(mapdata.playcount)} plays | ${func.separateNum(mapdata.beatmapset.play_count)} mapset plays | ${func.separateNum(mapdata.passcount)} passes | ${func.separateNum(mapdata.beatmapset.favourite_count)} favourites\n` +
+                `Submitted <t:${new Date(mapdata.beatmapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(mapdata.beatmapset.last_updated).getTime() / 1000}:R>
+    ${mapdata.status == 'ranked' ?
+                    `Ranked <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                }${mapdata.status == 'approved' || mapdata.status == 'qualified' ?
+                    `Approved/Qualified <t: ${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                }${mapdata.status == 'loved' ?
+                    `Loved <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                }\n` +
+                `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`;
+
+            Embed
+                .setAuthor({
+                    name: `${mapdata.beatmapset.creator}`,
+                    url: `https://osu.ppy.sh/users/${mapperdata.id}`,
+                    iconURL: `${mapperdata?.avatar_url ?? def.images.any.url}`,
                 })
-                .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
-                .setImage(`attachment://${passurl}.jpg`);
-            await embeds.push(passEmbed);
-        }
+                .addFields([
+                    {
+                        name: 'MAP VALUES',
+                        value:
+                            `${basicvals} ⭐${totaldiff}\n`,
+                        inline: true
+                    },
+                    {
+                        name: def.invisbleChar,
+                        value: `${emojis.mapobjs.bpm}${baseBPM}\n` +
+                            `${emojis.mapobjs.circle}${mapdata.count_circles} \n${emojis.mapobjs.slider}${mapdata.count_sliders} \n${emojis.mapobjs.spinner}${mapdata.count_spinners}\n` +
+                            `${emojis.mapobjs.total_length}${allvals.length != mapdata.hit_length ? `${allvals.details.lengthFull}(${calc.secondsToTime(mapdata.hit_length)})` : allvals.details.lengthFull}\n`,
+                        inline: true
+                    },
+                    {
+                        name: 'PP',
+                        value:
+                            detailed != 2 ?
+                                `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
+                                `99: ${ppComputed[1].pp?.toFixed(2)} \n ` +
+                                `98: ${ppComputed[2].pp?.toFixed(2)} \n ` +
+                                `97: ${ppComputed[3].pp?.toFixed(2)} \n ` +
+                                `96: ${ppComputed[4].pp?.toFixed(2)} \n ` +
+                                `95: ${ppComputed[5].pp?.toFixed(2)} \n ` +
+                                `${ppissue}` :
+                                detailedmapdata
+                        ,
+                        inline: detailed != 2
+                    },
+                    {
+                        name: 'DOWNLOAD',
+                        value: `[osu!](https://osu.ppy.sh/b/${mapdata.id}) | [Chimu](https://api.chimu.moe/v1/download${mapdata.beatmapset_id}) | [Beatconnect](https://beatconnect.io/b/${mapdata.beatmapset_id}) | [Kitsu](https://kitsu.io/d/${mapdata.beatmapset_id})\n` +
+                            `[MAP PREVIEW](https://jmir.xyz/osu/preview.html#${mapdata.id})`,
+                        inline: false
+                    }, // [osu!direct](osu://b/${mapdata.id}) - discord doesn't support schemes other than http, https and discord
+                    {
+                        name: 'MAP DETAILS',
+                        value: `${statusimg} | ${mapimg} | ${ppComputed[0].difficulty.maxCombo ?? mapdata.max_combo}x combo \n ` +
+                            `${detailed == 2 ?
+                                exMapDetails
+                                : ''}`
 
+                        ,
+                        inline: false
+                    }
+                ]);
+
+            if (mapdata.user_id != mapdata.beatmapset.user_id) {
+                let gdReq: osufunc.apiReturn;
+                let gdData: osuApiTypes.User;
+                if (func.findFile(mapdata.user_id, `osudata`) &&
+                    !('error' in func.findFile(mapdata.user_id, `osudata`)) &&
+                    input.button != 'Refresh') {
+                    gdReq = func.findFile(mapdata.user_id, `osudata`);
+                } else {
+                    gdReq = await osufunc.apiget(
+                        {
+                            type: 'user',
+                            config: input.config,
+                            params: {
+                                userid: mapdata.user_id,
+                            }
+                        });
+                }
+
+                gdData = gdReq.apiData;
+                if (gdReq?.error) {
+                    await msgfunc.sendMessage({
+                        commandType: input.commandType,
+                        obj: input.obj,
+                        args: {
+                            content: errors.uErr.osu.profile.user.replace('[ID]', `${mapdata.user_id}`),
+                            edit: true
+                        }
+                    }, input.canReply);
+                    log.logCommand({
+                        event: 'Error',
+                        commandName: 'map',
+                        commandType: input.commandType,
+                        commandId: input.absoluteID,
+                        object: input.obj,
+                        config: input.config,
+                        customString: errors.uErr.osu.profile.user.replace('[ID]', `${mapdata.user_id}`)
+                    });
+                    return;
+                }
+
+                osufunc.debug(gdReq, 'command', 'map', input.obj.guildId, 'guestData');
+
+                if (gdData?.hasOwnProperty('error')) {
+                    gdData = JSON.parse(fs.readFileSync(`${precomppath}/files/defaults/mapper.json`, 'utf8'));
+                    log.logCommand({
+                        event: 'Error',
+                        commandName: 'map',
+                        commandType: input.commandType,
+                        commandId: input.absoluteID,
+                        object: input.obj,
+                        config: input.config,
+                        customString: `Could not find user ${mapdata.user_id} (guest mapper).\nUsing default json file.`
+                    });
+                }
+                func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
+                Embed.setDescription(`Guest difficulty by [${gdData?.username}](https://osu.ppy.sh/users/${mapdata.user_id})`);
+
+                buttons
+                    .addComponents(
+                        new Discord.ButtonBuilder()
+                            .setCustomId(`${mainconst.version}-User-map-any-${input.absoluteID}-${gdData.id}+${gdData.playmode}`)
+                            .setStyle(buttonsthing.type.current)
+                            .setEmoji(buttonsthing.label.extras.user),
+                    );
+            } else {
+                buttons
+                    .addComponents(
+                        new Discord.ButtonBuilder()
+                            .setCustomId(`${mainconst.version}-User-map-any-${input.absoluteID}-${mapperdata.id}+${mapperdata.playmode}`)
+                            .setStyle(buttonsthing.type.current)
+                            .setEmoji(buttonsthing.label.extras.user),
+                    );
+            }
+
+            buttons.addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId(`${mainconst.version}-Leaderboard-map-${commanduser.id}-${input.absoluteID}`)
+                    .setStyle(buttonsthing.type.current)
+                    .setEmoji(buttonsthing.label.extras.leaderboard)
+            );
+
+            if (mapgraph) {
+                Embed.setImage(`attachment://${mapgraph}.jpg`);
+            }
+            switch (true) {
+                case parseFloat(totaldiff.toString()) >= 8:
+                    Embed.setColor(colours.diffcolour[7].dec);
+                    break;
+                case parseFloat(totaldiff.toString()) >= 7:
+                    Embed.setColor(colours.diffcolour[6].dec);
+                    break;
+                case parseFloat(totaldiff.toString()) >= 6:
+                    Embed.setColor(colours.diffcolour[5].dec);
+                    break;
+                case parseFloat(totaldiff.toString()) >= 4.5:
+                    Embed.setColor(colours.diffcolour[4].dec);
+                    break;
+                case parseFloat(totaldiff.toString()) >= 3.25:
+                    Embed.setColor(colours.diffcolour[3].dec);
+                    break;
+                case parseFloat(totaldiff.toString()) >= 2.5:
+                    Embed.setColor(colours.diffcolour[2].dec);
+                    break;
+                case parseFloat(totaldiff.toString()) >= 2:
+                    Embed.setColor(colours.diffcolour[1].dec);
+                    break;
+                case parseFloat(totaldiff.toString()) >= 1.5:
+                    Embed.setColor(colours.diffcolour[0].dec);
+                    break;
+                default:
+                    Embed.setColor(colours.diffcolour[0].dec);
+                    break;
+            }
+
+            if (detailed == 2) {
+                const failval = mapdata.failtimes.fail;
+                const exitval = mapdata.failtimes.exit;
+                const numofval = [];
+                for (let i = 0; i < failval.length; i++) {
+                    numofval.push(`${i}s`);
+                }
+                const passInit = await func.graph(numofval, mapdata.failtimes.fail, 'Fails', {
+                    stacked: true,
+                    type: 'bar',
+                    showAxisX: false,
+                    title: 'Fail times',
+                    imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
+                    blurImg: true,
+                }, [{
+                    data: mapdata.failtimes.exit,
+                    label: 'Exits',
+                    separateAxis: false,
+                }]);
+                useFiles.push(passInit.path);
+
+                const passurl = passInit.filename;
+                const passEmbed = new Discord.EmbedBuilder()
+                    .setFooter({
+                        text: `${embedStyle}`
+                    })
+                    .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
+                    .setImage(`attachment://${passurl}.jpg`);
+                await embeds.push(passEmbed);
+            }
+        }
+        Embed
+            .setFooter({
+                text: `${embedStyle}`
+            });
+        embeds.push(Embed);
+        embeds.reverse();
         osufunc.writePreviousId('map', input.obj.guildId,
             {
                 id: `${mapdata.id}`,
@@ -11189,19 +11395,25 @@ HP${baseHP}`;
             }
         );
 
-
         useComponents.push(buttons);
 
-        let frmod = inputModal;
+        let frmod = inputModalSearch;
         if (overwriteModal != null) {
             frmod = overwriteModal;
         }
 
-        const selectrow = new Discord.ActionRowBuilder()
+        const selectrowSearch = new Discord.ActionRowBuilder()
             .addComponents(frmod);
+        const selectrowDiff = new Discord.ActionRowBuilder()
+            .addComponents(inputModalDiff);
 
-        if (!(inputModal.options.length < 1)) {
-            useComponents.push(selectrow);
+        if (!(inputModalDiff.options.length < 1)) {
+            useComponents.push(new Discord.ActionRowBuilder()
+                .addComponents(inputModalDiff));
+        }
+        if (!(inputModalSearch.options.length < 1)) {
+            useComponents.push(new Discord.ActionRowBuilder()
+                .addComponents(frmod));
         }
 
         useShit = {

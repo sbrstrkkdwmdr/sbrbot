@@ -812,7 +812,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'map',
         description: 'Shows information about a beatmap',
-        usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
+        usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp] [-ppcalc]',
         slashusage: 'map [query] [id] [mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp]',
         linkusage: [
             'osu.ppy.sh/b/<id> +[mods]',
@@ -942,6 +942,16 @@ const osucmds: commandInfo[] = [
                 examples: ['-hp 3', 'hp:5'],
                 commandTypes: ['message', 'interaction']
             },
+            {
+                name: 'ppcalc',
+                type: 'boolean',
+                required: false,
+                description: 'Shows only the pp calculations for the map. See [here](https://sbrstrkkdwmdr.github.io/sbrbot/commands.html#osucmd-ppcalc) for more info.',
+                options: ['N/A'],
+                defaultValue: 'false',
+                examples: ['-pp', '-calc'],
+                commandTypes: ['message']
+            }   
         ]
     },
     {
