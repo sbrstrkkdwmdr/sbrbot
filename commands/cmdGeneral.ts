@@ -46,8 +46,12 @@ export async function changelog(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             version = input.args[0] ?? null;
-            if (input.args.includes('pending') || input.args.includes('next')) {
-                useGit = true;
+            for (const arg of input.args) {
+                if (arg.includes('pending') || arg.includes('next')) {
+                    useGit = true;
+                    version = null;
+                    break;
+                }
             }
         }
             break;
