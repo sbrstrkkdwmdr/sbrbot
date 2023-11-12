@@ -167,7 +167,46 @@ const scoreListCommandOptions = [
         commandTypes: ['message', 'interaction']
     }
 ];
-
+const user = {
+    name: 'user',
+    type: 'string/ integer/ user mention',
+    required: false,
+    description: 'The user to show',
+    options: ['N/A'],
+    defaultValue: 'The user who ran the command',
+    examples: ['mrekk', 'user:mrekk'],
+    commandTypes: ['message', 'interaction']
+};
+const mode = {
+    name: 'mode',
+    type: 'string',
+    required: false,
+    description: 'The mode to use',
+    options: ['osu', 'taiko', 'fruits', 'mania'],
+    defaultValue: 'osu',
+    examples: ['taiko', 'mode:mania'],
+    commandTypes: ['message', 'interaction']
+};
+const userTrack = {
+    name: 'user',
+    type: 'string',
+    required: true,
+    description: 'The user to use',
+    options: ['N/A'],
+    defaultValue: 'N/A',
+    examples: ['SaberStrike', 'user:SaberStrike'],
+    commandTypes: ['message', 'interaction']
+};
+const userAdmin = {
+    name: 'user',
+    type: 'integer/user mention',
+    required: false,
+    description: 'The user to use',
+    options: ['N/A'],
+    defaultValue: 'The user who ran the command',
+    examples: [''],
+    commandTypes: ['message', 'interaction']
+};
 const generalcommands = [
     {
         name: 'changelog',
@@ -185,7 +224,7 @@ const generalcommands = [
             },
             {
                 text: 'PREFIXMSGchangelog pending',
-                descriptor: 'Returns the changelog for the next version'
+                descriptor: 'Returns the changelog for the upcoming version'
             },
             {
                 text: 'PREFIXMSGchangelog versions',
@@ -199,7 +238,7 @@ const generalcommands = [
                 type: 'string',
                 required: false,
                 description: 'The version',
-                options: ['formatted as major.minor.patch (`0.4.1`) or `first`, `second` etc. `versions` also works'],
+                options: ['formatted as major.minor.patch (`0.4.1`) or `first`, `second` etc. `pending` shows upcoming changes'],
                 defaultValue: 'latest',
                 examples: ['0.4.1', 'version:0.4.1', 'first'],
                 commandTypes: ['message', 'interaction']
@@ -237,9 +276,8 @@ const generalcommands = [
                 name: 'to',
                 type: 'string',
                 required: true,
-                description: 'The unit to convert to',
-                options: ['see [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.html#conv) for units',
-                    'help', 'SI units',],
+                description: 'The unit to convert to see [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.html#conv) for units',
+                options: ['help', 'SI units',],
                 defaultValue: 'N/A',
                 examples: ['c', 'to:celsius'],
                 commandTypes: ['message', 'interaction']
@@ -275,7 +313,7 @@ const generalcommands = [
                 descriptor: 'Shows information about the recent command'
             }
         ],
-        aliases: ['commands'],
+        aliases: ['commands', 'list', 'command'],
         buttons: [buttonsObjs.label.extras.random, buttonsObjs.label.main.detailed],
         options: [
             {
@@ -473,14 +511,14 @@ operators: *, /, +, -, (, )
                 descriptor: 'Shows the current time in AEST (UTC+10, Australian Eastern Standard Time)'
             },
         ],
-        aliases: [],
+        aliases: ['tz'],
         options: [
             {
                 name: 'timezone',
                 type: 'string',
                 required: false,
-                description: 'The timezone to show the time in (see here - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset )',
-                options: ['Formatted as city, UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
+                description: 'The timezone to show the time in (see [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset))',
+                options: ['Formatted as [city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
                 defaultValue: 'UTC',
                 examples: ['Australia/Melbourne', 'Europe/Warsaw'],
                 commandTypes: ['message', 'interaction']
@@ -538,16 +576,7 @@ const osucommands = [
         aliases: [],
         buttons: [buttonsObjs.label.extras.user],
         options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to show the badge weighting of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['DigitalHypno', 'fieryrage'],
-                commandTypes: ['message', 'interaction']
-            }
+            user,
         ]
     },
     {
@@ -572,16 +601,7 @@ const osucommands = [
         aliases: ['badgeweightsystem', 'badgeweight', 'badgeweigthseed', 'badgerank'],
         buttons: [buttonsObjs.label.extras.user],
         options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to show the badge weighting of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['DigitalHypno', 'fieryrage'],
-                commandTypes: ['message', 'interaction']
-            }
+            user,
         ]
     },
     {
@@ -695,16 +715,7 @@ const osucommands = [
         aliases: ['osc', 'osustatscount'],
         buttons: [buttonsObjs.label.extras.user],
         options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to get',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['mrekk', 'user:mrekk'],
-                commandTypes: ['message', 'interaction']
-            },
+            user,
         ]
     },
     {
@@ -742,7 +753,7 @@ const osucommands = [
     {
         name: 'map',
         description: 'Shows information about a beatmap',
-        usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
+        usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp] [-ppcalc]',
         slashusage: 'map [query] [id] [mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp]',
         linkusage: [
             'osu.ppy.sh/b/<id> +[mods]',
@@ -872,6 +883,16 @@ const osucommands = [
                 examples: ['-hp 3', 'hp:5'],
                 commandTypes: ['message', 'interaction']
             },
+            {
+                name: 'ppcalc',
+                type: 'boolean',
+                required: false,
+                description: 'Shows only the pp calculations for the map. See [here](https://sbrstrkkdwmdr.github.io/sbrbot/commands.html#osucmd-ppcalc) for more info.',
+                options: ['N/A'],
+                defaultValue: 'false',
+                examples: ['-pp', '-calc'],
+                commandTypes: ['message']
+            }
         ]
     },
     {
@@ -974,16 +995,7 @@ const osucommands = [
         ],
         aliases: ['recmap', 'recommendmap', 'maprec', 'mapsuggest', 'suggestmap'],
         options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to check the performance of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['SaberStrike', 'user:15222484'],
-                commandTypes: ['message', 'interaction', 'link']
-            },
+            user, mode,
             {
                 name: 'range',
                 type: 'float',
@@ -994,6 +1006,16 @@ const osucommands = [
                 examples: ['-range 0.5'],
                 commandTypes: ['message', 'interaction']
             },
+            {
+                name: 'type',
+                type: 'string',
+                required: false,
+                description: 'How to fetch the recommended map',
+                options: ['closest', 'random'],
+                defaultValue: 'random',
+                examples: ['-closest'],
+                commandTypes: ['message']
+            }
         ]
     },
     {
@@ -1057,16 +1079,7 @@ const osucommands = [
         ],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.graph],
         options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to show the profile of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['SaberStrike', 'user:15222484'],
-                commandTypes: ['message', 'interaction', 'link']
-            },
+            user, mode,
             {
                 name: 'detailed',
                 type: 'boolean',
@@ -1076,16 +1089,6 @@ const osucommands = [
                 defaultValue: 'false',
                 examples: ['-d', '-detailed', 'detailed:true'],
                 commandTypes: ['message', 'interaction', 'button', 'link']
-            },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The gamemode to show the stats of',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'The user\'s default gamemode',
-                examples: ['-taiko', 'mode:mania', '-ctb'],
-                commandTypes: ['message', 'interaction', 'link']
             },
             {
                 name: 'graph',
@@ -1621,16 +1624,7 @@ const osucommands = [
         aliases: ['recentact', 'rsact'],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.extras.user],
         options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to show the activity(s) of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['SaberStrike', 'user:SaberStrike'],
-                commandTypes: ['message', 'interaction']
-            },
+            user,
             {
                 name: 'page',
                 type: 'integer',
@@ -1725,16 +1719,7 @@ const osucommands = [
         ],
         aliases: [],
         options: [
-            {
-                name: 'user',
-                type: 'user mention',
-                required: false,
-                description: 'The user to show the saved settings of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['@SaberStrike'],
-                commandTypes: ['message', 'interaction']
-            }
+            userAdmin,
         ]
     },
     {
@@ -1883,16 +1868,7 @@ const osucommands = [
         aliases: ['ss'],
         buttons: [buttonsObjs.label.main.detailed, buttonsObjs.label.extras.user],
         options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to show the scores of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['mrekk', 'user:mrekk'],
-                commandTypes: ['message', 'interaction']
-            },
+            user, mode,
             {
                 name: 'type',
                 type: 'string',
@@ -1901,16 +1877,6 @@ const osucommands = [
                 options: ['best', 'firsts', 'recent', 'pinned'],
                 defaultValue: 'best',
                 examples: ['type:recent', '-firsts'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The mode to use',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-                examples: ['-taiko', 'mode:mania'],
                 commandTypes: ['message', 'interaction']
             },
             {
@@ -2057,16 +2023,7 @@ const osucommands = [
         ],
         aliases: ['ta', 'track'],
         options: [
-            {
-                name: 'user',
-                type: 'string',
-                required: true,
-                description: 'The user to add to the tracklist',
-                options: ['N/A'],
-                defaultValue: 'N/A',
-                examples: ['SaberStrike', 'user:SaberStrike'],
-                commandTypes: ['message', 'interaction']
-            }
+            userTrack,
         ]
     },
     {
@@ -2125,16 +2082,7 @@ const osucommands = [
         ],
         aliases: ['tr', 'trackrm', 'untrack'],
         options: [
-            {
-                name: 'user',
-                type: 'string',
-                required: true,
-                description: 'The user to remove from the tracklist',
-                options: ['N/A'],
-                defaultValue: 'N/A',
-                examples: ['SaberStrike'],
-                commandTypes: ['message', 'interaction']
-            }
+            userTrack,
         ]
     },
     {
@@ -2156,76 +2104,68 @@ const osucommands = [
             'ranked', 'favourite', 'favourites', 'graveyard', 'unranked', 'loved', 'pending', 'wip', 'nominated', 'bn', 'guest', 'gd', 'most_played', 'mp', 'mostplayed'
         ],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
-        options: [{
-            name: 'user',
-            type: 'string/ integer/ user mention',
-            required: false,
-            description: 'The user to show the beatmaps of',
-            options: ['N/A'],
-            defaultValue: 'The user who ran the command',
-            examples: ['Sotarks', 'user:Mismagius'],
-            commandTypes: ['message', 'interaction']
-        },
-        {
-            name: 'type',
-            type: 'string',
-            required: false,
-            description: 'The type of beatmaps to show',
-            options: ['Favourites', 'Ranked', 'Pending', 'Graveyard', 'Loved'],
-            defaultValue: 'Favourites',
-            examples: ['Ranked', 'type:Loved'],
-            commandTypes: ['message', 'interaction']
-        },
-        {
-            name: 'reverse',
-            type: 'boolean',
-            required: false,
-            description: 'Whether to sort the beatmaps in reverse',
-            options: ['true', 'false'],
-            defaultValue: 'false',
-            examples: ['-reverse', 'reverse:true'],
-            commandTypes: ['message', 'interaction']
-        },
-        {
-            name: 'page',
-            type: 'integer',
-            required: false,
-            description: 'The page of beatmaps to show',
-            options: ['N/A'],
-            defaultValue: '1',
-            examples: ['page:3', '-p 4'],
-            commandTypes: ['message', 'interaction', 'button']
-        },
-        {
-            name: 'sort',
-            type: 'string',
-            required: false,
-            description: 'The way to sort the beatmaps',
-            options: ['Title', 'Artist', 'Difficulty', 'Status', 'Fails', 'Plays', 'Date Added', 'Favourites', 'BPM', 'CS', 'AR', 'OD', 'HP', 'Length'],
-            defaultValue: 'Date Added',
-            examples: ['sort:title'],
-            commandTypes: ['message', 'interaction']
-        },
-        {
-            name: 'parse',
-            type: 'integer',
-            required: false,
-            description: 'Parses the beatmap with the given index',
-            options: ['N/A'],
-            defaultValue: '1',
-            examples: ['parse:3', '-parse 727'],
-            commandTypes: ['message', 'interaction']
-        },
-        {
-            name: 'filter',
-            type: 'string',
-            required: false,
-            description: 'Filters the beatmaps by the given string',
-            options: ['N/A'],
-            defaultValue: 'N/A',
-            examples: ['filter:hard', '-? "blue dragon"'],
-            commandTypes: ['message', 'interaction']
-        },
+        options: [
+            user,
+            {
+                name: 'type',
+                type: 'string',
+                required: false,
+                description: 'The type of beatmaps to show',
+                options: ['Favourites', 'Ranked', 'Pending', 'Graveyard', 'Loved'],
+                defaultValue: 'Favourites',
+                examples: ['Ranked', 'type:Loved'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'reverse',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to sort the beatmaps in reverse',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: ['-reverse', 'reverse:true'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'page',
+                type: 'integer',
+                required: false,
+                description: 'The page of beatmaps to show',
+                options: ['N/A'],
+                defaultValue: '1',
+                examples: ['page:3', '-p 4'],
+                commandTypes: ['message', 'interaction', 'button']
+            },
+            {
+                name: 'sort',
+                type: 'string',
+                required: false,
+                description: 'The way to sort the beatmaps',
+                options: ['Title', 'Artist', 'Difficulty', 'Status', 'Fails', 'Plays', 'Date Added', 'Favourites', 'BPM', 'CS', 'AR', 'OD', 'HP', 'Length'],
+                defaultValue: 'Date Added',
+                examples: ['sort:title'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'parse',
+                type: 'integer',
+                required: false,
+                description: 'Parses the beatmap with the given index',
+                options: ['N/A'],
+                defaultValue: '1',
+                examples: ['parse:3', '-parse 727'],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'filter',
+                type: 'string',
+                required: false,
+                description: 'Filters the beatmaps by the given string',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: ['filter:hard', '-? "blue dragon"'],
+                commandTypes: ['message', 'interaction']
+            },
         ]
     },
     {
@@ -2246,16 +2186,7 @@ const osucommands = [
         aliases: ['wi'],
         buttons: [buttonsObjs.label.extras.user],
         options: [
-            {
-                name: 'user',
-                type: 'string/ integer/ user mention',
-                required: false,
-                description: 'The user to show the stats of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: ['SaberStrike', 'user:SaberStrike'],
-                commandTypes: ['message', 'interaction']
-            },
+            user, mode,
             {
                 name: 'pp',
                 type: 'float',
@@ -2266,16 +2197,6 @@ const osucommands = [
                 examples: ['72700', 'pp:72700'],
                 commandTypes: ['message', 'interaction']
             },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The mode to show the stats in',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-                examples: ['mode:taiko'],
-                commandTypes: ['message', 'interaction']
-            }
         ]
     }
 ];
@@ -2427,7 +2348,7 @@ const misccommands = [
                 descriptor: 'Rolls a random number between 50 and 100'
             }
         ],
-        aliases: [],
+        aliases: ['rng', 'randomnumber', 'randomnumbergenerator', 'pickanumber', 'pickanum'],
         options: [
             {
                 name: 'max',
@@ -2497,7 +2418,7 @@ const misccommands = [
                 descriptor: 'Searches youtube for "never gonna give you up"'
             }
         ],
-        aliases: ['yt'],
+        aliases: ['yt', 'yts'],
         options: [
             {
                 name: 'query',
