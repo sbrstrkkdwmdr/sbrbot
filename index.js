@@ -73,17 +73,15 @@ ${cmd?.linkusage && cmd.linkusage.length > 0 ?
                         cmd.options.map(option => {
                             let opStr = ''
                             for (const opt of option.options) {
-                                if (opt) {
-                                    if (opt.includes('[') && opt.includes(']') && opt.includes('(') && opt.includes(')')) {
-                                        opStr += markdownURLtoHTML(opt) + ', '
-                                    } else {
-                                        opStr += opt + ', '
-                                    }
+                                if (opt?.includes('[') && opt?.includes(']') && opt?.includes('(') && opt?.includes(')')) {
+                                    opStr += markdownURLtoHTML(opt) + ', '
+                                } else {
+                                    opStr += opt + ', '
                                 }
                             }
                             let optDesc = ''
                             if (option.description.includes('[') && option.description.includes(']') && option.description.includes('(') && option.description.includes(')')) {
-                                optDesc = markdownURLtoHTML(opt) + ', '
+                                optDesc = markdownURLtoHTML(option.description) + ', '
                             } else if (option.description.includes('http')) {
                                 optDesc = urlToHTML(option.description)
                             } else {
