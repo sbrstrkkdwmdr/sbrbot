@@ -343,48 +343,11 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
         scoredetailed = 0;
         input.args.splice(input.args.indexOf('-c'), 1);
     }
-
-    if (input.args.includes('-osu')) {
-        mode = 'osu';
-        input.args.splice(input.args.indexOf('-osu'), 1);
+    {
+        const temp = await parseArgsMode(input);
+        input.args = temp.args;
+        mode = temp.mode
     }
-    if (input.args.includes('-o')) {
-        mode = 'osu';
-        input.args.splice(input.args.indexOf('-o'), 1);
-    }
-    if (input.args.includes('-taiko')) {
-        mode = 'taiko';
-        input.args.splice(input.args.indexOf('-taiko'), 1);
-    }
-    if (input.args.includes('-t')) {
-        mode = 'taiko';
-        input.args.splice(input.args.indexOf('-t'), 1);
-    }
-    if (input.args.includes('-catch')) {
-        mode = 'fruits';
-        input.args.splice(input.args.indexOf('-catch'), 1);
-    }
-    if (input.args.includes('-fruits')) {
-        mode = 'fruits';
-        input.args.splice(input.args.indexOf('-fruits'), 1);
-    }
-    if (input.args.includes('-ctb')) {
-        mode = 'fruits';
-        input.args.splice(input.args.indexOf('-ctb'), 1);
-    }
-    if (input.args.includes('-f')) {
-        mode = 'fruits';
-        input.args.splice(input.args.indexOf('-f'));
-    }
-    if (input.args.includes('-mania')) {
-        mode = 'mania';
-        input.args.splice(input.args.indexOf('-mania'), 1);
-    }
-    if (input.args.includes('-m')) {
-        mode = 'mania';
-        input.args.splice(input.args.indexOf('-m'));
-    }
-
     if (input.args.includes('-recent')) {
         sort = 'recent';
         input.args.splice(input.args.indexOf('-recent'), 1);
@@ -804,6 +767,54 @@ export async function parseArgs_scoreList(input: extypes.commandInput) {
         filteredMods, exactMods,
         pp, score, acc, combo, miss,
         bpm
+    };
+}
+
+export async function parseArgsMode(input: extypes.commandInput){
+    let mode = null;
+    if (input.args.includes('-osu')) {
+        mode = 'osu';
+        input.args.splice(input.args.indexOf('-osu'), 1);
+    }
+    if (input.args.includes('-o')) {
+        mode = 'osu';
+        input.args.splice(input.args.indexOf('-o'), 1);
+    }
+    if (input.args.includes('-taiko')) {
+        mode = 'taiko';
+        input.args.splice(input.args.indexOf('-taiko'), 1);
+    }
+    if (input.args.includes('-t')) {
+        mode = 'taiko';
+        input.args.splice(input.args.indexOf('-t'), 1);
+    }
+    if (input.args.includes('-catch')) {
+        mode = 'fruits';
+        input.args.splice(input.args.indexOf('-catch'), 1);
+    }
+    if (input.args.includes('-fruits')) {
+        mode = 'fruits';
+        input.args.splice(input.args.indexOf('-fruits'), 1);
+    }
+    if (input.args.includes('-ctb')) {
+        mode = 'fruits';
+        input.args.splice(input.args.indexOf('-ctb'), 1);
+    }
+    if (input.args.includes('-f')) {
+        mode = 'fruits';
+        input.args.splice(input.args.indexOf('-f'), 1);
+    }
+    if (input.args.includes('-mania')) {
+        mode = 'mania';
+        input.args.splice(input.args.indexOf('-mania'), 1);
+    }
+    if (input.args.includes('-m')) {
+        mode = 'mania';
+        input.args.splice(input.args.indexOf('-m'), 1);
+    }
+    return {
+        args: input.args,
+        mode
     };
 }
 

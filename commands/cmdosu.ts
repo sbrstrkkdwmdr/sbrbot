@@ -782,45 +782,10 @@ export async function lb(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
             }
             input.args = msgfunc.cleanArgs(input.args);
             id = input.args[0];
@@ -1083,45 +1048,10 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
                 page = temp.value;
                 input.args = temp.newArgs;
             }
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
             }
 
             input.args = msgfunc.cleanArgs(input.args);
@@ -1466,45 +1396,10 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
             }
 
             input.args = msgfunc.cleanArgs(input.args);
@@ -1674,46 +1569,10 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
                 graphonly = true;
                 input.args.splice(input.args.indexOf('-g'), 1);
             }
-
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
             }
 
             input.args = msgfunc.cleanArgs(input.args);
@@ -7528,46 +7387,10 @@ export async function scorepost(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
             }
 
             input.args = msgfunc.cleanArgs(input.args);
@@ -8770,45 +8593,10 @@ export async function scorestats(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
             }
 
             if (input.args.includes('-firsts')) {
@@ -10578,7 +10366,7 @@ export async function map(input: extypes.commandInput) {
             const curmapset = mapidtest?.beatmapsets?.[i];
             // console.log(curmapset);
             if (!curmapset) break;
-            const curmap = curmapset.beatmaps.sort((a,b) => b.difficulty_rating - a.difficulty_rating)[0];
+            const curmap = curmapset.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0];
             console.log(curmap);
             inputModalSearch.addOptions(
                 new Discord.StringSelectMenuOptionBuilder()
@@ -12632,6 +12420,8 @@ export async function recMap(input: extypes.commandInput) {
     let searchid: string;
     let user: string;
     let maxRange: number = 1;
+    let useType: 'closest' | 'random' = 'random';
+    let mode: osuApiTypes.GameMode;
 
     switch (input.commandType) {
         case 'message': {
@@ -12641,17 +12431,31 @@ export async function recMap(input: extypes.commandInput) {
                 const temp = func.parseArg(input.args, '-range', 'number', maxRange, null, true);
                 maxRange = temp.value;
                 input.args = temp.newArgs;
+                useType = 'random';
             }
             if (input.args.includes('-diff')) {
                 const temp = func.parseArg(input.args, '-diff', 'number', maxRange, null, true);
                 maxRange = temp.value;
                 input.args = temp.newArgs;
+                useType = 'random';
             }
             if (input.args.includes('-r')) {
                 const temp = func.parseArg(input.args, '-r', 'number', maxRange, null, true);
                 maxRange = temp.value;
                 input.args = temp.newArgs;
+                useType = 'random';
             }
+            if (input.args.includes('-closest')) {
+                useType = 'closest';
+                input.args = input.args.splice(input.args.indexOf('-closest'), 1);
+
+            }
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
+            }
+
             input.args = msgfunc.cleanArgs(input.args);
             user = input.args.join(' ');
             if (!input.args[0] || input.args[0].includes(searchid)) {
@@ -12704,6 +12508,14 @@ export async function recMap(input: extypes.commandInput) {
             {
                 name: 'Range',
                 value: maxRange
+            },
+            {
+                name: 'Mode',
+                value: mode
+            },
+            {
+                name: 'type',
+                value: useType
             }
         ],
     });
@@ -12716,6 +12528,9 @@ export async function recMap(input: extypes.commandInput) {
     if (user == null) {
         const cuser = await osufunc.searchUser(searchid, input.userdata, true);
         user = cuser.username;
+        if (mode == null) {
+            mode = cuser.gamemode;
+        }
     }
 
     //if user is not found in database, use discord username
@@ -12724,17 +12539,17 @@ export async function recMap(input: extypes.commandInput) {
         user = cuser.username;
     }
 
-    if (maxRange < 0.5) {
+    if (maxRange < 0.5 || !maxRange) {
         maxRange = 0.5;
     }
 
     let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(user, 'osudata', osufunc.modeValidator('')) &&
-        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(''))) &&
+    if (func.findFile(user, 'osudata', osufunc.modeValidator(mode)) &&
+        !('error' in func.findFile(user, 'osudata', osufunc.modeValidator(mode))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(''));
+        osudataReq = func.findFile(user, 'osudata', osufunc.modeValidator(mode));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
@@ -12792,27 +12607,25 @@ export async function recMap(input: extypes.commandInput) {
         return;
     }
 
-
-
-    const randomMap = osufunc.recommendMap(JSON.parse((formula.omc.user.recdiff(osudata.statistics.pp)).toFixed(2)), maxRange ?? 1);
-    if (randomMap.err != null) {
+    const randomMap = osufunc.recommendMap(JSON.parse((formula.omc.user.recdiff(osudata.statistics.pp)).toFixed(2)), useType, mode, maxRange ?? 1);
+    if (randomMap.hasErr == true) {
         txt = randomMap.err;
     } else {
-        txt = `https://osu.ppy.sh/b/${randomMap.returnId}`;
+        txt = `https://osu.ppy.sh/b/${randomMap.mapid}`;
     }
+    const exTxt =
+        useType == 'closest' ? '' :
+            `Random map within ${maxRange}⭐ of ${formula.omc.user.recdiff(osudata.statistics.pp)}\n`;
 
     const embed = new Discord.EmbedBuilder()
         .setTitle('Map recommendation')
-        .setDescription(`
-Random map within ${maxRange}⭐ of ${formula.omc.user.recdiff(osudata.statistics.pp)}
-${txt}
-`);
-    if (randomMap.err == null) {
+        .setDescription(`${exTxt}${txt}`);
+    if (!isNaN(randomMap.mapid)) {
         input.overrides = {
-            id: randomMap.returnId,
+            id: randomMap.mapid,
             commanduser,
             commandAs: input.commandType,
-            ex: `\nRandom map within ${maxRange}⭐ of ${formula.omc.user.recdiff(osudata.statistics.pp)} `
+            ex: exTxt
         };
 
         await map(input);
@@ -13823,41 +13636,10 @@ export async function trackadd(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'), 1);
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
             }
             user = input.args[0];
         }
@@ -14053,41 +13835,10 @@ export async function trackremove(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'), 1);
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
             }
             user = input.args[0];
         }
@@ -15116,45 +14867,10 @@ export async function osuset(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
             }
 
             if (input.args.includes('-skin')) {
@@ -15653,45 +15369,10 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
 
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
 
-            if (input.args.includes('-osu')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-osu'), 1);
-            }
-            if (input.args.includes('-o')) {
-                mode = 'osu';
-                input.args.splice(input.args.indexOf('-o'), 1);
-            }
-            if (input.args.includes('-taiko')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-taiko'), 1);
-            }
-            if (input.args.includes('-t')) {
-                mode = 'taiko';
-                input.args.splice(input.args.indexOf('-t'), 1);
-            }
-            if (input.args.includes('-catch')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-catch'), 1);
-            }
-            if (input.args.includes('-fruits')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-fruits'), 1);
-            }
-            if (input.args.includes('-ctb')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-ctb'), 1);
-            }
-            if (input.args.includes('-f')) {
-                mode = 'fruits';
-                input.args.splice(input.args.indexOf('-f'));
-            }
-            if (input.args.includes('-mania')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-mania'), 1);
-            }
-            if (input.args.includes('-m')) {
-                mode = 'mania';
-                input.args.splice(input.args.indexOf('-m'));
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
             }
 
             input.args = msgfunc.cleanArgs(input.args);

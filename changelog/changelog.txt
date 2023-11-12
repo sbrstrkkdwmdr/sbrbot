@@ -594,3 +594,5 @@ changes:
 [FIX] changelog - allow `-` before pending arg (`pending` would work but `-pending` would cause an error)
 [QOL] tweak searchMatch();
 [FIX] map search strings with non-alphanumeric characters resulting in inaccurate results
+[QOL] recommend map command
+[QOL] move arg mode checkers to one function

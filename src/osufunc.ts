@@ -2355,42 +2355,62 @@ export function randomMap(type?: 'Ranked' | 'Loved' | 'Approved' | 'Qualified' |
     };
 }
 
-export function recommendMap(baseRating: number, maxDifference: number) {
-    let returnId = 4204;
-    let errormsg = null;
-    //check if cache exists
+export function getStoredMaps() {
     const cache = fs.existsSync(`${path}/cache/commandData`);
     if (cache) {
         const mapsExist = fs.readdirSync(`${path}/cache/commandData`).filter(x => x.includes('mapdata'));
         const maps: apiReturn[] = [];
 
-        for (let i = 0; i < mapsExist.length; i++) {
-            if (mapsExist[i].includes('.json')) {
-                const dataAsStr = fs.readFileSync(`${path}/cache/commandData/${mapsExist[i]}`, 'utf-8');
+        for (const data of mapsExist) {
+            if (data.includes('.json')) {
+                const dataAsStr = fs.readFileSync(`${path}/cache/commandData/${data}`, 'utf-8');
                 maps.push(JSON.parse(dataAsStr) as apiReturn);
             }
         }
-
-        const filteredMaps = maps.filter(x => (x?.apiData?.difficulty_rating > baseRating - maxDifference && x?.apiData?.difficulty_rating < baseRating + maxDifference));
-        if (filteredMaps.length < 1) {
-            errormsg =
-                `No maps within ${maxDifference?.toFixed(2)}⭐ of ${baseRating}⭐ were found
-total maps: ${maps.length}`;
-        } else {
-            try {
-                const curmap = filteredMaps[Math.floor(Math.random() * filteredMaps.length)];
-                returnId = curmap?.apiData?.id;
-            } catch (error) {
-                errormsg = `There was an error while trying to parse the map ID`;
-            }
-        }
-    } else {
-        errormsg = 'No maps were found';
+        return maps;
     }
-    return {
-        returnId,
-        err: errormsg
+    return [];
+}
+
+export function recommendMap(baseRating: number, retrieve: 'closest' | 'random', mode: osuApiTypes.GameMode, maxRange?: number) {
+    const maps = getStoredMaps();
+    const obj = {
+        hasErr: false,
+        err: 'unknown',
+        mapid: NaN
     };
+    if (maps.length == 0) {
+        obj['hasErr'] = true;
+        obj['err'] = 'No maps found in cache';
+    }
+    if (retrieve == 'random' && !maxRange) {
+        obj['hasErr'] = true;
+        obj['err'] = 'Maximum range is invalid';
+    }
+    //sort maps by closest to given base rating
+    const sorted = (maps.map(x => x.apiData) as osuApiTypes.Beatmap[])
+        .filter(x => x.mode == (mode ?? 'osu'))
+        .sort((a, b) =>
+            Math.abs(baseRating - a.difficulty_rating)
+            - Math.abs(baseRating - b.difficulty_rating)
+        )
+
+        ;
+    if (sorted.length == 0) {
+        obj['hasErr'] = true;
+        obj['err'] = 'No maps found for the given gamemode';
+    }
+    else if (retrieve == 'closest') {
+        obj['mapid'] = sorted[0].id;
+    }
+    else if (retrieve == 'random') {
+        const filter = sorted.filter(x =>
+            (x?.difficulty_rating > baseRating - maxRange && x?.difficulty_rating < baseRating + maxRange)
+        );
+        obj['mapid'] = filter[Math.floor(Math.random() * filter.length)].id;
+    }
+
+    return obj;
 }
 
 /**
@@ -2633,7 +2653,7 @@ export async function getFailPoint(
             log.toOutput(
                 log.errLog('Failed to get score failpoint', `passed: ${objectsPassed}\nmapPath: ${mapPath}\n${error}`),
                 config
-            )
+            );
         }
     } else {
         console.log("Path does not exist:" + mapPath);
