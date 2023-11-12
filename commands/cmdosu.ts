@@ -10400,7 +10400,7 @@ export async function map(input: extypes.commandInput) {
             type: 'mapset_search',
             config: input.config,
             params: {
-                searchString: maptitleq,
+                searchString: encodeURIComponent(maptitleq),
                 opts: [`s=${searchRestrict}`]
             }
         });
@@ -10570,6 +10570,9 @@ export async function map(input: extypes.commandInput) {
         func.storeFile(mapdataReq, mapidtest2[0].id, 'mapdata');
 
         //options menu to switch to other maps
+
+
+
 
         for (let i = 0; i < mapidtest?.beatmapsets?.length && i < 25; i++) {
             const curmapset = mapidtest?.beatmapsets?.[i];

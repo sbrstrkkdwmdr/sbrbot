@@ -593,3 +593,4 @@ changes:
 [REM] remove multiple difficulties from the same set and only show the first in search tabs
 [FIX] changelog - allow `-` before pending arg (`pending` would work but `-pending` would cause an error)
 [QOL] tweak searchMatch();
+[FIX] map search strings with non-alphanumeric characters resulting in inaccurate results

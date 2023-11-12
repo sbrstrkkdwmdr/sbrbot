@@ -1499,3 +1499,10 @@ export function formatHours(arr: string[]) {
 
     return formattedHours.join(", ");
 }
+
+/**
+ * replaces special characters such as "&" with their unicode form to not ruin api requests
+ */
+export function fixSearchInURL(search:string){
+    return encodeURIComponent(search)
+}
