@@ -12615,7 +12615,9 @@ export async function recMap(input: extypes.commandInput) {
     }
     const exTxt =
         useType == 'closest' ? '' :
-            `Random map within ${maxRange}⭐ of ${formula.omc.user.recdiff(osudata.statistics.pp)}\n`;
+`Random map within ${maxRange}⭐ of ${(formula.omc.user.recdiff(osudata.statistics.pp))?.toFixed(2)}
+Pool of ${randomMap.poolSize}
+`;
 
     const embed = new Discord.EmbedBuilder()
         .setTitle('Map recommendation')

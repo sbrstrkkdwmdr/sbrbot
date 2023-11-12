@@ -2377,7 +2377,9 @@ export function recommendMap(baseRating: number, retrieve: 'closest' | 'random',
     const obj = {
         hasErr: false,
         err: 'unknown',
-        mapid: NaN
+        mapid: NaN,
+        poolSize: 0,
+        poolSizePreFilter: 0,
     };
     if (maps.length == 0) {
         obj['hasErr'] = true;
@@ -2408,6 +2410,8 @@ export function recommendMap(baseRating: number, retrieve: 'closest' | 'random',
             (x?.difficulty_rating > baseRating - maxRange && x?.difficulty_rating < baseRating + maxRange)
         );
         obj['mapid'] = filter[Math.floor(Math.random() * filter.length)].id;
+        obj['poolSize'] = filter.length
+        obj['poolSizePreFilter'] = sorted.length
     }
 
     return obj;
