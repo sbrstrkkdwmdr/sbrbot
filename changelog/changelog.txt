@@ -592,3 +592,4 @@ changes:
 [QOL] separate the "select map" tab into separate difficulty and map tabs
 [REM] remove multiple difficulties from the same set and only show the first in search tabs
 [FIX] changelog - allow `-` before pending arg (`pending` would work but `-pending` would cause an error)
+[QOL] tweak searchMatch();

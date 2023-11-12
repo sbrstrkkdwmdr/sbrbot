@@ -1418,10 +1418,21 @@ export function searchMatch(input: string, list: string[]) {
             }
         }
         if (word.trim().toLowerCase().includes(input.trim().toLowerCase()) || input.trim().toLowerCase().includes(word.trim().toLowerCase())) {
-            tempFactor += 5;
+            tempFactor += 4;
         }
+        const tempWordArr = word.split(' ');
+        word.includes(' ') ? word.split(' ') : [word];
+        const tempWordArrIn = input.split(' ');
+        input.includes(' ') ? input.split(' ') : [input];
+        for (const sub of tempWordArr) {
+            if(tempWordArrIn.includes(sub)){
+                tempFactor += 3
+                tempWordArrIn.splice(tempWordArrIn.indexOf(sub), 1)
+            }
+        }
+
         if (word.trim().toLowerCase() == input.trim().toLowerCase()) {
-            tempFactor = 1e16;
+            tempFactor += 1e10;
         }
         sort.push({ factor: tempFactor, text: word });
     }
