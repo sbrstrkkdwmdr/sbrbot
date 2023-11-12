@@ -73,10 +73,12 @@ ${cmd?.linkusage && cmd.linkusage.length > 0 ?
                         cmd.options.map(option => {
                             let opStr = ''
                             for (const opt of option.options) {
-                                if (opt.includes('[') && opt.includes(']') && opt.includes('(') && opt.includes(')')) {
-                                    opStr += markdownURLtoHTML(opt) + ', '
-                                } else {
-                                    opStr += opt + ', '
+                                if (opt) {
+                                    if (opt.includes('[') && opt.includes(']') && opt.includes('(') && opt.includes(')')) {
+                                        opStr += markdownURLtoHTML(opt) + ', '
+                                    } else {
+                                        opStr += opt + ', '
+                                    }
                                 }
                             }
                             let optDesc = ''
@@ -137,8 +139,8 @@ function urlToHTML(str) {
         console.log(args[i])
         if (args[i].includes('http')) break;
     }
-    const init = args.slice(0, i-1).join(' ');
-    const fin = args.slice(i+1, args.length).join(' ');
+    const init = args.slice(0, i - 1).join(' ');
+    const fin = args.slice(i + 1, args.length).join(' ');
     console.log(`${init} <a class="minA" href=${args[i]}>url</a> ${fin}`)
     return `${init} <a class="minA" href=${args[i]}>url</a> ${fin}`
 }
