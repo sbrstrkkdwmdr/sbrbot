@@ -2536,8 +2536,6 @@ export async function weather(input: extypes.commandInput) {
                 }
                 i++;
             }
-            console.log(hrArr);
-            console.log(useHrs);
             const hrTxt = func.formatHours(hrArr);
             let precip = '';
             precip += dailyData.rain_sum[2] > 0 ? `Rain: ${dailyData.rain_sum[2]}${weatherUnits.rain_sum}`
