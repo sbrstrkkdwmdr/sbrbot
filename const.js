@@ -2448,16 +2448,7 @@ const admincommands = [
         ],
         aliases: ['perms'],
         options: [
-            {
-                name: 'user',
-                type: 'integer/user mention',
-                required: false,
-                description: 'The user to check the permissions of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: [''],
-                commandTypes: ['message', 'interaction']
-            }
+            userAdmin,
         ]
     },
     {
@@ -2477,16 +2468,7 @@ const admincommands = [
         ],
         aliases: ['userinfo'],
         options: [
-            {
-                name: 'user',
-                type: 'integer/user mention',
-                required: false,
-                description: 'The user to get information about',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: [''],
-                commandTypes: ['message', 'interaction']
-            }
+            userAdmin,
         ]
     },
     {
@@ -2506,16 +2488,7 @@ const admincommands = [
         ],
         aliases: ['av', 'pfp'],
         options: [
-            {
-                name: 'user',
-                type: 'integer/user mention',
-                required: false,
-                description: 'The user to get the avator of',
-                options: ['N/A'],
-                defaultValue: 'The user who ran the command',
-                examples: [''],
-                commandTypes: ['message', 'interaction']
-            }
+            userAdmin,
         ]
     },
     {
