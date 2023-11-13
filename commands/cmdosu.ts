@@ -5765,7 +5765,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                     );
                 fcaccgr =
                     osumodcalc.calcgrade(
-                        gamehits.count_300,
+                        gamehits.count_300 + gamehits.count_miss,
                         gamehits.count_100,
                         gamehits.count_50,
                         0
@@ -5780,7 +5780,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                     );
                 fcaccgr =
                     osumodcalc.calcgradeTaiko(
-                        gamehits.count_300,
+                        gamehits.count_300 + gamehits.count_miss,
                         gamehits.count_100,
                         0
                     );
@@ -5796,7 +5796,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                     );
                 fcaccgr =
                     osumodcalc.calcgradeCatch(
-                        gamehits.count_300,
+                        gamehits.count_300 + gamehits.count_miss,
                         gamehits.count_100,
                         gamehits.count_50,
                         gamehits.count_katu,
@@ -5816,7 +5816,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                 fcaccgr =
                     osumodcalc.calcgradeMania(
                         gamehits.count_geki,
-                        gamehits.count_300,
+                        gamehits.count_300 + gamehits.count_miss,
                         gamehits.count_katu,
                         gamehits.count_100,
                         gamehits.count_50,
