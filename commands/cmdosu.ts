@@ -10529,6 +10529,7 @@ export async function map(input: extypes.commandInput) {
         }
 
         let hitlength = mapdata.hit_length;
+        const oldOverrideSpeed = overrideSpeed;
 
         if (overrideBpm != null && isNaN(overrideBpm) == false && (overrideSpeed == null || isNaN(overrideSpeed) == true) && overrideBpm != mapdata.bpm) {
             overrideSpeed = overrideBpm / mapdata.bpm;
@@ -10559,7 +10560,7 @@ export async function map(input: extypes.commandInput) {
         );
 
         const allvals = osumodcalc.calcValuesAlt(
-            inallvals.cs, inallvals.ar, inallvals.od, inallvals.hp, inallvals.bpm, hitlength, overrideSpeed
+            inallvals.cs, inallvals.ar, inallvals.od, inallvals.hp, inallvals.bpm, hitlength, oldOverrideSpeed
         );
 
         const mapimg = input.config.useEmojis.gamemodes ?
@@ -12615,7 +12616,7 @@ export async function recMap(input: extypes.commandInput) {
     }
     const exTxt =
         useType == 'closest' ? '' :
-`Random map within ${maxRange}⭐ of ${(formula.omc.user.recdiff(osudata.statistics.pp))?.toFixed(2)}
+            `Random map within ${maxRange}⭐ of ${(formula.omc.user.recdiff(osudata.statistics.pp))?.toFixed(2)}
 Pool of ${randomMap.poolSize}
 `;
 

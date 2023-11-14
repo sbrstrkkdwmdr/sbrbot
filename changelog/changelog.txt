@@ -597,3 +597,4 @@ changes:
 [QOL] recommend map command - add "closest" and "random" arg
 [QOL] move arg mode checkers to one function
 [QOL] recmap - show map pool size
+[FIX] speed multipliers being applied twice
