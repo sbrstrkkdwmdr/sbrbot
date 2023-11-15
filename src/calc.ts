@@ -103,7 +103,6 @@ export function toScientificNotation(number: number, significantFigures: number)
         // Code to ensure the number has the correct number of significant figures
         let xFig = significantFigures + (mantissa.match(/[-.]/g) || []).length;
         mantissa = mantissa.slice(0, xFig);
-
         if (exponent == 1) {
             mantissa = `${(+mantissa * 10)}`;
             exponent = 0;
@@ -111,7 +110,7 @@ export function toScientificNotation(number: number, significantFigures: number)
             mantissa = `${(+mantissa / 10)}`;
             exponent = 0;
         }
-
+        mantissa = mantissa.slice(0, xFig);
         if (exponent !== 0) {
             tNum = `${mantissa}e${exponent}`;
         } else {
