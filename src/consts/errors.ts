@@ -90,10 +90,15 @@ export const uErr = {
         }
     },
     weather: {
-        api: "Something went wrong with the weather api",
+        api: "Something went wrong with the open-meteo api",
         locateNF: "The requested location was not found",
-        wrongCoords: "Something went wrong with the weather api (NaN coordinates)",
+        wrongCoords: "Something went wrong with the open-meteo api (NaN coordinates)",
         input_ms: "Missing <region> argument",
         stormNF: "Data for [SID] was not found"
+    },
+    country: {
+        api: 'Something went wrong with the RESTcountries api',
+        nf: 'The country [ID] was not found. Maybe try other names/params',
+        ms: 'Missing <search> argument'
     }
 };

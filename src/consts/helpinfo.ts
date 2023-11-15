@@ -349,6 +349,46 @@ const cmds: commandInfo[] = [
         ]
     },
     {
+        name: 'country',
+        description: 'Displays information for a given country',
+        usage: '[-type] <search>',
+        slashusage: '<search>',
+        examples: [
+            {
+                text: 'PREFIXMSGcountry australia',
+                descriptor: 'Shows information for Australia'
+            },
+            {
+                text: 'PREFIXMSGcountry -code DE',
+                descriptor: 'Shows information for Germany'
+            },
+        ],
+        aliases: [],
+        buttons: [buttonsObjs.label.extras.time, buttonsObjs.label.extras.weather],
+        options: [
+            {
+                name: 'type',
+                type: 'string',
+                required: false,
+                description: 'What param to search with',
+                options: ['name', 'fullname', 'code', 'codes', 'demonym', 'capital', 'translation'],
+                defaultValue: 'name',
+                examples: ['-iso',],
+                commandTypes: ['message', 'interaction',]
+            },
+            {
+                name: 'search',
+                type: 'string',
+                required: false,
+                description: 'The country to search for',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: ['australia',],
+                commandTypes: ['message', 'interaction',]
+            },
+        ]
+    },
+    {
         name: 'help',
         description: 'Shows a list of commands or information about a specific command',
         usage: 'help [command]',

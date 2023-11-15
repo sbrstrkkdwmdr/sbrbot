@@ -598,3 +598,4 @@ changes:
 [QOL] move arg mode checkers to one function
 [QOL] recmap - show map pool size
 [FIX] speed multipliers being applied twice
+[ADD] country command

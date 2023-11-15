@@ -101,6 +101,7 @@ copy the key and paste it into the google.apiKey field </br>
 | osr handler | [osureplayparser](https://www.npmjs.com/package/osureplayparser) |
 | Weather API | [open-meteo](https://open-meteo.com) |
 | Tropical Weather API | [tidetech](https://docs.tidetech.org/storm-api/) |
+| Country API | [REST Countries](https://restcountries.com/) |
 
 ### art credits
 | Usage | Source |

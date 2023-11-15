@@ -231,13 +231,27 @@ export default (input: {
             return;
         }
 
+        if (button == 'Weather') {
+            overrides.id = buttonsplit[5];
+            overrides.commandAs = 'interaction';
+            overrides.commanduser = interaction.member.user as Discord.User;
+            await commands.weather({ commandType: 'other', obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata })
+            return;
+        }
+        if (button == 'Time') {
+            overrides.ex = buttonsplit[5];
+            overrides.commandAs = 'interaction';
+            overrides.commanduser = interaction.member.user as Discord.User;
+            await commands.time({ commandType: 'other', obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata })
+            return;
+        }
+
         const nopingcommands = ['scorestats'];
 
         if (!nopingcommands.includes(command)) {
             interaction.deferUpdate()
                 .catch(error => { });
         }
-
 
         switch (command) {
             case 'changelog':

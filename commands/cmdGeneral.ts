@@ -647,6 +647,248 @@ SF:   ${data.significantFigures}\`
 }
 
 /**
+ * get country data
+ */
+export async function country(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+    let search: string;
+    let type: othertypes.countryDataSearchTypes = 'name';
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+            if (input.args.includes('-fullname')) {
+                type = 'fullname';
+                input.args.splice(input.args.indexOf('-fullname'), 1);
+            }
+            if (input.args.includes('-code')) {
+                type = 'code';
+                input.args.splice(input.args.indexOf('-code'), 1);
+            }
+            if (input.args.includes('-iso')) {
+                type = 'code';
+                input.args.splice(input.args.indexOf('-iso'), 1);
+            }
+            if (input.args.includes('-codes')) {
+                type = 'codes';
+                input.args.splice(input.args.indexOf('-codes'), 1);
+            }
+            if (input.args.includes('-demonym')) {
+                type = 'demonym';
+                input.args.splice(input.args.indexOf('-demonym'), 1);
+            }
+            if (input.args.includes('-people')) {
+                type = 'demonym';
+                input.args.splice(input.args.indexOf('-people'), 1);
+            }
+            if (input.args.includes('-capital')) {
+                type = 'capital';
+                input.args.splice(input.args.indexOf('-capital'), 1);
+            }
+            if (input.args.includes('-translation')) {
+                type = 'translation';
+                input.args.splice(input.args.indexOf('-translation'), 1);
+            }
+            search = input.args.join(' ') ?? null;
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'Country',
+        options: [],
+        config: input.config,
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    if (!search || search.length == 0) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: errors.uErr.country.ms,
+                edit: true
+            }
+        }, input.canReply);
+        return;
+    }
+    let data;
+    if (func.findFile(search, 'countrydata') &&
+        !('error' in func.findFile(search, 'countrydata')) &&
+        input.button != 'Refresh'
+    ) {
+        data = { data: func.findFile(search, 'countrydata') };
+    } else {
+        data = await func.getCountryData(search, type, input.config);
+    }
+
+    func.storeFile(data?.data, search, 'countrydata');
+
+    const countryData = data.data as othertypes.countryData[];
+    if (countryData.length == 0) {
+        msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: errors.uErr.country.nf.replace('[ID]', `${search}`),
+                edit: true
+            }
+        }, input.canReply);
+        return;
+    }
+    const country = countryData[0];
+
+    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+        .addComponents(
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Time-Country-${commanduser.id}-${input.absoluteID}-${country.capital[0] ?? country.timezones[0]}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.time),
+            new Discord.ButtonBuilder()
+                .setCustomId(`${mainconst.version}-Weather-Country-${commanduser.id}-${input.absoluteID}-${country.capital[0] ?? country.name.common}`)
+                .setStyle(buttonsthing.type.current)
+                .setEmoji(buttonsthing.label.extras.weather),
+        );
+
+    const name = country.name.official +
+        (country.name.official !=
+            (Object.values(country.name.nativeName)[0] as othertypes.langName)?.official
+            ?
+            ` (${(Object.values(country.name.nativeName)[0] as othertypes.langName)?.official})`
+            : '');
+    const capital = country.capital.length > 1 ?
+        country.capital.join(', ') : country.capital[0];
+    let languages: string[] = [];
+    for (const lang in country.languages) {
+        languages.push(country.languages[lang]);
+    }
+
+    const currencyrn: string[] = [];
+    for (const cur in country.currencies) {
+        currencyrn.push(`${country.currencies[cur].name} (${country.currencies[cur]?.symbol} ${cur})`);
+    }
+
+
+    const embed = new Discord.EmbedBuilder()
+        .setTitle(name)
+        .setDescription(`${country.region}\n${country.subregion}`)
+        .setFields(
+            {
+                name: 'Capital(s)',
+                value: `${capital}`,
+                inline: true
+            },
+            {
+                name: 'Population',
+                value: `${func.separateNum(country.population)}`,
+                inline: true
+            },
+            {
+                name: 'Land Area',
+                value: `${func.separateNum(country.area)}km²`,
+                inline: true
+            },
+            {
+                name: 'Currency',
+                value: `${currencyrn.join(', ')}`,
+                inline: true
+            },
+            {
+                name: 'Coordinates',
+                value: `${country.latlng.join(',')} (Capital ${country.capitalInfo.latlng.join(',')})`,
+                inline: true
+            },
+            {
+                name: 'Languages',
+                value: `${languages.join(', ')}`,
+                inline: true
+            },
+            {
+                name: 'Other Information',
+                value: `
+Phone: ${country.idd.root}${country.idd.suffixes.length == 1 ? country.idd.suffixes[0] : ''}
+Drives on the ${country.car.side} of the road
+${country.unMember ? 'Is a member of the UN' : ''}
+`,
+                inline: false
+            },
+            {
+                name: 'ISO CODES',
+                value: `\`\`\`
+cca2: ${country.cca2}
+ccn3: ${country.ccn3}
+cca3: ${country.cca3}
+cioc: ${country.cioc}
+\`\`\``
+            }
+        )
+        .setThumbnail(country.coatOfArms.png)
+        .setImage(country.flags.png);
+
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            embeds: [embed],
+            components: [buttons]
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'Country',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            config: input.config,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'Country',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send',
+            config: input.config,
+        });
+    }
+
+}
+
+/**
  * list all commands or info about a specific command
  */
 export async function help(input: extypes.commandInput) {
@@ -2014,9 +2256,16 @@ export async function time(input: extypes.commandInput) {
     if (input?.overrides) {
         if (input?.overrides?.ex) {
             fetchtimezone = input?.overrides?.ex as string;
+            displayedTimezone = input?.overrides?.ex as string;
         }
         if (input?.overrides?.id) {
             displayedTimezone = (input?.overrides?.id ?? fetchtimezone) as string;
+        }
+        if (input?.overrides?.commandAs) {
+            input.commandType = input?.overrides?.commandAs;
+        }
+        if (input?.overrides?.commanduser) {
+            commanduser = input?.overrides?.commanduser;
         }
     }
 
@@ -2039,6 +2288,19 @@ export async function time(input: extypes.commandInput) {
         config: input.config
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    if (input?.overrides?.ex && input?.commandType == 'interaction') {
+        (input.obj as Discord.ChatInputCommandInteraction)
+            .reply({
+                content: 'Loading...',
+                allowedMentions: { repliedUser: false }
+            });
+        await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(true);
+            }, 1000);
+        });
+    }
 
     const curTime = moment();
 
@@ -2229,7 +2491,8 @@ export async function time(input: extypes.commandInput) {
         obj: input.obj,
         args: {
             embeds: [Embed],
-            components: useComponents
+            components: useComponents,
+            edit: input?.overrides?.ex ? true : false
         }
     }, input.canReply);
 
@@ -2298,6 +2561,15 @@ export async function weather(input: extypes.commandInput) {
         if (input?.overrides?.ex != null) {
             overrideID = +input?.overrides?.ex;
         }
+        if (input?.overrides?.id != null) {
+            name = input?.overrides?.id as string;
+        }
+        if (input?.overrides?.commandAs) {
+            input.commandType = input?.overrides?.commandAs;
+        }
+        if (input?.overrides?.commanduser) {
+            commanduser = input?.overrides?.commanduser;
+        }
     }
     //==============================================================================================================================================================================================
 
@@ -2322,7 +2594,6 @@ export async function weather(input: extypes.commandInput) {
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
     let locatingData: othertypes.geoResults;
     if ((!name || name == null || name.length == 0) && input.commandType != 'button') {
         const cuser = await osufunc.searchUserFull(commanduser.id, input.userdata);
@@ -2341,7 +2612,7 @@ export async function weather(input: extypes.commandInput) {
         logWeatherError(err);
         return;
     }
-    if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
+    if ((input.commandType == 'interaction' && input?.overrides?.commandAs == null) || (input.commandType == 'interaction' && input?.overrides?.id)) {
         await msgfunc.sendMessage({
             commandType: input.commandType,
             obj: input.obj,

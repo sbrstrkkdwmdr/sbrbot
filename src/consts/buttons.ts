@@ -30,7 +30,9 @@ export const label = {
         graph: '<:graph:1058600585525469274>', //'📈',
         map: '<:map:1058600587274494064>', //🗺
         user: '<:user:1057463807930277988>',
-        leaderboard: '<:leaderboard:1057463857305632908>'
+        leaderboard: '<:leaderboard:1057463857305632908>',
+        time: '<:time:1174306276637941810>',
+        weather: '<:weather:1174306274637258782>'
     },
     page_old: {
         first: '⬅',

@@ -183,6 +183,7 @@ export default (input: {
         const requireEmbedCommands: string[] = [
             //gen
             'convert', 'conv',
+            'country',
             'help', 'commands', 'list', 'command',
             'info',
             'invite',
@@ -317,6 +318,9 @@ export default (input: {
                 break;
             case 'convert': case 'conv':
                 commands.convert({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
+            case 'country':
+                commands.country({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides });
                 break;
             case 'help': case 'commands': case 'list': case 'command':
                 startType(obj);

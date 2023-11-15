@@ -233,7 +233,9 @@ export type commandButtonTypes =
     'SearchMenu' | 'Sort' | 'SortMenu' |
     'Map' | 'Leaderboard' |
     'User' |
-    'Scores'
+    'Scores' |
+    'Weather' |
+    'Time'
     ;
 
 export type osustatscache = {

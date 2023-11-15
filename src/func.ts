@@ -191,6 +191,7 @@ export function storeFile(data: string | osufunc.apiReturn | ((osuApiTypes.Score
         }
         return true;
     } catch (error) {
+        console.log(error)
         return error;
     }
 }
@@ -1425,9 +1426,9 @@ export function searchMatch(input: string, list: string[]) {
         const tempWordArrIn = input.split(' ');
         input.includes(' ') ? input.split(' ') : [input];
         for (const sub of tempWordArr) {
-            if(tempWordArrIn.includes(sub)){
-                tempFactor += 3
-                tempWordArrIn.splice(tempWordArrIn.indexOf(sub), 1)
+            if (tempWordArrIn.includes(sub)) {
+                tempFactor += 3;
+                tempWordArrIn.splice(tempWordArrIn.indexOf(sub), 1);
             }
         }
 
@@ -1503,6 +1504,43 @@ export function formatHours(arr: string[]) {
 /**
  * replaces special characters such as "&" with their unicode form to not ruin api requests
  */
-export function fixSearchInURL(search:string){
-    return encodeURIComponent(search)
+export function fixSearchInURL(search: string) {
+    return encodeURIComponent(search);
+}
+
+export async function getCountryData(search: string, type: othertypes.countryDataSearchTypes, config) {
+    let baseURL = `https://restcountries.com/v3.1/`;
+    search = encodeURI(search);
+    switch (type) {
+        case 'all':
+            baseURL += `all`;
+            break;
+        case 'name': case 'fullname':
+            baseURL += `name/${search}`;
+            if (type == 'fullname') {
+                baseURL += `?fullText=true`;
+            }
+            break;
+        case 'calling': //not yet supported in v3 as of 2023-11-15
+            baseURL += `all`;
+            break;
+        case 'capital':
+        case 'currency':
+        case 'demonym':
+        case 'language':
+        case 'region':
+        case 'subregion':
+        case 'translation':
+            baseURL += `${type}/${search}`;
+            break;
+        case 'code':
+            baseURL += `alpha/${search}`;
+            break;
+        case 'codes':
+            baseURL += `alpha?codes=${search}`;
+            break;
+    }
+    log.toOutput(baseURL, config)
+    const data = await axios.get(baseURL);
+    return data;
 }
