@@ -18,12 +18,14 @@ export const mapobjs = {
 };
 
 // files/img/osu/mode(x).png
+// <:modeosu:1174502725967429682> <:modetaiko:1174502730086223997> <:modefruits:1174502718224744538> <:modemania:1174502721110409317>
+
 export const gamemodes = {
-    standard: '<:modeosu:944181096868884481>', //standard, STD, osu!
-    osu: '<:modeosu:944181096868884481>',
-    taiko: '<:modetaiko:944181097053442068>', //taiko, drums
-    fruits: '<:modefruits:944181096206176326>', //catch, catch the beat, ctb
-    mania: '<:modemania:944181095874834453>' //piano
+    standard: '<:modeosu:1174502725967429682>', //standard, STD, osu!
+    osu: '<:modeosu:1174502725967429682>',
+    taiko: '<:modetaiko:1174502730086223997>', //taiko, drums
+    fruits: '<:modefruits:1174502718224744538>', //catch, catch the beat, ctb
+    mania: '<:modemania:1174502721110409317>' //piano
 };
 
 // files/img/osu/status-(x).png

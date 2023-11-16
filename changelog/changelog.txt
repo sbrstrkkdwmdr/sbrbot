@@ -600,3 +600,4 @@ changes:
 [FIX] speed multipliers being applied twice
 [ADD] country command
 [FIX] fix sig figs being extremely long (ie 57.400000000000006 instead of 57.4)
+[QOL] change mode icons
