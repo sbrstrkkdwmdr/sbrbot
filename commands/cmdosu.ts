@@ -11776,21 +11776,49 @@ export async function maplocal(input: extypes.commandInput) {
     const decoder = new osuparsers.BeatmapDecoder();
     const mapParsed: osuclasses.Beatmap = await decoder.decodeFromPath(mapPath, true);
     osufunc.debug(mapParsed, 'fileparse', 'map (file)', input.obj.guildId, 'map');
-    const bpm = {
-        min: mapParsed?.bpmMin,
-        max: mapParsed?.bpmMax,
-        mode: mapParsed?.bpmMode,
-    };
     let clockRate = 1;
     if (mods.includes('DT') || mods.includes('NC')) {
         clockRate = 1.5;
     } else if (mods.includes('HT') || mods.includes('DC')) {
         clockRate = 0.75;
     }
-    const bpmTxt = bpm.min == bpm.max ?
-        `${(bpm.mode * clockRate)?.toFixed(2)} ` :
-        `${(bpm.min * clockRate)?.toFixed(2)} -${(bpm.max * clockRate)?.toFixed(2)} (${(bpm.mode * clockRate)?.toFixed(2)})`;
+    /**
+     * msperbeat - +mapParsed?.controlPoints?.timingPoints[0]._beatLength
+     * s per beat - /1000
+     * 60/sperbeat
+     * bpm
+     * 
+     */
+    const valCalc = osumodcalc.calcValues(
+        +mapParsed?.difficulty?._CS,
+        +mapParsed?.difficulty?._AR,
+        +mapParsed?.difficulty?._OD,
+        +mapParsed?.difficulty?._HP,
+        60 / (+mapParsed?.controlPoints?.timingPoints[0]._beatLength / 1000),
+        (+mapParsed?.totalLength) / 1000,
+        mods
+    );
 
+    let circleob = 0;
+    let sliderob = 0;
+    let spinnerob = 0;
+    for (const object of mapParsed?.hitObjects) {
+        if (
+            object.hasOwnProperty("repeats") ||
+            object.hasOwnProperty("velocity") ||
+            object.hasOwnProperty("path") ||
+            object.hasOwnProperty("legacyLastTickOffset") ||
+            object.hasOwnProperty("nodeSamples")
+        ) {
+            sliderob++;
+        } else if (object.hasOwnProperty("endTime")) {
+            spinnerob++;
+        } else {
+            circleob++;
+        }
+    }
+
+    console.log(mapParsed?.controlPoints?.timingPoints);
 
     let ppcalcing: PerformanceAttributes[];
     try {
@@ -11842,16 +11870,16 @@ export async function maplocal(input: extypes.commandInput) {
             .setFooter({
                 text: `${embedStyle}`
             })
-            .setTitle(`${mapParsed?.metadata.artist} - ${mapParsed?.metadata.title}`)
+            .setTitle(`${mapParsed?.metadata.artist} - ${mapParsed?.metadata.title} [${mapParsed?.metadata?.version}]`)
             .addFields([
                 {
                     name: 'MAP VALUES',
                     value:
                         `
-CS${mapParsed?.difficulty?._CS ?? mapParsed?.difficulty?._OD}
-AR${mapParsed?.difficulty?._AR ?? mapParsed?.difficulty?._OD} 
-OD${mapParsed?.difficulty?._OD} 
-HP${mapParsed?.difficulty?._HP ?? mapParsed?.difficulty?._OD}
+CS${valCalc.cs}
+AR${valCalc.ar} 
+OD${valCalc.od} 
+HP${valCalc.hp}
 ⭐${ppcalcing[0]?.difficulty?.stars?.toFixed(2)}
 `,
                     inline: true
@@ -11859,11 +11887,11 @@ HP${mapParsed?.difficulty?._HP ?? mapParsed?.difficulty?._OD}
                 {
                     name: def.invisbleChar,
                     value: `
-${emojis.mapobjs.circle}${NaN}
-${emojis.mapobjs.slider}${NaN}
-${emojis.mapobjs.spinner}${NaN}
-${emojis.mapobjs.total_length}${calc.secondsToTime((mapParsed?.totalLength / 1000) / clockRate)}
-${emojis.mapobjs.bpm}${bpmTxt}
+${emojis.mapobjs.circle}${circleob}
+${emojis.mapobjs.slider}${sliderob}
+${emojis.mapobjs.spinner}${spinnerob}
+${emojis.mapobjs.total_length}${calc.secondsToTime((valCalc.length))}
+${emojis.mapobjs.bpm}${valCalc.bpm}
 `,
                     inline: true
                 },
@@ -11880,6 +11908,7 @@ ${emojis.mapobjs.bpm}${bpmTxt}
                 }
             ])
             .setDescription(`
+Mapped by ${mapParsed?.metadata?.creator}
 Mode: ${input.config.useEmojis.gamemodes ? emojis.gamemodes[osumodcalc.ModeIntToName(mapParsed.mode)] : mapParsed.mode}
 File format: ${mapParsed.fileFormat}
 Map Creator: ${mapParsed.metadata.creator}

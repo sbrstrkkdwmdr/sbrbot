@@ -602,3 +602,6 @@ changes:
 [FIX] fix sig figs being extremely long (ie 57.400000000000006 instead of 57.4)
 [QOL] change mode icons
 [FIX] `.osu` files not parsing (extra space in the path)
+[FIX] `.osu` map file parse - map values (cs,ar,od,hp) not changing with mods applied 
+[FIX] `.osu` map file parse - NaN hitobject counters
+[FIX] `.osu` map file parse - NaN BPM
