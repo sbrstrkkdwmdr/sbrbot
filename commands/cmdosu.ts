@@ -11766,20 +11766,16 @@ export async function maplocal(input: extypes.commandInput) {
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
     let mapPath: string = '';
-    if (fs.existsSync(`${filespath} /localmaps/${input.absoluteID}.osu`)) {
-        mapPath = `${filespath} /localmaps/${input.absoluteID}.osu`;
+    if (fs.existsSync(`${filespath}/localmaps/${input.absoluteID}.osu`)) {
+        mapPath = `${filespath}/localmaps/${input.absoluteID}.osu`;
     } else {
         return;
     }
 
     let errtxt = '';
-
     const decoder = new osuparsers.BeatmapDecoder();
-
     const mapParsed: osuclasses.Beatmap = await decoder.decodeFromPath(mapPath, true);
-
     osufunc.debug(mapParsed, 'fileparse', 'map (file)', input.obj.guildId, 'map');
-
     const bpm = {
         min: mapParsed?.bpmMin,
         max: mapParsed?.bpmMax,
@@ -11817,7 +11813,6 @@ export async function maplocal(input: extypes.commandInput) {
 
         strains = await osufunc.straincalclocal(`${filespath}/errmap.osu`, mods, 0, osumodcalc.ModeIntToName(mapParsed?.mode));
     }
-
     osufunc.debug(strains, 'fileparse', 'map (file)', input.obj.guildId, 'strains');
     try {
         const mapgraphInit = await
@@ -11913,7 +11908,6 @@ HitObjects: ${mapParsed.hitObjects?.length}
         });
         return;
     }
-
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,

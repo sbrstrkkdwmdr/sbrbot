@@ -601,3 +601,4 @@ changes:
 [ADD] country command
 [FIX] fix sig figs being extremely long (ie 57.400000000000006 instead of 57.4)
 [QOL] change mode icons
+[FIX] `.osu` files not parsing (extra space in the path)
