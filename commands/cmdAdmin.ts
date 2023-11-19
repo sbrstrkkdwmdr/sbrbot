@@ -751,7 +751,7 @@ Owner ID: ${guild.ownerId}
                 fs.writeFileSync(`${filespath}/servers.txt`, servers, 'utf-8');
             }
             usemsgArgs = {
-                content: 'All servers connected to the client',
+                content: `${input.client.guilds.cache.size} servers connected to the client`,
                 files: [`${filespath}/servers.txt`]
             };
 
@@ -786,7 +786,7 @@ Created:   ${channel.createdAt}
                 fs.writeFileSync(`${filespath}/channels${serverId}.txt`, channels, 'utf-8');
 
                 usemsgArgs = {
-                    content: `Channels in guild ${serverId}`,
+                    content: `${input.obj.guild.channels.cache.size} channels in guild ${serverId}`,
                     files: [`${filespath}/channels${serverId}.txt`]
                 };
             }
@@ -826,7 +826,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                 fs.writeFileSync(`${filespath}/users${serverId}.txt`, users, 'utf-8');
 
                 usemsgArgs = {
-                    content: `Users in guild ${serverId}`,
+                    content: `${input.obj.guild.memberCount} users in guild ${serverId}`,
                     files: [`${filespath}/users${serverId}.txt`]
                 };
             }
@@ -1658,7 +1658,7 @@ export async function servers(input: extypes.commandInput) {
 
     const servers = (input.client.guilds.cache.map(guild => ` **${guild.name}** => \`${guild.id}\` | <@${guild.ownerId}> \`||\``)).join('');
     const embed = new Discord.EmbedBuilder()
-        .setTitle('Guilds')
+        .setTitle(`This client is in ${input.client.guilds.cache.size} guilds`)
         .setDescription(`${servers}`);
 
 

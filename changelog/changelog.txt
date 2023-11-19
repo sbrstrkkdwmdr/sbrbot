@@ -605,3 +605,4 @@ changes:
 [FIX] `.osu` map file parse - map values (cs,ar,od,hp) not changing with mods applied 
 [FIX] `.osu` map file parse - NaN hitobject counters
 [FIX] `.osu` map file parse - NaN BPM
+[QOL] show # of servers/users/channels
