@@ -54,6 +54,10 @@ export async function scoreList(
         filtereddata = filtereddata.filter(array => array.score.beatmapset.creator.toLowerCase() == asObj.filteredMapper.toLowerCase());
         filterinfo += `\nmapper: ${asObj.filteredMapper}`;
     }
+    if (asObj.exactMods?.toUpperCase() == 'NM') {
+        filtereddata = filtereddata.filter(array => array.score.mods.length == 0);
+        filterinfo += `\nexact mods: NM`;
+    }
     let calcmods = osumodcalc.OrderMods(asObj.filteredMods + '');
     let calcmodsx = osumodcalc.OrderMods(asObj.exactMods + '');
     if (calcmods.length < 1) {
@@ -71,10 +75,6 @@ export async function scoreList(
     if (asObj.filteredMods != null) {
         filtereddata = filtereddata.filter(array => array.score.mods.join('').toUpperCase().includes(calcmods.toUpperCase()));
         filterinfo += `\ninclude mods: ${calcmods}`;
-    }
-    if (asObj.exactMods?.toUpperCase() == 'NM') {
-        filtereddata = filtereddata.filter(array => array.score.mods.length == 0);
-        filterinfo += `\nexact mods: ${calcmodsx}`;
     }
 
     if (asObj.filterMapTitle != null) {

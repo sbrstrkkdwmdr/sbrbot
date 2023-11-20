@@ -607,3 +607,4 @@ changes:
 [FIX] `.osu` map file parse - NaN BPM
 [QOL] show # of servers/users/channels
 [QOL] show # of scores in score list commands
+[FIX] scorelists not being able to filter by NM
