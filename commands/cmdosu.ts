@@ -6170,16 +6170,14 @@ ${srStr}
         } else {
             switch (scoredetailed) {
                 case 0: case 2: {
-                    let txt = `Page: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
-                    ${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}
-                    ${filterTitle ? `Filter: ${filterTitle}\n` : ''}` + scoresarg.string.join('');
+                    let txt = `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
+                    ${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}` + scoresarg.string.join('');
                     rsEmbed.setDescription(txt);
                 }
                     break;
                 case 1: default: {
-                    rsEmbed.setDescription(`Page: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
+                    rsEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
                     ${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}
-                    ${filterTitle ? `Filter: ${filterTitle}` : ''}
                     `);
                     rsEmbed.addFields(scoresarg.fields);
                 }

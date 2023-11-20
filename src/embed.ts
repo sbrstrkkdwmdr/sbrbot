@@ -404,7 +404,7 @@ ${pptxt} ${weighted}
     return {
         string: scoresAsArrStr,
         fields: scoresAsFields,
-        filter: filterinfo,
+        filter: `\n${newData.length} scores` + filterinfo,
         maxPages: Math.ceil(newData.length / perPage),
         isFirstPage: asObj.page == 0,
         isLastPage: asObj.page >= Math.ceil(newData.length / perPage) - 1,
