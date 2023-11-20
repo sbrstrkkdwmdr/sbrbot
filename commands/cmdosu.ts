@@ -10356,16 +10356,10 @@ export async function map(input: extypes.commandInput) {
         func.storeFile(mapdataReq, mapidtest2[0].id, 'mapdata');
 
         //options menu to switch to other maps
-
-
-
-
         for (let i = 0; i < mapidtest?.beatmapsets?.length && i < 25; i++) {
             const curmapset = mapidtest?.beatmapsets?.[i];
-            // console.log(curmapset);
             if (!curmapset) break;
             const curmap = curmapset.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0];
-            console.log(curmap);
             inputModalSearch.addOptions(
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(`${curmap.mode_int == 0 ? emojis.gamemodes.standard :
@@ -10374,14 +10368,75 @@ export async function map(input: extypes.commandInput) {
                                 curmap.mode_int == 3 ? emojis.gamemodes.mania :
                                     emojis.gamemodes.standard
                         }` as Discord.APIMessageComponentEmoji)
-                    .setLabel(`#${i + 1} | ${curmapset.title} // ${curmapset.creator}`)
+                    .setLabel(`${curmapset.title} // ${curmapset.creator}`)
                     .setDescription(`[${curmap.version}] ${curmap.difficulty_rating}⭐`)
                     .setValue(`${curmap.id}`)
             );
         }
+        if (func.findFile(mapdata.beatmapset_id, `bmsdata`) &&
+            !('error' in func.findFile(mapdata.beatmapset_id, `bmsdata`)) &&
+            input.button != 'Refresh') {
+            bmsdataReq = func.findFile(mapdata.beatmapset_id, `bmsdata`);
+        } else {
+            bmsdataReq = await osufunc.apiget(
+                {
+                    type: 'mapset_get',
+                    config: input.config,
+                    params: {
+                        id: mapdata.beatmapset_id
+                    }
+                });
+        }
+        bmsdata = bmsdataReq.apiData;
+        if (bmsdataReq?.error) {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.map.ms.replace('[ID]', `${mapdata.beatmapset_id}`),
+                    edit: true
+                }
+            }, input.canReply);
+            log.logCommand({
+                event: 'Error',
+                commandName: 'map',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                config: input.config,
+                customString: errors.uErr.osu.map.ms.replace('[ID]', `${mapdata.beatmapset_id}`)
+            });
+            return;
+        }
+        osufunc.debug(bmsdataReq, 'command', 'map', input.obj.guildId, 'bmsData');
+
+        if (bmsdata?.hasOwnProperty('error')) {
+            if (input.commandType != 'button' && input.commandType != 'link') {
+                await msgfunc.sendMessage({
+                    commandType: input.commandType,
+                    obj: input.obj,
+                    args: {
+                        content: errors.uErr.osu.map.ms.replace('[ID]', mapdata.beatmapset_id.toString()),
+                        edit: true
+                    }
+                }, input.canReply);
+            }
+            log.logCommand({
+                event: 'Error',
+                commandName: 'map',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                config: input.config,
+                customString: errors.uErr.osu.map.ms.replace('[ID]', mapdata.beatmapset_id.toString())
+            });
+            return;
+        }
+
+        func.storeFile(bmsdataReq, mapdata.beatmapset_id, `bmsdata`);
     }
 
-    //options thing to switch to other maps in the mapset
+    //options thing to switch to other maps in the mapset (difficulties)
     if (typeof bmsdata?.beatmaps == 'undefined' || bmsdata?.beatmaps?.length < 2) {
         inputModalDiff.addOptions(
             new Discord.StringSelectMenuOptionBuilder()
@@ -10391,8 +10446,8 @@ export async function map(input: extypes.commandInput) {
                             mapdata.mode_int == 3 ? emojis.gamemodes.mania :
                                 emojis.gamemodes.standard
                     }` as Discord.APIMessageComponentEmoji)
-                .setLabel(`#${1}`)
-                .setDescription(`${mapdata.version} ${mapdata.difficulty_rating}⭐`)
+                .setLabel(`${mapdata.version}`)
+                .setDescription(`${mapdata.difficulty_rating}⭐`)
                 .setValue(`${mapdata.id}`)
         );
     } else {
@@ -10407,8 +10462,8 @@ export async function map(input: extypes.commandInput) {
                                 mapdata.mode_int == 3 ? emojis.gamemodes.mania :
                                     emojis.gamemodes.standard
                         }` as Discord.APIMessageComponentEmoji)
-                    .setLabel(`#${i + 1} | ${bmsdata.title}`)
-                    .setDescription(`${curmap.version} ${curmap.difficulty_rating}⭐`)
+                    .setLabel(`${curmap.version}`)
+                    .setDescription(`${curmap.difficulty_rating}⭐`)
                     .setValue(`${curmap.id}`)
             );
         }
@@ -10890,7 +10945,7 @@ HP${baseHP}`;
                     customString: `Could not find user ${mapdata.beatmapset.user_id} (map creator).\nUsing default json file`
                 });
             }
-            func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
+            func.storeFile(mapperdataReq, mapperdata.id, `osudata`, 'osu');
 
             const strains = await osufunc.straincalc(mapdata.id, mapmods, 0, mapdata.mode, new Date(mapdata.last_updated), input.config);
             try {
@@ -11080,7 +11135,7 @@ HP${baseHP}`;
                         customString: `Could not find user ${mapdata.user_id} (guest mapper).\nUsing default json file.`
                     });
                 }
-                func.storeFile(mapperdataReq, mapperdata.id, `osudata`);
+                func.storeFile(gdReq, mapdata.user_id, `osudata`);
                 Embed.setDescription(`Guest difficulty by [${gdData?.username}](https://osu.ppy.sh/users/${mapdata.user_id})`);
 
                 buttons
@@ -11192,11 +11247,6 @@ HP${baseHP}`;
             frmod = overwriteModal;
         }
 
-        const selectrowSearch = new Discord.ActionRowBuilder()
-            .addComponents(frmod);
-        const selectrowDiff = new Discord.ActionRowBuilder()
-            .addComponents(inputModalDiff);
-
         if (!(inputModalDiff.options.length < 1)) {
             useComponents.push(new Discord.ActionRowBuilder()
                 .addComponents(inputModalDiff));
@@ -11204,6 +11254,10 @@ HP${baseHP}`;
         if (!(inputModalSearch.options.length < 1)) {
             useComponents.push(new Discord.ActionRowBuilder()
                 .addComponents(frmod));
+        }
+        if(overwriteModal){
+            useComponents.push(new Discord.ActionRowBuilder()
+            .addComponents(overwriteModal));
         }
 
         useShit = {
@@ -11656,7 +11710,7 @@ export async function recMap(input: extypes.commandInput) {
 Pool of ${randomMap.poolSize}
 `;
 
-    const embed = new Discord.EmbedBuilder()
+    const embed = new Discord.EmbedBuilder();
     if (!isNaN(randomMap.mapid)) {
         input.overrides = {
             id: randomMap.mapid,
@@ -11669,8 +11723,8 @@ Pool of ${randomMap.poolSize}
         return;
     } else {
         embed
-        .setTitle('Error')
-        .setDescription(`${randomMap.err}`)
+            .setTitle('Error')
+            .setDescription(`${randomMap.err}`);
     }
 
 

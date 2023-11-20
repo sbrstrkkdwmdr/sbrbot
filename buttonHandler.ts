@@ -110,21 +110,12 @@ export default (input: {
         }
         if (button.includes('Select')) {
             switch (command) {
-                case 'map':
+                case 'map': case 'ppcalc':
                     {
                         //interaction is converted to a base interaction first because button interaction and select menu interaction don't overlap
                         overrides.id = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
-                        if (interaction?.message?.components[1]?.components[0]) {
-                            overrides.overwriteModal = interaction.message.components[1].components[0] as any;
-                        }
-                    }
-                    break;
-                case 'ppcalc':
-                    {
-                        //interaction is converted to a base interaction first because button interaction and select menu interaction don't overlap
-                        overrides.id = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
-                        if (interaction?.message?.components[1]?.components[0]) {
-                            overrides.overwriteModal = interaction.message.components[1].components[0] as any;
+                        if (interaction?.message?.components[2]?.components[0]) {
+                            overrides.overwriteModal = interaction.message.components[2].components[0] as any;
                         }
                     }
                     break;
@@ -235,14 +226,14 @@ export default (input: {
             overrides.id = buttonsplit[5];
             overrides.commandAs = 'interaction';
             overrides.commanduser = interaction.member.user as Discord.User;
-            await commands.weather({ commandType: 'other', obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata })
+            await commands.weather({ commandType: 'other', obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
             return;
         }
         if (button == 'Time') {
             overrides.ex = buttonsplit[5];
             overrides.commandAs = 'interaction';
             overrides.commanduser = interaction.member.user as Discord.User;
-            await commands.time({ commandType: 'other', obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata })
+            await commands.time({ commandType: 'other', obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
             return;
         }
 

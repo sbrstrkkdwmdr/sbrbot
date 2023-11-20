@@ -608,7 +608,7 @@ changes:
 [QOL] show # of servers/users/channels
 [QOL] show # of scores in score list commands
 [FIX] scorelists not being able to filter by NM
-[FIX] scorelists changing exact mods to include mods when changing pages
+[FIX] scorelists changing `exact mods` to `include mods` when changing pages
 
 VERSION 0.5.9
 date_time
@@ -616,3 +616,8 @@ commit: null
 changes:
 [FIX] missing `\n` in recmap
 [FIX] recmap error handling
+[QOL] map - difficulty selector labels show version instead of song title
+[REM] map - remove #s in difficulty/map selectors
+[FIX] map - guest mapper data 
+[FIX] map - difficulty selector when using -? would only show the top diff
+[FIX] map - search selector disappearing when switching difficulties
