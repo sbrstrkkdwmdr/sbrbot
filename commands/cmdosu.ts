@@ -9920,7 +9920,7 @@ export async function map(input: extypes.commandInput) {
         }
         if (input.overrides?.commanduser != null) {
             commanduser = input.overrides.commanduser;
-            useContent = `Requested by <@${commanduser.id}>`;
+            useContent = `Requested by <@${commanduser.id}>\n`;
         }
         if (input.overrides?.commandAs != null) {
             input.commandType = input.overrides.commandAs;
@@ -11539,7 +11539,7 @@ export async function recMap(input: extypes.commandInput) {
         commanduser,
         object: input.obj,
         config: input.config,
-        commandName: 'map (random)',
+        commandName: 'recmap',
         options: [
             {
                 name: 'User',
@@ -11565,8 +11565,6 @@ export async function recMap(input: extypes.commandInput) {
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-    let txt = '';
 
     //if user is null, use searchid
     if (user == null) {
@@ -11641,7 +11639,7 @@ export async function recMap(input: extypes.commandInput) {
         }
         log.logCommand({
             event: 'Error',
-            commandName: 'map (recommend)',
+            commandName: 'recmap',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11652,11 +11650,6 @@ export async function recMap(input: extypes.commandInput) {
     }
 
     const randomMap = osufunc.recommendMap(JSON.parse((formula.omc.user.recdiff(osudata.statistics.pp)).toFixed(2)), useType, mode, maxRange ?? 1);
-    if (randomMap.hasErr == true) {
-        txt = randomMap.err;
-    } else {
-        txt = `https://osu.ppy.sh/b/${randomMap.mapid}`;
-    }
     const exTxt =
         useType == 'closest' ? '' :
             `Random map within ${maxRange}⭐ of ${(formula.omc.user.recdiff(osudata.statistics.pp))?.toFixed(2)}
@@ -11664,8 +11657,6 @@ Pool of ${randomMap.poolSize}
 `;
 
     const embed = new Discord.EmbedBuilder()
-        .setTitle('Map recommendation')
-        .setDescription(`${exTxt}${txt}`);
     if (!isNaN(randomMap.mapid)) {
         input.overrides = {
             id: randomMap.mapid,
@@ -11676,6 +11667,10 @@ Pool of ${randomMap.poolSize}
 
         await map(input);
         return;
+    } else {
+        embed
+        .setTitle('Error')
+        .setDescription(`${randomMap.err}`)
     }
 
 
@@ -11691,7 +11686,7 @@ Pool of ${randomMap.poolSize}
     if (finalMessage == true) {
         log.logCommand({
             event: 'Success',
-            commandName: 'map (recommend)',
+            commandName: 'recmap',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,
@@ -11700,7 +11695,7 @@ Pool of ${randomMap.poolSize}
     } else {
         log.logCommand({
             event: 'Error',
-            commandName: 'map (recommend)',
+            commandName: 'recmap',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,

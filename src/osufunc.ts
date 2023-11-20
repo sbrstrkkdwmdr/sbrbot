@@ -2409,7 +2409,12 @@ export function recommendMap(baseRating: number, retrieve: 'closest' | 'random',
         const filter = sorted.filter(x =>
             (x?.difficulty_rating > baseRating - maxRange && x?.difficulty_rating < baseRating + maxRange)
         );
-        obj['mapid'] = filter[Math.floor(Math.random() * filter.length)].id;
+        if(filter.length > 0){
+            obj['mapid'] = filter[Math.floor(Math.random() * filter.length)].id;
+        } else {
+            obj['err'] = `No maps within ${maxRange}⭐ of ${baseRating}⭐`
+            obj['hasErr'] = true;
+        }
         obj['poolSize'] = filter.length
         obj['poolSizePreFilter'] = sorted.length
     }

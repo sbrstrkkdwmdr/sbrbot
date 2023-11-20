@@ -609,3 +609,10 @@ changes:
 [QOL] show # of scores in score list commands
 [FIX] scorelists not being able to filter by NM
 [FIX] scorelists changing exact mods to include mods when changing pages
+
+VERSION 0.5.9
+date_time
+commit: null
+changes:
+[FIX] missing `\n` in recmap
+[FIX] recmap error handling
