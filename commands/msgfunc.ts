@@ -528,7 +528,7 @@ export async function parseArgs_scoreList_button(input: extypes.commandInput) {
         }
 
         if (input.obj.message.embeds[0].description.includes('exact mods')) {
-            filteredMods = input.obj.message.embeds[0].description.split('exact mods: ')[1].split('\n')[0];
+            exactMods = input.obj.message.embeds[0].description.split('exact mods: ')[1].split('\n')[0];
         }
 
         if (input.obj.message.embeds[0].description.includes('map')) {
