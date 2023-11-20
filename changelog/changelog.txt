@@ -621,3 +621,4 @@ changes:
 [FIX] map - guest mapper data 
 [FIX] map - difficulty selector when using -? would only show the top diff
 [FIX] map - search selector disappearing when switching difficulties
+[QOL] math - change OD from +- to ±
