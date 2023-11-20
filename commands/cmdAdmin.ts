@@ -747,7 +747,6 @@ Owner ID: ${guild.ownerId}
                 }
                 )))
                     .join('\n');
-                console.log(servers);
                 fs.writeFileSync(`${filespath}/servers.txt`, servers, 'utf-8');
             }
             usemsgArgs = {
