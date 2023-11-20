@@ -583,8 +583,8 @@ changes:
 [FIX] `precomppath` being the same as `path`
 
 VERSION 0.5.8
-date_time
-commit: null 
+2023-11-20
+commit: 9494021cc189924cea0be7e9528795720cda663a 
 changes:
 [FIX] math od to ms returning undefined
 [QOL] move pp calc to be part of map cmd 
