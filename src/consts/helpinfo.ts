@@ -2734,9 +2734,18 @@ const buttons: {
             emoji: buttonsObjs.label.extras.user
         }, {
             name: 'Leaderboard',
-            description: 'Displays the leaderboard of the map',
+            description: 'Displays the leaderboard of the map or other scores the user has on that map',
             emoji: buttonsObjs.label.extras.leaderboard
+        }, {
+            name: 'Time',
+            description: 'Displays the time for the given region',
+            emoji: buttonsObjs.label.extras.time
+        }, {
+            name: 'Weather',
+            description: 'Displays the weather for the given region',
+            emoji: buttonsObjs.label.extras.weather
         }
+
     ];
 
 export { admincmds, buttons, cmds, osucmds, othercmds };
