@@ -180,6 +180,7 @@ export default (input: {
     function execCommand_checker(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[],
         canReply: boolean, config: extypes.config
     ) {
+        //perms bot needs
         const requireEmbedCommands: string[] = [
             //gen
             'convert', 'conv',
@@ -250,13 +251,20 @@ export default (input: {
         const requireReactions: string[] = [
             'poll', 'vote'
         ];
+        const requireMsgManage: string[] = [
+            'purge'
+        ];
+
         const botRequireAdmin: string[] = [
             'checkperms', 'fetchperms', 'checkpermissions', 'permissions', 'perms',
             'userinfo'
         ];
+
+        //perms user needs
         const userRequireAdminOrOwner: string[] = [
             'checkperms', 'fetchperms', 'checkpermissions', 'permissions', 'perms',
-            'userinfo'
+            'userinfo',
+            'purge',
         ];
 
         const userRequireOwner: string[] = [
@@ -265,10 +273,11 @@ export default (input: {
 
         const disabled = [
             'globals', 'osc', 'osustatscount',
+            'render', 'rdr'
         ];
 
         let allowed = true;
-        const missingPermsBot: string[] = [];
+        const missingPermsBot: Discord.PermissionsString[] = [];
         const missingPermsUser: string[] = [];
 
         if (
@@ -280,6 +289,9 @@ export default (input: {
 
         if (requireReactions.includes(command) && !checks.botHasPerms(obj, input.client, ['AddReactions'])) {
             missingPermsBot.push('AddReactions');
+        }
+        if (requireMsgManage.includes(command) && !checks.botHasPerms(obj, input.client, ['ManageMessages'])) {
+            missingPermsBot.push('ManageMessages');
         }
         if (botRequireAdmin.includes(command) && !checks.botHasPerms(obj, input.client, ['Administrator'])) {
             missingPermsBot.push('Administrator');
@@ -894,6 +906,9 @@ export default (input: {
             case 'prefix':
                 // startType(obj);
                 admincmds.prefix({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, guildSettings: input.guildSettings });
+                break;
+            case 'purge':
+                admincmds.purge({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, guildSettings: input.guildSettings });
                 break;
             case 'servers':
                 // startType(obj);

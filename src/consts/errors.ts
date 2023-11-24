@@ -88,6 +88,12 @@ export const uErr = {
     admin: {
         channel: {
             msid: 'Invalid channel id'
+        },
+        purge: {
+            msc: 'Missing arg [COUNT]',
+            unf: 'Could not find user with id [ID]',
+            fail: 'There was an error trying to delete [COUNT] message(s)',
+            failTime: 'You cannot purge messages over 14 days old'
         }
     },
     weather: {

@@ -2665,6 +2665,59 @@ const admincmds: commandInfo[] = [
         ]
     },
     {
+        name: 'purge',
+        description: 'Deletes a specified amount of messages from the current channel',
+        usage: 'purge [count] [user] [-method]',
+        slashusage: 'purge [count] [user] [method]',
+        examples: [
+            {
+                text: 'PREFIXMSGpurge 5 12345689',
+                descriptor: 'Deletes 5 messages from the user with the ID 12345689'
+            },
+            {
+                text: 'PREFIXMSGpurge 5 @testsubject',
+                descriptor: 'Deletes 5 messages from the user "testsubject"'
+            },
+            {
+                text: 'PREFIXMSGpurge 5 -fetch',
+                descriptor: 'Deletes 5 messages using the fetch method'
+            },
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'count',
+                type: 'number',
+                required: false,
+                description: 'The amount of messages to delete',
+                options: ['0-100'],
+                defaultValue: '5',
+                examples: [],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'user',
+                type: 'string/user mention',
+                required: false,
+                description: 'The user\'s messages to delete. Deletes messages from any user if unspecified',
+                options: [],
+                defaultValue: 'N/A',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'method',
+                type: 'string',
+                required: false,
+                description: 'The method to delete messages. Fetch is slower, but can delete messages older than 14 days. Bulk cannot be used if user is specified.',
+                options: ['bulk', 'fetch'],
+                defaultValue: 'bulk',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            }
+        ]
+    },
+    {
         name: 'servers',
         description: 'Shows the servers the bot is in',
         usage: 'servers',

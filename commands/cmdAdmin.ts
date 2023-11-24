@@ -8,6 +8,7 @@ import * as buttonsthing from '../src/consts/buttons.js';
 import * as colours from '../src/consts/colours.js';
 import * as def from '../src/consts/defaults.js';
 import * as emojis from '../src/consts/emojis.js';
+import * as errors from '../src/consts/errors.js';
 import * as helpinfo from '../src/consts/helpinfo.js';
 import * as mainconst from '../src/consts/main.js';
 import * as embedStuff from '../src/embed.js';
@@ -1606,6 +1607,192 @@ export async function prefix(input: extypes.commandInput) {
         });
     }
 
+}
+
+/**
+ * delete mass amounts of messages at once
+ */
+export async function purge(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+    let purgeCount: number = 5;
+    let filter: {
+        byUser: boolean,
+        userid: string;
+    } = {
+        byUser: false,
+        userid: null,
+    };
+    let method: 'bulk' | 'fetch' = 'bulk';
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+
+            if (input.args.includes('-fetch')) {
+                method = 'fetch';
+                input.args.splice(input.args.indexOf('-fetch'), 1);
+            }
+            if (input.args.includes('-bulk')) {
+                method = 'bulk';
+                input.args.splice(input.args.indexOf('-bulk'), 1);
+            }
+
+            filter.userid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : null;
+            purgeCount = input.args[0] ? +input.args[0] : 5;
+            if (!isNaN(+input.args[1])) {
+                filter.userid = input.args[1];
+            }
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+
+    }
+    //==============================================================================================================================================================================================
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'purge',
+        options: [
+            {
+                name: 'Count',
+                value: purgeCount
+            },
+            {
+                name: 'User',
+                value: filter.userid
+            },
+            {
+                name: 'Method',
+                value: method
+            }
+        ],
+        config: input.config,
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+    let user: Discord.GuildMember;
+    if (filter.userid) {
+        filter.byUser = true;
+        user = input.obj.guild.members.cache.get(filter.userid);
+        if (!user) {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.admin.purge.unf
+                        .replace('[ID]', filter.userid),
+                    edit: true
+                }
+            }, input.canReply);
+            return;
+        }
+    }
+
+    if (purgeCount > 100) {
+        purgeCount = 100;
+    } else if (purgeCount < 2) {
+        purgeCount = 5;
+    }
+
+    const channel = input.client.channels.cache.get(input.obj.channelId) as Discord.TextChannel;
+    let amt = 0;
+    let content = `Purged ${amt} message(s)${filter.byUser ? ` from user ${user?.displayName}(${user?.id})` : ''}.`;
+
+    if (filter.byUser == true) {
+        const messages = channel.messages.cache;
+        let i = 0;
+        messages.forEach(message => {
+            if (message.author.id.trim() == filter.userid.trim() && message.deletable && i < purgeCount) {
+                message.delete();
+                i++;
+            }
+        });
+        content = `Purged ${i} message(s)${filter.byUser ? ` from user ${user?.displayName}(${user?.id})` : ''}.`;
+    } else {
+        if (method == 'bulk') {
+            await channel.bulkDelete(purgeCount).then(x => {
+                amt = x.size;
+                content = `Purged ${amt} message(s)${filter.byUser ? ` from user ${user?.displayName}(${user?.id})` : ''}.`;
+            }).catch(x => {
+                content = errors.uErr.admin.purge.fail
+                    .replace('[COUNT]', `${purgeCount}`) + `\n${errors.uErr.admin.purge.failTime}`
+                    ;
+                log.logCommand({
+                    event: 'Error',
+                    commandName: 'purge',
+                    commandType: input.commandType,
+                    commandId: input.absoluteID,
+                    object: input.obj,
+                    customString: errors.uErr.admin.purge.fail
+                        .replace('[COUNT]', `${purgeCount}`) + `\n${errors.uErr.admin.purge.failTime}`,
+                    config: input.config
+                });
+            });
+        } else if (method == 'fetch') {
+            const messages = channel.messages.cache;
+            let i = 0;
+            messages.forEach(message => {
+                if (message.deletable && i < purgeCount) {
+                    message.delete();
+                    i++;
+                }
+            });
+            content = `Purged ${i} message(s)${filter.byUser ? ` from user ${user?.displayName}(${user?.id})` : ''}.`;
+        }
+    }
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            content
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'purge',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            config: input.config,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'purge',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send',
+            config: input.config,
+        });
+    }
 }
 
 /**

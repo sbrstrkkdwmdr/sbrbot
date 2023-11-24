@@ -624,3 +624,4 @@ changes:
 [QOL] math - change OD from +- to ±
 [FIX] time and weather buttons missing from helpinfo
 [FIX] scoreparse crashing the bot if args were null
+[ADD] purge command
