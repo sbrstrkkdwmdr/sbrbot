@@ -57,7 +57,8 @@ export const uErr = {
             nf: 'Could not find the requested score',
             wrong: 'Score is invalid/unsubmitted and cannot be parsed',
             nd: 'Could not find score data for [SID] in [MODE]',
-            msp: 'No previous score id found in this guild'
+            msp: 'No previous score id found in this guild',
+            ms: 'Missing arg <SCORE ID>'
         },
         scores: {
             pinned: 'Could not find the [ID]\'s pinned scores',

@@ -6669,7 +6669,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             scorelink = null;
             scoremode = input.args[1] ?? 'osu';
             scoreid = input.args[0];
-            if (input.args[0].includes('https://')) {
+            if (input?.args[0]?.includes('https://')) {
                 const messagenohttp = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
                 scorelink = messagenohttp.split('/scores/')[1];
                 scoremode = scorelink.split('/')[0];
@@ -6779,6 +6779,31 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     });
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+    if (!scoreid) {
+        const temp = osufunc.getPreviousId('score', input.obj.guildId);
+        if (temp.apiData.best_id && typeof temp.apiData.best_id === 'number') {
+            scoreid = temp.apiData.best_id;
+        } else {
+            await msgfunc.sendMessage({
+                commandType: input.commandType,
+                obj: input.obj,
+                args: {
+                    content: errors.uErr.osu.score.ms,
+                    edit: true
+                }
+            }, input.canReply);
+            log.logCommand({
+                event: 'Error',
+                commandName: 'scoreparse',
+                commandType: input.commandType,
+                commandId: input.absoluteID,
+                object: input.obj,
+                customString: errors.uErr.osu.score.ms,
+                config: input.config
+            });
+            return;
+        }
+    }
     let scoredataReq: osufunc.apiReturn;
 
     if (func.findFile(scoreid, 'scoredata') &&
@@ -11255,9 +11280,9 @@ HP${baseHP}`;
             useComponents.push(new Discord.ActionRowBuilder()
                 .addComponents(frmod));
         }
-        if(overwriteModal){
+        if (overwriteModal) {
             useComponents.push(new Discord.ActionRowBuilder()
-            .addComponents(overwriteModal));
+                .addComponents(overwriteModal));
         }
 
         useShit = {
