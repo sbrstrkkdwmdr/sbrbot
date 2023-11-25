@@ -182,7 +182,7 @@ additional notes: string
 -------------------------------------------------------------------------------------------------------------------------
 
 #15)
-    status: WIP
+    status: FINISHED
     issue: local time in weather command uses UTC
     cause: frogor + moment hangs when using tz()
     author: sbrstrkkdwmdr
@@ -192,3 +192,13 @@ additional notes: string
     additional notes: 
 
 -------------------------------------------------------------------------------------------------------------------------
+
+#16)
+    status: WIP
+    issue: can't access weather API when running on ubuntu
+    cause: unknown 
+    author: sbrstrkkdwmdr
+    found: 2023-10-26 21:30 AEDT (UTC+11)
+    fixed: 
+    solution: 
+    additional notes:
