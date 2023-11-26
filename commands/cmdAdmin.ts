@@ -17,6 +17,7 @@ import * as log from '../src/log.js';
 import * as osufunc from '../src/osufunc.js';
 import * as trackfunc from '../src/trackfunc.js';
 import * as extypes from '../src/types/extratypes.js';
+import * as osuapitypes from '../src/types/osuApiTypes.js';
 import * as msgfunc from './msgfunc.js';
 
 export async function name(input: extypes.commandInput) {
@@ -483,7 +484,7 @@ export async function getUserAv(input: extypes.commandInput) {
 export async function debug(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
-    type debugtype = 'commandfile' | 'commandfiletype' | 'servers' | 'channels' | 'users' | 'forcetrack' | 'curcmdid' | 'logs' | 'clear';
+    type debugtype = 'commandfile' | 'commandfiletype' | 'servers' | 'channels' | 'users' | 'forcetrack' | 'curcmdid' | 'logs' | 'clear' | 'maps';
 
     let type: debugtype;
     let inputstr;
@@ -830,6 +831,49 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                     files: [`${filespath}/users${serverId}.txt`]
                 };
             }
+        }
+            break;
+        case 'maps': {
+            let type;
+            if (!inputstr) {
+                type = 'id';
+            } else {
+                type = inputstr;
+            }
+            const directory = `${path}/cache/commandData`;
+            const dirFiles = fs.readdirSync(directory);
+            const acceptFiles: string[] = [];
+            for (const file of dirFiles) {
+                if (file.includes('mapdata')) {
+                    const tempdata = (JSON.parse(fs.readFileSync(directory + '/' + file, 'utf-8'))) as osufunc.apiReturn;
+                    const data = tempdata.apiData as osuapitypes.Beatmap;
+                    if (type.includes('name')) {
+                        acceptFiles.push(`[${data.beatmapset.title} [${data.version}]](https://osu.ppy.sh/b/${data.id})`);
+                    } else {
+                        acceptFiles.push(`[${data.id}](https://osu.ppy.sh/b/${data.id})`);
+                    }
+                }
+            }
+            const temppath = `${filespath}/maps.txt`;
+            fs.writeFileSync(temppath, acceptFiles.join('\n'), 'utf-8');
+            const embeds = [];
+            let content = '';
+            let files = [];
+            if (acceptFiles.join('\n').length < 2000) {
+                embeds.push(
+                    new Discord.EmbedBuilder()
+                        .setTitle(`${acceptFiles.length} maps stored in cache.`)
+                        .setDescription(acceptFiles.join('\n'))
+                );
+            } else {
+                content = `${acceptFiles.length} maps stored in cache.`
+                files = [`${temppath}`]
+            }
+            usemsgArgs = {
+                content,
+                embeds,
+                files
+            };
         }
             break;
         //force osutrack to update

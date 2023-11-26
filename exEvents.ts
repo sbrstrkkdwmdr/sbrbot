@@ -101,6 +101,7 @@ export default (input: {
             status: 'dnd',
             afk: false
         });
+        return (map as osuapitypes.Beatmap).total_length;
     }
 
     const activityChristmas = [
@@ -149,11 +150,12 @@ export default (input: {
     let curEvent = Events[0];
     let activityarr = activities;
 
+    let timer = 60 * 1000;
+    updateStatus();
+
     setInterval(() => {
         updateStatus();
-    }, 60 * 1000);
-
-    updateStatus();
+    }, timer);
 
     function updateStatus() {
         const date = new Date();
@@ -191,8 +193,11 @@ export default (input: {
                 status: 'dnd',
                 afk: false
             });
+            timer = 60 * 1000;
         } else {
-            setActivity();
+            const temp = setActivity();
+            timer = temp > 60 * 1000 * 30 ?
+                60 * 1000 : temp * 1000;
         }
     }
 

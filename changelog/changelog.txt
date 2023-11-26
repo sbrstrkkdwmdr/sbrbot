@@ -626,3 +626,5 @@ changes:
 [FIX] scoreparse crashing the bot if args were null
 [ADD] purge command
 [QOL] make changelog command more readable
+[QOL] status timer based off song length 
+[ADD] debug map command
