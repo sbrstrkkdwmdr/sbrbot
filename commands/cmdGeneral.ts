@@ -179,7 +179,7 @@ export async function changelog(input: extypes.commandInput) {
     if (typeof found == 'string' && useGit == false) {
         isList = true;
         Embed.setTitle('ALL VERSIONS')
-            .setDescription(`${mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n')}${foundBool ? '' : `\nThere was an error trying to find version ${version}`}`)
+            .setDescription(`${mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n')}${foundBool ? '' : `\nThere was an error trying to find version \`${version}\``}`)
             .setFooter({
                 text: `${useNum + 1}/${mainconst.versions.length}`
             });
