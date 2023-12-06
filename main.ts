@@ -195,7 +195,11 @@ Current Client ID:        ${client.user.id}
 
     const oncooldown = new Set();
 
-
+    if (!fs.existsSync(`${path}/config/osuauth.json`)) {
+        console.log(`Creating ${path}/config/osuauth.json`);
+        fs.writeFileSync(`${path}/config/osuauth.json`, 
+        '{"token_type": "Bearer", "expires_in": 1, "access_token": "blahblahblah"}', 'utf-8');
+    }
     if (!fs.existsSync(`${path}/id.txt`)) {
         console.log(`Creating ${path}/id.txt`);
         fs.writeFileSync(`${path}/id.txt`, '0', 'utf-8');

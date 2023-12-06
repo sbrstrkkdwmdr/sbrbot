@@ -28,6 +28,7 @@ dist/
 *.json
 !tsconfig.json
 !config/tempconfig.json
+!config/temposuauth.json
 !TEMPLATE.sqlite
 *.7z
 *.zip
