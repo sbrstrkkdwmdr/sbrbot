@@ -80,7 +80,7 @@ const namesList = {
     pow_w: ['Watt', 'w'],
     pow_horse: ['Horse Power', 'hp'],
     pow_erg: ['Ergs', 'erg s⁻¹', 'erg/s'],
-    pow_ftlbs: ['Foot-pounds per second', 'ft lb s⁻¹', 'ftlb/s', 'ft lb s', 'ftlbs', 'ftlbsec', 'ft lb sec'],
+    pow_ftlbs: ['Foot-pounds per second', 'ft lb s⁻¹', 'ftlb/s', 'ft lb s', 'ftlbs', 'ftlbsec', 'ft lb sec'], 
     pow_dbm: ['Decibel-milliwatts', 'dBm', 'dbmw'],
     pow_btus: ['BTU per second', 'btu s⁻¹', 'btus', 'btusec',],
     pow_calhr: ['Calories per hour', 'calh', 'calhr'],
