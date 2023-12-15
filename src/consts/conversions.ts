@@ -1,7 +1,7 @@
 export type convVal = {
     name: string,
     names: string[],
-    type: 'Temperature' | 'Distance' | 'Volume' | 'Time' | 'Mass' | 'Pressure' | 'Energy' | 'Angle' | 'Area' | 'Speed' | 'N/A',
+    type: 'Temperature' | 'Distance' | 'Volume' | 'Time' | 'Mass' | 'Pressure' | 'Energy' | 'Power' | 'Angle' | 'Area' | 'Speed' | 'N/A',
     system: 'Metric' | 'Imperial' | 'N/A',
     calc: {
         to: string,
@@ -19,6 +19,13 @@ export type convValCalc = {
 };
 
 //some values have NULL due to how conversions help embed works
+/**
+ * conversions taken from
+ * google
+ * https://www.unitconverters.net/power/watt-to-pound-foot-minute.htm
+ * https://www.everythingrf.com/rf-calculators/watt-to-dbm
+ */
+
 
 const namesList = {
     arbitrary: ['Arbitrary units', 'idk', 'wtf', '???', '?'],
@@ -70,6 +77,13 @@ const namesList = {
     nrg_cal: ['Calorie', 'cal'],
     nrg_btu: ['British Thermal Unit', 'btu'],
     nrg_wh: ['Watt Hour', 'wH'],
+    pow_w: ['Watt', 'w'],
+    pow_horse: ['Horse Power', 'hp'],
+    pow_erg: ['Ergs', 'erg s⁻¹', 'erg/s'],
+    pow_ftlbs: ['Foot-pounds per second', 'ft lb s⁻¹', 'ftlb/s', 'ft lb s', 'ftlbs', 'ftlbsec', 'ft lb sec'],
+    pow_dbm: ['Decibel-milliwatts', 'dBm', 'dbmw'],
+    pow_btus: ['BTU per second', 'btu s⁻¹', 'btus', 'btusec',],
+    pow_calhr: ['Calories per hour', 'calh', 'calhr'],
     area_in2: ['Square inch', 'in²', 'in2', 'sqin'],
     area_ft2: ['Square foot', 'ft²', 'ft2', 'sqft'],
     area_m2: ['Square metre', 'm²', 'm2', 'sqm'],
@@ -3824,6 +3838,461 @@ export const values: convVal[] = [
                 text: 'x'
             },
             toArbitrary
+        ]
+    },
+    //power
+    {
+        name: 'Watt',
+        names: namesList.pow_w,
+        type: 'Power',
+        system: 'Metric',
+        calc: [
+            {
+                to: 'Watt',
+                names: namesList.pow_w,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Horse Power',
+                names: namesList.pow_horse,
+                func: (x) => {
+                    return x / 745.7;
+                },
+                text: 'x/745.7'
+            },
+            {
+                to: 'Ergs',
+                names: namesList.pow_erg,
+                func: (x) => {
+                    return x * 1e7;
+                },
+                text: 'x*1e7'
+            },
+            {
+                to: 'Foot-pounds per minute',
+                names: namesList.pow_ftlb,
+                func: (x) => {
+                    return x / 1.3558179483;
+                },
+                text: 'x/1.3558179483'
+            },
+            {
+                to: 'Decibel-milliwatts',
+                names: namesList.pow_dbm,
+                func: (x) => {
+                    return x * 30;
+                },
+                text: 'x*30'
+            },
+            {
+                to: 'BTU per hour',
+                names: namesList.pow_btuhr,
+                func: (x) => {
+                    return x / 1055.0558526;
+                },
+                text: 'x/1055.0558526'
+            },
+            {
+                to: 'Calories per hour',
+                names: namesList.pow_calhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+        ]
+    },
+    {
+        name: 'Horse Power',
+        names: namesList.pow_horse,
+        type: 'Power',
+        system: 'Imperial',
+        calc: [
+            {
+                to: 'Watt',
+                names: namesList.pow_w,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+
+            {
+                to: 'Horse Power',
+                names: namesList.pow_horse,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Ergs',
+                names: namesList.pow_erg,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Foot-pounds per minute',
+                names: namesList.pow_ftlb,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Decibel-milliwatts',
+                names: namesList.pow_dbm,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'BTU per hour',
+                names: namesList.pow_btuhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Calories per hour',
+                names: namesList.pow_calhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+        ]
+    },
+    {
+        name: 'Ergs',
+        names: namesList.pow_erg,
+        type: 'Power',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Watt',
+                names: namesList.pow_w,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+
+            {
+                to: 'Horse Power',
+                names: namesList.pow_horse,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Ergs',
+                names: namesList.pow_erg,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Foot-pounds per minute',
+                names: namesList.pow_ftlb,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Decibel-milliwatts',
+                names: namesList.pow_dbm,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'BTU per hour',
+                names: namesList.pow_btuhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Calories per hour',
+                names: namesList.pow_calhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+        ]
+    },
+    {
+        name: 'Foot-pounds per minute',
+        names: namesList.pow_ftlb,
+        type: 'Power',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Watt',
+                names: namesList.pow_w,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+
+            {
+                to: 'Horse Power',
+                names: namesList.pow_horse,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Ergs',
+                names: namesList.pow_erg,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Foot-pounds per minute',
+                names: namesList.pow_ftlb,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Decibel-milliwatts',
+                names: namesList.pow_dbm,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'BTU per hour',
+                names: namesList.pow_btuhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Calories per hour',
+                names: namesList.pow_calhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+        ]
+    },
+    {
+        name: 'Decibel-milliwatts',
+        names: namesList.pow_dbm,
+        type: 'Power',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Watt',
+                names: namesList.pow_w,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+
+            {
+                to: 'Horse Power',
+                names: namesList.pow_horse,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Ergs',
+                names: namesList.pow_erg,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Foot-pounds per minute',
+                names: namesList.pow_ftlb,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Decibel-milliwatts',
+                names: namesList.pow_dbm,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'BTU per hour',
+                names: namesList.pow_btuhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Calories per hour',
+                names: namesList.pow_calhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+        ]
+    },
+    {
+        name: 'BTU per hour',
+        names: namesList.pow_btuhr,
+        type: 'Power',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Watt',
+                names: namesList.pow_w,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+
+            {
+                to: 'Horse Power',
+                names: namesList.pow_horse,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Ergs',
+                names: namesList.pow_erg,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Foot-pounds per minute',
+                names: namesList.pow_ftlb,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Decibel-milliwatts',
+                names: namesList.pow_dbm,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'BTU per hour',
+                names: namesList.pow_btuhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Calories per hour',
+                names: namesList.pow_calhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+        ]
+    },
+    {
+        name: 'Calories per hour',
+        names: namesList.pow_calhr,
+        type: 'Power',
+        system: 'N/A',
+        calc: [
+            {
+                to: 'Watt',
+                names: namesList.pow_w,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+
+            {
+                to: 'Horse Power',
+                names: namesList.pow_horse,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Ergs',
+                names: namesList.pow_erg,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Foot-pounds per minute',
+                names: namesList.pow_ftlb,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Decibel-milliwatts',
+                names: namesList.pow_dbm,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'BTU per hour',
+                names: namesList.pow_btuhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
+            {
+                to: 'Calories per hour',
+                names: namesList.pow_calhr,
+                func: (x) => {
+                    return x;
+                },
+                text: 'x'
+            },
         ]
     },
     //area
