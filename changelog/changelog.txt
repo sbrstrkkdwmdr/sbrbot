@@ -629,3 +629,4 @@ changes:
 [QOL] status timer based off song length 
 [ADD] debug map command
 [FIX] `config/osuauth.json` missing
+[FIX] remove separate handling of sigfigs that are 10^1 or 10^-1
