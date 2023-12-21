@@ -463,8 +463,23 @@ author:
 #40)
     description: add medals command
     type: add
-    status: WIP
+    status: finished
     priority: medium
     request date: 2023-11-26 09:40 AEDT (UTC+11)
+    finish date: 
+    author: sbrstrkkdwmdr
+-------------------------------------------------------------------------------------------------------------------------
+
+#41)
+    description: add add buglist cmd ->
+empty collection
+sbr-bug add weather broken??
+sbr-bug list -> "01. weather broken??"
+sbr-bug rem 01
+sbr-bug list -> "no bugs found
+    type: add
+    status: WIP
+    priority: medium
+    request date: 2023-12-21 23:40 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr

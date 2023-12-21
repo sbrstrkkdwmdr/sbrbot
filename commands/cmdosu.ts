@@ -2232,8 +2232,8 @@ ${gradeCounts}
 ${prevnames}
 ${supporter} ${onlinestatus}
 **Avg time per play:** ${calc.secondsToTime(secperplay)}
-**Avg daily playcount:**: ${dailies}
-**Avg monthly playcount:**: ${monthlies}
+**Avg daily playcount:** ${dailies}
+**Avg monthly playcount:** ${monthlies}
 `,
                     inline: true
                 }
