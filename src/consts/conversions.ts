@@ -3980,57 +3980,57 @@ export const values: convVal[] = [
                 to: 'Ergs',
                 names: namesList.pow_erg,
                 func: (x) => {
-                    return x * 1e7;
+                    return x * 1e7 / 30;
                 },
-                text: 'x*1e7'
+                text: 'x*1e7/30'
             },
             {
                 to: 'Watt',
                 names: namesList.pow_w,
+                func: (x) => {
+                    return x / 30;
+                },
+                text: '/30'
+            },
+            {
+                to: 'Decibel-milliwatts',
+                names: namesList.pow_dbm,
                 func: (x) => {
                     return x;
                 },
                 text: 'x'
             },
             {
-                to: 'Decibel-milliwatts',
-                names: namesList.pow_dbm,
-                func: (x) => {
-                    return x * 30;
-                },
-                text: 'x*30'
-            },
-            {
                 to: 'Foot-pounds per minute',
                 names: namesList.pow_ftlbsec,
                 func: (x) => {
-                    return x / 1.3558179483;
+                    return x / (1.3558179483 * 30);
                 },
-                text: 'x/1.3558179483'
+                text: 'x/(1.3558179483*30)'
             },
             {
                 to: 'Calories per second',
                 names: namesList.pow_calsec,
                 func: (x) => {
-                    return x * (6 / 25);
+                    return x * (6 / (25 * 30));
                 },
-                text: 'x*(6/25)'
+                text: 'x*(6/(25*30))'
             },
             {
                 to: 'Horse Power',
                 names: namesList.pow_horse,
                 func: (x) => {
-                    return x / 745.7;
+                    return x / (745.7 * 30);
                 },
-                text: 'x/745.7'
+                text: 'x/(745.7*30)'
             },
             {
                 to: 'BTU per second',
                 names: namesList.pow_btusec,
                 func: (x) => {
-                    return x / 1055.0558526;
+                    return x / (1055.0558526 * 30);
                 },
-                text: 'x/1055.0558526'
+                text: 'x/(1055.0558526*30)'
             },
         ]
     },
