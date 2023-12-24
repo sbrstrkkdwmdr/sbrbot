@@ -163,29 +163,21 @@ export default (input: {
         const month = date.getMonth() + 1;
         let specialDay = false;
         if ((month == 12 && day == 31) || (month == 1 && day == 1)) {
-            if (curEvent != Events[1]) {
-                curEvent = Events[1];
-                activityarr = activityNewYear;
-                specialDay = true;
-            }
+            curEvent = Events[1];
+            activityarr = activityNewYear;
+            specialDay = true;
         }
         else if (month == 10 && day == 31) {
-            if (curEvent != Events[2]) {
-                curEvent = Events[2];
-                activityarr = activityHalloween;
-                specialDay = true;
-            }
+            curEvent = Events[2];
+            activityarr = activityHalloween;
+            specialDay = true;
         } else if (month == 12 && day == 25) {
-            if (curEvent != Events[3]) {
-                curEvent = Events[3];
-                activityarr = activityChristmas;
-                specialDay = true;
-            }
+            curEvent = Events[3];
+            activityarr = activityChristmas;
+            specialDay = true;
         } else {
-            if (curEvent != Events[0]) {
                 curEvent = Events[0];
                 activityarr = activities;
-            }
         }
         if (specialDay == true) {
             input.client.user.setPresence({
