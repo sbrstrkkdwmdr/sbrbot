@@ -612,7 +612,7 @@ changes:
 
 VERSION 0.5.9
 2023-12-25
-commit: cbce11eb1463bec6f845d03ec07a16214f56457e
+commit: db4e489c7fdcd9b91c8b11e871b73fea3b3960bb
 changes:
 [FIX] missing `\n` in recmap
 [FIX] recmap error handling
