@@ -611,7 +611,7 @@ changes:
 [FIX] scorelists changing `exact mods` to `include mods` when changing pages
 
 VERSION 0.5.9
-date_time
+2023-12-25
 commit: null
 changes:
 [FIX] missing `\n` in recmap
