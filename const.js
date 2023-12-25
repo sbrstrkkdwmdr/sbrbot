@@ -52,35 +52,57 @@ const buttonsObjs = {
 
 const mods = 'See [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.html#mods)';
 
+const user = {
+    name: 'user',
+    type: 'string/ integer/ user mention',
+    required: false,
+    description: 'The user to show',
+    options: ['N/A'],
+    defaultValue: 'The user who ran the command',
+    examples: ['mrekk', 'user:mrekk'],
+    commandTypes: ['message', 'interaction']
+};
+const mode = {
+    name: 'mode',
+    type: 'string',
+    required: false,
+    description: 'The mode to use',
+    options: ['osu', 'taiko', 'fruits', 'mania'],
+    defaultValue: 'osu',
+    examples: ['taiko', 'mode:mania'],
+    commandTypes: ['message', 'interaction']
+};
+const userTrack = {
+    name: 'user',
+    type: 'string',
+    required: true,
+    description: 'The user to use',
+    options: ['N/A'],
+    defaultValue: 'N/A',
+    examples: ['SaberStrike', 'user:SaberStrike'],
+    commandTypes: ['message', 'interaction']
+};
+const userAdmin = {
+    name: 'user',
+    type: 'integer/user mention',
+    required: false,
+    description: 'The user to use',
+    options: ['N/A'],
+    defaultValue: 'The user who ran the command',
+    examples: [''],
+    commandTypes: ['message', 'interaction']
+};
+
 const scoreListCommandOptions = [
-    {
-        name: 'user',
-        type: 'string/ integer/ user mention',
-        required: false,
-        description: 'The user to show the scores of',
-        options: ['N/A'],
-        defaultValue: 'The user who ran the command',
-        examples: ['mrekk', 'user:mrekk'],
-        commandTypes: ['message', 'interaction']
-    },
-    {
-        name: 'mode',
-        type: 'string',
-        required: false,
-        description: 'The mode to show the scores in',
-        options: ['osu', 'taiko', 'fruits', 'mania'],
-        defaultValue: 'osu',
-        examples: ['taiko', 'mode:mania'],
-        commandTypes: ['message', 'interaction']
-    },
+    user, mode,
     {
         name: 'sort',
         type: 'string',
         required: false,
         description: 'The sort order of the scores',
-        options: ['pp', 'score', 'recent', 'accuracy', 'combo', 'miss count', 'rank'],
+        options: ['pp', 'score', 'recent', 'acc', 'combo', 'miss', 'rank'],
         defaultValue: 'pp',
-        examples: ['sort:score', '-recent'],
+        examples: ['sort:score', '-recent', '-sort acc'],
         commandTypes: ['message', 'interaction']
     },
     {
@@ -118,10 +140,20 @@ const scoreListCommandOptions = [
         name: 'mods',
         type: 'string',
         required: false,
-        description: 'The mods to filter the scores by',
-        options: mods,
+        description: `Filter scores including these mods. ${mods}`,
+        options: ['N/A'],
         defaultValue: 'null',
-        examples: ['mods:HDHR'],
+        examples: ['mods:HDHR', '-mods HDHR'],
+        commandTypes: ['interaction']
+    },
+    {
+        name: 'exact mods',
+        type: 'string',
+        required: false,
+        description: `Filter scores with these exact mods. ${mods}`,
+        options: ['N/A'],
+        defaultValue: 'null',
+        examples: ['-modx HDHR'],
         commandTypes: ['interaction']
     },
     {
@@ -165,48 +197,69 @@ const scoreListCommandOptions = [
         defaultValue: 'null',
         examples: ['-grade XH', 'grade:S'],
         commandTypes: ['message', 'interaction']
-    }
+    },
+    {
+        name: 'pp',
+        type: 'string',
+        required: false,
+        description: 'Filters scores to have more/less pp than this value',
+        options: ['>number', '<number'],
+        defaultValue: 'null',
+        examples: ['-pp >100', '-pp <500'],
+        commandTypes: ['message', 'interaction']
+    },
+    {
+        name: 'score',
+        type: 'string',
+        required: false,
+        description: 'Filters scores to have more/less score than this value',
+        options: ['>number', '<number'],
+        defaultValue: 'null',
+        examples: ['-score >1000000', '-score 1000000'],
+        commandTypes: ['message', 'interaction']
+    },
+    {
+        name: 'acc',
+        type: 'string',
+        required: false,
+        description: 'Filters scores to have more/less accuracy than this value',
+        options: ['>number', '<number'],
+        defaultValue: 'null',
+        examples: ['-acc >98.80', '-acc <90'],
+        commandTypes: ['message', 'interaction']
+    },
+    {
+        name: 'combo',
+        type: 'string',
+        required: false,
+        description: 'Filters scores to have more/less maximum combo than this value',
+        options: ['>number', '<number'],
+        defaultValue: 'null',
+        examples: ['-combo >2000', '-combo <100'],
+        commandTypes: ['message', 'interaction']
+    },
+    {
+        name: 'miss',
+        type: 'string',
+        required: false,
+        description: 'Filters scores to have more/less misses than this value',
+        options: ['>number', '<number'],
+        defaultValue: 'null',
+        examples: ['-miss <10', '-miss >20'],
+        commandTypes: ['message', 'interaction']
+    },
+    {
+        name: 'bpm',
+        type: 'string',
+        required: false,
+        description: 'Filters scores to have more/less bpm than this value',
+        options: ['>number', '<number'],
+        defaultValue: 'null',
+        examples: ['-bpm <10', '-bpm >20'],
+        commandTypes: ['message', 'interaction']
+    },
 ];
-const user = {
-    name: 'user',
-    type: 'string/ integer/ user mention',
-    required: false,
-    description: 'The user to show',
-    options: ['N/A'],
-    defaultValue: 'The user who ran the command',
-    examples: ['mrekk', 'user:mrekk'],
-    commandTypes: ['message', 'interaction']
-};
-const mode = {
-    name: 'mode',
-    type: 'string',
-    required: false,
-    description: 'The mode to use',
-    options: ['osu', 'taiko', 'fruits', 'mania'],
-    defaultValue: 'osu',
-    examples: ['taiko', 'mode:mania'],
-    commandTypes: ['message', 'interaction']
-};
-const userTrack = {
-    name: 'user',
-    type: 'string',
-    required: true,
-    description: 'The user to use',
-    options: ['N/A'],
-    defaultValue: 'N/A',
-    examples: ['SaberStrike', 'user:SaberStrike'],
-    commandTypes: ['message', 'interaction']
-};
-const userAdmin = {
-    name: 'user',
-    type: 'integer/user mention',
-    required: false,
-    description: 'The user to use',
-    options: ['N/A'],
-    defaultValue: 'The user who ran the command',
-    examples: [''],
-    commandTypes: ['message', 'interaction']
-};
+
 const generalcommands = [
     {
         name: 'changelog',
@@ -847,8 +900,8 @@ const osucommands = [
                 name: 'mods',
                 type: 'string',
                 required: false,
-                description: 'The mods to calculate the map with',
-                options: [mods],
+                description: `The mods to calculate the map with. ${mods}`,
+                options: ['N/A'],
                 defaultValue: 'none',
                 examples: ['+HDHR', 'mods:HDDTHR'],
                 commandTypes: ['message', 'interaction', 'link']
@@ -977,8 +1030,8 @@ const osucommands = [
                 name: 'mods',
                 type: 'string',
                 required: false,
-                description: 'The mods to filter the leaderboard by',
-                options: [mods],
+                description: `The mods to filter the leaderboard by. ${mods}`,
+                options: ['N/A'],
                 defaultValue: 'none',
                 examples: ['+HDHR', 'mods:EZFL'],
                 commandTypes: ['message', 'interaction']
@@ -1345,8 +1398,8 @@ const osucommands = [
                 name: 'mods',
                 type: 'string',
                 required: false,
-                description: 'The mods to calculate the map with',
-                options: [mods],
+                description: `The mods to calculate the map with. ${mods}`,
+                options: ['N/A'],
                 defaultValue: 'none',
                 examples: ['+HDHR', 'mods:HDDTHR'],
                 commandTypes: ['message', 'interaction', 'link']
@@ -1717,7 +1770,7 @@ const osucommands = [
                 name: 'mods',
                 type: 'string',
                 required: false,
-                description: 'What mods to render with',
+                description: `What mods to render with. ${mods}`,
                 options: ['N/A'],
                 defaultValue: 'NM',
                 examples: ['+HDHR', 'mods:HDDT'],
@@ -1958,8 +2011,8 @@ const osucommands = [
                 name: 'mods',
                 type: 'string',
                 required: false,
-                description: 'The mods to simulate the score with',
-                options: [mods],
+                description: `The mods to simulate the score with. ${mods}`,
+                options: ['N/A'],
                 defaultValue: 'none',
                 examples: ['+HDDT', 'mods:HDDT'],
                 commandTypes: ['message', 'interaction']
