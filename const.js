@@ -295,6 +295,46 @@ const generalcommands = [
         ]
     },
     {
+        name: 'country',
+        description: 'Displays information for a given country',
+        usage: '[-type] <search>',
+        slashusage: '<search>',
+        examples: [
+            {
+                text: 'PREFIXMSGcountry australia',
+                descriptor: 'Shows information for Australia'
+            },
+            {
+                text: 'PREFIXMSGcountry -code DE',
+                descriptor: 'Shows information for Germany'
+            },
+        ],
+        aliases: [],
+        buttons: [buttonsObjs.label.extras.time, buttonsObjs.label.extras.weather],
+        options: [
+            {
+                name: 'type',
+                type: 'string',
+                required: false,
+                description: 'What param to search with',
+                options: ['name', 'fullname', 'code', 'codes', 'demonym', 'capital', 'translation'],
+                defaultValue: 'name',
+                examples: ['-iso',],
+                commandTypes: ['message', 'interaction',]
+            },
+            {
+                name: 'search',
+                type: 'string',
+                required: false,
+                description: 'The country to search for',
+                options: ['N/A'],
+                defaultValue: 'N/A',
+                examples: ['australia',],
+                commandTypes: ['message', 'interaction',]
+            },
+        ]
+    },
+    {
         name: 'help',
         description: 'Shows a list of commands or information about a specific command',
         usage: 'help [command]',
@@ -2434,7 +2474,7 @@ const misccommands = [
     }
 ];
 
-const admincommands = [
+const   admincommands = [
     {
         name: 'checkperms',
         description: 'Checks the permissions of the user',
@@ -2504,7 +2544,7 @@ const admincommands = [
                 type: 'string',
                 required: false,
                 description: 'The type of debug to perform',
-                options: ['commandfile', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear'],
+                options: ['commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps'],
                 defaultValue: 'list options',
                 examples: [''],
                 commandTypes: ['message', 'interaction']
@@ -2571,6 +2611,59 @@ const admincommands = [
         ]
     },
     {
+        name: 'purge',
+        description: 'Deletes a specified amount of messages from the current channel',
+        usage: 'purge [count] [user] [-method]',
+        slashusage: 'purge [count] [user] [method]',
+        examples: [
+            {
+                text: 'PREFIXMSGpurge 5 12345689',
+                descriptor: 'Deletes 5 messages from the user with the ID 12345689'
+            },
+            {
+                text: 'PREFIXMSGpurge 5 @testsubject',
+                descriptor: 'Deletes 5 messages from the user "testsubject"'
+            },
+            {
+                text: 'PREFIXMSGpurge 5 -fetch',
+                descriptor: 'Deletes 5 messages using the fetch method'
+            },
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'count',
+                type: 'number',
+                required: false,
+                description: 'The amount of messages to delete',
+                options: ['0-100'],
+                defaultValue: '5',
+                examples: [],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'user',
+                type: 'string/user mention',
+                required: false,
+                description: 'The user\'s messages to delete. Deletes messages from any user if unspecified',
+                options: [],
+                defaultValue: 'N/A',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'method',
+                type: 'string',
+                required: false,
+                description: 'The method to delete messages. Fetch is slower, but can delete messages older than 14 days. Bulk cannot be used if user is specified.',
+                options: ['bulk', 'fetch'],
+                defaultValue: 'bulk',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            }
+        ]
+    },
+    {
         name: 'servers',
         description: 'Shows the servers the bot is in',
         usage: 'servers',
@@ -2622,13 +2715,38 @@ const buttons = [
         name: 'Random',
         description: 'Picks a random command to display',
         emoji: buttonsObjs.label.extras.random,
-    },
+    }, {
+        name: 'Graph',
+        description: 'Displays any graphs related',
+        emoji: buttonsObjs.label.extras.graph
+    }, {
+        name: 'Map',
+        description: 'Displays the map of the current score(s)',
+        emoji: buttonsObjs.label.extras.map
+    }, {
+        name: 'User',
+        description: 'Displays the user',
+        emoji: buttonsObjs.label.extras.user
+    }, {
+        name: 'Leaderboard',
+        description: 'Displays the leaderboard of the map or other scores the user has on that map',
+        emoji: buttonsObjs.label.extras.leaderboard
+    }, {
+        name: 'Time',
+        description: 'Displays the time for the given region',
+        emoji: buttonsObjs.label.extras.time
+    }, {
+        name: 'Weather',
+        description: 'Displays the weather for the given region',
+        emoji: buttonsObjs.label.extras.weather
+    }
+
 ];
 
 const conversionData = {
     temp_c: ['Celsius', '℃', '°C', 'Celcius', 'Centigrade', 'C',],
     temp_f: ['Fahrenheit', '℉', '°F', 'F'],
-    temp_k: ['Kelvin', '°K', 'L'],
+    temp_k: ['Kelvin', '°K', 'K'],
     dist_in: ['Inch', 'in', '\'', '`'],
     dist_ft: ['Feet', 'ft', 'foot', '"', "''", '``'],
     dist_m: ['Metre', 'm', 'Meter'],
@@ -2674,6 +2792,13 @@ const conversionData = {
     nrg_cal: ['Calorie', 'cal'],
     nrg_btu: ['British Thermal Unit', 'btu'],
     nrg_wh: ['Watt Hour', 'wH'],
+    pow_w: ['Watt', 'w'],
+    pow_horse: ['Horse Power', 'hp'],
+    pow_erg: ['Ergs', 'erg s⁻¹', 'erg/s'],
+    pow_ftlbsec: ['Foot-pounds per second', 'ft lb s⁻¹', 'ftlb/s', 'ft lb s', 'ftlbs', 'ftlbsec', 'ft lb sec'],
+    pow_dbm: ['Decibel-milliwatts', 'dBm', 'dbmw'],
+    pow_btusec: ['BTU per second', 'btu s⁻¹', 'btus', 'btusec',],
+    pow_calsec: ['Calories per second', 'cal s⁻¹', 'cals', 'calsec'],
     area_in2: ['Square inch', 'in²', 'in2', 'sqin'],
     area_ft2: ['Square foot', 'ft²', 'ft2', 'sqft'],
     area_m2: ['Square metre', 'm²', 'm2', 'sqm'],
