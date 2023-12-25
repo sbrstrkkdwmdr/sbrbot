@@ -866,8 +866,8 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                         .setDescription(acceptFiles.join('\n'))
                 );
             } else {
-                content = `${acceptFiles.length} maps stored in cache.`
-                files = [`${temppath}`]
+                content = `${acceptFiles.length} maps stored in cache.`;
+                files = [`${temppath}`];
             }
             usemsgArgs = {
                 content,
@@ -922,8 +922,10 @@ Joined(EPOCH):  ${member.joinedTimestamp}
         }
             break;
         default: {
+            const expectArgs = [
+                'commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps',];
             usemsgArgs = {
-                content: 'Valid types are: `commandfile`(id),`commandfiletype`(cmd),`servers`,`channels`,`users`,`forcetrack`,`curcmdid`,`logs`(sid), `clear`(type)'
+                content: `Valid types are: ${expectArgs.map(x => `\`${x}\``).join(', ')}`
             };
         }
 

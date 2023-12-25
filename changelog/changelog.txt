@@ -633,3 +633,9 @@ changes:
 [FIX] extra : in osu -d
 [ADD] power conversions
 [FIX] "special" statuses not working properly
+
+VERSION 0.5.10
+date_time
+commit: null
+changes:
+[FIX] debug command missing args in helpinfo
