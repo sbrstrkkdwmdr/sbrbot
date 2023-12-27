@@ -639,3 +639,4 @@ date_time
 commit: null
 changes:
 [FIX] debug command missing args in helpinfo
+[FIX] missing power units in `convert help`

@@ -492,6 +492,12 @@ export async function convert(input: extypes.commandInput) {
                     inline: true
                 },
                 {
+                    name: 'Power',
+                    value: conversions.values.filter(x => x.type == 'Power')
+                        .map(x => toName(x)).join(', '),
+                    inline: true
+                },
+                {
                     name: 'Area',
                     value: conversions.values.filter(x => x.type == 'Area')
                         .map(x => toName(x)).join(', '),
