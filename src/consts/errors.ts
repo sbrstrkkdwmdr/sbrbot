@@ -107,5 +107,9 @@ export const uErr = {
         api: 'Something went wrong with the RESTcountries api',
         nf: 'The country [ID] was not found. Maybe try other names/params',
         ms: 'Missing <search> argument'
+    },
+    arg: {
+        ms: 'Missing arg [ID]',
+        type: 'arg [ID] is the wrong type'
     }
 };

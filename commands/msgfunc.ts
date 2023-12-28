@@ -346,7 +346,7 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
     {
         const temp = await parseArgsMode(input);
         input.args = temp.args;
-        mode = temp.mode
+        mode = temp.mode;
     }
     if (input.args.includes('-recent')) {
         sort = 'recent';
@@ -770,7 +770,7 @@ export async function parseArgs_scoreList(input: extypes.commandInput) {
     };
 }
 
-export async function parseArgsMode(input: extypes.commandInput){
+export async function parseArgsMode(input: extypes.commandInput) {
     let mode = null;
     if (input.args.includes('-osu')) {
         mode = 'osu';
@@ -852,6 +852,37 @@ export async function missingPrevID_map(input: extypes.commandInput) {
         commandId: input.absoluteID,
         object: input.obj,
         customString: errors.uErr.osu.map.m_msp,
+        config: input.config
+    });
+    return;
+}
+
+/**
+ * @param noLinks ignore "button" and "link" command types
+ * logs error, sends error to command user then promptly aborts the command
+ */
+export async function errorAndAbort(input: extypes.commandInput, commandName: string, interactionEdit: boolean, err: string, noLinks: boolean) {
+    if (!err) {
+        err = 'undefined error';
+    }
+    if((noLinks && input.commandType != 'button' && input.commandType != 'link') || !noLinks)
+    {
+        await sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: err,
+                edit: interactionEdit
+            }
+        }, input.canReply);
+    }
+    log.logCommand({
+        event: 'Error',
+        commandName,
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        object: input.obj,
+        customString: err,
         config: input.config
     });
     return;
