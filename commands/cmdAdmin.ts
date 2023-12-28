@@ -205,6 +205,155 @@ export async function crash(input: extypes.commandInput) {
     process.exit(1);
 }
 
+export async function get(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+    type typex = 'server' | 'user' | 'channel';
+    let type: typex;
+    let searchid;
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+            type = (input.args[0]?.toLowerCase().trim() ?? null) as typex;
+            searchid = input.args[1] ?? null;
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    if (input.overrides != null) {
+
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'COMMANDNAME',
+        options: [],
+        config: input.config,
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+    let err: string = null;
+    if (!type) {
+        msgfunc.errorAndAbort(input, 'get', false, errors.uErr.arg.ms.replace('[ID]', 'TYPE'), false);
+        return;
+    }
+    if (!searchid) {
+        msgfunc.errorAndAbort(input, 'get', false, errors.uErr.arg.ms.replace('[ID]', 'ID'), false);
+        return;
+    }
+    if (!['server', 'user', 'channel'].includes(type)) {
+        msgfunc.errorAndAbort(input, 'get', false, errors.uErr.arg.type.replace('[ID]', 'TYPE') + `.\nValid types are: \`server\`, \`user\`, \`channel\``, false);
+        return;
+    }
+    if (isNaN(+searchid)) {
+        msgfunc.errorAndAbort(input, 'get', false, errors.uErr.arg.type.replace('[ID]', 'ID'), false);
+        return;
+    }
+
+    const embed = new Discord.EmbedBuilder();
+
+    switch (type) {
+        case 'user': {
+            const user = input.client.users.cache.get(searchid);
+            embed.setAuthor({ name: 'USER ' + searchid })
+                .setTitle(
+                    user.username.trim() != user.displayName.trim() ? `${user.displayName}(${user.username})` : user.username
+                    + user.bot ? emojis.
+                    )
+                .setDescription(`
+Account created ${func.dateToDiscordFormat(user.createdAt)}
+Badges
+Current Status ${user.}
+About
+`
+                )
+                .setThumbnail(user.defaultAvatarURL)
+                ;
+        }
+            break;
+        case 'server': {
+            const server = input.client.guilds.cache.get(searchid);
+            embed.setAuthor({ name: 'SERVER ' + searchid })
+                .setTitle(`${server.name}`)
+                .setDescription(`
+Guild created ${func.dateToDiscordFormat(server.createdAt)}
+Owner
+Members
+Channels
+Roles
+`)
+                .setThumbnail(server.iconURL())
+                ;
+
+        } break;
+        case 'channel': {
+            const channel = input.client.channels.cache.get(searchid);
+            embed.setAuthor({ name: 'CHANNEL ' + searchid })
+            .setTitle(`${channel?.name ?? 'No name'}`)
+            .setDescription(`
+Guild created ${func.dateToDiscordFormat(channel.createdAt)}
+Owner
+Members
+Channels
+Roles
+`);
+
+        } break;
+    }
+
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'COMMANDNAME',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            config: input.config,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'COMMANDNAME',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send',
+            config: input.config,
+        });
+    }
+}
+
 export async function getUser(input: extypes.commandInput) {
 
     let commanduser;
@@ -318,7 +467,7 @@ export async function getUser(input: extypes.commandInput) {
                 }
             }
 
-            Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`)
+            Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? emojis.discord.bot : ''}`)
                 .setThumbnail(`${userfind.user.avatarURL()}?size=512`)
                 .setDescription(
                     `ID: ${userfind.user.id}

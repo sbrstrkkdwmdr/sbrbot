@@ -1544,3 +1544,7 @@ export async function getCountryData(search: string, type: othertypes.countryDat
     const data = await axios.get(baseURL);
     return data;
 }
+
+export function dateToDiscordFormat(date: Date, type?: 'R' | 'F'){
+    return `<t:${Math.floor(date.getTime() / 1000)}:${type ?? 'R'}>`
+}

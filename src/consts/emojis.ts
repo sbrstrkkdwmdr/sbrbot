@@ -179,5 +179,9 @@ export const supporter = {
     third: '<:support3:1134082838355005470>',
 };
 
+export const discord = {
+    bot: '<:bot:958289108147523584>',
+}
+
 //module.exports = { mapobjs, gamemodes, rankedstatus, grades, onlinestatus }
 

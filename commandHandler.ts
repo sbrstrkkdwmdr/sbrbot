@@ -899,6 +899,9 @@ export default (input: {
                     userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings
                 });
                 break;
+            case 'get':
+                admincmds.get({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
             case 'leaveguild': case 'leave':
                 // startType(obj);
                 admincmds.leaveguild({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
