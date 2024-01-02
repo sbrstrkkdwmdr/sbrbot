@@ -2,7 +2,7 @@ import Discord from 'discord.js';
 import * as cmdconfig from './src/consts/commandopts.js';
 export default (input: {
     userdata,
-    client/* :Discord.Client */,
+    client: Discord.Client,
     config,
     oncooldown;
 }) => {
@@ -20,7 +20,7 @@ export default (input: {
         {
             name: 'changelog',
             description: 'Displays the changes for the current version or version requested',
-            dmPermission: false, 
+            dmPermission: false,
             options: [
                 {
                     name: 'version',
@@ -288,7 +288,6 @@ export default (input: {
                     description: 'Show all details',
                     type: Discord.ApplicationCommandOptionType.Boolean,
                     required: false,
-                    default: false
                 },
                 {
                     name: 'query',
@@ -337,7 +336,6 @@ export default (input: {
                     description: 'Show all details',
                     type: Discord.ApplicationCommandOptionType.Boolean,
                     required: false,
-                    default: false
                 },
                 {
                     name: 'query',
@@ -411,7 +409,6 @@ export default (input: {
                     description: 'Which page to display',
                     required: false,
                     type: Discord.ApplicationCommandOptionType.Integer,
-                    default: 1,
                     minValue: 1,
                     maxValue: 20
 
@@ -446,7 +443,6 @@ export default (input: {
                     description: 'Which page to display',
                     required: false,
                     type: Discord.ApplicationCommandOptionType.Integer,
-                    default: 1,
                     minValue: 1,
                     maxValue: 20
 
@@ -493,7 +489,6 @@ export default (input: {
                     description: 'Displays extra information',
                     type: Discord.ApplicationCommandOptionType.Boolean,
                     required: false,
-                    default: false
                 },
                 {
                     name: 'mode',
@@ -520,7 +515,6 @@ export default (input: {
                     description: 'Displays extra information',
                     type: Discord.ApplicationCommandOptionType.Boolean,
                     required: false,
-                    default: false
                 },
                 {
                     name: 'mode',
@@ -547,7 +541,6 @@ export default (input: {
                     description: 'Displays extra information',
                     type: Discord.ApplicationCommandOptionType.Boolean,
                     required: false,
-                    default: false
                 },
                 {
                     name: 'mode',
@@ -575,7 +568,6 @@ export default (input: {
                     type: Discord.ApplicationCommandOptionType.String,
                     required: false,
                     choices: cmdconfig.modeopts,
-                    default: 'osu'
                 },
                 {
                     name: 'skin',
@@ -1161,6 +1153,30 @@ export default (input: {
             ]
         },
         {
+            name: 'get',
+            description: 'Gets details of a user/server/channel',
+            dmPermission: false,
+            options: [
+                {
+                    name: 'type',
+                    description: 'The type of info to fetch',
+                    type: Discord.ApplicationCommandOptionType.String,
+                    required: true,
+                    choices: [
+                        { name: 'User', value: 'user' },
+                        { name: 'Server', value: 'server' },
+                        { name: 'Channel', value: 'channel' },
+                    ]
+                },
+                {
+                    name: 'id',
+                    description: 'The ID to fetch',
+                    type: Discord.ApplicationCommandOptionType.String,
+                    required: true,
+                }
+            ]
+        },
+        {
             name: 'servers',
             description: 'Displays all servers the bot is in',
             dmPermission: false,
@@ -1176,7 +1192,6 @@ export default (input: {
                     description: 'The server to leave',
                     type: Discord.ApplicationCommandOptionType.String,
                     required: true,
-                    minValue: 1
                 }
             ],
 

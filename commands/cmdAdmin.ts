@@ -223,6 +223,8 @@ export async function get(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
+            type = input.obj.options.get('type') as unknown as typex;
+            searchid = input.obj.options.get('id')
         }
             //==============================================================================================================================================================================================
 
@@ -278,48 +280,70 @@ export async function get(input: extypes.commandInput) {
     switch (type) {
         case 'user': {
             const user = input.client.users.cache.get(searchid);
-            embed.setAuthor({ name: 'USER ' + searchid })
-                .setTitle(
-                    user.username.trim() != user.displayName.trim() ? `${user.displayName}(${user.username})` : user.username
-                    + user.bot ? emojis.
+            if (user) {
+                embed.setAuthor({ name: 'USER ' + searchid })
+                    .setTitle(
+                        (user?.username && user?.username?.trim() != user?.displayName?.trim() ? `${user?.displayName}(${user?.username})` : user?.displayName)
+                        + (user?.bot ? emojis.discord.bot : '')
                     )
-                .setDescription(`
-Account created ${func.dateToDiscordFormat(user.createdAt)}
-Badges
-Current Status ${user.}
-About
+                    .setDescription(`
+Account created ${func.dateToDiscordFormat(user?.createdAt)}
+Badges: ${func.userbitflagsToEmoji(user?.flags)}
 `
-                )
-                .setThumbnail(user.defaultAvatarURL)
-                ;
+                    )
+                    .setThumbnail(user?.avatarURL()+'?size=512');
+            } else {
+                msgfunc.errorAndAbort(input, 'get', false, errors.uErr.arg.inaccess.replaceAll('[ID]', searchid).replaceAll('[TYPE]', type), false);
+                return;
+            }
+            ;
         }
             break;
         case 'server': {
             const server = input.client.guilds.cache.get(searchid);
-            embed.setAuthor({ name: 'SERVER ' + searchid })
-                .setTitle(`${server.name}`)
-                .setDescription(`
+            const owner = await server.fetchOwner();
+            if (server) {
+                embed.setAuthor({ name: 'SERVER ' + searchid })
+                    .setTitle(`${server.name}`)
+                    .setDescription(`
 Guild created ${func.dateToDiscordFormat(server.createdAt)}
-Owner
-Members
-Channels
-Roles
+Owner: ${owner.id} || ${owner.displayName}
+Members: ${server.memberCount}
+Channels: ${server.channels.cache.size}
+Roles: ${server.roles.cache.size}
+Emojis: ${server.emojis.cache.size}
+Stickers: ${server.stickers.cache.size}
 `)
-                .setThumbnail(server.iconURL())
-                ;
-
+                    .setThumbnail(server.iconURL()+'?size=512')
+                    ;
+            } else {
+                msgfunc.errorAndAbort(input, 'get', false, errors.uErr.arg.inaccess.replaceAll('[ID]', searchid).replaceAll('[TYPE]', type), false);
+                return;
+            }
         } break;
         case 'channel': {
             const channel = input.client.channels.cache.get(searchid);
-            embed.setAuthor({ name: 'CHANNEL ' + searchid })
-            .setTitle(`${channel?.name ?? 'No name'}`)
-            .setDescription(`
-Guild created ${func.dateToDiscordFormat(channel.createdAt)}
-Owner
-Members
-Channels
-Roles
-`);
+            if (channel) {
+                embed.setAuthor({ name: 'CHANNEL ' + searchid })
+                    .setTitle(`${(channel as Discord.GuildTextBasedChannel)?.name ?? 'No name'}`);
+                let text = `
+Channel created ${func.dateToDiscordFormat(channel.createdAt)}
+Type: ${Discord.ChannelType[channel.type]}
+`;
+                if (Discord.ChannelType[channel.type].toLowerCase().includes('text')) {
+                    const tempchan = channel as Discord.TextBasedChannel;
+                    text += `Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is online are cached)`;
+                }
+                if (Discord.ChannelType[channel.type].toLowerCase().includes('voice')) {
+                    let tempchan = channel as Discord.VoiceBasedChannel;
+                    text += `User limit: ${tempchan.messages.cache.size == 0 ? '∞' : tempchan.messages.cache.size}
+Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is online are cached)`;
+                }
+                embed.setDescription(text)
+            } else {
+                msgfunc.errorAndAbort(input, 'get', false, errors.uErr.arg.inaccess.replaceAll('[ID]', searchid).replaceAll('[TYPE]', type), false);
+                return;
+            }
 
         } break;
     }
@@ -329,6 +353,7 @@ Roles
         commandType: input.commandType,
         obj: input.obj,
         args: {
+            embeds: [embed]
         }
     }, input.canReply);
 

@@ -181,7 +181,32 @@ export const supporter = {
 
 export const discord = {
     bot: '<:bot:958289108147523584>',
-}
+    flags: {
+        ActiveDeveloper: '',
+        BotHTTPInteractions: '', //bot only uses http interactions
+        BugHunterLevel1: '',
+        BugHunterLevel2: '',
+        CertifiedModerator: '',
+        Collaborator: '',
+        DisablePremium: '',
+        HasUnreadUrgentMessages: '',
+        HypeSquadOnlineHouse1: '', //bravery
+        HypeSquadOnlineHouse2: '', //brilliance
+        HypeSquadOnlineHouse3: '', //balance
+        Hypesquad: '',
+        MFASMS: '',
+        Partner: '',
+        PremiumEarlySupporter: '',
+        PremiumPromoDismissed: '',
+        Quarantined: '',
+        RestrictedCollaborator: '',
+        Spammer: '',
+        Staff: '',
+        TeamPseudoUser: '',
+        VerifiedBot: '',
+        VerifiedDeveloper: '',
+    }
+};
 
 //module.exports = { mapobjs, gamemodes, rankedstatus, grades, onlinestatus }
 

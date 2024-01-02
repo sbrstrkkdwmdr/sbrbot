@@ -2594,7 +2594,7 @@ const admincmds: commandInfo[] = [
         aliases: [],
         options: [
             {
-                name: 'Type',
+                name: 'type',
                 type: 'string',
                 required: false,
                 description: 'The type of debug to perform',
@@ -2609,6 +2609,41 @@ const admincmds: commandInfo[] = [
                 description: 'commandfile -> the id of the command to search for\ncommandfiletype -> the name of the command to search\nlogs -> the ID of the guild to send logs from\nclear -> the types of files to clear (read the options section)',
                 options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
                 defaultValue: 'commandfile -> latest command\ncommandfiletype -> list options\nlogs -> current server\n clear -> temporary files only',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            }
+        ]
+    },
+    {
+        name: 'get',
+        description: 'Gets details of a user/server/channel',
+        usage: 'get <type> <ID>',
+        slashusage: 'get <type> <ID>',
+        examples: [
+            {
+                text: 'PREFIXMSGget user 777125560869978132',
+                descriptor: 'Returns info for user with id 777125560869978132'
+            }
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'type',
+                type: 'string',
+                required: true,
+                description: 'The type of info to fetch',
+                options: ['user', 'server', 'channel',],
+                defaultValue: 'N/A',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'id',
+                type: 'number',
+                required: true,
+                description: 'The ID to fetch',
+                options: ['N/A'],
+                defaultValue: 'N/A',
                 examples: [''],
                 commandTypes: ['message', 'interaction']
             }

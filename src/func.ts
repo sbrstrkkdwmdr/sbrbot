@@ -1,6 +1,7 @@
 import fs = require('fs');
 import axios from 'axios';
 import charttoimg from 'chartjs-to-image';
+import * as Discord from 'discord.js';
 import https from 'https';
 import * as jimp from 'jimp';
 import * as quickchart from 'quickchart-js';
@@ -8,6 +9,7 @@ import { filespath, path, precomppath } from '../path.js';
 import * as calc from './calc.js';
 import * as clr from './colourcalc.js';
 import * as clrs from './consts/colours.js';
+import * as emojis from './consts/emojis.js';
 import * as mainconst from './consts/main.js';
 import * as log from './log.js';
 import * as osufunc from './osufunc.js';
@@ -191,7 +193,7 @@ export function storeFile(data: string | osufunc.apiReturn | ((osuApiTypes.Score
         }
         return true;
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return error;
     }
 }
@@ -1540,11 +1542,34 @@ export async function getCountryData(search: string, type: othertypes.countryDat
             baseURL += `alpha?codes=${search}`;
             break;
     }
-    log.toOutput(baseURL, config)
+    log.toOutput(baseURL, config);
     const data = await axios.get(baseURL);
     return data;
 }
 
-export function dateToDiscordFormat(date: Date, type?: 'R' | 'F'){
-    return `<t:${Math.floor(date.getTime() / 1000)}:${type ?? 'R'}>`
+export function dateToDiscordFormat(date: Date, type?: 'R' | 'F') {
+    return `<t:${Math.floor(date.getTime() / 1000)}:${type ?? 'R'}>`;
+}
+
+export function ubitflagsAsName(flags: Discord.UserFlagsBitField) {
+    console.log(flags);
+    const fl = flags.toArray();
+    console.log(fl);
+    return 'aa';
+}
+
+export function userbitflagsToEmoji(flags: Discord.UserFlagsBitField) {
+    const temp = flags.toArray();
+    const tempMap = temp.map(x => emojis.discord.flags[x]);
+    const newArr: string[] = [];
+    for (let i = 0; i < temp.length; i++) {
+        let a = '';
+        if (tempMap[i].length == 0) {
+            a = temp[i];
+        } else {
+            a = tempMap[i];
+        }
+        newArr.push(a);
+    }
+    return newArr;
 }

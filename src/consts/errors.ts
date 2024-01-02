@@ -110,6 +110,8 @@ export const uErr = {
     },
     arg: {
         ms: 'Missing arg [ID]',
-        type: 'arg [ID] is the wrong type'
+        type: 'arg [ID] is the wrong type',
+        nf: 'Could not find arg [ID]',
+        inaccess: 'Could not find [TYPE] with id [ID]'
     }
 };
