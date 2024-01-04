@@ -1564,7 +1564,7 @@ export function userbitflagsToEmoji(flags: Discord.UserFlagsBitField) {
     const newArr: string[] = [];
     for (let i = 0; i < temp.length; i++) {
         let a = '';
-        if (tempMap[i].length == 0) {
+        if (!tempMap[i] || tempMap[i].length == 0) {
             a = temp[i];
         } else {
             a = tempMap[i];

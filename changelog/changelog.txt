@@ -641,4 +641,4 @@ changes:
 [FIX] debug command missing args in helpinfo
 [FIX] missing power units in `convert help`
 [QOL] move error msg handling to a single universal function
-[ADD] "get" command
+[ADD] `get` command

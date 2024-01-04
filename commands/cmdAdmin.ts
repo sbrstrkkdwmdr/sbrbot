@@ -283,10 +283,10 @@ export async function get(input: extypes.commandInput) {
             if (user) {
                 embed.setAuthor({ name: 'USER ' + searchid })
                     .setTitle(
-                        (user?.username && user?.username?.trim() != user?.displayName?.trim() ? `${user?.displayName}(${user?.username})` : user?.displayName)
+                        (user?.username && user?.username?.trim() != user?.displayName?.trim() ? `${user?.displayName} (${user?.username})` : user?.displayName)
                         + (user?.bot ? emojis.discord.bot : '')
                     )
-                    .setDescription(`
+                    .setDescription(`<@${searchid}>
 Account created ${func.dateToDiscordFormat(user?.createdAt)}
 Badges: ${func.userbitflagsToEmoji(user?.flags)}
 `
@@ -326,7 +326,7 @@ Stickers: ${server.stickers.cache.size}
             if (channel) {
                 embed.setAuthor({ name: 'CHANNEL ' + searchid })
                     .setTitle(`${(channel as Discord.GuildTextBasedChannel)?.name ?? 'No name'}`);
-                let text = `
+                let text = `<#${searchid}>
 Channel created ${func.dateToDiscordFormat(channel.createdAt)}
 Type: ${Discord.ChannelType[channel.type]}
 `;
@@ -336,7 +336,7 @@ Type: ${Discord.ChannelType[channel.type]}
                 }
                 if (Discord.ChannelType[channel.type].toLowerCase().includes('voice')) {
                     let tempchan = channel as Discord.VoiceBasedChannel;
-                    text += `User limit: ${tempchan.messages.cache.size == 0 ? '∞' : tempchan.messages.cache.size}
+                    text += `User limit: ${tempchan.userLimit == 0 ? '∞' : tempchan.userLimit}
 Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is online are cached)`;
                 }
                 embed.setDescription(text)
