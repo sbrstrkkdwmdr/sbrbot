@@ -257,7 +257,7 @@ export async function scoreList(
 
     for (let i = 0; i < newData.length && i < perPage; i++) {
         const scoreoffset = asObj.page * perPage + i;
-        const curscore = newData[scoreoffset].score;
+        const curscore = newData[scoreoffset]?.score;
 
         if (!curscore) {
             break;

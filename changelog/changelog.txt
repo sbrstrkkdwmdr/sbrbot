@@ -642,3 +642,4 @@ changes:
 [FIX] missing power units in `convert help`
 [QOL] move error msg handling to a single universal function
 [ADD] `get` command
+[FIX] undefined (reading 'score') //`newData[scoreoffset].score` -> `newData[scoreoffset]?.score`
