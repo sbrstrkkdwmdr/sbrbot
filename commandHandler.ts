@@ -183,6 +183,7 @@ export default (input: {
         //perms bot needs
         const requireEmbedCommands: string[] = [
             //gen
+            'changelog', 'clog',
             'convert', 'conv',
             'country',
             'help', 'commands', 'list', 'command',
@@ -257,7 +258,8 @@ export default (input: {
 
         const botRequireAdmin: string[] = [
             'checkperms', 'fetchperms', 'checkpermissions', 'permissions', 'perms',
-            'userinfo'
+            'get',
+            'userinfo',
         ];
 
         //perms user needs

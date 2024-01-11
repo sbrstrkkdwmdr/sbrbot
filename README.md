@@ -68,7 +68,6 @@ to get the emoji id, type the emoji then put a `\` in front of it</br>
 to compile the bot the bot run `tsc` or `npm run build`</br>
 to run the compiled code run `npm run run` </br>
 
-to run the bot without checking for errors (or for other debugging purposes) use `npm run test`</br>
 
 ## image search setup
 
@@ -81,6 +80,16 @@ copy the search engine id and paste it in the google.engineId field</br>
 scroll down and press "Get Started" on "Custom Search JSON API" (limited)</br>
 press "Get a Key" and create a new project </br>
 copy the key and paste it into the google.apiKey field </br>
+
+## required permissions
+disabling these permissions will disable the commands listed
+
+| Permission | Usage | Affected Commands |
+| --- | --- | --- |
+| EmbedLinks | Most commands display information via the use of *embeds* | All commands |
+| AddReactions | The poll/vote command requires reactions for voting | poll |
+| ManageMessages | To bulk delete messages | purge |
+| Administrator | To access certain data | checkperms, get, userinfo |
 
 ## credits n stuff
 
