@@ -1022,9 +1022,9 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                     const tempdata = (JSON.parse(fs.readFileSync(directory + '/' + file, 'utf-8'))) as osufunc.apiReturn;
                     const data = tempdata.apiData as osuapitypes.Beatmap;
                     if (type.includes('name')) {
-                        acceptFiles.push(`[${data.beatmapset.title} [${data.version}]](https://osu.ppy.sh/b/${data.id})`);
+                        acceptFiles.push(`[${data.beatmapset.title} [${data.version}]](https://osu.ppy.sh/b/${data.id}) (${data.status})`);
                     } else {
-                        acceptFiles.push(`[${data.id}](https://osu.ppy.sh/b/${data.id})`);
+                        acceptFiles.push(`[${data.id}](https://osu.ppy.sh/b/${data.id}) (${data.status})`);
                     }
                 }
             }
