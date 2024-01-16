@@ -3756,10 +3756,6 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         );
     }
 
-    if (noMiss) {
-        osutopdata = osutopdata.filter(x => x.statistics.count_miss == 0);
-    }
-
     if (filterRank) {
         osutopdata = osutopdata.filter(x => x.rank == filterRank);
     }
@@ -3801,6 +3797,16 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
         });
+
+    if (commandButtonName == 'nochokes') {
+        for (const score of osutopdata) {
+            score.statistics.count_miss = 0;
+            score.max_combo = score?.beatmap?.max_combo ?? null;
+            score.pp = null;
+            score.perfect = true;
+        }
+    }
+
     const scoresarg = await embedStuff.scoreList(
         {
             scores: osutopdata,

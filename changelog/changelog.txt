@@ -645,3 +645,4 @@ changes:
 [FIX] undefined (reading 'score') //`newData[scoreoffset].score` -> `newData[scoreoffset]?.score`
 [QOL] show ranked status on map debug 
 [FIX] fix apiget(); testing mode
+[QOL] rework nochokes to unchoke plays instead of removing 0 miss plays

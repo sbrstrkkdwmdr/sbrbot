@@ -260,11 +260,11 @@ export async function scorecalc(
                     mode,
                     mods: osumodcalc.ModStringToInt(mods),
                     acc: obj?.acc ? obj.acc * 100 : 100,
-                    passedObjects: obj.passedObj,
                     clockRate: obj.clockRate ?? 1,
                 };
                 if (obj.maxcombo != null && !isNaN(obj.maxcombo)) {
                     baseScore.combo = obj.maxcombo;
+                    baseScore.passedObjects = obj.passedObj;
                 }
                 if (obj.hit300 != null && !isNaN(obj.hit300)) {
                     baseScore.n300 = obj.hit300;
@@ -281,7 +281,7 @@ export async function scorecalc(
                 if (obj.hitkatu != null && !isNaN(obj.hitkatu)) {
                     baseScore.nKatu = obj.hitkatu;
                 }
-
+                console.log(baseScore);
                 ppl = [
                     new rosu.Calculator(baseScore).performance(map),
                     new rosu.Calculator({

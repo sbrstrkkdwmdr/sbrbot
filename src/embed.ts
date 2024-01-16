@@ -319,11 +319,14 @@ export async function scoreList(
                     new Date(mapping.overrideMapLastDate),
                 config
             );
+        let tempMainpp = null;
         if (curscore.accuracy != 1) {
             if (curscore.pp == null || isNaN(curscore.pp)) {
-                pptxt = `${await ppcalcing[0].pp.toFixed(2)}pp`;
+                pptxt = `${ppcalcing[0].pp.toFixed(2)}pp`;
+                tempMainpp = ppcalcing[0].pp;
             } else {
                 pptxt = `${curscore.pp.toFixed(2)}pp`;
+                tempMainpp = curscore.pp;
             }
             if (curscore.perfect == false) {
                 pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`;
@@ -332,10 +335,12 @@ export async function scoreList(
         } else {
             if (curscore.pp == null || isNaN(curscore.pp)) {
                 pptxt =
-                    `${await ppcalcing[0].pp.toFixed(2)}pp`;
+                    `${ppcalcing[0].pp.toFixed(2)}pp`;
+                tempMainpp = ppcalcing[0].pp;
             } else {
                 pptxt =
                     `${curscore.pp.toFixed(2)}pp`;
+                tempMainpp = curscore.pp;
             }
         }
 
@@ -352,7 +357,7 @@ export async function scoreList(
 
         let weighted;
         if (asObj.showWeights == true) {
-            weighted = `\n${(curscore?.weight?.pp)?.toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`;
+            weighted = `\n${(tempMainpp * (0.95 ** scoreoffset)).toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`;
         } else {
             weighted = '';
         }
