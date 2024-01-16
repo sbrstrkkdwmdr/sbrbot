@@ -643,3 +643,5 @@ changes:
 [QOL] move error msg handling to a single universal function
 [ADD] `get` command
 [FIX] undefined (reading 'score') //`newData[scoreoffset].score` -> `newData[scoreoffset]?.score`
+[QOL] show ranked status on map debug 
+[FIX] fix apiget(); testing mode

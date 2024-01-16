@@ -259,12 +259,13 @@ export async function scorecalc(
                 const baseScore: calcScore = {
                     mode,
                     mods: osumodcalc.ModStringToInt(mods),
-                    combo: obj.maxcombo,
                     acc: obj?.acc ? obj.acc * 100 : 100,
                     passedObjects: obj.passedObj,
                     clockRate: obj.clockRate ?? 1,
                 };
-
+                if (obj.maxcombo != null && !isNaN(obj.maxcombo)) {
+                    baseScore.combo = obj.maxcombo;
+                }
                 if (obj.hit300 != null && !isNaN(obj.hit300)) {
                     baseScore.n300 = obj.hit300;
                 }
@@ -958,7 +959,7 @@ export async function apiget(input: apiInput) {
     const before = perf.performance.now();
     try {
         if (mainconst.isTesting) {
-            datafirst = apigetOffline(input);
+            data = await apigetOffline(input) as apiReturn;
         } else {
             log.toOutput(url, input.config);
             datafirst = (await axios.get(url, {
@@ -1001,30 +1002,32 @@ export async function apiget(input: apiInput) {
         fs.writeFileSync(`${path}/cache/errors/osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
     const after = perf.performance.now();
-    try {
-        if (datafirst?.authentication) {
-            await updateToken(input.config);
-            input.callNum ? input.callNum = input.callNum + 1 : input.callNum = 1;
-            datafirst = await apiget(input);
+    if (mainconst.isTesting == false) {
+        try {
+            if (datafirst?.authentication) {
+                await updateToken(input.config);
+                input.callNum ? input.callNum = input.callNum + 1 : input.callNum = 1;
+                datafirst = await apiget(input);
+            }
+            if ('error' in datafirst && !input.type.includes('search')) {
+                throw new Error(errors.apiError);
+            }
+            data = {
+                url,
+                input,
+                totaltimeNum: after - before,
+                apiData: datafirst
+            };
+        } catch (error) {
+            data = {
+                url,
+                input,
+                totaltimeNum: after - before,
+                apiData: datafirst,
+                error: error ?? 'Unknown error'
+            };
+            fs.writeFileSync(`${path}/cache/errors/osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
         }
-        if ('error' in datafirst && !input.type.includes('search')) {
-            throw new Error(errors.apiError);
-        }
-        data = {
-            url,
-            input,
-            totaltimeNum: after - before,
-            apiData: datafirst
-        };
-    } catch (error) {
-        data = {
-            url,
-            input,
-            totaltimeNum: after - before,
-            apiData: datafirst,
-            error: error ?? 'Unknown error'
-        };
-        fs.writeFileSync(`${path}/cache/errors/osuapiV${input.version ?? 2}${Date.now()}.json`, JSON.stringify(data, null, 2));
     }
 
     if (data?.apiData?.apiData) {
@@ -2409,14 +2412,14 @@ export function recommendMap(baseRating: number, retrieve: 'closest' | 'random',
         const filter = sorted.filter(x =>
             (x?.difficulty_rating > baseRating - maxRange && x?.difficulty_rating < baseRating + maxRange)
         );
-        if(filter.length > 0){
+        if (filter.length > 0) {
             obj['mapid'] = filter[Math.floor(Math.random() * filter.length)].id;
         } else {
-            obj['err'] = `No maps within ${maxRange}⭐ of ${baseRating}⭐`
+            obj['err'] = `No maps within ${maxRange}⭐ of ${baseRating}⭐`;
             obj['hasErr'] = true;
         }
-        obj['poolSize'] = filter.length
-        obj['poolSizePreFilter'] = sorted.length
+        obj['poolSize'] = filter.length;
+        obj['poolSizePreFilter'] = sorted.length;
     }
 
     return obj;
@@ -2927,18 +2930,19 @@ export async function apigetOffline(input: apiInput) {
     //using spath find file
     const full = spath.split('/');
     const file = full.pop();
-    console.log(full.join('/'));
+    console.log("getting file from " + full.join('/'));
     const dir = fs.readdirSync(full.join('/'));
-    console.log(dir);
+    console.log("directory contains" + dir);
     const isPresent = dir.filter(x => x.includes(file));
-    console.log(isPresent);
-    console.log(file);
+    console.log("files matching filter " + isPresent);
+    console.log("using file " + file);
     if (isPresent.length > 0) {
         ipath = full.join('/') + `/${isPresent[Math.floor(Math.random() * isPresent.length)]}`;
     } else {
         skillissue = true;
     }
-    console.log(skillissue);
+    console.log("skill issue - " + skillissue);
+    console.log(ipath);
     //else return err
 
     const d = skillissue ? '{ error: "null" }' : fs.readFileSync(ipath, 'utf-8');
