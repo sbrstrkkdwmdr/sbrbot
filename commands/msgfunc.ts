@@ -309,6 +309,8 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
     input.obj = input.obj as Discord.Message;
 
     const searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
+    console.log('pre parse');
+    console.log(input.args);
     if (input.args.includes('-parse')) {
         parseScore = true;
         const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
@@ -371,62 +373,67 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
     if (input.args.includes('-mods')) {
         const temp = func.parseArg(input.args, '-mods', 'string', filteredMods, false);
         filteredMods = temp.value;
-        input.args.splice(input.args.indexOf('-mods'), 1);
+        input.args = temp.newArgs;
     }
     if (input.args.includes('-modx')) {
         const temp = func.parseArg(input.args, '-modx', 'string', exactMods, false);
         exactMods = temp.value;
-        input.args.splice(input.args.indexOf('-modx'), 1);
+        input.args = temp.newArgs;
     }
     if (input.args.includes('-mx')) {
         const temp = func.parseArg(input.args, '-mx', 'string', exactMods, false);
         exactMods = temp.value;
-        input.args.splice(input.args.indexOf('-mx'), 1);
+        input.args = temp.newArgs;
     }
     if (input.args.includes('-mapper')) {
         const temp = func.parseArg(input.args, '-mapper', 'string', filteredMapper, true);
         filteredMapper = temp.value;
-        input.args.splice(input.args.indexOf('-mapper'), 1);
+        input.args = temp.newArgs;
     }
     if (input.args.includes('-sort')) {
         const temp = func.parseArg(input.args, '-sort', 'string', sort, false);
-        sort = temp.value;
-        input.args.splice(input.args.indexOf('-sort'), 1);
+        sort = temp.value; 
+        input.args = temp.newArgs;
     }
-
     if (input.args.includes('-pp')) {
         const temp = func.parseArg(input.args, '-pp', 'string', pp, false);
         pp = temp.value;
-        input.args.splice(input.args.indexOf('-pp'), 1);
+        input.args = temp.newArgs;
     }
     if (input.args.includes('-score')) {
         const temp = func.parseArg(input.args, '-score', 'string', score, false);
         score = temp.value;
+        input.args = temp.newArgs;
     }
     if (input.args.includes('-acc')) {
         const temp = func.parseArg(input.args, '-acc', 'string', acc, false);
         acc = temp.value;
+        input.args = temp.newArgs;
     }
     if (input.args.includes('-combo')) {
         const temp = func.parseArg(input.args, '-combo', 'string', combo, false);
         combo = temp.value;
+        input.args = temp.newArgs;
     }
     if (input.args.includes('-misses')) {
         const temp = func.parseArg(input.args, '-misses', 'string', miss, false);
         miss = temp.value;
+        input.args = temp.newArgs;
     }
     if (input.args.includes('-miss')) {
         const temp = func.parseArg(input.args, '-miss', 'string', miss, false);
         miss = temp.value;
+        input.args = temp.newArgs;
     }
     if (input.args.includes('-rank')) {
         const temp = func.parseArg(input.args, '-rank', 'string', filterRank, false);
         filterRank = osumodcalc.checkGrade(temp.value);
-        input.args.splice(input.args.indexOf('-rank'), 1);
+        input.args = temp.newArgs;
     }
     if (input.args.includes('-bpm')) {
         const temp = func.parseArg(input.args, '-bpm', 'string', bpm, false);
         bpm = temp.value;
+        input.args = temp.newArgs;
     }
     if (input.args.includes('-grade')) {
         const temp = func.parseArg(input.args, '-grade', 'string', filterRank, false);
@@ -439,9 +446,6 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
         filterTitle = temp.value;
         input.args = temp.newArgs;
     }
-
-
-    input.args = cleanArgs(input.args);
 
     user = input.args.join(' ');
     if (!input.args[0] || input.args.join(' ').includes(searchid)) {
@@ -865,8 +869,7 @@ export async function errorAndAbort(input: extypes.commandInput, commandName: st
     if (!err) {
         err = 'undefined error';
     }
-    if((noLinks && input.commandType != 'button' && input.commandType != 'link') || !noLinks)
-    {
+    if ((noLinks && input.commandType != 'button' && input.commandType != 'link') || !noLinks) {
         await sendMessage({
             commandType: input.commandType,
             obj: input.obj,

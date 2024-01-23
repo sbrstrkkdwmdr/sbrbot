@@ -646,3 +646,4 @@ changes:
 [QOL] show ranked status on map debug 
 [FIX] fix apiget(); testing mode
 [QOL] rework nochokes to unchoke plays instead of removing 0 miss plays
+[FIX] scorelist commands ignoring user param if other params given
