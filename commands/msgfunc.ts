@@ -309,8 +309,6 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
     input.obj = input.obj as Discord.Message;
 
     const searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-    console.log('pre parse');
-    console.log(input.args);
     if (input.args.includes('-parse')) {
         parseScore = true;
         const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
