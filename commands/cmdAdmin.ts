@@ -301,8 +301,8 @@ Badges: ${func.userbitflagsToEmoji(user?.flags)}
             break;
         case 'server': {
             const server = input.client.guilds.cache.get(searchid);
-            const owner = await server.fetchOwner();
             if (server) {
+                const owner = await server.fetchOwner();
                 embed.setAuthor({ name: 'SERVER ' + searchid })
                     .setTitle(`${server.name}`)
                     .setDescription(`
