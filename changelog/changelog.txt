@@ -636,7 +636,7 @@ changes:
 
 VERSION 0.5.10
 2024-01-23
-commit: null
+commit: 637359f840fcfed8dc5bfb1b0316a1237052cb5c
 changes:
 [FIX] debug command missing args in helpinfo
 [FIX] missing power units in `convert help`
