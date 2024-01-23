@@ -196,6 +196,11 @@ export const versions: {
             name: '0.5.9',
             releaseDate: 20231225,
             releaseDateFormatted: '2023-12-25'
+        },
+        {
+            name: '0.5.10',
+            releaseDate: 20240123,
+            releaseDateFormatted: '2024-01-23'
         }
     ];
 

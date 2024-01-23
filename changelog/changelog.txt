@@ -635,7 +635,7 @@ changes:
 [FIX] "special" statuses not working properly
 
 VERSION 0.5.10
-date_time
+2024-01-23
 commit: null
 changes:
 [FIX] debug command missing args in helpinfo
