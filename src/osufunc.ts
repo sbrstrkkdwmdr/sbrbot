@@ -255,11 +255,14 @@ export async function scorecalc(
                 if (newacc <= 1) {
                     newacc *= 100;
                 }
+                if (newacc > 100) {
+                    newacc /= 100;
+                }
 
                 const baseScore: calcScore = {
                     mode,
                     mods: osumodcalc.ModStringToInt(mods),
-                    acc: obj?.acc ? obj.acc * 100 : 100,
+                    acc: newacc ?? 100,
                     clockRate: obj.clockRate ?? 1,
                 };
                 if (obj.maxcombo != null && !isNaN(obj.maxcombo)) {
@@ -281,6 +284,7 @@ export async function scorecalc(
                 if (obj.hitkatu != null && !isNaN(obj.hitkatu)) {
                     baseScore.nKatu = obj.hitkatu;
                 }
+                console.log(baseScore);
                 ppl = [
                     new rosu.Calculator(baseScore).performance(map),
                     new rosu.Calculator({
