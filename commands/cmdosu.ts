@@ -2909,7 +2909,6 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
     const scoredetailed: number = 1;
 
     let useContent: string = null;
-
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
@@ -2999,21 +2998,18 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         if (input.overrides.id) {
             mapid = input.overrides.id;
         }
-        // if(input.overrides.mode){
-        //     mode = input.overrides.mode            
-        // }
         if (input.overrides.filterMods) {
             mapmods = input.overrides.filterMods;
         }
+        console.log(input.overrides.commandAs)
         if (input.overrides.commandAs) {
             input.commandType = input.overrides.commandAs;
-            useContent = `Requested by <@${commanduser.id}>`;
         }
         if (input.overrides.commanduser) {
             commanduser = input.overrides.commanduser;
+            useContent = `Requested by <@${commanduser.id}>`;
         }
     }
-
     //==============================================================================================================================================================================================
 
     const buttons = new Discord.ActionRowBuilder()
@@ -3024,7 +3020,6 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
                 .setEmoji(buttonsthing.label.main.refresh),
         );
     const pgbuttons: Discord.ActionRowBuilder = await msgfunc.pageButtons('maplb', commanduser, input.absoluteID);
-
 
     log.logCommand({
         event: 'Command',
