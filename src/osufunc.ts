@@ -2931,7 +2931,7 @@ export async function apigetOffline(input: apiInput) {
     const file = full.pop();
     console.log("getting file from " + full.join('/'));
     const dir = fs.readdirSync(full.join('/'));
-    console.log("directory contains" + dir);
+    console.log("directory contains " + dir);
     const isPresent = dir.filter(x => x.includes(file));
     console.log("files matching filter " + isPresent);
     console.log("using file " + file);
