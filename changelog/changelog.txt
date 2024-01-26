@@ -654,3 +654,4 @@ commit: null
 changes:
 [FIX] maplb via button would hang - cmdtxt in wrong "if" statement
 [FIX] simulated pp being ridiculously high (how tf did it get 1290pp with 7x miss on a map woth 760 if fc https://cdn.discordapp.com/attachments/515827485733027850/1200257525816242226/53pVGKu.png)
+[FIX] pp on scorelist returning 0pp

@@ -310,7 +310,7 @@ export async function scoreList(
                 maxcombo: curscore.max_combo,
                 score: curscore.score,
                 calctype: 0,
-                passedObj: 0,
+                passedObj: getTotalHits(curscore.mode, curscore),
                 failed: false
             },
                 mapping.useScoreMap ?
