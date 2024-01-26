@@ -321,7 +321,7 @@ export async function scoreList(
             );
         let tempMainpp = null;
         if (curscore.accuracy != 1) {
-            if (curscore.pp == null || isNaN(curscore.pp)) {
+            if (!curscore.pp || isNaN(curscore.pp) || curscore.pp == 0) {
                 pptxt = `${ppcalcing[0].pp.toFixed(2)}pp`;
                 tempMainpp = ppcalcing[0].pp;
             } else {
@@ -333,7 +333,7 @@ export async function scoreList(
             }
             pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`;
         } else {
-            if (curscore.pp == null || isNaN(curscore.pp)) {
+            if (!curscore.pp || isNaN(curscore.pp) || curscore.pp == 0) {
                 pptxt =
                     `${ppcalcing[0].pp.toFixed(2)}pp`;
                 tempMainpp = ppcalcing[0].pp;
