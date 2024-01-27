@@ -657,3 +657,4 @@ changes:
 [FIX] pp on scorelist returning 0pp
 [FIX] simulate embed showing incorrect input values
 [ADD] lazer grade calculations
+[QOL] only calculate passed objects on failed scores

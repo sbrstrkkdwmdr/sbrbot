@@ -5083,10 +5083,12 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
         }
 
         const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
-        const msToFail = await osufunc.getFailPoint(totalhits, `${path}/files/maps/${curbm.id}.osu`, input.config);
-
-        const curbmpasstime = Math.floor(msToFail / 1000);
-        const guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
+        let msToFail: number, curbmpasstime: number, guesspasspercentage: number;
+        if (curscore.rank.toUpperCase() == 'F') {
+            msToFail = await osufunc.getFailPoint(totalhits, `${path}/files/maps/${curbm.id}.osu`, input.config);
+            curbmpasstime = Math.floor(msToFail / 1000);
+            guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
+        }
 
         // let showFailGraph = false;
         // let FailGraph = '';
