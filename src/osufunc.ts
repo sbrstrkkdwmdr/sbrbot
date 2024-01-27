@@ -284,7 +284,6 @@ export async function scorecalc(
                 if (obj.hitkatu != null && !isNaN(obj.hitkatu)) {
                     baseScore.nKatu = obj.hitkatu;
                 }
-                console.log(baseScore);
                 ppl = [
                     new rosu.Calculator(baseScore).performance(map),
                     new rosu.Calculator({
