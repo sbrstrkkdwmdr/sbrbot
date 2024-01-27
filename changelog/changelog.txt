@@ -658,3 +658,5 @@ changes:
 [FIX] simulate embed showing incorrect input values
 [ADD] lazer grade calculations
 [QOL] only calculate passed objects on failed scores
+[FIX] simulate not parsing mapid arg
+[QOL] refine `mapIdFromLink()`

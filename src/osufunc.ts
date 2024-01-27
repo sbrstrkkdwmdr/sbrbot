@@ -2119,7 +2119,6 @@ export async function userStatsCacheFix(database: Sequelize.ModelStatic<any>, mo
  * @param callIfMapIdNull if only set id is found, then send an api request to fetch the map id
  */
 export async function mapIdFromLink(url: string, callIfMapIdNull: boolean, config: extypes.config) {
-
     if (url.includes(' ')) {
         const temp = url.split(' ');
         //get arg that has osu.ppy.sh
@@ -2132,7 +2131,11 @@ export async function mapIdFromLink(url: string, callIfMapIdNull: boolean, confi
         }
     }
 
-    const object = {
+    const object: {
+        set: number,
+        mode: string,
+        map: number,
+    } = {
         set: null,
         mode: null,
         map: null,
@@ -2142,41 +2145,51 @@ export async function mapIdFromLink(url: string, callIfMapIdNull: boolean, confi
     /**
      *
      * osu.ppy.sh/b/{map}
-     * osu.ppy.sh/beatmaps/{map}
      * osu.ppy.sh/b/{map}?m={mode}
+     * osu.ppy.sh/beatmaps/{map}
      * osu.ppy.sh/beatmaps/{map}?m={mode}
      * osu.ppy.sh/s/{set} //mapset
-     * osu.ppy.sh/beatmapsets/{set}#{mode}/{map}
+     * osu.ppy.sh/s/{set}#{mode}/{map}
      * osu.ppy.sh/beatmapsets/{set}
+     * osu.ppy.sh/beatmapsets/{set}#{mode}/{map}
      */
 
     switch (true) {
         case url.includes('?m='):
             object.mode = url.split('?m=')[1];
-            object.map = url.split('?m=')[0];
+            if (url.includes('/b/')) {
+                object.map = +url.split('?m=')[0].split('/b/')[1];
+            } else if (url.includes('/beatmaps/')) {
+                object.map = +url.split('?m=')[0].split('/beatmaps/')[1];
+            }
             break;
         case url.includes('/b/'):
-            object.map = url.split('/b/')[1];
+            object.map = +url.split('/b/')[1];
             break;
         case url.includes('beatmaps/'):
-            object.map = url.split('/beatmaps/')[1];
+            object.map = +url.split('/beatmaps/')[1];
             break;
         case url.includes('beatmapsets') && url.includes('#'):
-            object.set = url.split('beatmapsets/')[1].split('#')[0];
+            object.set = +url.split('beatmapsets/')[1].split('#')[0];
             object.mode = url.split('#')[1].split('/')[0];
-            object.map = url.split('#')[1].split('/')[1];
+            object.map = +url.split('#')[1].split('/')[1];
+            break;
+        case url.includes('/s/') && url.includes('#'):
+            object.set = +url.split('/s/')[1].split('#')[0];
+            object.mode = url.split('#')[1].split('/')[0];
+            object.map = +url.split('#')[1].split('/')[1];
             break;
         case url.includes('/s/'):
-            object.set = url.split('/s/')[1];
+            object.set = +url.split('/s/')[1];
             break;
         case url.includes('beatmapsets/'):
-            object.set = url.split('/beatmapsets/')[1];
+            object.set = +url.split('/beatmapsets/')[1];
             break;
         case !isNaN(+url):
-            object.map = url;
+            object.map = +url;
             break;
     }
-    if (callIfMapIdNull && object.map == null) {
+    if (callIfMapIdNull && object.map == null && object.set) {
         const bmsdataReq = await apiget({
             type: 'mapset_get',
             params: {
