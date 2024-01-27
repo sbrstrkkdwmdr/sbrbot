@@ -3001,7 +3001,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         if (input.overrides.filterMods) {
             mapmods = input.overrides.filterMods;
         }
-        console.log(input.overrides.commandAs)
+        console.log(input.overrides.commandAs);
         if (input.overrides.commandAs) {
             input.commandType = input.overrides.commandAs;
         }
@@ -8222,20 +8222,7 @@ export async function simulate(input: extypes.commandInput) {
         n50 ?? 0,
         nMiss ?? 0
     );
-    const fcaccgr =
-        osumodcalc.calcgrade(
-            use300s,
-            n100 ?? 0,
-            n50 ?? 0,
-            0
-        );
 
-
-    const specAcc = isNaN(fcaccgr.accuracy) ?
-        acc ?
-            acc :
-            100 :
-        fcaccgr.accuracy;
 
     const mapPerf = await osufunc.mapcalc({
         mods,
@@ -8267,7 +8254,7 @@ export async function simulate(input: extypes.commandInput) {
             {
                 name: 'Score Details',
                 value:
-                    `${useAcc?.accuracy?.toFixed(2)}% | ${nMiss ?? 0}x misses
+                    `${(acc ?? useAcc?.accuracy)?.toFixed(2)}% | ${nMiss ?? 0}x misses
 ${combo ?? mxCombo}x/**${mxCombo}**x
 ${mods ?? 'No mods'}
 \`${n300}/${n100}/${n50}/${nMiss}\`
@@ -8279,7 +8266,7 @@ Speed: ${overrideSpeed ?? 1}x (${overrideBpm ?? mapdata.bpm}BPM)
                 name: 'Performance',
                 value:
                     `
-${score[0].pp?.toFixed(2)}pp | ${score[1].pp?.toFixed(2)}pp if ${(specAcc).toFixed(2)}% FC
+${score[0].pp?.toFixed(2)}pp | ${score[1].pp?.toFixed(2)}pp if ${(acc ?? useAcc?.accuracy)?.toFixed(2)}% FC
 SS: ${mapPerf[0].pp?.toFixed(2)}
 99: ${mapPerf[1].pp?.toFixed(2)}
 98: ${mapPerf[2].pp?.toFixed(2)}
