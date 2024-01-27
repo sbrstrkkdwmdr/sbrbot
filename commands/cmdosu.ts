@@ -8015,15 +8015,19 @@ export async function simulate(input: extypes.commandInput) {
             if (input.args.includes('speed=')) {
                 overrideSpeed = parseFloat(ctn.split('speed=')[1].split(' ')[0]);
             }
-
             input.args = msgfunc.cleanArgs(input.args);
 
-            if (isNaN(+input.args[0])) {
-                mapid = +input.args[0];
-            }
             if (ctn.includes('+')) {
                 mods = ctn.split('+')[1].split(' ')[0];
+                let i = 0;
+                for (; i < input.args.length; i++) {
+                    if (input.args[i].includes('+')) {
+                        break;
+                    }
+                }
+                input.args = input.args.slice(0, i).concat(input.args.slice(i + 1, input.args.length));
             }
+            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true, input.config)).map;
         }
             break;
 
@@ -8094,7 +8098,15 @@ export async function simulate(input: extypes.commandInput) {
             {
                 name: 'Misses',
                 value: nMiss
-            }
+            },
+            {
+                name: 'Override BPM',
+                value: overrideBpm
+            },
+            {
+                name: 'Override Speed',
+                value: overrideSpeed
+            },
         ],
         config: input.config
     });
