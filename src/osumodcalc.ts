@@ -13,6 +13,7 @@ export type ApproachRateObj = {
 };
 export type AccGra = {
     grade: string,
+    gradeLazer: string,
     accuracy: number;
 };
 export type ValObj = {
@@ -224,7 +225,7 @@ function calcgrade(hit300: number, hit100: number, hit50: number, miss: number) 
     const totalhits = hit300 + hit100 + hit50 + miss;
     const equation = ((Math.floor((300 * hit300) + (100 * hit100) + (50 * hit50))) / (Math.floor(300 * (hit300 + hit100 + hit50 + miss)))) * 100;
     //https://osu.ppy.sh/wiki/en/FAQ#grades
-    let grade = 'D';
+    let [grade, gradeLazer] = ['D', 'D'];
     if (hit300 / totalhits > 0.6) {
         grade = 'C';
     }
@@ -239,9 +240,24 @@ function calcgrade(hit300: number, hit100: number, hit50: number, miss: number) 
     }
     if (hit100 < 1 && hit50 < 1 && miss == 0) {
         grade = 'SS';
+        gradeLazer = 'SS';
     }
+    if (equation >= 70) {
+        grade = 'C';
+    }
+    if (equation >= 80) {
+        grade = 'B';
+    }
+    if (equation >= 90) {
+        grade = 'A';
+    }
+    if (equation >= 95 && miss == 0) {
+        gradeLazer = 'S';
+    }
+
     const finalarr: AccGra = {
-        grade: grade,
+        grade,
+        gradeLazer,
         accuracy: equation,
     };
 
@@ -257,21 +273,25 @@ function calcgrade(hit300: number, hit100: number, hit50: number, miss: number) 
 function calcgradeTaiko(hit300: number, hit100: number, miss: number) {
     const equation = (Math.abs(hit300 + (hit100 / 2))) / (Math.abs(hit300 + hit100 + miss));
     //grade = 'https://osu.ppy.sh/wiki/en/FAQ#grades'
-    let grade = 'D';
-    if (equation > 0.8) {
-        grade = 'B';
+    let [grade, gradeLazer] = ['D', 'D'];
+    if (equation >= 0.8) {
+        [grade, gradeLazer] = ['B', 'B'];
     }
-    if (equation > 0.9) {
-        grade = 'A';
+    if (equation >= 0.9) {
+        [grade, gradeLazer] = ['A', 'B'];
     }
-    if (equation > 0.95) {
+    if (equation >= 0.95) {
         grade = 'S';
     }
+    if (equation >= 0.95 && miss == 0) {
+        gradeLazer = 'S';
+    }
     if (equation == 1) {
-        grade = 'SS';
+        [grade, gradeLazer] = ['SS', 'SS'];
     }
     const finalarr: AccGra = {
-        grade: grade,
+        grade,
+        gradeLazer,
         accuracy: equation * 100,
     };
     return finalarr;
@@ -288,25 +308,26 @@ function calcgradeTaiko(hit300: number, hit100: number, miss: number) {
  */
 function calcgradeCatch(hit300: number, hit100: number, hit50: number, hitkatu: number, miss: number) {
     const equation = Math.floor(hit300 + hit100 + hit50) / Math.floor(hit300 + hit100 + hit50 + hitkatu + miss);
-    let grade = 'D';
-    if (equation > 0.85) {
-        grade = 'C';
+    let [grade, gradeLazer] = ['D', 'D'];
+    if (equation >= 0.85) {
+        [grade, gradeLazer] = ['C', 'C'];
     }
-    if (equation > 0.9) {
-        grade = 'B';
+    if (equation >= 0.9) {
+        [grade, gradeLazer] = ['B', 'B'];
     }
-    if (equation > 0.94) {
-        grade = 'A';
+    if (equation >= 0.94) {
+        [grade, gradeLazer] = ['A', 'A'];
     }
-    if (equation > 0.98) {
-        grade = 'S';
+    if (equation >= 0.98) {
+        [grade, gradeLazer] = ['S', 'S'];
     }
     if (equation == 1) {
-        grade = 'SS';
+        [grade, gradeLazer] = ['SS', 'SS'];
     }
 
     const finalarr: AccGra = {
-        grade: grade,
+        grade,
+        gradeLazer,
         accuracy: equation * 100,
     };
     return finalarr;
@@ -323,24 +344,25 @@ function calcgradeCatch(hit300: number, hit100: number, hit50: number, hitkatu: 
  */
 function calcgradeMania(hit300max: number, hit300: number, hit200: number, hit100: number, hit50: number, miss: number) {
     const equation = Math.floor((300 * (hit300max + hit300)) + (200 * hit200) + (100 * hit100) + (50 * hit50)) / Math.floor(300 * (hit300max + hit300 + hit200 + hit100 + hit50 + miss));
-    let grade = 'D';
-    if (equation > 0.7) {
-        grade = 'C';
+    let [grade, gradeLazer] = ['D', 'D'];
+    if (equation >= 0.7) {
+        [grade, gradeLazer] = ['C', 'C'];
     }
-    if (equation > 0.8) {
-        grade = 'B';
+    if (equation >= 0.8) {
+        [grade, gradeLazer] = ['B', 'B'];
     }
-    if (equation > 0.9) {
-        grade = 'A';
+    if (equation >= 0.9) {
+        [grade, gradeLazer] = ['A', 'A'];
     }
-    if (equation > 0.95) {
-        grade = 'S';
+    if (equation >= 0.95) {
+        [grade, gradeLazer] = ['S', 'S'];
     }
     if (equation == 1) {
-        grade = 'SS';
+        [grade, gradeLazer] = ['SS', 'SS'];
     }
     const finalarr: AccGra = {
-        grade: grade,
+        grade,
+        gradeLazer,
         accuracy: equation * 100,
     };
     return finalarr;
