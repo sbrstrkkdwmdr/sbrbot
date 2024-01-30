@@ -13,6 +13,7 @@ export type timezone = {
  * @source https://countrycode.org/ 
  * @source https://en.wikipedia.org/wiki/List_of_capitals_in_the_United_States 
  * @source https://en.wikipedia.org/wiki/Provinces_and_territories_of_Canada
+ * @source https://en.wikipedia.org/wiki/List_of_international_airports_by_country
  */
 
 /**
@@ -653,7 +654,8 @@ export const timezones: timezone[] = [
             'Andorra', 'AD', 'AND',
             'Andorra la Vella', //^ capital
             'Algeria', 'Dzayer', 'ⴷⵣⴰⵢⴻⵔ', 'Al-Jazā\'ir', 'الجزائر', 'DZ', 'DZA',
-            'Algiers', //^ capital
+            'Algiers', 'ALG', //^ capital
+            'AZR', 'AAE', 'BLJ', 'BJA', 'BSK', 'CFK', 'CZL', 'HME', 'GJL', 'ORN', 'QSF', 'TMR', 'TLM', 'xxx', //^ airports
             'Angola', 'AO', 'AGO',
             'Luanda', 'Lwanda', //^ capital
             'Austria', 'Österreich', 'Osterreich', 'AT', 'AUT',
@@ -705,6 +707,7 @@ export const timezones: timezone[] = [
             'Podgorica', 'Подгорица', //^ capital
             'Morocco', 'Amerruk', 'Elmeɣrib', 'ⴰⵎⵔⵔⵓⴽ', 'ⵍⵎⵖⵔⵉⴱ', 'Al-maɣréb', 'المغرب', 'MA', 'MAR',
             'Rabat', 'Errbaṭ', 'ⵔⵔⴱⴰⵟ', 'Ar-ribaaṭ', 'الرباط', //^ capital
+            'AGA', 'CMN', 'FEZ', 'RAK', 'NDR', 'OUD', 'RBA', 'TNG', 'TTU', 'VIL', 'EUN', //^ airport
             'Netherlands', 'Nederland', 'Nederlân', 'NL', 'NLD',
             'Amsterdam', //^ capital
             'Niger', 'NE', 'NER',
@@ -762,6 +765,8 @@ export const timezones: timezone[] = [
             'Nicosia', 'Lefkosia', 'Λευκωσία', 'Lefkoşa', //^ capital
             'Egypt', 'Misr', 'Masr', 'مصر', 'EG', 'EGY',
             'Cairo', 'Al-Qāhirah', 'القاهرة', //^ capital
+            'Alexandria',
+            'HBE', 'ALY', 'ATZ', 'ASW', 'CAI', 'SPX', 'AAC', 'DBB', 'HRG', 'LXR', 'RMF', 'MUH', 'SKV', 'SSH', 'HMB', 'TCP', //^ airports
             'Estonia', 'Eesti', 'EE', 'EST',
             'Tallinn', //^ capital
             'Eswatini', 'eSwatini', 'Swaziland',//(former name)
@@ -784,6 +789,7 @@ export const timezones: timezone[] = [
             'Maseru', //^ capital
             'Libya', 'ⵍⵉⴱⵢⴰ', 'Lībiyā', 'ليبيا', 'LY', 'LBY',
             'Tripoli', 'Ṭrables', 'ⵟⵔⴰⴱⵍⴻⵙ', 'Tarabulus', 'طرابلس', //^ capital
+            'BEN', 'SEB', 'TIP', 'MJI', //^ airports
             'Lithuania', 'Lietuva', 'LT', 'LTU',
             'Vilnius', //^ capital
             'Malawi', 'Malaŵi', 'MW', 'MWI',
@@ -809,6 +815,7 @@ export const timezones: timezone[] = [
             'Bloemfontein', 'ǀʼAuxa ǃXās', 'Mangaung', //^ judicial capital
             'Sudan', 'As-Sudan', 'السودان', 'SD', 'SDN',
             'Khartoum', 'Al-Khartûm', 'الخرطوم', //^ capital
+            'KRT','PZU', //^ airport
             'Syria', 'Suriyah', 'سورية', 'SY', 'SYR',
             'Damascus', 'Dimashq', 'Ash-Sham', 'دمشق', 'الشام ', //^ capital
             'Ukraine', 'Ukrajina', 'Україна', 'UA', 'UKR',

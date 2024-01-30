@@ -108,11 +108,8 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
                 }
             }
         }
-        fs.writeFileSync(`${path}/trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(curdata.slice().sort((a, b) =>
-            parseFloat(b.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
-            -
-            parseFloat(a.created_at.slice(0, 19).replaceAll('-', '').replaceAll('T', '').replaceAll(':', '').replaceAll('+', ''))
-        ), null, 2));
+        fs.writeFileSync(`${path}/trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, JSON.stringify(
+            curdata.slice().sort((a, b) => b.pp - a.pp), null, 2));
     }
 }
 
@@ -206,7 +203,7 @@ export async function trackUsers(db, client, guildSettings, totalTime: number, c
         const user = allUsers[i];
 
         setTimeout(() => {
-            log.toOutput(`Tracking - index ${i+1}/${allUsers.length}. Next track in ${Math.floor(totalTime / allUsers.length)}`, config);
+            log.toOutput(`Tracking - index ${i + 1}/${allUsers.length}. Next track in ${Math.floor(totalTime / allUsers.length)}`, config);
             let willFetch = false;
             if (!(typeof user.osuid == 'undefined' || user.osuid == null || user.osuid == undefined)) {
                 if (`${user.guildsosu}`.length > 0 && `${user.guildsosu}`.length != 4) {

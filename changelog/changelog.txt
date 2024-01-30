@@ -649,7 +649,7 @@ changes:
 [FIX] scorelist commands ignoring user param if other params given
 
 VERSION 0.5.11
-date_time
+2024-01-30
 commit: null
 changes:
 [FIX] maplb via button would hang - cmdtxt in wrong "if" statement
@@ -660,3 +660,4 @@ changes:
 [QOL] only calculate passed objects on failed scores
 [FIX] simulate not parsing mapid arg
 [QOL] refine `mapIdFromLink()`
+[FIX] trackfile sorting

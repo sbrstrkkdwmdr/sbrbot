@@ -1,6 +1,6 @@
-export const version = '20231225';
+export const version = '20240130';
 
-export const versionAlt = '0.5.9';
+export const versionAlt = '0.5.11';
 
 export const versions: {
     name: string,
@@ -201,7 +201,12 @@ export const versions: {
             name: '0.5.10',
             releaseDate: 20240123,
             releaseDateFormatted: '2024-01-23'
-        }
+        },
+        {
+            name: '0.5.11',
+            releaseDate: 20240130,
+            releaseDateFormatted: '2024-01-30'
+        },
     ];
 
 export const linkInvite = 'There is currently no invite link publicly available';
