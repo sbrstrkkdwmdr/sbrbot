@@ -650,7 +650,7 @@ changes:
 
 VERSION 0.5.11
 2024-01-30
-commit: null
+commit: 1765f7dd0416a56e498bf8a90c4ac3f4264c7503
 changes:
 [FIX] maplb via button would hang - cmdtxt in wrong "if" statement
 [FIX] simulated pp being ridiculously high (how tf did it get 1290pp with 7x miss on a map woth 760 if fc https://cdn.discordapp.com/attachments/515827485733027850/1200257525816242226/53pVGKu.png)
