@@ -545,7 +545,11 @@ export type Score = {
     replay: boolean,
     score: number,
     statistics: Statistics,
+    type?: string,
     user_id: number,
+    current_user_attributes?: {
+        pin: boolean,
+    }
     user?: UserCompact,
     weight?: {
         percentage: number,
