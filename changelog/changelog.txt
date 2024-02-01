@@ -666,3 +666,4 @@ VERSION 0.5.12
 SOON
 commit: null
 changes:
+[QOL] check if FC - switch from using score.perfect to maxcombo == beatmap.maxcombo
