@@ -1452,6 +1452,8 @@ Discord.js: [${pkgjson.dependencies['discord.js'].replace('^', '')}](https://dis
 rosu-pp: [${pkgjson.dependencies['rosu-pp'].replace('^', '')}](https://github.com/MaxOhn/rosu-pp-js)
 Axios: [${pkgjson.dependencies['axios'].replace('^', '')}](https://github.com/axios/axios)
 Sequelize: [${pkgjson.dependencies['sequelize'].replace('^', '')}](https://github.com/sequelize/sequelize/)
+ChartJS-to-image: [${pkgjson.dependencies['chartjs-to-image'].replace('^', '')}](https://github.com/typpo/chartjs-to-image)
+sqlite3: [${pkgjson.dependencies['sqlite3'].replace('^', '')}](https://github.com/TryGhost/node-sqlite3)
 `,
                 inline: true
             },
