@@ -5060,19 +5060,20 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
                     ppcalcing[0].pp.toFixed(2);
             osufunc.debug(ppcalcing, 'command', 'recent', input.obj.guildId, 'ppCalcing');
 
-            if (curscore.accuracy < 1 && curscore.perfect == true) {
+            const mxCombo = ppcalcing[0].difficulty.maxCombo ?? mapdata?.max_combo;
+
+            if (curscore.accuracy < 1 && curscore.max_combo == mxCombo) {
                 fcflag = `FC\n**${ppcalcing[2].pp.toFixed(2)}**pp IF SS`;
             }
-            if (curscore.perfect == false) {
+            if (curscore.max_combo != mxCombo) {
                 fcflag =
                     `\n**${ppcalcing[1].pp.toFixed(2)}**pp IF ${fcaccgr.accuracy.toFixed(2)}% FC
                 **${ppcalcing[2].pp.toFixed(2)}**pp IF SS`;
             }
-            if (curscore.perfect == true && curscore.accuracy == 1) {
+            if (curscore.max_combo == mxCombo && curscore.accuracy == 1) {
                 fcflag = 'FC';
             }
-
-
+            
         } catch (error) {
             rspp =
                 curscore.pp ?
@@ -6160,15 +6161,15 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
     }, 1);
 
     let pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`;
-
+    const mxCombo = ppcalcing[0].difficulty.maxCombo ?? mapdata?.max_combo;
     if (scoredata.accuracy == 1) {
-        if (scoredata.perfect == true) {
+        if (scoredata.max_combo == mxCombo) {
             pptxt = `${ppcalcing[0].pp.toFixed(2)}pp`;
         } else {
             pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC`;
         }
     } else {
-        if (scoredata.perfect == true) {
+        if (scoredata.max_combo == mxCombo) {
             pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[2].pp.toFixed(2)}pp if SS`;
         } else {
             pptxt = `${ppcalcing[0].pp.toFixed(2)}pp | ${ppcalcing[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC | ${ppcalcing[2].pp.toFixed(2)}pp if SS`;

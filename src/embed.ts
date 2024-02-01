@@ -320,6 +320,8 @@ export async function scoreList(
                 config
             );
         let tempMainpp = null;
+        const mxCombo = ppcalcing[0].difficulty.maxCombo ?? curscore?.beatmap?.max_combo;
+
         if (curscore.accuracy != 1) {
             if (!curscore.pp || isNaN(curscore.pp) || curscore.pp == 0) {
                 pptxt = `${ppcalcing[0].pp.toFixed(2)}pp`;
@@ -328,7 +330,7 @@ export async function scoreList(
                 pptxt = `${curscore.pp.toFixed(2)}pp`;
                 tempMainpp = curscore.pp;
             }
-            if (curscore.perfect == false) {
+            if (curscore.max_combo != mxCombo) {
                 pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`;
             }
             pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`;
@@ -362,7 +364,6 @@ export async function scoreList(
             weighted = '';
         }
 
-        const mxCombo = ppcalcing[0].difficulty.maxCombo ?? curscore?.beatmap?.max_combo;
 
         switch (asObj.detailed) {
             case 0: case 2: {
