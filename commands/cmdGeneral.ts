@@ -176,10 +176,16 @@ export async function changelog(input: extypes.commandInput) {
             (found as number) :
             mainconst.versions.length - 1 - offset;
     const Embed = new Discord.EmbedBuilder();
+    const exceeded = 'Exceeded character limit. Please click [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.txt) to view the changelog.';
     if (typeof found == 'string' && useGit == false) {
         isList = true;
+        let txt = mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n');
+        if (txt.length > 2000) {
+            txt = exceeded;
+        }
         Embed.setTitle('ALL VERSIONS')
-            .setDescription(`${mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n')}${foundBool ? '' : `\nThere was an error trying to find version \`${version}\``}`)
+            .setAuthor({ name: foundBool ? '' : `\nThere was an error trying to find version \`${version}\`` })
+            .setDescription(txt)
             .setFooter({
                 text: `${useNum + 1}/${mainconst.versions.length}`
             });
@@ -268,6 +274,10 @@ export async function changelog(input: extypes.commandInput) {
             :
             `https://github.com/sbrstrkkdwmdr/sbrbot/commit/${commit.trim()}`;
 
+
+            if (txt.length > 2000) {
+                txt = exceeded;
+            }
 
         Embed
             .setTitle(`${verdata.name.trim()} Changelog`)
