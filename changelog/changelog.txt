@@ -669,3 +669,4 @@ changes:
 [QOL] check if FC - switch from using score.perfect to maxcombo == beatmap.maxcombo
 [QOL] track - cancel if score pp is null
 [QOL] show total amount of changes in changelog
+[QOL] exceeded text length message for changelog
