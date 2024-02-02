@@ -120,7 +120,6 @@ export async function getEmbed(
     },
     config: extypes.config
 ) {
-    if(data.scoredata.pp == null || isNaN(data.scoredata.pp)) return;
     const curscore = data.scoredata;
     const scorestats = data.scoredata.statistics;
     let totalhits = 0;
@@ -158,10 +157,11 @@ export async function getEmbed(
 
     let pp: string;
     const mxCombo = ppcalc[0].difficulty.maxCombo;
+    let usepp = data.scoredata.pp ?? ppcalc[0].pp;
     if (data.scoredata.accuracy != 1) {
-        pp = `${data.scoredata.pp}pp ${data.scoredata.max_combo == mxCombo ? '(FC)' : `(${ppcalc[1].pp.toFixed(2)} if FC)`}`;
+        pp = `${usepp}pp ${data.scoredata.max_combo == mxCombo ? '(FC)' : `(${ppcalc[1].pp.toFixed(2)} if FC)`}`;
     } else {
-        pp = `${data.scoredata.pp}pp (SS)`;
+        pp = `${usepp}pp (SS)`;
     }
 
     const embed = new Discord.EmbedBuilder()
