@@ -210,7 +210,7 @@ export async function changelog(input: extypes.commandInput) {
             maj: [],
             min: [],
         };
-        const changesList = changesTxt.split('\n').map(x => x.trim());
+        const changesList = changesTxt.split('\n').map(x => x.trim()).filter(x => x.length > 2);
         for (const change of changesList) {
             switch (true) {
                 case change.startsWith('[ADD]'):
@@ -229,10 +229,11 @@ export async function changelog(input: extypes.commandInput) {
                     changes.maj.push(change.slice(5));
                     break;
                 default:
-                    if (change.length > 2) changes.min.push(change.replaceAll('[MIN]', ''));
+                    changes.min.push(change.replaceAll('[MIN]', ''));
                     break;
             }
         }
+
         let txt = '';
         if (changes.maj.length > 0) {
             txt += `\n${colourfunc.codeBlockColourText("MAJOR CHANGES", "blue", "text")} \n- ` + changes.maj.join('\n- ');
@@ -272,13 +273,13 @@ export async function changelog(input: extypes.commandInput) {
             .setTitle(`${verdata.name.trim()} Changelog`)
             .setURL(url)
             .setDescription(`commit [${commit.trim()?.slice(0, 7)?.trim()}](${url})
-Released ${verdata.releaseDateFormatted}${txt}
+Released ${verdata.releaseDateFormatted}
+Total of ${changesList.length} changes.${txt}
 `)
             .setFooter({
                 text: `${useNum + 1}/${mainconst.versions.length}`
             })
             ;
-
     }
 
     if (isList) {
@@ -1744,7 +1745,7 @@ export async function math(input: extypes.commandInput) {
             case 'oddt':
                 odcalc = osumodcalc.odDT(num1) as osumodcalc.OverallDifficultyObj;
                 equation = (`OD${odcalc.od_num}\n\`300: ±${odcalc.hitwindow_300}\`\n\`100: ±${odcalc.hitwindow_100}\`\n\`50:  ±${odcalc.hitwindow_50}\``);
-                break; 
+                break;
             case 'odht':
                 odcalc = osumodcalc.odHT(num1) as osumodcalc.OverallDifficultyObj;
                 equation = (`OD${odcalc.od_num}\n\`300: ±${odcalc.hitwindow_300}\`\n\`100: ±${odcalc.hitwindow_100}\`\n\`50:  ±${odcalc.hitwindow_50}\``);
