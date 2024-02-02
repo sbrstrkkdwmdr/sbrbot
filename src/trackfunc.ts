@@ -97,7 +97,7 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
             }
 
             for (let i = 0; i < curdata.length; i++) {
-                if (!previous.find(x => x.id == curdata[i].id)) {
+                if (!previous.find(x => x.best_id == curdata[i].best_id )) {
                     log.toOutput(`Found new score for: ${curdata[i]?.user?.username ?? 'null name'}`, config);
                     sendMsg(await getEmbed({
                         scoredata: curdata[i],
@@ -120,6 +120,7 @@ export async function getEmbed(
     },
     config: extypes.config
 ) {
+    if(data.scoredata.pp == null || isNaN(data.scoredata.pp)) return;
     const curscore = data.scoredata;
     const scorestats = data.scoredata.statistics;
     let totalhits = 0;
@@ -156,8 +157,9 @@ export async function getEmbed(
         }, new Date(curscore.beatmap.last_updated), config);
 
     let pp: string;
+    const mxCombo = ppcalc[0].difficulty.maxCombo;
     if (data.scoredata.accuracy != 1) {
-        pp = `${data.scoredata.pp}pp ${data.scoredata.perfect ? '(FC)' : `(${ppcalc[1].pp.toFixed(2)} if FC)`}`;
+        pp = `${data.scoredata.pp}pp ${data.scoredata.max_combo == mxCombo ? '(FC)' : `(${ppcalc[1].pp.toFixed(2)} if FC)`}`;
     } else {
         pp = `${data.scoredata.pp}pp (SS)`;
     }
