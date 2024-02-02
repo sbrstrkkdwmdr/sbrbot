@@ -197,7 +197,7 @@ export async function changelog(input: extypes.commandInput) {
         const verdata = useGit ? {
             name: 'Pending',
             releaseDate: NaN,
-            releaseDateFormatted: 'Soon'
+            releaseDateFormatted: 'at an unspecified date'
 
         } : mainconst.versions[useNum];
         const commit = useGit ? 'null' : cur.split('commit:')[1].split('\n')[0] as string;
