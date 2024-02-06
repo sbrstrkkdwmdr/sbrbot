@@ -670,3 +670,4 @@ changes:
 [QOL] show total amount of changes in changelog
 [QOL] exceeded text length message for changelog
 [FIX] osu!track - null pp (osu!api returning null pp 2024-02-02)
+[QOL] whatif - round estimated rank

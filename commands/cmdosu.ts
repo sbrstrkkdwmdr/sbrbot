@@ -13004,7 +13004,7 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
         .setDescription(
             `A ${pp} score would be their **${calc.toOrdinal(ppindex + 1)}** top play and would be weighted at **${(weight * 100).toFixed(2)}%**.
 Their pp would change by **${Math.abs((total + bonus) - osudata.statistics.pp).toFixed(2)}pp** and their new total pp would be **${(total + bonus).toFixed(2)}pp**.
-Their new rank would be **${guessrank}** (+${osudata?.statistics?.global_rank - guessrank}).
+Their new rank would be **${Math.round(guessrank)}** (+${Math.round(osudata?.statistics?.global_rank - guessrank)}).
 `
         );
 
