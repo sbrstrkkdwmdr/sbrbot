@@ -642,7 +642,7 @@ Submitted <t:${new Date(curmapset.submitted_date).getTime() / 1000}:R> | Last up
 ${topmap.status == 'ranked' ?
                                     `Ranked <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
                                 }${topmap.status == 'approved' || topmap.status == 'qualified' ?
-                                    `Approved/Qualified <t: ${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
+                                    `Approved/Qualified <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
                                 }${topmap.status == 'loved' ?
                                     `Loved <t:${Math.floor(new Date(curmapset.ranked_date).getTime() / 1000)}:R>` : ''
                                 }`,

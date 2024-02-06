@@ -671,3 +671,4 @@ changes:
 [QOL] exceeded text length message for changelog
 [FIX] osu!track - null pp (osu!api returning null pp 2024-02-02)
 [QOL] whatif - round estimated rank
+[FIX] ubm - approved/qualified time formatted incorrectly
