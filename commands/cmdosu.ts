@@ -2347,38 +2347,38 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             } break;
             case 'beatmapsetApprove': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetApprove;
-                obj.desc = `Approved **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.desc = `Approved **[\`${temp.beatmapset.title}\`](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'beatmapPlaycount': {
                 const temp = curEv as osuApiTypes.EventBeatmapPlaycount;
                 obj.desc =
-                    `Achieved ${temp.count} plays on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url}) <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                    `Achieved ${temp.count} plays on [\`${temp.beatmap.title}\`](https://osu.ppy.sh${temp.beatmap.url}) <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'beatmapsetDelete': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetDelete;
-                obj.desc = `Deleted **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.desc = `Deleted **[\`${temp.beatmapset.title}\`](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'beatmapsetRevive': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetRevive;
-                obj.desc = `Revived **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.desc = `Revived **[\`${temp.beatmapset.title}\`](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'beatmapsetUpdate': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetUpdate;
-                obj.desc = `Updated **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.desc = `Updated **[\`${temp.beatmapset.title}\`](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'beatmapsetUpload': {
                 const temp = curEv as osuApiTypes.EventBeatmapsetUpload;
-                obj.desc = `Submitted **[${temp.beatmapset.title}](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.desc = `Submitted **[\`${temp.beatmapset.title}\`](https://osu.ppy.sh${temp.beatmapset.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'rank': {
                 const temp = (curEv as osuApiTypes.EventRank);
                 obj.desc =
-                    `Achieved rank **#${temp.rank}** on [${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url}) (${input.config.useEmojis.gamemodes ? emojis.gamemodes[temp.mode] : temp.mode}) <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                    `Achieved rank **#${temp.rank}** on [\`${temp.beatmap.title}\`](https://osu.ppy.sh${temp.beatmap.url}) (${input.config.useEmojis.gamemodes ? emojis.gamemodes[temp.mode] : temp.mode}) <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             }
                 break;
             case 'rankLost': {
                 const temp = curEv as osuApiTypes.EventRankLost;
-                obj.desc = `Lost #1 on **[${temp.beatmap.title}](https://osu.ppy.sh${temp.beatmap.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
+                obj.desc = `Lost #1 on **[\`${temp.beatmap.title}\`](https://osu.ppy.sh${temp.beatmap.url})** <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
             case 'userSupportAgain': {
                 const temp = curEv as osuApiTypes.EventUserSupportAgain;
@@ -3186,7 +3186,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
         lbEmbed
             .setColor(colours.embedColour.scorelist.dec)
-            .setTitle(`Score leaderboard of ${fulltitle}`)
+            .setTitle(`Score leaderboard of \`${fulltitle}\``)
             .setURL(`https://osu.ppy.sh/b/${mapid}`)
             .setThumbnail(osufunc.getMapImages(mapdata.beatmapset_id).list2x)
             ;
@@ -5137,7 +5137,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             case 0: {
                 rsEmbed
                     .setDescription(`
-[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
+[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${input.config.useEmojis.gamemodes ? emojis.gamemodes[curscore.mode] : curscore.mode}
 <t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}${func.separateNum(curscore.score)} | ${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
@@ -5149,7 +5149,7 @@ ${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\` | ${curscore.max
             case 1: default: {
                 rsEmbed
                     .setDescription(`
-[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
+[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${input.config.useEmojis.gamemodes ? emojis.gamemodes[curscore.mode] : curscore.mode}
 <t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}
@@ -5200,7 +5200,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
 
                 rsEmbed
                     .setDescription(`
-[${fulltitle}](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
+[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
 ${totaldiff}⭐ | ${input.config.useEmojis.gamemodes ? emojis.gamemodes[curscore.mode] : curscore.mode}
 <t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}`)
@@ -6226,7 +6226,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             url: `https://osu.ppy.sh/users/${osudata.id}`,
             iconURL: `${osudata?.avatar_url ?? def.images.any.url}`
         })
-        .setTitle(`${title} [${mapdata.version}]`)
+        .setTitle(`\`${title} [${mapdata.version}]\``)
         .setURL(`https://osu.ppy.sh/scores/${mode}/${scoreid}`)
         .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`);
     switch (scoredetailed) {
@@ -7309,7 +7309,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             text: `${embedStyle}`
         })
         .setColor(colours.embedColour.scorelist.dec)
-        .setTitle(`${title} \n[${mapdata.version}]`)
+        .setTitle(`\`${title} \n[${mapdata.version}]\``)
         .setThumbnail(`${osudata?.avatar_url ?? def.images.any.url}`)
         .setImage(`${mapdata.beatmapset.covers['cover@2x']}`)
         .setAuthor({
@@ -8262,7 +8262,7 @@ export async function simulate(input: extypes.commandInput) {
         .setFooter({
             text: `${embedStyle}`
         })
-        .setTitle(`Simulated play on \n${title}`)
+        .setTitle(`Simulated play on \n\`${title}\``)
         .setURL(`https://osu.ppy.sh/b/${mapid}`)
         .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg` || `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
         .addFields([
@@ -9258,7 +9258,7 @@ export async function map(input: extypes.commandInput) {
             }
         }, 1);
         mapmods = mapmods.replace(',', '');
-        const maptitle: string = mapmods ? `${mapname} [${mapdata.version}] +${mapmods}` : `${mapname} [${mapdata.version}]`;
+        const maptitle: string = mapmods ? `\`${mapname} [${mapdata.version}]\` +${mapmods}` : `\`${mapname} [${mapdata.version}]\``;
         const Embed = new Discord.EmbedBuilder()
             .setURL(`https://osu.ppy.sh/beatmapsets/${mapdata.beatmapset_id}#${mapdata.mode}/${mapdata.id}`)
             .setThumbnail(osufunc.getMapImages(mapdata.beatmapset_id).list2x)
@@ -12165,7 +12165,7 @@ export async function compare(input: extypes.commandInput) {
                     const secondscorestr =
                         `${secondscore.pp.toFixed(2)}pp | ${(secondscore.accuracy * 100).toFixed(2)}% ${secondscore.mods.length > 0 ? '| +' + secondscore.mods.join('') : ''}\`\n`;//.padEnd(30, ' ').substring(0, 30)
                     arrscore.push(
-                        `**[${firstscore.beatmapset.title} [${firstscore.beatmap.version}]](https://osu.ppy.sh/b/${firstscore.beatmap.id})**
+                        `**[\`${firstscore.beatmapset.title} [${firstscore.beatmap.version}]\`](https://osu.ppy.sh/b/${firstscore.beatmap.id})**
 \`${firstuser.username.padEnd(30, ' ').substring(0, 30)} | ${seconduser.username.padEnd(30, ' ').substring(0, 30)}\`
 ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                     );
