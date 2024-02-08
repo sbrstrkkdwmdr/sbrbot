@@ -673,3 +673,5 @@ changes:
 [QOL] whatif - round estimated rank
 [FIX] ubm - approved/qualified time formatted incorrectly
 [FIX] discord formatting map names with special characters in the name
+[FIX] whatif - mode icons returning "undefined"
+[QOL] whatif - show amount of entries used

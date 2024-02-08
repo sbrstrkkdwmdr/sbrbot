@@ -1351,8 +1351,11 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
         }
             break;
     }
+
+    const dataSizetxt = await input.statsCache.count();
+
     Embed
-        .setDescription(`${returnval}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}`);
+        .setDescription(`${returnval}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode ?? 'osu'] : mode ?? 'osu'}\nEstimated from ${dataSizetxt} entries.`);
 
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -5073,7 +5076,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             if (curscore.max_combo == mxCombo && curscore.accuracy == 1) {
                 fcflag = 'FC';
             }
-            
+
         } catch (error) {
             rspp =
                 curscore.pp ?
