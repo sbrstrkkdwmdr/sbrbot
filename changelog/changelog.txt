@@ -675,3 +675,4 @@ changes:
 [FIX] discord formatting map names with special characters in the name
 [FIX] whatif - mode icons returning "undefined"
 [QOL] whatif - show amount of entries used
+[FIX] osutop - inaccurate weighted pp
