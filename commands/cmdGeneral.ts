@@ -275,9 +275,9 @@ export async function changelog(input: extypes.commandInput) {
             `https://github.com/sbrstrkkdwmdr/sbrbot/commit/${commit.trim()}`;
 
 
-            if (txt.length > 2000) {
-                txt = exceeded;
-            }
+        if (txt.length > 2000) {
+            txt = exceeded;
+        }
 
         Embed
             .setTitle(`${verdata.name.trim()} Changelog`)
@@ -1203,67 +1203,38 @@ export async function help(input: extypes.commandInput) {
                 const res = helpinfo.admincmds.find(obj => obj.aliases.includes(fetchcmd));
                 commandEmb(res, commandInfo);
             }
-            else if (command.includes('CategoryMenu')) {
+            else if (command.toLowerCase().includes('category')) {
                 switch (true) {
-                    case command.includes('gen'): {
-                        commandInfo.setTitle("General Commands");
-                        let desctxt = '';
-                        for (let i = 0; i < helpinfo.cmds.length; i++) {
-                            desctxt += `\n\`${helpinfo.cmds[i].name}\`: ${helpinfo.cmds[i].description}`;
-                        }
-                        if (desctxt == '') {
-                            desctxt = 'No commands in this category';
-                        }
-                        commandInfo.setDescription(desctxt);
+                    case command.includes('gen'): case command.includes('main'): {
+                        commandInfo.setTitle("General Commands")
+                            .setDescription(categorise('cmds'));
                         commandCategory = 'gen';
-                        commandfound = true;
                     }
                         break;
                     case command.includes('osu'): {
-                        commandInfo.setTitle("osu! Commands");
-                        let desctxt = '';
-                        for (let i = 0; i < helpinfo.osucmds.length; i++) {
-                            desctxt += `\n\`${helpinfo.osucmds[i].name}\`: ${helpinfo.osucmds[i].description}`;
-                        }
-                        if (desctxt == '') {
-                            desctxt = 'No commands in this category';
-                        }
-                        commandInfo.setDescription(desctxt);
+                        commandInfo.setTitle("osu! Commands")
+                            .setDescription(categorise('osucmds'));
                         commandCategory = 'osu';
-                        commandfound = true;
                     }
                         break;
                     case command.includes('admin'): {
-                        commandInfo.setTitle("Admin Commands");
-                        let desctxt = '';
-                        for (let i = 0; i < helpinfo.admincmds.length; i++) {
-                            desctxt += `\n\`${helpinfo.admincmds[i].name}\`: ${helpinfo.admincmds[i].description}`;
-                        }
-                        if (desctxt == '') {
-                            desctxt = 'No commands in this category';
-                        }
-                        commandInfo.setDescription(desctxt);
+                        commandInfo.setTitle("Admin Commands")
+                            .setDescription(categorise('admincmds'));
                         commandCategory = 'admin';
-                        commandfound = true;
                     }
                         break;
                     case command.includes('misc'): {
-                        commandInfo.setTitle("General Commands");
-                        let desctxt = '';
-                        for (let i = 0; i < helpinfo.othercmds.length; i++) {
-                            desctxt += `\n\`${helpinfo.othercmds[i].name}\`: ${helpinfo.othercmds[i].description}`;
-                        }
-                        if (desctxt == '') {
-                            desctxt = 'No commands in this category';
-                        }
-                        commandInfo.setDescription(desctxt);
+                        commandInfo.setTitle("Miscellaneous Commands")
+                            .setDescription(categorise('othercmds'));
                         commandCategory = 'misc';
-                        commandfound = true;
                     }
+                        break;
+                    default:
+                        command = null;
+                        getemb();
                         break;
                 }
             }
-
             else {
                 command = null;
                 getemb();
@@ -1279,6 +1250,17 @@ export async function help(input: extypes.commandInput) {
     function rdmp(w: string) {
         const fullyrando = Math.floor(Math.random() * helpinfo[w].length);
         return helpinfo[w][fullyrando].name;
+    }
+    function categorise(type: 'cmds' | 'osucmds' | 'admincmds' | 'othercmds') {
+        let desctxt = '';
+        for (let i = 0; i < helpinfo[type].length; i++) {
+            desctxt += `\n\`${helpinfo[type][i].name}\`: ${helpinfo[type][i].description}`;
+        }
+        if (desctxt == '') {
+            desctxt = 'No commands in this category';
+        }
+        commandfound = true;
+        return desctxt;
     }
 
     getemb();

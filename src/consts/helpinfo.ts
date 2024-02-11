@@ -405,6 +405,10 @@ const cmds: commandInfo[] = [
             {
                 text: '/help recent',
                 descriptor: 'Shows information about the recent command'
+            },
+            {
+                text: 'PREFIXMSG help categoryosu',
+                descriptor: 'Lists all commands in the osu category'
             }
         ],
         aliases: ['commands', 'list', 'command'],
@@ -414,7 +418,7 @@ const cmds: commandInfo[] = [
                 name: 'command',
                 type: 'string',
                 required: false,
-                description: 'The command to get information about',
+                description: 'The command/category to get information about. Categories are always prefixed with `categoryX`.',
                 options: ['N/A'],
                 defaultValue: 'N/A',
                 examples: ['recent', 'command:osutop'],

@@ -677,3 +677,4 @@ changes:
 [QOL] whatif - show amount of entries used
 [FIX] osutop - inaccurate weighted pp
 [QOL] alt help command - `[command] -h` instead of `help [command]`
+[QOL] access command categories via just text
