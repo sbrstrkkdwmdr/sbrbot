@@ -168,6 +168,17 @@ export default (input: {
             (obj.channel.type == Discord.ChannelType.PublicThread ||
                 obj.channel.type == Discord.ChannelType.PrivateThread)) return;
 
+        /**
+         * help mode?
+         * ie
+         * sbr-conv -help -> sbr-help conv
+         */
+        const helpOverrides: string[] = ['-h', '-help', '--h', '--help'];
+        if (helpOverrides.some(x => args.includes(x))) {
+            args = [command];
+            command = 'help';
+        }
+
         const allowed = execCommand_checker(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply, config);
 
         if (allowed == true) {

@@ -676,3 +676,4 @@ changes:
 [FIX] whatif - mode icons returning "undefined"
 [QOL] whatif - show amount of entries used
 [FIX] osutop - inaccurate weighted pp
+[QOL] alt help command - `[command] -h` instead of `help [command]`
