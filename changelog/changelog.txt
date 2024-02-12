@@ -679,3 +679,4 @@ changes:
 [QOL] alt help command - `[command] -h` instead of `help [command]`
 [QOL] access command categories via just text
 [QOL] extend map cache lifespan
+[FIX] `sbr-info` - incorrect link
