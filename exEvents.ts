@@ -353,8 +353,8 @@ export default (input: {
                 } else {
                     if (permanentCache.some(x => file.startsWith(x))) {
                         //do nothing
-                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24 * 7)) {
-                            //kill after 7d
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24 * 28)) {
+                            //kill after 4 weeks
                             fs.unlinkSync(`${path}/cache/commandData/` + file);
                             log.toOutput(`Deleted file ${path}/cache/commandData/` + file, input.config);
                         }
