@@ -663,8 +663,8 @@ changes:
 [FIX] trackfile sorting
 
 VERSION 0.5.12
-SOON
-commit: null
+2024-02-12
+commit: 8840263edd97c37103ec3c92d02371b0ffb1ed4a
 changes:
 [QOL] check if FC - switch from using score.perfect to maxcombo == beatmap.maxcombo
 [QOL] show total amount of changes in changelog
@@ -680,3 +680,4 @@ changes:
 [QOL] access command categories via just text
 [QOL] extend map cache lifespan
 [FIX] `sbr-info` - incorrect link
+[FIX] cooldown even on non-cooldown commands
