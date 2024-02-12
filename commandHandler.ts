@@ -82,7 +82,7 @@ export default (input: {
             });
             return;
         }
-        if (!input.oncooldown.has(message.author.id)) {
+        if (!input.oncooldown.has(message.author.id) && cd.cooldownCommands.includes(command)) {
             input.oncooldown.add(message.author.id);
             setTimeout(() => {
                 input.oncooldown.delete(message.author.id);
