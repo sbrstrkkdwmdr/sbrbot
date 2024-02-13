@@ -483,3 +483,14 @@ sbr-bug list -> "no bugs found
     request date: 2023-12-21 23:40 AEDT (UTC+11)
     finish date: 
     author: sbrstrkkdwmdr
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#42)
+    description: fix lb command always showing an empty list
+    type: fix
+    status: WIP
+    priority: medium
+    request date: 2024-02-13 14:46 AEDT UTC+11
+    finish date: 
+    author: sbrstrkkdwmdr
