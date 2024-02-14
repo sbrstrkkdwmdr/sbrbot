@@ -404,6 +404,10 @@ const generalcommands = [
             {
                 text: '/help recent',
                 descriptor: 'Shows information about the recent command'
+            },
+            {
+                text: 'PREFIXMSG help categoryosu',
+                descriptor: 'Lists all commands in the osu category'
             }
         ],
         aliases: ['commands', 'list', 'command'],
@@ -413,7 +417,7 @@ const generalcommands = [
                 name: 'command',
                 type: 'string',
                 required: false,
-                description: 'The command to get information about',
+                description: 'The command/category to get information about. Categories are always prefixed with `categoryX`.',
                 options: ['N/A'],
                 defaultValue: 'N/A',
                 examples: ['recent', 'command:osutop'],
@@ -770,7 +774,7 @@ const osucommands = [
     {
         name: 'firsts',
         description: 'Shows the #1 global scores of a user',
-        usage: 'firsts [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)] [-grade] [-reverse]',
+        usage: 'firsts [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter] [grade]',
         examples: [
             {
@@ -1113,8 +1117,8 @@ const osucommands = [
     },
     {
         name: 'nochokes',
-        description: 'Shows the user\'s top plays without misses',
-        usage: 'nochokes [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)] [-grade] [-reverse]',
+        description: 'Shows the user\'s top plays if no scores had a miss',
+        usage: 'nochokes [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter] [grade]',
         examples: [
             {
@@ -1279,7 +1283,7 @@ const osucommands = [
     {
         name: 'osutop',
         description: 'Shows the top scores of a user',
-        usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade]',
+        usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter] [grade]',
         examples: [
             {
@@ -1327,7 +1331,7 @@ const osucommands = [
     {
         name: 'pinned',
         description: 'Shows the pinned scores of a user',
-        usage: 'pinned [user] [-page/-p] [-(mode)] [-parse] [-?] [-(detailed)] [-grade] [-reverse]',
+        usage: 'pinned [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter] [grade]',
         examples: [
             {
@@ -1621,7 +1625,7 @@ const osucommands = [
     {
         name: 'recent',
         description: 'Shows the recent score(s) of a user',
-        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-?] [-grade] [-mods] [-modsx]',
+        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-mapper] [-mods] [-modx] [-reverse] [-(sort)] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'recent [user] [page] [mode] [list] [filter] [grade]',
         examples: [
             {
@@ -1903,7 +1907,7 @@ const osucommands = [
     {
         name: 'scores',
         description: 'Shows the scores of a user on a beatmap',
-        usage: 'scores [user] [id] [-page/-p] [-parse] [-grade] [-reverse]',
+        usage: 'scores [user] [id] [-page/-p] [-mods] [-modx] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'scores [user] [id] [sort] [reverse] [page] [detailed] [parse] [grade]',
         examples: [
             {
@@ -2527,7 +2531,7 @@ const misccommands = [
     }
 ];
 
-const   admincommands = [
+const admincommands = [
     {
         name: 'checkperms',
         description: 'Checks the permissions of the user',
@@ -2593,7 +2597,7 @@ const   admincommands = [
         aliases: [],
         options: [
             {
-                name: 'Type',
+                name: 'type',
                 type: 'string',
                 required: false,
                 description: 'The type of debug to perform',
@@ -2608,6 +2612,41 @@ const   admincommands = [
                 description: 'commandfile -> the id of the command to search for\ncommandfiletype -> the name of the command to search\nlogs -> the ID of the guild to send logs from\nclear -> the types of files to clear (read the options section)',
                 options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
                 defaultValue: 'commandfile -> latest command\ncommandfiletype -> list options\nlogs -> current server\n clear -> temporary files only',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            }
+        ]
+    },
+    {
+        name: 'get',
+        description: 'Gets details of a user/server/channel',
+        usage: 'get <type> <ID>',
+        slashusage: 'get <type> <ID>',
+        examples: [
+            {
+                text: 'PREFIXMSGget user 777125560869978132',
+                descriptor: 'Returns info for user with id 777125560869978132'
+            }
+        ],
+        aliases: [],
+        options: [
+            {
+                name: 'type',
+                type: 'string',
+                required: true,
+                description: 'The type of info to fetch',
+                options: ['user', 'server', 'channel',],
+                defaultValue: 'N/A',
+                examples: [''],
+                commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'id',
+                type: 'number',
+                required: true,
+                description: 'The ID to fetch',
+                options: ['N/A'],
+                defaultValue: 'N/A',
                 examples: [''],
                 commandTypes: ['message', 'interaction']
             }
