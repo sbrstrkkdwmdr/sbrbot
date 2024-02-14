@@ -2594,7 +2594,48 @@ const admincmds: commandInfo[] = [
         description: 'Runs a debugging command',
         usage: 'debug <type> [arg]',
         slashusage: 'debug <type> [arg]',
-        examples: [],
+        examples: [
+            {
+                text: 'PREFIXMSGdebug commandfile 1',
+                descriptor: 'Returns all files associated with the command matching ID 1'
+            },
+            {
+                text: 'PREFIXMSGdebug commandfiletype map',
+                descriptor: 'Returns all files associated with the command "map"'
+            },
+            {
+                text: 'PREFIXMSGdebug servers',
+                descriptor: 'Returns a list of all guilds the bot is in'
+            },
+            {
+                text: 'PREFIXMSGdebug channels',
+                descriptor: 'Returns a list of all channels in the current guild'
+            },
+            {
+                text: 'PREFIXMSGdebug users',
+                descriptor: 'Returns a list of all members in the current guild'
+            },
+            {
+                text: 'PREFIXMSGdebug forcetrack',
+                descriptor: 'Forces the osu!track to run a cycle (takes a minute to complete)'
+            },
+            {
+                text: 'PREFIXMSGdebug curcmdid',
+                descriptor: 'Returns the current command\'s ID'
+            },
+            {
+                text: 'PREFIXMSGdebug logs',
+                descriptor: 'Returns the logs associated with the current guild'
+            },
+            {
+                text: 'PREFIXMSGdebug clear all',
+                descriptor: 'Deletes all command-related files cached'
+            },
+            {
+                text: 'PREFIXMSGdebug maps name',
+                descriptor: 'Returns all maps stored in the cache, and lists them by name'
+            },
+        ],
         aliases: [],
         options: [
             {
