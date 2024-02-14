@@ -687,3 +687,7 @@ date_time
 commit: null
 changes:
 [FIX] lb empty list - modechecker was always returning null instead of 'osu' as a default value
+[FIX] lb - spacing
+[FIX] lb - page buttons not changing the page
+[FIX] lb - using buttons always changes server to current guild (rip global)
+[FIX] lb - cant go back to page 1 from page 2

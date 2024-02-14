@@ -718,6 +718,30 @@ export async function lb(input: extypes.commandInput) {
             if (!input.obj.message.embeds[0]) {
                 return;
             }
+
+            id = input.obj.message.embeds[0].author.name;
+            mode = input.obj.message.embeds[0].footer.text.split(' | ')[0];
+
+            page = 0;
+            if (input.button == 'BigLeftArrow') {
+                page = 1;
+            }
+            let pageFinder = input.obj.message.embeds[0].footer.text.split(' | ')[1].split('Page ')[1];
+            switch (input.button) {
+                case 'LeftArrow':
+                    page = +pageFinder.split('/')[0] - 1;
+                    break;
+                case 'RightArrow':
+                    page = +pageFinder.split('/')[0] + 1;
+                    break;
+                case 'BigRightArrow':
+                    page = +pageFinder.split('/')[1];
+                    break;
+            }
+
+            if (page < 2) {
+                page == 1;
+            }
             commanduser = input.obj.member.user;
         }
             break;
@@ -760,7 +784,6 @@ export async function lb(input: extypes.commandInput) {
         page = 1;
     }
     page--;
-
     let global = false;
     let guild = input.obj.guild;
     if (id == 'global') {
@@ -778,6 +801,7 @@ export async function lb(input: extypes.commandInput) {
         `Server leaderboard for ${guild?.name ?? "null"}`;
 
     const serverlb = new Discord.EmbedBuilder()
+        .setAuthor({ name: `${id ?? guild.id}` })
         .setFooter({
             text: `${embedStyle}`
         }).setColor(colours.embedColour.userlist.dec)
@@ -851,7 +875,7 @@ export async function lb(input: extypes.commandInput) {
                         rank:
                             `${rank}`.padEnd(10 - 2, ' ').substring(0, 8),
                         acc:
-                            `${acc}`,
+                            `${acc}`.substring(0, 5),
                         pp:
                             `${pp}pp`.padEnd(9 - 2, ' '),
                     }
@@ -864,18 +888,25 @@ export async function lb(input: extypes.commandInput) {
 
     const another = rarr.slice().sort((b, a) => b.rank - a.rank); //for some reason this doesn't sort even tho it does in testing
     rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `;
+    let pageOffset = page * 10;
     for (let i = 0; i < rarr.length && i < 10; i++) {
-        if (!another[i]) break;
-        rtxt += `\n#${i + 1 + ')'.padEnd(5, ' ')} ${another[i].discname}   ${another[i].osuname}   ${another[i].rank.toString().padEnd(10 - 2, ' ').substring(0, 8)}   ${another[i].acc}%   ${another[i].pp}  `;
+        const cur = another[i + pageOffset];
+        if (!cur) break;
+        const pad = i + 1 >= 10 ?
+            i + 1 >= 100 ?
+                3
+                : 4
+            : 5;
+        rtxt += `\n#${i + 1 + pageOffset + ')'.padEnd(pad, ' ')} ${cur.discname}   ${cur.osuname}   ${cur.rank.toString().padEnd(10 - 2, ' ').substring(0, 8)}   ${cur.acc}%   ${cur.pp}  `;
     }
 
     rtxt += `\n\``;
     serverlb.setDescription(rtxt);
-    serverlb.setFooter({ text: mode + ` | Page 1/${Math.ceil(rarr.length / 10)}` });
-    const endofcommand = new Date().getTime();
-    const timeelapsed = endofcommand - input.currentDate.getTime();
+    serverlb.setFooter({ text: mode + ` | Page ${page + 1}/${Math.ceil(rarr.length / 10)}` });
+    // const endofcommand = new Date().getTime();
+    // const timeelapsed = endofcommand - input.currentDate.getTime();
 
-    if (page <= 1) {
+    if (page < 1) {
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
