@@ -691,3 +691,4 @@ changes:
 [FIX] lb - page buttons not changing the page
 [FIX] lb - using buttons always changes server to current guild (rip global)
 [FIX] lb - cant go back to page 1 from page 2
+[FIX] debug - incorrect user and channel counts

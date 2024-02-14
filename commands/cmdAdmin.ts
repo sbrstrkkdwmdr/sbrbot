@@ -961,7 +961,7 @@ Created:   ${channel.createdAt}
                 fs.writeFileSync(`${filespath}/channels${serverId}.txt`, channels, 'utf-8');
 
                 usemsgArgs = {
-                    content: `${input.obj.guild.channels.cache.size} channels in guild ${serverId}`,
+                    content: `${curServer.channels.cache.size} channels in guild ${serverId}`,
                     files: [`${filespath}/channels${serverId}.txt`]
                 };
             }
@@ -1001,7 +1001,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                 fs.writeFileSync(`${filespath}/users${serverId}.txt`, users, 'utf-8');
 
                 usemsgArgs = {
-                    content: `${input.obj.guild.memberCount} users in guild ${serverId}`,
+                    content: `${curServer.memberCount} users in guild ${serverId}`,
                     files: [`${filespath}/users${serverId}.txt`]
                 };
             }
