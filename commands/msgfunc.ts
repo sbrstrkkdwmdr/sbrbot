@@ -773,7 +773,7 @@ export async function parseArgs_scoreList(input: extypes.commandInput) {
 }
 
 export async function parseArgsMode(input: extypes.commandInput) {
-    let mode = null;
+    let mode:osuApiTypes.GameMode = 'osu';
     if (input.args.includes('-osu')) {
         mode = 'osu';
         input.args.splice(input.args.indexOf('-osu'), 1);

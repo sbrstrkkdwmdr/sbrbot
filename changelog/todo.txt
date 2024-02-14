@@ -488,8 +488,9 @@ sbr-bug list -> "no bugs found
 
 #42)
     description: fix lb command always showing an empty list
+    mfw it just a single variable
     type: fix
-    status: WIP
+    status: FINISHED
     priority: medium
     request date: 2024-02-13 14:46 AEDT UTC+11
     finish date: 

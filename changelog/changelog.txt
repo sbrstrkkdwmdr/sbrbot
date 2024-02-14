@@ -681,3 +681,9 @@ changes:
 [QOL] extend map cache lifespan
 [FIX] `sbr-info` - incorrect link
 [FIX] cooldown even on non-cooldown commands
+
+VERSION 0.5.13
+date_time
+commit: null
+changes:
+[FIX] lb empty list - modechecker was always returning null instead of 'osu' as a default value
