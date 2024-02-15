@@ -366,10 +366,10 @@ export async function convert(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
+            num = +input.args.find((x) => !isNaN(+x));
+            input.args = input.args.filter(x => x != `${num}`);
             cat1 = input.args[0] ?? '';
             cat2 = input.args[1] ?? '';
-            num = +(input.args[2]) ?? 1;
-            numAsStr = input.args[2] ?? '1';
             if (!input.args[0]) {
                 cat1 = 'help';
             }
@@ -377,13 +377,12 @@ export async function convert(input: extypes.commandInput) {
                 cat2 = 'help';
             }
             if (isNaN(num)) {
-                num = 0;
-                numAsStr = '0';
+                num = 1;
             }
-            if (!input.args[2]) {
-                num = 0;
-                numAsStr = '0';
-            }
+            numAsStr = `${num}`;
+
+            // assume first numbered arg is val
+
         }
             break;
 
