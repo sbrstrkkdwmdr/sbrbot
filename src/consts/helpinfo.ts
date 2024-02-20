@@ -818,13 +818,23 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'lb',
-        description: 'Shows the leaderboard of the current server',
-        usage: 'lb [-(mode)]',
-        slashusage: 'lb [mode]',
+        description: 'Shows the osu! rankings of a server',
+        usage: 'lb [id] [-(mode)]',
+        slashusage: 'lb [id] [mode]',
         examples: [],
         aliases: [],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last],
         options: [
+            {
+                name: 'id',
+                type: 'string/integer',
+                required: false,
+                description: 'The server to get the rankings of. Use global to combine the rankings of all servers the bot is in.',
+                options: ['N/A'],
+                defaultValue: 'Current server',
+                examples: ['global', '1234567'],
+                commandTypes: ['message', 'interaction'],
+            },
             {
                 name: 'mode',
                 type: 'string',

@@ -264,6 +264,21 @@ export default (input: {
             name: 'lb',
             description: 'Displays the server leaderboard',
             dmPermission: false,
+            options: [
+                {
+                    name: 'id',
+                    description: 'The server to get the rankings of. Use global to combine the rankings of all servers the bot is in.',
+                    type: Discord.ApplicationCommandOptionType.String,
+                    required: false,
+                },
+                {
+                    name: 'mode',
+                    description: 'The mode to display the plays of',
+                    type: Discord.ApplicationCommandOptionType.String,
+                    required: false,
+                    choices: cmdconfig.modeopts
+                },
+            ]
         },
         {
             name: 'map',

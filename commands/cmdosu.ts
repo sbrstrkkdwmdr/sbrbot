@@ -695,6 +695,7 @@ export async function lb(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
+            id = input.obj.options.getString('id');
             const gamemode = input.obj.options.getString('mode');
             if (!gamemode || gamemode == 'osu' || gamemode == 'o' || gamemode == '0' || gamemode == 'standard' || gamemode == 'std') {
                 mode = 'osu';

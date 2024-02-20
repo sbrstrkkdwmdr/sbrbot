@@ -693,3 +693,4 @@ changes:
 [FIX] lb - cant go back to page 1 from page 2
 [FIX] debug - incorrect user and channel counts
 [QOL] convert - input value can be in any spot ie `[in] [out] [val]`, as well as `[val] [in] [out]` and `[in] [val] [out]` all are valid
+[QOL] lb - update interaction version
