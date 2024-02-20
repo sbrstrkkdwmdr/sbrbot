@@ -101,11 +101,10 @@ export default (input: {
     input.client.on('interactionCreate', async (interaction) => {
         if (!(interaction.type === Discord.InteractionType.ApplicationCommand)) { return; }
         interaction = interaction as Discord.ChatInputCommandInteraction;
-
         const currentDate = new Date();
         const absoluteID = func.generateId();
 
-        const args = null;
+        const args = [];
         const button = null;
 
         if (!input.oncooldown.has(interaction.member.user.id) && cd.cooldownCommands.includes(interaction.commandName)) {
@@ -158,29 +157,28 @@ export default (input: {
 
     function execCommand(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[], config: extypes.config) {
         let canReply = true;
+        
         if (!checks.botHasPerms(obj, input.client, ['ReadMessageHistory'])) {
             canReply = false;
         }
         if (!checks.botHasPerms(obj, input.client, ['SendMessages', /* 'ViewChannel' */]) && commandType == 'message') return;
-
         //if is thread check if bot has perms
         if (!checks.botHasPerms(obj, input.client, ['SendMessagesInThreads']) &&
             (obj.channel.type == Discord.ChannelType.PublicThread ||
                 obj.channel.type == Discord.ChannelType.PrivateThread)) return;
-
+     
         /**
          * help mode?
          * ie
          * sbr-conv -help -> sbr-help conv
          */
         const helpOverrides: string[] = ['-h', '-help', '--h', '--help'];
-        if (helpOverrides.some(x => args.includes(x))) {
+        if (helpOverrides.some(x => args?.includes(x))) {
             args = [command];
             command = 'help';
         }
 
         const allowed = execCommand_checker(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply, config);
-
         if (allowed == true) {
             execCommand_switch(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply);
         }
