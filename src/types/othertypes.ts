@@ -311,7 +311,7 @@ export type countryData = {
         openStreetMaps: string,
     },
     population: number,
-    gini: {},
+    gini: object,
     fifa: string,
     car: {
         signs: string[],

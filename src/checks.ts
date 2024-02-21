@@ -69,7 +69,7 @@ CHECKING CONFIG FOR ANY ERRORS
         if (Array.isArray(config["ownerusers"])) {
             tempIsArr = true;
             config["ownerusers"].forEach(x => {
-                if (typeof x !== "string") { smthWrong = true; };
+                if (typeof x !== "string") { smthWrong = true; }
             });
         }
         if (tempIsArr === false && smthWrong) {
@@ -157,7 +157,7 @@ CHECKS COMPLETE
 ====================================================
 `);
     return config as extypes.config;
-};
+}
 
 
 

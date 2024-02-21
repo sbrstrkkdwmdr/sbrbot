@@ -240,9 +240,6 @@ export async function get(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
 
     log.logCommand({
@@ -257,7 +254,6 @@ export async function get(input: extypes.commandInput) {
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-    let err: string = null;
     if (!type) {
         msgfunc.errorAndAbort(input, 'get', false, errors.uErr.arg.ms.replace('[ID]', 'TYPE'), false);
         return;
@@ -296,7 +292,6 @@ Badges: ${func.userbitflagsToEmoji(user?.flags)}
                 msgfunc.errorAndAbort(input, 'get', false, errors.uErr.arg.inaccess.replaceAll('[ID]', searchid).replaceAll('[TYPE]', type), false);
                 return;
             }
-            ;
         }
             break;
         case 'server': {
@@ -335,7 +330,7 @@ Type: ${Discord.ChannelType[channel.type]}
                     text += `Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is online are cached)`;
                 }
                 if (Discord.ChannelType[channel.type].toLowerCase().includes('voice')) {
-                    let tempchan = channel as Discord.VoiceBasedChannel;
+                    const tempchan = channel as Discord.VoiceBasedChannel;
                     text += `User limit: ${tempchan.userLimit == 0 ? '∞' : tempchan.userLimit}
 Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is online are cached)`;
                 }
@@ -1835,7 +1830,7 @@ export async function prefix(input: extypes.commandInput) {
 export async function purge(input: extypes.commandInput) {
     let commanduser: Discord.User;
     let purgeCount: number = 5;
-    let filter: {
+    const filter: {
         byUser: boolean,
         userid: string;
     } = {
@@ -1883,9 +1878,6 @@ export async function purge(input: extypes.commandInput) {
             commanduser = input.obj.author;
         }
             break;
-    }
-    if (input.overrides != null) {
-
     }
     //==============================================================================================================================================================================================
     log.logCommand({

@@ -727,9 +727,6 @@ export async function country(input: extypes.commandInput) {
         }
             break;
     }
-    if (input.overrides != null) {
-
-    }
     //==============================================================================================================================================================================================
 
     log.logCommand({
@@ -802,7 +799,7 @@ export async function country(input: extypes.commandInput) {
             : '');
     const capital = country.capital.length > 1 ?
         country.capital.join(', ') : country.capital[0];
-    let languages: string[] = [];
+    const languages: string[] = [];
     for (const lang in country.languages) {
         languages.push(country.languages[lang]);
     }
@@ -2798,7 +2795,7 @@ export async function weather(input: extypes.commandInput) {
 
             //get hours 
             const useHrs = weatherData.hourly.precipitation.slice(48, 71);
-            let hrArr = [];
+            const hrArr = [];
             let i = 0;
             for (const hour of useHrs) {
                 if (hour > 0) {

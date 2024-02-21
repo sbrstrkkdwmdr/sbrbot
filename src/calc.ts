@@ -101,7 +101,7 @@ export function toScientificNotation(number: number, significantFigures: number)
         }
         let mantissa = number.toFixed(significantFigures - 1);
         // Code to ensure the number has the correct number of significant figures
-        let xFig = significantFigures + (mantissa.match(/[-.]/g) || []).length;
+        const xFig = significantFigures + (mantissa.match(/[-.]/g) || []).length;
         mantissa = mantissa.slice(0, xFig);
 
         // this bit just breaks all the time and i cant be bothered to fix it properly
@@ -716,7 +716,6 @@ export function convert(input: string, output: string, value: number) {
     let usePre2 = true;
     let formula: string = 'Conversion not found';
     let type: string = 'Invalid';
-    let outvalue: number = NaN;
     let extra: string;
     let otherUnits: string = '-';
     let significantFigures: string = 'NaN';
@@ -826,7 +825,7 @@ export function convert(input: string, output: string, value: number) {
     }
     return {
         formula,
-        outvalue,
+        NaN,
         type,
         hasErr,
         extra,

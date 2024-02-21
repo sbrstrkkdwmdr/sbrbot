@@ -1352,17 +1352,17 @@ export const hasDaylight: {
     includes: string[],
 }[] = [
         //template 
-        {
-            start: 'x Sunday in March',
-            end: 'x Sunday in October',
-            includes: [],
-            check: ((date) => {
-                if (true) {
-                    return true;
-                }
-                return false;
-            })
-        },
+        // {
+        //     start: 'x Sunday in March',
+        //     end: 'x Sunday in October',
+        //     includes: [],
+        //     check: ((date) => {
+        //         if (true) {
+        //             return true;
+        //         }
+        //         return false;
+        //     })
+        // },
         //southern hemisphere
         {
             start: 'First Sunday in October',

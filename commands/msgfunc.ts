@@ -508,7 +508,7 @@ export async function parseArgs_scoreList_button(input: extypes.commandInput) {
     let acc = null;
     let combo = null;
     let miss = null;
-    let bpm = null;
+    const bpm = null;
     input.obj = (input.obj as Discord.ButtonInteraction);
 
     if (!input.obj.message.embeds[0]) {

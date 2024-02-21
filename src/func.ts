@@ -1479,7 +1479,7 @@ export function formatHours(arr: string[]) {
     }
 
     arr = arr.map(time => time.trim()).sort();
-    let formattedHours = [];
+    const formattedHours = [];
     let startHour = arr[0];
     let endHour = arr[0];
 

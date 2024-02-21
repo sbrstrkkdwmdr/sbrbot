@@ -727,7 +727,7 @@ export async function lb(input: extypes.commandInput) {
             if (input.button == 'BigLeftArrow') {
                 page = 1;
             }
-            let pageFinder = input.obj.message.embeds[0].footer.text.split(' | ')[1].split('Page ')[1];
+            const pageFinder = input.obj.message.embeds[0].footer.text.split(' | ')[1].split('Page ')[1];
             switch (input.button) {
                 case 'LeftArrow':
                     page = +pageFinder.split('/')[0] - 1;
@@ -885,11 +885,10 @@ export async function lb(input: extypes.commandInput) {
 
         }
     }
-    // let iterator = 0;
 
     const another = rarr.slice().sort((b, a) => b.rank - a.rank); //for some reason this doesn't sort even tho it does in testing
     rtxt = `\`Rank    Discord           osu!              Rank       Acc      pp       `;
-    let pageOffset = page * 10;
+    const pageOffset = page * 10;
     for (let i = 0; i < rarr.length && i < 10; i++) {
         const cur = another[i + pageOffset];
         if (!cur) break;
@@ -2863,7 +2862,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
     } else {
         switch (scoredetailed) {
             case 0: case 2: {
-                let temptxt = '\n' + scoresarg.string.join('');
+                const temptxt = '\n' + scoresarg.string.join('');
                 firstsEmbed.setDescription(
                     `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
                     + temptxt
@@ -3879,7 +3878,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     } else {
         switch (scoredetailed) {
             case 0: case 2: {
-                let temptxt = '\n' + scoresarg.string.join('');
+                const temptxt = '\n' + scoresarg.string.join('');
                 topEmbed.setDescription(
                     `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}`
                     + temptxt
@@ -4323,7 +4322,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     } else {
         switch (scoredetailed) {
             case 0: case 2: {
-                let temptxt = '\n' + scoresarg.string.join('');
+                const temptxt = '\n' + scoresarg.string.join('');
                 pinnedEmbed.setDescription(
                     `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}${reachedMaxCount ? '\nOnly first 500 scores are shown' : ''}`
                     + temptxt
@@ -5386,7 +5385,7 @@ ${srStr}
         } else {
             switch (scoredetailed) {
                 case 0: case 2: {
-                    let txt = `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
+                    const txt = `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
                     ${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}` + scoresarg.string.join('');
                     rsEmbed.setDescription(txt);
                 }
@@ -7401,7 +7400,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     } else {
         switch (scoredetailed) {
             case 0: case 2: {
-                let temptxt = '\n' + scoresarg.string.join('');
+                const temptxt = '\n' + scoresarg.string.join('');
                 scoresEmbed.setDescription(
                     `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}\n${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}`
                     + temptxt
@@ -8259,7 +8258,7 @@ export async function simulate(input: extypes.commandInput) {
     osufunc.debug(score, 'command', 'simulate', input.obj.guildId, 'ppCalc');
 
     let use300s = (n300 ?? 0);
-    let gotTot = (n300 ?? 0) + (n100 ?? 0) + (n50 ?? 0) + (nMiss ?? 0);
+    const gotTot = use300s + (n100 ?? 0) + (n50 ?? 0) + (nMiss ?? 0);
     if (gotTot != mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) {
         while (use300s < (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners)) {
             use300s++;
@@ -10374,7 +10373,7 @@ export async function maplocal(input: extypes.commandInput) {
     let circleob = 0;
     let sliderob = 0;
     let spinnerob = 0;
-    for (const object of mapParsed?.hitObjects) {
+    for (const object of mapParsed.hitObjects) {
         if (
             object.hasOwnProperty("repeats") ||
             object.hasOwnProperty("velocity") ||
@@ -11114,7 +11113,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
     } else {
         switch (mapDetailed) {
             case 0: case 2: {
-                let temptxt = '\n' + mapsarg.string.join('');
+                const temptxt = '\n' + mapsarg.string.join('');
                 mapList.setDescription(
                     `
 ${mapsarg.filter}
