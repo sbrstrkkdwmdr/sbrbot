@@ -862,6 +862,7 @@ export async function apiget(input: apiInput) {
                     break;
             }
         }
+        ''
 
         case 2: {
             switch (input.type) {
@@ -884,28 +885,28 @@ export async function apiget(input: apiInput) {
                     url += `scores/${input.params.mode ?? 'osu'}/${input.params.id}`;
                     break;
                 case 'scores_get_best': case 'osutop': case 'best':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/best?mode=${input.params.mode ?? 'osu'}`;
+                    url += `users/${input.params.username ?? input.params.userid}/scores/best?mode=${input.params.mode ?? 'osu'}&legacy_only=0`;
                     break;
                 case 'scores_get_first': case 'firsts':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/firsts?mode=${input.params.mode ?? 'osu'}`;
+                    url += `users/${input.params.username ?? input.params.userid}/scores/firsts?mode=${input.params.mode ?? 'osu'}&legacy_only=0`;
                     break;
                 case 'firsts_alt':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/firsts?limit=100`;
+                    url += `users/${input.params.username ?? input.params.userid}/scores/firsts?limit=100&legacy_only=0`;
                     break;
                 case 'scores_get_map': case 'maplb':
-                    url += `beatmaps/${input.params.id}/scores?mode=${input.params.mode ?? 'osu'}`;
+                    url += `beatmaps/${input.params.id}/scores?mode=${input.params.mode ?? 'osu'}&legacy_only=0`;
                     break;
                 case 'scores_get_pinned': case 'pinned':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/pinned?mode=${input.params.mode ?? 'osu'}`;
+                    url += `users/${input.params.username ?? input.params.userid}/scores/pinned?mode=${input.params.mode ?? 'osu'}&legacy_only=0`;
                     break;
                 case 'pinned_alt':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/pinned?limit=100&${input.params}`;
+                    url += `users/${input.params.username ?? input.params.userid}/scores/pinned?limit=100&${input.params}&legacy_only=0`;
                     break;
                 case 'scores_get_recent': case 'recent':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?mode=${input.params.mode ?? 'osu'}`;
+                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?mode=${input.params.mode ?? 'osu'}&legacy_only=0`;
                     break;
                 case 'recent_alt':
-                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?limit=100`;
+                    url += `users/${input.params.username ?? input.params.userid}/scores/recent?limit=100&legacy_only=0`;
                     break;
                 case 'user_get': case 'user':
                     url += `users/${input.params.username ?? input.params.userid}/${input.params.mode ?? 'osu'}`;
@@ -914,7 +915,7 @@ export async function apiget(input: apiInput) {
                     url += `users/${input.params.username ?? input.params.userid}/beatmapsets/most_played`;
                     break;
                 case 'user_get_scores_map':
-                    url += `beatmaps/${input.params.id}/scores/users/${input.params.username ?? input.params.userid}/all`;
+                    url += `beatmaps/${input.params.id}/scores/users/${input.params.username ?? input.params.userid}/all?legacy_only=0`;
                     break;
                 case 'user_get_maps':
                     url += `users/${input.params.username ?? input.params.userid}/beatmapsets/${input.params.category ?? 'favourite'}?limit=100`;
