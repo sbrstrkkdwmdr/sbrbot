@@ -205,6 +205,9 @@ export async function crash(input: extypes.commandInput) {
     process.exit(1);
 }
 
+/**
+ * DEPRECATED - use `find()` instead
+ */
 export async function get(input: extypes.commandInput) {
     let commanduser: Discord.User;
     type typex = 'server' | 'user' | 'channel';
@@ -224,7 +227,7 @@ export async function get(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
             type = input.obj.options.get('type') as unknown as typex;
-            searchid = input.obj.options.get('id')
+            searchid = input.obj.options.get('id');
         }
             //==============================================================================================================================================================================================
 
@@ -287,7 +290,7 @@ Account created ${func.dateToDiscordFormat(user?.createdAt)}
 Badges: ${func.userbitflagsToEmoji(user?.flags)}
 `
                     )
-                    .setThumbnail(user?.avatarURL()+'?size=512');
+                    .setThumbnail(user?.avatarURL() + '?size=512');
             } else {
                 msgfunc.errorAndAbort(input, 'get', false, errors.uErr.arg.inaccess.replaceAll('[ID]', searchid).replaceAll('[TYPE]', type), false);
                 return;
@@ -309,7 +312,7 @@ Roles: ${server.roles.cache.size}
 Emojis: ${server.emojis.cache.size}
 Stickers: ${server.stickers.cache.size}
 `)
-                    .setThumbnail(server.iconURL()+'?size=512')
+                    .setThumbnail(server.iconURL() + '?size=512')
                     ;
             } else {
                 msgfunc.errorAndAbort(input, 'get', false, errors.uErr.arg.inaccess.replaceAll('[ID]', searchid).replaceAll('[TYPE]', type), false);
@@ -334,7 +337,7 @@ Type: ${Discord.ChannelType[channel.type]}
                     text += `User limit: ${tempchan.userLimit == 0 ? '∞' : tempchan.userLimit}
 Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is online are cached)`;
                 }
-                embed.setDescription(text)
+                embed.setDescription(text);
             } else {
                 msgfunc.errorAndAbort(input, 'get', false, errors.uErr.arg.inaccess.replaceAll('[ID]', searchid).replaceAll('[TYPE]', type), false);
                 return;
@@ -1414,7 +1417,7 @@ export async function find(input: extypes.commandInput) {
     switch (type) {
         case 'user':
             {
-                let userfind;
+                let userfind: Discord.GuildMember;
                 input.client.guilds.cache.forEach(guild => {
                     if (guild.members.cache.has(id)) {
                         userfind = guild.members.cache.get(id);//.user.tag
@@ -1460,14 +1463,15 @@ export async function find(input: extypes.commandInput) {
                             }
                         }
 
-                        Embedr.setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`);
-                        Embedr.setThumbnail(`${userfind.user.avatarURL()}`);
-                        Embedr.setDescription(
-                            `ID: ${userfind.user.id}
+                        Embedr
+                            .setAuthor({ name: `USER ${id}` })
+                            .setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`)
+                            .setThumbnail(`${userfind.user.avatarURL()}`)
+                            .setDescription(
+                                `Account created ${func.dateToDiscordFormat(userfind.user?.createdAt)}
 Status: ${up}
-Account creation date: ${userfind.user.createdAt}
 Bot: ${userfind.user.bot}
-Flags: ${userfind.user.flags.toArray().join(',')}
+Flags/badges: ${func.userbitflagsToEmoji(userfind.user?.flags)}
 `);
                         return;
                     }
@@ -1479,27 +1483,26 @@ Flags: ${userfind.user.flags.toArray().join(',')}
                 if (!(cmdchecks.isOwner(commanduser.id, input.config) || (id == input.obj.guildId && cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
-                    let guildfind;
-                    input.client.guilds.cache.forEach(guild => {
-                        if (guild.id == id) {
-                            guildfind = guild;
-                            Embedr.setTitle(`${guildfind.name}`);
-                            if (guildfind.iconURL()) {
-                                Embedr.setThumbnail(`${guildfind.iconURL()}`);
-                            }
-                            if (guildfind.bannerURL()) {
-                                Embedr.setImage(`${guildfind.bannerURL()}`);
-                            }
-                            Embedr.setDescription(`
-ID: ${guildfind.id}
-Owner: <@${guildfind.ownerId}>
-Total user count: ${guildfind.members.cache.size}
-Total channel count: ${guildfind.channels.cache.size}
-Creation date: ${guildfind.createdAt}
+                    const guildfind = input.client.guilds.cache.get(id);
+                    const owner = await guildfind?.fetchOwner();
+                    Embedr
+                        .setAuthor({ name: `GUILD ${id}` })
+                        .setTitle(`${guildfind.name}`);
+                    if (guildfind.iconURL()) {
+                        Embedr.setThumbnail(`${guildfind.iconURL()}`);
+                    }
+                    if (guildfind.bannerURL()) {
+                        Embedr.setImage(`${guildfind.bannerURL()}`);
+                    }
+                    Embedr.setDescription(`
+Created ${func.dateToDiscordFormat(guildfind.createdAt)}
+Owner: <@${guildfind.ownerId}> | ${guildfind.ownerId} | ${owner?.displayName}
+Members: ${guildfind.members.cache.size}
+Channels: ${guildfind.channels.cache.size}
+Roles: ${guildfind.roles.cache.size}
+Emojis: ${guildfind.emojis.cache.size}
+Stickers: ${guildfind.stickers.cache.size}
 `);
-                            return;
-                        }
-                    });
                 }
             }
             break;
@@ -1512,17 +1515,29 @@ Creation date: ${guildfind.createdAt}
                     input.client.guilds.cache.forEach(guild => {
                         if (guild.channels.cache.has(id)) {
                             channelfind = guild.channels.cache.get(id);
-                            Embedr.setTitle(`Channel: #${channelfind.name}`);
+                            Embedr
+                                .setAuthor({ name: `CHANNEL ${id}` })
+                                .setTitle(`Channel: #${channelfind.name}`);
                             if (guild.iconURL()) {
                                 Embedr.setThumbnail(`${guild.iconURL()}`);
                             }
-                            Embedr.setDescription(`
-ID: ${channelfind.id}
+                            let txt = `
+Created ${func.dateToDiscordFormat(channelfind.createdAt)}
+Type: ${Discord.ChannelType[channelfind.type]}
 Topic: ${channelfind.topic}
-[Type: ${channelfind.type}](https://discord-api-types.dev/api/discord-api-types-v10/enum/ChannelType)
 Parent: ${channelfind.parent ? channelfind.parent.name : 'No parent'} ${channelfind.parent ? '| ' + channelfind.parent.id + ' | Type ' + channelfind.parent.type : ''}
 Guild: ${guild.name} | ${guild.id}
-`);
+`;
+                            if (Discord.ChannelType[channelfind.type].toLowerCase().includes('text')) {
+                                const tempchan = channelfind as Discord.TextBasedChannel;
+                                txt += `Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is online are cached)`;
+                            }
+                            if (Discord.ChannelType[channelfind.type].toLowerCase().includes('voice')) {
+                                const tempchan = channelfind as Discord.VoiceBasedChannel;
+                                txt += `User limit: ${tempchan.userLimit == 0 ? '∞' : tempchan.userLimit}
+Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is online are cached)`;
+                            }
+                            Embedr.setDescription(txt);
                             return;
                         }
                     });
@@ -1534,17 +1549,21 @@ Guild: ${guild.name} | ${guild.id}
                 if (!(cmdchecks.isOwner(commanduser.id, input.config) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
-                    let rolefind;
+                    let rolefind: Discord.Role;
                     input.client.guilds.cache.forEach(guild => {
                         if (guild.roles.cache.has(id)) {
                             rolefind = guild.roles.cache.get(id);
-                            Embedr.setTitle(`Role: ${rolefind.name}`);
+                            Embedr
+                                .setAuthor({ name: `ROLE ${id}` })
+                                .setTitle(`Role: ${rolefind.name}`);
                             if (guild.iconURL()) {
                                 Embedr.setThumbnail(`${guild.iconURL()}`);
                             }
+                            const clr = rolefind.color ?
+                                `${rolefind.color} | ${colourfunc.decToHex(rolefind.color)} | RGB ${colourfunc.decToRgb(rolefind.color)}` : 'null';
                             Embedr.setDescription(`
-ID: ${rolefind.id}
-Colour: [${rolefind.color ? rolefind.color : 'null'}](https://discord.js.org/#/docs/discord.js/main/class/Role?scrollTo=color)
+Created ${func.dateToDiscordFormat(rolefind.createdAt)}
+Colour: ${clr}
 Emoji: ${rolefind.unicodeEmoji ? rolefind.unicodeEmoji : 'null'}
 Guild: ${guild.name} | ${guild.id}
 `);
@@ -1556,22 +1575,30 @@ Guild: ${guild.name} | ${guild.id}
             }
             break;
         case 'emoji': {
-            let emojifind;
-            input.client.guilds.cache.forEach(guild => {
-                if (guild.emojis.cache.has(id)) {
-                    emojifind = guild.emojis.cache.get(id);
-                    Embedr.setTitle(`Emoji: ${emojifind.name}`);
-                    if (emojifind.url) {
-                        Embedr.setThumbnail(`${emojifind.url}`);
-                    }
-                    Embedr.setDescription(`
-ID: ${emojifind.id}
-Emoji: \`<:${guild.emojis.cache.get(id).name}:${id}>\`
-Guild: ${guild.name} | ${guild.id}
+            let emojifind = input.client.emojis.cache.get(id);
+            Embedr
+                .setAuthor({ name: `EMOJI ${id}` })
+                .setTitle(`Emoji: ${emojifind.name}`);
+            if (emojifind.url) {
+                Embedr.setThumbnail(`${emojifind.imageURL()}`);
+            }
+            Embedr.setDescription(`
+Created ${func.dateToDiscordFormat(emojifind.createdAt)}
+Emoji: \`<:${emojifind.name}:${id}>\`
+Guild: ${emojifind.guild.name} | ${emojifind.guild.id}
 `);
-                    return;
-                }
-            });
+        }
+            break;
+        case 'sticker': {
+            let stickerfind = await input.client.fetchSticker(id);
+            Embedr
+                .setAuthor({ name: `STICKER ${id}` })
+                .setTitle(`Sticker: ${stickerfind.name}`)
+                .setThumbnail(stickerfind.url)
+                .setDescription(`
+Created ${func.dateToDiscordFormat(stickerfind.createdAt)}
+Guild: ${stickerfind.guild.name} | ${stickerfind.guildId}
+`);
         }
             break;
         default:

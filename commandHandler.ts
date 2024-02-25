@@ -157,7 +157,7 @@ export default (input: {
 
     function execCommand(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[], config: extypes.config) {
         let canReply = true;
-        
+
         if (!checks.botHasPerms(obj, input.client, ['ReadMessageHistory'])) {
             canReply = false;
         }
@@ -166,7 +166,7 @@ export default (input: {
         if (!checks.botHasPerms(obj, input.client, ['SendMessagesInThreads']) &&
             (obj.channel.type == Discord.ChannelType.PublicThread ||
                 obj.channel.type == Discord.ChannelType.PrivateThread)) return;
-     
+
         /**
          * help mode?
          * ie
@@ -256,6 +256,7 @@ export default (input: {
             //admin
             'avatar', 'av', 'pfp',
             'checkperms', 'fetchperms', 'checkpermissions', 'permissions', 'perms',
+            'find', 'get',
             'prefix', 'servers', 'userinfo'
         ];
         const requireReactions: string[] = [
@@ -910,9 +911,12 @@ export default (input: {
                     userdata: input.userdata, trackDb: input.trackDb, guildSettings: input.guildSettings
                 });
                 break;
-            case 'get':
-                admincmds.get({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+            case 'find': case 'get':
+                admincmds.find({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
+            // case 'get':
+            //     admincmds.get({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+            //     break;
             case 'leaveguild': case 'leave':
                 // startType(obj);
                 admincmds.leaveguild({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });

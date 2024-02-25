@@ -2670,24 +2670,24 @@ const admincmds: commandInfo[] = [
         ]
     },
     {
-        name: 'get',
-        description: 'Gets details of a user/server/channel',
-        usage: 'get <type> <ID>',
-        slashusage: 'get <type> <ID>',
+        name: 'find',
+        description: 'Finds details of a user/guild/channel/role/emoji/sticker',
+        usage: 'find <type> <ID>',
+        slashusage: 'find <type> <ID>',
         examples: [
             {
-                text: 'PREFIXMSGget user 777125560869978132',
+                text: 'PREFIXMSGfind user 777125560869978132',
                 descriptor: 'Returns info for user with id 777125560869978132'
             }
         ],
-        aliases: [],
+        aliases: ['get'],
         options: [
             {
                 name: 'type',
                 type: 'string',
                 required: true,
                 description: 'The type of info to fetch',
-                options: ['user', 'server', 'channel',],
+                options: ['user', 'guild', 'channel', 'role', 'emoji', 'sticker'],
                 defaultValue: 'N/A',
                 examples: [''],
                 commandTypes: ['message', 'interaction']

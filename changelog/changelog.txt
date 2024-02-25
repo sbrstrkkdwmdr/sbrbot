@@ -695,3 +695,5 @@ changes:
 [QOL] convert - input value can be in any spot ie `[in] [out] [val]`, as well as `[val] [in] [out]` and `[in] [val] [out]` all are valid
 [QOL] lb - update interaction version
 [FIX] alt help command breaks interaction commands
+[REM] get command
+[ADD] find command - really old command i kinda forgot about
