@@ -1414,6 +1414,8 @@ export async function find(input: extypes.commandInput) {
         .setThumbnail(`https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
         .setDescription(`${type} does not exist or bot is not in the same guild as the ${type}`);
 
+    let tempCheckErr = true;
+
     switch (type) {
         case 'user':
             {
@@ -1473,9 +1475,14 @@ Status: ${up}
 Bot: ${userfind.user.bot}
 Flags/badges: ${func.userbitflagsToEmoji(userfind.user?.flags)}
 `);
+                        tempCheckErr = false;
                         return;
                     }
                 });
+                if (tempCheckErr) {
+                    msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', type).replace('[ID]', id), true)
+                    return;
+                }
             }
             break;
         case 'guild':
@@ -1484,17 +1491,18 @@ Flags/badges: ${func.userbitflagsToEmoji(userfind.user?.flags)}
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
                     const guildfind = input.client.guilds.cache.get(id);
-                    const owner = await guildfind?.fetchOwner();
-                    Embedr
-                        .setAuthor({ name: `GUILD ${id}` })
-                        .setTitle(`${guildfind.name}`);
-                    if (guildfind.iconURL()) {
-                        Embedr.setThumbnail(`${guildfind.iconURL()}`);
-                    }
-                    if (guildfind.bannerURL()) {
-                        Embedr.setImage(`${guildfind.bannerURL()}`);
-                    }
-                    Embedr.setDescription(`
+                    if (guildfind) {
+                        const owner = await guildfind?.fetchOwner();
+                        Embedr
+                            .setAuthor({ name: `GUILD ${id}` })
+                            .setTitle(`${guildfind.name}`);
+                        if (guildfind.iconURL()) {
+                            Embedr.setThumbnail(`${guildfind.iconURL()}`);
+                        }
+                        if (guildfind.bannerURL()) {
+                            Embedr.setImage(`${guildfind.bannerURL()}`);
+                        }
+                        Embedr.setDescription(`
 Created ${func.dateToDiscordFormat(guildfind.createdAt)}
 Owner: <@${guildfind.ownerId}> | ${guildfind.ownerId} | ${owner?.displayName}
 Members: ${guildfind.members.cache.size}
@@ -1503,6 +1511,10 @@ Roles: ${guildfind.roles.cache.size}
 Emojis: ${guildfind.emojis.cache.size}
 Stickers: ${guildfind.stickers.cache.size}
 `);
+                    } else {
+                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', type).replace('[ID]', id), true)
+                        return;
+                    }
                 }
             }
             break;
@@ -1538,9 +1550,14 @@ Guild: ${guild.name} | ${guild.id}
 Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is online are cached)`;
                             }
                             Embedr.setDescription(txt);
+                            tempCheckErr = false;
                             return;
                         }
                     });
+                    if (tempCheckErr) {
+                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', type).replace('[ID]', id), true)
+                        return;
+                    }
                 }
             }
             break;
@@ -1568,37 +1585,58 @@ Emoji: ${rolefind.unicodeEmoji ? rolefind.unicodeEmoji : 'null'}
 Guild: ${guild.name} | ${guild.id}
 `);
                             Embedr.setColor(rolefind.color);
+                            tempCheckErr = false;
                             return;
                         }
                     });
+                    if (tempCheckErr) {
+                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', type).replace('[ID]', id), true)
+                        return;
+                    }
                 }
             }
             break;
         case 'emoji': {
             let emojifind = input.client.emojis.cache.get(id);
-            Embedr
-                .setAuthor({ name: `EMOJI ${id}` })
-                .setTitle(`Emoji: ${emojifind.name}`);
-            if (emojifind.url) {
-                Embedr.setThumbnail(`${emojifind.imageURL()}`);
-            }
-            Embedr.setDescription(`
+            if (emojifind) {
+                Embedr
+                    .setAuthor({ name: `EMOJI ${id}` })
+                    .setTitle(`Emoji: ${emojifind.name}`);
+                if (emojifind.url) {
+                    Embedr.setThumbnail(`${emojifind.imageURL()}`);
+                }
+                Embedr.setDescription(`
 Created ${func.dateToDiscordFormat(emojifind.createdAt)}
 Emoji: \`<:${emojifind.name}:${id}>\`
 Guild: ${emojifind.guild.name} | ${emojifind.guild.id}
 `);
+            } else {
+                msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', type).replace('[ID]', id), true)
+                return;
+            }
         }
             break;
         case 'sticker': {
-            let stickerfind = await input.client.fetchSticker(id);
-            Embedr
-                .setAuthor({ name: `STICKER ${id}` })
-                .setTitle(`Sticker: ${stickerfind.name}`)
-                .setThumbnail(stickerfind.url)
-                .setDescription(`
+            let stickerfind: Discord.Sticker;
+            input.client.guilds.cache.forEach(guild => {
+                if (guild.stickers.cache.has(id)) {
+                    stickerfind = guild.stickers.cache.get(id);
+                    Embedr
+                        .setAuthor({ name: `STICKER ${id}` })
+                        .setTitle(`Sticker: ${stickerfind.name}`)
+                        .setThumbnail(stickerfind.url)
+                        .setDescription(`
 Created ${func.dateToDiscordFormat(stickerfind.createdAt)}
 Guild: ${stickerfind.guild.name} | ${stickerfind.guildId}
 `);
+tempCheckErr = false;
+                    return;
+                }
+            });
+            if(tempCheckErr){
+                msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', type).replace('[ID]', id), true)
+                return;
+            }
         }
             break;
         default:
