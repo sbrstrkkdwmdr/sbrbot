@@ -1464,11 +1464,14 @@ export async function find(input: extypes.commandInput) {
                     `;
                             }
                         }
+                        if (userfind?.user?.avatarURL()) {
+                            Embedr
+                                .setThumbnail(`${userfind?.user?.avatarURL()}`);
+                        }
 
                         Embedr
                             .setAuthor({ name: `USER ${id}` })
                             .setTitle(`${userfind.user.tag} ${userfind.user.bot ? '<:bot:958289108147523584>' : ''}`)
-                            .setThumbnail(`${userfind.user.avatarURL()}`)
                             .setDescription(
                                 `Account created ${func.dateToDiscordFormat(userfind.user?.createdAt)}
 Status: ${up}
@@ -1480,7 +1483,7 @@ Flags/badges: ${func.userbitflagsToEmoji(userfind.user?.flags)}
                     }
                 });
                 if (tempCheckErr) {
-                    msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true)
+                    msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true);
                     return;
                 }
             }
@@ -1512,7 +1515,7 @@ Emojis: ${guildfind.emojis.cache.size}
 Stickers: ${guildfind.stickers.cache.size}
 `);
                     } else {
-                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true)
+                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true);
                         return;
                     }
                 }
@@ -1555,7 +1558,7 @@ Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is onl
                         }
                     });
                     if (tempCheckErr) {
-                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true)
+                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true);
                         return;
                     }
                 }
@@ -1590,7 +1593,7 @@ Guild: ${guild.name} | ${guild.id}
                         }
                     });
                     if (tempCheckErr) {
-                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true)
+                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true);
                         return;
                     }
                 }
@@ -1611,7 +1614,7 @@ Emoji: \`<:${emojifind.name}:${id}>\`
 Guild: ${emojifind.guild.name} | ${emojifind.guild.id}
 `);
             } else {
-                msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true)
+                msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true);
                 return;
             }
         }
@@ -1629,12 +1632,12 @@ Guild: ${emojifind.guild.name} | ${emojifind.guild.id}
 Created ${func.dateToDiscordFormat(stickerfind.createdAt)}
 Guild: ${stickerfind.guild.name} | ${stickerfind.guildId}
 `);
-tempCheckErr = false;
+                    tempCheckErr = false;
                     return;
                 }
             });
-            if(tempCheckErr){
-                msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true)
+            if (tempCheckErr) {
+                msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true);
                 return;
             }
         }

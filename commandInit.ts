@@ -1168,8 +1168,8 @@ export default (input: {
             ]
         },
         {
-            name: 'get',
-            description: 'Gets details of a user/server/channel',
+            name: 'find',
+            description: 'Finds details of a user/guild/channel/role/emoji/sticker',
             dmPermission: false,
             options: [
                 {
@@ -1179,8 +1179,11 @@ export default (input: {
                     required: true,
                     choices: [
                         { name: 'User', value: 'user' },
-                        { name: 'Server', value: 'server' },
+                        { name: 'Guild (server)', value: 'guild' },
                         { name: 'Channel', value: 'channel' },
+                        { name: 'Role', value: 'role' },
+                        { name: 'Emoji', value: 'emoji' },
+                        { name: 'Sticker', value: 'sticker' },
                     ]
                 },
                 {
