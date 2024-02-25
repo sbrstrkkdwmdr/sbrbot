@@ -1480,7 +1480,7 @@ Flags/badges: ${func.userbitflagsToEmoji(userfind.user?.flags)}
                     }
                 });
                 if (tempCheckErr) {
-                    msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', type).replace('[ID]', id), true)
+                    msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true)
                     return;
                 }
             }
@@ -1512,7 +1512,7 @@ Emojis: ${guildfind.emojis.cache.size}
 Stickers: ${guildfind.stickers.cache.size}
 `);
                     } else {
-                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', type).replace('[ID]', id), true)
+                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true)
                         return;
                     }
                 }
@@ -1555,7 +1555,7 @@ Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is onl
                         }
                     });
                     if (tempCheckErr) {
-                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', type).replace('[ID]', id), true)
+                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true)
                         return;
                     }
                 }
@@ -1590,7 +1590,7 @@ Guild: ${guild.name} | ${guild.id}
                         }
                     });
                     if (tempCheckErr) {
-                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', type).replace('[ID]', id), true)
+                        msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true)
                         return;
                     }
                 }
@@ -1611,7 +1611,7 @@ Emoji: \`<:${emojifind.name}:${id}>\`
 Guild: ${emojifind.guild.name} | ${emojifind.guild.id}
 `);
             } else {
-                msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', type).replace('[ID]', id), true)
+                msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true)
                 return;
             }
         }
@@ -1634,7 +1634,7 @@ tempCheckErr = false;
                 }
             });
             if(tempCheckErr){
-                msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', type).replace('[ID]', id), true)
+                msgfunc.errorAndAbort(input, 'find', false, errors.uErr.arg.nf.replace('arg', `${type} with ID`).replace('[ID]', id), true)
                 return;
             }
         }
