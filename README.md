@@ -63,11 +63,11 @@ in the `./config/` folder rename `tempconfig.json` to `config.json`
 
 change the values in `config.json` </br>
 rename `TEMPLATE.sqlite` to `database.sqlite`</br>
-check `src/consts/emojis.ts` and `src/consts/buttons.ts` and change the emojis that are formatted as <:name:ID:> (reupload to a private server that the bot is in) </br>
+check `src/consts/emojis.ts` and `src/consts/buttons.ts` and change the emojis that are formatted as <:name:ID:> (reupload* to a private server that the bot is in) </br>
+emoji images are found under `./files/img/emojis/`
 to get the emoji id, type the emoji then put a `\` in front of it</br>
 to compile the bot the bot run `tsc` or `npm run build`</br>
 to run the compiled code run `npm run run` </br>
-
 
 ## image search setup
 
