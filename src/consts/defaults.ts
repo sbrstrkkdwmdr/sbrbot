@@ -47,11 +47,11 @@ const images = {
     },
     any: {
         name: 'any',
-        url: 'https://cdn.discordapp.com/attachments/762455063922737174/1022133648578854912/blank.png'
+        url: 'https://cdn.discordapp.com/attachments/762455063922737174/1022133648578854912/blank.png',
     }
 };
 
 export const invisbleChar = '⠀';
 
-export { defaultClientConfig, defaultGuildSettings, chocoMOF, images };
+export { chocoMOF, defaultClientConfig, defaultGuildSettings, images };
 

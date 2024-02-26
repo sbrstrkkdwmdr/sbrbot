@@ -1,6 +1,6 @@
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
-import { filespath, path } from '../path.js';
+import { filespath, path, precomppath } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
 import * as colourfunc from '../src/colourcalc.js';
@@ -1411,10 +1411,10 @@ export async function find(input: extypes.commandInput) {
 
     const Embedr = new Discord.EmbedBuilder()
         .setTitle(`Error`)
-        .setThumbnail(`https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
         .setDescription(`${type} does not exist or bot is not in the same guild as the ${type}`);
-
+    let nullIMG = true;
     let tempCheckErr = true;
+    const useFiles = [];
 
     switch (type) {
         case 'user':
@@ -1465,6 +1465,7 @@ export async function find(input: extypes.commandInput) {
                             }
                         }
                         if (userfind?.user?.avatarURL()) {
+                            nullIMG = false;
                             Embedr
                                 .setThumbnail(`${userfind?.user?.avatarURL()}`);
                         }
@@ -1500,6 +1501,7 @@ Flags/badges: ${func.userbitflagsToEmoji(userfind.user?.flags)}
                             .setAuthor({ name: `GUILD ${id}` })
                             .setTitle(`${guildfind.name}`);
                         if (guildfind.iconURL()) {
+                            nullIMG = false;
                             Embedr.setThumbnail(`${guildfind.iconURL()}`);
                         }
                         if (guildfind.bannerURL()) {
@@ -1526,6 +1528,7 @@ Stickers: ${guildfind.stickers.cache.size}
                 if (!(cmdchecks.isOwner(commanduser.id, input.config) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
+                    nullIMG = false;
                     let channelfind;
                     input.client.guilds.cache.forEach(guild => {
                         if (guild.channels.cache.has(id)) {
@@ -1572,6 +1575,7 @@ Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is onl
                     let rolefind: Discord.Role;
                     input.client.guilds.cache.forEach(guild => {
                         if (guild.roles.cache.has(id)) {
+                            nullIMG = false;
                             rolefind = guild.roles.cache.get(id);
                             Embedr
                                 .setAuthor({ name: `ROLE ${id}` })
@@ -1606,6 +1610,7 @@ Guild: ${guild.name} | ${guild.id}
                     .setAuthor({ name: `EMOJI ${id}` })
                     .setTitle(`Emoji: ${emojifind.name}`);
                 if (emojifind.url) {
+                    nullIMG = false;
                     Embedr.setThumbnail(`${emojifind.imageURL()}`);
                 }
                 Embedr.setDescription(`
@@ -1624,6 +1629,7 @@ Guild: ${emojifind.guild.name} | ${emojifind.guild.id}
             input.client.guilds.cache.forEach(guild => {
                 if (guild.stickers.cache.has(id)) {
                     stickerfind = guild.stickers.cache.get(id);
+                    nullIMG = false;
                     Embedr
                         .setAuthor({ name: `STICKER ${id}` })
                         .setTitle(`Sticker: ${stickerfind.name}`)
@@ -1649,14 +1655,19 @@ Valid Types: user, guild, channel, role, emoji
 `);
             break;
     }
-
+    if (nullIMG) {
+        useFiles.push(new Discord.AttachmentBuilder(precomppath + '/files/blank.png'));
+        Embedr
+            .setThumbnail(`attachment://blank.png`);
+    }
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
     const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            embeds: [Embedr]
+            embeds: [Embedr],
+            files: useFiles
         }
     }, input.canReply);
 

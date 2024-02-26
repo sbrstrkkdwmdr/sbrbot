@@ -699,3 +699,4 @@ changes:
 [ADD] find command - really old command i kinda forgot about
 [FIX] error handling for `find`
 [QOL] wording
+[QOL] change `find`'s default image
