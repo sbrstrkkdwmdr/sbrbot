@@ -700,3 +700,4 @@ changes:
 [FIX] error handling for `find`
 [QOL] wording
 [QOL] change `find`'s default image
+[FIX] inspire - some misformatted 

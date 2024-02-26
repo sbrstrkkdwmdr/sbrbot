@@ -132,13 +132,13 @@ export const templateStrings: quoteTemplate[] = [
         descriptors: 0,
     },
     {
-        string: 'ensure that your name1 feels descriptor1',
+        string: 'ensure that your name1ba feels descriptor1',
         names: 1,
         verbs: 0,
         descriptors: 1,
     },
     {
-        string: 'you can be the reason why a name1 verb1pr',
+        string: 'you can be the reason why a name1ba verb1pr',
         names: 1,
         verbs: 1,
         descriptors: 0,
@@ -1043,6 +1043,30 @@ export const verbs: verb[] = [
         ing: 'calling',
         present: 'calls',
     },
+    {
+        base: 'spontaneously combust',
+        past: 'spontaneously combusted',
+        ing: 'spontaneously combusting',
+        present: 'spontaneously combusts'
+    },
+    {
+        base: 'combust',
+        past: 'combusted',
+        ing: 'combusting',
+        present: 'combusts'
+    },
+    {
+        base: 'die',
+        past: 'died',
+        ing: 'dying',
+        present: 'dies'
+    },
+    {
+        base: 'kill',
+        past: 'killed',
+        ing: 'killing',
+        present: 'kills'
+    }
 ];
 
 export const descriptors: string[] = [
@@ -1085,5 +1109,6 @@ export const descriptors: string[] = [
     'horrible',
     'dangerous',
     'insane',
-    'ashamed'
+    'ashamed',
+    'explosive',
 ];
