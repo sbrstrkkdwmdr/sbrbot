@@ -817,13 +817,23 @@ const osucommands = [
     },
     {
         name: 'lb',
-        description: 'Shows the leaderboard of the current server',
-        usage: 'lb [-(mode)]',
-        slashusage: 'lb [mode]',
+        description: 'Shows the osu! rankings of a server',
+        usage: 'lb [id] [-(mode)]',
+        slashusage: 'lb [id] [mode]',
         examples: [],
         aliases: [],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last],
         options: [
+            {
+                name: 'id',
+                type: 'string/integer',
+                required: false,
+                description: 'The server to get the rankings of. Use global to combine the rankings of all servers the bot is in.',
+                options: ['N/A'],
+                defaultValue: 'Current server',
+                examples: ['global', '1234567'],
+                commandTypes: ['message', 'interaction'],
+            },
             {
                 name: 'mode',
                 type: 'string',
@@ -2593,7 +2603,48 @@ const admincommands = [
         description: 'Runs a debugging command',
         usage: 'debug <type> [arg]',
         slashusage: 'debug <type> [arg]',
-        examples: [],
+        examples: [
+            {
+                text: 'PREFIXMSGdebug commandfile 1',
+                descriptor: 'Returns all files associated with the command matching ID 1'
+            },
+            {
+                text: 'PREFIXMSGdebug commandfiletype map',
+                descriptor: 'Returns all files associated with the command "map"'
+            },
+            {
+                text: 'PREFIXMSGdebug servers',
+                descriptor: 'Returns a list of all guilds the bot is in'
+            },
+            {
+                text: 'PREFIXMSGdebug channels',
+                descriptor: 'Returns a list of all channels in the current guild'
+            },
+            {
+                text: 'PREFIXMSGdebug users',
+                descriptor: 'Returns a list of all members in the current guild'
+            },
+            {
+                text: 'PREFIXMSGdebug forcetrack',
+                descriptor: 'Forces the osu!track to run a cycle (takes a minute to complete)'
+            },
+            {
+                text: 'PREFIXMSGdebug curcmdid',
+                descriptor: 'Returns the current command\'s ID'
+            },
+            {
+                text: 'PREFIXMSGdebug logs',
+                descriptor: 'Returns the logs associated with the current guild'
+            },
+            {
+                text: 'PREFIXMSGdebug clear all',
+                descriptor: 'Deletes all command-related files cached'
+            },
+            {
+                text: 'PREFIXMSGdebug maps name',
+                descriptor: 'Returns all maps stored in the cache, and lists them by name'
+            },
+        ],
         aliases: [],
         options: [
             {
@@ -2618,24 +2669,24 @@ const admincommands = [
         ]
     },
     {
-        name: 'get',
-        description: 'Gets details of a user/server/channel',
-        usage: 'get <type> <ID>',
-        slashusage: 'get <type> <ID>',
+        name: 'find',
+        description: 'Finds details of a user/guild/channel/role/emoji/sticker',
+        usage: 'find <type> <ID>',
+        slashusage: 'find <type> <ID>',
         examples: [
             {
-                text: 'PREFIXMSGget user 777125560869978132',
+                text: 'PREFIXMSGfind user 777125560869978132',
                 descriptor: 'Returns info for user with id 777125560869978132'
             }
         ],
-        aliases: [],
+        aliases: ['get'],
         options: [
             {
                 name: 'type',
                 type: 'string',
                 required: true,
                 description: 'The type of info to fetch',
-                options: ['user', 'server', 'channel',],
+                options: ['user', 'guild', 'channel', 'role', 'emoji', 'sticker'],
                 defaultValue: 'N/A',
                 examples: [''],
                 commandTypes: ['message', 'interaction']
