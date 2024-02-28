@@ -30,13 +30,14 @@ export type commandInfo = {
 };
 
 export type commandInfoOptions = {
-    name: string,
-    type: string,
+    name: string, //name of option
+    type: string, //string, float etc.
     required: string | boolean,
     description: string,
-    options: string[],
-    defaultValue: string,
-    commandTypes: extypes.commandType[],
+    // format: string[], //how to use the option ie -x blah or x=blah
+    options: string[], //ie 1-100, true or false
+    defaultValue: string, //if command is not specified then it uses this value
+    commandTypes: extypes.commandType[], //message, interaction, button, link
     examples: string[],
     aliases?: string[];
 };
@@ -113,7 +114,8 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         options: ['true', 'false'],
         defaultValue: 'false',
         examples: ['reverse:true', '-reverse'],
-        commandTypes: ['message', 'interaction']
+        commandTypes: ['message', 'interaction'],
+        aliases: ['-rev']
     },
     {
         name: 'page',
@@ -122,9 +124,9 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         description: 'The page of scores to show',
         options: ['N/A'],
         defaultValue: '1',
-        aliases: ['p'],
         examples: ['page:6', '-p 4'],
-        commandTypes: ['message', 'interaction', 'button']
+        commandTypes: ['message', 'interaction', 'button'],
+        aliases: ['-p'],
     },
     {
         name: 'mapper',
@@ -134,7 +136,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         options: ['N/A'],
         defaultValue: 'null',
         examples: ['mapper:Sotarks'],
-        commandTypes: ['interaction']
+        commandTypes: ['message','interaction']
     },
     {
         name: 'mods',
@@ -144,7 +146,8 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         options: ['N/A'],
         defaultValue: 'null',
         examples: ['mods:HDHR', '-mods HDHR'],
-        commandTypes: ['interaction']
+        commandTypes: ['message', 'interaction'],
+        aliases: ['-mods']
     },
     {
         name: 'exact mods',
@@ -154,7 +157,8 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         options: ['N/A'],
         defaultValue: 'null',
         examples: ['-modx HDHR'],
-        commandTypes: ['interaction']
+        commandTypes: ['message', 'interaction'],
+        aliases: ['-modx', '-mx']
     },
     {
         name: 'detailed',
@@ -246,7 +250,8 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         options: ['>number', '<number'],
         defaultValue: 'null',
         examples: ['-miss <10', '-miss >20'],
-        commandTypes: ['message', 'interaction']
+        commandTypes: ['message', 'interaction'],
+        aliases: ['-misses']
     },
     {
         name: 'bpm',
@@ -2030,7 +2035,8 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: 'none',
                 examples: ['+HDDT', 'mods:HDDT'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-mods', '+[mods]']
             },
             {
                 name: 'accuracy',
@@ -2040,7 +2046,8 @@ const osucmds: commandInfo[] = [
                 options: ['0-100'],
                 defaultValue: '100',
                 examples: ['acc=98.79'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-acc']
             },
             {
                 name: 'combo',
@@ -2050,7 +2057,8 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: 'map max combo',
                 examples: ['combo=999'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-combo', '-x', 'maxcombo', '']
             },
             {
                 name: 'n300',
@@ -2060,7 +2068,8 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: 'calculated from accuracy',
                 examples: ['n300=1200'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-300s']
             },
             {
                 name: 'n100',
@@ -2070,7 +2079,8 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: 'calculated from accuracy',
                 examples: ['n100=12'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-100s']
             },
             {
                 name: 'n50',
@@ -2080,7 +2090,8 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: 'calculated from accuracy',
                 examples: ['n50=2'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-50s']
             },
             {
                 name: 'misses',
@@ -2090,7 +2101,8 @@ const osucmds: commandInfo[] = [
                 options: ['N/A'],
                 defaultValue: '0',
                 examples: ['miss=2'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-miss']
             },
             {
                 name: 'bpm',

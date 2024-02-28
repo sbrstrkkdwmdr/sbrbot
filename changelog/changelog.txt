@@ -702,3 +702,4 @@ changes:
 [QOL] change `find`'s default image
 [ADD] more stuff to inspire
 [FIX] inspire - some misformatted quotes
+[QOL] add command option aliases to helpinfo

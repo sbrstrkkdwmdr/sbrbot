@@ -7958,6 +7958,16 @@ export async function simulate(input: extypes.commandInput) {
                 combo = temp.value;
                 input.args = temp.newArgs;
             }
+            if (ctn.includes('-x')) {
+                const temp = func.parseArg(input.args, '-x', 'number', combo);
+                combo = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (ctn.includes('-maxcombo')) {
+                const temp = func.parseArg(input.args, '-maxcombo', 'number', combo);
+                combo = temp.value;
+                input.args = temp.newArgs;
+            }
             if (ctn.includes('-n300')) {
                 const temp = func.parseArg(input.args, '-n300', 'number', n300);
                 n300 = temp.value;
