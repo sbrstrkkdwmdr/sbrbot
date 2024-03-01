@@ -71,9 +71,12 @@ export async function _8ball(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
+    //agree, disagree, maybe, other
     const responses = [
-        'yes', 'no', 'What? no', '知らない', 'nope', 'yeahhh', 'a strong maybe', 'definitely maybe not', 'nah', 'yeah of course', '多分', '絶対!!!',
-        'come again?', 'ehhhh', '⠀', '💀', '🥺', 'bruhhh', 'splish splash your question is trash', 3
+        'yes', 'yeahhh', 'yeah of course', 'absolutely', 
+        'no', 'What? no', 'definitely maybe not', 'nah', 'nope',
+        '知らない', 'a strong maybe', '多分', 'come again?', 'ehhhh', '⠀', 'ask me later',
+        '💀', '🥺', 'bruhhh', 'splish splash your question is trash', 3, 'why would you ask me that? what is wrong with you man...', '😭'
     ];
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
@@ -1085,7 +1088,7 @@ export function say(input: extypes.commandInput) {
 /**
  * fuck you alex
  */
-export async function sex(input: extypes.commandInput){
+export async function sex(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
     switch (input.commandType) {
@@ -1128,10 +1131,10 @@ export async function sex(input: extypes.commandInput){
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const attachment = new Discord.AttachmentBuilder(`${precomppath}/files/img/smex.png`)
-    console.log(precomppath)
-    console.log(`${precomppath}/files/img/smex.png`)
-    console.log(path)
+    const attachment = new Discord.AttachmentBuilder(`${precomppath}/files/img/smex.png`);
+    console.log(precomppath);
+    console.log(`${precomppath}/files/img/smex.png`);
+    console.log(path);
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
