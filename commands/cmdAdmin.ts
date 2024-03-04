@@ -1102,47 +1102,50 @@ Joined(EPOCH):  ${member.joinedTimestamp}
         }
             break;
         case 'ls': {
+            const fields: Discord.RestOrArray<Discord.APIEmbedField> = [];
+            const files: string[] = [];
             //command data
             const cmdCache = fs.readdirSync(`${path}/cache/commandData`);
+            fields.push(intofield('Cache', cmdCache, `${filespath}/cmdcache.txt`));
             //debug
-            const debug = fs.readdirSync(`${path}/cache/debug`);
+            const debugCMD = fs.readdirSync(`${path}/cache/debug/command`);
+            const debugFP = fs.readdirSync(`${path}/cache/debug/fileparse`);
+            const debugCache = debugCMD.concat(debugFP);
+            fields.push(intofield('Debug', debugCache, `${filespath}/debugcache.txt`));
             //error files
             const errf = fs.readdirSync(`${path}/cache/errors`);
+            fields.push(intofield('Error files', errf, `${filespath}/errcache.txt`));
             //previous files
             const prevF = fs.readdirSync(`${path}/cache/previous`);
+            fields.push(intofield('Previous files', prevF, `${filespath}/prevcache.txt`));
             //map files
             const mapC = fs.readdirSync(`${path}/files/maps`);
+            fields.push(intofield('Map files', mapC, `${filespath}/mapcache.txt`));
+
             const embed = new Discord.EmbedBuilder()
                 .setTitle('Files')
-                .setFields(
-                    [
-                        {
-                            name: 'Cache',
-                            value: `Files: ${cmdCache.length}\n${form(cmdCache)}`
-                        },
-                        {
-                            name: 'Debug',
-                            value: `Files: ${debug.length}\n${form(debug)}`
-                        },
-                        {
-                            name: 'Error',
-                            value: `Files: ${errf.length}\n${form(errf)}`
-                        },
-                        {
-                            name: 'Previous',
-                            value: `Files: ${prevF.length}\n${form(prevF)}`
-                        },
-                        {
-                            name: 'Maps',
-                            value: `Files: ${mapC.length}\n${form(mapC)}`
-                        },
-                    ]
-                );
-            function form(s: string[]) {
-                return s.map(x => `\`${x}\`, `);
+                .setFields(fields);
+            function form(s: string[], variant?: number) {
+                return variant == 1 ?
+                    s.map(x => `\`${x}\`\n`).join('')
+                    :
+                    s.map(x => `\`${x}\`, `).join('');
+            }
+            function intofield(name: string, cache: string[], temppath: string, alt?:boolean) {
+                let value = `${alt ? 'Folders' : 'Files'}: ${cache.length}`;
+                if (cache.length > 25) {
+                    fs.writeFileSync(temppath, form(cache, 1), 'utf-8');
+                    files.push(temppath);
+                } else {
+                    value += `\n${form(cache)}`;
+                }
+                return {
+                    name, value
+                } as Discord.APIEmbedField;
             }
             usemsgArgs = {
-                embeds: [embed]
+                embeds: [embed],
+                files
             };
         }
             break;
