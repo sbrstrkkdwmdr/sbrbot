@@ -703,3 +703,4 @@ changes:
 [ADD] more stuff to inspire
 [FIX] inspire - some misformatted quotes
 [QOL] add command option aliases to helpinfo
+[QOL] add weather and tropicalweather to debug 
