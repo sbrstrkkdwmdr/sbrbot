@@ -1111,7 +1111,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             const debugCMD = fs.readdirSync(`${path}/cache/debug/command`);
             const debugFP = fs.readdirSync(`${path}/cache/debug/fileparse`);
             const debugCache = debugCMD.concat(debugFP);
-            fields.push(intofield('Debug', debugCache, `${filespath}/debugcache.txt`));
+            fields.push(intofield('Debug', debugCache, `${filespath}/debugcache.txt`, true));
             //error files
             const errf = fs.readdirSync(`${path}/cache/errors`);
             fields.push(intofield('Error files', errf, `${filespath}/errcache.txt`));
