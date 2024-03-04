@@ -347,7 +347,6 @@ export default (input: {
                 commands.country({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides });
                 break;
             case 'help': case 'commands': case 'list': case 'command':
-                startType(obj);
                 commands.help({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
             case 'info':
