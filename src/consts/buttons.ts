@@ -34,12 +34,5 @@ export const label = {
         time: '<:time:1174306276637941810>',
         weather: '<:weather:1174306274637258782>'
     },
-    page_old: {
-        first: '⬅',
-        previous: '◀',
-        search: '🔍',
-        next: '▶',
-        last: '➡',
-    },
 }
 
