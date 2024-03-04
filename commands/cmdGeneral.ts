@@ -2627,6 +2627,7 @@ export async function weather(input: extypes.commandInput) {
     }
 
     func.storeFile(locatingData, name, 'weatherlocationdata');
+    osufunc.debug(locatingData as object, 'command', 'weather', input.obj.guildId, 'locatingdata');
 
     const weatherEmbed = new Discord.EmbedBuilder()
         .setURL(`https://open-meteo.com/en/docs`)
@@ -2665,6 +2666,7 @@ export async function weather(input: extypes.commandInput) {
             weatherData = await func.getWeather(location.latitude, location.longitude, location, input.config);
         }
         func.storeFile(weatherData, location.id, `weatherdata`);
+        osufunc.debug(weatherData as object, 'command', 'weather', input.obj.guildId, 'weatherdata');
         if (typeof weatherData == 'string') {
             if (weatherData.includes("timeout")) {
                 weatherEmbed.setDescription(errors.timeout);
@@ -3017,6 +3019,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
         weatherData = await func.getTropical(input.config, type, system);
     }
     func.storeFile(weatherData, input.absoluteID, `${type}${type == 'storm' ? '-' + (weatherData?.data as othertypes.tsData)?.id : ''}-tropicalWeatherData`);
+    osufunc.debug(weatherData, 'command', 'tropicalweather', input.obj.guildId, 'weatherdata');
     const embed = new Discord.EmbedBuilder();
     let useComponents = [];
     let useAttach = [];
@@ -3133,6 +3136,7 @@ export async function tropicalWeather(input: extypes.commandInput) {
                         tempData = await func.getTropical(input.config, 'storm', x.id);
                     }
                     const inTempData = tempData.data as othertypes.tsData;
+                    osufunc.debug(inTempData, 'command', 'tropicalweather', input.obj.guildId, 'stormdata');
                     func.storeFile((tempData as othertypes.tsData), `${(inTempData as othertypes.tsData).id}`, `storm-tropicalweatherdata`);
                     if (inTempData?.category) {
                         second = inTempData?.category.toUpperCase() + ' ' + ifirst;

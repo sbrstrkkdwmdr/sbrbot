@@ -866,6 +866,12 @@ export async function debug(input: extypes.commandInput) {
                     case 'mapfile': case 'mf':
                         resString = 'map (file)';
                         break;
+                    case 'weather':
+                        resString = 'weather';
+                        break;
+                    case 'tropicalweather': case 'ts':
+                        resString = 'tropicalweather';
+                        break;
                     default:
                         resString = inputstr;
                         break;
@@ -888,6 +894,8 @@ export async function debug(input: extypes.commandInput) {
                     case 'simplay':
                     case 'userbeatmaps':
                     case 'whatif':
+                    case 'weather':
+                    case 'tropicalweather':
                         {
                             await findAndReturn(`${path}/cache/debug/command`, resString, cmdid);
                         }
@@ -900,7 +908,7 @@ export async function debug(input: extypes.commandInput) {
                         break;
                     default:
                         usemsgArgs = {
-                            content: `${inputstr && inputstr?.length > 0 ? `No files found for command "${inputstr}"\n` : ''}Valid options are: \`badges\`,\`bws\`,\`firsts\`,\`globals\`,\`map\`,\`maplb\`,\`osu\`,\`osutop\`,\`pinned\`,\`recent\`,\`recent_activity\`,\`scoreparse\`,\`scores\`,\`scorestats\`,\`simplay\`,\`userbeatmaps\`,\`whatif\`,`
+                            content: `${inputstr && inputstr?.length > 0 ? `No files found for command "${inputstr}"\n` : ''}Valid options are: \`badges\`,\`bws\`,\`firsts\`,\`globals\`,\`map\`,\`maplb\`,\`osu\`,\`osutop\`,\`pinned\`,\`recent\`,\`recent_activity\`,\`scoreparse\`,\`scores\`,\`scorestats\`,\`simplay\`,\`userbeatmaps\`,\`whatif\`, \`weather\`, \`tropicalweather\``
                         };
                         break;
                 }
