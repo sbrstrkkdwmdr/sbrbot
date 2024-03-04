@@ -917,6 +917,7 @@ export async function help(input: extypes.commandInput) {
     const fullCommandList = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
         .setTitle('Command List')
+        .setURL('https://sbrstrkkdwmdr.github.io/sbrbot/commands')
         .setDescription('use `/help <command>` to get more info on a command')
         .addFields([
             {
