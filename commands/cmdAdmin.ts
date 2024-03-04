@@ -656,7 +656,7 @@ export async function getUserAv(input: extypes.commandInput) {
 export async function debug(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
-    type debugtype = 'commandfile' | 'commandfiletype' | 'servers' | 'channels' | 'users' | 'forcetrack' | 'curcmdid' | 'logs' | 'clear' | 'maps';
+    type debugtype = 'commandfile' | 'commandfiletype' | 'servers' | 'channels' | 'users' | 'forcetrack' | 'curcmdid' | 'logs' | 'clear' | 'maps' | 'ls';
 
     let type: debugtype;
     let inputstr;
@@ -1101,9 +1101,54 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             clear(ctype);
         }
             break;
+        case 'ls': {
+            //command data
+            const cmdCache = fs.readdirSync(`${path}/cache/commandData`);
+            //debug
+            const debug = fs.readdirSync(`${path}/cache/debug`);
+            //error files
+            const errf = fs.readdirSync(`${path}/cache/errors`);
+            //previous files
+            const prevF = fs.readdirSync(`${path}/cache/previous`);
+            //map files
+            const mapC = fs.readdirSync(`${path}/files/maps`);
+            const embed = new Discord.EmbedBuilder()
+                .setTitle('Files')
+                .setFields(
+                    [
+                        {
+                            name: 'Cache',
+                            value: `Files: ${cmdCache.length}\n${form(cmdCache)}`
+                        },
+                        {
+                            name: 'Debug',
+                            value: `Files: ${debug.length}\n${form(debug)}`
+                        },
+                        {
+                            name: 'Error',
+                            value: `Files: ${errf.length}\n${form(errf)}`
+                        },
+                        {
+                            name: 'Previous',
+                            value: `Files: ${prevF.length}\n${form(prevF)}`
+                        },
+                        {
+                            name: 'Maps',
+                            value: `Files: ${mapC.length}\n${form(mapC)}`
+                        },
+                    ]
+                );
+            function form(s: string[]) {
+                return s.map(x => `\`${x}\`, `);
+            }
+            usemsgArgs = {
+                embeds: [embed]
+            };
+        }
+            break;
         default: {
             const expectArgs = [
-                'commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps',];
+                'commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps', 'ls'];
             usemsgArgs = {
                 content: `Valid types are: ${expectArgs.map(x => `\`${x}\``).join(', ')}`
             };

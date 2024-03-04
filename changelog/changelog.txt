@@ -704,3 +704,4 @@ changes:
 [FIX] inspire - some misformatted quotes
 [QOL] add command option aliases to helpinfo
 [QOL] add weather and tropicalweather to debug 
+[ADD] debug - add ls option
