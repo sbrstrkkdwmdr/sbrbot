@@ -2029,7 +2029,8 @@ const osucommands = [
                 options: ['N/A'],
                 defaultValue: 'none',
                 examples: ['+HDDT', 'mods:HDDT'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-mods', '+[mods]']
             },
             {
                 name: 'accuracy',
@@ -2039,7 +2040,8 @@ const osucommands = [
                 options: ['0-100'],
                 defaultValue: '100',
                 examples: ['acc=98.79'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-acc']
             },
             {
                 name: 'combo',
@@ -2049,7 +2051,8 @@ const osucommands = [
                 options: ['N/A'],
                 defaultValue: 'map max combo',
                 examples: ['combo=999'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-combo', '-x', 'maxcombo', '']
             },
             {
                 name: 'n300',
@@ -2059,7 +2062,8 @@ const osucommands = [
                 options: ['N/A'],
                 defaultValue: 'calculated from accuracy',
                 examples: ['n300=1200'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-300s']
             },
             {
                 name: 'n100',
@@ -2069,7 +2073,8 @@ const osucommands = [
                 options: ['N/A'],
                 defaultValue: 'calculated from accuracy',
                 examples: ['n100=12'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-100s']
             },
             {
                 name: 'n50',
@@ -2079,7 +2084,8 @@ const osucommands = [
                 options: ['N/A'],
                 defaultValue: 'calculated from accuracy',
                 examples: ['n50=2'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-50s']
             },
             {
                 name: 'misses',
@@ -2089,7 +2095,8 @@ const osucommands = [
                 options: ['N/A'],
                 defaultValue: '0',
                 examples: ['miss=2'],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message', 'interaction'],
+                aliases: ['-miss']
             },
             {
                 name: 'bpm',
@@ -2652,7 +2659,7 @@ const admincommands = [
                 type: 'string',
                 required: false,
                 description: 'The type of debug to perform',
-                options: ['commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps'],
+                options: ['commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps', 'ls'],
                 defaultValue: 'list options',
                 examples: [''],
                 commandTypes: ['message', 'interaction']
