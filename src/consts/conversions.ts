@@ -36,6 +36,7 @@ const namesList = {
     dist_in: ['Inch', 'in', '\'', '`'],
     dist_ft: ['Feet', 'ft', 'foot', '"', "''", '``'],
     dist_m: ['Metre', 'm', 'Meter'],
+    dist_footfield: ['Football Field', 'ff', 'footballfield'],
     dist_mi: ['Mile', 'mi'],
     dist_au: ['Astronomical Unit', 'au'],
     dist_ly: ['Light Year', 'ly'],
