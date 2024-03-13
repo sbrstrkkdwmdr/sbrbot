@@ -4,7 +4,7 @@ html {
 
 body {
     /* background-image: url(./docbg.jpg); */
-    background-image: url(./docbg.jpg);
+    background-image: linear-gradient(#FF006E, #FF6A00);
     background-repeat: initial;
     background-attachment: fixed;
     background-size: fill;
