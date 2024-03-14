@@ -94,8 +94,7 @@ export default (input: {
 
         const absoluteID = func.generateId();
         const button = null;
-        const overrides = null;
-        execCommand(command, 'message', message, overrides, button, absoluteID, currentDate, message.author.id, args, input.config);
+        execCommand(command, 'message', message, {}, button, absoluteID, currentDate, message.author.id, args, input.config);
     });
 
     input.client.on('interactionCreate', async (interaction) => {
@@ -152,7 +151,7 @@ export default (input: {
                 prefix: 'sbr-',
             };
         }
-        execCommand(interaction.commandName, 'interaction', interaction, null, button, absoluteID, currentDate, interaction.member.user.id, args, input.config);
+        execCommand(interaction.commandName, 'interaction', interaction, {}, button, absoluteID, currentDate, interaction.member.user.id, args, input.config);
     });
 
     function execCommand(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[], config: extypes.config) {
@@ -178,6 +177,10 @@ export default (input: {
             command = 'help';
         }
 
+        if(['list', 'commands'].some(x => command == x)){
+            overrides['ex'] = 'list';
+        }
+
         const allowed = execCommand_checker(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply, config);
         if (allowed == true) {
             execCommand_switch(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply);
@@ -189,13 +192,14 @@ export default (input: {
     function execCommand_checker(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[],
         canReply: boolean, config: extypes.config
     ) {
+        
         //perms bot needs
         const requireEmbedCommands: string[] = [
             //gen
             'changelog', 'clog',
             'convert', 'conv',
             'country',
-            'help', 'commands', 'list', 'command',
+            'help', 'commands', 'list', 'command', 'h',
             'info',
             'invite',
             'ping',
@@ -346,7 +350,7 @@ export default (input: {
             case 'country':
                 commands.country({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides });
                 break;
-            case 'help': case 'commands': case 'list': case 'command':
+            case 'help': case 'commands': case 'list': case 'command': case 'h':
                 commands.help({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
             case 'info':

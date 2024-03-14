@@ -914,36 +914,6 @@ export async function help(input: extypes.commandInput) {
     function cmdToTxt(input: helpinfo.commandInfo[]) {
         return '`' + input.map(x => x.name + '`').join(', `');
     }
-    const fullCommandList = new Discord.EmbedBuilder()
-        .setColor(colours.embedColour.info.dec)
-        .setTitle('Command List')
-        .setURL('https://sbrstrkkdwmdr.github.io/sbrbot/commands')
-        .setDescription('use `/help <command>` to get more info on a command')
-        .addFields([
-            {
-                name: 'Main commands',
-                value: cmdToTxt(helpinfo.cmds),
-                inline: false
-            },
-            {
-                name: 'osu! comands',
-                value: cmdToTxt(helpinfo.osucmds),
-                inline: false
-            },
-            {
-                name: 'Admin commands',
-                value: cmdToTxt(helpinfo.admincmds),
-                inline: false
-            },
-            {
-                name: 'Other/misc commands',
-                value: cmdToTxt(helpinfo.othercmds),
-                inline: false
-            },
-        ])
-        .setFooter({
-            text: 'Website: https://sbrstrkkdwmdr.github.io/sbrbot/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
-        });
 
     switch (input.commandType) {
         case 'message': {
@@ -1131,7 +1101,39 @@ export async function help(input: extypes.commandInput) {
         }
     }
     function getemb() {
-        if (command != null) {
+        if (command == 'list') {
+            useEmbeds.push(new Discord.EmbedBuilder()
+                .setColor(colours.embedColour.info.dec)
+                .setTitle('Command List')
+                .setURL('https://sbrstrkkdwmdr.github.io/sbrbot/commands')
+                .setDescription('use `/help <command>` to get more info on a command')
+                .addFields([
+                    {
+                        name: 'Main commands',
+                        value: cmdToTxt(helpinfo.cmds),
+                        inline: false
+                    },
+                    {
+                        name: 'osu! comands',
+                        value: cmdToTxt(helpinfo.osucmds),
+                        inline: false
+                    },
+                    {
+                        name: 'Admin commands',
+                        value: cmdToTxt(helpinfo.admincmds),
+                        inline: false
+                    },
+                    {
+                        name: 'Other/misc commands',
+                        value: cmdToTxt(helpinfo.othercmds),
+                        inline: false
+                    },
+                ])
+                .setFooter({
+                    text: 'Website: https://sbrstrkkdwmdr.github.io/sbrbot/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
+                }));
+            commandCategory = 'default';
+        } else if (command != null) {
             const fetchcmd = command.toString();
             const commandInfo = new Discord.EmbedBuilder()
                 .setColor(colours.embedColour.info.dec);
@@ -1147,7 +1149,6 @@ export async function help(input: extypes.commandInput) {
                 desc += buttonstxt;
                 commandInfo.setTitle('Buttons')
                     .setDescription(desc);
-
             } else if (helpinfo.cmds.find(obj => obj.name == fetchcmd)) {
                 commandfound = true;
                 commandCategory = 'gen';
@@ -1226,6 +1227,10 @@ export async function help(input: extypes.commandInput) {
                         commandCategory = 'misc';
                     }
                         break;
+                    case command.includes('all'): {
+                        command = 'list';
+                        getemb();
+                    }
                     default:
                         command = null;
                         getemb();
@@ -1240,7 +1245,21 @@ export async function help(input: extypes.commandInput) {
 
             useEmbeds.push(commandInfo);
         } else {
-            useEmbeds.push(fullCommandList);
+            useEmbeds.push(new Discord.EmbedBuilder()
+                .setColor(colours.embedColour.info.dec)
+                .setTitle('Help')
+                .setURL('https://sbrstrkkdwmdr.github.io/sbrbot/commands')
+                .setDescription(`Prefix is: ${input.config.prefix}
+- Arguments are shown as either <arg> or [arg]. Angled brackets "<arg>" are required and square brackets "[arg]" are optional.
+- Use \`/help <command>\` to get more info on a command or \`/help list\` to get a list of commands
+- \`/help category<category>\` will list only commands from that category
+- Arguments with spaces (such as names) can be specified with quotes ie. "saber strike"
+- You can use \`${input.config.prefix}osuset\` to automatically set your osu! username and gamemode for commands such as \`recent\` (rs)
+- Mods are specified with +[mods] (include), +mx [mods] (match exact) or +ex [mods] (exclude). +mx overrides +[mods]
+`)
+                .setFooter({
+                    text: 'Website: https://sbrstrkkdwmdr.github.io/sbrbot/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
+                }));
             commandCategory = 'default';
         }
     }

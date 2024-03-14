@@ -706,3 +706,4 @@ changes:
 [QOL] add weather and tropicalweather to debug 
 [ADD] debug - add ls option
 [QOL] command list links to website
+[QOL] added a general help page to `help`. use `sbr-list` or `sbr-help list` to see the list of commands.

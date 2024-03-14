@@ -401,7 +401,7 @@ const cmds: commandInfo[] = [
         examples: [
             {
                 text: 'PREFIXMSGhelp',
-                descriptor: 'Shows a list of all commands'
+                descriptor: 'Shows the general help page'
             },
             {
                 text: 'PREFIXMSGhelp convert',
@@ -412,11 +412,15 @@ const cmds: commandInfo[] = [
                 descriptor: 'Shows information about the recent command'
             },
             {
-                text: 'PREFIXMSG help categoryosu',
+                text: 'PREFIXMSGhelp categoryosu',
                 descriptor: 'Lists all commands in the osu category'
+            },
+            {
+                text: 'PREFIXMSGhelp list',
+                descriptor: 'Lists all available commands'
             }
         ],
-        aliases: ['commands', 'list', 'command'],
+        aliases: ['commands', 'list', 'command', 'h'],
         buttons: [buttonsObjs.label.extras.random, buttonsObjs.label.main.detailed],
         options: [
             {
@@ -424,7 +428,7 @@ const cmds: commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The command/category to get information about. Categories are always prefixed with `categoryX`.',
-                options: ['N/A'],
+                options: ['list', 'category(category)', '(command)'],
                 defaultValue: 'N/A',
                 examples: ['recent', 'command:osutop'],
                 commandTypes: ['message', 'interaction', 'button']
