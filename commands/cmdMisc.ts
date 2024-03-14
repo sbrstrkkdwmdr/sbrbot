@@ -15,6 +15,7 @@ import * as gifs from '../src/consts/gif.js';
 import * as helpinfo from '../src/consts/helpinfo.js';
 import * as insp from '../src/consts/inspire.js';
 import * as mainconst from '../src/consts/main.js';
+import * as response from '../src/consts/responses.js';
 import * as embedStuff from '../src/embed.js';
 import * as func from '../src/func.js';
 import * as log from '../src/log.js';
@@ -73,7 +74,7 @@ export async function _8ball(input: extypes.commandInput) {
 
     //agree, disagree, maybe, other
     const responses = [
-        'yes', 'yeahhh', 'yeah of course', 'absolutely', 
+        'yes', 'yeahhh', 'yeah of course', 'absolutely',
         'no', 'What? no', 'definitely maybe not', 'nah', 'nope',
         '知らない', 'a strong maybe', '多分', 'come again?', 'ehhhh', '⠀', 'ask me later',
         '💀', '🥺', 'bruhhh', 'splish splash your question is trash', 3, 'why would you ask me that? what is wrong with you man...', '😭'
@@ -81,11 +82,29 @@ export async function _8ball(input: extypes.commandInput) {
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
+    const value = Math.floor(Math.random() * 4);
+    let content: string;
+    switch (value) {
+        case 0:
+            content = response.affirm[Math.floor(Math.random() * response.affirm.length)];
+            break;
+        case 1:
+            content = response.negate[Math.floor(Math.random() * response.negate.length)];
+            break;
+        case 2:
+            content = response.huh[Math.floor(Math.random() * response.huh.length)];
+            break;
+        case 3: default:
+            content = response.other[Math.floor(Math.random() * response.other.length)];
+            break;
+    }
+
+
     const finalMessage = await msgfunc.sendMessage({
         commandType: input.commandType,
         obj: input.obj,
         args: {
-            content: `${responses[Math.floor(Math.random() * responses.length)]}`,
+            content,
         }
     }, input.canReply);
 

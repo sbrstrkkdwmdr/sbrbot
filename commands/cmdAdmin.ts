@@ -11,6 +11,7 @@ import * as emojis from '../src/consts/emojis.js';
 import * as errors from '../src/consts/errors.js';
 import * as helpinfo from '../src/consts/helpinfo.js';
 import * as mainconst from '../src/consts/main.js';
+import * as response from '../src/consts/responses.js';
 import * as embedStuff from '../src/embed.js';
 import * as func from '../src/func.js';
 import * as log from '../src/log.js';
@@ -656,7 +657,13 @@ export async function getUserAv(input: extypes.commandInput) {
 export async function debug(input: extypes.commandInput) {
     let commanduser: Discord.User;
 
-    type debugtype = 'commandfile' | 'commandfiletype' | 'servers' | 'channels' | 'users' | 'forcetrack' | 'curcmdid' | 'logs' | 'clear' | 'maps' | 'ls';
+    type debugtype =
+        'commandfile' | 'commandfiletype' |
+        'servers' | 'channels' | 'users' | 'maps' |
+        'forcetrack' | 'curcmdid' |
+        'logs' | 'ls' |
+        'clear' |
+        'ip' | 'tcp' | 'location';
 
     let type: debugtype;
     let inputstr;
@@ -1131,7 +1138,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                     :
                     s.map(x => `\`${x}\`, `).join('');
             }
-            function intofield(name: string, cache: string[], temppath: string, alt?:boolean) {
+            function intofield(name: string, cache: string[], temppath: string, alt?: boolean) {
                 let value = `${alt ? 'Folders' : 'Files'}: ${cache.length}`;
                 if (cache.length > 25) {
                     fs.writeFileSync(temppath, form(cache, 1), 'utf-8');
@@ -1148,6 +1155,11 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                 files
             };
         }
+            break;
+        case 'ip': case 'tcp': case 'location':
+            usemsgArgs = {
+                content: response.decline[Math.floor(Math.random() * response.decline.length)]
+            };
             break;
         default: {
             const expectArgs = [
