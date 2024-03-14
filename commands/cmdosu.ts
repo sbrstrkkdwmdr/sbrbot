@@ -2508,6 +2508,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
     const parseId = parseArgs.parseId ?? null;
 
     const exactMods = parseArgs.exactMods;
+    const excludeMods = parseArgs.excludeMods;
 
     const pp = parseArgs.pp;
     const score = parseArgs.score;
@@ -2837,6 +2838,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         filterRank,
         reverse,
         exactMods,
+        excludeMods,
         pp,
         score,
         acc,
@@ -3251,6 +3253,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             filteredMapper: null,
             filteredMods: null,
             exactMods: null,
+            excludeMods: null,
             filterMapTitle: null,
             filterRank: null,
             reverse: false,
@@ -3489,6 +3492,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     const parseId = parseArgs.parseId ?? null;
 
     const exactMods = parseArgs.exactMods;
+    const excludeMods = parseArgs.excludeMods;
 
     const pp = parseArgs.pp;
     const score = parseArgs.score;
@@ -3852,6 +3856,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             filterRank,
             reverse,
             exactMods,
+            excludeMods,
             pp,
             score,
             acc,
@@ -3971,6 +3976,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     const parseId = parseArgs.parseId ?? null;
 
     const exactMods = parseArgs.exactMods;
+    const excludeMods = parseArgs.excludeMods;
 
     const pp = parseArgs.pp;
     const score = parseArgs.score;
@@ -4297,6 +4303,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
             filterRank,
             reverse: false,
             exactMods,
+            excludeMods,
             pp,
             score,
             acc,
@@ -4409,6 +4416,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
     let filterRank: osuApiTypes.Rank = null;
 
     let exactMods = null;
+    const excludeMods = null;
 
     let pp = null;
     let score = null;
@@ -5361,6 +5369,7 @@ ${srStr}
                 filterRank,
                 reverse: false,
                 exactMods,
+                excludeMods,
                 pp,
                 score,
                 acc,
@@ -6884,6 +6893,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
     let parseId = null;
 
     const exactMods = null;
+    const excludeMods = null;
 
     const pp = null;
     const score = null;
@@ -7374,6 +7384,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
             reverse: reverse,
             mapidOverride: mapdata.id,
             exactMods,
+            excludeMods,
             pp,
             score,
             acc,

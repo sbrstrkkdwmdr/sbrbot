@@ -712,3 +712,4 @@ date_time
 commit: null
 changes: 
 [QOL] added a general help page to `help`. use `sbr-list` or `sbr-help list` to see the list of commands.
+[ADD] added exclude mods arg to some commands

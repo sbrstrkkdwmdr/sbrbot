@@ -22,6 +22,7 @@ export async function scoreList(
         filteredMapper: string,
         filteredMods: string,
         exactMods: string,
+        excludeMods: string,
         filterMapTitle: string,
         filterRank: osuapitypes.Rank,
         reverse: boolean,
@@ -75,6 +76,10 @@ export async function scoreList(
     if (asObj.filteredMods != null) {
         filtereddata = filtereddata.filter(array => array.score.mods.join('').toUpperCase().includes(calcmods.toUpperCase()));
         filterinfo += `\ninclude mods: ${calcmods}`;
+    }
+    if (asObj.excludeMods != null) {
+        filtereddata = filtereddata.filter(array => !array.score.mods.join('').toUpperCase().includes(calcmods.toUpperCase()));
+        filterinfo += `\nexclude mods: ${calcmods}`;
     }
 
     if (asObj.filterMapTitle != null) {
