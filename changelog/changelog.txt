@@ -1,11 +1,14 @@
-[ADD] = addition
-[REM] = removal
-[FIX] = fix
-[QOL] = quality of life
-[MAJ] = major breaking change
-[MIN] = minor change 
-
-commit: the final commit for that version
+// [ADD] = addition
+// [REM] = removal
+// [FIX] = fix
+// [QOL] = quality of life
+// [MAJ] = major breaking change
+// [MIN] = minor change 
+// 
+// commit: the final commit for that version
+// file created 7acfa41a7039ac1f377386d01c82d26fda777ccc
+// version 0.4.4
+// changelog b4 0.4.1 is inaccurate
 
 VERSION 
 0.0.0
@@ -714,3 +717,4 @@ changes:
 [QOL] added a general help page to `help`. use `sbr-list` or `sbr-help list` to see the list of commands.
 [ADD] added exclude mods arg to some commands
 [QOL] reworked mod args
+[QOL] changelog links to changelog.txt by default

@@ -270,7 +270,7 @@ export async function changelog(input: extypes.commandInput) {
         }
 
         const url = commit?.toString()?.includes('null') || useGit ?
-            `https://github.com/sbrstrkkdwmdr/sbrbot/`
+            `https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.txt`
             :
             `https://github.com/sbrstrkkdwmdr/sbrbot/commit/${commit.trim()}`;
 
