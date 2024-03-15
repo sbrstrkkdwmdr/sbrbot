@@ -3155,7 +3155,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
     let mods;
     if (mapmods) {
-        mods = osumodcalc.OrderMods(mapmods) + '';
+        mods = osumodcalc.OrderMods(mapmods).string + '';
     }
     const lbEmbed = new Discord.EmbedBuilder()
         .setFooter({
@@ -5179,7 +5179,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             case 0: {
                 rsEmbed
                     .setDescription(`
-[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
+[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()).string : ''} 
 ${totaldiff}⭐ | ${input.config.useEmojis.gamemodes ? emojis.gamemodes[curscore.mode] : curscore.mode}
 <t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}${func.separateNum(curscore.score)} | ${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}${curscore.replay ? ` | [REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)` : ''}
@@ -5191,7 +5191,7 @@ ${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\` | ${curscore.max
             case 1: default: {
                 rsEmbed
                     .setDescription(`
-[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
+[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()).string : ''} 
 ${totaldiff}⭐ | ${input.config.useEmojis.gamemodes ? emojis.gamemodes[curscore.mode] : curscore.mode}
 <t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}
@@ -5242,7 +5242,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
 
                 rsEmbed
                     .setDescription(`
-[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()) : ''} 
+[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()).string : ''} 
 ${totaldiff}⭐ | ${input.config.useEmojis.gamemodes ? emojis.gamemodes[curscore.mode] : curscore.mode}
 <t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}`)
@@ -6277,7 +6277,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             embedStyle = 'LC';
             scoreembed
                 .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + (input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**`) : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + (input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join('')).string}**`) : ''}
 <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 \`${hitlist}\`
 ${scoredata?.pp?.toFixed(2) ?? 'null '}pp
@@ -6288,7 +6288,7 @@ ${scoredata?.pp?.toFixed(2) ?? 'null '}pp
             embedStyle = 'L';
             scoreembed
                 .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + (input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**`) : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + (input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join('')).string}**`) : ''}
 <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | <t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:R>
 [Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
 \`${hitlist}\`
@@ -6351,7 +6351,7 @@ ${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata
                         name: 'Score details',
                         value:
                             `
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? ('| ' + (input.config.useEmojis.mods == true ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join(''))}**`)) : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? ('| ' + (input.config.useEmojis.mods == true ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join('')).string}**`)) : ''}
 ${hitlist}
 ${scoredata.max_combo == mxcombo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mxcombo}x**
 `                        ,
@@ -6662,7 +6662,7 @@ export async function scorepost(input: extypes.commandInput) {
         name: scoredata.user.username,
         fullTitle: `${scoredata.beatmapset.artist} - ${scoredata.beatmapset.title}`,
         version: scoredata.beatmap.version,
-        mods: osumodcalc.OrderMods(scoredata.mods.join('')),
+        mods: osumodcalc.OrderMods(scoredata.mods.join('')).string,
         acc: scoredata.accuracy * 100,
         diff: ppCalc[0].difficulty.stars,
         mapper: mapdata.beatmapset.creator,
@@ -8774,7 +8774,7 @@ export async function map(input: extypes.commandInput) {
     if (!mapid) {
         const temp = osufunc.getPreviousId('map', input.obj.guildId);
         mapid = temp.id;
-        if (!mapmods || osumodcalc.OrderMods(mapmods).length == 0) {
+        if (!mapmods || osumodcalc.OrderMods(mapmods).string.length == 0) {
             mapmods = temp.mods;
         }
     }

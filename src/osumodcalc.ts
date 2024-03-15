@@ -561,7 +561,7 @@ function ModIntToString(modInt: number) {
     if (modString.includes('SD') && modString.includes('PF')) {
         modString = modString.replace('SD', '');
     }
-    return OrderMods(modString);
+    return OrderMods(modString).string;
 }
 /**
  * 
@@ -593,7 +593,10 @@ function OrderMods(modString: string) {
         }
     }
 
-    return modStringArrayOrdered.join('');
+    return {
+        string: modStringArrayOrdered.join(''),
+        array: modStringArrayOrdered
+    };
 }
 
 
@@ -640,7 +643,7 @@ function shortModName(modstring: string) {
         .replaceAll('coop', 'KC')
         .replaceAll('co-op', 'KC')
         .replaceAll('scorev2', 'S2')
-        .replaceAll('mirror', 'MR'))
+        .replaceAll('mirror', 'MR')).string;
         ;
 }
 /**
@@ -650,7 +653,7 @@ function shortModName(modstring: string) {
  */
 // do the opposite of above
 function longModName(modstring: string) {
-    return (OrderMods(modstring))
+    return (OrderMods(modstring).string)
         .replaceAll(' ', '')
         .replaceAll('-', '')
         .replaceAll('NF', 'NoFail ')

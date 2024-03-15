@@ -59,8 +59,12 @@ export async function scoreList(
         filtereddata = filtereddata.filter(array => array.score.mods.length == 0);
         filterinfo += `\nexact mods: NM`;
     }
-    let calcmods = osumodcalc.OrderMods(asObj.filteredMods + '');
-    let calcmodsx = osumodcalc.OrderMods(asObj.exactMods + '');
+    const modOrder = osumodcalc.OrderMods(asObj.filteredMods + '');
+    let calcmods = modOrder.string;
+    const modOrderX = osumodcalc.OrderMods(asObj.exactMods + '');
+    let calcmodsx = modOrderX.string;
+    const modOrderEx = osumodcalc.OrderMods(asObj.excludeMods + '');
+    let calcmodsex = modOrderEx.string;
     if (calcmods.length < 1) {
         calcmods = 'NM';
         asObj.filteredMods = null;
@@ -69,17 +73,21 @@ export async function scoreList(
         calcmodsx = 'NM';
         asObj.exactMods = null;
     }
+    if (calcmodsex.length < 1) {
+        calcmodsex = 'NM';
+        asObj.excludeMods = null;
+    }
     if (asObj.exactMods != null) {
         filtereddata = filtereddata.filter(array => array.score.mods.join('').toUpperCase() == calcmodsx.toUpperCase());
         filterinfo += `\nexact mods: ${calcmodsx}`;
     }
     if (asObj.filteredMods != null) {
-        filtereddata = filtereddata.filter(array => array.score.mods.join('').toUpperCase().includes(calcmods.toUpperCase()));
+        filtereddata = filtereddata.filter(array => array.score.mods.some(x => modOrder.array.includes(x)));
         filterinfo += `\ninclude mods: ${calcmods}`;
     }
     if (asObj.excludeMods != null) {
-        filtereddata = filtereddata.filter(array => !array.score.mods.join('').toUpperCase().includes(calcmods.toUpperCase()));
-        filterinfo += `\nexclude mods: ${calcmods}`;
+        filtereddata = filtereddata.filter(array => array.score.mods.some(x => modOrderEx.array.includes(x)));
+        filterinfo += `\nexclude mods: ${calcmodsex}`;
     }
 
     if (asObj.filterMapTitle != null) {
@@ -297,10 +305,7 @@ export async function scoreList(
         if (!curscore.mods || curscore.mods.join('') == '' || curscore.mods == null || curscore.mods == undefined) {
             ifmods = '';
         } else {
-            ifmods =
-                config.useEmojis.mods == true ?
-                    curscore.mods.map(x => emojis.mods[x.toLowerCase()]).join(' ') :
-                    `**${osumodcalc.OrderMods(curscore.mods.join(''))}**`;
+            ifmods = `**${osumodcalc.OrderMods(curscore.mods.join('')).string}**`;
         }
 
         let pptxt: string;
@@ -364,7 +369,7 @@ export async function scoreList(
 
         let weighted;
         if (asObj.showWeights == true) {
-            (0.95 ** scoreoffset)
+            (0.95 ** scoreoffset);
             weighted = `\n${(tempMainpp * (curscore?.weight?.percentage / 100)).toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`;
         } else {
             weighted = '';
