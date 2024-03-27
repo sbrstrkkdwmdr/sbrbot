@@ -449,10 +449,21 @@ const cmds: commandInfo[] = [
     {
         name: 'info',
         description: 'Shows information about the bot',
-        usage: 'info',
+        usage: 'info [arg]',
         examples: [],
-        aliases: [],
-        options: []
+        aliases: ['[arg]'],
+        options: [
+            {
+                name: 'arg',
+                type: 'string',
+                required: false,
+                description: 'Return just that specific value',
+                options: ['uptime', 'version', 'server', 'website', 'timezone'],
+                defaultValue: 'null',
+                examples: ['N/A'],
+                commandTypes: ['message', 'interaction']
+            },
+        ]
     },
     {
         name: 'invite',

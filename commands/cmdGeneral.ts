@@ -1451,34 +1451,71 @@ export async function info(input: extypes.commandInput) {
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
         .setTitle('Bot Information');
-    if (input.args) {
+    if (input.args.length > 0) {
         ['uptime', 'version', 'server', 'website', 'timezone',];
         switch (input.args[0]) {
             case 'uptime':
                 Embed.setTitle('Total uptime')
-                    .setDescription(`${calc.secondsToTime(input.client.uptime / 1000)}`)
+                    .setDescription(`${calc.secondsToTime(input.client.uptime / 1000)}`);
                 break;
             case 'version':
                 Embed.setTitle('Bot version')
-                    .setDescription(`${pkgjson.version}`)
+                    .setDescription(`${pkgjson.version}`);
                 break;
             case 'server':
                 Embed.setTitle('Bot server')
-                    .setDescription(`${mainconst.serverURL}`)
+                    .setDescription(`${mainconst.serverURL}`);
                 break;
             case 'website':
                 Embed.setTitle('Bot website')
-                    .setDescription(`${mainconst.website}`)
+                    .setDescription(`${mainconst.website}`);
                 break;
-            case 'timezone':
+            case 'timezone': case 'tz': {
                 const starttime = new Date((fs.readFileSync(`${path}/debug/starttime.txt`)).toString());
 
-                starttime.toString().split('(')[1].split(')')[0]
+                const txt = starttime.toString().split('(')[1].split(')')[0];
+                //get utc offset
+                const found: timezoneList.timezone[] = [];
+
+                let frTemp: string[] = [];
+                for (const tz of timezoneList.timezones) {
+                    frTemp = frTemp.concat(tz.aliases);
+                }
+                const frWords = func.searchMatch(txt, func.removeDupes(frTemp));
+                //convert frWords to tzlist
+
+                for (let i = 0; i < timezoneList.timezones.length && i < 25; i++) {
+                    for (const tz of timezoneList.timezones) {
+                        if (tz.aliases.includes(frWords[i])) {
+                            found.push(tz);
+                        }
+                    }
+                }
+
+                const offset = found[0].offsetDirection == '+' ?
+                    found[0].offsetHours :
+                    -found[0].offsetHours;
+                let isOffset = false;
+                for (let i = 0; i < timezoneList.hasDaylight.length; i++) {
+                    const curTimeZone = timezoneList.hasDaylight[i];
+                    if (curTimeZone.includes.slice().map(x => x.trim().toUpperCase()).includes(txt.trim().toUpperCase()) && curTimeZone.check(input.currentDate)) {
+                        isOffset = true;
+                    }
+                }
+                if (txt.toLowerCase().includes('daylight')) isOffset = true;
+
+                const offsetToMinutes = isOffset ? Math.floor(offset * 60) + 60 : Math.floor(offset * 60);
+                const Hrs = offset > 0 ?
+                    Math.floor(isOffset ? offset + 1 : offset).toString().padStart(3, '+0') :
+                    Math.floor(isOffset ? offset + 1 : offset).toString().replace('-', '').padStart(3, '-0');
+                const offsetReadable = `UTC${Hrs}:${(Math.abs(offsetToMinutes % 60)).toString().padStart(2, '0')}`;
+
                 Embed.setTitle('Bot timezone')
-                    .setDescription(`${starttime.toString().split('(')[1].split(')')[0]}`)
+                    .setDescription(`${txt} (${offsetReadable})`);
+            }
                 break;
             default:
-                Embed.setDescription(`\`${input.args[0]}\` is an invalid argument`)
+                Embed.setDescription(`\`${input.args[0]}\` is an invalid argument`);
                 break;
         }
     } else {
@@ -2465,6 +2502,7 @@ export async function time(input: extypes.commandInput) {
                     isOffset = true;
                 }
             }
+            if (fetchtimezone.toLowerCase().includes('daylight')) isOffset = true;
 
             const offsetToMinutes = isOffset ? Math.floor(offset * 60) + 60 : Math.floor(offset * 60);
 

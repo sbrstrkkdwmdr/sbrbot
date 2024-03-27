@@ -718,3 +718,4 @@ changes:
 [ADD] added exclude mods arg to some commands
 [QOL] reworked mod args
 [QOL] changelog links to changelog.txt by default
+[QOL] add args to `info`
