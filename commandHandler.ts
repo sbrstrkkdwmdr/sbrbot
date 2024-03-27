@@ -177,8 +177,14 @@ export default (input: {
             command = 'help';
         }
 
-        if(['list', 'commands'].some(x => command == x)){
+        if (['list', 'commands'].some(x => command == x)) {
             overrides['ex'] = 'list';
+        }
+
+        const statCommands: string[] = ['uptime', 'version', 'server', 'website', 'timezone',];
+        if (statCommands.some(x => command == x)) {
+            args = [command];
+            command = 'info';
         }
 
         const allowed = execCommand_checker(command, commandType, obj, overrides, button, absoluteID, currentDate, userid, args, canReply, config);
@@ -192,7 +198,7 @@ export default (input: {
     function execCommand_checker(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[],
         canReply: boolean, config: extypes.config
     ) {
-        
+
         //perms bot needs
         const requireEmbedCommands: string[] = [
             //gen

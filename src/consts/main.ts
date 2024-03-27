@@ -221,6 +221,10 @@ export const versions: {
 
 export const linkInvite = 'There is currently no invite link publicly available';
 
+export const serverURL = 'https://discord.gg/3P7864BcRT'
+
+export const website = 'https://sbrstrkkdwmdr.github.io/sbrbot/commands'
+
 /**
  * NOTE - data saved to cache may need to be cleared as debugging files may be saved with different IDs
  */

@@ -1447,43 +1447,77 @@ export async function info(input: extypes.commandInput) {
     const serverpfx = curGuildSettings.dataValues.prefix;
 
     // const starttime = new Date((fs.readFileSync(`${path}/debug/starttime.txt`)).toString());
-
+    //
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
-        .setTitle('Bot Information')
-        .setFields([
-            {
-                name: 'Dependencies',
-                value:
-                    `
-Typescript: [${pkgjson.dependencies['typescript'].replace('^', '')}](https://www.typescriptlang.org/)
-Discord.js: [${pkgjson.dependencies['discord.js'].replace('^', '')}](https://discord.js.org/#/docs)
-rosu-pp: [${pkgjson.dependencies['rosu-pp'].replace('^', '')}](https://github.com/MaxOhn/rosu-pp-js)
-Axios: [${pkgjson.dependencies['axios'].replace('^', '')}](https://github.com/axios/axios)
-Sequelize: [${pkgjson.dependencies['sequelize'].replace('^', '')}](https://github.com/sequelize/sequelize/)
-ChartJS-to-image: [${pkgjson.dependencies['chartjs-to-image'].replace('^', '')}](https://github.com/typpo/chartjs-to-image)
-sqlite3: [${pkgjson.dependencies['sqlite3'].replace('^', '')}](https://github.com/TryGhost/node-sqlite3)
-`,
-                inline: true
-            },
-            {
-                name: 'Statistics',
-                value:
-                    `
-Uptime: ${calc.secondsToTime(input.client.uptime / 1000)}
-Shards: ${input?.client?.shard?.count ?? 1}
-Guilds: ${input.client.guilds.cache.size}
-Users: ${input.client.users.cache.size}`,
-                inline: true
-            }
-        ])
-        .setDescription(`
-[Created by SaberStrike](https://sbrstrkkdwmdr.github.io/)
-[Commands](https://sbrstrkkdwmdr.github.io/sbrbot/commands)
-Global prefix: ${input.config.prefix.includes('`') ? `"${input.config.prefix}"` : `\`${input.config.prefix}\``}
-Server prefix: ${serverpfx.includes('`') ? `"${serverpfx}"` : `\`${serverpfx}\``}
-Bot Version: ${pkgjson.version}
-`);
+        .setTitle('Bot Information');
+    if (input.args) {
+        ['uptime', 'version', 'server', 'website', 'timezone',];
+        switch (input.args[0]) {
+            case 'uptime':
+                Embed.setTitle('Total uptime')
+                    .setDescription(`${calc.secondsToTime(input.client.uptime / 1000)}`)
+                break;
+            case 'version':
+                Embed.setTitle('Bot version')
+                    .setDescription(`${pkgjson.version}`)
+                break;
+            case 'server':
+                Embed.setTitle('Bot server')
+                    .setDescription(`${mainconst.serverURL}`)
+                break;
+            case 'website':
+                Embed.setTitle('Bot website')
+                    .setDescription(`${mainconst.website}`)
+                break;
+            case 'timezone':
+                const starttime = new Date((fs.readFileSync(`${path}/debug/starttime.txt`)).toString());
+
+                starttime.toString().split('(')[1].split(')')[0]
+                Embed.setTitle('Bot timezone')
+                    .setDescription(`${starttime.toString().split('(')[1].split(')')[0]}`)
+                break;
+            default:
+                Embed.setDescription(`\`${input.args[0]}\` is an invalid argument`)
+                break;
+        }
+    } else {
+        Embed
+            .setFields([
+                {
+                    name: 'Dependencies',
+                    value:
+                        `
+    Typescript: [${pkgjson.dependencies['typescript'].replace('^', '')}](https://www.typescriptlang.org/)
+    Discord.js: [${pkgjson.dependencies['discord.js'].replace('^', '')}](https://discord.js.org/#/docs)
+    rosu-pp: [${pkgjson.dependencies['rosu-pp'].replace('^', '')}](https://github.com/MaxOhn/rosu-pp-js)
+    Axios: [${pkgjson.dependencies['axios'].replace('^', '')}](https://github.com/axios/axios)
+    Sequelize: [${pkgjson.dependencies['sequelize'].replace('^', '')}](https://github.com/sequelize/sequelize/)
+    ChartJS-to-image: [${pkgjson.dependencies['chartjs-to-image'].replace('^', '')}](https://github.com/typpo/chartjs-to-image)
+    sqlite3: [${pkgjson.dependencies['sqlite3'].replace('^', '')}](https://github.com/TryGhost/node-sqlite3)
+    `,
+                    inline: true
+                },
+                {
+                    name: 'Statistics',
+                    value:
+                        `
+    Uptime: ${calc.secondsToTime(input.client.uptime / 1000)}
+    Shards: ${input?.client?.shard?.count ?? 1}
+    Guilds: ${input.client.guilds.cache.size}
+    Users: ${input.client.users.cache.size}`,
+                    inline: true
+                }
+            ])
+            .setDescription(`
+    [Created by SaberStrike](https://sbrstrkkdwmdr.github.io/)
+    [Commands](https://sbrstrkkdwmdr.github.io/sbrbot/commands)
+    Global prefix: ${input.config.prefix.includes('`') ? `"${input.config.prefix}"` : `\`${input.config.prefix}\``}
+    Server prefix: ${serverpfx.includes('`') ? `"${serverpfx}"` : `\`${serverpfx}\``}
+    Bot Version: ${pkgjson.version}
+    `);
+    }
+
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
