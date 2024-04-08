@@ -4085,7 +4085,7 @@ export const values: convVal[] = [
                 to: 'Horse Power',
                 names: namesList.pow_horse,
                 func: (x) => {
-                    return x*1.3558179483 / 745.7;
+                    return x * 1.3558179483 / 745.7;
                 },
                 text: 'x*1.3558179483/745.7'
             },
@@ -4093,7 +4093,7 @@ export const values: convVal[] = [
                 to: 'BTU per second',
                 names: namesList.pow_btusec,
                 func: (x) => {
-                    return (x*1.3558179483) / 1055.0558526;
+                    return (x * 1.3558179483) / 1055.0558526;
                 },
                 text: 'x*1.3558179483/1055.0558526'
             },
@@ -4197,7 +4197,7 @@ export const values: convVal[] = [
                 to: 'Foot-pounds per minute',
                 names: namesList.pow_ftlbsec,
                 func: (x) => {
-                    return (x *745.7)/ 1.3558179483;
+                    return (x * 745.7) / 1.3558179483;
                 },
                 text: '(x*745.7)/1.3558179483'
             },
@@ -4245,7 +4245,7 @@ export const values: convVal[] = [
                 to: 'Watt',
                 names: namesList.pow_w,
                 func: (x) => {
-                    return x*1055.0558526;
+                    return x * 1055.0558526;
                 },
                 text: 'x*1055.0558526'
             },
@@ -4261,7 +4261,7 @@ export const values: convVal[] = [
                 to: 'Foot-pounds per minute',
                 names: namesList.pow_ftlbsec,
                 func: (x) => {
-                    return x*1055.0558526 / 1.3558179483;
+                    return x * 1055.0558526 / 1.3558179483;
                 },
                 text: 'x*1055.0558526/1.3558179483'
             },
@@ -4277,7 +4277,7 @@ export const values: convVal[] = [
                 to: 'Horse Power',
                 names: namesList.pow_horse,
                 func: (x) => {
-                    return (x*1055.0558526) / 745.7;
+                    return (x * 1055.0558526) / 745.7;
                 },
                 text: 'x*1055.0558526/745.7'
             },
@@ -5413,6 +5413,211 @@ export const values: convVal[] = [
                 text: toArbitrary.text
             },
             toArbitrary
+        ]
+    }
+];
+
+
+//-----------------------------------------------------------------------
+/**
+ * this section is for base number conversions
+ */
+
+const namesListBaseNum = {
+    dec: ['Decimal', 'dec', 'base10'],
+    bin: ['Binary', 'bin', 'base2'],
+    hex: ['Hexadecimal', 'hex', 'base16'],
+    oct: ['Octal', 'oct'],
+};
+
+export type baseNumConv = {
+    name: string,
+    names: string[],
+    calc: {
+        to: string,
+        names: string[];
+        func: (x: string) => string,
+    }[];
+};
+
+export const baseNumValues: baseNumConv[] = [
+    {
+        name: 'Binary',
+        names: namesListBaseNum.bin,
+        calc: [
+            {
+                to: 'Binary',
+                names: namesListBaseNum.bin,
+                func: (x) => {
+                    return x;
+                },
+            },
+            {
+                to: 'Octal',
+                names: namesListBaseNum.oct,
+                func: (x) => {
+                    return x;
+                },
+
+
+            },
+            {
+                to: 'Decimal',
+                names: namesListBaseNum.dec,
+                func: (x) => {
+                    const tempTxt = x.replace(/(.{1})/g, "$1 ").split('').map(e => +e).reverse();
+                    let number = 0;
+                    let base = 0;
+                    for (const tnum of tempTxt) {
+                        if (tnum == 1) {
+                            number += 2 ** base;
+                        }
+                        base++;
+                    }
+                    return x;
+                },
+
+
+            },
+            {
+                to: 'Hexadecimal',
+                names: namesListBaseNum.hex,
+                func: (x) => {
+                    return x;
+                },
+
+            },
+        ]
+    },
+    {
+        name: 'Octal',
+        names: namesListBaseNum.oct,
+        calc: [
+            {
+                to: 'Binary',
+                names: namesListBaseNum.bin,
+                func: (x) => {
+                    return x;
+                },
+
+
+            },
+            {
+                to: 'Octal',
+                names: namesListBaseNum.oct,
+                func: (x) => {
+                    return x;
+                },
+
+
+            },
+            {
+                to: 'Decimal',
+                names: namesListBaseNum.dec,
+                func: (x) => {
+                    return x;
+                },
+
+
+            },
+            {
+                to: 'Hexadecimal',
+                names: namesListBaseNum.hex,
+                func: (x) => {
+                    return x;
+                },
+
+            },
+        ]
+    },
+    {
+        name: 'Decimal',
+        names: namesListBaseNum.dec,
+        calc: [
+            {
+                to: 'Binary',
+                names: namesListBaseNum.bin,
+                func: (x) => {
+                    let tempNum = +x;
+                    let baseTxt = '';
+                    for (let i = 2 ** 32; i > 0; i / 2) {
+                        if (tempNum > i) {
+                            tempNum = tempNum - i;
+                            baseTxt += '1';
+                        } else {
+                            baseTxt += '0';
+                        }
+                    }
+                    return baseTxt;
+                },
+            },
+            {
+                to: 'Octal',
+                names: namesListBaseNum.oct,
+                func: (x) => {
+                    return x;
+                },
+
+
+            },
+            {
+                to: 'Decimal',
+                names: namesListBaseNum.dec,
+                func: (x) => {
+                    return x;
+                },
+
+
+            },
+            {
+                to: 'Hexadecimal',
+                names: namesListBaseNum.hex,
+                func: (x) => {
+                    return x;
+                },
+
+            },
+        ]
+    },
+    {
+        name: 'Hexadecimal',
+        names: namesListBaseNum.hex,
+        calc: [
+            {
+                to: 'Binary',
+                names: namesListBaseNum.bin,
+                func: (x) => {
+                    return x;
+                },
+
+
+            },
+            {
+                to: 'Octal',
+                names: namesListBaseNum.oct,
+                func: (x) => {
+                    return x;
+                },
+
+
+            },
+            {
+                to: 'Decimal',
+                names: namesListBaseNum.dec,
+                func: (x) => {
+                    return x;
+                },
+
+
+            },
+            {
+                to: 'Hexadecimal',
+                names: namesListBaseNum.hex,
+                func: (x) => {
+                    return x;
+                },
+
+            },
         ]
     }
 ];

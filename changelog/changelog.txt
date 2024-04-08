@@ -719,3 +719,4 @@ changes:
 [QOL] reworked mod args
 [QOL] changelog links to changelog.txt by default
 [QOL] add args to `info`
+[ADD] base number converter (WIP)

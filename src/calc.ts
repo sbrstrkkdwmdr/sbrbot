@@ -835,6 +835,17 @@ export function convert(input: string, output: string, value: number) {
     };
 }
 
+type numConvertType = 
+'binary' | 'decimal' | 'hexadecimal' | 'octal'
+
+/**
+ * convert different base systems to others
+ * @param inType what type the input is
+ * @param outType what type the output is
+ */
+export function numConvert(input: string, inType: numConvertType, outType: numConvertType){
+
+}
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
 // export {
