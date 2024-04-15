@@ -113,5 +113,9 @@ export const uErr = {
         type: 'arg [ID] is the wrong type',
         nf: 'Could not find arg [ID]',
         inaccess: 'Could not find [TYPE] with id [ID]'
+    },
+    conv: {
+        input: 'Input is an invalid type',
+        output: 'Output is an invalid type'
     }
 };

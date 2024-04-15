@@ -5423,7 +5423,7 @@ export const values: convVal[] = [
  * this section is for base number conversions
  */
 
-const namesListBaseNum = {
+export const namesListBaseNum = {
     dec: ['Decimal', 'dec', 'base10'],
     bin: ['Binary', 'bin', 'base2'],
     hex: ['Hexadecimal', 'hex', 'base16'],
@@ -5431,37 +5431,32 @@ const namesListBaseNum = {
 };
 
 const hexDig = [
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E'
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
 ];
 const octDig = [
-    0, 1, 2, 3, 4, 5, 6, 7,
+    '0', '1', '2', '3', '4', '5', '6', '7',
 ];
 
 export type baseNumConv = {
     name: string,
-    names: string[],
     calc: {
         to: string,
-        names: string[];
-        func: (x: string) => string,
+        func: (x: string | number) => string | number,
     }[];
 };
 
 export const baseNumValues: baseNumConv[] = [
     {
         name: 'Binary',
-        names: namesListBaseNum.bin,
         calc: [
             {
                 to: 'Binary',
-                names: namesListBaseNum.bin,
                 func: (x) => {
                     return x;
                 },
             },
             {
                 to: 'Octal',
-                names: namesListBaseNum.oct,
                 func: (x) => {
                     return x;
                 },
@@ -5470,9 +5465,8 @@ export const baseNumValues: baseNumConv[] = [
             },
             {
                 to: 'Decimal',
-                names: namesListBaseNum.dec,
                 func: (x) => {
-                    const tempTxt = x.replace(/(.{1})/g, "$1 ").split('').map(e => +e).reverse();
+                    const tempTxt = `${x}`.replace(/(.{1})/g, "$1 ").split('').map(e => +e).reverse();
                     let number = 0;
                     let base = 0;
                     for (const tnum of tempTxt) {
@@ -5481,14 +5475,13 @@ export const baseNumValues: baseNumConv[] = [
                         }
                         base++;
                     }
-                    return x;
+                    return number;
                 },
 
 
             },
             {
                 to: 'Hexadecimal',
-                names: namesListBaseNum.hex,
                 func: (x) => {
                     return x;
                 },
@@ -5498,11 +5491,9 @@ export const baseNumValues: baseNumConv[] = [
     },
     {
         name: 'Octal',
-        names: namesListBaseNum.oct,
         calc: [
             {
                 to: 'Binary',
-                names: namesListBaseNum.bin,
                 func: (x) => {
                     return x;
                 },
@@ -5511,7 +5502,6 @@ export const baseNumValues: baseNumConv[] = [
             },
             {
                 to: 'Octal',
-                names: namesListBaseNum.oct,
                 func: (x) => {
                     return x;
                 },
@@ -5520,16 +5510,22 @@ export const baseNumValues: baseNumConv[] = [
             },
             {
                 to: 'Decimal',
-                names: namesListBaseNum.dec,
                 func: (x) => {
-                    return x;
+                    const temptxt = `${x}`.replace(/(.{1})/g, "$1 ").split(' ');
+                    temptxt.reverse();
+                    let tempNum = 0;
+                    let i = 1;
+                    for (const temp of temptxt) {
+                        tempNum += i * octDig.indexOf(temp);
+                        i++;
+                    }
+                    return tempNum;
                 },
 
 
             },
             {
                 to: 'Hexadecimal',
-                names: namesListBaseNum.hex,
                 func: (x) => {
                     return x;
                 },
@@ -5539,28 +5535,25 @@ export const baseNumValues: baseNumConv[] = [
     },
     {
         name: 'Decimal',
-        names: namesListBaseNum.dec,
         calc: [
             {
                 to: 'Binary',
-                names: namesListBaseNum.bin,
                 func: (x) => {
                     let tempNum = +x;
                     let baseTxt = '';
-                    for (let i = 2 ** 32; i > 0; i / 2) {
-                        if (tempNum > i) {
+                    for (let i = 2 ** 32; i > 0 && i == Math.floor(i); i /= 2) {
+                        if (tempNum >= i) {
                             tempNum = tempNum - i;
                             baseTxt += '1';
                         } else {
                             baseTxt += '0';
                         }
                     }
-                    return baseTxt;
+                    return baseTxt.replace(/^0+/, '');
                 },
             },
             {
                 to: 'Octal',
-                names: namesListBaseNum.oct,
                 func: (x) => {
                     let temptxt: (string | number)[] = [];
                     for (let i = +x; i > 0; null) {
@@ -5576,7 +5569,6 @@ export const baseNumValues: baseNumConv[] = [
             },
             {
                 to: 'Decimal',
-                names: namesListBaseNum.dec,
                 func: (x) => {
                     return x;
                 },
@@ -5585,7 +5577,6 @@ export const baseNumValues: baseNumConv[] = [
             },
             {
                 to: 'Hexadecimal',
-                names: namesListBaseNum.hex,
                 func: (x) => {
                     let temptxt: (string | number)[] = [];
                     for (let i = +x; i > 0; null) {
@@ -5602,11 +5593,9 @@ export const baseNumValues: baseNumConv[] = [
     },
     {
         name: 'Hexadecimal',
-        names: namesListBaseNum.hex,
         calc: [
             {
                 to: 'Binary',
-                names: namesListBaseNum.bin,
                 func: (x) => {
                     return x;
                 },
@@ -5615,7 +5604,6 @@ export const baseNumValues: baseNumConv[] = [
             },
             {
                 to: 'Octal',
-                names: namesListBaseNum.oct,
                 func: (x) => {
                     return x;
                 },
@@ -5624,16 +5612,29 @@ export const baseNumValues: baseNumConv[] = [
             },
             {
                 to: 'Decimal',
-                names: namesListBaseNum.dec,
                 func: (x) => {
-                    return x;
+                    const temptxt = `${x}`.replace(/(.{1})/g, "$1 ").split(' ');
+                    temptxt.reverse();
+                    temptxt.shift();
+                    let tempNum = 0;
+                    let i = 0;
+                    console.log(temptxt);
+                    for (const temp of temptxt) {
+                        console.log('bussy');
+                        console.log(temp);
+                        console.log(hexDig.indexOf(temp));
+                        hexDig.indexOf(temp);
+                        tempNum += (i * 16) * hexDig.indexOf(temp);
+                        console.log(tempNum);
+                        i++;
+                    }
+                    return tempNum;
                 },
 
 
             },
             {
                 to: 'Hexadecimal',
-                names: namesListBaseNum.hex,
                 func: (x) => {
                     return x;
                 },

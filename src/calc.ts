@@ -1,5 +1,6 @@
 import * as stats from 'simple-statistics';
 import * as conversions from './consts/conversions.js';
+import * as err from './consts/errors.js';
 import * as func from './func.js';
 /**
  * 
@@ -835,17 +836,50 @@ export function convert(input: string, output: string, value: number) {
     };
 }
 
-type numConvertType = 
-'binary' | 'decimal' | 'hexadecimal' | 'octal'
+type numConvertType = 'Binary' | 'Octal' | 'Decimal' | 'Hexadecimal';
 
 /**
  * convert different base systems to others
  * @param inType what type the input is
  * @param outType what type the output is
  */
-export function numConvert(input: string, inType: numConvertType, outType: numConvertType){
-
+export function numConvert(input: string | number, inType: numConvertType, outType: numConvertType) {
+    let txt = err.uErr.conv.input;
+    let foundInit = false;
+    let foundExit = false;
+    /**
+     * 0 - binary
+     * 1 - octal
+     * 2 - decimal
+     * 3 - hexadecimal
+     */
+    let initBase: conversions.baseNumConv;
+    let fullCalc: (x: string | number) => string | number;
+    for (const base of conversions.baseNumValues) {
+        if (base.name == inType) {
+            initBase = base;
+            foundInit = true;
+            break;
+        }
+    }
+    if (foundInit) {
+        for (const calc of initBase.calc) {
+            if (calc.to == outType) {
+                fullCalc = calc.func;
+                foundExit = true;
+                break;
+            }
+        }
+        txt = err.uErr.conv.output;
+        if (foundExit) {
+            txt = `${fullCalc((input as string).toUpperCase().trim())}`;
+        }
+    }
+    return txt;
 }
+
+console.log(numConvert('3F', 'Hexadecimal', 'Decimal'))
+console.log(numConvert('32', 'Octal', 'Decimal'))
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
 // export {
