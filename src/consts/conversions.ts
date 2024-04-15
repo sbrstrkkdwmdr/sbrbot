@@ -5430,6 +5430,13 @@ const namesListBaseNum = {
     oct: ['Octal', 'oct'],
 };
 
+const hexDig = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E'
+];
+const octDig = [
+    0, 1, 2, 3, 4, 5, 6, 7,
+];
+
 export type baseNumConv = {
     name: string,
     names: string[],
@@ -5555,7 +5562,14 @@ export const baseNumValues: baseNumConv[] = [
                 to: 'Octal',
                 names: namesListBaseNum.oct,
                 func: (x) => {
-                    return x;
+                    let temptxt: (string | number)[] = [];
+                    for (let i = +x; i > 0; null) {
+                        const ex = i % 8;
+                        i = Math.floor(i / 8);
+                        temptxt.push(octDig[ex]);
+                    }
+                    temptxt.reverse();
+                    return temptxt.join('');
                 },
 
 
@@ -5573,7 +5587,14 @@ export const baseNumValues: baseNumConv[] = [
                 to: 'Hexadecimal',
                 names: namesListBaseNum.hex,
                 func: (x) => {
-                    return x;
+                    let temptxt: (string | number)[] = [];
+                    for (let i = +x; i > 0; null) {
+                        const ex = i % 16;
+                        i = Math.floor(i / 16);
+                        temptxt.push(hexDig[ex]);
+                    }
+                    temptxt.reverse();
+                    return temptxt.join('');
                 },
 
             },
