@@ -711,7 +711,7 @@ changes:
 [QOL] command list links to website
 
 VERSION 0.5.14
-date_time
+2024-04-16
 commit: null
 changes: 
 [QOL] added a general help page to `help`. use `sbr-list` or `sbr-help list` to see the list of commands.
