@@ -86,7 +86,7 @@ export async function scoreList(
         filterinfo += `\ninclude mods: ${calcmods}`;
     }
     if (asObj.excludeMods != null) {
-        filtereddata = filtereddata.filter(array => array.score.mods.some(x => modOrderEx.array.includes(x)));
+        filtereddata = filtereddata.filter(array => !array.score.mods.some(x => modOrderEx.array.includes(x)));
         filterinfo += `\nexclude mods: ${calcmodsex}`;
     }
 
