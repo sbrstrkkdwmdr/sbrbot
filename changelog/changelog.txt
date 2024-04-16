@@ -712,7 +712,7 @@ changes:
 
 VERSION 0.5.14
 2024-04-16
-commit: null
+commit: 348108a8847f83a112af434cb0f265ece946bf60
 changes: 
 [QOL] added a general help page to `help`. use `sbr-list` or `sbr-help list` to see the list of commands.
 [ADD] added exclude mods arg to some commands
