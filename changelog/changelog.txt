@@ -719,4 +719,5 @@ changes:
 [QOL] reworked mod args
 [QOL] changelog links to changelog.txt by default
 [QOL] add args to `info`
-[ADD] base number converter (WIP)
+[ADD] base number converter (useable in `convert` cmd)
+[QOL] reworked `convert` in order to support base number conversions

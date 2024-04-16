@@ -360,13 +360,12 @@ export async function convert(input: extypes.commandInput) {
     let commanduser;
     let cat1: string = '';
     let cat2: string = '';
-    let num: number = 1;
+    let num: string | number = 1;
     let numAsStr: string = num.toString();
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            num = +input.args.find((x) => !isNaN(+x));
             input.args = input.args.filter(x => x != `${num}`);
             cat1 = input.args[0] ?? '';
             cat2 = input.args[1] ?? '';
@@ -376,9 +375,38 @@ export async function convert(input: extypes.commandInput) {
             if (!input.args[1]) {
                 cat2 = 'help';
             }
-            if (isNaN(num)) {
-                num = 1;
+            if (input.args.includes('-i')) {
+                const temp = func.parseArg(input.args, '-i', 'string', cat1, null, true);
+                cat1 = temp.value;
+                input.args = temp.newArgs;
             }
+            if (input.args.includes('-in')) {
+                const temp = func.parseArg(input.args, '-in', 'string', cat1, null, true);
+                cat1 = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-input')) {
+                const temp = func.parseArg(input.args, '-input', 'string', cat1, null, true);
+                cat1 = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-o')) {
+                const temp = func.parseArg(input.args, '-o', 'string', cat2, null, true);
+                cat2 = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-out')) {
+                const temp = func.parseArg(input.args, '-out', 'string', cat2, null, true);
+                cat2 = temp.value;
+                input.args = temp.newArgs;
+            }
+            if (input.args.includes('-output')) {
+                const temp = func.parseArg(input.args, '-output', 'string', cat2, null, true);
+                cat2 = temp.value;
+                input.args = temp.newArgs;
+            }
+            input.args = msgfunc.cleanArgs(input.args);
+            num = input.args[2] ?? input.args[0];
             numAsStr = `${num}`;
 
             // assume first numbered arg is val
@@ -434,7 +462,6 @@ export async function convert(input: extypes.commandInput) {
     });
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
     const embedres = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec);
     // .setDescription('⠀');
@@ -526,6 +553,11 @@ export async function convert(input: extypes.commandInput) {
                     inline: true
                 },
                 {
+                    name: 'Number bases',
+                    value: 'Binary, Octal, Decimal, Hexadecimal',
+                    inline: true,
+                },
+                {
                     name: 'Non-measurements',
                     value: 'help, metricprefixes',
                     inline: false
@@ -601,7 +633,7 @@ q | quecto | 10^-30 | Nonillionth
 
     if (converting == true) {
         //find
-        const data = calc.convert(cat1, cat2, num);
+        const data = calc.convert(cat1, cat2, +num);
         embedres.setTitle(`${data.type} conversion`);
         embedres.addFields([
             {
@@ -624,6 +656,25 @@ SF:   ${data.significantFigures}\`
                 inline: false
             }
         ]);
+        if (data.formula.includes('not found')) {
+            const c1 = calc.numConvertTyping(cat1);
+            const c2 = calc.numConvertTyping(cat2);
+            const tdata = calc.numConvert(num, c1, c2);
+            if (!tdata.includes('INVALID')) {
+                embedres
+                    .setTitle('Base number conversion')
+                    .setFields([
+                        {
+                            name: 'Data',
+                            value: `\`${tdata}\``,
+                        },
+                        {
+                            name: 'Other types',
+                            value: 'Binary, Octal, Decimal, Hexadecimal'
+                        }
+                    ]);
+            }
+        }
         useEmbeds.push(embedres);
     }
 

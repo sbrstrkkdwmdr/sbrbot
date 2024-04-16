@@ -317,8 +317,8 @@ const cmds: commandInfo[] = [
     },
     {
         name: 'convert',
-        description: 'Converts a number from one unit to another',
-        usage: 'convert <from> [to] [number]',
+        description: 'Converts a number from one unit/base to another',
+        usage: 'convert [from] [to] [number]',
         slashusage: 'convert <from> [to] [number]',
         examples: [
             {
@@ -339,17 +339,17 @@ const cmds: commandInfo[] = [
                 description: 'The unit to convert from',
                 options: ['N/A'],
                 defaultValue: 'N/A',
-                examples: ['k', 'from:kelvin'],
+                examples: ['k', 'from:kelvin', '-i decimal'],
                 commandTypes: ['message', 'interaction']
             },
             {
                 name: 'to',
                 type: 'string',
                 required: true,
-                description: 'The unit to convert to see [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.html#conv) for units',
+                description: 'The unit to convert to. see [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.html#conv) for units',
                 options: ['help', 'SI units',],
                 defaultValue: 'N/A',
-                examples: ['c', 'to:celsius'],
+                examples: ['c', 'to:celsius', '-o hex'],
                 commandTypes: ['message', 'interaction']
             },
             {
