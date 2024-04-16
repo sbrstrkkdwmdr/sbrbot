@@ -1306,7 +1306,7 @@ export async function help(input: extypes.commandInput) {
 - \`/help category<category>\` will list only commands from that category
 - Arguments with spaces (such as names) can be specified with quotes ie. "saber strike"
 - You can use \`${input.config.prefix}osuset\` to automatically set your osu! username and gamemode for commands such as \`recent\` (rs)
-- Mods are specified with +[mods] (include), +mx [mods] (match exact) or +ex [mods] (exclude). +mx overrides +[mods]
+- Mods are specified with +[mods] (include), -mx [mods] (match exact) or -ex [mods] (exclude). +mx overrides +[mods]
 `)
                 .setFooter({
                     text: 'Website: https://sbrstrkkdwmdr.github.io/sbrbot/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
