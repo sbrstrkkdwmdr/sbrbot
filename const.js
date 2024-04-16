@@ -300,8 +300,8 @@ const generalcommands = [
     },
     {
         name: 'convert',
-        description: 'Converts a number from one unit to another',
-        usage: 'convert <from> [to] [number]',
+        description: 'Converts a number from one unit/base to another',
+        usage: 'convert [from] [to] [number]',
         slashusage: 'convert <from> [to] [number]',
         examples: [
             {
@@ -322,17 +322,17 @@ const generalcommands = [
                 description: 'The unit to convert from',
                 options: ['N/A'],
                 defaultValue: 'N/A',
-                examples: ['k', 'from:kelvin'],
+                examples: ['k', 'from:kelvin', '-i decimal'],
                 commandTypes: ['message', 'interaction']
             },
             {
                 name: 'to',
                 type: 'string',
                 required: true,
-                description: 'The unit to convert to see [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.html#conv) for units',
+                description: 'The unit to convert to. see [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.html#conv) for units',
                 options: ['help', 'SI units',],
                 defaultValue: 'N/A',
-                examples: ['c', 'to:celsius'],
+                examples: ['c', 'to:celsius', '-o hex'],
                 commandTypes: ['message', 'interaction']
             },
             {
@@ -395,7 +395,7 @@ const generalcommands = [
         examples: [
             {
                 text: 'PREFIXMSGhelp',
-                descriptor: 'Shows a list of all commands'
+                descriptor: 'Shows the general help page'
             },
             {
                 text: 'PREFIXMSGhelp convert',
@@ -406,11 +406,15 @@ const generalcommands = [
                 descriptor: 'Shows information about the recent command'
             },
             {
-                text: 'PREFIXMSG help categoryosu',
+                text: 'PREFIXMSGhelp categoryosu',
                 descriptor: 'Lists all commands in the osu category'
+            },
+            {
+                text: 'PREFIXMSGhelp list',
+                descriptor: 'Lists all available commands'
             }
         ],
-        aliases: ['commands', 'list', 'command'],
+        aliases: ['commands', 'list', 'command', 'h'],
         buttons: [buttonsObjs.label.extras.random, buttonsObjs.label.main.detailed],
         options: [
             {
@@ -418,7 +422,7 @@ const generalcommands = [
                 type: 'string',
                 required: false,
                 description: 'The command/category to get information about. Categories are always prefixed with `categoryX`.',
-                options: ['N/A'],
+                options: ['list', 'category(category)', '(command)'],
                 defaultValue: 'N/A',
                 examples: ['recent', 'command:osutop'],
                 commandTypes: ['message', 'interaction', 'button']
@@ -428,10 +432,21 @@ const generalcommands = [
     {
         name: 'info',
         description: 'Shows information about the bot',
-        usage: 'info',
+        usage: 'info [arg]',
         examples: [],
-        aliases: [],
-        options: []
+        aliases: ['[arg]'],
+        options: [
+            {
+                name: 'arg',
+                type: 'string',
+                required: false,
+                description: 'Return just that specific value',
+                options: ['uptime', 'version', 'server', 'website', 'timezone'],
+                defaultValue: 'null',
+                examples: ['N/A'],
+                commandTypes: ['message', 'interaction']
+            },
+        ]
     },
     {
         name: 'invite',
@@ -774,7 +789,7 @@ const osucommands = [
     {
         name: 'firsts',
         description: 'Shows the #1 global scores of a user',
-        usage: 'firsts [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
+        usage: 'firsts [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter] [grade]',
         examples: [
             {
@@ -1128,7 +1143,7 @@ const osucommands = [
     {
         name: 'nochokes',
         description: 'Shows the user\'s top plays if no scores had a miss',
-        usage: 'nochokes [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
+        usage: 'nochokes [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter] [grade]',
         examples: [
             {
@@ -1293,7 +1308,7 @@ const osucommands = [
     {
         name: 'osutop',
         description: 'Shows the top scores of a user',
-        usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
+        usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter] [grade]',
         examples: [
             {
@@ -1341,7 +1356,7 @@ const osucommands = [
     {
         name: 'pinned',
         description: 'Shows the pinned scores of a user',
-        usage: 'pinned [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
+        usage: 'pinned [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter] [grade]',
         examples: [
             {
@@ -1635,7 +1650,7 @@ const osucommands = [
     {
         name: 'recent',
         description: 'Shows the recent score(s) of a user',
-        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-mapper] [-mods] [-modx] [-reverse] [-(sort)] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
+        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'recent [user] [page] [mode] [list] [filter] [grade]',
         examples: [
             {
@@ -1673,8 +1688,8 @@ const osucommands = [
         ],
         aliases: ['rs', 'r', 'rt', 'rf', 'rm', 'rctb', 'rl', 'rlt', 'rlf', 'rlm', 'rlctb', 'rsbest', 'recentbest', 'rb'],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.map, buttonsObjs.label.extras.user],
-        options: scoreListCommandOptions.slice(0, 8).concat(
-            scoreListCommandOptions.slice(10))
+        options: scoreListCommandOptions.slice(0, 9).concat(
+            scoreListCommandOptions.slice(11))
             .concat([
                 {
                     name: 'list',
@@ -1917,7 +1932,7 @@ const osucommands = [
     {
         name: 'scores',
         description: 'Shows the scores of a user on a beatmap',
-        usage: 'scores [user] [id] [-page/-p] [-mods] [-modx] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
+        usage: 'scores [user] [id] [-page/-p] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'scores [user] [id] [sort] [reverse] [page] [detailed] [parse] [grade]',
         examples: [
             {
@@ -2964,4 +2979,8 @@ const conversionData = {
     speed_kt: ['Knot', 'kt', 'nmi h⁻¹', 'nmih', 'nmh', 'Nautical miles per hour'],
     speed_ms: ['Metres per second', 'm s⁻¹', 'ms', 'mps', 'm/s',],
     speed_c: ['Light', 'c', 'lightspeed'],
+    base_bin: ['Binary', 'bin', 'base2'],
+    base_oct: ['Octal', 'oct', 'base8'],
+    base_dec: ['Decimal', 'dec', 'base10'],
+    base_hex: ['Hexadecimal', 'hex', 'base16'],
 }
