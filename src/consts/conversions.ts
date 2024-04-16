@@ -5424,10 +5424,10 @@ export const values: convVal[] = [
  */
 
 export const namesListBaseNum = {
-    dec: ['Decimal', 'dec', 'base10'],
-    bin: ['Binary', 'bin', 'base2'],
-    hex: ['Hexadecimal', 'hex', 'base16'],
-    oct: ['Octal', 'oct'],
+    bin: ['binary', 'bin', 'base2'],
+    oct: ['octal', 'oct', 'base8'],
+    dec: ['decimal', 'dec', 'base10'],
+    hex: ['hexadecimal', 'hex', 'base16'],
 };
 
 const hexDig = [
@@ -5458,7 +5458,9 @@ export const baseNumValues: baseNumConv[] = [
             {
                 to: 'Octal',
                 func: (x) => {
-                    return x;
+                    let init = parseInt(x as string, 2);
+                    let temp = init.toString(8);
+                    return temp;
                 },
 
 
@@ -5466,16 +5468,8 @@ export const baseNumValues: baseNumConv[] = [
             {
                 to: 'Decimal',
                 func: (x) => {
-                    const tempTxt = `${x}`.replace(/(.{1})/g, "$1 ").split('').map(e => +e).reverse();
-                    let number = 0;
-                    let base = 0;
-                    for (const tnum of tempTxt) {
-                        if (tnum == 1) {
-                            number += 2 ** base;
-                        }
-                        base++;
-                    }
-                    return number;
+                    let init = parseInt(x as string, 2);
+                    return init;
                 },
 
 
@@ -5483,7 +5477,9 @@ export const baseNumValues: baseNumConv[] = [
             {
                 to: 'Hexadecimal',
                 func: (x) => {
-                    return x;
+                    let init = parseInt(x as string, 2);
+                    let temp = init.toString(16);
+                    return temp;
                 },
 
             },
@@ -5495,7 +5491,9 @@ export const baseNumValues: baseNumConv[] = [
             {
                 to: 'Binary',
                 func: (x) => {
-                    return x;
+                    let init = parseInt(x as string, 8);
+                    let temp = init.toString(2);
+                    return temp;
                 },
 
 
@@ -5513,10 +5511,12 @@ export const baseNumValues: baseNumConv[] = [
                 func: (x) => {
                     const temptxt = `${x}`.replace(/(.{1})/g, "$1 ").split(' ');
                     temptxt.reverse();
+                    temptxt.shift();
                     let tempNum = 0;
-                    let i = 1;
+                    let i = 0;
                     for (const temp of temptxt) {
-                        tempNum += i * octDig.indexOf(temp);
+                        octDig.indexOf(temp);
+                        tempNum += (8 ** i) * octDig.indexOf(temp);
                         i++;
                     }
                     return tempNum;
@@ -5527,7 +5527,9 @@ export const baseNumValues: baseNumConv[] = [
             {
                 to: 'Hexadecimal',
                 func: (x) => {
-                    return x;
+                    let init = parseInt(x as string, 8);
+                    let temp = init.toString(16);
+                    return temp;
                 },
 
             },
@@ -5597,7 +5599,9 @@ export const baseNumValues: baseNumConv[] = [
             {
                 to: 'Binary',
                 func: (x) => {
-                    return x;
+                    let init = parseInt(x as string, 16);
+                    let temp = init.toString(2);
+                    return temp;
                 },
 
 
@@ -5605,7 +5609,9 @@ export const baseNumValues: baseNumConv[] = [
             {
                 to: 'Octal',
                 func: (x) => {
-                    return x;
+                    let init = parseInt(x as string, 16);
+                    let temp = init.toString(8);
+                    return temp;
                 },
 
 
@@ -5618,14 +5624,9 @@ export const baseNumValues: baseNumConv[] = [
                     temptxt.shift();
                     let tempNum = 0;
                     let i = 0;
-                    console.log(temptxt);
                     for (const temp of temptxt) {
-                        console.log('bussy');
-                        console.log(temp);
-                        console.log(hexDig.indexOf(temp));
                         hexDig.indexOf(temp);
-                        tempNum += (i * 16) * hexDig.indexOf(temp);
-                        console.log(tempNum);
+                        tempNum += (16 ** i) * hexDig.indexOf(temp);
                         i++;
                     }
                     return tempNum;

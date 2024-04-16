@@ -836,12 +836,12 @@ export function convert(input: string, output: string, value: number) {
     };
 }
 
-type numConvertType = 'Binary' | 'Octal' | 'Decimal' | 'Hexadecimal';
+export type numConvertType = 'Binary' | 'Octal' | 'Decimal' | 'Hexadecimal';
 
 /**
  * convert different base systems to others
- * @param inType what type the input is
- * @param outType what type the output is
+ * 
+ * don't use signed or decimal numbers
  */
 export function numConvert(input: string | number, inType: numConvertType, outType: numConvertType) {
     let txt = err.uErr.conv.input;
@@ -875,11 +875,28 @@ export function numConvert(input: string | number, inType: numConvertType, outTy
             txt = `${fullCalc((input as string).toUpperCase().trim())}`;
         }
     }
-    return txt;
+    return txt.toUpperCase();
 }
 
-console.log(numConvert('3F', 'Hexadecimal', 'Decimal'))
-console.log(numConvert('32', 'Octal', 'Decimal'))
+export function numConvertTyping(string): numConvertType {
+    const nList = conversions.namesListBaseNum;
+    let t: numConvertType = null;
+    switch (true) {
+        case nList.bin.includes(string):
+            t = 'Binary';
+            break;
+        case nList.oct.includes(string):
+            t = 'Octal';
+            break;
+        case nList.dec.includes(string):
+            t = 'Decimal';
+            break;
+        case nList.hex.includes(string):
+            t = 'Hexadecimal';
+            break;
+    }
+    return t;
+}
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };
 // export {
