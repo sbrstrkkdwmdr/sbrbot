@@ -456,7 +456,7 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
         input.args = temp.newArgs;
     }
 
-    user = input.args.join(' ');
+    user = input.args.join(' ')?.replaceAll('"', '');
     if (!input.args[0] || input.args.join(' ').includes(searchid)) {
         user = null;
     }
@@ -782,6 +782,7 @@ export async function parseArgs_scoreList(input: extypes.commandInput) {
         }
             break;
     }
+
     return {
         commanduser,
         user, searchid, page, scoredetailed,

@@ -61,7 +61,7 @@ export async function badges(input: extypes.commandInput & { statsCache: any; })
 
                 input.args = msgfunc.cleanArgs(input.args);
 
-                user = input.args.join(' ');
+                user = input.args.join(' ')?.replaceAll('"', '');
                 if (!input.args[0] || input.args[0].includes(searchid)) {
                     user = null;
                 }
@@ -258,7 +258,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            user = input.args.join(' ');
+            user = input.args.join(' ')?.replaceAll('"', '');
             if (!input.args[0] || input.args[0].includes(searchid)) {
                 user = null;
             }
@@ -456,7 +456,7 @@ export async function globals(input: extypes.commandInput & { statsCache: any; }
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            user = input.args.join(' ');
+            user = input.args.join(' ')?.replaceAll('"', '');
             if (!input.args[0] || input.args[0].includes(searchid)) {
                 user = null;
             }
@@ -1475,7 +1475,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            user = input.args.join(' ');
+            user = input.args.join(' ')?.replaceAll('"', '');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null;
             }
@@ -2137,7 +2137,7 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            user = input.args.join(' ');
+            user = input.args.join(' ')?.replaceAll('"', '');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null;
             }
@@ -4485,7 +4485,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            user = input.args.join(' ');
+            user = input.args.join(' ')?.replaceAll('"', '');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null;
             }
@@ -6954,7 +6954,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                 input.args.splice(input.args.indexOf(input.args.find(arg => arg.includes('https://osu.ppy.sh/'))), 1);
             }
 
-            user = input.args.join(' ');
+            user = input.args.join(' ')?.replaceAll('"', '');
 
             if (!input.args[0] || input.args.join(' ').includes(searchid) || user == undefined) {
                 user = null;
@@ -7554,7 +7554,7 @@ export async function scorestats(input: extypes.commandInput) {
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            user = input.args.join(' ');
+            user = input.args.join(' ')?.replaceAll('"', '');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null;
             }
@@ -10134,7 +10134,7 @@ export async function recMap(input: extypes.commandInput) {
             }
 
             input.args = msgfunc.cleanArgs(input.args);
-            user = input.args.join(' ');
+            user = input.args.join(' ')?.replaceAll('"', '');
             if (!input.args[0] || input.args[0].includes(searchid)) {
                 user = null;
             }
@@ -10711,7 +10711,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            user = input.args.join(' ');
+            user = input.args.join(' ')?.replaceAll('"', '');
             if (!input.args[0] || input.args.join(' ').includes(searchid)) {
                 user = null;
             }
@@ -12635,7 +12635,7 @@ export async function saved(input: extypes.commandInput) {
             commanduser = input.obj.author;
 
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            user = input.args.join(' ');
+            user = input.args.join(' ')?.replaceAll('"', '');
             if (!input.args[0] || input.args[0].includes(searchid)) {
                 user = null;
             }

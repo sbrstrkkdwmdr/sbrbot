@@ -721,3 +721,9 @@ changes:
 [QOL] add args to `info`
 [ADD] base number converter (useable in `convert` cmd)
 [QOL] reworked `convert` in order to support base number conversions
+
+VERSION 0.5.15
+date_time
+commit: null
+changes:
+[FIX] usernames defined with `"` not working
