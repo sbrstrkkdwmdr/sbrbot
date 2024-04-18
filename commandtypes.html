@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <title>SSoB | bot</title>
-<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/cmd.css">
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu&display=swap" rel="stylesheet">
 <meta charset="utf-8" />
 <html>
@@ -12,6 +13,15 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sbrstrkkdwmdr.github.io/sbrbot/commands" />
 </head>
+<nav class="nBar">
+    <div>
+        <ul class="ultitle">
+            <li><a href="index.html" class="titlenav">Home</a></li>
+            <li><a href="commands.html" class="titlenav">Commands</a></li>
+            <li><a href="https://sbrstrkkdwmdr.github.io/" target="_blank" class="titlenav">Contact</a></li>
+        </ul>
+    </div>
+</nav>
 
 <body style="margin:auto;">
     <center>
@@ -24,44 +34,44 @@
                     <th>Example</th>
                 </tr>
                 <tr>
-                    <td>String</td>
-                    <td>Plain text</td>
-                    <td>Hello this is a string 1231313 lfs-fあああ</td>
+                    <td class="tdTypes">String</td>
+                    <td class="tdTypes">Plain text</td>
+                    <td class="tdTypes">Hello this is a string 1231313 lfs-fあああ</td>
                 </tr>
                 <tr>
-                    <td>Integer</td>
-                    <td>A number without decimal points</td>
-                    <td>1231313</td>
+                    <td class="tdTypes">Integer</td>
+                    <td class="tdTypes">A number without decimal points</td>
+                    <td class="tdTypes">1231313</td>
                 </tr>
                 <tr>
-                    <td>Float</td>
-                    <td>A number with decimal points</td>
-                    <td>1231313.123</td>
+                    <td class="tdTypes">Float</td>
+                    <td class="tdTypes">A number with decimal points</td>
+                    <td class="tdTypes">1231313.123</td>
                 </tr>
                 <tr>
-                    <td>Boolean</td>
-                    <td>True or False</td>
-                    <td>True</td>
+                    <td class="tdTypes">Boolean</td>
+                    <td class="tdTypes">True or False</td>
+                    <td class="tdTypes">True</td>
                 </tr>
                 <tr>
-                    <td>Mention</td>
-                    <td>A mention of a user</td>
-                    <td>&lt;@12319381231&gt; or @user_name</td>
+                    <td class="tdTypes">Mention</td>
+                    <td class="tdTypes">A mention of a user</td>
+                    <td class="tdTypes">&lt;@12319381231&gt; or @user_name</td>
                 </tr>
                 <tr>
-                    <td>Channel</td>
-                    <td>A mention of a channel</td>
-                    <td>&lt;#12319381231&gt; or #channel_name</td>
+                    <td class="tdTypes">Channel</td>
+                    <td class="tdTypes">A mention of a channel</td>
+                    <td class="tdTypes">&lt;#12319381231&gt; or #channel_name</td>
                 </tr>
                 <tr>
-                    <td>Role</td>
-                    <td>A mention of a role</td>
-                    <td>&lt;@&12319381231&gt; or @role_name</td>
+                    <td class="tdTypes">Role</td>
+                    <td class="tdTypes">A mention of a role</td>
+                    <td class="tdTypes">&lt;@&12319381231&gt; or @role_name</td>
                 </tr>
                 <tr>
-                    <td>Array</td>
-                    <td>A collection of items</td>
-                    <td>[1, 2, 3, 4, 5] or ['osu', 'game']</td>
+                    <td class="tdTypes">Array</td>
+                    <td class="tdTypes">A collection of items</td>
+                    <td class="tdTypes">[1, 2, 3, 4, 5] or ['osu', 'game']</td>
                 </tr>
             </table>
 
@@ -72,135 +82,91 @@
                     <th>Options</th>
                 </tr>
                 <tr>
-                    <td>Temperature</td>
-                    <td id="conv_temp"></td>
+                    <td class="tdTypes">Temperature</td>
+                    <td class="tdTypes" id="conv_temp"></td>
                 </tr>
                 <tr>
-                    <td>Distance</td>
-                    <td id="conv_dist"></td>
+                    <td class="tdTypes">Distance</td>
+                    <td class="tdTypes" id="conv_dist"></td>
                 </tr>
                 <tr>
-                    <td>Time</td>
-                    <td id="conv_time"></td>
+                    <td class="tdTypes">Time</td>
+                    <td class="tdTypes" id="conv_time"></td>
                 </tr>
                 <tr>
-                    <td>Volume</td>
-                    <td id="conv_vol"></td>
+                    <td class="tdTypes">Volume</td>
+                    <td class="tdTypes" id="conv_vol"></td>
                 </tr>
                 <tr>
-                    <td>Mass</td>
-                    <td id="conv_mass"></td>
+                    <td class="tdTypes">Mass</td>
+                    <td class="tdTypes" id="conv_mass"></td>
                 </tr>
                 <tr>
-                    <td>Pressure</td>
-                    <td id="conv_pres"></td>
+                    <td class="tdTypes">Pressure</td>
+                    <td class="tdTypes" id="conv_pres"></td>
                 </tr>
                 <tr>
-                    <td>Energy</td>
-                    <td id="conv_nrg"></td>
+                    <td class="tdTypes">Energy</td>
+                    <td class="tdTypes" id="conv_nrg"></td>
                 </tr>
                 <tr>
-                    <td>Power</td>
-                    <td id="conv_pow"></td>
+                    <td class="tdTypes">Power</td>
+                    <td class="tdTypes" id="conv_pow"></td>
                 </tr>
                 <tr>
-                    <td>Area</td>
-                    <td id="conv_area"></td>
+                    <td class="tdTypes">Area</td>
+                    <td class="tdTypes" id="conv_area"></td>
                 </tr>
                 <tr>
-                    <td>Angle</td>
-                    <td id="conv_angle"></td>
+                    <td class="tdTypes">Angle</td>
+                    <td class="tdTypes" id="conv_angle"></td>
                 </tr>
                 <tr>
-                    <td>Speed</td>
-                    <td id="conv_speed"></td>
+                    <td class="tdTypes">Speed</td>
+                    <td class="tdTypes" id="conv_speed"></td>
+                </tr>
+                <tr>
+                    <td class="tdTypes">Number base</td>
+                    <td class="tdTypes" id="conv_base"></td>
                 </tr>
             </table>
 
             <h2 id="mods">Mods </h2>
             <table style="margin:50px" class="tableBG">
                 <tr>
-                    <td>Difficulty Decreasing</td>
-                    <td>EZ (Easy),NF (No Fail),HT (Half Time), DC (Daycore),</td>
+                    <td class="tdTypes">Difficulty Decreasing</td>
+                    <td class="tdTypes">EZ (Easy),NF (No Fail),HT (Half Time), DC (Daycore),</td>
                 </tr>
                 <tr>
-                    <td>Difficulty Increasing</td>
-                    <td>HR (Hard Rock), SD (Sudden Death), PF (Perfect), DT (Double Time), NC (Nightcore), HD (Hidden),
+                    <td class="tdTypes">Difficulty Increasing</td>
+                    <td class="tdTypes">HR (Hard Rock), SD (Sudden Death), PF (Perfect), DT (Double Time), NC
+                        (Nightcore), HD (Hidden),
                         FI
                         (Fade
                         In), FL (Flashlight), </td>
                 </tr>
                 <tr>
-                    <td>Special</td>
-                    <td>None (NM), AT (Auto), CN (Cinema), RX (Relax), AP (Autopilot), SO (Spun Out), TP (Target
+                    <td class="tdTypes">Special</td>
+                    <td class="tdTypes">None (NM), AT (Auto), CN (Cinema), RX (Relax), AP (Autopilot), SO (Spun Out), TP
+                        (Target
                         Practice)
                     </td>
                 </tr>
                 <tr>
-                    <td>Mania</td>
-                    <td>1/2/3/4/5/6/7/8/9K, RD (Random), MR (Mirror), CP (Co-Op or Dual Stages in Lazer)</td>
+                    <td class="tdTypes">Mania</td>
+                    <td class="tdTypes">1/2/3/4/5/6/7/8/9K, RD (Random), MR (Mirror), CP (Co-Op or Dual Stages in Lazer)
+                    </td>
                 </tr>
                 <tr>
-                    <td>Lazer-Only (not implemented)</td>
-                    <td>BL (Blinds), ST (Strict Tracking), AC (Accuracy Challenge), DA, CL, RD, MR, AL, SG, TR, WG, SI,
+                    <td class="tdTypes">Lazer-Only (not implemented)</td>
+                    <td class="tdTypes">BL (Blinds), ST (Strict Tracking), AC (Accuracy Challenge), DA, CL, RD, MR, AL,
+                        SG, TR, WG, SI,
                         GR,
                         DF,
                         WU, WD, TC, BR, AD, MU, NS, MG, RP, AS, FR, BU, SY</td>
                 </tr>
             </table>
             <p style="margin-bottom: 900px;"></p>
-            <!--     <table>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Example</th>
-        <tr>
-            <td>Name</td>
-            <td>The name of an option</td>
-            <td>ID</td>
-        </tr>
-        <tr>
-            <td>Type</td>
-            <td>The type of an option</td>
-            <td>String</td>
-        </tr>
-        <tr>
-            <td>Required</td>
-            <td>Whether the option is required (has to be used)</td>
-            <td>True</td>
-        </tr>
-        <tr>
-            <td>Description</td>
-            <td>The description of an option</td>
-            <td>The ID of the option</td>
-        </tr>
-        <tr>
-            <td>Choices</td>
-            <td>The choices/range/formatting of an option</td>
-            <td>a/b/c/d</td>
-        </tr>
-        <tr>
-            <td>Defaults</td>
-            <td>The default value of an option</td>
-            <td>a</td>
-        </tr>
-    </table>
-    <table>
-        <th>Required level</th>
-        <th>Description</th>
-
-        <tr>
-            <td>True</td>
-            <td>The option is required</td>
-        </tr>
-        <tr>
-            <td>False</td>
-            <td>The option is not required</td>
-        </tr>
-        <tr>
-            <td>Sometimes</td>
-            <td>The option is <b>usually</b> not required</td>
-        </tr>
-    </table> -->
         </div>
     </center>
     <script src="./const.js" type="text/javascript"></script>
