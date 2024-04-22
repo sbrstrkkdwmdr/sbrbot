@@ -196,12 +196,11 @@ export async function scorecalc(
                         obj.mods.length < 1 ? 'NM' : obj.mods
                         : 'NM'
                     ;
-                let mode;
+                let mode = osumodcalc.ModeNameToInt(obj.gamemode)
                 let newacc = osumodcalc.calcgrade(obj.hit300, obj.hit100, obj.hit50, 0).accuracy;
                 if (obj.hit300 && obj.hit100) {
                     switch (obj.gamemode) {
                         case 'osu': default:
-                            mode = 0;
                             if (obj.hit50) {
                                 osumodcalc.calcgrade(obj.hit300, obj.hit100, obj.hit50, 0).accuracy;
                             } else {
@@ -209,11 +208,9 @@ export async function scorecalc(
                             }
                             break;
                         case 'taiko':
-                            mode = 1;
                             newacc = osumodcalc.calcgradeTaiko(obj.hit300, obj.hit100, 0).accuracy;
                             break;
                         case 'fruits':
-                            mode = 2;
                             if (obj.hit50) {
                                 newacc = osumodcalc.calcgradeCatch(obj.hit300, obj.hit100, obj.hit50, 0, obj.hitkatu).accuracy;
                             } else {
@@ -221,7 +218,6 @@ export async function scorecalc(
                             }
                             break;
                         case 'mania':
-                            mode = 3;
                             if (obj.hitgeki && obj.hitkatu && obj.hit50) {
                                 newacc = osumodcalc.calcgradeMania(obj.hitgeki, obj.hit300, obj.hitkatu, obj.hit100, obj.hit50, 0).accuracy;
                             } else {
@@ -231,20 +227,6 @@ export async function scorecalc(
                     }
                 } else {
                     newacc = obj.acc;
-                    switch (obj.gamemode) {
-                        case 'osu': default:
-                            mode = 0;
-                            break;
-                        case 'taiko':
-                            mode = 1;
-                            break;
-                        case 'fruits':
-                            mode = 2;
-                            break;
-                        case 'mania':
-                            mode = 3;
-                            break;
-                    }
                 }
                 if (isNaN(newacc)) {
                     newacc = obj.acc * 100;
@@ -331,11 +313,12 @@ export async function straincalc(mapid: number, mods: string, calctype: number, 
             if (!(typeof mapPath == 'string')) {
                 throw new Error(`Map path not a string: ${mapPath}`);
             }
-
+            const tempb = new rosu.Beatmap({ path: mapPath });
             let strains1 =
                 new rosu.Calculator({
-                    mods: osumodcalc.ModStringToInt(mods)
-                }).strains(new rosu.Beatmap({ path: mapPath }));
+                    mods: osumodcalc.ModStringToInt(mods),
+                    mode: osumodcalc.ModeNameToInt(mode)
+                }).strains(tempb);
 
             switch (mode) {
                 case 'osu': {
@@ -862,7 +845,7 @@ export async function apiget(input: apiInput) {
                     break;
             }
         }
-        ''
+            '';
 
         case 2: {
             switch (input.type) {
@@ -1498,6 +1481,7 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
             apiData: osuApiTypes.Score,
             mods: string,
             default: boolean,
+            mode: osuApiTypes.GameMode;
         };
         return init;
     } catch (error) {
@@ -1506,11 +1490,13 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
             apiData: osuApiTypes.Score,
             mods: string;
             default: boolean,
+            mode: osuApiTypes.GameMode;
         } = {
             id: false,
             apiData: null,
             mods: null,
             default: true,
+            mode: 'osu'
         };
 
         /*         switch (type) {
@@ -1548,6 +1534,7 @@ export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string
     id: string,
     apiData: osuApiTypes.Score,
     mods: string,
+    mode?: osuApiTypes.GameMode,
     default?: boolean;
 }) {
     if (!data.mods || data.mods.length == 0) {
@@ -2134,7 +2121,7 @@ export async function mapIdFromLink(url: string, callIfMapIdNull: boolean, confi
 
     const object: {
         set: number,
-        mode: string,
+        mode: osuApiTypes.GameMode,
         map: number,
     } = {
         set: null,
@@ -2156,13 +2143,19 @@ export async function mapIdFromLink(url: string, callIfMapIdNull: boolean, confi
      */
 
     switch (true) {
-        case url.includes('?m='):
-            object.mode = url.split('?m=')[1];
+        case url.includes('?m='): {
+            const modeTemp = url.split('?m=')[1];
+            if (isNaN(+modeTemp)) {
+                object.mode = modeTemp as osuApiTypes.GameMode;
+            } else {
+                object.mode = osumodcalc.ModeIntToName(+modeTemp);
+            }
             if (url.includes('/b/')) {
                 object.map = +url.split('?m=')[0].split('/b/')[1];
             } else if (url.includes('/beatmaps/')) {
                 object.map = +url.split('?m=')[0].split('/beatmaps/')[1];
             }
+        }
             break;
         case url.includes('/b/'):
             object.map = +url.split('/b/')[1];
@@ -2170,16 +2163,26 @@ export async function mapIdFromLink(url: string, callIfMapIdNull: boolean, confi
         case url.includes('beatmaps/'):
             object.map = +url.split('/beatmaps/')[1];
             break;
-        case url.includes('beatmapsets') && url.includes('#'):
+        case url.includes('beatmapsets') && url.includes('#'): {
             object.set = +url.split('beatmapsets/')[1].split('#')[0];
-            object.mode = url.split('#')[1].split('/')[0];
+            const modeTemp = url.split('#')[1].split('/')[0];
+            if (isNaN(+modeTemp)) {
+                object.mode = modeTemp as osuApiTypes.GameMode;
+            } else {
+                object.mode = osumodcalc.ModeIntToName(+modeTemp);
+            }
             object.map = +url.split('#')[1].split('/')[1];
-            break;
-        case url.includes('/s/') && url.includes('#'):
+        } break;
+        case url.includes('/s/') && url.includes('#'): {
             object.set = +url.split('/s/')[1].split('#')[0];
-            object.mode = url.split('#')[1].split('/')[0];
+            const modeTemp = url.split('#')[1].split('/')[0];
+            if (isNaN(+modeTemp)) {
+                object.mode = modeTemp as osuApiTypes.GameMode;
+            } else {
+                object.mode = osumodcalc.ModeIntToName(+modeTemp);
+            }
             object.map = +url.split('#')[1].split('/')[1];
-            break;
+        } break;
         case url.includes('/s/'):
             object.set = +url.split('/s/')[1];
             break;

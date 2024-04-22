@@ -998,7 +998,7 @@ function ModeNameToInt(mode: string): number {
  * @param mode the gamemode to convert to a string
  * @returns osu standard, taiko, catch, or mania.
  */
-function ModeIntToName(mode: number): string {
+function ModeIntToName(mode: number): osuapitypes.GameMode {
     switch (mode) {
         case 0:
             return 'osu';

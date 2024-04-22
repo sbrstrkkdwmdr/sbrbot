@@ -727,3 +727,4 @@ date_time
 commit: null
 changes:
 [FIX] usernames defined with `"` not working
+[FIX] support for converted maps
