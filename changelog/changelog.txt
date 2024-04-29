@@ -723,7 +723,7 @@ changes:
 [QOL] reworked `convert` in order to support base number conversions
 
 VERSION 0.5.15
-date_time
+2024-04-29
 commit: null
 changes:
 [FIX] usernames defined with `"` not working
