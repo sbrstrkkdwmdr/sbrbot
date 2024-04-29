@@ -724,7 +724,7 @@ changes:
 
 VERSION 0.5.15
 2024-04-29
-commit: null
+commit: 1c9333b5988d583962ccac7c8a6f46767ffb0a90
 changes:
 [FIX] usernames defined with `"` not working
 [FIX] support for converted maps
