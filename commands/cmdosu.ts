@@ -8600,27 +8600,15 @@ export async function map(input: extypes.commandInput) {
                     messagenohttp.split('+')[1] : 'NM';
             if (input.args[0] && input.args[0].startsWith('query')) {
                 maptitleq = input.args[1];
-            } else if (
-                (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmapsets/') && messagenohttp.includes('#'))) ||
-                (!messagenohttp.includes('/s/') && (messagenohttp.includes('/b/'))) ||
-                (!messagenohttp.includes('/s/') && (messagenohttp.includes('/beatmaps/')))
-            ) {
-                let idfirst;
-                try {
-                    if (messagenohttp.includes('beatmapsets')) {
-                        idfirst = messagenohttp.split('#')[1].split('/')[1];
-                    } else if (messagenohttp.includes('?')) {
-                        idfirst = messagenohttp.split('beatmaps/')[1].split('?')[0];
-                    }
-                    else {
-                        idfirst = messagenohttp.split('/')[messagenohttp.split('/').length - 1];
-                    }
-                    if (isNaN(+idfirst)) {
-                        mapid = parseInt(idfirst.split(' ')[0]);
-                    } else {
-                        mapid = parseInt(idfirst);
-                    }
-                } catch (error) {
+            } else if (messagenohttp.includes('q=')) {
+                maptitleq =
+                    messagenohttp.includes('&') ?
+                        messagenohttp.split('q=')[1].split('&')[0] :
+                        messagenohttp.split('q=')[1];
+            } else {
+                const mapTemp = await osufunc.mapIdFromLink(messagenohttp, true, input.config);
+                mapid = mapTemp.map;
+                if (!(mapTemp.map || mapTemp.set)) {
                     await msgfunc.sendMessage({
                         commandType: input.commandType,
                         obj: input.obj,
@@ -8631,76 +8619,35 @@ export async function map(input: extypes.commandInput) {
                     }, input.canReply);
                     return;
                 }
-            } else if (messagenohttp.includes('q=')) {
-                maptitleq =
-                    messagenohttp.includes('&') ?
-                        messagenohttp.split('q=')[1].split('&')[0] :
-                        messagenohttp.split('q=')[1];
-            } else {
-                let setid = 910392;
-                if (!messagenohttp.includes('/beatmapsets/')) {
-                    setid = +messagenohttp.split('/s/')[1];
-
-                    if (isNaN(setid)) {
-                        setid = +messagenohttp.split('/s/')[1].split(' ')[0];
-                    }
-                } else if (!messagenohttp.includes('/s/')) {
-                    setid = +messagenohttp.split('/beatmapsets/')[1];
-
-                    if (isNaN(setid)) {
-                        setid = +messagenohttp.split('/s/')[1].split(' ')[0];
-                    }
-                }
-                let bmsdataReq: osufunc.apiReturn;
-                if (func.findFile(setid, `bmsdata`) &&
-                    !('error' in func.findFile(setid, `bmsdata`)) &&
-                    input.button != 'Refresh') {
-                    bmsdataReq = func.findFile(setid, `bmsdata`);
-                } else {
-                    bmsdataReq = await osufunc.apiget({
-                        type: 'mapset_get',
-                        config: input.config,
-                        params: {
-                            id: setid
-                        }
-                    });
-                    // bmsdataReq = await osufunc.apiget('mapset_get', `${setid}`)
-                }
-
-                const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
-                if (bmsdataReq?.error) {
-                    await msgfunc.errorAndAbort(input, 'map', true, errors.uErr.osu.map.ms.replace('[ID]', `${setid}`), false);
-                    return;
-                }
-                if (bmsdata?.hasOwnProperty('error')) {
-                    await msgfunc.errorAndAbort(input, 'map', true, errors.uErr.osu.map.ms.replace('[ID]', `${setid}`), false);
-                    return;
-                }
-                try {
-                    mapid = bmsdata.beatmaps[0].id;
-                } catch (error) {
-                    await msgfunc.errorAndAbort(input, 'map', true, errors.uErr.osu.map.ms.replace('[ID]', `${setid}`), false);
-                }
-                // get mode
-                if (messagenohttp.includes('#')) {
-                    const temp = messagenohttp.split('#')[1];
-                    forceMode = (temp.includes('/') ? temp.split('/')[0] : temp) as osuApiTypes.GameMode;
-                }
-                if (messagenohttp.includes('mode=')) {
-                    const temp = messagenohttp.split('mode=')[1];
-                    if (isNaN(+temp)) {
-                        forceMode = temp as osuApiTypes.GameMode;
+                //get map id via mapset if not in the given URL
+                if (!mapTemp.map && mapTemp.set) {
+                    let bmsdataReq: osufunc.apiReturn;
+                    if (func.findFile(mapTemp.set, `bmsdata`) &&
+                        !('error' in func.findFile(mapTemp.set, `bmsdata`)) &&
+                        input.button != 'Refresh') {
+                        bmsdataReq = func.findFile(mapTemp.set, `bmsdata`);
                     } else {
-                        forceMode = osumodcalc.ModeIntToName(+temp);
+                        bmsdataReq = await osufunc.apiget({
+                            type: 'mapset_get',
+                            config: input.config,
+                            params: {
+                                id: mapTemp.set
+                            }
+                        });
                     }
-                }
-                if (messagenohttp.includes('m=')) {
-                    const temp = messagenohttp.split('m=')[1];
-                    if (isNaN(+temp)) {
-                        forceMode = temp as osuApiTypes.GameMode;
-                    } else {
-                        forceMode = osumodcalc.ModeIntToName(+temp);
+                    const bmsdata: osuApiTypes.Beatmapset = bmsdataReq.apiData;
+                    if (bmsdataReq?.error) {
+                        await msgfunc.errorAndAbort(input, 'map', true, errors.uErr.osu.map.ms.replace('[ID]', `${mapTemp.set}`), false);
+                        return;
                     }
+                    if (bmsdata?.hasOwnProperty('error')) {
+                        await msgfunc.errorAndAbort(input, 'map', true, errors.uErr.osu.map.ms.replace('[ID]', `${mapTemp.set}`), false);
+                        return;
+                    }
+                    if (!bmsdata?.beatmaps[0]?.id) {
+                        await msgfunc.errorAndAbort(input, 'map', true, errors.uErr.osu.map.ms.replace('[ID]', `${mapTemp.set}`), false);
+                    }
+                    mapid = bmsdata?.beatmaps[0]?.id;
                 }
             }
         }
@@ -10428,11 +10375,11 @@ export async function maplocal(input: extypes.commandInput) {
      * 
      */
     const valCalc = osumodcalc.calcValues(
-        +mapParsed?.difficulty?._CS,
-        +mapParsed?.difficulty?._AR,
-        +mapParsed?.difficulty?._OD,
-        +mapParsed?.difficulty?._HP,
-        60 / (+mapParsed?.controlPoints?.timingPoints[0]._beatLength / 1000),
+        +mapParsed?.difficulty?.circleSize,
+        +mapParsed?.difficulty?.approachRate,
+        +mapParsed?.difficulty?.overallDifficulty,
+        +mapParsed?.difficulty?.drainRate,
+        60 / (+mapParsed?.controlPoints?.timingPoints[0]?.beatLength / 1000),
         (+mapParsed?.totalLength) / 1000,
         mods
     );

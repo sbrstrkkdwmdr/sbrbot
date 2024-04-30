@@ -2674,7 +2674,7 @@ export async function getFailPoint(
     if (fs.existsSync(mapPath)) {
         try {
             const decoder = new osuparsers.BeatmapDecoder();
-            const beatmap = await decoder.decodeFromPath(mapPath, false) as osuparsertypes.Beatmap;
+            const beatmap = await decoder.decodeFromPath(mapPath, false) as any as osuparsertypes.Beatmap;
             if (objectsPassed == null || objectsPassed < 1) {
                 objectsPassed = 1;
             }

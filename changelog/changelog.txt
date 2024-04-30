@@ -728,3 +728,4 @@ commit: 1c9333b5988d583962ccac7c8a6f46767ffb0a90
 changes:
 [FIX] usernames defined with `"` not working
 [FIX] support for converted maps
+[FIX] https://osu.ppy.sh/b/[ID]?m=[MODE] links not working
