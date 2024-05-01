@@ -878,7 +878,7 @@ export function numConvert(input: string | number, inType: numConvertType, outTy
     return txt.toUpperCase();
 }
 
-export function numConvertTyping(string): numConvertType {
+export function numConvertTyping(string: string): numConvertType {
     const nList = conversions.namesListBaseNum;
     let t: numConvertType = null;
     switch (true) {
@@ -896,6 +896,31 @@ export function numConvertTyping(string): numConvertType {
             break;
     }
     return t;
+}
+
+export function numBaseToInt(input: numConvertType): number {
+    let out: number;
+    switch (input) {
+        case 'Binary':
+            out = 2;
+            break;
+        case 'Octal':
+            out = 8;
+            break;
+        case 'Decimal':
+            out = 10;
+            break;
+        case 'Hexadecimal':
+            out = 16;
+            break;
+    }
+    return out;
+}
+
+export function numConvertAlt(value: string, inBase: number, outBase: number) {
+    let init = parseInt(value as string, inBase);
+    let outVal = init.toString(outBase);
+    return outVal;
 }
 
 //module.exports = { findHCF, findLCM, pythag, sigfig, fixtoundertwo, factorial, to12htime, relto12htime, dayhuman, tomonthname, fixoffset };

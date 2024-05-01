@@ -657,9 +657,9 @@ SF:   ${data.significantFigures}\`
             }
         ]);
         if (data.formula.includes('not found')) {
-            const c1 = calc.numConvertTyping(cat1);
-            const c2 = calc.numConvertTyping(cat2);
-            const tdata = calc.numConvert(num, c1, c2);
+            const c1 = calc.numBaseToInt(calc.numConvertTyping(cat1))
+            const c2 = calc.numBaseToInt(calc.numConvertTyping(cat2));
+            const tdata = calc.numConvertAlt(`${num}`, c1, c2);
             if (!tdata.includes('INVALID')) {
                 embedres
                     .setTitle('Base number conversion')

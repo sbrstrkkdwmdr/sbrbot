@@ -733,3 +733,4 @@ VERSION 0.5.16
 date_time
 commit: null
 [FIX] https://osu.ppy.sh/b/[ID]?m=[MODE] links not working
+[QOL] rewrite code for base conversions
