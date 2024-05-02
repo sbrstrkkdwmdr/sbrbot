@@ -77,13 +77,20 @@ export async function scoreList(
         calcmodsex = 'NM';
         asObj.excludeMods = null;
     }
+    if (asObj.filteredMods != null) {
+        filtereddata = filtereddata.filter(array => {
+            let temp = 0;
+            for (const mod of modOrder.array) {
+                if (array.score.mods.includes(mod)) temp++;
+            }
+            if (temp == modOrder.array.length) return true;
+            return false;
+        });
+        filterinfo += `\ninclude mods: ${calcmods}`;
+    }
     if (asObj.exactMods != null) {
         filtereddata = filtereddata.filter(array => array.score.mods.join('').toUpperCase() == calcmodsx.toUpperCase());
         filterinfo += `\nexact mods: ${calcmodsx}`;
-    }
-    if (asObj.filteredMods != null) {
-        filtereddata = filtereddata.filter(array => array.score.mods.some(x => modOrder.array.includes(x)));
-        filterinfo += `\ninclude mods: ${calcmods}`;
     }
     if (asObj.excludeMods != null) {
         filtereddata = filtereddata.filter(array => !array.score.mods.some(x => modOrderEx.array.includes(x)));

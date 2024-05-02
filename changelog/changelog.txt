@@ -739,3 +739,4 @@ commit: null
 [FIX] filter rank using score.mods instead of score.rank
 [QOL] miss and bpm filters now allow for equal values
 [FIX] `+` variant of includemods not working on scorelist cmds
+[FIX] include mods has to include all mods given instead of just one
