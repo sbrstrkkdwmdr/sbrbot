@@ -838,47 +838,7 @@ export function convert(input: string, output: string, value: number) {
 
 export type numConvertType = 'Binary' | 'Octal' | 'Decimal' | 'Hexadecimal';
 
-/**
- * convert different base systems to others
- * 
- * don't use signed or decimal numbers
- */
-export function numConvert(input: string | number, inType: numConvertType, outType: numConvertType) {
-    let txt = err.uErr.conv.input;
-    let foundInit = false;
-    let foundExit = false;
-    /**
-     * 0 - binary
-     * 1 - octal
-     * 2 - decimal
-     * 3 - hexadecimal
-     */
-    let initBase: conversions.baseNumConv;
-    let fullCalc: (x: string | number) => string | number;
-    for (const base of conversions.baseNumValues) {
-        if (base.name == inType) {
-            initBase = base;
-            foundInit = true;
-            break;
-        }
-    }
-    if (foundInit) {
-        for (const calc of initBase.calc) {
-            if (calc.to == outType) {
-                fullCalc = calc.func;
-                foundExit = true;
-                break;
-            }
-        }
-        txt = err.uErr.conv.output;
-        if (foundExit) {
-            txt = `${fullCalc((input as string).toUpperCase().trim())}`;
-        }
-    }
-    return txt.toUpperCase();
-}
-
-export function numConvertTyping(string: string): numConvertType {
+export function numConvertTyping(string): numConvertType {
     const nList = conversions.namesListBaseNum;
     let t: numConvertType = null;
     switch (true) {
@@ -917,7 +877,7 @@ export function numBaseToInt(input: numConvertType): number {
     return out;
 }
 
-export function numConvertAlt(value: string, inBase: number, outBase: number) {
+export function numConvert(value: string, inBase: number, outBase: number) {
     let init = parseInt(value as string, inBase);
     let outVal = init.toString(outBase);
     return outVal;
