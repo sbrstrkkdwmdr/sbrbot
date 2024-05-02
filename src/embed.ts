@@ -117,7 +117,7 @@ export async function scoreList(
         filterinfo += `\nmap: ${asObj.filterMapTitle}`;
     }
     if (asObj.filterRank != null) {
-        filtereddata = filtereddata.filter(array => array.score.mods.toString().replaceAll(',', '').includes(calcmods));
+        filtereddata = filtereddata.filter(array => array.score.rank == asObj.filterRank);
         filterinfo += `\nrank: ${asObj.filterRank}`;
     }
     if (asObj.pp != null) {

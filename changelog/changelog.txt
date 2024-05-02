@@ -736,3 +736,4 @@ commit: null
 [QOL] rewrote code for base conversions
 [ADD] option to show which countries observe DST in time command
 [QOL] rewrote msg args parsing
+[FIX] filter rank using score.mods instead of score.rank
