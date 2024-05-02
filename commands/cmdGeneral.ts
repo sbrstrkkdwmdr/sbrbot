@@ -657,7 +657,7 @@ SF:   ${data.significantFigures}\`
             }
         ]);
         if (data.formula.includes('not found')) {
-            const c1 = calc.numBaseToInt(calc.numConvertTyping(cat1))
+            const c1 = calc.numBaseToInt(calc.numConvertTyping(cat1));
             const c2 = calc.numBaseToInt(calc.numConvertTyping(cat2));
             const tdata = calc.numConvert(`${num}`, c1, c2);
             if (!tdata.includes('INVALID')) {
@@ -2360,7 +2360,7 @@ export async function time(input: extypes.commandInput) {
 
     let fetchtimezone: string;
     let displayedTimezone: string;
-    let dstList = false;
+    let showGMT = false;
 
     let useComponents = [];
 
@@ -2368,6 +2368,10 @@ export async function time(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
+            const temp = msgfunc.matchArgMultiple(['-utc', '-gmt'], input.args);
+            showGMT = temp.found ? temp.output : false;
+            input.args = temp.args;
+            input.args = msgfunc.cleanArgs(input.args);
             fetchtimezone = input.args.join(' ');
         }
             break;
@@ -2443,8 +2447,6 @@ export async function time(input: extypes.commandInput) {
 
     const curTime = moment();
 
-    let showGMT = false;
-
     const fields: Discord.EmbedField[] = [
         {
             /**
@@ -2497,11 +2499,11 @@ export async function time(input: extypes.commandInput) {
             }
             tempFields.push({
                 name: `Starts on the ${rule.start} | Ends on the ${rule.end}`,
-                value: `${tempRegions.join('\n ')}`,
+                value: `${tempRegions.join('\n')}`,
                 inline: false,
             });
         }
-        Embed.setFields(tempFields)
+        Embed.setFields(tempFields);
     } else if (fetchtimezone != null && fetchtimezone != '') {
         try {
             const found: timezoneList.timezone[] = [];

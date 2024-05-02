@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
+import * as flags from '../src/consts/argflags.js';
 import * as buttonsthing from '../src/consts/buttons.js';
 import * as errors from '../src/consts/errors.js';
 import * as mainconst from '../src/consts/main.js';
@@ -317,72 +318,40 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
         input.args = temp.newArgs;
     }
 
-    if (input.args.includes('-page')) {
-        const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-        page = temp.value;
-        input.args = temp.newArgs;
+    const pageArgFinder = matchArgMultiple(flags.pages, input.args, true);
+    if (pageArgFinder.found) {
+        page = pageArgFinder.output;
+        input.args = pageArgFinder.args;
     }
-    if (input.args.includes('-p')) {
-        const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
-        page = temp.value;
-        input.args = temp.newArgs;
-    }
-
-    if (input.args.includes('-detailed')) {
+    const detailArgFinder = matchArgMultiple(flags.details, input.args);
+    if (detailArgFinder.found) {
         scoredetailed = 2;
-        input.args.splice(input.args.indexOf('-detailed'), 1);
+        input.args = detailArgFinder.args;
     }
-    if (input.args.includes('-d')) {
-        scoredetailed = 2;
-        input.args.splice(input.args.indexOf('-d'), 1);
-    }
-    if (input.args.includes('-compress')) {
+    const lessDetailArgFinder = matchArgMultiple(flags.compress, input.args);
+    if (lessDetailArgFinder.found) {
         scoredetailed = 0;
-        input.args.splice(input.args.indexOf('-compress'), 1);
-    }
-    if (input.args.includes('-c')) {
-        scoredetailed = 0;
-        input.args.splice(input.args.indexOf('-c'), 1);
+        input.args = lessDetailArgFinder.args;
     }
     {
         const temp = await parseArgsMode(input);
         input.args = temp.args;
         mode = temp.mode;
     }
-    if (input.args.includes('-recent')) {
-        sort = 'recent';
-        input.args.splice(input.args.indexOf('-recent'), 1);
-    }
-    if (input.args.includes('-r')) {
-        sort = 'recent';
-        input.args.splice(input.args.indexOf('-r'), 1);
-    }
-    if (input.args.includes('-performance')) {
-        sort = 'pp';
-        input.args.splice(input.args.indexOf('-performance'), 1);
-    }
-    if (input.args.includes('-reverse')) {
+    const reverseArgFinder = matchArgMultiple(flags.toFlag(['rev', 'reverse',]), input.args);
+    if (reverseArgFinder.found) {
         reverse = true;
-        input.args.splice(input.args.indexOf('-reverse'), 1);
-    }
-    if (input.args.includes('-rev')) {
-        reverse = true;
-        input.args.splice(input.args.indexOf('-rev'), 1);
+        input.args = reverseArgFinder.args;
     }
     if (input.args.includes('-mods')) {
         const temp = func.parseArg(input.args, '-mods', 'string', filteredMods, false);
         filteredMods = temp.value;
         input.args = temp.newArgs;
     }
-    if (input.args.includes('-modx')) {
-        const temp = func.parseArg(input.args, '-modx', 'string', exactMods, false);
-        exactMods = temp.value;
-        input.args = temp.newArgs;
-    }
-    if (input.args.includes('-mx')) {
-        const temp = func.parseArg(input.args, '-mx', 'string', exactMods, false);
-        exactMods = temp.value;
-        input.args = temp.newArgs;
+    const mxmodArgFinder = matchArgMultiple(flags.toFlag(['mx', 'modx',]), input.args, true, 'string');
+    if (mxmodArgFinder.found) {
+        exactMods = mxmodArgFinder.output;
+        input.args = mxmodArgFinder.args;
     }
     if (input.args.includes('-exmod')) {
         const temp = func.parseArg(input.args, '-exmod', 'string', excludeMods, false);
@@ -394,15 +363,30 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
         excludeMods = temp.value;
         input.args = temp.newArgs;
     }
+    const exmodArgFinder = matchArgMultiple(flags.toFlag(['me', 'exmod',]), input.args, true, 'string');
+    if (exmodArgFinder.found) {
+        excludeMods = exmodArgFinder.output;
+        input.args = exmodArgFinder.args;
+    }
     if (input.args.includes('-mapper')) {
         const temp = func.parseArg(input.args, '-mapper', 'string', filteredMapper, true);
         filteredMapper = temp.value;
         input.args = temp.newArgs;
     }
+
     if (input.args.includes('-sort')) {
         const temp = func.parseArg(input.args, '-sort', 'string', sort, false);
         sort = temp.value;
         input.args = temp.newArgs;
+    }
+    const recentArgFinder = matchArgMultiple(flags.toFlag(['r', 'recent',]), input.args);
+    if (recentArgFinder.found) {
+        sort = 'recent';
+        input.args = recentArgFinder.args;
+    }
+    if (input.args.includes('-performance')) {
+        sort = 'pp';
+        input.args.splice(input.args.indexOf('-performance'), 1);
     }
     if (input.args.includes('-pp')) {
         const temp = func.parseArg(input.args, '-pp', 'string', pp, false);
@@ -419,34 +403,29 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
         acc = temp.value;
         input.args = temp.newArgs;
     }
-    if (input.args.includes('-combo')) {
-        const temp = func.parseArg(input.args, '-combo', 'string', combo, false);
-        combo = temp.value;
-        input.args = temp.newArgs;
+    const filterComboArgFinder = matchArgMultiple(flags.toFlag(['combo', 'maxcombo']), input.args, true, 'string');
+    if (filterComboArgFinder.found) {
+        combo = filterComboArgFinder.output;
+        input.args = filterComboArgFinder.args;
     }
-    if (input.args.includes('-misses')) {
-        const temp = func.parseArg(input.args, '-misses', 'string', miss, false);
-        miss = temp.value;
-        input.args = temp.newArgs;
+    const filterMissArgFinder = matchArgMultiple(flags.toFlag(['miss', 'misses']), input.args, true, 'string');
+    if (filterMissArgFinder.found) {
+        miss = filterMissArgFinder.output;
+        input.args = filterMissArgFinder.args;
     }
-    if (input.args.includes('-miss')) {
-        const temp = func.parseArg(input.args, '-miss', 'string', miss, false);
-        miss = temp.value;
-        input.args = temp.newArgs;
+    const fcArgFinder = matchArgMultiple(flags.toFlag(['fc', 'fullcombo',]), input.args);
+    if (fcArgFinder.found) {
+        miss = '0'
+        input.args = fcArgFinder.args;
     }
-    if (input.args.includes('-rank')) {
-        const temp = func.parseArg(input.args, '-rank', 'string', filterRank, false);
-        filterRank = osumodcalc.checkGrade(temp.value);
-        input.args = temp.newArgs;
+    const filterRankArgFinder = matchArgMultiple(flags.toFlag(['rank', 'grade', 'letter']), input.args, true, 'string');
+    if (filterRankArgFinder.found) {
+        miss = filterRankArgFinder.output;
+        input.args = filterRankArgFinder.args;
     }
     if (input.args.includes('-bpm')) {
         const temp = func.parseArg(input.args, '-bpm', 'string', bpm, false);
         bpm = temp.value;
-        input.args = temp.newArgs;
-    }
-    if (input.args.includes('-grade')) {
-        const temp = func.parseArg(input.args, '-grade', 'string', filterRank, false);
-        filterRank = osumodcalc.checkGrade(temp.value);
         input.args = temp.newArgs;
     }
 
@@ -455,7 +434,7 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
         filterTitle = temp.value;
         input.args = temp.newArgs;
     }
-
+    input.args = cleanArgs(input.args)
     user = input.args.join(' ')?.replaceAll('"', '');
     if (!input.args[0] || input.args.join(' ').includes(searchid)) {
         user = null;
@@ -797,45 +776,25 @@ export async function parseArgs_scoreList(input: extypes.commandInput) {
 
 export async function parseArgsMode(input: extypes.commandInput) {
     let mode: osuApiTypes.GameMode = 'osu';
-    if (input.args.includes('-osu')) {
+    const otemp = matchArgMultiple(['-o', '-osu'], input.args);
+    if (otemp.found) {
         mode = 'osu';
-        input.args.splice(input.args.indexOf('-osu'), 1);
+        input.args = otemp.args;
     }
-    if (input.args.includes('-o')) {
-        mode = 'osu';
-        input.args.splice(input.args.indexOf('-o'), 1);
-    }
-    if (input.args.includes('-taiko')) {
+    const ttemp = matchArgMultiple(['-t', '-taiko'], input.args);
+    if (ttemp.found) {
         mode = 'taiko';
-        input.args.splice(input.args.indexOf('-taiko'), 1);
+        input.args = ttemp.args;
     }
-    if (input.args.includes('-t')) {
-        mode = 'taiko';
-        input.args.splice(input.args.indexOf('-t'), 1);
-    }
-    if (input.args.includes('-catch')) {
+    const ftemp = matchArgMultiple(['-f', '-fruits', '-ctb', '-catch'], input.args);
+    if (ftemp.found) {
         mode = 'fruits';
-        input.args.splice(input.args.indexOf('-catch'), 1);
+        input.args = ftemp.args;
     }
-    if (input.args.includes('-fruits')) {
-        mode = 'fruits';
-        input.args.splice(input.args.indexOf('-fruits'), 1);
-    }
-    if (input.args.includes('-ctb')) {
-        mode = 'fruits';
-        input.args.splice(input.args.indexOf('-ctb'), 1);
-    }
-    if (input.args.includes('-f')) {
-        mode = 'fruits';
-        input.args.splice(input.args.indexOf('-f'), 1);
-    }
-    if (input.args.includes('-mania')) {
+    const mtemp = matchArgMultiple(['-m', '-mania'], input.args);
+    if (mtemp.found) {
         mode = 'mania';
-        input.args.splice(input.args.indexOf('-mania'), 1);
-    }
-    if (input.args.includes('-m')) {
-        mode = 'mania';
-        input.args.splice(input.args.indexOf('-m'), 1);
+        input.args = mtemp.args;
     }
     return {
         args: input.args,
@@ -910,4 +869,32 @@ export async function errorAndAbort(input: extypes.commandInput, commandName: st
         config: input.config
     });
     return;
+}
+
+export function matchArgMultiple(argFlags: string[], inargs: string[], match?: boolean, matchType?: 'string' | 'number') {
+    let found = false;
+    let args: string[];
+    let matchedValue = null;
+    let output = null;
+    if (inargs.some(x => {
+        if (argFlags.includes(x)) {
+            matchedValue = x;
+            return true;
+        }
+        return false;
+    })) {
+        found = true;
+        if (match) {
+            const temp = func.parseArg(inargs, matchedValue, matchType ?? 'number', null);
+            output = temp.value;
+            args = temp.newArgs;
+        } else {
+            output = true;
+            args = inargs.splice(inargs.indexOf(matchedValue), 1);
+        }
+    }
+
+    return {
+        found, args, output,
+    };
 }

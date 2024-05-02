@@ -12,6 +12,7 @@ import { filespath, path, precomppath } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
 import * as colourfunc from '../src/colourcalc.js';
+import * as flags from '../src/consts/argflags.js';
 import * as buttonsthing from '../src/consts/buttons.js';
 import * as colours from '../src/consts/colours.js';
 import * as def from '../src/consts/defaults.js';
@@ -30,7 +31,6 @@ import * as extypes from '../src/types/extratypes.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
 import * as othertypes from '../src/types/othertypes.js';
 import * as msgfunc from './msgfunc.js';
-
 export async function name(input: extypes.commandInput) {
 }
 
@@ -967,15 +967,10 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            if (input.args.includes('-page')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
+            const pageArgFinder = msgfunc.matchArgMultiple(flags.pages, input.args, true);
+            if (pageArgFinder.found) {
+                page = pageArgFinder.output;
+                input.args = pageArgFinder.args;
             }
             {
                 const temp = await msgfunc.parseArgsMode(input);
@@ -1443,29 +1438,15 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if (input.args.includes('-details')) {
+            const detailArgFinder = msgfunc.matchArgMultiple(flags.details, input.args);
+            if (detailArgFinder.found) {
                 detailed = 2;
-                input.args.splice(input.args.indexOf('-details'), 1);
+                input.args = detailArgFinder.args;
             }
-            if (input.args.includes('-detailed')) {
-                detailed = 2;
-                input.args.splice(input.args.indexOf('-detailed'), 1);
-            }
-            if (input.args.includes('-detail')) {
-                detailed = 2;
-                input.args.splice(input.args.indexOf('-detail'), 1);
-            }
-            if (input.args.includes('-d')) {
-                detailed = 2;
-                input.args.splice(input.args.indexOf('-d'), 1);
-            }
-            if (input.args.includes('-graph')) {
+            const graphArgFinder = msgfunc.matchArgMultiple(['-g', '-graph',], input.args);
+            if (graphArgFinder.found) {
                 graphonly = true;
-                input.args.splice(input.args.indexOf('-graph'), 1);
-            }
-            if (input.args.includes('-g')) {
-                graphonly = true;
-                input.args.splice(input.args.indexOf('-g'), 1);
+                input.args = graphArgFinder.args;
             }
             {
                 const temp = await msgfunc.parseArgsMode(input);
@@ -2119,15 +2100,10 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
             commanduser = input.obj.author;
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
 
-            if (input.args.includes('-page')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
+            const pageArgFinder = msgfunc.matchArgMultiple(flags.pages, input.args, true);
+            if (pageArgFinder.found) {
+                page = pageArgFinder.output;
+                input.args = pageArgFinder.args;
             }
             if (input.args.includes('-?')) {
                 const temp = func.parseArg(input.args, '-?', 'string', filter, true);
@@ -2950,15 +2926,10 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
 
-            if (input.args.includes('-page')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
+            const pageArgFinder = msgfunc.matchArgMultiple(flags.pages, input.args, true);
+            if (pageArgFinder.found) {
+                page = pageArgFinder.output;
+                input.args = pageArgFinder.args;
             }
 
             if (input.args.includes('-parse')) {
@@ -4436,33 +4407,15 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
             commanduser = input.obj.author;
 
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if (input.args.includes('-list')) {
+            const listArgFinder = msgfunc.matchArgMultiple(['-l', '-list', '-detailed'], input.args);
+            if (listArgFinder.found) {
                 list = true;
-                input.args.splice(input.args.indexOf('-list'), 1);
+                input.args = listArgFinder.args;
             }
-            if (input.args.includes('-l')) {
-                list = true;
-                input.args.splice(input.args.indexOf('-l'), 1);
-            }
-            if (input.args.includes('-passes=true')) {
+            const passArgFinder = msgfunc.matchArgMultiple(['-nf', '-nofail', '-pass', '-passes', 'passes=true'], input.args);
+            if (passArgFinder.found) {
                 showFails = 0;
-                input.args.splice(input.args.indexOf('-passes=true'), 1);
-            }
-            if (input.args.includes('-passes')) {
-                showFails = 0;
-                input.args.splice(input.args.indexOf('-passes=true'), 1);
-            }
-            if (input.args.includes('-pass')) {
-                showFails = 0;
-                input.args.splice(input.args.indexOf('-pass'), 1);
-            }
-            if (input.args.includes('-nofail')) {
-                showFails = 0;
-                input.args.splice(input.args.indexOf('-nofail'), 1);
-            }
-            if (input.args.includes('-nf')) {
-                showFails = 0;
-                input.args.splice(input.args.indexOf('-nf'), 1);
+                input.args = passArgFinder.args;
             }
 
             const temp = await msgfunc.parseArgs_scoreList_message(input);
@@ -5840,22 +5793,15 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
-
-            if (input.args.includes('-detailed')) {
+            const detailArgFinder = msgfunc.matchArgMultiple(flags.details, input.args);
+            if (detailArgFinder.found) {
                 scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-detailed'), 1);
+                input.args = detailArgFinder.args;
             }
-            if (input.args.includes('-d')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-d'), 1);
-            }
-            if (input.args.includes('-compress')) {
+            const lessDetailArgFinder = msgfunc.matchArgMultiple(flags.compress, input.args);
+            if (lessDetailArgFinder.found) {
                 scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-compress'), 1);
-            }
-            if (input.args.includes('-c')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-c'), 1);
+                input.args = lessDetailArgFinder.args;
             }
 
             scorelink = null;
@@ -6919,32 +6865,20 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                 input.args = temp.newArgs;
             }
 
-            if (input.args.includes('-page')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
+            const pageArgFinder = msgfunc.matchArgMultiple(flags.pages, input.args, true);
+            if (pageArgFinder.found) {
+                page = pageArgFinder.output;
+                input.args = pageArgFinder.args;
             }
-            if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-
-            if (input.args.includes('-detailed')) {
+            const detailArgFinder = msgfunc.matchArgMultiple(flags.details, input.args);
+            if (detailArgFinder.found) {
                 scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-detailed'), 1);
+                input.args = detailArgFinder.args;
             }
-            if (input.args.includes('-d')) {
-                scoredetailed = 2;
-                input.args.splice(input.args.indexOf('-d'), 1);
-            }
-            if (input.args.includes('-compress')) {
+            const lessDetailArgFinder = msgfunc.matchArgMultiple(flags.compress, input.args);
+            if (lessDetailArgFinder.found) {
                 scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-compress'), 1);
-            }
-            if (input.args.includes('-c')) {
-                scoredetailed = 0;
-                input.args.splice(input.args.indexOf('-c'), 1);
+                input.args = lessDetailArgFinder.args;
             }
 
             input.args = msgfunc.cleanArgs(input.args);
@@ -7506,50 +7440,25 @@ export async function scorestats(input: extypes.commandInput) {
                 input.args = temp.args;
                 mode = temp.mode;
             }
-
-            if (input.args.includes('-firsts')) {
+            const firstArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['first', 'firsts', 'globals', 'global', 'f', 'g']), input.args);
+            if (firstArgFinder.found) {
                 scoreTypes = 'firsts';
-                input.args.splice(input.args.indexOf('-firsts'), 1);
+                input.args = firstArgFinder.args;
             }
-            if (input.args.includes('-first')) {
-                scoreTypes = 'firsts';
-                input.args.splice(input.args.indexOf('-first'), 1);
-            }
-            if (input.args.includes('-globals')) {
-                scoreTypes = 'firsts';
-                input.args.splice(input.args.indexOf('-globals'), 1);
-            }
-            if (input.args.includes('-global')) {
-                scoreTypes = 'firsts';
-                input.args.splice(input.args.indexOf('-global'), 1);
-            }
-            if (input.args.includes('-osutop')) {
+            const topArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['osutop', 'top', 'best', 't', 'b']), input.args);
+            if (topArgFinder.found) {
                 scoreTypes = 'best';
-                input.args.splice(input.args.indexOf('-osutop'), 1);
+                input.args = topArgFinder.args;
             }
-            if (input.args.includes('-top')) {
-                scoreTypes = 'best';
-                input.args.splice(input.args.indexOf('-top'), 1);
-            }
-            if (input.args.includes('-recent')) {
+            const recentArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['r', 'recent', 'rs']), input.args);
+            if (recentArgFinder.found) {
                 scoreTypes = 'recent';
-                input.args.splice(input.args.indexOf('-recent'), 1);
+                input.args = recentArgFinder.args;
             }
-            if (input.args.includes('-r')) {
-                scoreTypes = 'recent';
-                input.args.splice(input.args.indexOf('-r'), 1);
-            }
-            if (input.args.includes('-pinned')) {
+            const pinnedArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['pinned', 'pins', 'pin', 'p']), input.args);
+            if (pinnedArgFinder.found) {
                 scoreTypes = 'pinned';
-                input.args.splice(input.args.indexOf('-pinned'), 1);
-            }
-            if (input.args.includes('-pins')) {
-                scoreTypes = 'pinned';
-                input.args.splice(input.args.indexOf('-pins'), 1);
-            }
-            if (input.args.includes('-pin')) {
-                scoreTypes = 'pinned';
-                input.args.splice(input.args.indexOf('-pin'), 1);
+                input.args = pinnedArgFinder.args;
             }
 
             input.args = msgfunc.cleanArgs(input.args);
@@ -7953,41 +7862,20 @@ export async function simulate(input: extypes.commandInput) {
                 mods = temp.value;
                 input.args = temp.newArgs;
             }
-            if (ctn.includes('-acc')) {
-                const temp = func.parseArg(input.args, '-acc', 'number', acc);
-                acc = temp.value;
-                input.args = temp.newArgs;
-
+            const accArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['acc', 'accuracy', '%',]), input.args, true);
+            if (accArgFinder.found) {
+                acc = accArgFinder.output;
+                input.args = accArgFinder.args;
             }
-            if (ctn.includes('-accuracy')) {
-                const temp = func.parseArg(input.args, '-accuracy', 'number', acc);
-                acc = temp.value;
-                input.args = temp.newArgs;
+            const comboArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['x', 'combo', 'maxcombo',]), input.args, true);
+            if (comboArgFinder.found) {
+                combo = comboArgFinder.output;
+                input.args = comboArgFinder.args;
             }
-            if (ctn.includes('-combo')) {
-                const temp = func.parseArg(input.args, '-combo', 'number', combo);
-                combo = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (ctn.includes('-x')) {
-                const temp = func.parseArg(input.args, '-x', 'number', combo);
-                combo = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (ctn.includes('-maxcombo')) {
-                const temp = func.parseArg(input.args, '-maxcombo', 'number', combo);
-                combo = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (ctn.includes('-n300')) {
-                const temp = func.parseArg(input.args, '-n300', 'number', n300);
-                n300 = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (ctn.includes('-300s')) {
-                const temp = func.parseArg(input.args, '-300s', 'number', n300);
-                n300 = temp.value;
-                input.args = temp.newArgs;
+            const n300ArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['n300', '300s',]), input.args, true);
+            if (n300ArgFinder.found) {
+                n300 = n300ArgFinder.output;
+                input.args = n300ArgFinder.args;
             }
             if (ctn.includes('-n100')) {
                 const temp = func.parseArg(input.args, '-n100', 'number', n100);
@@ -7999,15 +7887,15 @@ export async function simulate(input: extypes.commandInput) {
                 n100 = temp.value;
                 input.args = temp.newArgs;
             }
-            if (ctn.includes('-n50')) {
-                const temp = func.parseArg(input.args, '-n50', 'number', n50);
-                n50 = temp.value;
-                input.args = temp.newArgs;
+            const n100ArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['n100', '100s',]), input.args, true);
+            if (n100ArgFinder.found) {
+                n100 = n100ArgFinder.output;
+                input.args = n100ArgFinder.args;
             }
-            if (ctn.includes('-50s')) {
-                const temp = func.parseArg(input.args, '-50s', 'number', n50);
-                n50 = temp.value;
-                input.args = temp.newArgs;
+            const n50ArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['n50', '50s',]), input.args, true);
+            if (n50ArgFinder.found) {
+                n50 = n50ArgFinder.output;
+                input.args = n50ArgFinder.args;
             }
             if (ctn.includes('-miss')) {
                 const temp = func.parseArg(input.args, '-miss', 'number', nMiss);
@@ -8018,6 +7906,11 @@ export async function simulate(input: extypes.commandInput) {
                 const temp = func.parseArg(input.args, '-misses', 'number', nMiss);
                 nMiss = temp.value;
                 input.args = temp.newArgs;
+            }
+            const nMissArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['miss', 'misses', 'n0', '0s',]), input.args, true);
+            if (nMissArgFinder.found) {
+                nMiss = nMissArgFinder.output;
+                input.args = nMissArgFinder.args;
             }
             if (input.args.includes('-bpm')) {
                 const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
@@ -8444,14 +8337,10 @@ export async function map(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.Message);
 
             commanduser = input.obj.author;
-
-            if (input.args.includes('-detailed')) {
+            const detailArgFinder = msgfunc.matchArgMultiple(flags.details, input.args);
+            if (detailArgFinder.found) {
                 detailed = 2;
-                input.args.splice(input.args.indexOf('-detailed'), 1);
-            }
-            if (input.args.includes('-d')) {
-                detailed = 2;
-                input.args.splice(input.args.indexOf('-d'), 1);
+                input.args = detailArgFinder.args;
             }
             if (input.args.includes('-bpm')) {
                 const temp = func.parseArg(input.args, '-bpm', 'number', overrideBpm);
@@ -8474,25 +8363,15 @@ export async function map(input: extypes.commandInput) {
                 customAR = temp.value;
                 input.args = temp.newArgs;
             }
-            if (input.args.includes('-od')) {
-                const temp = func.parseArg(input.args, '-od', 'number', customOD);
-                customOD = temp.value;
-                input.args = temp.newArgs;
+            const customODArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['od', 'accuracy',]), input.args, true);
+            if (customODArgFinder.found) {
+                customOD = customODArgFinder.output;
+                input.args = customODArgFinder.args;
             }
-            if (input.args.includes('-accuracy')) {
-                const temp = func.parseArg(input.args, '-accuracy', 'number', customOD);
-                customOD = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-hp')) {
-                const temp = func.parseArg(input.args, '-hp', 'number', customHP);
-                customHP = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-drain')) {
-                const temp = func.parseArg(input.args, '-drain', 'number', customHP);
-                customHP = temp.value;
-                input.args = temp.newArgs;
+            const customHPArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['hp', 'drain', 'health']), input.args, true);
+            if (customHPArgFinder.found) {
+                customHP = customHPArgFinder.output;
+                input.args = customHPArgFinder.args;
             }
 
             if (input.args.includes('-?')) {
@@ -8517,14 +8396,10 @@ export async function map(input: extypes.commandInput) {
             if (input.args.includes('-bg')) {
                 showBg = true;
             }
-
-            if (input.args.includes('-calc')) {
+            const isppCalcArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['pp', 'calc', 'performance']), input.args);
+            if (isppCalcArgFinder.found) {
                 isppCalc = true;
-                input.args.splice(input.args.indexOf('-calc'), 1);
-            }
-            if (input.args.includes('-pp')) {
-                isppCalc = true;
-                input.args.splice(input.args.indexOf('-pp'), 1);
+                input.args = isppCalcArgFinder.args;
             }
 
             const modeTemp = await msgfunc.parseArgsMode(input);
@@ -9903,14 +9778,6 @@ export async function randomMap(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            if (input.args.includes('-ranked')) {
-                mapType = 'Ranked';
-                input.args.splice(input.args.indexOf('-ranked'), 1);
-            }
-            if (input.args.includes('-rank')) {
-                mapType = 'Ranked';
-                input.args.splice(input.args.indexOf('-rank'), 1);
-            }
             if (input.args.includes('-leaderboard')) {
                 useRandomRanked = true;
                 input.args.splice(input.args.indexOf('-leaderboard'), 1);
@@ -9919,65 +9786,40 @@ export async function randomMap(input: extypes.commandInput) {
                 useRandomRanked = true;
                 input.args.splice(input.args.indexOf('-lb'), 1);
             }
-            if (input.args.includes('-loved')) {
+            const mapTypeRankedArgFinder = msgfunc.matchArgMultiple(flags.mapRanked, input.args);
+            if (mapTypeRankedArgFinder.found) {
+                mapType = 'Ranked';
+                input.args = mapTypeRankedArgFinder.args;
+            }
+            const mapTypeLovedArgFinder = msgfunc.matchArgMultiple(flags.mapLove, input.args);
+            if (mapTypeLovedArgFinder.found) {
                 mapType = 'Loved';
-                input.args.splice(input.args.indexOf('-loved'), 1);
+                input.args = mapTypeLovedArgFinder.args;
             }
-            if (input.args.includes('-love')) {
-                mapType = 'Loved';
-                input.args.splice(input.args.indexOf('-love'), 1);
-            }
-            if (input.args.includes('-approved')) {
+            const mapTypeApprovedArgFinder = msgfunc.matchArgMultiple(flags.mapApprove, input.args);
+            if (mapTypeApprovedArgFinder.found) {
                 mapType = 'Approved';
-                input.args.splice(input.args.indexOf('-approved'), 1);
+                input.args = mapTypeApprovedArgFinder.args;
             }
-            if (input.args.includes('-approve')) {
-                mapType = 'Approved';
-                input.args.splice(input.args.indexOf('-approve'), 1);
-            }
-            if (input.args.includes('-qualified')) {
+            const mapTypeQualifiedArgFinder = msgfunc.matchArgMultiple(flags.mapQualified, input.args);
+            if (mapTypeQualifiedArgFinder.found) {
                 mapType = 'Qualified';
-                input.args.splice(input.args.indexOf('-qualified'), 1);
+                input.args = mapTypeQualifiedArgFinder.args;
             }
-            if (input.args.includes('-qualify')) {
-                mapType = 'Qualified';
-                input.args.splice(input.args.indexOf('-qualify'), 1);
-            }
-            if (input.args.includes('-qual')) {
-                mapType = 'Qualified';
-                input.args.splice(input.args.indexOf('-qual'), 1);
-            }
-            if (input.args.includes('-pending')) {
+            const mapTypePendArgFinder = msgfunc.matchArgMultiple(flags.mapPending, input.args);
+            if (mapTypePendArgFinder.found) {
                 mapType = 'Pending';
-                input.args.splice(input.args.indexOf('-pending'), 1);
+                input.args = mapTypePendArgFinder.args;
             }
-            if (input.args.includes('-pend')) {
-                mapType = 'Pending';
-                input.args.splice(input.args.indexOf('-pend'), 1);
-            }
-            if (input.args.includes('-wip')) {
+            const mapTypeWipArgFinder = msgfunc.matchArgMultiple(flags.mapWip, input.args);
+            if (mapTypeWipArgFinder.found) {
                 mapType = 'WIP';
-                input.args.splice(input.args.indexOf('-wip'), 1);
+                input.args = mapTypeWipArgFinder.args;
             }
-            if (input.args.includes('-unfinished')) {
-                mapType = 'WIP';
-                input.args.splice(input.args.indexOf('-unfinished'), 1);
-            }
-            if (input.args.includes('-graveyarded')) {
+            const mapTypeGraveyardArgFinder = msgfunc.matchArgMultiple(flags.mapGraveyard, input.args);
+            if (mapTypeGraveyardArgFinder.found) {
                 mapType = 'Graveyard';
-                input.args.splice(input.args.indexOf('-graveyarded'), 1);
-            }
-            if (input.args.includes('-graveyard')) {
-                mapType = 'Graveyard';
-                input.args.splice(input.args.indexOf('-graveyard'), 1);
-            }
-            if (input.args.includes('-grave')) {
-                mapType = 'Graveyard';
-                input.args.splice(input.args.indexOf('-grave'), 1);
-            }
-            if (input.args.includes('-unranked')) {
-                mapType = 'Graveyard';
-                input.args.splice(input.args.indexOf('-unranked'), 1);
+                input.args = mapTypeGraveyardArgFinder.args;
             }
             input.args = msgfunc.cleanArgs(input.args);
         }
@@ -10097,23 +9939,11 @@ export async function recMap(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            if (input.args.includes('-range')) {
-                const temp = func.parseArg(input.args, '-range', 'number', maxRange, null, true);
-                maxRange = temp.value;
-                input.args = temp.newArgs;
+            const usetypeRandomArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['r', 'random', 'f2', 'rdm', 'range', 'diff']), input.args, true);
+            if (usetypeRandomArgFinder.found) {
+                maxRange = usetypeRandomArgFinder.output;
                 useType = 'random';
-            }
-            if (input.args.includes('-diff')) {
-                const temp = func.parseArg(input.args, '-diff', 'number', maxRange, null, true);
-                maxRange = temp.value;
-                input.args = temp.newArgs;
-                useType = 'random';
-            }
-            if (input.args.includes('-r')) {
-                const temp = func.parseArg(input.args, '-r', 'number', maxRange, null, true);
-                maxRange = temp.value;
-                input.args = temp.newArgs;
-                useType = 'random';
+                input.args = usetypeRandomArgFinder.args;
             }
             if (input.args.includes('-closest')) {
                 useType = 'closest';
@@ -10589,101 +10419,56 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             commanduser = input.obj.author;
 
             searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            if (input.args.includes('-page')) {
-                const temp = func.parseArg(input.args, '-page', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-p')) {
-                const temp = func.parseArg(input.args, '-p', 'number', page, null, true);
-                page = temp.value;
-                input.args = temp.newArgs;
+            const pageArgFinder = msgfunc.matchArgMultiple(flags.pages, input.args, true);
+            if (pageArgFinder.found) {
+                page = pageArgFinder.output;
+                input.args = pageArgFinder.args;
             }
 
-            if (input.args.includes('-detailed')) {
+            const detailArgFinder = msgfunc.matchArgMultiple(flags.details, input.args);
+            if (detailArgFinder.found) {
                 mapDetailed = 2;
-                input.args.splice(input.args.indexOf('-detailed'), 1);
+                input.args = detailArgFinder.args;
             }
-            if (input.args.includes('-d')) {
-                mapDetailed = 2;
-                input.args.splice(input.args.indexOf('-d'), 1);
-            }
-            if (input.args.includes('-compress')) {
-                mapDetailed = 0;
-                input.args.splice(input.args.indexOf('-compress'), 1);
-            }
-            if (input.args.includes('-c')) {
-                mapDetailed = 0;
-                input.args.splice(input.args.indexOf('-c'), 1);
-            }
-
-            if (input.args.includes('-ranked')) {
+            const filterRankArgFinder = msgfunc.matchArgMultiple(flags.mapRanked, input.args);
+            if (filterRankArgFinder.found) {
                 filter = 'ranked';
-                input.args.splice(input.args.indexOf('-ranked'), 1);
+                input.args = filterRankArgFinder.args;
             }
-            if (input.args.includes('-rank')) {
-                filter = 'ranked';
-                input.args.splice(input.args.indexOf('-rank'), 1);
-            }
-            if (input.args.includes('-favourites')) {
+            const filterFavouritesArgFinder = msgfunc.matchArgMultiple(flags.mapFavourite, input.args);
+            if (filterFavouritesArgFinder.found) {
                 filter = 'favourite';
-                input.args.splice(input.args.indexOf('-favourites'), 1);
+                input.args = filterFavouritesArgFinder.args;
             }
-            if (input.args.includes('-favourite')) {
-                filter = 'favourite';
-                input.args.splice(input.args.indexOf('-favourite'), 1);
-            }
-            if (input.args.includes('-fav')) {
-                filter = 'favourite';
-                input.args.splice(input.args.indexOf('-fav'), 1);
-            }
-            if (input.args.includes('-graveyard')) {
+            const filterGraveyardArgFinder = msgfunc.matchArgMultiple(flags.mapGraveyard, input.args);
+            if (filterGraveyardArgFinder.found) {
                 filter = 'graveyard';
-                input.args.splice(input.args.indexOf('-graveyard'), 1);
+                input.args = filterGraveyardArgFinder.args;
             }
-            if (input.args.includes('-grave')) {
-                filter = 'graveyard';
-                input.args.splice(input.args.indexOf('-grave'), 1);
-            }
-            if (input.args.includes('-loved')) {
+            const filterLovedArgFinder = msgfunc.matchArgMultiple(flags.mapLove, input.args);
+            if (filterLovedArgFinder.found) {
                 filter = 'loved';
-                input.args.splice(input.args.indexOf('-loved'), 1);
+                input.args = filterLovedArgFinder.args;
             }
-            if (input.args.includes('-pending')) {
+            const filterPendingArgFinder = msgfunc.matchArgMultiple(flags.mapPending, input.args);
+            if (filterPendingArgFinder.found) {
                 filter = 'pending';
-                input.args.splice(input.args.indexOf('-pending'), 1);
+                input.args = filterPendingArgFinder.args;
             }
-            if (input.args.includes('-nominated')) {
+            const filterNominatedArgFinder = msgfunc.matchArgMultiple(flags.mapNominated, input.args);
+            if (filterNominatedArgFinder.found) {
                 filter = 'nominated';
-                input.args.splice(input.args.indexOf('-nominated'), 1);
+                input.args = filterNominatedArgFinder.args;
             }
-            if (input.args.includes('-bn')) {
-                filter = 'nominated';
-                input.args.splice(input.args.indexOf('-bn'), 1);
-            }
-            if (input.args.includes('-guest')) {
+            const filterGuestArgFinder = msgfunc.matchArgMultiple(flags.mapGuest, input.args);
+            if (filterGuestArgFinder.found) {
                 filter = 'guest';
-                input.args.splice(input.args.indexOf('-guest'), 1);
+                input.args = filterGuestArgFinder.args;
             }
-            if (input.args.includes('-gd')) {
-                filter = 'guest';
-                input.args.splice(input.args.indexOf('-gd'), 1);
-            }
-            if (input.args.includes('-mostplayed')) {
+            const filterMostPlayedArgFinder = msgfunc.matchArgMultiple(flags.mapMostPlayed, input.args);
+            if (filterMostPlayedArgFinder.found) {
                 filter = 'most_played';
-                input.args.splice(input.args.indexOf('-mostplayed'), 1);
-            }
-            if (input.args.includes('-most')) {
-                filter = 'most_played';
-                input.args.splice(input.args.indexOf('-most'), 1);
-            }
-            if (input.args.includes('-most_played')) {
-                filter = 'most_played';
-                input.args.splice(input.args.indexOf('-most_played'), 1);
-            }
-            if (input.args.includes('-mp')) {
-                filter = 'most_played';
-                input.args.splice(input.args.indexOf('-mp'), 1);
+                input.args = filterMostPlayedArgFinder.args;
             }
             if (input.args.includes('-reverse')) {
                 reverse = true;
@@ -12362,15 +12147,10 @@ export async function osuset(input: extypes.commandInput) {
                 location = temp.value;
                 input.args = temp.newArgs;
             }
-            if (input.args.includes('-timezone')) {
-                const temp = func.parseArg(input.args, '-timezone', 'string', tz, true);
-                tz = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (input.args.includes('-tz')) {
-                const temp = func.parseArg(input.args, '-tz', 'string', tz, true);
-                tz = temp.value;
-                input.args = temp.newArgs;
+            const timeArgFinder = msgfunc.matchArgMultiple(flags.toFlag(['timezone', 'tz']), input.args, true, 'string');
+            if (timeArgFinder.found) {
+                tz = timeArgFinder.output;
+                input.args = timeArgFinder.args;
             }
 
             input.args = msgfunc.cleanArgs(input.args);
