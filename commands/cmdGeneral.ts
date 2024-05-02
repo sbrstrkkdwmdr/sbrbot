@@ -659,7 +659,7 @@ SF:   ${data.significantFigures}\`
         if (data.formula.includes('not found')) {
             const c1 = calc.numBaseToInt(calc.numConvertTyping(cat1))
             const c2 = calc.numBaseToInt(calc.numConvertTyping(cat2));
-            const tdata = calc.numConvertAlt(`${num}`, c1, c2);
+            const tdata = calc.numConvert(`${num}`, c1, c2);
             if (!tdata.includes('INVALID')) {
                 embedres
                     .setTitle('Base number conversion')
@@ -2360,6 +2360,7 @@ export async function time(input: extypes.commandInput) {
 
     let fetchtimezone: string;
     let displayedTimezone: string;
+    let dstList = false;
 
     let useComponents = [];
 
@@ -2477,7 +2478,31 @@ export async function time(input: extypes.commandInput) {
         displayedTimezone = cuser.tz;
     }
 
-    if (fetchtimezone != null && fetchtimezone != '') {
+    const daylightMatch = ['dst', 'daylight', 'daylight savings', 'daylight savings time'];
+    if (daylightMatch.some(x => x.toLowerCase().trim() == fetchtimezone.trim().toLowerCase())) {
+        Embed.setTitle('List of countries that observe daylight savings and when they do');
+        const tempFields: Discord.EmbedField[] = [];
+        for (const rule of timezoneList.dstForList) {
+            const tempRegions: string[] = [];
+            for (let region of rule.includes) {
+                let txt = '';
+                if ((region as timezoneList.dstCountry)?.name) {
+                    region = region as timezoneList.dstCountry;
+                    const tempT = region.territories.join(', ');
+                    txt = `${region.name} -- \`${tempT}\``;
+                } else {
+                    txt = region as string;
+                }
+                tempRegions.push(txt);
+            }
+            tempFields.push({
+                name: `Starts on the ${rule.start} | Ends on the ${rule.end}`,
+                value: `${tempRegions.join('\n ')}`,
+                inline: false,
+            });
+        }
+        Embed.setFields(tempFields)
+    } else if (fetchtimezone != null && fetchtimezone != '') {
         try {
             const found: timezoneList.timezone[] = [];
 

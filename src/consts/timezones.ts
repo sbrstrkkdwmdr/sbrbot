@@ -815,7 +815,7 @@ export const timezones: timezone[] = [
             'Bloemfontein', 'ǀʼAuxa ǃXās', 'Mangaung', //^ judicial capital
             'Sudan', 'As-Sudan', 'السودان', 'SD', 'SDN',
             'Khartoum', 'Al-Khartûm', 'الخرطوم', //^ capital
-            'KRT','PZU', //^ airport
+            'KRT', 'PZU', //^ airport
             'Syria', 'Suriyah', 'سورية', 'SY', 'SYR',
             'Damascus', 'Dimashq', 'Ash-Sham', 'دمشق', 'الشام ', //^ capital
             'Ukraine', 'Ukrajina', 'Україна', 'UA', 'UKR',
@@ -1376,6 +1376,8 @@ export const hasDaylight: {
                 'Sydney', //^
                 'Tasmania', 'TAS',
                 'Hobart', //^
+                'South Australia', 'SA',
+                'Adelaide',
                 'Lord Howe Island',
                 'Norfolk Island', ' Norf\'k Ailen', //^
                 'Kingston', //^ capital
@@ -1443,7 +1445,7 @@ export const hasDaylight: {
             includes: [
                 'Aland', 'Åland', 'Ahvenanmaa', //^ (autonomous region)
                 'Mariehamn', 'Maarianhamina', //^ capital
-                'Shqiperia', 'AL', 'ALB',
+                'Albania', 'Shqipëria', 'Shqiperia', 'AL', 'ALB',
                 'Tirana', //^ capital
                 'Andorra', 'AD', 'AND',
                 'Andorra la Vella', //^ capital
@@ -1776,6 +1778,225 @@ export const hasDaylight: {
                 }
                 return false;
             })
+        },
+    ];
+
+export type dstCountry = {
+    name: string,
+    territories: string[];
+};
+
+export const dstForList: {
+    start: string,
+    end: string,
+    includes: (dstCountry| string)[],
+}[] = [
+        //template 
+        // {
+        //     start: 'x Sunday in March',
+        //     end: 'x Sunday in October',
+        //     includes: [],
+        //     check: ((date) => {
+        //         if (true) {
+        //             return true;
+        //         }
+        //         return false;
+        //     })
+        // },
+        //southern hemisphere
+        {
+            start: 'First Sunday in October',
+            end: 'First Sunday in April',
+            includes: [
+                {
+                    name: 'Australia',
+                    territories: [
+                        'Australian Capital Territory (ACT)',
+                        'Victoria (VIC)',
+                        'New South Wales (NSW)',
+                        'Tasmania (TAS)',
+                        'Lord Howe Island',
+                        'Norfolk Island/Norf\'k Ailen',
+                    ]
+                }
+            ],
+        },
+        {
+            start: 'Last Sunday in October',
+            end: 'First Sunday in March',
+            includes: [
+                'Paraguay/Paraguái'
+            ],
+        },
+        {
+            start: 'First Sunday in October',
+            end: 'Last Sunday in March',
+            includes: [
+                'New Zealand/Aotearoa',
+                'Tokelau'
+            ],
+        },
+        // northern hemisphere
+        {
+            start: 'Last Sunday in March',
+            end: 'Last Sunday in October',
+            includes: [
+                'Aland Islands/Åland Islands/Ahvenanmaa',
+                'Albania/Shqipëria',
+                'Andorra',
+                'Austria/Österreich',
+                'Belgium/België/Belgique/Belgien',
+                'Bosnia And Herzegovina/Босна и Херцеговина',
+                'Bulgaria/България',
+                'Croatia/Hrvatska',
+                'Czechia/Czech Republic/Česká republika/Česko',
+                'Denmark/Danmark',
+                'Estonia/Eesti',
+                'Faroe Islands/Føroyar/Færøerne',
+                'Finland/Suomi',
+                'France',
+                'Germany/Deutschland',
+                'Gibraltar',
+                'Greece/Ελλάς/Ελλάδα',
+                'Guernsey',
+                'Hungary/Magyarország', 'Magyarország',
+                'Ireland/Éire',
+                'Isle of Man/Ellan Vannin',
+                'Italy/Italia',
+                'Jersey/Jèrri',
+                'Kosovo/Косово',
+                'Latvia/Latvija',
+                'Liechtenstein',
+                'Lithuania/Lietuva',
+                'Luxembourg/Lëtzebuerg/Luxemburg',
+                'Malta',
+                'Moldova',
+                'Monaco/Múnegu', 'Múnegu',
+                'Montenegro/Црна Гора',
+                'Netherlands/Nederland/Nederlân',
+                'North Macedonia/Северна Македонија',
+                'Norway/Norge/Noreg',
+                'Poland/Polska',
+                'Portugal',
+                'Romania/România',
+                'San Marino',
+                'Serbia/Србија',
+                'Slovakia/Slovensko',
+                'Slovenia/Slovenija',
+                'Spain/España',
+                'Sweden/Sverige',
+                'Switzerland/Schweiz/Suisse/Svizra',
+                'Ukraine/Україна',
+                'United Kingdom/UK',
+                'Vatican City/Holy See/Città del Vaticano',
+            ],
+        },
+        {
+            start: 'Second Sunday in March',
+            end: 'First Sunday in November',
+            includes: [
+                'Bermuda',
+                {
+                    name: 'Canada',
+                    territories: [
+                        'British Columbia',
+                        'Manitoba',
+                        'Northwest Territories',
+                        'Ontario (excl. NW)',
+                        'Nunavut',
+                        'Quebec (excl. E)',
+                        'Labrador',
+                        'Nova Scotia',
+                        'Prince Edward Island',
+                        'Newfoundland and Labrador', 'Newfoundland',
+                    ]
+                },
+                'Cuba',
+                'Haiti/Ayiti',
+                {
+                    name: 'Mexico',
+                    territories: [
+                        'Baja California',
+                        'Chihuahua',
+                        'Coahuila',
+                        'Nuevo Leon(Nuevo León)',
+                        'Tamaulipas',
+                    ]
+                },
+                'Saint Pierre and Miquelon',
+                'The Bahamas',
+                'Turks and Caicos Islands',
+                {
+                    name: 'United States of America/USA',
+                    territories: [
+                        'Alabama',//^ state
+                        'Alaska', //^ state
+                        'Aleutian Islands',
+                        'Arizona (NW)',
+                        'Arkansas',//^ state
+                        'California',//^ state
+                        'Colorado',//^ state
+                        'Connecticut',//^ state 
+                        'Delaware',//^ state
+                        'Florida',//^ state //excl. W panhandle
+                        'Georgia',//^ state
+                        'Idaho', //^ state 
+                        'Illinois',//^ state
+                        'Indiana', //^ state
+                        'Iowa',//^ state
+                        'Kansas',//^ state 
+                        'Kentucky',//^  state
+                        'Louisiana',//^ state
+                        'Maine',//^ state 
+                        'Maryland',//^ state
+                        'Massachusetts',//^ state 
+                        'Michigan', //^state
+                        'Minnesota',//^ state
+                        'Mississippi',//^ state
+                        'Missouri',//^ state
+                        'Montana',//^ state
+                        'Nebraska', //^ state
+                        'Nevada', //^ state
+                        'New Hampshire',//^ state 
+                        'New Jersey',//^ state
+                        'New Mexico',//^ state
+                        'New York', //^ state 
+                        'North Carolina',//^ state
+                        'North Dakota',//^  state
+                        'Ohio',//^ state 
+                        'Oklahoma',//^ state
+                        'Oregon',//^ state
+                        'Pennsylvania',//^ state 
+                        'Rhode Island',//^ state 
+                        'South Carolina',//^ state
+                        'South Dakota',//^state //E
+                        'Tennessee',//^  state//W and central
+                        'Texas', //^ state//most of
+                        'Utah',//^ state
+                        'Vermont',//^ state 
+                        'Virginia',//^ state
+                        'Washington D.C.',
+                        'Washington',//^ state
+                        'West Virginia',//^ state
+                        'Wisconsin',//^ state
+                        'Wyoming',//^ state
+                    ]
+                },
+            ],
+        },
+        {
+            start: 'Last Saturday in April',
+            end: 'Last Saturday in October',
+            includes: [
+                'Palestine/فلسطين',
+            ],
+        },
+        {
+            start: 'Last Thursday in March',
+            end: 'Last Sunday in October',
+            includes: [
+                'Lebanon/لبنان ', 
+            ],
         },
     ];
 
