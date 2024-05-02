@@ -156,23 +156,30 @@ export async function scoreList(
                 array.score.max_combo > tempValue :
                 array.score.max_combo < tempValue);
     }
+    //only miss and bpm allow for "equal" on top of LT/GT
     if (asObj.miss != null) {
         filterinfo += `\nmiss: ${asObj.miss}`;
-        const tempType: 'l' | 'g' = asObj.miss.includes('<') ? 'l' : 'g';
+        const tempType: 'l' | 'g' | 'e' = asObj.miss.includes('<') ? 'l' : asObj.miss.includes('>') ? 'g' : 'e';
         const tempValue = +(asObj.miss.replace('<', '').replace('>', '')) ?? 0;
         filtereddata = filtereddata.filter(array =>
             tempType == 'g' ?
                 array.score.statistics.count_miss > tempValue :
-                array.score.statistics.count_miss < tempValue);
+                tempType == 'l' ?
+                    array.score.statistics.count_miss < tempValue :
+                    array.score.statistics.count_miss == tempValue
+        );
     }
     if (asObj.bpm != null) {
         filterinfo += `\nbpm: ${asObj.bpm}`;
-        const tempType: 'l' | 'g' = asObj.bpm.includes('<') ? 'l' : 'g';
+        const tempType: 'l' | 'g' | 'e' = asObj.bpm.includes('<') ? 'l' : asObj.bpm.includes('>') ? 'g' : 'e';
         const tempValue = +(asObj.bpm.replace('<', '').replace('>', '')) ?? 0;
         filtereddata = filtereddata.filter(array =>
             tempType == 'g' ?
                 array.score.beatmap.bpm > tempValue :
-                array.score.beatmap.bpm < tempValue);
+                tempType == 'l' ?
+                    array.score.beatmap.bpm < tempValue :
+                    array.score.beatmap.bpm == tempValue
+        );
     }
 
 

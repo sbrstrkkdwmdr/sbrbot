@@ -737,3 +737,4 @@ commit: null
 [ADD] option to show which countries observe DST in time command
 [QOL] rewrote msg args parsing
 [FIX] filter rank using score.mods instead of score.rank
+[QOL] miss and bpm filters now allow for equal values
