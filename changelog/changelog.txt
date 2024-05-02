@@ -741,3 +741,4 @@ changes:
 [QOL] miss and bpm filters now allow for equal values
 [FIX] `+` variant of includemods not working on scorelist cmds
 [FIX] include mods has to include all mods given instead of just one
+[FIX] changelog causing crashes if there is no `changes:` string

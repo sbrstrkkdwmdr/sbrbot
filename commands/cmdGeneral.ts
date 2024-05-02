@@ -216,7 +216,9 @@ export async function changelog(input: extypes.commandInput) {
             maj: [],
             min: [],
         };
-        const changesList = changesTxt.split('\n').map(x => x.trim()).filter(x => x.length > 2);
+        const changesList = 
+        changesTxt ? 
+        changesTxt.split('\n').map(x => x.trim()).filter(x => x.length > 2) : [];
         for (const change of changesList) {
             switch (true) {
                 case change.startsWith('[ADD]'):
