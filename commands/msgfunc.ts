@@ -415,7 +415,7 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
     }
     const fcArgFinder = matchArgMultiple(flags.toFlag(['fc', 'fullcombo',]), input.args);
     if (fcArgFinder.found) {
-        miss = '0'
+        miss = '0';
         input.args = fcArgFinder.args;
     }
     const filterRankArgFinder = matchArgMultiple(flags.toFlag(['rank', 'grade', 'letter']), input.args, true, 'string');
@@ -434,7 +434,12 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
         filterTitle = temp.value;
         input.args = temp.newArgs;
     }
-    input.args = cleanArgs(input.args)
+    input.args = cleanArgs(input.args);
+    if (input.args.join(' ').includes('+')) {
+        filteredMods = input.args.join(' ').split('+')[1];
+        filteredMods.includes(' ') ? filteredMods = filteredMods.split(' ')[0] : null;
+        input.args = input.args.join(' ').replace('+', '').replace(filteredMods, '').split(' ');
+    }
     user = input.args.join(' ')?.replaceAll('"', '');
     if (!input.args[0] || input.args.join(' ').includes(searchid)) {
         user = null;
@@ -873,7 +878,7 @@ export async function errorAndAbort(input: extypes.commandInput, commandName: st
 
 export function matchArgMultiple(argFlags: string[], inargs: string[], match?: boolean, matchType?: 'string' | 'number') {
     let found = false;
-    let args: string[];
+    let args: string[] = inargs;
     let matchedValue = null;
     let output = null;
     if (inargs.some(x => {
@@ -890,10 +895,10 @@ export function matchArgMultiple(argFlags: string[], inargs: string[], match?: b
             args = temp.newArgs;
         } else {
             output = true;
-            args = inargs.splice(inargs.indexOf(matchedValue), 1);
+            inargs.splice(inargs.indexOf(matchedValue), 1);
+            args = inargs;
         }
     }
-
     return {
         found, args, output,
     };
