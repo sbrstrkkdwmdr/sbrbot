@@ -744,3 +744,4 @@ changes:
 [FIX] changelog crashing if there is no `changes:` string
 [QOL] show changes count in version list
 [QOL] show pending changes in version list
+[FIX] changelog crashing on version list

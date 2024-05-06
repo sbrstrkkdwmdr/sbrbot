@@ -181,28 +181,28 @@ export async function changelog(input: extypes.commandInput) {
         isList = true;
         // let txt = '' mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n');
         const doc = fs.readFileSync(`${precomppath}/changelog/changelog.txt`, 'utf-8');
-        let txt = '\`VERSION          DATE     CHANGES\`\n';
+        let txt = '\`VERSION        DATE     CHANGES\`\n';
         const list = doc.split('VERSION');
         list.shift();
         for (let i = 0; i < mainconst.versions.length; i++) {
             const sumVer = mainconst.versions[i];
             const useVer = list[i];
             const changes = useVer?.split('changes:')[1]?.split('\n')?.length ?? 0;
-            txt += `\`${(sumVer.name).padEnd(10)} (${sumVer.releaseDateFormatted})   ${changes}\`\n`
+            txt += `\`${(sumVer.name).padEnd(10)} (${sumVer.releaseDateFormatted})   ${changes}\`\n`;
         }
-        if(list[list.length-1].includes('commit: null')){
-            const changes = list[list.length-1]?.split('changes:')[1]?.split('\n')?.length ?? 0;
-            txt += `\`Pending                   ${changes}\`\n`
+        if (list[list.length - 1].includes('commit: null')) {
+            const changes = list[list.length - 1]?.split('changes:')[1]?.split('\n')?.length ?? 0;
+            txt += `\`Pending                   ${changes}\`\n`;
         }
         if (txt.length > 2000) {
             txt = exceeded;
         }
         Embed.setTitle('ALL VERSIONS')
-            .setAuthor({ name: foundBool ? '' : `\nThere was an error trying to find version \`${version}\`` })
             .setDescription(txt)
             .setFooter({
                 text: `${useNum + 1}/${mainconst.versions.length}`
             });
+        foundBool ? null : Embed.setAuthor({ name: `\nThere was an error trying to find version \`${version}\`` });
     } else {
         const document = useGit ?
             fs.readFileSync(`${path}/cache/changelog.txt`, 'utf-8')
