@@ -297,11 +297,11 @@ const cmds: commandInfo[] = [
                 descriptor: 'Returns the changelog for the upcoming version'
             },
             {
-                text: 'PREFIXMSGchangelog versions',
+                text: 'PREFIXMSGversions',
                 descriptor: 'Returns a list of all versions'
             },
         ],
-        aliases: ['clog', 'changes'],
+        aliases: ['clog', 'changes', 'versions'],
         options: [
             {
                 name: 'version',

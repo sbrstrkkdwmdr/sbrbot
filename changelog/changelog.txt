@@ -745,3 +745,4 @@ changes:
 [QOL] show changes count in version list
 [QOL] show pending changes in version list
 [FIX] changelog crashing on version list
+[ADD] "versions" alias for changelog
