@@ -180,7 +180,7 @@ export async function changelog(input: extypes.commandInput) {
     if (typeof found == 'string' && useGit == false) {
         isList = true;
         // let txt = '' mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n');
-        const doc = fs.readFileSync(`${precomppath}/changelog/changelog.txt`, 'utf-8');
+        const doc = fs.readFileSync(`${path}/cache/changelog.txt`, 'utf-8');
         let txt = '\`VERSION        DATE     CHANGES\`\n';
         const list = doc.split('VERSION');
         list.shift();
