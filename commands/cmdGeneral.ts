@@ -179,7 +179,21 @@ export async function changelog(input: extypes.commandInput) {
     const exceeded = 'Exceeded character limit. Please click [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.txt) to view the changelog.';
     if (typeof found == 'string' && useGit == false) {
         isList = true;
-        let txt = mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n');
+        // let txt = '' mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n');
+        const doc = fs.readFileSync(`${precomppath}/changelog/changelog.txt`, 'utf-8');
+        let txt = '\`VERSION          DATE     CHANGES\`\n';
+        const list = doc.split('VERSION');
+        list.shift();
+        for (let i = 0; i < mainconst.versions.length; i++) {
+            const sumVer = mainconst.versions[i];
+            const useVer = list[i];
+            const changes = useVer?.split('changes:')[1]?.split('\n')?.length ?? 0;
+            txt += `\`${(sumVer.name).padEnd(10)} (${sumVer.releaseDateFormatted})   ${changes}\`\n`
+        }
+        if(list[list.length-1].includes('commit: null')){
+            const changes = list[list.length-1]?.split('changes:')[1]?.split('\n')?.length ?? 0;
+            txt += `\`Pending                   ${changes}\`\n`
+        }
         if (txt.length > 2000) {
             txt = exceeded;
         }
@@ -216,9 +230,9 @@ export async function changelog(input: extypes.commandInput) {
             maj: [],
             min: [],
         };
-        const changesList = 
-        changesTxt ? 
-        changesTxt.split('\n').map(x => x.trim()).filter(x => x.length > 2) : [];
+        const changesList =
+            changesTxt ?
+                changesTxt.split('\n').map(x => x.trim()).filter(x => x.length > 2) : [];
         for (const change of changesList) {
             switch (true) {
                 case change.startsWith('[ADD]'):
