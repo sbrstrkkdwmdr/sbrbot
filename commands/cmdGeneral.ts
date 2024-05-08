@@ -187,11 +187,11 @@ export async function changelog(input: extypes.commandInput) {
         for (let i = 0; i < mainconst.versions.length; i++) {
             const sumVer = mainconst.versions[i];
             const useVer = list[i];
-            const changes = useVer?.split('changes:')[1]?.split('\n')?.length ?? 0;
-            txt += `\`${(sumVer.name).padEnd(10)} (${sumVer.releaseDateFormatted})   ${changes}\`\n`;
+            const changes = useVer?.split('changes:')[1]?.split('\n')?.filter(x => x.length > 0) ?? [];
+            txt += `\`${(sumVer.name).padEnd(10)} (${sumVer.releaseDateFormatted})   ${changes.length}\`\n`;
         }
         if (list[list.length - 1].includes('commit: null')) {
-            const changes = list[list.length - 1]?.split('changes:')[1]?.split('\n')?.length ?? 0;
+            const changes = (list[list.length - 1]?.split('changes:')[1]?.split('\n')?.length ?? 1) - 1;
             txt += `\`Pending                   ${changes}\`\n`;
         }
         if (txt.length > 2000) {
