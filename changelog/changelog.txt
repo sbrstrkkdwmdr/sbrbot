@@ -748,3 +748,4 @@ changes:
 [ADD] "versions" alias for changelog
 [FIX] changelog - page buttons not disabling correctly
 [FIX] changelog - BigLeftArrow not going to first version
+[ADD] debug - clear option for map pp calc files only

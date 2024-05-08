@@ -745,7 +745,7 @@ export async function debug(input: extypes.commandInput) {
         'pscores' | 'prevscore' |
         'pusers' | 'prevuser' |
         'users' | 'errors' | 'trueall' |
-        'maps' | 'map' |
+        'maps' | 'map' | 'pp' | 
         'graph'
         ;
 
@@ -1232,6 +1232,15 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                     content: `Clearing all files in ./cache/commandData/`
                 };
             }
+                break;
+            case 'pp':
+                log.toOutput(`manually clearing all map files in ${path}/files/maps/`, input.config)
+                const curpath =`${path}/files/maps`;
+                const files =  fs.readdirSync(curpath);
+                for (const file of files){
+                    fs.unlinkSync(`${curpath}/` + file)
+                    log.toOutput(`${curpath}/` + file, input.config)
+                }
                 break;
             case 'map': case 'maps': { // clears all maps and mapset files
                 log.toOutput(`manually clearing all map and mapset files in ${path}/cache/commandData/ and ${path}/files/maps/`, input.config);
