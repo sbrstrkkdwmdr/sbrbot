@@ -74,7 +74,7 @@ export async function changelog(input: extypes.commandInput) {
             ) - 1;
             switch (input.button) {
                 case 'BigLeftArrow':
-                    useNum = 1;
+                    useNum = 0;
                     break;
                 case 'LeftArrow':
                     useNum = curpage - 1;
@@ -330,7 +330,7 @@ Total of ${changesList.length} changes.${txt}
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
-    if (useNum == mainconst.versions.length) {
+    if (useNum == mainconst.versions.length - 1) {
         (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }

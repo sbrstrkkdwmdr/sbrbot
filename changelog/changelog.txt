@@ -746,3 +746,5 @@ changes:
 [QOL] show pending changes in version list
 [FIX] changelog crashing on version list
 [ADD] "versions" alias for changelog
+[FIX] changelog - page buttons not disabling correctly
+[FIX] changelog - BigLeftArrow not going to first version
