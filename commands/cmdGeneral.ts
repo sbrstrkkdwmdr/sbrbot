@@ -187,11 +187,11 @@ export async function changelog(input: extypes.commandInput) {
         for (let i = 0; i < mainconst.versions.length; i++) {
             const sumVer = mainconst.versions[i];
             const useVer = list[i];
-            const changes = useVer?.split('changes:')[1]?.split('\n')?.filter(x => x.length > 0) ?? [];
+            const changes = useVer?.split('changes:\n')[1]?.split('\n')?.filter(x => x.length > 0) ?? [];
             txt += `\`${(sumVer.name).padEnd(10)} (${sumVer.releaseDateFormatted})   ${changes.length}\`\n`;
         }
         if (list[list.length - 1].includes('commit: null')) {
-            const changes = (list[list.length - 1]?.split('changes:')[1]?.split('\n')?.length ?? 1) - 1;
+            const changes = (list[list.length - 1]?.split('changes:\n')[1]?.split('\n')?.length ?? 1) - 1;
             txt += `\`Pending                   ${changes}\`\n`;
         }
         if (txt.length > 2000) {
@@ -204,10 +204,10 @@ export async function changelog(input: extypes.commandInput) {
             });
         foundBool ? null : Embed.setAuthor({ name: `\nThere was an error trying to find version \`${version}\`` });
     } else {
-        const document = useGit ?
-            fs.readFileSync(`${path}/cache/changelog.txt`, 'utf-8')
-            :
-            fs.readFileSync(`${precomppath}/changelog/changelog.txt`, 'utf-8');
+        const document = /* useGit ? */
+            fs.readFileSync(`${path}/cache/changelog.txt`, 'utf-8');
+/*             :
+            fs.readFileSync(`${precomppath}/changelog/changelog.txt`, 'utf-8'); */
         const list = document.split('VERSION');
         list.shift();
         if (useGit) {
@@ -221,7 +221,7 @@ export async function changelog(input: extypes.commandInput) {
 
         } : mainconst.versions[useNum];
         const commit = useGit ? 'null' : cur.split('commit:')[1].split('\n')[0] as string;
-        const changesTxt = cur.split('changes:')[1];
+        const changesTxt = cur.split('changes: ')[1];
         const changes: { add: string[]; rem: string[]; qol: string[], fix: string[], maj: string[]; min: string[]; } = {
             add: [],
             rem: [],

@@ -9,12 +9,14 @@
 // file created 7acfa41a7039ac1f377386d01c82d26fda777ccc
 // version 0.4.4
 // changelog b4 0.4.1 is inaccurate
+// changes are written as changes: \n(changes)
+//
 
 VERSION 
 0.0.0
 2021-08-07
 commit: 7005504084d13a619e43b9781d27a8fa1470bf13
-changes:
+changes: 
 [MAJ] the beginning
 
 VERSION 
@@ -51,7 +53,6 @@ commit: c3566227ccecb19e93935a5be65f1c63dc7a0949
 changes: 
 [MAJ] switched from booba to rosu-pp
 [QOL] stopped using `fetch (thing).then(x => {    osudata = X    blahblahblah})` and switched to `osudata = fetch (thing).then(res => res.json())`
-
 [QOL] stopped using `username = JSON.stringify([osudata], [username]).replace().replace().replace()`
 [QOL] switched to `username  = osudata.username`
 
@@ -417,7 +418,7 @@ changes:
 VERSION 0.5.2
 2023-08-17
 commit: c4bca0407a8ff85ad7c078e0968d1bc345470e7c
-changes:
+changes: 
 [FIX] recent going back to most recent score when using non-page buttons
 [ADD] add buttons to changelog
 [QOL] fix changelog showing 0.4.1 instead of 0.4.1x
@@ -438,7 +439,7 @@ changes:
 VERSION 0.5.3
 2023-09-03 
 commit: 40c3b6731e34f42cbff523a015904aa12e4232bd
-changes:
+changes: 
 [QOL] versions are now evenly spaced (changelog)
 [QOL] change wind directions to shorthand (west-southwest -> WSW)
 [FIX] page # when requesting to show all versions (changelog)
@@ -474,7 +475,7 @@ changes:
 VERSION 0.5.4
 2023-09-20 
 commit: 8f273ea03e3baed6388b033063364e30f9ce84f9
-changes:
+changes: 
 [FIX] server name when showing global leaderboard
 [FIX] mania mods being applied to non-mania maps
 [QOL] change saved mods to `null` (NM) if from a map/ppcalc command (when no args are given, map id and mods are taken from last used)
@@ -500,6 +501,7 @@ VERSION 0.5.5
 2023-10-09
 commit: 0fb571588c6253e7ebc03f03bda1441f367142c3 
 changes: 
+
 [QOL] auto-censor config properties in cache
 [FIX] replayparse and mapfileparse not running (discord changed file URLs)
 [QOL] edit graph colours
@@ -525,7 +527,7 @@ changes:
 VERSION 0.5.5b
 2023-10-12
 commit: af0906ee036b8a140884fa77ab0db78889a46823 
-changes:
+changes: 
 [FIX] reminder list saying "sending reminder *in in*"
 [ADD] add aliases to roll
 [QOL] improve time command tz selector 
@@ -538,6 +540,7 @@ VERSION 0.5.6
 2023-10-26
 commit: e38de7573df02eb6f38a70ff8ea7a81089ae88ad
 changes: 
+
 [FIX] incorrect capitalisation in tz
 [REM] remove full numbers from convert SI prefix list
 [QOL] move conversions to a separate function
@@ -561,14 +564,14 @@ changes:
 VERSION 0.5.6_b
 2023-10-26
 commit: 6a1cb29237822513fe2b234b755639b9a317ae4e
-changes:
+changes: 
 [FIX] avatar no longer requires admin
 [FIX] error handling for weather
 
 VERSION 0.5.7
 2023-11-06
 commit: 83a9adc44875c48e16f1c1b8a34680c7e76db9f0
-changes:
+changes: 
 [QOL] simulate - pull values from previously used score if map id matches 
 [FIX] simulate - map predicted pp being too high/low (forced clockrate of 1 instead of matching DT/HT/specified)
 [ADD] simulate - show star rating
@@ -588,7 +591,7 @@ changes:
 VERSION 0.5.8
 2023-11-20
 commit: 9494021cc189924cea0be7e9528795720cda663a 
-changes:
+changes: 
 [FIX] math od to ms returning undefined
 [QOL] move pp calc to be part of map cmd 
 [ADD] add a "select difficulty" tab to map
@@ -616,7 +619,7 @@ changes:
 VERSION 0.5.9
 2023-12-25
 commit: db4e489c7fdcd9b91c8b11e871b73fea3b3960bb
-changes:
+changes: 
 [FIX] missing `\n` in recmap
 [FIX] recmap error handling
 [QOL] map - difficulty selector labels show version instead of song title
@@ -640,7 +643,7 @@ changes:
 VERSION 0.5.10
 2024-01-23
 commit: 637359f840fcfed8dc5bfb1b0316a1237052cb5c
-changes:
+changes: 
 [FIX] debug command missing args in helpinfo
 [FIX] missing power units in `convert help`
 [QOL] move error msg handling to a single universal function
@@ -654,7 +657,7 @@ changes:
 VERSION 0.5.11
 2024-01-30
 commit: 1765f7dd0416a56e498bf8a90c4ac3f4264c7503
-changes:
+changes: 
 [FIX] maplb via button would hang - cmdtxt in wrong "if" statement
 [FIX] simulated pp being ridiculously high (how tf did it get 1290pp with 7x miss on a map woth 760 if fc https://cdn.discordapp.com/attachments/515827485733027850/1200257525816242226/53pVGKu.png)
 [FIX] pp on scorelist returning 0pp
@@ -668,7 +671,7 @@ changes:
 VERSION 0.5.12
 2024-02-12
 commit: 8840263edd97c37103ec3c92d02371b0ffb1ed4a
-changes:
+changes: 
 [QOL] check if FC - switch from using score.perfect to maxcombo == beatmap.maxcombo
 [QOL] show total amount of changes in changelog
 [QOL] exceeded text length message for changelog
@@ -688,7 +691,7 @@ changes:
 VERSION 0.5.13
 2024-03-05
 commit: 823051a77e12a6061cdcac95a0cfbf9e765c9c69
-changes:
+changes: 
 [FIX] lb empty list - modechecker was always returning null instead of 'osu' as a default value
 [FIX] lb - spacing
 [FIX] lb - page buttons not changing the page
@@ -725,14 +728,14 @@ changes:
 VERSION 0.5.15
 2024-04-29
 commit: 1c9333b5988d583962ccac7c8a6f46767ffb0a90
-changes:
+changes: 
 [FIX] usernames defined with `"` not working
 [FIX] support for converted maps
 
 VERSION 0.5.16
 date_time
 commit: null
-changes:
+changes: 
 [FIX] https://osu.ppy.sh/b/[ID]?m=[MODE] links not working
 [QOL] rewrote code for base conversions
 [ADD] option to show which countries observe DST in time command
@@ -741,7 +744,7 @@ changes:
 [QOL] miss and bpm filters now allow for equal values
 [FIX] `+` variant of includemods not working on scorelist cmds
 [FIX] include mods has to include all mods given instead of just one
-[FIX] changelog crashing if there is no `changes` `:` string
+[FIX] changelog crashing if there is no `changes:` string
 [QOL] show changes count in version list
 [QOL] show pending changes in version list
 [FIX] changelog crashing on version list
@@ -749,3 +752,4 @@ changes:
 [FIX] changelog - page buttons not disabling correctly
 [FIX] changelog - BigLeftArrow not going to first version
 [ADD] debug - clear option for map pp calc files only
+[FIX] changelog - early cut off when `changes:` is present in the changes list
