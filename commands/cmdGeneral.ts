@@ -330,7 +330,7 @@ Total of ${changesList.length} changes.${txt}
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
-    if (useNum == mainconst.versions.length - 1) {
+    if (useNum == mainconst.versions.length - 1 || useGit) {
         (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
