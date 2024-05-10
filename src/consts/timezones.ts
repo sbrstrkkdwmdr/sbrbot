@@ -1786,6 +1786,8 @@ export type dstCountry = {
     territories: string[];
 };
 
+
+//ordered by date start, date end
 export const dstForList: {
     start: string,
     end: string,
@@ -1803,94 +1805,7 @@ export const dstForList: {
         //         return false;
         //     })
         // },
-        //southern hemisphere
-        {
-            start: 'First Sunday in October',
-            end: 'First Sunday in April',
-            includes: [
-                {
-                    name: 'Australia',
-                    territories: [
-                        'Australian Capital Territory (ACT)',
-                        'Victoria (VIC)',
-                        'New South Wales (NSW)',
-                        'Tasmania (TAS)',
-                        'Lord Howe Island',
-                        'Norfolk Island/Norf\'k Ailen',
-                    ]
-                }
-            ],
-        },
-        {
-            start: 'Last Sunday in October',
-            end: 'First Sunday in March',
-            includes: [
-                'Paraguay/Paraguái'
-            ],
-        },
-        {
-            start: 'First Sunday in October',
-            end: 'Last Sunday in March',
-            includes: [
-                'New Zealand/Aotearoa',
-                'Tokelau'
-            ],
-        },
         // northern hemisphere
-        {
-            start: 'Last Sunday in March',
-            end: 'Last Sunday in October',
-            includes: [
-                'Aland Islands/Åland Islands/Ahvenanmaa',
-                'Albania/Shqipëria',
-                'Andorra',
-                'Austria/Österreich',
-                'Belgium/België/Belgique/Belgien',
-                'Bosnia And Herzegovina/Босна и Херцеговина',
-                'Bulgaria/България',
-                'Croatia/Hrvatska',
-                'Czechia/Czech Republic/Česká republika/Česko',
-                'Denmark/Danmark',
-                'Estonia/Eesti',
-                'Faroe Islands/Føroyar/Færøerne',
-                'Finland/Suomi',
-                'France',
-                'Germany/Deutschland',
-                'Gibraltar',
-                'Greece/Ελλάς/Ελλάδα',
-                'Guernsey',
-                'Hungary/Magyarország', 'Magyarország',
-                'Ireland/Éire',
-                'Isle of Man/Ellan Vannin',
-                'Italy/Italia',
-                'Jersey/Jèrri',
-                'Kosovo/Косово',
-                'Latvia/Latvija',
-                'Liechtenstein',
-                'Lithuania/Lietuva',
-                'Luxembourg/Lëtzebuerg/Luxemburg',
-                'Malta',
-                'Moldova',
-                'Monaco/Múnegu', 'Múnegu',
-                'Montenegro/Црна Гора',
-                'Netherlands/Nederland/Nederlân',
-                'North Macedonia/Северна Македонија',
-                'Norway/Norge/Noreg',
-                'Poland/Polska',
-                'Portugal',
-                'Romania/România',
-                'San Marino',
-                'Serbia/Србија',
-                'Slovakia/Slovensko',
-                'Slovenia/Slovenija',
-                'Spain/España',
-                'Sweden/Sverige',
-                'Switzerland/Schweiz/Suisse/Svizra',
-                'Ukraine/Україна',
-                'United Kingdom/UK',
-                'Vatican City/Holy See/Città del Vaticano',
-            ],
-        },
         {
             start: 'Second Sunday in March',
             end: 'First Sunday in November',
@@ -1919,7 +1834,7 @@ export const dstForList: {
                         'Baja California',
                         'Chihuahua',
                         'Coahuila',
-                        'Nuevo Leon(Nuevo León)',
+                        'Nuevo León',
                         'Tamaulipas',
                     ]
                 },
@@ -1985,17 +1900,103 @@ export const dstForList: {
             ],
         },
         {
+            start: 'Last Thursday in March',
+            end: 'Last Sunday in October',
+            includes: [
+                'Lebanon/لبنان ', 
+            ],
+        },
+        {
+            start: 'Last Sunday in March',
+            end: 'Last Sunday in October',
+            includes: [
+                'Aland Islands/Åland Islands/Ahvenanmaa',
+                'Albania/Shqipëria',
+                'Andorra',
+                'Austria/Österreich',
+                'Belgium/België/Belgique/Belgien',
+                'Bosnia And Herzegovina/Босна и Херцеговина',
+                'Bulgaria/България',
+                'Croatia/Hrvatska',
+                'Czechia/Czech Republic/Česká republika/Česko',
+                'Denmark/Danmark',
+                'Estonia/Eesti',
+                'Faroe Islands/Føroyar/Færøerne',
+                'Finland/Suomi',
+                'France',
+                'Germany/Deutschland',
+                'Greece/Ελλάς/Ελλάδα',
+                'Guernsey',
+                'Hungary/Magyarország',
+                'Ireland/Éire',
+                'Isle of Man/Ellan Vannin',
+                'Italy/Italia',
+                'Jersey/Jèrri',
+                'Kosovo/Косово',
+                'Latvia/Latvija',
+                'Liechtenstein',
+                'Lithuania/Lietuva',
+                'Luxembourg/Lëtzebuerg/Luxemburg',
+                'Malta',
+                'Moldova',
+                'Monaco/Múnegu',
+                'Montenegro/Црна Гора',
+                'Netherlands/Nederland/Nederlân',
+                'North Macedonia/Северна Македонија',
+                'Norway/Norge/Noreg',
+                'Poland/Polska',
+                'Portugal',
+                'Romania/România',
+                'San Marino',
+                'Serbia/Србија',
+                'Slovakia/Slovensko',
+                'Slovenia/Slovenija',
+                'Spain/España',
+                'Sweden/Sverige',
+                'Switzerland/Schweiz/Suisse/Svizra',
+                'Ukraine/Україна',
+                'United Kingdom/UK',
+                'Vatican City/Holy See/Città del Vaticano',
+            ],
+        },
+        {
             start: 'Last Saturday in April',
             end: 'Last Saturday in October',
             includes: [
                 'Palestine/فلسطين',
             ],
         },
+        //southern hemisphere
         {
-            start: 'Last Thursday in March',
-            end: 'Last Sunday in October',
+            start: 'First Sunday in October',
+            end: 'Last Sunday in March',
             includes: [
-                'Lebanon/لبنان ', 
+                'New Zealand/Aotearoa',
+                'Tokelau'
+            ],
+        },
+        {
+            start: 'First Sunday in October',
+            end: 'First Sunday in April',
+            includes: [
+                {
+                    name: 'Australia',
+                    territories: [
+                        'Australian Capital Territory (ACT)',
+                        'Victoria (VIC)',
+                        'New South Wales (NSW)',
+                        'Tasmania (TAS)',
+                        'Lord Howe Island',
+                        'Norfolk Island/Norf\'k Ailen',
+                    ]
+                }
+            ],
+        },
+        {
+            start: 'Last Sunday in October',
+            end: 'First Sunday in March',
+            includes: [
+                'Paraguay/Paraguái'
             ],
         },
     ];
