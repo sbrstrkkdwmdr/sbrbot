@@ -1,7 +1,7 @@
 console.log('Loading...');
 const initdate = new Date();
-
-import Discord, { Client, GatewayIntentBits, Partials } from 'discord.js';
+import * as Discord from 'discord.js';
+import { Client, GatewayIntentBits, Partials } from 'discord.js';
 import fs from 'fs';
 import Sequelize from 'sequelize';
 import * as extypes from './src/types/extratypes.js';

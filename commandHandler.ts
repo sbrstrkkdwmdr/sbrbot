@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 import fs from 'fs';
 import { path } from './path.js';
 import * as checks from './src/checks.js';
@@ -68,7 +68,8 @@ export default (input: {
             timeouttime = new Date().getTime() + 3000;
         }
         if (input.oncooldown.has(message.author.id) && cd.cooldownCommands.includes(command)
-            && checks.botHasPerms(message, input.client, ['ManageMessages'])) {
+            //@ts-expect-error message<boolean> is not assignable to message<boolean> (why)
+            && checks.botHasPerms(message as Discord.Message<boolean>, input.client, ['ManageMessages'])) {
             setTimeout(() => {
                 message.delete()
                     .catch();
@@ -156,12 +157,14 @@ export default (input: {
 
     function execCommand(command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[], config: extypes.config) {
         let canReply = true;
-
+        //@ts-expect-error message<boolean> is not assignable to message<boolean> (why)
         if (!checks.botHasPerms(obj, input.client, ['ReadMessageHistory'])) {
             canReply = false;
         }
+        //@ts-expect-error message<boolean> is not assignable to message<boolean> (why)
         if (!checks.botHasPerms(obj, input.client, ['SendMessages', /* 'ViewChannel' */]) && commandType == 'message') return;
         //if is thread check if bot has perms
+        //@ts-expect-error message<boolean> is not assignable to message<boolean> (why)
         if (!checks.botHasPerms(obj, input.client, ['SendMessagesInThreads']) &&
             (obj.channel.type == Discord.ChannelType.PublicThread ||
                 obj.channel.type == Discord.ChannelType.PrivateThread)) return;
@@ -301,23 +304,23 @@ export default (input: {
         let allowed = true;
         const missingPermsBot: Discord.PermissionsString[] = [];
         const missingPermsUser: string[] = [];
-
-        if (
-            requireEmbedCommands.includes(command) && commandType == 'message' &&
-            !checks.botHasPerms(obj, input.client, ['EmbedLinks'])
-        ) {
+        //@ts-expect-error message<boolean> is not assignable to message<boolean> (why)
+        if (requireEmbedCommands.includes(command) && commandType == 'message' && !checks.botHasPerms(obj, input.client, ['EmbedLinks'])) {
             missingPermsBot.push('EmbedLinks');
         }
-
+            //@ts-expect-error message<boolean> is not assignable to message<boolean> (why)
         if (requireReactions.includes(command) && !checks.botHasPerms(obj, input.client, ['AddReactions'])) {
             missingPermsBot.push('AddReactions');
         }
+        //@ts-expect-error message<boolean> is not assignable to message<boolean> (why)
         if (requireMsgManage.includes(command) && !checks.botHasPerms(obj, input.client, ['ManageMessages'])) {
             missingPermsBot.push('ManageMessages');
         }
+        //@ts-expect-error message<boolean> is not assignable to message<boolean> (why)
         if (botRequireAdmin.includes(command) && !checks.botHasPerms(obj, input.client, ['Administrator'])) {
             missingPermsBot.push('Administrator');
         }
+        //@ts-expect-error client<boolean> is not assignable to client<boolean> (why)
         if (userRequireAdminOrOwner.includes(command) && !(checks.isAdmin(userid, obj.guildId, input.client) || checks.isOwner(userid, config))) {
             missingPermsUser.push('Administrator');
         }
@@ -351,7 +354,7 @@ export default (input: {
                 commands.changelog({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
             case 'versions':
-                args = ['versions']
+                args = ['versions'];
                 commands.changelog({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
             case 'convert': case 'conv':

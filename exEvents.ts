@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 import fs from 'fs';
 import Sequelize from 'sequelize';
 import { path } from './path.js';

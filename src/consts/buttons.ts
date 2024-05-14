@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 export const type = {
     current: Discord.ButtonStyle.Secondary,
     next: Discord.ButtonStyle.Primary,

@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 import fs from 'fs';
 import rosu from 'rosu-pp';
 import Sequelize from 'sequelize';

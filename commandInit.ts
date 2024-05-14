@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 import * as cmdconfig from './src/consts/commandopts.js';
 export default (input: {
     userdata,

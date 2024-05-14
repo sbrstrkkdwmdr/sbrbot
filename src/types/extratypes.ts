@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 import Sequelize from 'sequelize';
 import * as embedStuff from '../embed.js';
 import * as osuapitypes from '../types/osuApiTypes.js';

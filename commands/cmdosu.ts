@@ -10502,9 +10502,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             searchid = commanduser.id;
 
             user = input.obj.options.getString('user') ?? null;
-            //@ts-expect-error string not assignable blah blah
             filter = input.obj.options.getString('type') ?? 'favourite';
-            //@ts-expect-error string not assignable blah blah
             sort = input.obj.options.getString('sort') ?? 'dateadded';
             reverse = input.obj.options.getBoolean('reverse') ?? false;
             filterTitle = input.obj.options.getString('filter');
@@ -11640,7 +11638,6 @@ export async function compare(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
 
             commanduser = input.obj.member.user;
-            //@ts-expect-error string not assignable blah blah
             type = input.obj.options.getString('type') ?? 'profile';
             first = input.obj.options.getString('first');
             second = input.obj.options.getString('second');

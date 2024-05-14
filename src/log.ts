@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 import fs from 'fs';
 import { path } from '../path.js';
 import * as extypes from './types/extratypes.js';

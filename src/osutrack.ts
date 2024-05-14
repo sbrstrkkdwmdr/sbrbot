@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 import fs from 'fs';
 import Sequelize from 'sequelize';
 import * as def from './consts/defaults.js';

@@ -1,4 +1,5 @@
-import Discord, { ApplicationCommandOptionType } from 'discord.js';
+import * as Discord from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 /**
  * @info Gamemode options
  */
@@ -740,5 +741,5 @@ const rsopts :Discord.ApplicationCommandOptionData[]= [
 ];
 
 
-export { modeopts, playsortopts, skincmdopts, mathcmdopts, conversionopts, gifopts, timezoneopts, useridsortopts, useroffsetmodeopts, rsopts, playArrayOpts, osutopOpts };
+export { conversionopts, gifopts, mathcmdopts, modeopts, osutopOpts, playArrayOpts, playsortopts, rsopts, skincmdopts, timezoneopts, useridsortopts, useroffsetmodeopts };
 

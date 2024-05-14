@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import * as Discord from 'discord.js';
 import fs from 'fs';
 import * as admincmds from './commands/cmdAdmin.js';
 import * as checkcmds from './commands/cmdChecks.js';
@@ -26,6 +26,7 @@ export default (input: {
         if (!(interaction.type == Discord.InteractionType.MessageComponent || interaction.type == Discord.InteractionType.ModalSubmit)) return;
         if (interaction.applicationId != input.client.application.id) return;
         let canReply = true;
+        //@ts-expect-error type somehow no longer works
         if (!checks.botHasPerms(interaction, input.client, ['ReadMessageHistory'])) {
             canReply = false;
         }

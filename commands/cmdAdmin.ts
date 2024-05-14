@@ -96,6 +96,8 @@ export async function checkperms(input: extypes.commandInput) {
     if (searchUser == null || typeof searchUser == 'undefined') {
         searchUser = commanduser;
     }
+
+    //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
     if (!(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id, input.config))) {
         searchUser = commanduser;
     }
@@ -745,7 +747,7 @@ export async function debug(input: extypes.commandInput) {
         'pscores' | 'prevscore' |
         'pusers' | 'prevuser' |
         'users' | 'errors' | 'trueall' |
-        'maps' | 'map' | 'pp' | 
+        'maps' | 'map' | 'pp' |
         'graph'
         ;
 
@@ -1234,12 +1236,12 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             }
                 break;
             case 'pp':
-                log.toOutput(`manually clearing all map files in ${path}/files/maps/`, input.config)
-                const curpath =`${path}/files/maps`;
-                const files =  fs.readdirSync(curpath);
-                for (const file of files){
-                    fs.unlinkSync(`${curpath}/` + file)
-                    log.toOutput(`${curpath}/` + file, input.config)
+                log.toOutput(`manually clearing all map files in ${path}/files/maps/`, input.config);
+                const curpath = `${path}/files/maps`;
+                const files = fs.readdirSync(curpath);
+                for (const file of files) {
+                    fs.unlinkSync(`${curpath}/` + file);
+                    log.toOutput(`${curpath}/` + file, input.config);
                 }
                 break;
             case 'map': case 'maps': { // clears all maps and mapset files
@@ -1568,6 +1570,7 @@ Flags/badges: ${func.userbitflagsToEmoji(userfind.user?.flags)}
             break;
         case 'guild':
             {
+                //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
                 if (!(cmdchecks.isOwner(commanduser.id, input.config) || (id == input.obj.guildId && cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
@@ -1602,6 +1605,7 @@ Stickers: ${guildfind.stickers.cache.size}
             break;
         case 'channel':
             {
+                //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
                 if (!(cmdchecks.isOwner(commanduser.id, input.config) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
@@ -1646,6 +1650,7 @@ Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is onl
             break;
         case 'role':
             {
+                //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
                 if (!(cmdchecks.isOwner(commanduser.id, input.config) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
@@ -1833,6 +1838,7 @@ export async function leaveguild(input: extypes.commandInput) {
         }
         return;
     }
+    //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
     if (cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)) {
         const guild = input.client.guilds.cache.get(input.obj.guildId);
         if (guild) {
@@ -1934,6 +1940,7 @@ export async function prefix(input: extypes.commandInput) {
     if (curGuildSettings == null) {
         replymsg = 'Error: Guild settings not found';
     } else {
+        //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
         if (typeof newPrefix != 'string' || newPrefix.length < 1 || !(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id, input.config))) {
             replymsg = `The current prefix is \`${curGuildSettings.prefix}\``;
         } else {

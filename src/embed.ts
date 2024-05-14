@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 import fs from 'fs';
 import * as calc from './calc.js';
 import * as cmdchecks from './checks.js';

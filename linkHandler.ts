@@ -1,7 +1,7 @@
 import https from 'https';
 import tesseract from 'tesseract.js';
 
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 import fs from 'fs';
 import { filespath, path } from './path.js';
 import * as checks from './src/checks.js';
@@ -30,6 +30,7 @@ export default (input: {
 
     input.client.on('messageCreate', async (message) => {
         let canReply = true;
+        //@ts-expect-error message<boolean> is not assignable to message<boolean> (why)
         if (!checks.botHasPerms(message, input.client, ['ReadMessageHistory'])) {
             canReply = false;
         }
