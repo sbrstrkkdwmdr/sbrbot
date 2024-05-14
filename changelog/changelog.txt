@@ -734,7 +734,7 @@ changes:
 
 VERSION 0.5.16
 2024-05-14
-commit: null
+commit: 5ea2d7269873fbb2ffbf090516962db88d15134c
 changes: 
 [FIX] https://osu.ppy.sh/b/[ID]?m=[MODE] links not working
 [QOL] rewrote code for base conversions
