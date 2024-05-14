@@ -10389,13 +10389,14 @@ HitObjects: ${mapParsed.hitObjects?.length}
  * list of user's maps
  */
 export async function userBeatmaps(input: extypes.commandInput & { statsCache: any; }) {
-    let filter: 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' | 'nominated' | 'guest' | 'most_played' = 'favourite';
-    let sort:
-        'title' | 'artist' |
+    type ubmFilter = 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' | 'nominated' | 'guest' | 'most_played';
+    let filter: ubmFilter = 'favourite';
+    type ubmSort = 'title' | 'artist' |
         'difficulty' | 'status' |
         'fails' | 'plays' |
         'dateadded' | 'favourites' | 'bpm' |
-        'cs' | 'ar' | 'od' | 'hp' | 'length' = 'dateadded';
+        'cs' | 'ar' | 'od' | 'hp' | 'length';
+    let sort: ubmSort = 'dateadded';
     let reverse = false;
     let user;
     let searchid;
@@ -10502,8 +10503,8 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
             searchid = commanduser.id;
 
             user = input.obj.options.getString('user') ?? null;
-            filter = input.obj.options.getString('type') ?? 'favourite';
-            sort = input.obj.options.getString('sort') ?? 'dateadded';
+            filter = (input.obj.options.getString('type') ?? 'favourite') as ubmFilter;
+            sort = (input.obj.options.getString('sort') ?? 'dateadded') as ubmSort;
             reverse = input.obj.options.getBoolean('reverse') ?? false;
             filterTitle = input.obj.options.getString('filter');
 
@@ -11600,7 +11601,8 @@ export async function tracklist(input: extypes.commandInput) {
  */
 export async function compare(input: extypes.commandInput) {
     let commanduser: Discord.User;
-    let type: 'profile' | 'top' | 'mapscore' = 'profile';
+    type compareTypeasd = 'profile' | 'top' | 'mapscore'
+    let type: compareTypeasd = 'profile';
     let first = null;
     let second = null;
     let firstsearchid = null;
@@ -11638,7 +11640,7 @@ export async function compare(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
 
             commanduser = input.obj.member.user;
-            type = input.obj.options.getString('type') ?? 'profile';
+            type = (input.obj.options.getString('type') ?? 'profile') as compareTypeasd;
             first = input.obj.options.getString('first');
             second = input.obj.options.getString('second');
             firstsearchid = commanduser.id;

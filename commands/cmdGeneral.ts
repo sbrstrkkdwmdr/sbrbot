@@ -206,8 +206,8 @@ export async function changelog(input: extypes.commandInput) {
     } else {
         const document = /* useGit ? */
             fs.readFileSync(`${path}/cache/changelog.txt`, 'utf-8');
-/*             :
-            fs.readFileSync(`${precomppath}/changelog/changelog.txt`, 'utf-8'); */
+        /*             :
+                    fs.readFileSync(`${precomppath}/changelog/changelog.txt`, 'utf-8'); */
         const list = document.split('VERSION');
         list.shift();
         if (useGit) {
@@ -2006,6 +2006,7 @@ ${trueping}`);
 
 
     const preEdit = new Date();
+    //@ts-expect-error ong
     //This expression is not callable.
     //Each member of the union type '((options: string | MessagePayload | MessageReplyOptions) => Promise<Message>) | { (options: InteractionReplyOptions & { ...; }): Promise<...>; (options: string | ... 1 more ... | InteractionReplyOptions): Promise<...>; } | { ...; }' has signatures, but none of those signatures are compatible with each other.ts(2349)
     input.obj.reply({
@@ -2110,10 +2111,10 @@ export async function remind(input: extypes.commandInput & { reminders: extypes.
             remindertxt = input.obj.options.getString('reminder');
 
             time = input.obj.options.getString('time').replaceAll(' ', '');
-            sendtochannel =
-                (cmdchecks.isOwner(commanduser.id, input.config) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)) ?
+            //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
+            sendtochannel = (cmdchecks.isOwner(commanduser.id, input.config) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)) ?
 
-                    input.obj.options.getBoolean('sendinchannel') : false;
+                input.obj.options.getBoolean('sendinchannel') : false;
             user = input.obj.member.user;
 
             if (!time.endsWith('d') && !time.endsWith('h') && !time.endsWith('m') && !time.endsWith('s') && !time.includes(':') && !time.includes('.')) {

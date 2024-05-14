@@ -1941,7 +1941,7 @@ export async function prefix(input: extypes.commandInput) {
         replymsg = 'Error: Guild settings not found';
     } else {
         //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
-        if (typeof newPrefix != 'string' || newPrefix.length < 1 || !(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id, input.config))) {
+         if (typeof newPrefix != 'string' || newPrefix.length < 1 || !(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id, input.config))) {
             replymsg = `The current prefix is \`${curGuildSettings.prefix}\``;
         } else {
             curGuildSettings.update({
