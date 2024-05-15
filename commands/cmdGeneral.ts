@@ -1018,6 +1018,10 @@ export async function help(input: extypes.commandInput) {
                     command = null;
                     break;
             }
+            const curembed: Discord.Embed = input.obj.message.embeds[0];
+            if(input.button == 'Detailed' && curembed.description.includes('Prefix is')){
+                command = 'list'
+            }
         }
             break;
     }
