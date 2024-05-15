@@ -753,3 +753,9 @@ changes:
 [FIX] changelog - BigLeftArrow not going to first version
 [ADD] debug - clear option for map pp calc files only
 [FIX] changelog - early cut off when `changes:` is present in the changes list
+
+VERSION 0.5.17
+date_time 
+commit: null
+changes: 
+[FIX] https://osu.ppy.sh/b/[ID]?m=[MODE] links ignoring mode

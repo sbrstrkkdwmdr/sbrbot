@@ -8483,6 +8483,7 @@ export async function map(input: extypes.commandInput) {
             } else {
                 const mapTemp = await osufunc.mapIdFromLink(messagenohttp, true, input.config);
                 mapid = mapTemp.map;
+                forceMode = mapTemp.mode ?? forceMode;
                 if (!(mapTemp.map || mapTemp.set)) {
                     await msgfunc.sendMessage({
                         commandType: input.commandType,
