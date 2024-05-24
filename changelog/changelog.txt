@@ -761,3 +761,5 @@ changes:
 [FIX] https://osu.ppy.sh/b/[ID]?m=[MODE] links ignoring mode
 [QOL] pressing the detailed button in the default help window switches to the command list
 [FIX] changelog versions change count always shows 0
+[FIX] exactmods vs includemods
+[FIX] incorrect arg name in help embed
