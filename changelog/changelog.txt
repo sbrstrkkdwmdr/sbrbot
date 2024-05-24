@@ -762,4 +762,5 @@ changes:
 [QOL] pressing the detailed button in the default help window switches to the command list
 [FIX] changelog versions change count always shows 0
 [FIX] exactmods vs includemods
-[FIX] incorrect arg name in help embed
+[FIX] incorrect arg for exclude mods in help embed
+[REM] "render" from command list (was never gonna implement)
