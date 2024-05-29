@@ -760,6 +760,22 @@ export async function janken(input: extypes.commandInput) {
 
     const real = func.jankenConvert(userchoice);
     if (real == 'INVALID') {
+        const finalMessage = await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: 'Please input a valid argument'
+            }
+        }, input.canReply);
+        log.logCommand({
+            event: 'Error',
+            commandName: 'janken',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Invalid user input',
+            config: input.config,
+        });
         return;
     }
 

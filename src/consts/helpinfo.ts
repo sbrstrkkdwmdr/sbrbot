@@ -2395,7 +2395,7 @@ const othercmds: commandInfo[] = [
                 type: 'string',
                 required: true,
                 description: 'Paper, scissors or rock.',
-                options: ['rock', 'paper', 'scissors'],
+                options: ['rock', 'paper', 'scissors', 'グー', 'チョキ', 'パー'],
                 defaultValue: 'N/A',
                 examples: ['N/A'],
                 commandTypes: ['message', 'interaction']
