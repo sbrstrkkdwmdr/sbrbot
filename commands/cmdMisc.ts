@@ -706,6 +706,139 @@ export async function inspire(input: extypes.commandInput) {
 }
 
 /**
+ * paper scissors rock? rock paper scissors? idfk what the right order is
+ */
+export async function janken(input: extypes.commandInput) {
+    let commanduser: Discord.User;
+    let userchoice: string;
+
+    switch (input.commandType) {
+        case 'message': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+            userchoice = input.args[0];
+        }
+            break;
+        //==============================================================================================================================================================================================
+        case 'interaction': {
+            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            //==============================================================================================================================================================================================
+
+            break;
+        case 'button': {
+            input.obj = (input.obj as Discord.ButtonInteraction<any>);
+            commanduser = input.obj.member.user;
+        }
+            break;
+        case 'link': {
+            input.obj = (input.obj as Discord.Message<any>);
+            commanduser = input.obj.author;
+        }
+            break;
+    }
+    //==============================================================================================================================================================================================
+
+    log.logCommand({
+        event: 'Command',
+        commandType: input.commandType,
+        commandId: input.absoluteID,
+        commanduser,
+        object: input.obj,
+        commandName: 'janken',
+        options: [
+            {
+                name: 'choice',
+                value: userchoice
+            }
+        ],
+        config: input.config,
+    });
+
+    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
+
+    const real = func.jankenConvert(userchoice);
+    if (real == 'INVALID') {
+        return;
+    }
+
+    const opts = ['paper', 'scissors', 'rock'];
+    const pcChoice = opts[Math.floor(Math.random() * opts.length)];
+
+    let content = `It's a draw!`;
+    const wtxt = 'You win!';
+    const ltxt = 'You lose!';
+    switch (pcChoice) {
+        case 'paper':
+            switch (real) {
+                case 'rock':
+                    content = ltxt;
+                    break;
+                case 'scissors':
+                    content = wtxt;
+                    break;
+            }
+            break;
+        case 'rock':
+            switch (real) {
+                case 'paper':
+                    content = wtxt;
+                    break;
+                case 'scissors':
+                    content = ltxt;
+                    break;
+            }
+            break;
+        case 'scissors':
+            switch (real) {
+                case 'paper':
+                    content = ltxt;
+                    break;
+                case 'rock':
+                    content = wtxt;
+                    break;
+            }
+            break;
+    }
+    const toEmoji = {
+        'paper': '📃',
+        'scissors': '✂',
+        'rock': '🪨',
+    }
+    content = `${toEmoji[real]} vs. ${toEmoji[pcChoice]} | ` + content;
+    //SEND/EDIT MSG==============================================================================================================================================================================================
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            content
+        }
+    }, input.canReply);
+
+    if (finalMessage == true) {
+        log.logCommand({
+            event: 'Success',
+            commandName: 'janken',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            config: input.config,
+        });
+    } else {
+        log.logCommand({
+            event: 'Error',
+            commandName: 'janken',
+            commandType: input.commandType,
+            commandId: input.absoluteID,
+            object: input.obj,
+            customString: 'Message failed to send',
+            config: input.config,
+        });
+    }
+}
+
+/**
  * generate a poll
  */
 export function poll(input: extypes.commandInput) {

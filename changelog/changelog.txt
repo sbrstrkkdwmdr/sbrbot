@@ -765,3 +765,4 @@ changes:
 [FIX] incorrect arg for exclude mods in help embed
 [REM] "render" from command list (was never gonna implement)
 [QOL] remove empty lines in changelog
+[ADD] command - janken

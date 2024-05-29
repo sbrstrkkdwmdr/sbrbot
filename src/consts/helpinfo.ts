@@ -2383,6 +2383,26 @@ const othercmds: commandInfo[] = [
         options: [],
     },
     {
+        name: 'janken',
+        description: 'Plays janken with the bot. (aka paper scissors rock or rock paper scissors or whatever weird order it\'s in).',
+        usage: 'janken',
+        slashusage: 'janken',
+        examples: [],
+        aliases: ['paperscissorsrock','rockpaperscissors','rps','psr'],
+        options: [
+            {
+                name: 'choice',
+                type: 'string',
+                required: true,
+                description: 'Paper, scissors or rock.',
+                options: ['rock', 'paper', 'scissors'],
+                defaultValue: 'N/A',
+                examples: ['N/A'],
+                commandTypes: ['message', 'interaction']
+            }
+        ],
+    },
+    {
         name: 'poll',
         description: 'Creates a poll',
         usage: 'poll <question>',

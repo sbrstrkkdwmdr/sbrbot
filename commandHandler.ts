@@ -308,7 +308,7 @@ export default (input: {
         if (requireEmbedCommands.includes(command) && commandType == 'message' && !checks.botHasPerms(obj, input.client, ['EmbedLinks'])) {
             missingPermsBot.push('EmbedLinks');
         }
-            //@ts-expect-error message<boolean> is not assignable to message<boolean> (why)
+        //@ts-expect-error message<boolean> is not assignable to message<boolean> (why)
         if (requireReactions.includes(command) && !checks.botHasPerms(obj, input.client, ['AddReactions'])) {
             missingPermsBot.push('AddReactions');
         }
@@ -456,6 +456,9 @@ export default (input: {
                 break;
             case 'inspire': case 'insp':
                 misccmds.inspire({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
+                break;
+            case 'janken': case 'paperscissorsrock': case 'rockpaperscissors': case 'rps': case 'psr':
+                misccmds.janken({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
                 break;
             case 'poll': case 'vote':
                 misccmds.poll({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
