@@ -259,26 +259,26 @@ export async function changelog(input: extypes.commandInput) {
 
         let txt = '';
         if (changes.maj.length > 0) {
-            txt += `\n${colourfunc.codeBlockColourText("MAJOR CHANGES", "blue", "text")} \n- ` + changes.maj.join('\n- ');
+            txt += `\n${colourfunc.codeBlockColourText("MAJOR CHANGES", "blue", "text")} \`-\` ` + changes.maj.join('\n\`-\` ');
 
         }
         if (changes.add.length > 0) {
-            txt += `\n${colourfunc.codeBlockColourText("ADDITIONS", "green", "text")} \n- ` + changes.add.join('\n- ');
+            txt += `\n${colourfunc.codeBlockColourText("ADDITIONS", "green", "text")} \`-\` ` + changes.add.join('\n\`-\` ');
         }
         if (changes.qol.length > 0) {
-            txt += `\n${colourfunc.codeBlockColourText("QUALITY OF LIFE", "pink", "text")} \n- ` + changes.qol.join('\n- ');
+            txt += `\n${colourfunc.codeBlockColourText("QUALITY OF LIFE", "pink", "text")} \`-\` ` + changes.qol.join('\n\`-\` ');
 
         }
         if (changes.fix.length > 0) {
-            txt += `\n${colourfunc.codeBlockColourText("FIXES", "yellow", "text")} \n- ` + changes.fix.join('\n- ');
+            txt += `\n${colourfunc.codeBlockColourText("FIXES", "yellow", "text")} \`-\` ` + changes.fix.join('\n\`-\` ');
 
         }
         if (changes.rem.length > 0) {
-            txt += `\n${colourfunc.codeBlockColourText("REMOVALS", "red", "text")} \n- ` + changes.rem.join('\n- ');
+            txt += `\n${colourfunc.codeBlockColourText("REMOVALS", "red", "text")} \`-\` ` + changes.rem.join('\n\`-\` ');
 
         }
         if (changes.min.length > 0) {
-            txt += `\n${colourfunc.codeBlockColourText("MINOR", "cyan", "text")} \n- ` + changes.min.join('\n- ');
+            txt += `\n${colourfunc.codeBlockColourText("MINOR", "cyan", "text")} \`-\` ` + changes.min.join('\n\`-\` ');
 
         }
         txt = txt.slice(0, 2000);
