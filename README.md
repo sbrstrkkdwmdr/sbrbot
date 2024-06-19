@@ -130,13 +130,6 @@ disabling these permissions will disable the commands listed
 
 ## config properties
 
-"useEmojis": {
-"gamemodes": true,
-"scoreGrades": true,
-"mods": false
-}
-
-
 | Property | Type | Description | Default |
 | --- | --- | --- | --- |
 | important | object | see below | {} |
