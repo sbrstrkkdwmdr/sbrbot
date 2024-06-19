@@ -1,15 +1,11 @@
 {
     "important": {
         "token": "create app and get token here => https://discord.com/developers/applications",
-        "dbd_license": "ignore this",
-        "redirect_uri": "http://localhost/discord/callback",
-        "client_secret": "ignore this",
-        "client_id": "ignore this"
+        "osuClientID": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
+        "osuClientSecret": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
+        "osuApiKey": "get api key here => https://osu.ppy.sh/home/account/edit#legacy-api"
     },
     "prefix": "string",
-    "osuClientID": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
-    "osuClientSecret": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
-    "osuApiKey": "get api key here => https://osu.ppy.sh/home/account/edit#legacy-api",
     "ownerusers": [
         "user id",
         "user id 2"

@@ -766,3 +766,5 @@ changes:
 [REM] "render" from command list (was never gonna implement)
 [QOL] remove empty lines in changelog
 [ADD] command - janken
+[REM] config - remove unused properties 
+[QOL] config - move properties to important
