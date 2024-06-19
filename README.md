@@ -31,15 +31,11 @@ in the `./config/` folder rename `tempconfig.json` to `config.json`
 {
     "important": {
         "token": "create app and get token here => https://discord.com/developers/applications",
-        "dbd_license": "ignore this",
-        "redirect_uri": "http://localhost/discord/callback",
-        "client_secret": "ignore this",
-        "client_id": "ignore this"
+        "osuClientID": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
+        "osuClientSecret": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
+        "osuApiKey": "get api key here => https://osu.ppy.sh/home/account/edit#legacy-api"
     },
     "prefix": "string",
-    "osuClientID": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
-    "osuClientSecret": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
-    "osuApiKey": "get api key here => https://osu.ppy.sh/home/account/edit#legacy-api",
     "ownerusers": [
         "user id",
         "user id 2"
@@ -52,7 +48,7 @@ in the `./config/` folder rename `tempconfig.json` to `config.json`
     "LogApiCalls": true,
     "LogApiCallsToFile": true,
     "enableTracking": true,
-    "storeCommandLogs": true
+    "storeCommandLogs": true,
     "useEmojis": {
         "gamemodes": true,
         "scoreGrades": true,
@@ -134,9 +130,6 @@ disabling these permissions will disable the commands listed
 | --- | --- | --- | --- |
 | important | object | see below | {} |
 | prefix | string | a string at the start of each message to detect if a message is a command. ie `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't. | sbr- |
-| osuClientID | string | the client id of an osu! api v2 app | null |
-| osuClientSecret | string | the secret/token of an osu! api v2 app | null |
-| osuApiKey | string | the api key used for osu api v1 (only currently used for maplb with mods) | null |
 | ownerusers | string[] | an array of user ids stored as strings. users with these ids can use any command | [] |
 | google | object | see below | {} |
 | useScreenshotParse | boolean | enables/disables the detection of maps in screenshots. Can cause crashes due to high CPU and memory usage | false |
@@ -150,10 +143,9 @@ disabling these permissions will disable the commands listed
 | Property | Type | Description | Default |
 | --- | --- | --- | --- |
 | token | string | application token for bot to connect to discords API. </br>go to https://discord.com/developers/applications, create a new app, and create a new bot under the bot section. copy the token from there | N/A |
-| dbd_license | string | ignore this property | null |
-| redirect_uri | string | ignore this property | null |
-| client_secret | string | ignore this property | null |
-| client_id | string | ignore this property | null |
+| osuClientID | string | the client id of an osu! api v2 app | null |
+| osuClientSecret | string | the secret/token of an osu! api v2 app | null |
+| osuApiKey | string | the api key used for osu api v1 (only currently used for maplb with mods) | null |
 ### google
 | Property | Type | Description | Default |
 | --- | --- | --- | --- |
