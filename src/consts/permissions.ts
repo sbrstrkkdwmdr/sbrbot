@@ -1,4 +1,4 @@
-const PermissionsArray = [
+export const PermissionsArray = [
     'CreateInstantInvite',//
     'KickMembers',//
     'BanMembers',//
