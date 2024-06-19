@@ -3,15 +3,11 @@ import * as extypes from '../types/extratypes.js';
 const defaultClientConfig: extypes.config = {
     important: {
         token: '',
-        dbd_license: '',
-        redirect_uri: '',
-        client_secret: '',
-        client_id: '',
+        osuClientID: '',
+        osuClientSecret: '',
+        osuApiKey: '',
     },
     prefix: 'sbr-',
-    osuClientID: '',
-    osuClientSecret: '',
-    osuApiKey: '',
     ownerusers: [],
     google: {
         apiKey: '',

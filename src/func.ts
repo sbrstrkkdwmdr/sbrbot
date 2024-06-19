@@ -1353,15 +1353,11 @@ export function censorConfig(config: extypes.config) {
     return {
         "important": {
             "token": "CENSORED",
-            "dbd_license": "CENSORED",
-            "redirect_uri": "http://localhost/discord/callback",
-            "client_secret": "CENSORED",
-            "client_id": "CENSORED"
+            "osuClientID": "CENSORED",
+            "osuClientSecret": "CENSORED",
+            "osuApiKey": "CENSORED",
         },
         "prefix": config.prefix,
-        "osuClientID": "CENSORED",
-        "osuClientSecret": "CENSORED",
-        "osuApiKey": "CENSORED",
         "ownerusers": [
             `${config?.ownerusers?.length} users`
         ],
@@ -1577,14 +1573,14 @@ export function userbitflagsToEmoji(flags: Discord.UserFlagsBitField) {
 export function jankenConvert(str: string) {
     let out = 'INVALID';
     switch (str) {
-        case 'paper': case 'p': case '✂':case 'パー':
-            out = 'paper'
+        case 'paper': case 'p': case '✂': case 'パー':
+            out = 'paper';
             break;
-        case 'scissors': case 's':case '📃':case 'チョキ':
-            out = 'scissors'
+        case 'scissors': case 's': case '📃': case 'チョキ':
+            out = 'scissors';
             break;
-        case 'rock': case 'r':case '🪨': case 'グー':
-            out = 'rock'
+        case 'rock': case 'r': case '🪨': case 'グー':
+            out = 'rock';
             break;
     }
     return out;

@@ -830,7 +830,7 @@ export async function apiget(input: apiInput) {
     } catch (error) {
         access_token = '';
     }
-    const key = input.config.osuApiKey;
+    const key = input.config.important.osuApiKey;
     if (!input.version) {
         input.version = 2;
     }
@@ -1192,7 +1192,7 @@ export async function updateToken(config: extypes.config) {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             body:
-                `grant_type=client_credentials&client_id=${config.osuClientID}&client_secret=${config.osuClientSecret}&scope=public`
+                `grant_type=client_credentials&client_id=${config.important.osuClientID}&client_secret=${config.important.osuClientSecret}&scope=public`
         }).then(res => res.json() as any);
         if (newtoken?.access_token) {
             fs.writeFileSync(`${path}/config/osuauth.json`, JSON.stringify(newtoken));
