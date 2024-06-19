@@ -756,7 +756,7 @@ changes:
 
 VERSION 0.5.17
 2024-06-20 
-commit: null
+commit: 6680d39562d5ed3f1eb4ca8a5f28a53a9932928a
 changes: 
 [FIX] https://osu.ppy.sh/b/[ID]?m=[MODE] links ignoring mode
 [QOL] pressing the detailed button in the default help window switches to the command list
