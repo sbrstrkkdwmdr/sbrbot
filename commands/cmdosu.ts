@@ -3008,7 +3008,6 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
         if (input.overrides.filterMods) {
             mapmods = input.overrides.filterMods;
         }
-        console.log(input.overrides.commandAs);
         if (input.overrides.commandAs) {
             input.commandType = input.overrides.commandAs;
         }

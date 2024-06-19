@@ -1203,16 +1203,6 @@ export async function updateToken(config: extypes.config) {
     });
 }
 
-// export function log.toOutput(data: string, title?: string) {
-//     if (config.LogApiCalls == true) {
-//         console.log((title ? title : 'Api call') + ': ' + data);
-//     }
-//     if (config.LogApiCallsToFile == true) {
-//         fs.appendFileSync(`${path}/logs/console.log`, `${(title ? title : 'Api call') + ': ' + data}\n`);
-//     }
-//     return;
-// }
-
 export async function updateUserStats(user: osuApiTypes.User, mode: string, sqlDatabase: any) {
     const allUsers = await sqlDatabase.findAll();
 
