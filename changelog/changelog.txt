@@ -755,7 +755,7 @@ changes:
 [FIX] changelog - early cut off when `changes:` is present in the changes list
 
 VERSION 0.5.17
-date_time 
+2024-06-20 
 commit: null
 changes: 
 [FIX] https://osu.ppy.sh/b/[ID]?m=[MODE] links ignoring mode

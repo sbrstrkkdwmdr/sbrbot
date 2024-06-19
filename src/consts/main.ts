@@ -1,6 +1,6 @@
-export const version = '20240514';
+export const version = '20240620';
 
-export const versionAlt = '0.5.16';
+export const versionAlt = '0.5.17';
 
 export const versions: {
     name: string,
@@ -231,14 +231,19 @@ export const versions: {
             name: '0.5.16',
             releaseDate: 20240514,
             releaseDateFormatted: '2024-05-14'
+        },
+        {
+            name: '0.5.17',
+            releaseDate: 20240620,
+            releaseDateFormatted: '2024-06-20'
         }
     ];
 
 export const linkInvite = 'There is currently no invite link publicly available';
 
-export const serverURL = 'https://discord.gg/3P7864BcRT'
+export const serverURL = 'https://discord.gg/3P7864BcRT';
 
-export const website = 'https://sbrstrkkdwmdr.github.io/sbrbot/commands'
+export const website = 'https://sbrstrkkdwmdr.github.io/sbrbot/commands';
 
 /**
  * NOTE - data saved to cache may need to be cleared as debugging files may be saved with different IDs
