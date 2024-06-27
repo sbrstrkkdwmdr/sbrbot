@@ -11,6 +11,7 @@
 // changelog b4 0.4.1 is inaccurate
 // changes are written as changes: \n(changes)
 //
+// as of 2024-06-28, changes are now written in changelog.md
 
 VERSION 
 0.0.0
