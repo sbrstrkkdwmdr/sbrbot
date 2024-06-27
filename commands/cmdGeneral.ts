@@ -3024,7 +3024,6 @@ Max: ${dailyData.temperature_2m_max[2]}${weatherUnits.temperature_2m_max} (${cal
             weatherEmbed
                 .setFooter({ text: `input: ${name}` })
                 .setTitle(`Weather for ${location.name}`);
-            const curDay = 2;
             const fields: Discord.EmbedField[] = [
                 {
                     name: `Information`,

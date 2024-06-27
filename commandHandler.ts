@@ -103,7 +103,6 @@ export default (input: {
         interaction = interaction as Discord.ChatInputCommandInteraction;
         const currentDate = new Date();
         const absoluteID = func.generateId();
-
         const args = [];
         const button = null;
 
