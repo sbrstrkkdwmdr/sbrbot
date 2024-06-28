@@ -304,9 +304,9 @@ export default (input: {
     }
 
     async function getOnlineChangelog() {
-        await axios.get(`https://raw.githubusercontent.com/sbrstrkkdwmdr/sbrbot/main/changelog/changelog.txt`)
+        await axios.get(`https://raw.githubusercontent.com/sbrstrkkdwmdr/sbrbot/main/changelog/changelog.md`)
             .then(data => {
-                fs.writeFileSync(`${path}/cache/changelog.txt`, data.data);
+                fs.writeFileSync(`${path}/cache/changelog.md`, data.data);
             })
             .catch(error => {
                 console.log('ERROR FETCHING GIT');

@@ -39,20 +39,12 @@ export async function changelog(input: extypes.commandInput) {
     let version = null;
     let useNum: number = null;
     let isList = false;
-    let useGit = false;
 
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             version = input.args[0] ?? null;
-            for (const arg of input.args) {
-                if (arg.includes('pending') || arg.includes('next')) {
-                    useGit = true;
-                    version = null;
-                    break;
-                }
-            }
         }
             break;
 
@@ -152,16 +144,20 @@ export async function changelog(input: extypes.commandInput) {
             }
         } else {
             switch (version) {
-                case 'first': case 'original':
+                case 'WIP': case 'pending': case 'next':
                     found = 0;
                     break;
+                case 'first': case 'original':
+                    found = mainconst.versions.length - 1;
+                    break;
                 case 'second':
-                    found = 1;
+                    found = mainconst.versions.length - 2;
                     break;
                 case 'third':
-                    found = 2;
+                    found = mainconst.versions.length - 3;
                     break;
                 case 'latest':
+                    found = 1;
                     break;
                 default:
                     foundBool = false;
@@ -173,27 +169,22 @@ export async function changelog(input: extypes.commandInput) {
     }
     useNum = useNum != null ? useNum :
         typeof found == 'number' ?
-            (found as number) :
-            mainconst.versions.length - 1 - offset;
+            (found as number) : 1;
     const Embed = new Discord.EmbedBuilder();
-    const exceeded = 'Exceeded character limit. Please click [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.txt) to view the changelog.';
-    if (typeof found == 'string' && useGit == false) {
+    const exceeded = 'Exceeded character limit. Please click [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.md) to view the changelog.';
+    if (typeof found == 'string') {
         isList = true;
         // let txt = '' mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n');
-        const doc = fs.readFileSync(`${path}/cache/changelog.txt`, 'utf-8');
+        const doc = fs.readFileSync(`${path}/cache/changelog.md`, 'utf-8');
         let txt = '\`VERSION        DATE     CHANGES\`\n';
-        const list = doc.split('VERSION');
+        const list = doc.split('## [');
         list.shift();
         for (let i = 0; i < mainconst.versions.length; i++) {
             const sumVer = mainconst.versions[i];
             const useVer = list[i];
-            const changes = useVer?.split('changes: \n')[1]?.split('\n')?.filter(x => x.length > 0) ?? [];
+            const changes = useVer?.split('</br>')[1]?.split('\n')
+                .map(x => x.trim()).filter(x => x.length > 2 && !x.includes('### ')) ?? [];
             txt += `\`${(sumVer.name).padEnd(10)} (${sumVer.releaseDateFormatted})   ${changes.length}\`\n`;
-        }
-        if (list[list.length - 1].includes('commit: null')) {
-            (list[list.length - 1]?.split('changes: \n')[1]?.split('\n')?.length ?? 1) - 1
-            const changes = (list[list.length - 1]?.split('changes: ')[1]?.split('\n')?.length ?? 1) - 1;
-            txt += `\`Pending                   ${changes}\`\n`;
         }
         if (txt.length > 2000) {
             txt = exceeded;
@@ -206,91 +197,52 @@ export async function changelog(input: extypes.commandInput) {
         foundBool ? null : Embed.setAuthor({ name: `\nThere was an error trying to find version \`${version}\`` });
     } else {
         const document = /* useGit ? */
-            fs.readFileSync(`${path}/cache/changelog.txt`, 'utf-8');
+            fs.readFileSync(`${path}/cache/changelog.md`, 'utf-8');
         /*             :
                     fs.readFileSync(`${precomppath}/changelog/changelog.txt`, 'utf-8'); */
-        const list = document.split('VERSION');
+        const list = document.split('## [');
         list.shift();
-        if (useGit) {
-            useNum = list.length - 1;
-        }
         const cur = list[useNum] as string;
-        const verdata = useGit ? {
-            name: 'Pending',
-            releaseDate: NaN,
-            releaseDateFormatted: 'at an unspecified date'
-
-        } : mainconst.versions[useNum];
-        const commit = useGit ? 'null' : cur.split('commit:')[1].split('\n')[0] as string;
-        const changesTxt = cur.split('changes: ')[1];
-        const changes: { add: string[]; rem: string[]; qol: string[], fix: string[], maj: string[]; min: string[]; } = {
-            add: [],
-            rem: [],
-            qol: [],
-            fix: [],
-            maj: [],
-            min: [],
-        };
+        const verdata = mainconst.versions[useNum];
+        const commit = cur.split('[commit](')[1].split(')</br>')[0];
+        const changesTxt = cur.split('</br>')[1];
         const changesList =
             changesTxt ?
-                changesTxt.split('\n').map(x => x.trim()).filter(x => x.length > 2) : [];
-        for (const change of changesList) {
-            switch (true) {
-                case change.startsWith('[ADD]'):
-                    changes.add.push(change.slice(5));
-                    break;
-                case change.startsWith('[QOL]'):
-                    changes.qol.push(change.slice(5));
-                    break;
-                case change.startsWith('[FIX]'):
-                    changes.fix.push(change.slice(5));
-                    break;
-                case change.startsWith('[REM]'):
-                    changes.rem.push(change.slice(5));
-                    break;
-                case change.startsWith('[MAJ]'):
-                    changes.maj.push(change.slice(5));
-                    break;
-                default:
-                    changes.min.push(change.replaceAll('[MIN]', ''));
-                    break;
-            }
-        }
-
+                changesTxt.split('\n')
+                    .map(x => x.trim())
+                    .filter(x => x.length > 2) : [];
         let txt = '';
-        if (changes.maj.length > 0) {
-            txt += `\n${colourfunc.codeBlockColourText("MAJOR CHANGES", "blue", "text")} \`-\` ` + changes.maj.join('\n\`-\` ');
-
-        }
-        if (changes.add.length > 0) {
-            txt += `\n${colourfunc.codeBlockColourText("ADDITIONS", "green", "text")} \`-\` ` + changes.add.join('\n\`-\` ');
-        }
-        if (changes.qol.length > 0) {
-            txt += `\n${colourfunc.codeBlockColourText("QUALITY OF LIFE", "pink", "text")} \`-\` ` + changes.qol.join('\n\`-\` ');
-
-        }
-        if (changes.fix.length > 0) {
-            txt += `\n${colourfunc.codeBlockColourText("FIXES", "yellow", "text")} \`-\` ` + changes.fix.join('\n\`-\` ');
-
-        }
-        if (changes.rem.length > 0) {
-            txt += `\n${colourfunc.codeBlockColourText("REMOVALS", "red", "text")} \`-\` ` + changes.rem.join('\n\`-\` ');
-
-        }
-        if (changes.min.length > 0) {
-            txt += `\n${colourfunc.codeBlockColourText("MINOR", "cyan", "text")} \`-\` ` + changes.min.join('\n\`-\` ');
-
+        for (const change of changesList) {
+            if (change.startsWith('###')) {
+                const temp = change.replaceAll('###', '').trim();
+                switch (temp) {
+                    case 'Fixed':
+                        txt += colourfunc.codeBlockColourText(temp.toUpperCase(), "yellow", "text");
+                        break;
+                    case 'Changed':
+                        txt += colourfunc.codeBlockColourText(temp.toUpperCase(), "blue", "text");
+                        break;
+                    case 'Added':
+                        txt += colourfunc.codeBlockColourText(temp.toUpperCase(), "green", "text");
+                        break;
+                    case 'Removed':
+                        txt += colourfunc.codeBlockColourText(temp.toUpperCase(), "red", "text");
+                        break;
+                    case 'Deprecated':
+                        txt += colourfunc.codeBlockColourText(temp.toUpperCase(), "pink", "text");
+                        break;
+                    default:
+                        txt += colourfunc.codeBlockColourText(temp.toUpperCase(), "cyan", "text");
+                        break;
+                }
+            } else {
+                txt += change.replace('-', '`-`') + '\n';
+            }
         }
         txt = txt.slice(0, 2000);
         if (txt.trim().length == 0) {
             txt = '\nNo changes recorded';
         }
-
-        const url = commit?.toString()?.includes('null') || useGit ?
-            `https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.txt`
-            :
-            `https://github.com/sbrstrkkdwmdr/sbrbot/commit/${commit.trim()}`;
-
 
         if (txt.length > 2000) {
             txt = exceeded;
@@ -298,10 +250,11 @@ export async function changelog(input: extypes.commandInput) {
 
         Embed
             .setTitle(`${verdata.name.trim()} Changelog`)
-            .setURL(url)
-            .setDescription(`commit [${commit.trim()?.slice(0, 7)?.trim()}](${url})
+            .setURL(commit)
+            .setDescription(`commit [${commit.includes('commit/') ?
+                commit.split('commit/')[1].trim()?.slice(0, 7)?.trim() : 'null'}](${commit})
 Released ${verdata.releaseDateFormatted}
-Total of ${changesList.length} changes.${txt}
+Total of ${changesList.filter(x => !x.includes('### ')).length} changes.${txt}
 `)
             .setFooter({
                 text: `${useNum + 1}/${mainconst.versions.length}`
@@ -331,7 +284,7 @@ Total of ${changesList.length} changes.${txt}
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
-    if (useNum == mainconst.versions.length - 1 || useGit) {
+    if (useNum == mainconst.versions.length - 1) {
         (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
@@ -1020,8 +973,8 @@ export async function help(input: extypes.commandInput) {
                     break;
             }
             const curembed: Discord.Embed = input.obj.message.embeds[0];
-            if(input.button == 'Detailed' && curembed.description.includes('Prefix is')){
-                command = 'list'
+            if (input.button == 'Detailed' && curembed.description.includes('Prefix is')) {
+                command = 'list';
             }
         }
             break;

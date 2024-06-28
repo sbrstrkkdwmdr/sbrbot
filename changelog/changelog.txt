@@ -502,7 +502,6 @@ VERSION 0.5.5
 2023-10-09
 commit: 0fb571588c6253e7ebc03f03bda1441f367142c3 
 changes: 
-
 [QOL] auto-censor config properties in cache
 [FIX] replayparse and mapfileparse not running (discord changed file URLs)
 [QOL] edit graph colours
@@ -541,7 +540,6 @@ VERSION 0.5.6
 2023-10-26
 commit: e38de7573df02eb6f38a70ff8ea7a81089ae88ad
 changes: 
-
 [FIX] incorrect capitalisation in tz
 [REM] remove full numbers from convert SI prefix list
 [QOL] move conversions to a separate function
@@ -769,3 +767,9 @@ changes:
 [ADD] command - janken
 [REM] config - remove unused properties 
 [QOL] config - move properties to important
+
+VERSION null
+date_time 
+commit: null 
+changes:
+[QOL] moved changelog.txt to changelog.md
