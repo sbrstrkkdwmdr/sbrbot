@@ -8,7 +8,8 @@
         "test": "ts-node-transpile-only main.ts",
         "build": "tsc",
         "run": "node --experimental-json-modules --trace-warnings dist/main.js",
-        "update": "git pull && tsc"
+        "update": "git pull && tsc",
+        "cb": "tsc && node --experimental-json-modules --trace-warnings dist/main.js"
     },
     "repository": {
         "type": "git",
