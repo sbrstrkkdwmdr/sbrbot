@@ -6,11 +6,11 @@ import fs from 'fs';
 import Sequelize from 'sequelize';
 import * as extypes from './src/types/extratypes.js';
 
-import buttonHandler from './buttonHandler.js';
-import commandHandler from './commandHandler.js';
+import * as buttonHandler from './buttonHandler.js';
+import * as commandHandler from './commandHandler.js';
 import commandInit from './commandInit.js';
 import exEvents from './exEvents.js';
-import linkHandler from './linkHandler.js';
+import * as linkHandler from './linkHandler.js';
 import osutrack from './src/osutrack.js';
 
 import * as admincmds from './commands/cmdAdmin.js';
@@ -197,8 +197,8 @@ Current Client ID:        ${client.user.id}
 
     if (!fs.existsSync(`${path}/config/osuauth.json`)) {
         console.log(`Creating ${path}/config/osuauth.json`);
-        fs.writeFileSync(`${path}/config/osuauth.json`, 
-        '{"token_type": "Bearer", "expires_in": 1, "access_token": "blahblahblah"}', 'utf-8');
+        fs.writeFileSync(`${path}/config/osuauth.json`,
+            '{"token_type": "Bearer", "expires_in": 1, "access_token": "blahblahblah"}', 'utf-8');
     }
     if (!fs.existsSync(`${path}/id.txt`)) {
         console.log(`Creating ${path}/id.txt`);
@@ -298,13 +298,18 @@ Current Client ID:        ${client.user.id}
         fs.writeFileSync(`${path}/logs/general.log`, '');
     }
 
-    //commandHandler(blahblahblah) //loop
-    commandHandler({ userdata, client, config, oncooldown, guildSettings, trackDb, statsCache }); //instead of running once, the function should always be active
-    linkHandler({ userdata, client, config, oncooldown, guildSettings, statsCache }); //{}
-    buttonHandler({ userdata, client, config, oncooldown, statsCache });
     commandInit({ userdata, client, config, oncooldown });
     exEvents({ userdata, client, config, oncooldown, guildSettings, statsCache });
     osutrack({ userdata, client, config, oncooldown, trackDb, guildSettings });
+
+    client.on('messageCreate', async (message) => {
+        linkHandler.onMessage({ userdata, client, config, oncooldown, guildSettings, statsCache }, message); //{}
+        commandHandler.onMessage({ userdata, client, config, oncooldown, guildSettings, trackDb, statsCache }, message);
+    });
+    client.on('interactionCreate', async (interaction) => {
+        commandHandler.onInteraction({ userdata, client, config, oncooldown, guildSettings, trackDb, statsCache }, interaction);
+        buttonHandler.onInteraction({ userdata, client, config, oncooldown, statsCache }, interaction);
+    });
 
     fs.appendFileSync(`${path}/logs/general.log`, `\n\n\n${initlog}\n\n\n`, 'utf-8');
 
@@ -377,6 +382,11 @@ ${error}
 
 
 client.login(config.important.token);
+
+process.on('warning', e => {
+    console.log(e.stack);
+    console.warn(e.stack);
+});
 
 export { };
 

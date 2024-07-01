@@ -11,14 +11,7 @@ import * as extypes from './src/types/extratypes.js';
 import * as osuApiTypes from './src/types/osuApiTypes.js';
 import * as osuapitypes from './src/types/osuApiTypes.js';
 
-export default (input: {
-    userdata,
-    client: Discord.Client,
-    config: extypes.config,
-    oncooldown,
-    guildSettings: Sequelize.ModelStatic<any>,
-    statsCache;
-}) => {
+export default (input: extypes.input) => {
 
     setInterval(() => {
         clearMapFiles();
@@ -52,37 +45,8 @@ export default (input: {
     }
 
     function setActivity() {
-        // const rdm = Math.floor(Math.random() * 100);
         let string;
         let fr = 0;
-        // switch (true) {
-        //     case rdm > 2: {
-        //         const map = getMap();
-        //         if (map == false) {
-        //             string = `Artist - Title [version]`;
-        //         } else {
-        //             string = `${map.beatmapset.artist} - ${map.beatmapset.title}`;
-        //         }
-        //         fr = 2;
-        //     }
-        //         break;
-        //     case rdm < 1: {
-        //         const gamesList = [
-        //             'osu!',
-        //             'osu! Lazer',
-        //             'McOsu',
-        //             'danser'
-        //         ];
-        //         string = gamesList[Math.floor(Math.random() * gamesList.length)];
-        //         fr = 0;
-        //     }
-        //         break;
-        //     default: {
-        //         string = 'you';
-        //         fr = 3;
-        //     }
-        //         break;
-        // }
         const map = getMap();
         if (map == false) {
             string = 'you';
@@ -194,7 +158,6 @@ export default (input: {
     }
 
     input.client.on('messageCreate', async (message) => {
-
         const currentGuildId = message.guildId;
         let settings: extypes.guildSettings;
         let prefix: string = input.config.prefix;

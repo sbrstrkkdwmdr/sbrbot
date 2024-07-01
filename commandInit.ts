@@ -1,11 +1,7 @@
 import * as Discord from 'discord.js';
 import * as cmdconfig from './src/consts/commandopts.js';
-export default (input: {
-    userdata,
-    client: Discord.Client,
-    config,
-    oncooldown;
-}) => {
+import * as extypes from './src/types/extratypes.js';
+export default (input: extypes.input) => {
     /*
             const guildID = config.testGuildID;
         const guild = client.guilds.cache.get(guildID);

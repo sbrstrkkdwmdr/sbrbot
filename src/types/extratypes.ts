@@ -28,6 +28,16 @@ export type config = {
     };
 };
 
+export type input = {
+    userdata,
+    client: Discord.Client,
+    config: config,
+    oncooldown,
+    guildSettings?,
+    trackDb?,
+    statsCache?;
+}
+
 export type guildSettings = {
     guildid: number | string,
     guildname: string,

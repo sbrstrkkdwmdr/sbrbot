@@ -2,6 +2,8 @@
 
 ## [WIP] - xxxx-xx-xx
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+### Fixed
+- memory leak (maybe?)
 ### Changed
 - changelog.txt -> changelog.md
 - re-order versions to show newest first
