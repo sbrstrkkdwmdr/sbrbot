@@ -7,6 +7,7 @@
 ### Fixed
 
 - memory leak (maybe?)
+- removed unused depedencies
 
 ### Changed
 
@@ -14,6 +15,8 @@
 - re-order versions to show newest first
 - change formatting and handling in `changelog` command
 - edited changelog system (0.3 -> 1.0, 0.4 -> 2.0, 0.5 -> 3.0)
+- updated dependencies
+- use osu-parsers for replay parsing
 
 ## [3.16.0] - 2024-06-20
 

@@ -643,7 +643,7 @@ function shortModName(modstring: string) {
         .replaceAll('co-op', 'KC')
         .replaceAll('scorev2', 'S2')
         .replaceAll('mirror', 'MR')).string;
-        ;
+    ;
 }
 /**
  * 
@@ -976,7 +976,7 @@ function ModeNameToInt(mode: string): number {
 /**
  * convert an integer into it's corresponding mode name
  */
-function ModeIntToName(mode: number):osuapitypes.GameMode {
+function ModeIntToName(mode: number): osuapitypes.GameMode {
     switch (mode) {
         case 0:
             return 'osu';
@@ -994,8 +994,8 @@ function ModeIntToName(mode: number):osuapitypes.GameMode {
 /**
  * convert a string into an osu! rank/grade
  */
-function checkGrade(string: string, defaultRank?:osuapitypes.Rank) {
-    let grade:osuapitypes.Rank;
+function checkGrade(string: string, defaultRank?: osuapitypes.Rank) {
+    let grade: osuapitypes.Rank;
 
     if (!defaultRank) {
         defaultRank = 'A';
@@ -1054,4 +1054,40 @@ export function bws(badges: number, rank: number) {
  */
 export function recdiff(pp: number) {
     return (pp ** 0.4) * 0.195;
+}
+
+export function hitlist(hits: osuapitypes.Statistics, mode: osuapitypes.GameMode) {
+    const output = {
+        list: '',
+        acc: NaN,
+        accFc: NaN,
+        total: NaN,
+    };
+    switch (mode) {
+        case 'osu': default:
+            output.list = `${hits.count_300}/${hits.count_100}/${hits.count_50}/${hits.count_miss}`;
+            output.acc = calcgrade(hits.count_300, hits.count_100, hits.count_50, hits.count_miss).accuracy;
+            output.accFc = calcgrade(hits.count_300, hits.count_100, hits.count_50, 0).accuracy;
+            output.total = hits.count_300 + hits.count_100 + hits.count_50 + hits.count_miss;
+            break;
+        case 'taiko':
+            output.list = `${hits.count_300}/${hits.count_100}/${hits.count_miss}`;
+            output.acc = calcgradeTaiko(hits.count_300, hits.count_100, hits.count_miss).accuracy;
+            output.accFc = calcgradeTaiko(hits.count_300, hits.count_100, 0).accuracy;
+            output.total = hits.count_300 + hits.count_100 + hits.count_miss;
+            break;
+        case 'fruits':
+            output.list = `${hits.count_geki}/${hits.count_300}/${hits.count_katu}/${hits.count_100}/${hits.count_50}/${hits.count_miss}`;
+            output.acc = calcgradeCatch(hits.count_300, hits.count_100, hits.count_50, hits.count_katu, hits.count_miss).accuracy;
+            output.accFc = calcgradeCatch(hits.count_300, hits.count_100, hits.count_50, hits.count_katu, 0).accuracy;
+            output.total = hits.count_300 + hits.count_katu + hits.count_100 + hits.count_50 + hits.count_miss;
+            break;
+        case 'mania':
+            output.list = `${hits.count_geki}/${hits.count_300}/${hits.count_katu}/${hits.count_100}/${hits.count_50}/${hits.count_miss}`;
+            output.acc = calcgradeMania(hits.count_geki, hits.count_300, hits.count_katu, hits.count_100, hits.count_50, hits.count_miss).accuracy;
+            output.accFc = calcgradeMania(hits.count_geki, hits.count_300, hits.count_katu, hits.count_100, hits.count_50, 0).accuracy;
+            output.total = hits.count_geki + hits.count_300 + hits.count_katu + hits.count_100 + hits.count_50 + hits.count_miss;
+            break;
+    }
+    return output;
 }

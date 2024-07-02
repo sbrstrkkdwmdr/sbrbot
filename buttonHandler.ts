@@ -1,6 +1,5 @@
 import * as Discord from 'discord.js';
 import fs from 'fs';
-import * as admincmds from './commands/cmdAdmin.js';
 import * as checkcmds from './commands/cmdChecks.js';
 import * as commands from './commands/cmdGeneral.js';
 import * as misccmds from './commands/cmdMisc.js';

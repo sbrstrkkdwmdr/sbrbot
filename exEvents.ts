@@ -1,14 +1,9 @@
 import axios from 'axios';
 import * as Discord from 'discord.js';
 import fs from 'fs';
-import Sequelize from 'sequelize';
 import { path } from './path.js';
 import * as log from './src/log.js';
-import * as osufunc from './src/osufunc.js';
-import * as osumodcalc from './src/osumodcalc.js';
-import * as track from './src/trackfunc.js';
 import * as extypes from './src/types/extratypes.js';
-import * as osuApiTypes from './src/types/osuApiTypes.js';
 import * as osuapitypes from './src/types/osuApiTypes.js';
 
 export default (input: extypes.input) => {

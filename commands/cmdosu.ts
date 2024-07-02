@@ -3,7 +3,6 @@ import * as fs from 'fs';
 import * as jimp from 'jimp';
 import * as osuclasses from 'osu-classes';
 import * as osuparsers from 'osu-parsers';
-import * as replayparser from 'osureplayparser';
 import {
     CatchPerformanceAttributes,
     ManiaPerformanceAttributes, OsuPerformanceAttributes, PerformanceAttributes, TaikoPerformanceAttributes
@@ -11,14 +10,12 @@ import {
 import { filespath, path, precomppath } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
-import * as colourfunc from '../src/colourcalc.js';
 import * as flags from '../src/consts/argflags.js';
 import * as buttonsthing from '../src/consts/buttons.js';
 import * as colours from '../src/consts/colours.js';
 import * as def from '../src/consts/defaults.js';
 import * as emojis from '../src/consts/emojis.js';
 import * as errors from '../src/consts/errors.js';
-import * as helpinfo from '../src/consts/helpinfo.js';
 import * as mainconst from '../src/consts/main.js';
 import * as embedStuff from '../src/embed.js';
 import * as func from '../src/func.js';
@@ -29,16 +26,7 @@ import * as formula from '../src/tools.js';
 import * as trackfunc from '../src/trackfunc.js';
 import * as extypes from '../src/types/extratypes.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
-import * as othertypes from '../src/types/othertypes.js';
 import * as msgfunc from './msgfunc.js';
-export async function name(input: extypes.commandInput) {
-}
-
-/**
- * main command functions at the top
- * arg handling and other stuff is at the bottom
- */
-
 
 //user stats
 
@@ -5423,7 +5411,6 @@ ${srStr}
 export async function replayparse(input: extypes.commandInput) {
 
     let commanduser: Discord.User;
-    let replay: extypes.replay;
 
     const embedStyle: extypes.osuCmdStyle = 'S';
 
@@ -5473,47 +5460,50 @@ export async function replayparse(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    try {
-        replay = replayparser.parseReplay(`${filespath}/replays/${input.absoluteID}.osr`);
-    } catch (err) {
-        log.logCommand(
-            {
-                commandName: 'replayparse',
-                event: 'Error',
-                commandType: input.commandType,
-                commandId: input.absoluteID,
-                object: input.obj,
-                customString: 'Could not parse replay\n' + err,
-                config: input.config
-            }
-        );
-        return;
-    }
-    osufunc.debug(replay, 'fileparse', 'replay', input.obj.guildId, 'replayData');
+
+    // try {
+    //     replay = replayparser.parseReplay(`${filespath}/replays/${input.absoluteID}.osr`);
+    // } catch (err) {
+    //     log.logCommand(
+    //         {
+    //             commandName: 'replayparse',
+    //             event: 'Error',
+    //             commandType: input.commandType,
+    //             commandId: input.absoluteID,
+    //             object: input.obj,
+    //             customString: 'Could not parse replay\n' + err,
+    //             config: input.config
+    //         }
+    //     );
+    //     return;
+    // }
+    const decoder = new osuparsers.ScoreDecoder();
+    const score = await decoder.decodeFromPath(`${filespath}/replays/${input.absoluteID}.osr`);
+    osufunc.debug(score, 'fileparse', 'replay', input.obj.guildId, 'replayData');
 
     let mapdataReq: osufunc.apiReturn;
 
-    if (func.findFile(replay.beatmapMD5, `mapdata`) &&
+    if (func.findFile(score.info.beatmapHashMD5, `mapdata`) &&
 
-        !('error' in func.findFile(replay.beatmapMD5, `mapdata`)) &&
+        !('error' in func.findFile(score.info.beatmapHashMD5, `mapdata`)) &&
         input.button != 'Refresh') {
-        mapdataReq = func.findFile(replay.beatmapMD5, `mapdata`);
+        mapdataReq = func.findFile(score.info.beatmapHashMD5, `mapdata`);
     } else {
         mapdataReq = await osufunc.apiget(
             {
                 type: 'map_get_md5',
                 config: input.config,
                 params: {
-                    md5: replay.beatmapMD5
+                    md5: score.info.beatmapHashMD5
                 }
             });
     }
     const mapdata: osuApiTypes.Beatmap = mapdataReq.apiData;
     if (mapdataReq?.error) {
-        await msgfunc.errorAndAbort(input, 'replayparse', true, errors.uErr.osu.map.ms_md5.replace('[ID]', replay.beatmapMD5), false);
+        await msgfunc.errorAndAbort(input, 'replayparse', true, errors.uErr.osu.map.ms_md5.replace('[ID]', score.info.beatmapHashMD5), false);
         return;
     }
-    func.storeFile(mapdataReq, replay.beatmapMD5, 'mapdata');
+    func.storeFile(mapdataReq, score.info.beatmapHashMD5, 'mapdata');
 
     osufunc.debug(mapdataReq, 'fileparse', 'replay', input.obj.guildId, 'mapData');
     if (mapdata?.id) {
@@ -5521,24 +5511,26 @@ export async function replayparse(input: extypes.commandInput) {
             {
                 id: `${mapdata.id}`,
                 apiData: null,
-                mods: osumodcalc.ModIntToString(replay.mods)
+                mods: osumodcalc.ModIntToString(score.info?.mods?.bitwise ?? 0)
             }
         ) : '';
     }
 
+    console.log(score.info?.mods?.bitwise ?? 0);
+
     let osudataReq: osufunc.apiReturn;
 
-    if (func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu')) &&
-        !('error' in func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu'))) &&
+    if (func.findFile(score.info.username, 'osudata', osufunc.modeValidator('osu')) &&
+        !('error' in func.findFile(score.info.username, 'osudata', osufunc.modeValidator('osu'))) &&
         input.button != 'Refresh'
     ) {
-        osudataReq = func.findFile(replay.playerName, 'osudata', osufunc.modeValidator('osu'));
+        osudataReq = func.findFile(score.info.username, 'osudata', osufunc.modeValidator('osu'));
     } else {
         osudataReq = await osufunc.apiget({
             type: 'user',
             config: input.config,
             params: {
-                username: replay.playerName,
+                username: '' + score.info.username,
                 mode: osufunc.modeValidator('osu')
             }
         });
@@ -5546,11 +5538,11 @@ export async function replayparse(input: extypes.commandInput) {
 
     const osudata: osuApiTypes.User = osudataReq.apiData;
     if (osudataReq?.error) {
-        await msgfunc.errorAndAbort(input, 'replayparse', true, errors.uErr.osu.profile.user_msp.replace('[ID]', replay.playerName), false);
+        await msgfunc.errorAndAbort(input, 'replayparse', true, errors.uErr.osu.profile.user_msp.replace('[ID]', score.info.username), false);
         return;
     }
-    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(replay.gameMode));
-    func.storeFile(osudataReq, replay.playerName, 'osudata', osufunc.modeValidator(replay.gameMode));
+    func.storeFile(osudataReq, osudata.id, 'osudata', osufunc.modeValidator(score.replay.mode));
+    func.storeFile(osudataReq, score.info.username, 'osudata', osufunc.modeValidator(score.replay.mode));
     osufunc.debug(osudataReq, 'fileparse', 'replay', input.obj.guildId, 'osuData');
     let userid: string | number;
     try {
@@ -5573,72 +5565,46 @@ export async function replayparse(input: extypes.commandInput) {
     }, 1) + ` [${mapdata.version}]`;
     let mapdataid: string;
 
-    const mods = replay.mods;
+    const mods = score.info?.mods?.bitwise ?? 0;
     let ifmods: string;
     if (mods != 0) {
         ifmods = `+${osumodcalc.ModIntToString(mods)}`;
     } else {
         ifmods = '';
     }
-    const gameMode = replay.gameMode;
-    let accuracy: number;
     let xpp: PerformanceAttributes[];
-    let hitlist: string;
-    let fcacc: number;
     let ppissue: string;
-    let totalhits = 0;
 
-    switch (gameMode) {
-        case 0:
-            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`;
-            accuracy = osumodcalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, replay.misses).accuracy;
-            fcacc = osumodcalc.calcgrade(replay.number_300s, replay.number_100s, replay.number_50s, 0).accuracy;
-            totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.misses;
-            break;
-        case 1:
+    const hitlist = osumodcalc.hitlist({
+        count_geki: score.info.countGeki,
+        count_300: score.info.count300,
+        count_katu: score.info.countKatu,
+        count_100: score.info.count100,
+        count_50: score.info.count50,
+        count_miss: score.info.countMiss,
+    }, osumodcalc.ModeIntToName(score.replay.mode));
 
-            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.misses}`;
-            accuracy = osumodcalc.calcgradeTaiko(replay.number_300s, replay.number_100s, replay.misses).accuracy;
-            fcacc = osumodcalc.calcgradeTaiko(replay.number_300s, replay.number_100s, 0).accuracy;
-            totalhits = replay.number_300s + replay.number_100s + replay.misses;
-            break;
-        case 2:
-
-            hitlist = `${replay.number_300s}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`;
-            accuracy = osumodcalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, replay.misses).accuracy;
-            fcacc = osumodcalc.calcgradeCatch(replay.number_300s, replay.number_100s, replay.number_50s, replay.katus, 0).accuracy;
-            totalhits = replay.number_300s + replay.number_100s + replay.number_50s + replay.katus + replay.misses;
-            break;
-        case 3:
-
-            hitlist = `${replay.gekis}/${replay.number_300s}/${replay.katus}/${replay.number_100s}/${replay.number_50s}/${replay.misses}`;
-            accuracy = osumodcalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, replay.misses).accuracy;
-            fcacc = osumodcalc.calcgradeMania(replay.gekis, replay.number_300s, replay.katus, replay.number_100s, replay.number_50s, 0).accuracy;
-            totalhits = replay.gekis + replay.number_300s + replay.katus + replay.number_100s + replay.number_50s + replay.misses;
-            break;
-    }
-    const failed = totalhits == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true;
+    const failed = hitlist.total == (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) ? false : true;
 
     try {
         if (!mapdata.id) throw new Error('no map');
         xpp = await osufunc.scorecalc({
-            mods: osumodcalc.ModIntToString(replay.mods),
-            gamemode: osumodcalc.ModeIntToName(replay.gameMode),
+            mods: osumodcalc.ModIntToString(score.info?.mods?.bitwise ?? 0),
+            gamemode: osumodcalc.ModeIntToName(score.replay.mode),
             mapid: mapdata.id,
-            miss: replay.misses,
-            acc: accuracy / 100,
-            maxcombo: replay.max_combo,
-            score: replay.score,
+            miss: score.info.countMiss,
+            acc: hitlist.acc,
+            maxcombo: score.info.maxCombo,
             calctype: 0,
-            passedObj: totalhits,
+            passedObj: hitlist.total,
         }, new Date(mapdata.last_updated), input.config);
         ppissue = '';
     } catch (error) {
         const temp: PerformanceAttributes = {
-            mode: replay.gameMode,
+            mode: score.replay.mode,
             pp: 0,
             difficulty: {
-                mode: replay.gameMode,
+                mode: score.replay.mode,
                 stars: mapdata.difficulty_rating,
                 maxCombo: mapdata.max_combo ?? 0,
                 aim: 0,
@@ -5681,27 +5647,12 @@ export async function replayparse(input: extypes.commandInput) {
         mapdataid = 'https://osu.ppy.sh/images/layout/avatar-guest@2x.png';
     }
 
-    const lifebar = replay.life_bar.split('|');
-    const lifebarF = [];
-    for (let i = 0; i < lifebar.length; i++) {
-        lifebarF.push(lifebar[i].split(',')[0]);
-    }
-    lifebarF.shift();
-
-    const dataLabel = [];
-
-    for (let i = 0; i < lifebarF.length; i++) {
-        dataLabel.push('');
-
-    }
-
-    const passper = Math.abs(totalhits / (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners)) * 100;
+    const passper = Math.abs(hitlist.total / (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners)) * 100;
 
     const isfail = failed ?
         `${passper.toFixed(2)}% passed (${calc.secondsToTime(passper / 100 * mapdata.hit_length)}/${calc.secondsToTime(mapdata.hit_length)})`
         : '';
-
-    const chartInit = await func.graph(dataLabel, lifebarF, 'Health', {
+    const chartInit = await func.graph(score.replay.lifeBar.map(x => calc.secondsToTime(x.startTime / 1000)), score.replay.lifeBar.map(x => Math.floor(x.health * 100)), 'Health', {
         fill: false,
         startzero: true,
         pointSize: 0,
@@ -5712,27 +5663,20 @@ export async function replayparse(input: extypes.commandInput) {
 
     const chart = chartInit.filename;
 
-    // const UR =
-    //     mapdata.id ?
-    //         await osufunc.calcUr(
-    //             `${filespath}/replays/${input.absoluteID}.osr`,
-    //             `${path}/files/maps/${mapdata.id}.osu`
-    //         ) : null;
-
     const Embed = new Discord.EmbedBuilder()
         .setFooter({
             text: `${embedStyle}`
         })
         .setColor(colours.embedColour.score.dec)
-        .setAuthor({ name: `${replay.playerName}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
+        .setAuthor({ name: `${score.info.username}'s replay`, iconURL: `https://a.ppy.sh/${userid}`, url: `https://osu.ppy.sh/users/${userid}` })
         .setTitle(`${fulltitle} ${ifmods}`)
         .setURL(`${mapdataid}`)
         .setThumbnail(mapbg)
         .setDescription(
             `
-${replay.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | ${replay.max_combo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapcombo}x** | ${accuracy.toFixed(2)}%
-\`${hitlist}\`
-${xpp[0].pp.toFixed(2)}pp | ${xpp[1].pp.toFixed(2)}pp if ${fcacc.toFixed(2)}% FC 
+${score.info.maxCombo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}x/**${mapcombo}x** | ${hitlist.accFc.toFixed(2)}%
+\`${hitlist.list}\`
+${xpp[0].pp.toFixed(2)}pp | ${xpp[1].pp.toFixed(2)}pp if ${hitlist.accFc.toFixed(2)}% FC 
 ${ppissue}
 ${isfail}
 `
@@ -10233,8 +10177,6 @@ export async function maplocal(input: extypes.commandInput) {
         }
     }
 
-    console.log(mapParsed?.controlPoints?.timingPoints);
-
     let ppcalcing: PerformanceAttributes[];
     try {
         ppcalcing = await osufunc.mapcalclocal(mods, 'osu', mapPath, 0);
@@ -11601,7 +11543,7 @@ export async function tracklist(input: extypes.commandInput) {
  */
 export async function compare(input: extypes.commandInput) {
     let commanduser: Discord.User;
-    type compareTypeasd = 'profile' | 'top' | 'mapscore'
+    type compareTypeasd = 'profile' | 'top' | 'mapscore';
     let type: compareTypeasd = 'profile';
     let first = null;
     let second = null;

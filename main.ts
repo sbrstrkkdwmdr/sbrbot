@@ -1,10 +1,8 @@
 console.log('Loading...');
 const initdate = new Date();
-import * as Discord from 'discord.js';
 import { Client, GatewayIntentBits, Partials } from 'discord.js';
 import fs from 'fs';
 import Sequelize from 'sequelize';
-import * as extypes from './src/types/extratypes.js';
 
 import * as buttonHandler from './buttonHandler.js';
 import * as commandHandler from './commandHandler.js';
@@ -13,22 +11,7 @@ import exEvents from './exEvents.js';
 import * as linkHandler from './linkHandler.js';
 import osutrack from './src/osutrack.js';
 
-import * as admincmds from './commands/cmdAdmin.js';
-import * as checkcmds from './commands/cmdChecks.js';
-import * as commands from './commands/cmdGeneral.js';
-import * as misccmds from './commands/cmdMisc.js';
-import * as osucmds from './commands/cmdosu.js';
-
-import https from 'https';
-import tesseract from 'tesseract.js';
 import * as checks from './src/checks.js';
-import * as cmdconfig from './src/consts/commandopts.js';
-import * as cd from './src/consts/cooldown.js';
-import * as mainconst from './src/consts/main.js';
-import * as embedStuff from './src/embed.js';
-import * as func from './src/func.js';
-import * as osufunc from './src/osufunc.js';
-import * as trackfunc from './src/trackfunc.js';
 
 import inconfig from './config/config.json' assert { type: 'json' };
 import { path } from './path.js';

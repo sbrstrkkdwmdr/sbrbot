@@ -5,17 +5,9 @@ import * as Discord from 'discord.js';
 import fs from 'fs';
 import { filespath, path } from './path.js';
 import * as checks from './src/checks.js';
-import * as cd from './src/consts/cooldown.js';
-import * as defaults from './src/consts/defaults.js';
 import * as func from './src/func.js';
 
-import * as admincmds from './commands/cmdAdmin.js';
-import * as checkcmds from './commands/cmdChecks.js';
-import * as commands from './commands/cmdGeneral.js';
-import * as misccmds from './commands/cmdMisc.js';
 import * as osucmds from './commands/cmdosu.js';
-import * as mainconst from './src/consts/main.js';
-import * as embedStuff from './src/embed.js';
 import * as extypes from './src/types/extratypes.js';
 
 let imgParseCooldown = false;

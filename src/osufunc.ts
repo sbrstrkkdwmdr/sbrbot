@@ -3,7 +3,6 @@ import charttoimg from 'chartjs-to-image';
 import fs from 'fs';
 import nfetch from 'node-fetch';
 import * as osuparsers from 'osu-parsers';
-import * as replayparser from 'osureplayparser';
 import perf from 'perf_hooks';
 import rosu from 'rosu-pp';
 import Sequelize from 'sequelize';
@@ -196,7 +195,7 @@ export async function scorecalc(
                         obj.mods.length < 1 ? 'NM' : obj.mods
                         : 'NM'
                     ;
-                let mode = osumodcalc.ModeNameToInt(obj.gamemode)
+                let mode = osumodcalc.ModeNameToInt(obj.gamemode);
                 let newacc = osumodcalc.calcgrade(obj.hit300, obj.hit100, obj.hit50, 0).accuracy;
                 if (obj.hit300 && obj.hit100) {
                     switch (obj.gamemode) {
@@ -1885,36 +1884,19 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
 export function modeValidator(mode: string | number) {
     let returnf: osuApiTypes.GameMode = 'osu';
 
-    if (typeof mode == 'number') {
-        switch (mode) {
-            case 0: default:
-                returnf = 'osu';
-                break;
-            case 1:
-                returnf = 'taiko';
-                break;
-            case 2:
-                returnf = 'fruits';
-                break;
-            case 3:
-                returnf = 'mania';
-                break;
-        }
-    } else if (typeof mode == 'string') {
-        switch (mode) {
-            case 'osu': default: case 'o': case 'std': case 'standard':
-                returnf = 'osu';
-                break;
-            case 'taiko': case 't': case 'drums':
-                returnf = 'taiko';
-                break;
-            case 'fruits': case 'f': case 'c': case 'ctb': case 'catch': case 'catch the beat': case 'catchthebeat':
-                returnf = 'fruits';
-                break;
-            case 'mania': case 'm': case 'piano': case 'key': case 'keys':
-                returnf = 'mania';
-                break;
-        }
+    switch (mode) {
+        case 0: case 'osu': default: case 'o': case 'std': case 'standard':
+            returnf = 'osu';
+            break;
+        case 1: case 'taiko': case 't': case 'drums':
+            returnf = 'taiko';
+            break;
+        case 2: case 'fruits': case 'f': case 'c': case 'ctb': case 'catch': case 'catch the beat': case 'catchthebeat':
+            returnf = 'fruits';
+            break;
+        case 3: case 'mania': case 'm': case 'piano': case 'key': case 'keys':
+            returnf = 'mania';
+            break;
     }
     return returnf;
 }
@@ -2446,207 +2428,208 @@ export async function calcUr(
     osu: string,
     config: extypes.config,
 ) {
-    const unstableRate: number[] = [];
+    // const unstableRate: number[] = [];
 
-    let replay: extypes.replay = await replayparser.parseReplay(osr);
-    let map = await mapParser.mapObject_Alt(osu);
+    // let replay: extypes.replay = await replayparser.parseReplay(osr);
+    // let map = await mapParser.mapObject_Alt(osu);
 
-    try {
-        replay = await replayparser.parseReplay(osr);
-        map = await mapParser.mapObject_Alt(osu);
-    } catch (error) {
-        return {
-            unstablerate: 0,
-            averageOffset: 0,
-        };
-    }
+    // try {
+    //     replay = await replayparser.parseReplay(osr);
+    //     map = await mapParser.mapObject_Alt(osu);
+    // } catch (error) {
+    //     return {
+    //         unstablerate: 0,
+    //         averageOffset: 0,
+    //     };
+    // }
 
-    console.log(map.HitObjects);
+    // console.log(map.HitObjects);
 
-    //get offset
-    const pixeloffset = osumodcalc.csToRadius(map.Difficulty.CircleSize);
-    const hitOffset = osumodcalc.ODtoms(map.Difficulty.OverallDifficulty).hitwindow_50;
+    // //get offset
+    // const pixeloffset = osumodcalc.csToRadius(map.Difficulty.CircleSize);
+    // const hitOffset = osumodcalc.ODtoms(map.Difficulty.OverallDifficulty).hitwindow_50;
 
-    //get every hitobject
-    const hitObjectTimings: {
-        x: number,
-        y: number,
-        time: number,
-    }[] = [];
-    for (let i = 0; i < map.HitObjects.length; i++) {
-        const curObj = map.HitObjects[i];
-        hitObjectTimings.push({
-            x: curObj.position.x,
-            y: curObj.position.y,
-            time: curObj.time
-        });
-    }
+    // //get every hitobject
+    // const hitObjectTimings: {
+    //     x: number,
+    //     y: number,
+    //     time: number,
+    // }[] = [];
+    // for (let i = 0; i < map.HitObjects.length; i++) {
+    //     const curObj = map.HitObjects[i];
+    //     hitObjectTimings.push({
+    //         x: curObj.position.x,
+    //         y: curObj.position.y,
+    //         time: curObj.time
+    //     });
+    // }
 
 
 
-    //get every tap
-    const taps: {
-        x: number,
-        y: number,
-        time: number,
-    }[] = [];
-    for (let i = 0; i < replay.replay_data.length; i++) {
-        const curHit = replay.replay_data[i];
-        const lastHit = replay.replay_data[i - 1];
-        let tapTime: number;
+    // //get every tap
+    // const taps: {
+    //     x: number,
+    //     y: number,
+    //     time: number,
+    // }[] = [];
+    // for (let i = 0; i < replay.replay_data.length; i++) {
+    //     const curHit = replay.replay_data[i];
+    //     const lastHit = replay.replay_data[i - 1];
+    //     let tapTime: number;
 
-        let tapCounts = false;
+    //     let tapCounts = false;
 
-        if (!curHit) {
-            tapCounts = false;
-        } else {
-            if (!lastHit) {
-                console.log('no last hit');
-                if (curHit.keysPressed.K1 ||
-                    curHit.keysPressed.K2 ||
-                    curHit.keysPressed.M1 ||
-                    curHit.keysPressed.M2
-                ) {
-                    tapCounts = true;
-                    const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
-                    tapTime = tempArr.reduce((a, b) => a + b, 0);
-                }
-            } else {
-                //check if a key was pressed that wasn't pressed before
-                if ((curHit.keysPressed.K1 && lastHit.keysPressed.K1 == false) ||
-                    (curHit.keysPressed.K2 && lastHit.keysPressed.K2 == false) ||
-                    (curHit.keysPressed.M1 && lastHit.keysPressed.M1 == false) ||
-                    (curHit.keysPressed.M2 && lastHit.keysPressed.M2 == false)
-                ) {
-                    tapCounts = true;
-                    const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
-                    tapTime = tempArr.reduce((a, b) => a + b, 0);
-                }
-            }
-        }
-        if (tapCounts) {
-            taps.push(
-                {
-                    x: curHit.x,
-                    y: curHit.y,
-                    time: tapTime
-                }
-            );
-        }
-    }
+    //     if (!curHit) {
+    //         tapCounts = false;
+    //     } else {
+    //         if (!lastHit) {
+    //             console.log('no last hit');
+    //             if (curHit.keysPressed.K1 ||
+    //                 curHit.keysPressed.K2 ||
+    //                 curHit.keysPressed.M1 ||
+    //                 curHit.keysPressed.M2
+    //             ) {
+    //                 tapCounts = true;
+    //                 const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
+    //                 tapTime = tempArr.reduce((a, b) => a + b, 0);
+    //             }
+    //         } else {
+    //             //check if a key was pressed that wasn't pressed before
+    //             if ((curHit.keysPressed.K1 && lastHit.keysPressed.K1 == false) ||
+    //                 (curHit.keysPressed.K2 && lastHit.keysPressed.K2 == false) ||
+    //                 (curHit.keysPressed.M1 && lastHit.keysPressed.M1 == false) ||
+    //                 (curHit.keysPressed.M2 && lastHit.keysPressed.M2 == false)
+    //             ) {
+    //                 tapCounts = true;
+    //                 const tempArr = replay.replay_data.slice(0, i).map(x => x.timeSinceLastAction);
+    //                 tapTime = tempArr.reduce((a, b) => a + b, 0);
+    //             }
+    //         }
+    //     }
+    //     if (tapCounts) {
+    //         taps.push(
+    //             {
+    //                 x: curHit.x,
+    //                 y: curHit.y,
+    //                 time: tapTime
+    //             }
+    //         );
+    //     }
+    // }
 
-    log.toOutput(JSON.stringify(hitObjectTimings, null, 2), config);
+    // log.toOutput(JSON.stringify(hitObjectTimings, null, 2), config);
 
-    const hitObjectsforAvg = hitObjectTimings.slice();
+    // const hitObjectsforAvg = hitObjectTimings.slice();
 
-    //gets avg. from the absolute perfect hit;
-    const unstableRateF: number[] = [];
+    // //gets avg. from the absolute perfect hit;
+    // const unstableRateF: number[] = [];
 
-    for (let i = 0; i < taps.length; i++) {
-        const curHit = taps[i];
-        const curHitObj = hitObjectsforAvg[0];
-        let doable = true;
-        let missaim = false;
-        let mistap = false;
-        let objectGONE = false;
+    // for (let i = 0; i < taps.length; i++) {
+    //     const curHit = taps[i];
+    //     const curHitObj = hitObjectsforAvg[0];
+    //     let doable = true;
+    //     let missaim = false;
+    //     let mistap = false;
+    //     let objectGONE = false;
 
-        console.log(i);
-        console.log(curHit);
-        console.log(curHitObj);
+    //     console.log(i);
+    //     console.log(curHit);
+    //     console.log(curHitObj);
 
-        if (hitObjectsforAvg.length == 0) {
-            break;
-        }
+    //     if (hitObjectsforAvg.length == 0) {
+    //         break;
+    //     }
 
-        if (!curHitObj) {
-            hitObjectsforAvg.shift();
-        } else {
+    //     if (!curHitObj) {
+    //         hitObjectsforAvg.shift();
+    //     } else {
 
-            if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
-                doable = true;
-                objectGONE = true;
-            } else {
-                missaim = true;
-                doable = false;
-            }
+    //         if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
+    //             doable = true;
+    //             objectGONE = true;
+    //         } else {
+    //             missaim = true;
+    //             doable = false;
+    //         }
 
-            if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
-                doable = true;
-                objectGONE = true;
-            } else {
-                mistap = true;
-                doable = false;
-            }
-            if ((curHit.time - curHitObj.time) > hitOffset) {
-                objectGONE = true;
-            }
+    //         if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
+    //             doable = true;
+    //             objectGONE = true;
+    //         } else {
+    //             mistap = true;
+    //             doable = false;
+    //         }
+    //         if ((curHit.time - curHitObj.time) > hitOffset) {
+    //             objectGONE = true;
+    //         }
 
-            if (objectGONE) {
-                hitObjectsforAvg.shift();
-            }
-            if (doable) {
-                unstableRateF.push(curHit.time - curHitObj.time);
-            }
-        }
-    }
-    const avg = (unstableRateF.filter(x => x).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length;
+    //         if (objectGONE) {
+    //             hitObjectsforAvg.shift();
+    //         }
+    //         if (doable) {
+    //             unstableRateF.push(curHit.time - curHitObj.time);
+    //         }
+    //     }
+    // }
+    // const avg = (unstableRateF.filter(x => x).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length;
 
-    //now does the same as before with avg factored in
-    for (let i = 0; i < taps.length; i++) {
-        const curHit = taps[i];
-        const curHitObj = hitObjectTimings[0];
-        let doable = true;
-        let missaim = false;
-        let mistap = false;
-        let objectGONE = false;
+    // //now does the same as before with avg factored in
+    // for (let i = 0; i < taps.length; i++) {
+    //     const curHit = taps[i];
+    //     const curHitObj = hitObjectTimings[0];
+    //     let doable = true;
+    //     let missaim = false;
+    //     let mistap = false;
+    //     let objectGONE = false;
 
-        if (hitObjectTimings.length == 0) {
-            break;
-        }
+    //     if (hitObjectTimings.length == 0) {
+    //         break;
+    //     }
 
-        if (!curHitObj) {
-            hitObjectTimings.shift();
-        } else {
+    //     if (!curHitObj) {
+    //         hitObjectTimings.shift();
+    //     } else {
 
-            if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
-                doable = true;
-                objectGONE = true;
-            } else {
-                missaim = true;
-                doable = false;
-            }
+    //         if (Math.abs(curHit.x - curHitObj.x) < pixeloffset && Math.abs(curHit.y - curHitObj.y) < pixeloffset) {
+    //             doable = true;
+    //             objectGONE = true;
+    //         } else {
+    //             missaim = true;
+    //             doable = false;
+    //         }
 
-            if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
-                doable = true;
-                objectGONE = true;
-            } else {
-                mistap = true;
-                doable = false;
-            }
+    //         if (Math.abs(curHit.time - curHitObj.time) < hitOffset) {
+    //             doable = true;
+    //             objectGONE = true;
+    //         } else {
+    //             mistap = true;
+    //             doable = false;
+    //         }
 
-            if ((curHit.time - curHitObj.time) > hitOffset) {
-                objectGONE = true;
-            }
+    //         if ((curHit.time - curHitObj.time) > hitOffset) {
+    //             objectGONE = true;
+    //         }
 
-            if (objectGONE) {
-                hitObjectTimings.shift();
-            }
-            if (doable) {
-                unstableRate.push((curHit.time - curHitObj.time) - avg);
-            }
-        }
-    }
+    //         if (objectGONE) {
+    //             hitObjectTimings.shift();
+    //         }
+    //         if (doable) {
+    //             unstableRate.push((curHit.time - curHitObj.time) - avg);
+    //         }
+    //     }
+    // }
 
-    console.log(unstableRate);
-    console.log((unstableRate.reduce((prev, cur) => Math.abs(prev) + Math.abs(cur), 0)));
-    console.log(unstableRate.length);
+    // console.log(unstableRate);
+    // console.log((unstableRate.reduce((prev, cur) => Math.abs(prev) + Math.abs(cur), 0)));
+    // console.log(unstableRate.length);
 
-    return {
-        unstablerate: ((unstableRate.reduce((prev, cur) => Math.abs(prev) + Math.abs(cur), 0)) / unstableRate.length) * 10,
-        averageOffset: avg,
-        averageEarly: (unstableRateF.filter(x => x < 0).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length,
-        averageLate: (unstableRateF.filter(x => x > 0).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length
-    };
+    // return {
+    //     unstablerate: ((unstableRate.reduce((prev, cur) => Math.abs(prev) + Math.abs(cur), 0)) / unstableRate.length) * 10,
+    //     averageOffset: avg,
+    //     averageEarly: (unstableRateF.filter(x => x < 0).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length,
+    //     averageLate: (unstableRateF.filter(x => x > 0).reduce((prev, cur) => prev + cur, 0)) / unstableRateF.filter(x => x).length
+    // };
+    return NaN;
 }
 
 /**

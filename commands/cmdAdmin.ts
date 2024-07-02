@@ -1,18 +1,12 @@
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
 import { filespath, path, precomppath } from '../path.js';
-import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
 import * as colourfunc from '../src/colourcalc.js';
-import * as buttonsthing from '../src/consts/buttons.js';
 import * as colours from '../src/consts/colours.js';
-import * as def from '../src/consts/defaults.js';
 import * as emojis from '../src/consts/emojis.js';
 import * as errors from '../src/consts/errors.js';
-import * as helpinfo from '../src/consts/helpinfo.js';
-import * as mainconst from '../src/consts/main.js';
 import * as response from '../src/consts/responses.js';
-import * as embedStuff from '../src/embed.js';
 import * as func from '../src/func.js';
 import * as log from '../src/log.js';
 import * as osufunc from '../src/osufunc.js';
@@ -20,10 +14,6 @@ import * as trackfunc from '../src/trackfunc.js';
 import * as extypes from '../src/types/extratypes.js';
 import * as osuapitypes from '../src/types/osuApiTypes.js';
 import * as msgfunc from './msgfunc.js';
-
-export async function name(input: extypes.commandInput) {
-
-}
 
 /**
  * return permissions of user

@@ -909,7 +909,7 @@ type Mod = string;
 
 export type Rank = 'XH' | 'X' | 'SH' | 'S' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 
-type Statistics = {
+export type Statistics = {
     count_100: number,
     count_300: number,
     count_50: number,
