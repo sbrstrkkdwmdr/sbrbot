@@ -2,7 +2,7 @@
 
 ## [3.17.0] - 2024-07-02
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+[commit](b94ba31b91683bc5ebec457893fe348b1d46b346)</br>
 
 ### Fixed
 
