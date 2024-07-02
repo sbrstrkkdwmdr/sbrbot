@@ -176,7 +176,7 @@ export async function changelog(input: extypes.commandInput) {
         isList = true;
         // let txt = '' mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n');
         const doc = fs.readFileSync(`${path}/cache/changelog.md`, 'utf-8');
-        let txt = '\`VERSION        DATE     CHANGES\`\n';
+        let txt = '\`VERSION      |    DATE    | CHANGES\`\n';
         const list = doc.split('## [');
         list.shift();
         for (let i = 0; i < mainconst.versions.length; i++) {
@@ -184,7 +184,7 @@ export async function changelog(input: extypes.commandInput) {
             const useVer = list[i];
             const changes = useVer?.split('</br>')[1]?.split('\n')
                 .map(x => x.trim()).filter(x => x.length > 2 && !x.includes('### ')) ?? [];
-            txt += `\`${(sumVer.name).padEnd(10)} (${sumVer.releaseDateFormatted})   ${changes.length}\`\n`;
+            txt += `\`${(sumVer.name).padEnd(12)} | ${sumVer.releaseDateFormatted} | ${changes.length}\`\n`;
         }
         if (txt.length > 2000) {
             txt = exceeded;

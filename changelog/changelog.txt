@@ -12,6 +12,7 @@
 // changes are written as changes: \n(changes)
 //
 // as of 2024-06-28, changes are now written in changelog.md
+// as of 2024-07-02, this version system is outdated
 
 VERSION 
 0.0.0
