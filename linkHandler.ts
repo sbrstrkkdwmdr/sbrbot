@@ -188,6 +188,7 @@ progress: ${m.progress ? m.progress : 'none'}
         const attachosr = message.attachments.first().url;
         const osrdlfile = fs.createWriteStream(`${filespath}/replays/${absoluteID}.osr`);
         https.get(`${attachosr}`, function (response) {
+            //@ts-expect-error Argument of type 'WriteStream' is not assignable to parameter of type 'WritableStream'.ts(2345)
             response.pipe(osrdlfile);
         });//
         setTimeout(() => {
@@ -205,6 +206,7 @@ progress: ${m.progress ? m.progress : 'none'}
         const attachosu = message.attachments.first().url;
         const osudlfile = fs.createWriteStream(`${filespath}/localmaps/${absoluteID}.osu`);
         https.get(`${attachosu}`, function (response) {
+            //@ts-expect-error Argument of type 'WriteStream' is not assignable to parameter of type 'WritableStream'.ts(2345)
             response.pipe(osudlfile);
         });
         setTimeout(() => {
