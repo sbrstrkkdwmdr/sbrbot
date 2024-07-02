@@ -135,8 +135,8 @@ export default (input: extypes.input) => {
             activityarr = activityChristmas;
             specialDay = true;
         } else {
-                curEvent = Events[0];
-                activityarr = activities;
+            curEvent = Events[0];
+            activityarr = activities;
         }
         if (specialDay == true) {
             input.client.user.setPresence({
@@ -310,8 +310,9 @@ export default (input: extypes.input) => {
                     return;
                 } else {
                     if (permanentCache.some(x => file.startsWith(x))) {
-                        //do nothing
-                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24 * 28)) {
+                        //if amount of permcache mapfiles are < 100, keep them. otherwise, delete
+
+                        if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24 * 28) && files.filter(x => permanentCache.some(x => file.startsWith(x))).length >= 100) {
                             //kill after 4 weeks
                             fs.unlinkSync(`${path}/cache/commandData/` + file);
                             log.toOutput(`Deleted file ${path}/cache/commandData/` + file, input.config);

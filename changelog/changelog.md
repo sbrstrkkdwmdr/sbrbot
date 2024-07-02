@@ -1,6 +1,6 @@
 # changelog
 
-## [3.17.1] - 2024-07-02
+## [3.17.2] - 2024-07-02
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/1c7edae974fff318ad702ee4258813e2c66c6ef1)</br>
 
@@ -17,6 +17,7 @@
 - edited changelog system (0.3 -> 1.0, 0.4 -> 2.0, 0.5 -> 3.0)
 - updated dependencies
 - use osu-parsers for replay parsing
+- only delete map files if there's > 100
 
 ## [3.16.0] - 2024-06-20
 
