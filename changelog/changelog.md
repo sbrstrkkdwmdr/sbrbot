@@ -1,8 +1,8 @@
 # changelog
 
-## [3.17.0] - 2024-07-02
+## [3.17.1] - 2024-07-02
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/b94ba31b91683bc5ebec457893fe348b1d46b346)</br>
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/1c7edae974fff318ad702ee4258813e2c66c6ef1)</br>
 
 ### Fixed
 
