@@ -1,6 +1,6 @@
 # changelog
 
-## [WIP] - xxxx-xx-xx
+## [3.17.0] - 2024-07-02
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
