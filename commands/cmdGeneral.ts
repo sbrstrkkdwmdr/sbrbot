@@ -162,7 +162,7 @@ export async function changelog(input: extypes.commandInput) {
     }
     useNum = useNum != null ? useNum :
         typeof found == 'number' ?
-            (found as number) : 1;
+            (found as number) : 0;
     const Embed = new Discord.EmbedBuilder();
     const exceeded = 'Exceeded character limit. Please click [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.md) to view the changelog.';
     if (typeof found == 'string') {
