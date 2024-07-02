@@ -5516,8 +5516,6 @@ export async function replayparse(input: extypes.commandInput) {
         ) : '';
     }
 
-    console.log(score.info?.mods?.bitwise ?? 0);
-
     let osudataReq: osufunc.apiReturn;
 
     if (func.findFile(score.info.username, 'osudata', osufunc.modeValidator('osu')) &&
