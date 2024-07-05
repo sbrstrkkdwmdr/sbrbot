@@ -1,7 +1,7 @@
 # changelog
 
 ## [3.17.3] - 2024-07-05
-[commit]()
+[commit](5e93fcae5bd2dcce7c9f402d79c340f125175160)
 
 ### Fixed
 - debug fetch logs
