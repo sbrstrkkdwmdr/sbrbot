@@ -1,5 +1,11 @@
 # changelog
 
+## [3.17.3] - 2024-07-05
+[commit]()
+
+### Fixed
+- debug fetch logs
+
 ## [3.17.2] - 2024-07-02
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/1c7edae974fff318ad702ee4258813e2c66c6ef1)</br>

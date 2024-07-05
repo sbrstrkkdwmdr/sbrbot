@@ -1078,7 +1078,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             } else {
                 serverId = inputstr;
             }
-            const curServer = fs.existsSync(`${path}/logs/cmd/commands${serverId}.log`);
+            const curServer = fs.existsSync(`${path}/logs/cmd/${serverId}.log`);
             if (!curServer) {
                 usemsgArgs = {
                     content: `Server ${serverId} not found - does not exist or bot is not in the guild`
@@ -1086,7 +1086,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             } else {
                 usemsgArgs = {
                     content: `Logs for ${serverId}`,
-                    files: [`logs/cmd/commands${serverId}.log`]
+                    files: [`${path}/logs/cmd/${serverId}.log`]
                 };
             }
         }
