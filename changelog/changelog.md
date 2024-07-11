@@ -1,9 +1,19 @@
 # changelog
 
-## [3.17.3] - 2024-07-05
-[commit](5e93fcae5bd2dcce7c9f402d79c340f125175160)
+## [3.17.4] - 2024-07-11
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/7cff38c33f4505f340de256745541ac6ebe311c8)
 
 ### Fixed
+
+- changelog "expected to match a URL"
+
+## [3.17.3] - 2024-07-05
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/5e93fcae5bd2dcce7c9f402d79c340f125175160)
+
+### Fixed
+
 - debug fetch logs
 
 ## [3.17.2] - 2024-07-02
@@ -323,7 +333,7 @@
 - avatar no longer requires admin
 - error handling for weather
 
-## [3.6.0] - 2023-10-26 
+## [3.6.0] - 2023-10-26
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/e38de7573df02eb6f38a70ff8ea7a81089ae88ad)</br>
 
@@ -378,7 +388,7 @@
 
 - add aliases to roll
 
-## [3.5.0] - 2023-10-09 
+## [3.5.0] - 2023-10-09
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0fb571588c6253e7ebc03f03bda1441f367142c3)</br>
 
@@ -601,7 +611,7 @@
 - random map causing crashes
 - `rl` sorting by pp
 
-## [2.18.0] - 2023-04-10 
+## [2.18.0] - 2023-04-10
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/c328732d575b4aae819ec07d35d5c0cf99de912a)</br>
 
