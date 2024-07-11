@@ -243,7 +243,7 @@ export async function changelog(input: extypes.commandInput) {
 
         Embed
             .setTitle(`${verdata.name.trim()} Changelog`)
-            .setURL(commit)
+            .setURL(commit.includes('https://github.com/sbrstrkkdwmdr/sbrbot/commit/') ? commit : 'https://github.com/sbrstrkkdwmdr/sbrbot/commit/' + commit)
             .setDescription(`commit [${commit.includes('commit/') ?
                 commit.split('commit/')[1].trim()?.slice(0, 7)?.trim() : 'null'}](${commit})
 Released ${verdata.releaseDateFormatted}

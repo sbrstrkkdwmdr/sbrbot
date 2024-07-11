@@ -1,12 +1,17 @@
-export const version = '20240705';
+export const version = '20240711';
 
-export const versionAlt = '3.17.3';
+export const versionAlt = '3.17.4';
 
 export const versions: {
     name: string,
     releaseDate: number,
     releaseDateFormatted: string,
 }[] = [
+        {
+            name: '3.17.4',
+            releaseDate: 20240711,
+            releaseDateFormatted: '2024-07-11'
+        },
         {
             name: '3.17.3',
             releaseDate: 20240705,
