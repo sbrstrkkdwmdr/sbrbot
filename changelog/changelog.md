@@ -2,15 +2,16 @@
 
 ## [3.17.4] - 2024-07-11
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/7cff38c33f4505f340de256745541ac6ebe311c8)
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/7cff38c33f4505f340de256745541ac6ebe311c8)</br>
 
 ### Fixed
 
-- changelog "expected to match a URL"
+- changelog command "expected to match a URL"
+- changelog command breaking if `<br>` is missing after the commit
 
 ## [3.17.3] - 2024-07-05
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/5e93fcae5bd2dcce7c9f402d79c340f125175160)
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/5e93fcae5bd2dcce7c9f402d79c340f125175160)</br>
 
 ### Fixed
 

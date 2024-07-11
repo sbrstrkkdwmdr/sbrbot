@@ -197,8 +197,14 @@ export async function changelog(input: extypes.commandInput) {
         list.shift();
         const cur = list[useNum] as string;
         const verdata = mainconst.versions[useNum];
-        const commit = cur.split('[commit](')[1].split(')</br>')[0];
-        const changesTxt = cur.split('</br>')[1];
+        const commit = cur.split('[commit](')[1].split(')')[0];
+        const commitURL = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:[0-9]{1,5})?(\/[^\s]*)?$/g.test(commit) ?
+            commit :
+
+            pkgjson['repository']['url'] +
+            commit.replaceAll(/[^a-z0-9]/g, '');
+        const changesTxt = cur.includes('</br>') ? cur.split('</br>')[1] :
+            cur.split('\n').slice(3).join('\n');
         const changesList =
             changesTxt ?
                 changesTxt.split('\n')
@@ -243,9 +249,9 @@ export async function changelog(input: extypes.commandInput) {
 
         Embed
             .setTitle(`${verdata.name.trim()} Changelog`)
-            .setURL(commit.includes('https://github.com/sbrstrkkdwmdr/sbrbot/commit/') ? commit : 'https://github.com/sbrstrkkdwmdr/sbrbot/commit/' + commit)
+            .setURL(commitURL)
             .setDescription(`commit [${commit.includes('commit/') ?
-                commit.split('commit/')[1].trim()?.slice(0, 7)?.trim() : 'null'}](${commit})
+                commitURL.split('commit/')[1].trim()?.slice(0, 7)?.trim() : 'null'}](${commitURL})
 Released ${verdata.releaseDateFormatted}
 Total of ${changesList.filter(x => !x.includes('### ')).length} changes.${txt}
 `)
