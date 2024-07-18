@@ -1,5 +1,14 @@
 # changelog
 
+## [WIP] - 2024-xx-xx
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot)
+
+### Changed
+- version list only shows max 10 versions at a time
+
+### Added
+- pages in versions
+
 ## [3.17.4] - 2024-07-11
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/43660f5aaaf3259f51358f5ec8c66ed660a02518)</br>

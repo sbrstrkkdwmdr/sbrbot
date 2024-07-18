@@ -8,6 +8,7 @@ import { path, precomppath } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
 import * as colourfunc from '../src/colourcalc.js';
+import * as flags from '../src/consts/argflags.js';
 import * as buttonsthing from '../src/consts/buttons.js';
 import * as colours from '../src/consts/colours.js';
 import * as conversions from '../src/consts/conversions.js';
@@ -23,21 +24,28 @@ import * as osumodcalc from '../src/osumodcalc.js';
 import * as extypes from '../src/types/extratypes.js';
 import * as othertypes from '../src/types/othertypes.js';
 import * as msgfunc from './msgfunc.js';
+
 /**
  * 
  */
 export async function changelog(input: extypes.commandInput) {
     let commanduser;
     const offset = 0;
-    let version = null;
+    let version: string = null;
     let useNum: number = null;
     let isList = false;
+    let page: number = null;
 
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             version = input.args[0] ?? null;
+            const pageArgFinder = msgfunc.matchArgMultiple(flags.pages, input.args, true);
+            if (pageArgFinder.found) {
+                page = pageArgFinder.output;
+                input.args = pageArgFinder.args;
+            }
         }
             break;
 
@@ -76,6 +84,11 @@ export async function changelog(input: extypes.commandInput) {
                     useNum = curpage;
                     break;
             }
+            if (input.obj.message.embeds[0].title.toLowerCase().includes('all versions')) {
+                version = 'versions';
+                isList = true;
+            }
+
             switch (input.button) {
                 case 'Detail0':
                     isList = false;
@@ -90,7 +103,12 @@ export async function changelog(input: extypes.commandInput) {
             break;
     }
 
-
+    if (input.overrides != null) {
+        if (input.overrides.page != null) {
+            page = input.overrides.page;
+            useNum = input.overrides.page - 1;
+        }
+    }
     //==============================================================================================================================================================================================
 
     log.logCommand({
@@ -110,6 +128,10 @@ export async function changelog(input: extypes.commandInput) {
                 value: useNum
             },
             {
+                name: 'page',
+                value: page
+            },
+            {
                 name: 'listMode',
                 value: isList
             }
@@ -123,7 +145,7 @@ export async function changelog(input: extypes.commandInput) {
     const buttons = new Discord.ActionRowBuilder();
     //get version
     let found: string | number = null;
-    let foundBool = true;
+    let foundBool = false;
     if (version) {
         //search for version
         if (version?.includes('.')) {
@@ -131,38 +153,47 @@ export async function changelog(input: extypes.commandInput) {
                 version.trim() === `${x.name}`.trim() || version.includes(`${x.releaseDate}`) || version.includes(`${x.releaseDateFormatted}`)
                 || (`${x.releaseDate}`).includes(version) || `${x.releaseDateFormatted}`.includes(version)
             );
+            foundBool = true;
             if (found == -1) {
                 found = null;
-                foundBool = false;
             }
         } else {
             switch (version) {
                 case 'WIP': case 'pending': case 'next':
                     found = 0;
+                    foundBool = true;
                     break;
                 case 'first': case 'original':
                     found = mainconst.versions.length - 1;
+                    foundBool = true;
                     break;
                 case 'second':
                     found = mainconst.versions.length - 2;
+                    foundBool = true;
                     break;
                 case 'third':
                     found = mainconst.versions.length - 3;
+                    foundBool = true;
                     break;
                 case 'latest':
                     found = 1;
+                    foundBool = true;
                     break;
-                default:
-                    foundBool = false;
                 case 'versions': case 'list': case 'all':
+                    foundBool = true;
+                default:
                     found = 'string';
                     break;
             }
         }
     }
-    useNum = useNum != null ? useNum :
-        typeof found == 'number' ?
-            (found as number) : 0;
+    if ((!foundBool && found != 'string') || (page && found == 'string')) {
+        useNum = page ? page - 1 : null;
+    }
+    if (useNum < 1) {
+        useNum = !isNaN(+found) ?
+            +found : 0;
+    }
     const Embed = new Discord.EmbedBuilder();
     const exceeded = 'Exceeded character limit. Please click [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.md) to view the changelog.';
     if (typeof found == 'string') {
@@ -172,9 +203,10 @@ export async function changelog(input: extypes.commandInput) {
         let txt = '\`VERSION      |    DATE    | CHANGES\`\n';
         const list = doc.split('## [');
         list.shift();
-        for (let i = 0; i < mainconst.versions.length; i++) {
-            const sumVer = mainconst.versions[i];
-            const useVer = list[i];
+        let pageOffset = useNum * 10;
+        for (let i = 0; pageOffset + i < mainconst.versions.length && i < 10; i++) {
+            const sumVer = mainconst.versions[pageOffset + i];
+            const useVer = list[pageOffset + i];
             const changes = useVer?.split('</br>')[1]?.split('\n')
                 .map(x => x.trim()).filter(x => x.length > 2 && !x.includes('### ')) ?? [];
             txt += `\`${(sumVer.name).padEnd(12)} | ${sumVer.releaseDateFormatted} | ${changes.length}\`\n`;
@@ -182,10 +214,10 @@ export async function changelog(input: extypes.commandInput) {
         if (txt.length > 2000) {
             txt = exceeded;
         }
-        Embed.setTitle('ALL VERSIONS')
+        Embed.setTitle('All Versions')
             .setDescription(txt)
             .setFooter({
-                text: `${useNum + 1}/${mainconst.versions.length}`
+                text: `${useNum + 1}/${Math.floor(mainconst.versions.length / 10)}`
             });
         foundBool ? null : Embed.setAuthor({ name: `\nThere was an error trying to find version \`${version}\`` });
     } else {
@@ -283,7 +315,7 @@ Total of ${changesList.filter(x => !x.includes('### ')).length} changes.${txt}
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
-    if (useNum == mainconst.versions.length - 1) {
+    if ((useNum + 1 >= mainconst.versions.length && foundBool) || useNum + 1 >= Math.ceil(mainconst.versions.length / 10)) {
         (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }

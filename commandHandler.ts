@@ -355,7 +355,7 @@ function execCommand_switch(input: extypes.input, command: string, commandType: 
             commands.changelog({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
             break;
         case 'versions':
-            args = ['versions'];
+            args.unshift('versions');
             commands.changelog({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
             break;
         case 'convert': case 'conv':
