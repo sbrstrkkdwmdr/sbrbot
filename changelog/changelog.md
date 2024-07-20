@@ -1,17 +1,23 @@
 <!-- keep the WIP header pls -->
+
 # changelog
 
 ## [WIP] - 2024-xx-xx
+
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)
 
 ### Fixed
+
 - changelog could exceed amount of versions
 - changelog pages wouldn't disable when reaching the end
 
 ### Changed
+
 - version list only shows max 10 versions at a time
+- updated rosu-pp-js to v1.1.0
 
 ### Added
+
 - pages in versions
 
 ## [3.17.4] - 2024-07-11

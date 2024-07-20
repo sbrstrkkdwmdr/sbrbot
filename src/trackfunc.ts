@@ -1,11 +1,9 @@
 import * as Discord from 'discord.js';
 import fs from 'fs';
-import rosu from 'rosu-pp';
 import Sequelize from 'sequelize';
 import { path } from '../path.js';
 import * as def from './consts/defaults.js';
 import * as embedstuff from './embed.js';
-import * as func from './func.js';
 import * as log from './log.js';
 import * as osufunc from './osufunc.js';
 import * as extypes from './types/extratypes.js';

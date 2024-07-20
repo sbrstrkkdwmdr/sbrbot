@@ -1,13 +1,5 @@
-import charttoimg from 'chartjs-to-image';
 import fs from 'fs';
-import fetch from 'node-fetch';
-import perf from 'perf_hooks';
-import rosu from 'rosu-pp';
-import Sequelize from 'sequelize';
-import * as cmdchecks from './checks.js';
 import * as osufunc from './osufunc.js';
-import * as osumodcalc from './osumodcalc.js';
-import * as extypes from './types/extratypes.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
 
 /**

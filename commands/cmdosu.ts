@@ -3,10 +3,7 @@ import * as fs from 'fs';
 import * as jimp from 'jimp';
 import * as osuclasses from 'osu-classes';
 import * as osuparsers from 'osu-parsers';
-import {
-    CatchPerformanceAttributes,
-    ManiaPerformanceAttributes, OsuPerformanceAttributes, PerformanceAttributes, TaikoPerformanceAttributes
-} from 'rosu-pp';
+import { PerformanceAttributes } from 'rosu-pp-js';
 import { filespath, path, precomppath } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
@@ -5598,39 +5595,7 @@ export async function replayparse(input: extypes.commandInput) {
         }, new Date(mapdata.last_updated), input.config);
         ppissue = '';
     } catch (error) {
-        const temp: PerformanceAttributes = {
-            mode: score.replay.mode,
-            pp: 0,
-            difficulty: {
-                mode: score.replay.mode,
-                stars: mapdata.difficulty_rating,
-                maxCombo: mapdata.max_combo ?? 0,
-                aim: 0,
-                speed: 0,
-                flashlight: 0,
-                sliderFactor: 0,
-                speedNoteCount: 0,
-                ar: mapdata.ar,
-                od: mapdata.accuracy,
-                nCircles: mapdata.count_circles,
-                nSliders: mapdata.count_sliders,
-                nSpinners: mapdata.count_spinners,
-                stamina: 0,
-                rhythm: 0,
-                color: 0,
-                peak: 0,
-                hitWindow: mapdata.accuracy,
-                nFruits: mapdata.count_circles,
-                nDroplets: mapdata.count_sliders,
-                nTinyDroplets: mapdata.count_spinners,
-            },
-            ppAcc: 0,
-            ppAim: 0,
-            ppFlashlight: 0,
-            ppSpeed: 0,
-            effectiveMissCount: 0,
-            ppDifficulty: 0,
-        };
+        const temp = osufunc.ppComputedTemp(mapdata, score.replay.mode);
         xpp = [temp, temp];
         ppissue = errors.uErr.osu.performance.mapMissing;
     }
@@ -6037,39 +6002,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
         ppissue = '';
         osufunc.debug(ppcalcing, 'command', 'scoreparse', input.obj.guildId, 'ppCalcing');
     } catch (error) {
-        const ppComputedTemp: PerformanceAttributes = {
-            mode: mapdata.mode_int,
-            pp: 0,
-            difficulty: {
-                mode: mapdata.mode_int,
-                stars: mapdata.difficulty_rating,
-                maxCombo: mapdata.max_combo,
-                aim: 0,
-                speed: 0,
-                flashlight: 0,
-                sliderFactor: 0,
-                speedNoteCount: 0,
-                ar: mapdata.ar,
-                od: mapdata.accuracy,
-                nCircles: mapdata.count_circles,
-                nSliders: mapdata.count_sliders,
-                nSpinners: mapdata.count_spinners,
-                stamina: 0,
-                rhythm: 0,
-                color: 0,
-                hitWindow: 0,
-                nFruits: mapdata.count_circles,
-                nDroplets: mapdata.count_sliders,
-                nTinyDroplets: mapdata.count_spinners,
-            },
-            ppAcc: 0,
-            ppAim: 0,
-            ppDifficulty: 0,
-            ppFlashlight: 0,
-            ppSpeed: 0,
-            effectiveMissCount: 0,
-
-        };
+        const ppComputedTemp = osufunc.ppComputedTemp(mapdata, mapdata.mode_int);
         ppcalcing = [
             ppComputedTemp,
             ppComputedTemp,
@@ -9040,6 +8973,7 @@ export async function map(input: extypes.commandInput) {
                 customHP,
                 maxLimit: 21
             }, new Date(useMapdata.last_updated), input.config);
+            console.log('hi');
             ppissue = '';
             try {
                 totaldiff = useMapdata.difficulty_rating.toFixed(2) != ppComputed[0].difficulty.stars?.toFixed(2) ?
@@ -9051,6 +8985,7 @@ export async function map(input: extypes.commandInput) {
             osufunc.debug(ppComputed, 'command', 'map', input.obj.guildId, 'ppCalc');
 
         } catch (error) {
+            console.log(error)
             ppissue = 'Error - pp could not be calculated';
             const tstmods = mapmods.toUpperCase();
 
@@ -9060,39 +8995,7 @@ export async function map(input: extypes.commandInput) {
             if ((tstmods.includes('DT') || tstmods.includes('NC')) && tstmods.includes('HT')) {
                 ppissue += '\nInvalid mod combinations: DT/NC + HT';
             }
-            const ppComputedTemp: PerformanceAttributes = {
-                mode: useMapdata.mode_int,
-                pp: 0,
-                difficulty: {
-                    mode: useMapdata.mode_int,
-                    stars: useMapdata.difficulty_rating,
-                    maxCombo: useMapdata.max_combo ?? mapdata.max_combo, // for some reason converts don't have "max_combo"
-                    aim: 0,
-                    speed: 0,
-                    flashlight: 0,
-                    sliderFactor: 0,
-                    speedNoteCount: 0,
-                    ar: useMapdata.ar,
-                    od: useMapdata.accuracy,
-                    nCircles: useMapdata.count_circles,
-                    nSliders: useMapdata.count_sliders,
-                    nSpinners: useMapdata.count_spinners,
-                    stamina: 0,
-                    rhythm: 0,
-                    color: 0,
-                    hitWindow: 0,
-                    nFruits: useMapdata.count_circles,
-                    nDroplets: useMapdata.count_sliders,
-                    nTinyDroplets: useMapdata.count_spinners,
-                },
-                ppAcc: 0,
-                ppAim: 0,
-                ppDifficulty: 0,
-                ppFlashlight: 0,
-                ppSpeed: 0,
-                effectiveMissCount: 0,
-
-            };
+            const ppComputedTemp = osufunc.ppComputedTemp(useMapdata, useMapdata.mode_int);
             ppComputed = [
                 ppComputedTemp,
                 ppComputedTemp,
@@ -9162,97 +9065,92 @@ export async function map(input: extypes.commandInput) {
 
             switch (useMapdata.mode) {
                 case 'osu': {
-                    const curattr = ppComputed as OsuPerformanceAttributes[];
-
                     extras = `
         ---===SS===---  
-        \`Aim        ${curattr[0].ppAim?.toFixed(3)}\`
-        \`Speed      ${curattr[0].ppSpeed?.toFixed(3)}\`
-        \`Acc        ${curattr[0].ppAcc?.toFixed(3)}\`
-        ${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[0].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[0].pp?.toFixed(3)}\`
+        \`Aim        ${ppComputed[0].ppAim?.toFixed(3)}\`
+        \`Speed      ${ppComputed[0].ppSpeed?.toFixed(3)}\`
+        \`Acc        ${ppComputed[0].ppAccuracy?.toFixed(3)}\`
+        ${ppComputed[0].ppFlashlight > 0 ? `\`Flashlight ${ppComputed[0].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${ppComputed[0].pp?.toFixed(3)}\`
         ---===97%===---
-        \`Aim        ${curattr[3].ppAim?.toFixed(3)}\`
-        \`Speed      ${curattr[3].ppSpeed?.toFixed(3)}\`
-        \`Acc        ${curattr[3].ppAcc?.toFixed(3)}\`
-        ${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[3].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[3].pp?.toFixed(3)}\`
+        \`Aim        ${ppComputed[3].ppAim?.toFixed(3)}\`
+        \`Speed      ${ppComputed[3].ppSpeed?.toFixed(3)}\`
+        \`Acc        ${ppComputed[3].ppAccuracy?.toFixed(3)}\`
+        ${ppComputed[0].ppFlashlight > 0 ? `\`Flashlight ${ppComputed[3].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${ppComputed[3].pp?.toFixed(3)}\`
         ---===95%===---
-        \`Aim        ${curattr[5].ppAim?.toFixed(3)}\`
-        \`Speed      ${curattr[5].ppSpeed?.toFixed(3)}\`
-        \`Acc        ${curattr[5].ppAcc?.toFixed(3)}\`
-        ${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[5].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[5].pp?.toFixed(3)}\`
+        \`Aim        ${ppComputed[5].ppAim?.toFixed(3)}\`
+        \`Speed      ${ppComputed[5].ppSpeed?.toFixed(3)}\`
+        \`Acc        ${ppComputed[5].ppAccuracy?.toFixed(3)}\`
+        ${ppComputed[0].ppFlashlight > 0 ? `\`Flashlight ${ppComputed[5].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${ppComputed[5].pp?.toFixed(3)}\`
         ---===93%===---
-        \`Aim        ${curattr[7].ppAim?.toFixed(3)}\`
-        \`Speed      ${curattr[7].ppSpeed?.toFixed(3)}\`
-        \`Acc        ${curattr[7].ppAcc?.toFixed(3)}\`
-        ${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[7].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[7].pp?.toFixed(3)}\`
+        \`Aim        ${ppComputed[7].ppAim?.toFixed(3)}\`
+        \`Speed      ${ppComputed[7].ppSpeed?.toFixed(3)}\`
+        \`Acc        ${ppComputed[7].ppAccuracy?.toFixed(3)}\`
+        ${ppComputed[0].ppFlashlight > 0 ? `\`Flashlight ${ppComputed[7].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${ppComputed[7].pp?.toFixed(3)}\`
         ---===90%===---
-        \`Aim        ${curattr[10].ppAim?.toFixed(3)}\`
-        \`Speed      ${curattr[10].ppSpeed?.toFixed(3)}\`
-        \`Acc        ${curattr[10].ppAcc?.toFixed(3)}\`
-        ${curattr[0].ppFlashlight > 0 ? `\`Flashlight ${curattr[10].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${curattr[10].pp?.toFixed(3)}\`
+        \`Aim        ${ppComputed[10].ppAim?.toFixed(3)}\`
+        \`Speed      ${ppComputed[10].ppSpeed?.toFixed(3)}\`
+        \`Acc        ${ppComputed[10].ppAccuracy?.toFixed(3)}\`
+        ${ppComputed[0].ppFlashlight > 0 ? `\`Flashlight ${ppComputed[10].ppFlashlight?.toFixed(3)}\`\n` : ''}\`Total      ${ppComputed[10].pp?.toFixed(3)}\`
         `;
                 }
                     break;
                 case 'taiko': {
-                    const curattr = ppComputed as TaikoPerformanceAttributes[];
                     extras = `
         ---===SS===---  
-        - Strain: ${curattr[0].ppDifficulty}
-        - Acc: ${curattr[0].ppAcc}
-        - Total: ${curattr[0].pp} 
+        - Strain: ${ppComputed[0].ppDifficulty}
+        - Acc: ${ppComputed[0].ppAccuracy}
+        - Total: ${ppComputed[0].pp} 
         ---===97%===---
-        - Strain: ${curattr[3].ppDifficulty}
-        - Acc: ${curattr[3].ppAcc}
-        - Total: ${curattr[3].pp} 
+        - Strain: ${ppComputed[3].ppDifficulty}
+        - Acc: ${ppComputed[3].ppAccuracy}
+        - Total: ${ppComputed[3].pp} 
         ---===95%===---
-        - Strain: ${curattr[5].ppDifficulty}
-        - Acc: ${curattr[5].ppAcc}
-        - Total: ${curattr[5].pp} 
+        - Strain: ${ppComputed[5].ppDifficulty}
+        - Acc: ${ppComputed[5].ppAccuracy}
+        - Total: ${ppComputed[5].pp} 
         ---===93%===---
-        - Strain: ${curattr[7].ppDifficulty}
-        - Acc: ${curattr[7].ppAcc}
-        - Total: ${curattr[7].pp} 
+        - Strain: ${ppComputed[7].ppDifficulty}
+        - Acc: ${ppComputed[7].ppAccuracy}
+        - Total: ${ppComputed[7].pp} 
         ---===90%===---
-        - Strain: ${curattr[10].ppDifficulty}
-        - Acc: ${curattr[10].ppAcc}
-        - Total: ${curattr[10].pp}                 
+        - Strain: ${ppComputed[10].ppDifficulty}
+        - Acc: ${ppComputed[10].ppAccuracy}
+        - Total: ${ppComputed[10].pp}                 
         `;
                 }
                     break;
                 case 'fruits': {
-                    const curattr = ppComputed as CatchPerformanceAttributes[];
                     extras = `
         ---===SS===---  
-        - Strain: ${curattr[0].ppDifficulty}
-        - Total: ${curattr[0].pp} 
+        - Strain: ${ppComputed[0].ppDifficulty}
+        - Total: ${ppComputed[0].pp} 
         ---===97%===---
-        - Strain: ${curattr[3].ppDifficulty}
-        - Total: ${curattr[3].pp} 
+        - Strain: ${ppComputed[3].ppDifficulty}
+        - Total: ${ppComputed[3].pp} 
         ---===95%===---
-        - Strain: ${curattr[5].ppDifficulty}
-        - Total: ${curattr[5].pp} 
+        - Strain: ${ppComputed[5].ppDifficulty}
+        - Total: ${ppComputed[5].pp} 
         ---===93%===---
-        - Strain: ${curattr[7].ppDifficulty}
-        - Total: ${curattr[7].pp} 
+        - Strain: ${ppComputed[7].ppDifficulty}
+        - Total: ${ppComputed[7].pp} 
         ---===90%===---
-        - Strain: ${curattr[10].ppDifficulty}
-        - Total: ${curattr[10].pp}                 
+        - Strain: ${ppComputed[10].ppDifficulty}
+        - Total: ${ppComputed[10].pp}                 
         `;
                 }
                     break;
                 case 'mania': {
-                    const curattr = ppComputed as ManiaPerformanceAttributes[];
                     extras = `
         ---===SS===---  
-        - Total: ${curattr[0].pp} 
+        - Total: ${ppComputed[0].pp} 
         ---===97%===---
-        - Total: ${curattr[3].pp} 
+        - Total: ${ppComputed[3].pp} 
         ---===95%===---
-        - Total: ${curattr[5].pp} 
+        - Total: ${ppComputed[5].pp} 
         ---===93%===---
-        - Total: ${curattr[7].pp} 
+        - Total: ${ppComputed[7].pp} 
         ---===90%===---
-        - Total: ${curattr[10].pp}                 
+        - Total: ${ppComputed[10].pp}                 
         `;
                 }
                     break;
@@ -9379,40 +9277,36 @@ HP${baseHP}`;
             if (detailed == 2) {
                 switch (useMapdata.mode) {
                     case 'osu': {
-                        const curattr = ppComputed as OsuPerformanceAttributes[];
-                        detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Aim: ${curattr[0].ppAim?.toFixed(2)} | Speed: ${curattr[0].ppSpeed?.toFixed(2)} | Acc: ${curattr[0].ppAcc?.toFixed(2)} \n ` +
-                            `**99**: ${curattr[1].pp?.toFixed(2)} | Aim: ${curattr[1].ppAim?.toFixed(2)} | Speed: ${curattr[1].ppSpeed?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} \n ` +
-                            `**97**: ${curattr[3].pp?.toFixed(2)} | Aim: ${curattr[3].ppAim?.toFixed(2)} | Speed: ${curattr[3].ppSpeed?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} \n ` +
-                            `**95**: ${curattr[5].pp?.toFixed(2)} | Aim: ${curattr[5].ppAim?.toFixed(2)} | Speed: ${curattr[5].ppSpeed?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} \n ` +
+                        detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Aim: ${ppComputed[0].ppAim?.toFixed(2)} | Speed: ${ppComputed[0].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[0].ppAccuracy?.toFixed(2)} \n ` +
+                            `**99**: ${ppComputed[1].pp?.toFixed(2)} | Aim: ${ppComputed[1].ppAim?.toFixed(2)} | Speed: ${ppComputed[1].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[1].ppAccuracy?.toFixed(2)} \n ` +
+                            `**97**: ${ppComputed[3].pp?.toFixed(2)} | Aim: ${ppComputed[3].ppAim?.toFixed(2)} | Speed: ${ppComputed[3].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[3].ppAccuracy?.toFixed(2)} \n ` +
+                            `**95**: ${ppComputed[5].pp?.toFixed(2)} | Aim: ${ppComputed[5].ppAim?.toFixed(2)} | Speed: ${ppComputed[5].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[5].ppAccuracy?.toFixed(2)} \n ` +
                             `${ppissue}`;
                     }
                         break;
                     case 'taiko': {
-                        const curattr = ppComputed as TaikoPerformanceAttributes[];
-                        detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Acc: ${curattr[0].ppAcc?.toFixed(2)} | Strain: ${curattr[0].ppDifficulty?.toFixed(2)} \n ` +
-                            `**99**: ${curattr[1].pp?.toFixed(2)} | Acc: ${curattr[1].ppAcc?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
-                            `**97**: ${curattr[3].pp?.toFixed(2)} | Acc: ${curattr[3].ppAcc?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
-                            `**95**: ${curattr[5].pp?.toFixed(2)} | Acc: ${curattr[5].ppAcc?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
+                        detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Acc: ${ppComputed[0].ppAccuracy?.toFixed(2)} | Strain: ${ppComputed[0].ppDifficulty?.toFixed(2)} \n ` +
+                            `**99**: ${ppComputed[1].pp?.toFixed(2)} | Acc: ${ppComputed[1].ppAccuracy?.toFixed(2)} | Strain: ${ppComputed[1]?.ppDifficulty?.toFixed(2)} \n ` +
+                            `**97**: ${ppComputed[3].pp?.toFixed(2)} | Acc: ${ppComputed[3].ppAccuracy?.toFixed(2)} | Strain: ${ppComputed[3]?.ppDifficulty?.toFixed(2)} \n ` +
+                            `**95**: ${ppComputed[5].pp?.toFixed(2)} | Acc: ${ppComputed[5].ppAccuracy?.toFixed(2)} | Strain: ${ppComputed[5]?.ppDifficulty?.toFixed(2)} \n ` +
                             `${ppissue}`;
                     }
                         break;
                     case 'fruits': {
-                        const curattr = ppComputed as CatchPerformanceAttributes[];
-                        detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} | Strain: ${curattr[0].ppDifficulty?.toFixed(2)} \n ` +
-                            `**99**: ${curattr[1].pp?.toFixed(2)} | Strain: ${curattr[1]?.ppDifficulty?.toFixed(2)} \n ` +
-                            `**97**: ${curattr[3].pp?.toFixed(2)} | Strain: ${curattr[3]?.ppDifficulty?.toFixed(2)} \n ` +
-                            `**95**: ${curattr[5].pp?.toFixed(2)} | Strain: ${curattr[5]?.ppDifficulty?.toFixed(2)} \n ` +
+                        detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Strain: ${ppComputed[0].ppDifficulty?.toFixed(2)} \n ` +
+                            `**99**: ${ppComputed[1].pp?.toFixed(2)} | Strain: ${ppComputed[1]?.ppDifficulty?.toFixed(2)} \n ` +
+                            `**97**: ${ppComputed[3].pp?.toFixed(2)} | Strain: ${ppComputed[3]?.ppDifficulty?.toFixed(2)} \n ` +
+                            `**95**: ${ppComputed[5].pp?.toFixed(2)} | Strain: ${ppComputed[5]?.ppDifficulty?.toFixed(2)} \n ` +
                             `${ppissue}`;
                     }
                         break;
                     case 'mania': {
-                        const curattr = ppComputed as ManiaPerformanceAttributes[];
-                        detailedmapdata = `**SS**: ${curattr[0].pp?.toFixed(2)} \n ` +
-                            `**99**: ${curattr[1].pp?.toFixed(2)} \n ` +
-                            `**98**: ${curattr[2].pp?.toFixed(2)} \n ` +
-                            `**97**: ${curattr[3].pp?.toFixed(2)} \n ` +
-                            `**96**: ${curattr[4].pp?.toFixed(2)} \n ` +
-                            `**95**: ${curattr[5].pp?.toFixed(2)} \n ` +
+                        detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} \n ` +
+                            `**99**: ${ppComputed[1].pp?.toFixed(2)} \n ` +
+                            `**98**: ${ppComputed[2].pp?.toFixed(2)} \n ` +
+                            `**97**: ${ppComputed[3].pp?.toFixed(2)} \n ` +
+                            `**96**: ${ppComputed[4].pp?.toFixed(2)} \n ` +
+                            `**95**: ${ppComputed[5].pp?.toFixed(2)} \n ` +
                             `${ppissue}`;
                     }
                         break;
