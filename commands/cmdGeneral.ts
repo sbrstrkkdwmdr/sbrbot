@@ -40,12 +40,13 @@ export async function changelog(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
-            version = input.args[0] ?? null;
             const pageArgFinder = msgfunc.matchArgMultiple(flags.pages, input.args, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
             }
+
+            version = input.args[0] ?? null;
         }
             break;
 
@@ -187,7 +188,7 @@ export async function changelog(input: extypes.commandInput) {
             }
         }
     }
-    if ((!foundBool && found != 'string') || (page && found == 'string')) {
+    if (((!foundBool && found != 'string') || (page && found == 'string')) && !input.button) {
         useNum = page ? page - 1 : null;
     }
     if (useNum < 1) {
@@ -227,6 +228,9 @@ export async function changelog(input: extypes.commandInput) {
                     fs.readFileSync(`${precomppath}/changelog/changelog.txt`, 'utf-8'); */
         const list = document.split('## [');
         list.shift();
+        if (useNum >= list.length) {
+            useNum = list.length - 1;
+        }
         const cur = list[useNum] as string;
         const verdata = mainconst.versions[useNum];
         const commit = cur.split('[commit](')[1].split(')')[0];
@@ -315,7 +319,7 @@ Total of ${changesList.filter(x => !x.includes('### ')).length} changes.${txt}
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
     }
-    if ((useNum + 1 >= mainconst.versions.length && foundBool) || useNum + 1 >= Math.ceil(mainconst.versions.length / 10)) {
+    if ((useNum + 1 >= mainconst.versions.length && !isList) || (useNum + 1 >= Math.ceil(mainconst.versions.length / 10) && isList)) {
         (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
