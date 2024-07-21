@@ -8,7 +8,7 @@
 
 ## [3.18.0] - 2024-07-21
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot)
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/aede1ee3ca4a486312fd351b4d7c672a689d2188)
 
 ### Fixed
 
