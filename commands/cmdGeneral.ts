@@ -204,6 +204,9 @@ export async function changelog(input: extypes.commandInput) {
         let txt = '\`VERSION      |    DATE    | CHANGES\`\n';
         const list = doc.split('## [');
         list.shift();
+        if (useNum + 1 >= Math.ceil(mainconst.versions.length / 10)) {
+            useNum = Math.ceil(mainconst.versions.length / 10) - 1;
+        }
         let pageOffset = useNum * 10;
         for (let i = 0; pageOffset + i < mainconst.versions.length && i < 10; i++) {
             const sumVer = mainconst.versions[pageOffset + i];
@@ -218,7 +221,7 @@ export async function changelog(input: extypes.commandInput) {
         Embed.setTitle('All Versions')
             .setDescription(txt)
             .setFooter({
-                text: `${useNum + 1}/${Math.floor(mainconst.versions.length / 10)}`
+                text: `${useNum + 1}/${Math.ceil(mainconst.versions.length / 10)}`
             });
         foundBool ? null : Embed.setAuthor({ name: `\nThere was an error trying to find version \`${version}\`` });
     } else {
