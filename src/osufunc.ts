@@ -109,7 +109,6 @@ export async function mapcalc(
             }
             for (let i = 0; i < obj.maxLimit; i++) {
                 difficulty['accuracy'] = 100 - i;
-                console.log(difficulty);
                 ppl.push((
                     new rosu.Performance(difficulty)
                 ).calculate(map)

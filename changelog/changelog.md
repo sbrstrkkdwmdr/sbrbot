@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)
 
+## [3.18.0] - 2024-07-21
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot)
+
 ### Fixed
 
 - changelog could exceed amount of versions

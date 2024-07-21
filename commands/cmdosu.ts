@@ -8973,7 +8973,6 @@ export async function map(input: extypes.commandInput) {
                 customHP,
                 maxLimit: 21
             }, new Date(useMapdata.last_updated), input.config);
-            console.log('hi');
             ppissue = '';
             try {
                 totaldiff = useMapdata.difficulty_rating.toFixed(2) != ppComputed[0].difficulty.stars?.toFixed(2) ?
