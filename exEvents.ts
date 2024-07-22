@@ -18,8 +18,7 @@ export default (input: extypes.input) => {
 
     setInterval(async () => {
         getOnlineChangelog();
-        //rankings
-    }, 1000 * 60 * 60 * 24);
+    }, 1000 * 60 * 60 * 6);
     clearMapFiles();
     clearCommandCache();
     getOnlineChangelog();
