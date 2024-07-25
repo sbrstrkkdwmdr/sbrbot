@@ -1,22 +1,18 @@
 import axios from 'axios';
 import charttoimg from 'chartjs-to-image';
 import fs from 'fs';
-import nfetch from 'node-fetch';
 import * as osuparsers from 'osu-parsers';
 import perf from 'perf_hooks';
 import rosu from 'rosu-pp-js';
 import Sequelize from 'sequelize';
 import * as stats from 'simple-statistics';
-import * as msgfunc from '../commands/msgfunc.js';
-import { path, precomppath } from '../path.js';
+import { path } from '../path.js';
 import * as calc from './calc.js';
-import * as cmdchecks from './checks.js';
 import * as emojis from './consts/emojis.js';
 import * as errors from './consts/errors.js';
 import * as mainconst from './consts/main.js';
 import * as tools from './func.js';
 import * as log from './log.js';
-import * as mapParser from './mapParser.js';
 import * as osumodcalc from './osumodcalc.js';
 import * as extypes from './types/extratypes.js';
 import * as osuApiTypes from './types/osuApiTypes.js';
@@ -963,14 +959,6 @@ export async function apiget(input: apiInput) {
                 }
             })
             ).data;
-            // datafirst = await nfetch(url, {
-            //     method: 'GET',
-            //     headers: {
-            //         Authorization: `Bearer ${access_token}`,
-            //         "Content-Type": "application/json",
-            //         Accept: "application/json"
-            //     }
-            // }).then(res => res.json());
         }
     } catch (error) {
         data = {
@@ -1165,30 +1153,23 @@ export async function updateToken(config: extypes.config) {
          * hint: 'Check that all required parameters have been provided',
          * message: 'The authorization grant type is not supported by the authorization server.'
          */
-        // let nToken = await axios.post('https://osu.ppy.sh/oauth/token',
-        //     {
-        //         body: `grant_type=client_credentials&client_id=${config.osuClientID}&client_secret=${config.osuClientSecret}&scope=public`
-        //     },
-        //     {
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Content-Type': 'application/x-www-form-urlencoded'
-        //         },
-        //     },
-        // ).catch(err => {
-        //     return console.log(err);
-        // });
-        // console.log(nToken)
-
-        const newtoken: osuApiTypes.OAuth = await fetch('https://osu.ppy.sh/oauth/token', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded'
+        const newtoken: osuApiTypes.OAuth = (await axios.post('https://osu.ppy.sh/oauth/token',
+            `grant_type=client_credentials&client_id=${config.important.osuClientID}&client_secret=${config.important.osuClientSecret}&scope=public`,
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
             },
-            body:
-                `grant_type=client_credentials&client_id=${config.important.osuClientID}&client_secret=${config.important.osuClientSecret}&scope=public`
-        }).then(res => res.json() as any);
+        ).catch(err => {
+            console.log(err);
+            return {
+                failed: true,
+                data: {
+                    err,
+                }
+            };
+        })).data;
         if (newtoken?.access_token) {
             fs.writeFileSync(`${path}/config/osuauth.json`, JSON.stringify(newtoken));
             fs.appendFileSync(`${path}/logs/updates.log`, '\nosu auth token updated at ' + new Date().toLocaleString() + '\n');
@@ -1625,10 +1606,9 @@ export async function dlMap(mapid: number | string, curCall: number, lastUpdated
         if (!fs.existsSync(thispath)) {
             fs.mkdirSync(`${path}/files/maps/`, { recursive: true });
         }
-        const writer = fs.createWriteStream(thispath);
-        const res = await nfetch(url);
+        const res = await axios.get(url);
         log.toOutput(`Beatmap file download: ${url}`, config);
-        res.body.pipe(writer);
+        fs.writeFileSync(thispath, res.data, 'utf-8');
         await new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve('w');

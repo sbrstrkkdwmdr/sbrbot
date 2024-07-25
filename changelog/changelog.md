@@ -10,6 +10,10 @@
 
 - version list could exceed page count
 
+### Changed
+
+- replaced `node-fetch` in `updateToken()` and `dlMap()` with `axios`
+
 ### Added
 
 - more pp stats in scorestats (requires `-all` flag)
