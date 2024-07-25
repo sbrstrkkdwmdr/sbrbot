@@ -4,8 +4,10 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/sbrstrkkdwmdr/sbrbot/badge)](https://www.codefactor.io/repository/github/sbrstrkkdwmdr/sbrbot)
 [![license](https://img.shields.io/github/license/sbrstrkkdwmdr/sbrbot?label=license)](https://github.com/sbrstrkkdwmdr/sbrbot/LICENSE)
 [![stars](https://img.shields.io/github/stars/sbrstrkkdwmdr/sbrbot)](https://github.com/sbrstrkkdwmdr/sbrbot)
-[![lastcommit](https://img.shields.io/github/last-commit/sbrstrkkdwmdr/sbrbot)](https://github.com/sbrstrkkdwmdr/sbrbot)
-[![changelog](https://img.shields.io/badge/Changelog-E05735)](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.md)</br>
+[![lastcommit](https://img.shields.io/github/last-commit/sbrstrkkdwmdr/sbrbot)](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+[![changelog](https://img.shields.io/badge/Changelog-34A0DB)](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.md)
+[![credits](https://img.shields.io/badge/Credits-AEDD35)](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.md)
+[![todo](https://img.shields.io/badge/To_Do_List-E05735)](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.md)</br>
 
 [![discordjs](https://img.shields.io/badge/DiscordJS-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.js.org/#/)
 [![typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://github.com/microsoft/TypeScript)
