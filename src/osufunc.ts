@@ -2988,3 +2988,12 @@ export function ppComputedTemp(mapdata: osuApiTypes.Beatmap, mode: number) {
         state: null
     } as rosu.PerformanceAttributes;
 }
+
+export function weightPerformance(pp: number[]) {
+    pp = pp.sort((a, b) => b - a);
+    const numLen = [];
+    for (let i = 0; i < pp.length; i++) {
+        numLen.push(pp[i] * (0.95 ** i));
+    }
+    return numLen;
+}

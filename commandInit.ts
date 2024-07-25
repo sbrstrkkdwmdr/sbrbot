@@ -760,6 +760,12 @@ export default (input: extypes.input) => {
                         { name: 'recent', value: 'recent' },
                         { name: 'pinned', value: 'pinned' },
                     ]
+                },
+                {
+                    name: 'all',
+                    description: 'Shows all statistics',
+                    type: Discord.ApplicationCommandOptionType.Boolean,
+                    required: false,
                 }
             ]
         },

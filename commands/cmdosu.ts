@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as jimp from 'jimp';
 import * as osuclasses from 'osu-classes';
 import * as osuparsers from 'osu-parsers';
-import { PerformanceAttributes } from 'rosu-pp-js';
+import * as rosu from 'rosu-pp-js';
 import { filespath, path, precomppath } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as cmdchecks from '../src/checks.js';
@@ -1944,7 +1944,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
             const combostats = osufunc.Stats(osutopdata.map(x => x?.max_combo ?? 0));
             const ppstats = osufunc.Stats(osutopdata.map(x => x?.pp ?? 0));
-            const accstats = osufunc.Stats(osutopdata.map(x => (x?.accuracy * 100) ?? 100));
+            const accstats = osufunc.Stats(osutopdata.map(x => x?.accuracy ? x.accuracy * 100 : 100));
 
             let mostplaytxt = ``;
             for (let i2 = 0; i2 < mostplayeddata.length && i2 < 10; i2++) {
@@ -5015,7 +5015,7 @@ export async function recent(input: extypes.commandInput & { statsCache: any; })
 
         let rspp: string | number = 0;
         let ppissue: string = '';
-        let ppcalcing: PerformanceAttributes[];
+        let ppcalcing: rosu.PerformanceAttributes[];
         let fcflag = '';
         try {
             ppcalcing = await osufunc.scorecalc({
@@ -5567,7 +5567,7 @@ export async function replayparse(input: extypes.commandInput) {
     } else {
         ifmods = '';
     }
-    let xpp: PerformanceAttributes[];
+    let xpp: rosu.PerformanceAttributes[];
     let ppissue: string;
 
     const hitlist = osumodcalc.hitlist({
@@ -5984,7 +5984,7 @@ export async function scoreparse(input: extypes.commandInput & { statsCache: any
             break;
     }
 
-    let ppcalcing: PerformanceAttributes[];
+    let ppcalcing: rosu.PerformanceAttributes[];
     try {
         ppcalcing = await osufunc.scorecalc({
             mods: scoredata.mods.join('').length > 1 ?
@@ -7299,6 +7299,7 @@ export async function scorestats(input: extypes.commandInput) {
     let user = null;
     let searchid;
     let mode: osuApiTypes.GameMode;
+    let all: boolean = false;
 
     let reachedMaxCount = false;
 
@@ -7334,6 +7335,11 @@ export async function scorestats(input: extypes.commandInput) {
                 scoreTypes = 'pinned';
                 input.args = pinnedArgFinder.args;
             }
+            const allFinder = msgfunc.matchArgMultiple(flags.toFlag(['all', 'd', 'a', 'detailed']), input.args);
+            if (allFinder.found) {
+                all = true;
+                input.args = allFinder.args;
+            }
 
             input.args = msgfunc.cleanArgs(input.args);
 
@@ -7351,6 +7357,7 @@ export async function scorestats(input: extypes.commandInput) {
             input.obj.options.getString('user') ? user = input.obj.options.getString('user') : null;
             input.obj.options.getString('type') ? scoreTypes = input.obj.options.getString('type') as scoretypes : null;
             input.obj.options.getString('mode') ? mode = input.obj.options.getString('mode') as osuApiTypes.GameMode : null;
+            input.obj.options.getBoolean('all') ? all = input.obj.options.getBoolean('all') : null;
         }
             //==============================================================================================================================================================================================
 
@@ -7406,6 +7413,10 @@ export async function scorestats(input: extypes.commandInput) {
             {
                 name: 'Search ID',
                 value: searchid
+            },
+            {
+                name: 'All',
+                value: all,
             }
         ],
         config: input.config
@@ -7546,10 +7557,56 @@ export async function scorestats(input: extypes.commandInput) {
         }));
         const grades = calc.findMode(scoresdata.map(x => x.rank));
         const acc = osufunc.Stats(scoresdata.map(x => x.accuracy));
-        const pp = osufunc.Stats(scoresdata.map(x => x.pp));
         const combo = osufunc.Stats(scoresdata.map(x => x.max_combo));
+        let pp = osufunc.Stats(scoresdata.map(x => x.pp));
+        let totpp = '';
+        let weighttotpp = '';
 
+        if (all) {
+            //do pp calc
+            const calculations: rosu.PerformanceAttributes[] = [];
+            for (const score of scoresdata) {
+                const calc = await osufunc.scorecalc({
+                    mods: score.mods.join('').length > 1 ?
+                        score.mods.join('') : 'NM',
+                    gamemode: score.mode,
+                    mapid: score.beatmap.id,
+                    miss: score.statistics.count_miss,
+                    acc: score.accuracy,
+                    maxcombo: score.max_combo,
+                    score: score.score,
+                    calctype: 0,
+                }, new Date(score.beatmap.last_updated), input.config);
+                calculations.push(calc[0]);
+            }
 
+            pp = osufunc.Stats(calculations.map(x => x.pp));
+            const ppcalc = {
+                total: calculations.map(x => x.pp).reduce((a, b) => a + b, 0),
+                acc: calculations.map(x => x.ppAccuracy).reduce((a, b) => a + b, 0),
+                aim: calculations.map(x => x.ppAim).reduce((a, b) => a + b, 0),
+                diff: calculations.map(x => x.ppDifficulty).reduce((a, b) => a + b, 0),
+                speed: calculations.map(x => x.ppSpeed).reduce((a, b) => a + b, 0),
+            };
+            const weightppcalc = {
+                total: osufunc.weightPerformance(calculations.map(x => x.pp)).reduce((a, b) => a + b, 0),
+                acc: osufunc.weightPerformance(calculations.map(x => x.ppAccuracy)).reduce((a, b) => a + b, 0),
+                aim: osufunc.weightPerformance(calculations.map(x => x.ppAim)).reduce((a, b) => a + b, 0),
+                diff: osufunc.weightPerformance(calculations.map(x => x.ppDifficulty)).reduce((a, b) => a + b, 0),
+                speed: osufunc.weightPerformance(calculations.map(x => x.ppSpeed)).reduce((a, b) => a + b, 0),
+            };
+            totpp = `Total: ${ppcalc.total.toFixed(2)}`;
+            ppcalc.acc ? totpp += `\nAccuracy: ${ppcalc.acc.toFixed(2)}` : '';
+            ppcalc.aim ? totpp += `\nAim: ${ppcalc.aim.toFixed(2)}` : '';
+            ppcalc.diff ? totpp += `\nDifficulty: ${ppcalc.diff.toFixed(2)}` : '';
+            ppcalc.speed ? totpp += `\nSpeed: ${ppcalc.speed.toFixed(2)}` : '';
+
+            weighttotpp = `Total: ${weightppcalc.total.toFixed(2)}`;
+            ppcalc.acc ? weighttotpp += `\nAccuracy: ${weightppcalc.acc.toFixed(2)}` : '';
+            ppcalc.aim ? weighttotpp += `\nAim: ${weightppcalc.aim.toFixed(2)}` : '';
+            ppcalc.diff ? weighttotpp += `\nDifficulty: ${weightppcalc.diff.toFixed(2)}` : '';
+            ppcalc.speed ? weighttotpp += `\nSpeed: ${weightppcalc.speed.toFixed(2)}` : '';
+        }
         if (input.commandType == 'button') {
             let mappersStr = '';
             for (let i = 0; i < mappers.length; i++) {
@@ -7587,7 +7644,7 @@ export async function scorestats(input: extypes.commandInput) {
             }
 
 
-            Embed.addFields([{
+            Embed.setFields([{
                 name: 'Mappers',
                 value: mappersStr.length == 0 ?
                     'No data available' :
@@ -7620,6 +7677,17 @@ ${acc?.ignored > 0 ? `Skipped: ${acc?.ignored}` : ''}
                 inline: true
             },
             {
+                name: 'Combo',
+                value: `
+                Highest: ${combo?.highest}
+                Lowest: ${combo?.lowest}
+                Average: ${Math.floor(combo?.mean)}
+                Median: ${combo?.median}
+                ${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
+                `,
+                inline: true
+            },
+            {
                 name: 'PP',
                 value: `
 Highest: ${pp?.highest?.toFixed(2)}pp
@@ -7630,18 +7698,21 @@ ${pp?.ignored > 0 ? `Skipped: ${pp?.ignored}` : ''}
 `,
                 inline: true
             },
-            {
-                name: 'Combo',
-                value: `
-Highest: ${combo?.highest}
-Lowest: ${combo?.lowest}
-Average: ${Math.floor(combo?.mean)}
-Median: ${combo?.median}
-${combo?.ignored > 0 ? `Skipped: ${combo?.ignored}` : ''}
-`,
-                inline: true
-            }
             ]);
+            if (all) {
+                Embed.addFields([
+                    {
+                        name: 'Total PP',
+                        value: totpp,
+                        inline: true
+                    },
+                    {
+                        name: '(Weighted)',
+                        value: weighttotpp,
+                        inline: true
+                    },
+                ]);
+            }
         }
     }
 
@@ -8956,7 +9027,7 @@ export async function map(input: extypes.commandInput) {
             emojis.gamemodes[useMapdata.mode] :
             useMapdata.mode;
 
-        let ppComputed: PerformanceAttributes[];
+        let ppComputed: rosu.PerformanceAttributes[];
         let ppissue: string;
         let totaldiff: string | number = useMapdata.difficulty_rating;
 
@@ -8984,7 +9055,7 @@ export async function map(input: extypes.commandInput) {
             osufunc.debug(ppComputed, 'command', 'map', input.obj.guildId, 'ppCalc');
 
         } catch (error) {
-            console.log(error)
+            console.log(error);
             ppissue = 'Error - pp could not be calculated';
             const tstmods = mapmods.toUpperCase();
 
@@ -10068,7 +10139,7 @@ export async function maplocal(input: extypes.commandInput) {
         }
     }
 
-    let ppcalcing: PerformanceAttributes[];
+    let ppcalcing: rosu.PerformanceAttributes[];
     try {
         ppcalcing = await osufunc.mapcalclocal(mods, 'osu', mapPath, 0);
     } catch (error) {

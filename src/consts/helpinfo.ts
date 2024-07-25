@@ -136,7 +136,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         options: ['N/A'],
         defaultValue: 'null',
         examples: ['mapper:Sotarks'],
-        commandTypes: ['message','interaction']
+        commandTypes: ['message', 'interaction']
     },
     {
         name: 'mods',
@@ -1934,8 +1934,8 @@ const osucmds: commandInfo[] = [
     {
         name: 'scorestats',
         description: 'Shows the stats of a user\'s scores',
-        usage: 'scorestats [user] [-(type)] [-(mode)]',
-        slashusage: 'scorestats [user] [type] [mode]',
+        usage: 'scorestats [user] [-(type)] [-(mode)] [all]',
+        slashusage: 'scorestats [user] [type] [mode] [all]',
         examples: [
             {
                 text: 'PREFIXMSGscorestats @SaberStrike',
@@ -1969,6 +1969,16 @@ const osucmds: commandInfo[] = [
                 defaultValue: 'false',
                 examples: [],
                 commandTypes: ['button']
+            },
+            {
+                name: 'all',
+                type: 'boolean',
+                required: false,
+                description: 'Shows all statistics',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
@@ -2388,7 +2398,7 @@ const othercmds: commandInfo[] = [
         usage: 'janken',
         slashusage: 'janken',
         examples: [],
-        aliases: ['paperscissorsrock','rockpaperscissors','rps','psr'],
+        aliases: ['paperscissorsrock', 'rockpaperscissors', 'rps', 'psr'],
         options: [
             {
                 name: 'choice',
