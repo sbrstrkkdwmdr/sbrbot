@@ -9,6 +9,8 @@
 ### Fixed
 
 - version list could exceed page count
+- `nochokes` scores not being ordered by pp
+- "if FC" showing on `nochokes`
 
 ### Changed
 

@@ -3790,8 +3790,20 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         for (const score of osutopdata) {
             score.statistics.count_miss = 0;
             score.max_combo = score?.beatmap?.max_combo ?? null;
-            score.pp = null;
             score.perfect = true;
+            const ppcalcing = await osufunc.scorecalc({
+                mods: score.mods.join('').length > 1 ?
+                    score.mods.join('') : 'NM',
+                gamemode: score.mode,
+                mapid: score.beatmap.id,
+                miss: score.statistics.count_miss,
+                acc: score.accuracy,
+                maxcombo: score.max_combo,
+                score: score.score,
+                calctype: 0,
+                passedObj: embedStuff.getTotalHits(score.mode, score),
+            }, new Date(score.beatmap.last_updated), input.config);
+            score.pp = ppcalcing[1].pp
         }
     }
 
@@ -3817,7 +3829,8 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             acc,
             combo,
             miss,
-            bpm
+            bpm,
+            recalculateWeights: commandButtonName === 'nochokes'
         },
         {
             useScoreMap: true

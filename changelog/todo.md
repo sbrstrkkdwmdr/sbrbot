@@ -3,10 +3,10 @@
 newest-oldest
 
 - [ ] scorestats use saved json
-- [ ] re-order nochokes scores
-- [ ] remove (if FC) from nochokes
+- [x] re-order nochokes scores
+- [x] remove (if FC) from nochokes
 - [ ] use tenor API (or similar) for gif commands
-- [ ] fix lb command showing an empty list 
+- [x] fix lb command showing an empty list 
 - [ ] bugtracker command 
 - [ ] medals command 
 - [x] make strain graphs use osu map background

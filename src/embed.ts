@@ -34,6 +34,7 @@ export async function scoreList(
         combo?: string,
         miss?: string,
         bpm?: string,
+        recalculateWeights?: boolean,
     },
     mapping: {
         useScoreMap: boolean,
@@ -353,7 +354,7 @@ export async function scoreList(
                 pptxt = `${curscore.pp.toFixed(2)}pp`;
                 tempMainpp = curscore.pp;
             }
-            if (curscore.max_combo != mxCombo) {
+            if (curscore.max_combo != mxCombo && !curscore.perfect) {
                 pptxt += ` (${ppcalcing[1].pp.toFixed(2)}pp if FC)`;
             }
             pptxt += ` (${ppcalcing[2].pp.toFixed(2)}pp if SS)`;
@@ -382,8 +383,12 @@ export async function scoreList(
 
         let weighted;
         if (asObj.showWeights == true) {
-            (0.95 ** scoreoffset);
-            weighted = `\n${(tempMainpp * (curscore?.weight?.percentage / 100)).toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`;
+            if(asObj.recalculateWeights){
+                const tempCalc = (0.95 ** scoreoffset);
+                weighted = `\n${(tempMainpp * tempCalc).toFixed(2)}pp Weighted at **${(tempCalc * 100).toFixed(2)}%**`;
+            } else {
+                weighted = `\n${(tempMainpp * (curscore?.weight?.percentage / 100)).toFixed(2)}pp Weighted at **${(curscore?.weight?.percentage)?.toFixed(2)}%**`;
+            }
         } else {
             weighted = '';
         }
