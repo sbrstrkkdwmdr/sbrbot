@@ -1974,7 +1974,7 @@ const osucmds: commandInfo[] = [
                 name: 'all',
                 type: 'boolean',
                 required: false,
-                description: 'Shows all statistics',
+                description: 'Shows all statistics. May cause the command to lag as it needs to download all maps associated with each score.',
                 options: ['true', 'false'],
                 defaultValue: 'false',
                 examples: [],

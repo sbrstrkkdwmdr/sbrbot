@@ -2,6 +2,9 @@
 
 newest-oldest
 
+- [ ] scorestats use saved json
+- [ ] re-order nochokes scores
+- [ ] remove (if FC) from nochokes
 - [ ] use tenor API (or similar) for gif commands
 - [ ] fix lb command showing an empty list 
 - [ ] bugtracker command 
