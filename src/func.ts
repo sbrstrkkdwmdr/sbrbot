@@ -118,7 +118,9 @@ const cacheById = [
     'osudata',
     'scoredata',
     'maplistdata',
-    'firstscoresdata'
+    'firstscoresdata',
+    'pinnedscoresdata',
+    'bestscoresdata',
 ];
 
 /**
@@ -240,13 +242,17 @@ export function findFile(id: string | number, name: string, mode?: osuApiTypes.G
             }
         }
         else {
-            return false;
+            return {
+                'error': 'File requested does not exist'
+            };
         }
     } else {
         if (fs.existsSync(`${path}/cache/commandData/${id}-${name.toLowerCase()}.json`)) {
             return JSON.parse(fs.readFileSync(`${path}/cache/commandData/${id}-${name.toLowerCase()}.json`, 'utf-8'));
         } else {
-            return false;
+            return {
+                'error': 'File requested does not exist'
+            };
         }
     }
 }

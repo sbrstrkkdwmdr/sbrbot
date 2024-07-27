@@ -15,6 +15,7 @@
 ### Changed
 
 - replaced `node-fetch` in `updateToken()` and `dlMap()` with `axios`
+- scorestats use saved data
 
 ### Added
 

@@ -2,7 +2,7 @@
 
 newest-oldest
 
-- [ ] scorestats use saved json
+- [x] save osutopdata, pinnedscoresdata and firstsdata by user id instead of command id
 - [x] re-order nochokes scores
 - [x] remove (if FC) from nochokes
 - [ ] use tenor API (or similar) for gif commands

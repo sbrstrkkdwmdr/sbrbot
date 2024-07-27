@@ -1891,12 +1891,12 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             const graphembeds = await getGraphs();
 
             let osutopdataReq: osufunc.apiReturn;
-            if (func.findFile(input.absoluteID, 'osutopdata') &&
+            if (func.findFile(osudata.id, 'bestscoresdata') &&
                 input.commandType == 'button' &&
-                !('error' in func.findFile(input.absoluteID, 'osutopdata')) &&
+                !('error' in func.findFile(osudata.id, 'bestscoresdata')) &&
                 input.button != 'Refresh'
             ) {
-                osutopdataReq = func.findFile(input.absoluteID, 'osutopdata');
+                osutopdataReq = func.findFile(osudata.id, 'bestscoresdata');
             } else {
                 osutopdataReq = await osufunc.apiget({
                     type: 'best',
@@ -3676,12 +3676,12 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     let osutopdataReq: osufunc.apiReturn;
-    if (func.findFile(input.absoluteID, 'osutopdata') &&
+    if (func.findFile(osudata.id, 'bestscoresdata') &&
         input.commandType == 'button' &&
-        !('error' in func.findFile(input.absoluteID, 'osutopdata')) &&
+        !('error' in func.findFile(osudata.id, 'bestscoresdata')) &&
         input.button != 'Refresh'
     ) {
-        osutopdataReq = func.findFile(input.absoluteID, 'osutopdata');
+        osutopdataReq = func.findFile(osudata.id, 'bestscoresdata');
     } else {
         osutopdataReq = await osufunc.apiget({
             type: 'best',
@@ -3709,7 +3709,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
-    func.storeFile(osutopdataReq, input.absoluteID, 'osutopdata');
+    func.storeFile(osutopdataReq, osudata.id, 'bestscoresdata');
 
     let showtrue = false;
     if (sort != 'pp') {
@@ -3803,7 +3803,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
                 calctype: 0,
                 passedObj: embedStuff.getTotalHits(score.mode, score),
             }, new Date(score.beatmap.last_updated), input.config);
-            score.pp = ppcalcing[1].pp
+            score.pp = ppcalcing[1].pp;
         }
     }
 
@@ -4176,17 +4176,17 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
         }
 
     }
-    if (func.findFile(input.absoluteID, 'pinnedscoresdata') &&
+    if (func.findFile(osudata.id, 'pinnedscoresdata') &&
         input.commandType == 'button' &&
-        !('error' in func.findFile(input.absoluteID, 'pinnedscoresdata')) &&
+        !('error' in func.findFile(osudata.id, 'pinnedscoresdata')) &&
         input.button != 'Refresh'
     ) {
-        pinnedscoresdata = func.findFile(input.absoluteID, 'pinnedscoresdata');
+        pinnedscoresdata = func.findFile(osudata.id, 'pinnedscoresdata');
     } else {
         await getScoreCount(0);
     }
     osufunc.debug(pinnedscoresdata, 'command', 'pinned', input.obj.guildId, 'pinnedScoresData');
-    func.storeFile(pinnedscoresdata, input.absoluteID, 'pinnedscoresdata');
+    func.storeFile(pinnedscoresdata, osudata.id, 'pinnedscoresdata');
 
     if (page >= Math.ceil(pinnedscoresdata.length / 5)) {
         page = Math.ceil(pinnedscoresdata.length / 5) - 1;
@@ -7534,16 +7534,22 @@ export async function scorestats(input: extypes.commandInput) {
             reachedMaxCount = true;
         }
     }
-    if (func.findFile(input.absoluteID, 'reqdata') &&
-        input.commandType == 'button' &&
-        !('error' in func.findFile(input.absoluteID, 'reqdata')) &&
+
+    const dataFilename =
+        scoreTypes == 'firsts' ?
+            'firstscoresdata' :
+            scoreTypes === 'recent' ?
+                'rsdata' : `${scoreTypes}scoresdata`;
+
+    if (func.findFile(osudata.id, dataFilename) &&
+        !('error' in func.findFile(osudata.id, dataFilename)) &&
         input.button != 'Refresh'
     ) {
-        scoresdata = func.findFile(input.absoluteID, 'reqdata');
+        scoresdata = func.findFile(osudata.id, dataFilename);
     } else {
         await getScoreCount(0);
     }
-    func.storeFile(scoresdata, input.absoluteID, 'reqdata');
+    func.storeFile(scoresdata, osudata.id, dataFilename);
 
     let useFiles: string[] = [];
 
