@@ -194,8 +194,17 @@ export async function crash(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    console.log('executed crash command');
-    process.exit(1);
+    const finalMessage = await msgfunc.sendMessage({
+        commandType: input.commandType,
+        obj: input.obj,
+        args: {
+            content: 'executing crash command...'
+        }
+    }, input.canReply);
+    setTimeout(() => {
+        console.log('executed crash command');
+        process.exit(1);
+    }, 1000);
 }
 
 /**
