@@ -1891,12 +1891,12 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             const graphembeds = await getGraphs();
 
             let osutopdataReq: osufunc.apiReturn;
-            if (func.findFile(osudata.id, 'bestscoresdata') &&
+            if (func.findFile(osudata.id, 'topscoresdata') &&
                 input.commandType == 'button' &&
-                !('error' in func.findFile(osudata.id, 'bestscoresdata')) &&
+                !('error' in func.findFile(osudata.id, 'topscoresdata')) &&
                 input.button != 'Refresh'
             ) {
-                osutopdataReq = func.findFile(osudata.id, 'bestscoresdata');
+                osutopdataReq = func.findFile(osudata.id, 'topscoresdata');
             } else {
                 osutopdataReq = await osufunc.apiget({
                     type: 'best',
@@ -3676,12 +3676,12 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
     func.storeFile(osudataReq, user, 'osudata', osufunc.modeValidator(mode));
 
     let osutopdataReq: osufunc.apiReturn;
-    if (func.findFile(osudata.id, 'bestscoresdata') &&
+    if (func.findFile(osudata.id, 'topscoresdata') &&
         input.commandType == 'button' &&
-        !('error' in func.findFile(osudata.id, 'bestscoresdata')) &&
+        !('error' in func.findFile(osudata.id, 'topscoresdata')) &&
         input.button != 'Refresh'
     ) {
-        osutopdataReq = func.findFile(osudata.id, 'bestscoresdata');
+        osutopdataReq = func.findFile(osudata.id, 'topscoresdata');
     } else {
         osutopdataReq = await osufunc.apiget({
             type: 'best',
@@ -3709,7 +3709,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         return;
     }
 
-    func.storeFile(osutopdataReq, osudata.id, 'bestscoresdata');
+    func.storeFile(osutopdataReq, osudata.id, 'topscoresdata');
 
     let showtrue = false;
     if (sort != 'pp') {
@@ -7538,8 +7538,7 @@ export async function scorestats(input: extypes.commandInput) {
     const dataFilename =
         scoreTypes == 'firsts' ?
             'firstscoresdata' :
-            scoreTypes === 'recent' ?
-                'rsdata' : `${scoreTypes}scoresdata`;
+            `${scoreTypes}scoresdata`;
 
     if (func.findFile(osudata.id, dataFilename) &&
         !('error' in func.findFile(osudata.id, dataFilename)) &&
