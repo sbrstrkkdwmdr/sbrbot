@@ -20,6 +20,7 @@
 
 - replaced `node-fetch` in `updateToken()` and `dlMap()` with `axios`
 - scorestats use saved data
+- changelog defaults to current version instead of WIP
 
 ### Added
 

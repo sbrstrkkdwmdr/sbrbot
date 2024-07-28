@@ -192,8 +192,10 @@ export async function changelog(input: extypes.commandInput) {
         useNum = page ? page - 1 : null;
     }
     if (useNum < 1) {
-        useNum = !isNaN(+found) ?
-            +found : 0;
+        useNum = found && !isNaN(+found) ?
+            +found :
+            typeof found === 'string' ?
+                0 : 1;
     }
     const Embed = new Discord.EmbedBuilder();
     const exceeded = 'Exceeded character limit. Please click [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.md) to view the changelog.';
