@@ -4,14 +4,17 @@
 
 ## [WIP] - 2024-xx-xx
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot)
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+
+### Fixed
+- changelog not showing WIP
 
 ### Added
 - `v` alias ver `version`
 
 ## [3.18.1] - 2024-07-28
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/34288027dd65236a6309cded8aae8d536ee1bf16)
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/34288027dd65236a6309cded8aae8d536ee1bf16)</br>
 
 ### Fixed
 
@@ -31,7 +34,7 @@
 
 ## [3.18.0] - 2024-07-21
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/aede1ee3ca4a486312fd351b4d7c672a689d2188)
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/aede1ee3ca4a486312fd351b4d7c672a689d2188)</br>
 
 ### Fixed
 

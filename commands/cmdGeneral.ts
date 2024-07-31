@@ -159,25 +159,30 @@ export async function changelog(input: extypes.commandInput) {
                 found = null;
             }
         } else {
-            switch (version) {
-                case 'WIP': case 'pending': case 'next':
+            switch (version.toLowerCase()) {
+                case 'wip': case 'pending': case 'next':
                     found = 0;
+                    useNum = 0;
                     foundBool = true;
                     break;
                 case 'first': case 'original':
                     found = mainconst.versions.length - 1;
+                    useNum = mainconst.versions.length - 1;
                     foundBool = true;
                     break;
                 case 'second':
                     found = mainconst.versions.length - 2;
+                    useNum = mainconst.versions.length - 2;
                     foundBool = true;
                     break;
                 case 'third':
                     found = mainconst.versions.length - 3;
+                    useNum = mainconst.versions.length - 3;
                     foundBool = true;
                     break;
                 case 'latest':
                     found = 1;
+                    useNum = 1;
                     foundBool = true;
                     break;
                 case 'versions': case 'list': case 'all':
@@ -191,7 +196,7 @@ export async function changelog(input: extypes.commandInput) {
     if (((!foundBool && found != 'string') || (page && found == 'string')) && !input.button) {
         useNum = page ? page - 1 : null;
     }
-    if (useNum < 1) {
+    if (useNum < 1 && !foundBool) {
         useNum = found && !isNaN(+found) ?
             +found :
             typeof found === 'string' ?
