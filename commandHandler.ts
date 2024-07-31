@@ -185,7 +185,7 @@ function execCommand(input: extypes.input, command: string, commandType: extypes
         overrides['ex'] = 'list';
     }
 
-    const statCommands: string[] = ['uptime', 'version', 'server', 'website', 'timezone',];
+    const statCommands: string[] = ['uptime', 'version', 'v', 'server', 'website', 'timezone',];
     if (statCommands.some(x => command == x)) {
         args = [command];
         command = 'info';

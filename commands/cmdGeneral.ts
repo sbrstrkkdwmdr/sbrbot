@@ -1517,13 +1517,13 @@ export async function info(input: extypes.commandInput) {
         .setColor(colours.embedColour.info.dec)
         .setTitle('Bot Information');
     if (input.args.length > 0) {
-        ['uptime', 'version', 'server', 'website', 'timezone',];
+        ['uptime', 'version', 'server', 'website', 'timezone', 'v'];
         switch (input.args[0]) {
             case 'uptime':
                 Embed.setTitle('Total uptime')
                     .setDescription(`${calc.secondsToTime(input.client.uptime / 1000)}`);
                 break;
-            case 'version':
+            case 'version': case 'v':
                 Embed.setTitle('Bot version')
                     .setDescription(`${pkgjson.version}`);
                 break;

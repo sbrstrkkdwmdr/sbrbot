@@ -6,6 +6,9 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)
 
+### Added
+- `v` alias ver `version`
+
 ## [3.18.1] - 2024-07-28
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/34288027dd65236a6309cded8aae8d536ee1bf16)
