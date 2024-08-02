@@ -10,7 +10,7 @@
 - changelog not showing WIP
 
 ### Added
-- `v` alias ver `version`
+- `v` alias for `version`
 
 ## [3.18.1] - 2024-07-28
 
