@@ -412,6 +412,11 @@ export async function gif(input: extypes.commandInput) {
             break;
     }
 
+    const gifSearch = await func.getGif(type, input.config);
+    if (gifSearch?.data?.results?.length > 1) {
+        gifSelection = gifSearch?.data?.results?.map(x => x.media_formats.gif.url);
+    }
+
     if (gifSelection.length < 1) {
         gifSelection.push(def.images.any.url);
     }
@@ -810,7 +815,7 @@ export async function janken(input: extypes.commandInput) {
         'paper': '📃',
         'scissors': '✂',
         'rock': '🪨',
-    }
+    };
     content = `${toEmoji[real]} vs. ${toEmoji[pcChoice]} | ` + content;
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({

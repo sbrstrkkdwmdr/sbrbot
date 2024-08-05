@@ -105,6 +105,7 @@ see [here](https://github.com/sbrstrkkdwmdr/sbrbot/CREDITS.md)
 | enableTracking     | boolean  | enables/disables osutrack. Users can still be added/removed but scores won't be updated.                                                        | false   |
 | storeCommandLogs   | boolean  | enables/disables logs being stored locally                                                                                                      | false   |
 | useEmojis          | object   | see below                                                                                                                                       | {}      |
+| tenorKey           | string   | see [here](https://developers.google.com/tenor/guides/quickstart) (same steps as google api key)                                                | null    |
 
 ### important
 

@@ -23,5 +23,6 @@
         "gamemodes": true,
         "scoreGrades": true,
         "mods": false
-    }
+    },
+    "tenorKey": "https://developers.google.com/tenor/guides/quickstart"
 }

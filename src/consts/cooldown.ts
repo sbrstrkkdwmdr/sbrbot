@@ -44,8 +44,7 @@ export const cooldownCommands = [
     //non osu 
     'time', 'weather', 'tropicalweather', 'ts',
 
-
-    'gif',
+    'gif', 'hug', 'kiss', 'lick', 'pet', 'punch', 'slap',
     'image', 'imagesearch',
     'ytsearch', 'yt',
 ];

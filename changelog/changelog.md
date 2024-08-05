@@ -11,6 +11,10 @@
 
 ### Added
 - `v` alias for `version`
+- new config property "tenorKey"
+
+### Changed
+- gif commands now use tenor api when possible
 
 ## [3.18.1] - 2024-07-28
 

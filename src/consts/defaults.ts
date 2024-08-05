@@ -22,7 +22,8 @@ const defaultClientConfig: extypes.config = {
         gamemodes: true,
         scoreGrades: true,
         mods: false,
-    }
+    },
+    tenorKey: ''
 };
 
 const defaultGuildSettings: extypes.guildSettings = {

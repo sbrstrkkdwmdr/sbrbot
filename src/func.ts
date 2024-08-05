@@ -1592,3 +1592,15 @@ export function jankenConvert(str: string) {
     }
     return out;
 }
+
+export async function getGif(find: string, config: extypes.config) {
+    log.toOutput(`https://g.tenor.com/v2/search?q=${find}&key=KEY_OBFUSCATED&limit=50`, config);
+    const dataf = await axios.get(`https://g.tenor.com/v2/search?q=${find}&key=${config.tenorKey}&limit=50`).catch(err => {
+        return {
+            data: {
+                error: err
+            }
+        };
+    });
+    return dataf;
+}

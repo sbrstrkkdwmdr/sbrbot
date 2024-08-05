@@ -26,6 +26,7 @@ export type config = {
         scoreGrades: boolean,
         mods: boolean,
     };
+    tenorKey: string,
 };
 
 export type input = {

@@ -76,10 +76,10 @@ CHECKING CONFIG FOR ANY ERRORS
     } else {
         console.log("Property `google` is missing");
         console.log("image search commands will not work until this property is added/fixed");
-        config["google"] = {};
-        config["google"]["apiKey"] = "null";
-        config["google"]["engineId"] = "null";
-
+        config["google"] = {
+            apiKey: 'null',
+            engineId: 'null',
+        };
     }
     if (!config.hasOwnProperty("useScreenshotParse") && typeof config["useScreenshotParse"] != "boolean") {
         console.log("Property `useScreenshotParse` is invalid or an incorrect type");
@@ -123,11 +123,14 @@ CHECKING CONFIG FOR ANY ERRORS
             config["useEmojis"]["mods"] = false;
         }
     } else {
-        console.log("Property `google` is missing");
+        console.log("Property `useEmojis` is missing");
         console.log("image search commands will not work until this property is added/fixed");
-        config["google"] = {};
-        config["google"]["apiKey"] = "null";
-        config["google"]["engineId"] = "null";
+        config["useEmojis"] = {
+            gamemodes: false,
+            scoreGrades: false,
+            mods: false,
+        };
+
     }
     console.log(`
 ----------------------------------------------------
