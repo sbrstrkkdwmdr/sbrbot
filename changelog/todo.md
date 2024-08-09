@@ -5,7 +5,7 @@ newest-oldest
 - [x] save osutopdata, pinnedscoresdata and firstsdata by user id instead of command id
 - [x] re-order nochokes scores
 - [x] remove (if FC) from nochokes
-- [ ] use tenor API (or similar) for gif commands
+- [x] use tenor API (or similar) for gif commands
 - [x] fix lb command showing an empty list 
 - [ ] bugtracker command 
 - [ ] medals command 
