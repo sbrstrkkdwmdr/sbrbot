@@ -2,6 +2,7 @@
 
 newest-oldest
 
+- [ ] fix scoreparse crashing when given a link
 - [x] save osutopdata, pinnedscoresdata and firstsdata by user id instead of command id
 - [x] re-order nochokes scores
 - [x] remove (if FC) from nochokes

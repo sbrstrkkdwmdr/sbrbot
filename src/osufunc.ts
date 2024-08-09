@@ -11,6 +11,7 @@ import * as calc from './calc.js';
 import * as emojis from './consts/emojis.js';
 import * as errors from './consts/errors.js';
 import * as mainconst from './consts/main.js';
+import * as func from './func.js';
 import * as tools from './func.js';
 import * as log from './log.js';
 import * as osumodcalc from './osumodcalc.js';
@@ -1002,6 +1003,7 @@ export async function apiget(input: apiInput) {
     if (data?.apiData?.apiData) {
         data = data?.apiData;
     }
+    data.input.config = null;
     return data;
 }
 
