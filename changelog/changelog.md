@@ -12,6 +12,7 @@
 ### Added
 - `v` alias for `version`
 - new config property "tenorKey"
+- recent and scoreparse shows map strains
 
 ### Changed
 - gif commands now use tenor api when possible

@@ -5293,6 +5293,25 @@ ${srStr}
             useComponents = [pgbuttons, buttons];
         }
 
+        // strains graph
+        const strains = await osufunc.straincalc(mapdata.id, curscore.mods.join(''), 0, curscore.mode, new Date(mapdata.last_updated), input.config);
+        try {
+            osufunc.debug(strains, 'command', 'recent', input.obj.guildId, 'strains');
+        } catch (error) {
+            osufunc.debug({ error: error }, 'command', 'recent', input.obj.guildId, 'strains');
+        }
+        const strainsgraph =
+            await func.graph(strains.strainTime, strains.value, 'Strains', {
+                startzero: true,
+                type: 'bar',
+                fill: true,
+                displayLegend: false,
+                title: 'Strains',
+                imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
+                blurImg: true,
+            });
+        useFiles.push(strainsgraph.path);
+        rsEmbed.setImage(`attachment://${strainsgraph.filename}.jpg`);
     } else if (list == true) {
         rsEmbed
             .setColor(colours.embedColour.scorelist.dec)
@@ -5387,6 +5406,7 @@ ${srStr}
         args: {
             embeds: [rsEmbed],
             components: useComponents,
+            files: useFiles,
             edit: true
         }
     }, input.canReply);
@@ -6258,6 +6278,25 @@ ${srStr}
         useComponents = [buttons, xsbuttons];
     }
 
+     // strains graph
+     const strains = await osufunc.straincalc(mapdata.id, scoredata.mods.join(''), 0, scoredata.mode, new Date(mapdata.last_updated), input.config);
+     try {
+         osufunc.debug(strains, 'command', 'recent', input.obj.guildId, 'strains');
+     } catch (error) {
+         osufunc.debug({ error: error }, 'command', 'recent', input.obj.guildId, 'strains');
+     }
+     const strainsgraph =
+         await func.graph(strains.strainTime, strains.value, 'Strains', {
+             startzero: true,
+             type: 'bar',
+             fill: true,
+             displayLegend: false,
+             title: 'Strains',
+             imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
+             blurImg: true,
+         });
+     scoreembed.setImage(`attachment://${strainsgraph.filename}.jpg`);
+
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
     const finalMessage = await msgfunc.sendMessage({
@@ -6266,6 +6305,7 @@ ${srStr}
         args: {
             embeds: [scoreembed],
             components: useComponents,
+            files: [strainsgraph.path],
             edit: true
         }
     }, input.canReply);

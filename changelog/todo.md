@@ -37,11 +37,11 @@ newest-oldest
 - [ ] command options like filter and sort in a separate embed or section (partially implemented)
 - [x] edit arg handling in score list commands
 - [x] add score + rank filter to score list commands
-- [ ] profile card command (not `osu`)
+- [ ] profile card command (like show a jpg)
 - [x] make all button emojies the same theme
 - [x] osu map ranks command (#1s, #10s etc.) (FEATURE REMOVED 202X-XX-XX)
 - [ ] show fail point on `recent` strains graph
-- [ ] health + strains graph (`recent` and `scoreparse`)
+- [x] health + strains graph (`recent` and `scoreparse`)
 - [ ] score title/thumbnail generator
 - [x] fix map parser
 - [x] fix pages on maplb
