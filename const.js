@@ -280,11 +280,11 @@ const generalcommands = [
                 descriptor: 'Returns the changelog for the upcoming version'
             },
             {
-                text: 'PREFIXMSGchangelog versions',
+                text: 'PREFIXMSGversions',
                 descriptor: 'Returns a list of all versions'
             },
         ],
-        aliases: ['clog', 'changes'],
+        aliases: ['clog', 'changes', 'versions'],
         options: [
             {
                 name: 'version',
@@ -610,7 +610,7 @@ operators: *, /, +, -, (, )
     {
         name: 'time',
         description: 'Shows the current time in a specific timezone. ',
-        usage: 'time [timezone]',
+        usage: 'time [timezone] [-showutc]',
         slashusage: 'time [timezone]',
         examples: [
             {
@@ -629,11 +629,21 @@ operators: *, /, +, -, (, )
                 name: 'timezone',
                 type: 'string',
                 required: false,
-                description: 'The timezone to show the time in (see [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset))',
-                options: ['Formatted as [city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
+                description: 'The timezone to show the time in (see [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/src/consts/timezones.ts).\nUse dst instead to list off regions that observe daylight savings.',
+                options: ['Formatted as (city), UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
                 defaultValue: 'UTC',
                 examples: ['Australia/Melbourne', 'Europe/Warsaw'],
                 commandTypes: ['message', 'interaction']
+            },
+            {
+                name: 'showutc',
+                type: 'boolean',
+                required: false,
+                description: 'Whether or not to show the UTC time on top of the requested timezone.',
+                options: ['N/A'],
+                defaultValue: '`false` if timezone has a value',
+                examples: [],
+                commandTypes: ['message']
             }
         ]
     },
