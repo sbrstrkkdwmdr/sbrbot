@@ -13,9 +13,13 @@
 - `v` alias for `version`
 - new config property "tenorKey"
 - recent and scoreparse shows map strains
+- replace `chartjs-to-image` with `chart.js` and `canvas`
 
 ### Changed
 - gif commands now use tenor api when possible
+
+### Removed
+- `chartjs-to-image` dependency
 
 ## [3.18.1] - 2024-07-28
 

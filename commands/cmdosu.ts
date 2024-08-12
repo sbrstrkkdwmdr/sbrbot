@@ -5300,16 +5300,37 @@ ${srStr}
         } catch (error) {
             osufunc.debug({ error: error }, 'command', 'recent', input.obj.guildId, 'strains');
         }
-        const strainsgraph =
-            await func.graph(strains.strainTime, strains.value, 'Strains', {
-                startzero: true,
-                type: 'bar',
-                fill: true,
-                displayLegend: false,
-                title: 'Strains',
-                imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
-                blurImg: true,
-            });
+        let strainsgraph = {
+            path: '',
+            filename: '',
+        };
+        if (curscore.rank.toUpperCase() == 'F' && false) {
+            strainsgraph =
+                await func.graph(
+                    strains.strainTime, strains.value, 'Strains', {
+                    startzero: true,
+                    type: 'bar',
+                    fill: true,
+                    displayLegend: false,
+                    title: 'Strains',
+                    imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
+                    blurImg: true,
+                },
+                    null,
+                    [totalhits - 1]
+                );
+        } else {
+            strainsgraph =
+                await func.graph(strains.strainTime, strains.value, 'Strains', {
+                    startzero: true,
+                    type: 'bar',
+                    fill: true,
+                    displayLegend: false,
+                    title: 'Strains',
+                    imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
+                    blurImg: true,
+                });
+        }
         useFiles.push(strainsgraph.path);
         rsEmbed.setImage(`attachment://${strainsgraph.filename}.jpg`);
     } else if (list == true) {
@@ -6278,24 +6299,24 @@ ${srStr}
         useComponents = [buttons, xsbuttons];
     }
 
-     // strains graph
-     const strains = await osufunc.straincalc(mapdata.id, scoredata.mods.join(''), 0, scoredata.mode, new Date(mapdata.last_updated), input.config);
-     try {
-         osufunc.debug(strains, 'command', 'recent', input.obj.guildId, 'strains');
-     } catch (error) {
-         osufunc.debug({ error: error }, 'command', 'recent', input.obj.guildId, 'strains');
-     }
-     const strainsgraph =
-         await func.graph(strains.strainTime, strains.value, 'Strains', {
-             startzero: true,
-             type: 'bar',
-             fill: true,
-             displayLegend: false,
-             title: 'Strains',
-             imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
-             blurImg: true,
-         });
-     scoreembed.setImage(`attachment://${strainsgraph.filename}.jpg`);
+    // strains graph
+    const strains = await osufunc.straincalc(mapdata.id, scoredata.mods.join(''), 0, scoredata.mode, new Date(mapdata.last_updated), input.config);
+    try {
+        osufunc.debug(strains, 'command', 'recent', input.obj.guildId, 'strains');
+    } catch (error) {
+        osufunc.debug({ error: error }, 'command', 'recent', input.obj.guildId, 'strains');
+    }
+    const strainsgraph =
+        await func.graph(strains.strainTime, strains.value, 'Strains', {
+            startzero: true,
+            type: 'bar',
+            fill: true,
+            displayLegend: false,
+            title: 'Strains',
+            imgUrl: osufunc.getMapImages(mapdata.beatmapset_id).full,
+            blurImg: true,
+        });
+    scoreembed.setImage(`attachment://${strainsgraph.filename}.jpg`);
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 

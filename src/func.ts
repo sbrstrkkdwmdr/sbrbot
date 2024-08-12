@@ -1,14 +1,12 @@
 import fs = require('fs');
 import axios from 'axios';
-import charttoimg from 'chartjs-to-image';
+import * as canvas from 'canvas';
+import * as chartjs from 'chart.js/auto';
 import * as Discord from 'discord.js';
 import https from 'https';
-import * as jimp from 'jimp';
-import * as quickchart from 'quickchart-js';
 import { filespath, path, precomppath } from '../path.js';
 import * as calc from './calc.js';
 import * as clr from './colourcalc.js';
-import * as clrs from './consts/colours.js';
 import * as emojis from './consts/emojis.js';
 import * as mainconst from './consts/main.js';
 import * as log from './log.js';
@@ -1145,7 +1143,8 @@ export async function graph(
         separateAxis: boolean;
         customStack?: number;
         reverse?: boolean;
-    }[]
+    }[],
+    highlightPoints?: number[],
 ) {
 
     if (other.startzero == null || typeof other.startzero == 'undefined') {
@@ -1161,8 +1160,8 @@ export async function graph(
         other.type = 'line';
     }
 
-    let curx = [];
-    let cury = [];
+    let curx: (string | number)[] = [];
+    let cury: number[] = [];
 
     if (y.length > 200) {
         const div = y.length / 200;
@@ -1189,8 +1188,17 @@ export async function graph(
     //     // console.log(quickchart.default.getGradientFillHelper('vertical', [tmp.red, tmp.orange, tmp.yellow, tmp.green, tmp.blue, tmp.indigo, tmp.violet]));
     //     // //`__BEGINFUNCTION__getGradientFillHelper(${JSON.stringify(direction)}, ${JSON.stringify(colors)}, ${JSON.stringify(dimensions)})__ENDFUNCTION__`;
     // }
+    type dataset = {
+        label: string,
+        data: number[];
+        fill: boolean,
+        borderColor: string | ((colour) => string),
+        borderWidth: number,
+        pointRadius: number,
+        yAxisID: string,
+    };
 
-    const datasets = [{
+    const datasets: dataset[] = [{
         label: label,
         data: cury,
         fill: other.fill,
@@ -1230,6 +1238,15 @@ export async function graph(
                 i++;
             }
         }
+    }
+
+    if (highlightPoints && highlightPoints.length > 0) {
+        datasets[0].borderColor = (colour) => {
+            console.log(colour.index);
+            return highlightPoints.includes(colour.index) ?
+                'rgb(255, 106, 0)' :
+                other.lineColour ?? 'rgb(101, 101, 135)';
+        };
     }
 
     const cfgopts = {
@@ -1294,25 +1311,7 @@ export async function graph(
                 }
             ]
         },
-        plugins: {
-            backgroundImageUrl: other?.imgUrl ?? 'https://github.com/sbrstrkkdwmdr/sbrstrkkdwmdr/blob/main/blank.jpg?raw=true',
-            // customCanvasBackgroundColor: {
-            //     color: 'rgba(64, 64, 64, 25)',
-            // }
-        },
     };
-    // const plugin = {
-    //     id: 'customCanvasBackgroundColor',
-    //     beforeDraw: (chart, args, options) => {
-    //         const { ctx } = chart;
-    //         ctx.save();
-    //         ctx.globalCompositeOperation = 'destination-over';
-    //         ctx.fillStyle = options.color || '#99ffff';
-    //         ctx.fillRect(0, 0, chart.width, chart.height);
-    //         ctx.restore();
-    //     }
-    // };
-
 
     if (other?.type == 'bar') {
         cfgopts['elements'] = {
@@ -1329,22 +1328,123 @@ export async function graph(
             elem['stacked'] = other.stacked ?? false;
         }
     }
-    const chart = new charttoimg()
-        .setConfig({
-            type: other?.type ?? 'line',
-            data: {
-                labels: curx,
-                datasets: datasets
-            },
-            options: cfgopts,
-            // plugins: [plugin]
-        });
 
-    chart.setBackgroundColor('rgb(255,255,255)').setWidth(1500).setHeight(500);
+    const tc = canvas.createCanvas(1500, 500);
+    const ctx = tc.getContext("2d");
+    const image = new canvas.Image();
+
+    const chart = new chartjs.Chart(ctx, {
+        type: other?.type ?? 'line',
+        data: {
+            labels: curx,
+            datasets: datasets
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: {
+                        color: 'rgb(128, 128, 128)',
+                        backdropColor: 'rgb(128, 128, 128)',
+                        callback: function (value, index, values) {
+                            // if (highlightPoints && highlightPoints.includes(index)) {
+                            //     this.backgroundColor = 'rgb(128, 128, 128)';
+                            // }
+                            // this.backgroundColor = 'rgb(255, 0, 0)';
+                            return '';
+                        }
+                    },
+                    grid: {
+                        display: true,
+                        drawOnChartArea: true,
+                        drawTicks: true,
+                        color: 'rgb(64, 64, 64)'
+                    }
+                },
+                y: {
+                    position: 'left',
+                    reverse: other.reverse,
+                    beginAtZero: other.startzero,
+                    ticks: {
+                        color: 'rgb(128, 128, 128)',
+                        // beginAtZero: other.startzero
+                    },
+                    grid: {
+                        display: true,
+                        drawOnChartArea: true,
+                        drawTicks: true,
+                        color: 'rgb(64, 64, 64)'
+                    }
+                },
+                y1: {
+                    position: 'right',
+                    display: showSecondAxis,
+                    reverse: secondReverse,
+                    ticks: {
+                        // beginAtZero: other.startzero,
+                    },
+                }
+                // xAxes: [
+                //     {
+                //         display: true,
+                //         ticks: {
+                //             autoSkip: true,
+                //             maxTicksLimit: 10
+                //         },
+                //     }
+                // ],
+                // yAxes: [
+                //     {
+                //         id: '1y',
+                //         type: 'linear',
+                //         position: 'left',
+                //         display: true,
+                //         ticks: {
+                //             reverse: other.reverse,
+                //             beginAtZero: other.startzero
+                //         },
+                //     }, {
+                //         id: '2y',
+                //         type: 'linear',
+                //         position: 'right',
+                //         display: showSecondAxis,
+                //         ticks: {
+                //             reverse: secondReverse,
+                //             beginAtZero: other.startzero
+                //         },
+                //     }
+                // ]
+            },
+        },
+        plugins: [{
+            id: 'customImage',
+            beforeDraw: (chart) => {
+                console.log(chart.chartArea);
+            }
+        }]
+    });
+
+    // issue - background image covers chart
+    // await new Promise(resolve => {
+    //     image.onload = function () {
+    //         const {
+    //             top,
+    //             left,
+    //             width,
+    //             height
+    //         } = chart.chartArea;
+    //         const x = left + width - image.width;
+    //         const y = top + height - image.height;
+    //         ctx.drawImage(image, x, y);
+    //         resolve(null);
+    //     };
+    //     image.src = other?.imgUrl ?? 'https://github.com/sbrstrkkdwmdr/sbrstrkkdwmdr/blob/main/blank.jpg?raw=true';
+    // })
+
     const filename = `${(new Date).getTime()}`;
     let curt = `${path}/cache/graphs/${filename}.jpg`;
     try {
-        await chart.toFile(curt);
+        const buffer = tc.toBuffer();
+        fs.writeFileSync(curt, buffer);
     } catch (err) {
         console.log(err);
         curt = `${precomppath}/files/blank_graph.png`;
@@ -1603,4 +1703,25 @@ export async function getGif(find: string, config: extypes.config) {
         };
     });
     return dataf;
+}
+
+export async function delay(ms: number) {
+    await new Promise(resolve =>
+        setTimeout(resolve, ms)
+    );
+}
+
+export function loadImage(url) {
+    return new Promise((resolve, reject) => {
+        const img = new canvas.Image();
+
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error('Failed to load image'));
+
+        //   axios.get(url, (err, res) => {
+        //     if (err) return reject(err)
+
+        //     img.src = res.body
+        //   })
+    });
 }
