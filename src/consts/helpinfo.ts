@@ -646,8 +646,8 @@ operators: *, /, +, -, (, )
                 name: 'timezone',
                 type: 'string',
                 required: false,
-                description: 'The timezone to show the time in (see [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#UTC_offset)).\nUse dst instead to list off regions that observe daylight savings.',
-                options: ['Formatted as [city], UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
+                description: 'The timezone to show the time in (see [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/src/consts/timezones.ts).\nUse dst instead to list off regions that observe daylight savings.',
+                options: ['Formatted as (city), UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
                 defaultValue: 'UTC',
                 examples: ['Australia/Melbourne', 'Europe/Warsaw'],
                 commandTypes: ['message', 'interaction']
