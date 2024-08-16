@@ -1240,14 +1240,14 @@ export async function graph(
         }
     }
 
-    if (highlightPoints && highlightPoints.length > 0) {
-        datasets[0].borderColor = (colour) => {
-            console.log(colour.index);
-            return highlightPoints.includes(colour.index) ?
-                'rgb(255, 106, 0)' :
-                other.lineColour ?? 'rgb(101, 101, 135)';
-        };
-    }
+    // if (highlightPoints && highlightPoints.length > 0) {
+    //     datasets[0].borderColor = (colour) => {
+    //         console.log(colour.index);
+    //         return highlightPoints.includes(colour.index) ?
+    //             'rgb(255, 106, 0)' :
+    //             other.lineColour ?? 'rgb(101, 101, 135)';
+    //     };
+    // }
 
     const cfgopts = {
         legend: {
@@ -1418,7 +1418,7 @@ export async function graph(
         plugins: [{
             id: 'customImage',
             beforeDraw: (chart) => {
-                console.log(chart.chartArea);
+                // console.log(chart.chartArea);
             }
         }]
     });
