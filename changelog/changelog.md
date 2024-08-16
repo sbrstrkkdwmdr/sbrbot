@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+## [3.19.0] - 2024-08-16
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+
 ### Fixed
 - changelog not showing WIP
 - ppcalc accuracy list being mis-aligned
