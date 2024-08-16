@@ -9321,27 +9321,27 @@ export async function map(input: extypes.commandInput) {
                     {
                         name: 'PP',
                         value:
-                            `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
-                            `99%: ${ppComputed[1].pp?.toFixed(2)} \n ` +
-                            `98%: ${ppComputed[2].pp?.toFixed(2)} \n ` +
-                            `97%: ${ppComputed[3].pp?.toFixed(2)} \n ` +
-                            `96%: ${ppComputed[4].pp?.toFixed(2)} \n ` +
-                            `95%: ${ppComputed[5].pp?.toFixed(2)} \n ` +
-                            `94%: ${ppComputed[6].pp?.toFixed(2)} \n ` +
-                            `93%: ${ppComputed[7].pp?.toFixed(2)} \n ` +
-                            `92%: ${ppComputed[8].pp?.toFixed(2)} \n ` +
-                            `91%: ${ppComputed[9].pp?.toFixed(2)} \n ` +
-                            `90%: ${ppComputed[10].pp?.toFixed(2)} \n ` +
-                            `89%: ${ppComputed[11].pp?.toFixed(2)} \n ` +
-                            `88%: ${ppComputed[12].pp?.toFixed(2)} \n ` +
-                            `87%: ${ppComputed[13].pp?.toFixed(2)} \n ` +
-                            `86%: ${ppComputed[14].pp?.toFixed(2)} \n ` +
-                            `85%: ${ppComputed[15].pp?.toFixed(2)} \n ` +
-                            `84%: ${ppComputed[16].pp?.toFixed(2)} \n ` +
-                            `83%: ${ppComputed[17].pp?.toFixed(2)} \n ` +
-                            `82%: ${ppComputed[18].pp?.toFixed(2)} \n ` +
-                            `81%: ${ppComputed[19].pp?.toFixed(2)} \n ` +
-                            `80%: ${ppComputed[20].pp?.toFixed(2)} \n ` +
+                            `\`SS: \` ${ppComputed[0].pp?.toFixed(2)} \n ` +
+                            `\`99%:\` ${ppComputed[1].pp?.toFixed(2)} \n ` +
+                            `\`98%:\` ${ppComputed[2].pp?.toFixed(2)} \n ` +
+                            `\`97%:\` ${ppComputed[3].pp?.toFixed(2)} \n ` +
+                            `\`96%:\` ${ppComputed[4].pp?.toFixed(2)} \n ` +
+                            `\`95%:\` ${ppComputed[5].pp?.toFixed(2)} \n ` +
+                            `\`94%:\` ${ppComputed[6].pp?.toFixed(2)} \n ` +
+                            `\`93%:\` ${ppComputed[7].pp?.toFixed(2)} \n ` +
+                            `\`92%:\` ${ppComputed[8].pp?.toFixed(2)} \n ` +
+                            `\`91%:\` ${ppComputed[9].pp?.toFixed(2)} \n ` +
+                            `\`90%:\` ${ppComputed[10].pp?.toFixed(2)} \n ` +
+                            `\`89%:\` ${ppComputed[11].pp?.toFixed(2)} \n ` +
+                            `\`88%:\` ${ppComputed[12].pp?.toFixed(2)} \n ` +
+                            `\`87%:\` ${ppComputed[13].pp?.toFixed(2)} \n ` +
+                            `\`86%:\` ${ppComputed[14].pp?.toFixed(2)} \n ` +
+                            `\`85%:\` ${ppComputed[15].pp?.toFixed(2)} \n ` +
+                            `\`84%:\` ${ppComputed[16].pp?.toFixed(2)} \n ` +
+                            `\`83%:\` ${ppComputed[17].pp?.toFixed(2)} \n ` +
+                            `\`82%:\` ${ppComputed[18].pp?.toFixed(2)} \n ` +
+                            `\`81%:\` ${ppComputed[19].pp?.toFixed(2)} \n ` +
+                            `\`80%:\` ${ppComputed[20].pp?.toFixed(2)} \n ` +
                             `\n${ppissue}`
                         ,
                         inline: true

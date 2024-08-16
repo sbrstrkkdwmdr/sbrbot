@@ -8,6 +8,7 @@
 
 ### Fixed
 - changelog not showing WIP
+- ppcalc accuracy list being mis-aligned
 
 ### Added
 - `v` alias for `version`
