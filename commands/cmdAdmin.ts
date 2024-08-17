@@ -799,11 +799,11 @@ export async function debug(input: extypes.commandInput) {
             } else {
                 //convert to search term
                 let resString;
-                let cmdid = null;
+                let tempId = null;
                 if (inputstr.includes(' ')) {
                     const temp = inputstr.split(' ');
                     inputstr = temp[0];
-                    cmdid = temp[1];
+                    tempId = temp[1];
                 }
                 switch (inputstr) {
                     case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':
@@ -905,13 +905,13 @@ export async function debug(input: extypes.commandInput) {
                     case 'weather':
                     case 'tropicalweather':
                         {
-                            await findAndReturn(`${path}/cache/debug/command`, resString, cmdid);
+                            await findAndReturn(`${path}/cache/debug/command`, resString, tempId);
                         }
                         break;
                     case 'map (file)':
                     case 'replay':
                         {
-                            await findAndReturn(`${path}/cache/debug/fileparse`, resString, cmdid);
+                            await findAndReturn(`${path}/cache/debug/fileparse`, resString, tempId);
                         }
                         break;
                     default:
@@ -1172,18 +1172,19 @@ Joined(EPOCH):  ${member.joinedTimestamp}
 
     }
 
-    async function findAndReturn(inpath: string, find: string, cmdid: string) {
+    async function findAndReturn(inpath: string, find: string, serverId: string) {
         const sFiles = fs.readdirSync(`${inpath}`);
         const found = sFiles.find(x => x == find);
         const inFiles = fs.readdirSync(`${inpath}/${found}`);
         let content = `Files found for command \`${inputstr}\``;
         let files = inFiles.map(x => `${inpath}/${found}/${x}`);
-        if (!isNaN(+cmdid)) {
-            const tfiles = inFiles.map(x => `${inpath}/${found}/${x}`).filter(x => x.includes(cmdid));
-            content = `Files found for command \`${inputstr}\`, matching server ID ${cmdid}`;
+        if (!isNaN(+serverId)) {
+            const tfiles = inFiles.map(x => `${inpath}/${found}/${x}`).filter(x => x.includes(serverId));
+            content = `Files found for command \`${inputstr}\`, matching server ID ${serverId}`;
+            files = tfiles;
             if (tfiles.length == 0) {
                 files = inFiles.map(x => `${inpath}/${found}/${x}`);
-                content = `Files found for command \`${inputstr}\`. None found matching ${cmdid}`;
+                content = `Files found for command \`${inputstr}\`. None found matching ${serverId}`;
             }
         }
 

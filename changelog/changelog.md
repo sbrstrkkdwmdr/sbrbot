@@ -6,6 +6,9 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+### Fixed
+- filtering debug files by server ID not actually returning the filtered list
+
 ## [3.19.0] - 2024-08-16
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/363969c0304e3d38a01007645370fc80896c6ea3)</br>
