@@ -2,6 +2,7 @@
 
 newest-oldest
 
+- [ ] convert now returns NaN
 - [ ] new graph method doesnt have a background
 - [ ] scoreparse not working with new score ids on website -> https://osu.ppy.sh/scores/osu/4308973497 and https://osu.ppy.sh/scores/1637688819 are the same
 - [x] save osutopdata, pinnedscoresdata and firstsdata by user id instead of command id
