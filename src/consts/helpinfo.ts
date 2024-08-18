@@ -902,7 +902,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'map',
         description: 'Shows information about a beatmap',
-        usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp] [-ppcalc]',
+        usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp] [-ppcalc] [-bg]',
         slashusage: 'map [query] [id] [mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp]',
         linkusage: [
             'osu.ppy.sh/b/<id> +[mods]',
@@ -1041,7 +1041,17 @@ const osucmds: commandInfo[] = [
                 defaultValue: 'false',
                 examples: ['-pp', '-calc'],
                 commandTypes: ['message']
-            }
+            },
+            {
+                name: 'bg',
+                type: 'boolean',
+                required: false,
+                description: 'Show only the background images of the map',
+                options: ['N/A'],
+                defaultValue: 'false',
+                examples: ['-pp', '-calc'],
+                commandTypes: ['message']
+            },
         ]
     },
     {

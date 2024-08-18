@@ -8963,32 +8963,32 @@ export async function map(input: extypes.commandInput) {
             .setTitle('Beatmap images')
             .addFields([
                 {
-                    name: 'Thumbnail',
+                    name: 'Thumbnail (4:3)',
                     value: `${url.thumbnail}\n\n${url.thumbnailLarge}`,
                     inline: true
                 },
                 {
-                    name: 'Full',
+                    name: 'Full/Raw',
                     value: `${url.full}\n\n${url.raw}`,
                     inline: true
                 },
                 {
-                    name: 'Cover',
+                    name: 'Cover (18:5)',
                     value: `${url.cover}\n\n${url.cover2x}`,
                     inline: true
                 },
                 {
-                    name: 'Card',
+                    name: 'Card (20:7)',
                     value: `${url.card}\n\n${url.card2x}`,
                     inline: true
                 },
                 {
-                    name: 'List',
+                    name: 'List (1:1)',
                     value: `${url.list}\n\n${url.list2x}`,
                     inline: true
                 },
                 {
-                    name: 'Slimcover',
+                    name: 'Slimcover (16:3)',
                     value: `${url.slimcover}\n\n${url.slimcover2x}`,
                     inline: true
                 },

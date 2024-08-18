@@ -8,6 +8,10 @@
 
 ### Fixed
 - filtering debug files by server ID not actually returning the filtered list
+- `bg` arg missing from map's help command
+
+### Added
+- aspect ratios in map -bg
 
 ## [3.19.0] - 2024-08-16
 
