@@ -2,9 +2,13 @@
 
 # changelog
 
-## [WIP] - 2024-08-19
+## [WIP] - 2024-xx-xx
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+
+## [3.19.1] - 2024-08-19
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0249671851d3a48131075710074f35aaacf0690d)</br>
 
 ### Fixed
 - filtering debug files by server ID not actually returning the filtered list
