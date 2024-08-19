@@ -421,11 +421,13 @@ export async function convert(input: extypes.commandInput) {
                 input.args = temp.newArgs;
             }
             input.args = msgfunc.cleanArgs(input.args);
-            num = input.args[2] ?? input.args[0];
-            numAsStr = `${num}`;
-
-            // assume first numbered arg is val
-
+            for (const arg of input.args) {
+                if(!isNaN(+arg)){
+                    num = input.args[2] ?? input.args[0];
+                    numAsStr = `${num}`;
+                    break;
+                }
+            }
         }
             break;
 

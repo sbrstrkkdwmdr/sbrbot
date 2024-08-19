@@ -9,6 +9,7 @@
 ### Fixed
 - filtering debug files by server ID not actually returning the filtered list
 - `bg` arg missing from map's help command
+- convert using the `from` value for the `number` value (resulting in NaN output)
 
 ### Added
 - aspect ratios in map -bg
