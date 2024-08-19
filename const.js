@@ -885,7 +885,7 @@ const osucommands = [
     {
         name: 'map',
         description: 'Shows information about a beatmap',
-        usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp] [-ppcalc]',
+        usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp] [-ppcalc] [-bg]',
         slashusage: 'map [query] [id] [mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp]',
         linkusage: [
             'osu.ppy.sh/b/<id> +[mods]',
@@ -1024,7 +1024,17 @@ const osucommands = [
                 defaultValue: 'false',
                 examples: ['-pp', '-calc'],
                 commandTypes: ['message']
-            }
+            },
+            {
+                name: 'bg',
+                type: 'boolean',
+                required: false,
+                description: 'Show only the background images of the map',
+                options: ['N/A'],
+                defaultValue: 'false',
+                examples: ['-pp', '-calc'],
+                commandTypes: ['message']
+            },
         ]
     },
     {
@@ -1771,74 +1781,6 @@ const osucommands = [
         ]
     },
     {
-        name: 'render',
-        description: 'Renders the last requested beatmap. WIP',
-        usage: 'render [-(comboColour)] [+(mods)] [-start] [-end] [-speed]',
-        slashusage: 'render [comboColour] [mods] [start] [end] [speed]',
-        examples: [
-            {
-                text: 'PREFIXMSGrender',
-                descriptor: 'Renders the last requested beatmap'
-            },
-            {
-                text: 'PREFIXMSGrender -speed 1.5 -start 00:00:00 -end 00:00:30',
-                descriptor: 'Renders the beatmap at 1.5x speed, from 00:00:00 to 00:00:30'
-            },
-            {
-                text: 'PREFIXMSGrender +DT',
-                descriptor: 'Renders the beatmap with DT'
-            },
-            {
-                text: 'PREFIXMSGrender -nocolour',
-                descriptor: 'Renders the beatmap with white combo colours'
-            }
-        ],
-        aliases: ['rdr'],
-        options: [
-            {
-                name: 'comboColour',
-                type: 'boolean',
-                required: false,
-                description: 'Enables/disables combo colour. If disabled, the combo colour will be white',
-                options: ['nocolour', 'colour', 'true', 'false'],
-                defaultValue: 'colour',
-                examples: ['-nocolour', 'comboColour:true'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'mods',
-                type: 'string',
-                required: false,
-                description: `What mods to render with. ${mods}`,
-                options: ['N/A'],
-                defaultValue: 'NM',
-                examples: ['+HDHR', 'mods:HDDT'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'start',
-                type: 'integer',
-                required: false,
-                description: 'The start time of the render in seconds. Overrides [section]',
-                options: ['N/A'],
-                defaultValue: '0',
-                examples: ['-start 50.565', 'start:50'],
-                commandTypes: ['message', 'interaction']
-            },
-            {
-                name: 'end',
-                type: 'integer',
-                required: false,
-                description: 'The end time of the render in seconds. Overrides [section]',
-                options: ['N/A'],
-                defaultValue: 'The end of the beatmap',
-                examples: ['-end 234.2', 'end:10000'],
-                commandTypes: ['message', 'interaction']
-            }
-        ],
-
-    },
-    {
         name: 'saved',
         description: 'Shows a user\'s saved settings',
         usage: 'saved [user]',
@@ -1985,8 +1927,8 @@ const osucommands = [
     {
         name: 'scorestats',
         description: 'Shows the stats of a user\'s scores',
-        usage: 'scorestats [user] [-(type)] [-(mode)]',
-        slashusage: 'scorestats [user] [type] [mode]',
+        usage: 'scorestats [user] [-(type)] [-(mode)] [all]',
+        slashusage: 'scorestats [user] [type] [mode] [all]',
         examples: [
             {
                 text: 'PREFIXMSGscorestats @SaberStrike',
@@ -2020,6 +1962,16 @@ const osucommands = [
                 defaultValue: 'false',
                 examples: [],
                 commandTypes: ['button']
+            },
+            {
+                name: 'all',
+                type: 'boolean',
+                required: false,
+                description: 'Shows all statistics. May cause the command to lag as it needs to download all maps associated with each score.',
+                options: ['true', 'false'],
+                defaultValue: 'false',
+                examples: [],
+                commandTypes: ['message', 'interaction']
             }
         ]
     },
