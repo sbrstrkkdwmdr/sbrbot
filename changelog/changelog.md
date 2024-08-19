@@ -6,9 +6,9 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
-## [3.19.1] - 2024-08-19
+## [3.19.2] - 2024-08-19
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0249671851d3a48131075710074f35aaacf0690d)</br>
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/7860058fdabb12d9c046a78343bd9ecff6f2d617)</br>
 
 ### Fixed
 - info command crashing (was trying to find chartjs-to-image version)
