@@ -11,6 +11,13 @@
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0249671851d3a48131075710074f35aaacf0690d)</br>
 
 ### Fixed
+- info command crashing (was trying to find chartjs-to-image version)
+
+## [3.19.1] - 2024-08-19
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0249671851d3a48131075710074f35aaacf0690d)</br>
+
+### Fixed
 - filtering debug files by server ID not actually returning the filtered list
 - `bg` arg missing from map's help command
 - convert using the `from` value for the `number` value (resulting in NaN output)

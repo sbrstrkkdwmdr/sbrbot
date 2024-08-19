@@ -1602,7 +1602,7 @@ export async function info(input: extypes.commandInput) {
     rosu-pp: [${pkgjson.dependencies['rosu-pp-js'].replace('^', '')}](https://github.com/MaxOhn/rosu-pp-js)
     Axios: [${pkgjson.dependencies['axios'].replace('^', '')}](https://github.com/axios/axios)
     Sequelize: [${pkgjson.dependencies['sequelize'].replace('^', '')}](https://github.com/sequelize/sequelize/)
-    ChartJS-to-image: [${pkgjson.dependencies['chartjs-to-image'].replace('^', '')}](https://github.com/typpo/chartjs-to-image)
+    Chart.js: [${pkgjson.dependencies['chart.js'].replace('^', '')}](https://www.chartjs.org/)
     sqlite3: [${pkgjson.dependencies['sqlite3'].replace('^', '')}](https://github.com/TryGhost/node-sqlite3)
     `,
                     inline: true
