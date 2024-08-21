@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+## [WIP] - 2024-08-21
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/)</br>
+
 ### Fixed
 - missing interaction option handlers
 - `userinfo` slash command calling `user` (alias of `osu`)
