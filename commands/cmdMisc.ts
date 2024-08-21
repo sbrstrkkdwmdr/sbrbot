@@ -1,11 +1,12 @@
+import axios from 'axios';
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
-import fetch from 'node-fetch';
 import yts from 'yt-search';
 import { path, precomppath } from '../path.js';
 import * as calc from '../src/calc.js';
 import * as colours from '../src/consts/colours.js';
 import * as def from '../src/consts/defaults.js';
+import * as errors from '../src/consts/errors.js';
 import * as gifs from '../src/consts/gif.js';
 import * as insp from '../src/consts/inspire.js';
 import * as response from '../src/consts/responses.js';
@@ -58,16 +59,6 @@ export async function _8ball(input: extypes.commandInput) {
         options: [],
         config: input.config
     });
-
-    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-    //agree, disagree, maybe, other
-    const responses = [
-        'yes', 'yeahhh', 'yeah of course', 'absolutely',
-        'no', 'What? no', 'definitely maybe not', 'nah', 'nope',
-        '知らない', 'a strong maybe', '多分', 'come again?', 'ehhhh', '⠀', 'ask me later',
-        '💀', '🥺', 'bruhhh', 'splish splash your question is trash', 3, 'why would you ask me that? what is wrong with you man...', '😭'
-    ];
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
 
@@ -139,19 +130,8 @@ export async function coin(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
         }
-            //==============================================================================================================================================================================================
+            break;
 
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            break;
-        case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
-        }
-            break;
     }
     //==============================================================================================================================================================================================
     log.logCommand({
@@ -210,93 +190,6 @@ export async function coin(input: extypes.commandInput) {
         });
     }
 
-}
-
-export async function duckify(input: extypes.commandInput) {
-
-    let commanduser: Discord.User;
-    let string: string = '';
-
-    switch (input.commandType) {
-        case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
-            string = input.args.join(' ');
-        }
-            break;
-        //==============================================================================================================================================================================================
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
-            commanduser = input.obj.member.user;
-            string = input.obj.options.getString('text');
-        }
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            break;
-        case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
-        }
-            break;
-    }
-    //==============================================================================================================================================================================================
-
-    log.logCommand({
-        event: 'Command',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        commanduser,
-        object: input.obj,
-        commandName: 'duckify',
-        options: [{
-            name: 'text',
-            value: string
-        }],
-        config: input.config
-    });
-
-    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-    const frStr = string.split(' ');
-    const fin: string[] = [];
-    for (const string in frStr) {
-        fin.push('quack');
-    }
-
-    //SEND/EDIT MSG==============================================================================================================================================================================================
-    const finalMessage = await msgfunc.sendMessage({
-        commandType: input.commandType,
-        obj: input.obj,
-        args: {
-            content: fin.join(' ')
-        }
-    }, input.canReply);
-
-    if (finalMessage == true) {
-        log.logCommand({
-            event: 'Success',
-            commandName: 'Duckify',
-            commandType: input.commandType,
-            commandId: input.absoluteID,
-            object: input.obj,
-            config: input.config
-        });
-    } else {
-        log.logCommand({
-            event: 'Error',
-            commandName: 'Duckify',
-            commandType: input.commandType,
-            commandId: input.absoluteID,
-            object: input.obj,
-            customString: 'Message failed to send',
-            config: input.config
-        });
-    }
 }
 
 /**
@@ -465,16 +358,12 @@ export async function image(input: extypes.commandInput) {
 
     let commanduser;
     let query;
-    let iserr = false;
 
     switch (input.commandType) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
             query = input.args.join(' ');
-            if (!input.args[0]) {
-                iserr = true;
-            }
         }
             break;
 
@@ -518,10 +407,18 @@ export async function image(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const res = await fetch(
-        `https://customsearch.googleapis.com/customsearch/v1?q=${query}&cx=${input.config?.google?.engineId}&key=${input.config?.google?.apiKey}&searchType=image`
-    );
+    if (!query || query.length == 0) {
+        await msgfunc.sendMessage({
+            commandType: input.commandType,
+            obj: input.obj,
+            args: {
+                content: errors.uErr.arg.ms.replace('[ID]', 'query'),
+            }
+        }, input.canReply);
+        return;
+    }
 
+    const res = await axios.get(`https://customsearch.googleapis.com/customsearch/v1?q=${query}&cx=${input.config?.google?.engineId}&key=${input.config?.google?.apiKey}&searchType=image`);
 
     if (!res || res.status !== 200) {
         await msgfunc.sendMessage({
@@ -534,7 +431,7 @@ export async function image(input: extypes.commandInput) {
         return;
     }
 
-    const response: extypes.imagesearches = await res.json() as any;
+    const response: extypes.imagesearches = res.data;
     fs.writeFileSync(`debug/command-image=imageSearch=${input.obj.guildId}.json`, JSON.stringify(response, null, 4), 'utf-8');
 
     if (!response.items) {
@@ -551,7 +448,7 @@ export async function image(input: extypes.commandInput) {
     let resimg = '';
     let i: number;
     for (i = 0; i < response.items.length && i < 5; i++) {
-        resimg += `\n\n<${response.items[i].link}>`;
+        resimg += `\n[${response.items[i].title}](${response.items[i].link})`;
     }
 
     const imageEmbed = new Discord.EmbedBuilder()
@@ -604,24 +501,6 @@ export async function inspire(input: extypes.commandInput) {
     let commanduser: Discord.User;
     switch (input.commandType) {
         case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
-        }
-            break;
-        //==============================================================================================================================================================================================
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            break;
-        case 'link': {
             input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
         }
@@ -711,24 +590,6 @@ export async function janken(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.Message<any>);
             commanduser = input.obj.author;
             userchoice = input.args[0];
-        }
-            break;
-        //==============================================================================================================================================================================================
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            break;
-        case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
         }
             break;
     }
@@ -869,8 +730,6 @@ export function poll(input: extypes.commandInput) {
         }
             break;
 
-        //==============================================================================================================================================================================================
-
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
@@ -891,15 +750,6 @@ export function poll(input: extypes.commandInput) {
                 pollOpts = [pollOptsInit];
             }
         }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
     }
 
 
@@ -1043,22 +893,11 @@ export async function roll(input: extypes.commandInput) {
             }
         }
             break;
-
-        //==============================================================================================================================================================================================
-
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
             maxNum = input.obj.options.getNumber('max') ? Math.floor(input.obj.options.getNumber('max')) : 100;
             minNum = input.obj.options.getNumber('min') ? Math.floor(input.obj.options.getNumber('min')) : 0;
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
         }
             break;
     }
@@ -1146,8 +985,6 @@ export function say(input: extypes.commandInput) {
         }
             break;
 
-        //==============================================================================================================================================================================================
-
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
@@ -1157,15 +994,6 @@ export function say(input: extypes.commandInput) {
             }
             msg = input.obj.options.getString('message');
         }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
     }
 
 
@@ -1244,88 +1072,6 @@ export function say(input: extypes.commandInput) {
         object: input.obj,
         config: input.config
     });
-
-}
-
-/**
- * fuck you alex
- */
-export async function sex(input: extypes.commandInput) {
-    let commanduser: Discord.User;
-
-    switch (input.commandType) {
-        case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
-        }
-            break;
-        //==============================================================================================================================================================================================
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            break;
-        case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
-        }
-            break;
-    }
-    //==============================================================================================================================================================================================
-
-    log.logCommand({
-        event: 'Command',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        commanduser,
-        object: input.obj,
-        commandName: 'sex',
-        options: [],
-        config: input.config,
-    });
-
-    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-    const attachment = new Discord.AttachmentBuilder(`${precomppath}/files/img/smex.png`);
-    console.log(precomppath);
-    console.log(`${precomppath}/files/img/smex.png`);
-    console.log(path);
-    //SEND/EDIT MSG==============================================================================================================================================================================================
-    const finalMessage = await msgfunc.sendMessage({
-        commandType: input.commandType,
-        obj: input.obj,
-        args: {
-            files: [attachment]
-        }
-    }, input.canReply);
-
-    if (finalMessage == true) {
-        log.logCommand({
-            event: 'Success',
-            commandName: 'sex',
-            commandType: input.commandType,
-            commandId: input.absoluteID,
-            object: input.obj,
-            config: input.config,
-        });
-    } else {
-        log.logCommand({
-            event: 'Error',
-            commandName: 'sex',
-            commandType: input.commandType,
-            commandId: input.absoluteID,
-            object: input.obj,
-            customString: 'Message failed to send',
-            config: input.config,
-        });
-    }
 
 }
 

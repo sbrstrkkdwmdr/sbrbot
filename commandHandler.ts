@@ -185,7 +185,7 @@ function execCommand(input: extypes.input, command: string, commandType: extypes
         overrides['ex'] = 'list';
     }
 
-    const statCommands: string[] = ['uptime', 'version', 'v', 'server', 'website', 'timezone',];
+    const statCommands: string[] = ['uptime', 'version', 'v', 'server', 'website', 'timezone', 'dep', 'deps', 'dependencies'];
     if (statCommands.some(x => command == x)) {
         args = [command];
         command = 'info';
@@ -199,7 +199,7 @@ function execCommand(input: extypes.input, command: string, commandType: extypes
     return;
 }
 
-function execCommand_checker(input:extypes.input, command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[],
+function execCommand_checker(input: extypes.input, command: string, commandType: extypes.commandType, obj: Discord.Message | Discord.ChatInputCommandInteraction, overrides: extypes.overrides, button: null, absoluteID: number, currentDate: Date, userid: string | number, args: string[],
     canReply: boolean, config: extypes.config
 ) {
 
@@ -210,7 +210,7 @@ function execCommand_checker(input:extypes.input, command: string, commandType: 
         'convert', 'conv',
         'country',
         'help', 'commands', 'list', 'command', 'h',
-        'info',
+        'info', 'i',
         'invite',
         'ping',
         'remind', 'reminders', 'reminder',
@@ -229,7 +229,6 @@ function execCommand_checker(input:extypes.input, command: string, commandType: 
         'bws', 'badgeweightsystem', 'badgeweight', 'badgeweightseed', 'badgerank',
         'compare', 'common',
         'firsts', 'firstplaceranks', 'fpr', 'fp', '#1s', 'first', '#1', '1s',
-        'globals', 'osc', 'osustatscount',
         'leaderboard', 'maplb', 'mapleaderboard', 'ml',
         'lb',
         'map', 'm',
@@ -298,8 +297,6 @@ function execCommand_checker(input:extypes.input, command: string, commandType: 
     ];
 
     const disabled = [
-        'globals', 'osc', 'osustatscount',
-        'render', 'rdr'
     ];
 
     let allowed = true;
@@ -367,7 +364,7 @@ function execCommand_switch(input: extypes.input, command: string, commandType: 
         case 'help': case 'commands': case 'list': case 'command': case 'h':
             commands.help({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
             break;
-        case 'info':
+        case 'info': case 'i':
             commands.info({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, guildSettings: input.guildSettings });
             break;
         case 'invite':
@@ -402,11 +399,6 @@ function execCommand_switch(input: extypes.input, command: string, commandType: 
             startType(obj);
             commands.weather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
             break;
-        case 'tropicalweather': case 'ts':
-            startType(obj);
-            commands.tropicalWeather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
-            break;
-
         //misc
         case '8ball': case 'ask':
             misccmds._8ball({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
@@ -467,9 +459,6 @@ function execCommand_switch(input: extypes.input, command: string, commandType: 
         case 'roll': case 'rng': case 'randomnumber': case 'randomnumbergenerator': case 'pickanumber': case 'pickanum':
             misccmds.roll({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
             break;
-        case 'sex':
-            misccmds.sex({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
-            break;
         case 'ytsearch': case 'yt': case 'yts':
             startType(obj);
             misccmds.ytsearch({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
@@ -501,10 +490,6 @@ function execCommand_switch(input: extypes.input, command: string, commandType: 
         case 'firsts': case 'firstplaceranks': case 'fpr': case 'fp': case '#1s': case 'first': case '#1': case '1s':
             startType(obj);
             osucmds.firsts({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            break;
-        case 'globals': case 'osc': case 'osustatscount':
-            // startType(obj);
-            osucmds.globals({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             break;
         case 'leaderboard': case 'maplb': case 'mapleaderboard': case 'ml':
             startType(obj);
@@ -793,10 +778,6 @@ function execCommand_switch(input: extypes.input, command: string, commandType: 
         case 'scoreparse': case 'score': case 'sp':
             startType(obj);
             osucmds.scoreparse({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            break;
-        case 'scorepost':
-            // startType(obj);
-            osucmds.scorepost({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
             break;
         case 'scores': case 'c':
             startType(obj);

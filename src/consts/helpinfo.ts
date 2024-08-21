@@ -689,15 +689,6 @@ operators: *, /, +, -, (, )
             }
         ]
     },
-    {
-        name: 'tropicalweather',
-        description: 'Shows the currently active tropical storms.',
-        usage: 'tropicalweather',
-        slashusage: 'tropicalweather',
-        examples: [],
-        aliases: ['ts'],
-        options: []
-    },
 ];
 
 const osucmds: commandInfo[] = [
@@ -844,18 +835,6 @@ const osucmds: commandInfo[] = [
         aliases: ['firstplaceranks', 'first', 'fpr', 'fp', '#1s', '1s', '#1'],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
         options: scoreListCommandOptions
-    },
-    {
-        name: 'globals',
-        description: 'Shows the number of #1(#25, 50 etc..) scores a player has. ',
-        usage: 'globals [username]',
-        slashusage: 'globals [username]',
-        examples: [],
-        aliases: ['osc', 'osustatscount'],
-        buttons: [buttonsObjs.label.extras.user],
-        options: [
-            user,
-        ]
     },
     {
         name: 'lb',
@@ -1860,45 +1839,6 @@ const osucmds: commandInfo[] = [
         ]
     },
     {
-        name: 'scorepost',
-        description: 'Generates a thumbnail and title for a score',
-        usage: 'scorepost <id> [mode]',
-        examples: [
-            {
-                text: 'PREFIXMSGscorepost 1234567890',
-                descriptor: 'Generates a thumbnail and title for the osu! score with the id 1234567890'
-            },
-            {
-                text: 'PREFIXMSGscorepost 1234567890 mania',
-                descriptor: 'Generates a thumbnail and title for the osu! score with the id 1234567890'
-            },
-        ],
-        aliases: [],
-        buttons: [],
-        options: [
-            {
-                name: 'id',
-                type: 'integer',
-                required: true,
-                description: 'The id of the score',
-                options: ['N/A'],
-                defaultValue: 'null',
-                examples: ['id:727'],
-                commandTypes: ['message', 'interaction', 'link']
-            },
-            {
-                name: 'mode',
-                type: 'string',
-                required: 'false if message command, true if link',
-                description: 'The mode of the score',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-                examples: ['mode:osu'],
-                commandTypes: ['message', 'interaction', 'link']
-            }
-        ]
-    },
-    {
         name: 'scores',
         description: 'Shows the scores of a user on a beatmap',
         usage: 'scores [user] [id] [-page/-p] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
@@ -2580,17 +2520,17 @@ const admincmds: commandInfo[] = [
         ]
     },
     {
-        name: 'user',
+        name: 'userinfo',
         description: 'Returns information about a user',
-        usage: 'user [user]',
-        slashusage: 'user [user]',
+        usage: 'userinfo [user]',
+        slashusage: 'userinfo [user]',
         examples: [
             {
                 text: 'PREFIXMSGuser @SSoB',
                 descriptor: 'Returns information about the user @SSoB'
             },
             {
-                text: '/user user:SSoB',
+                text: '/userinfo user:SSoB',
                 descriptor: 'Returns information about the user SSoB'
             }
         ],
@@ -2676,7 +2616,7 @@ const admincmds: commandInfo[] = [
                 options: ['commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps', 'ls'],
                 defaultValue: 'list options',
                 examples: [''],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message',]
             }, {
                 name: 'arg',
                 type: 'integer/string',
@@ -2685,7 +2625,7 @@ const admincmds: commandInfo[] = [
                 options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
                 defaultValue: 'commandfile -> latest command\ncommandfiletype -> list options\nlogs -> current server\n clear -> temporary files only',
                 examples: [''],
-                commandTypes: ['message', 'interaction']
+                commandTypes: ['message',]
             }
         ]
     },

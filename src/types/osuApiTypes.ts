@@ -539,17 +539,21 @@ export type Score = {
     passed: boolean,
     perfect: boolean,
     pp: number,
+    preserve?: boolean,
+    processed?: boolean,
     rank_country?: string,
     rank_global?: string | number,
     rank: Rank,
     replay: boolean,
+    room_id?: number,
+    ruleset_id?: number,
     score: number,
     statistics: Statistics,
     type?: string,
     user_id: number,
     current_user_attributes?: {
         pin: boolean,
-    }
+    };
     user?: UserCompact,
     weight?: {
         percentage: number,

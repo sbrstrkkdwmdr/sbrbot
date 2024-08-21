@@ -300,9 +300,6 @@ export async function onInteraction(input: extypes.input,
         case 'weather':
             await commands.weather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
             break;
-        case 'tropicalweather':
-            await commands.tropicalWeather({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
-            break;
         case 'ytsearch':
             await misccmds.ytsearch({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata });
             break;

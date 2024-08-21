@@ -6,6 +6,26 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+### Fixed
+- missing interaction option handlers
+- `userinfo` slash command calling `user` (alias of `osu`)
+
+### Changed
+- changed some interaction commands 
+- switched `image` to use `axios`
+- links shown in `image` show hyperlinks with page title instead of raw URL
+
+### Added
+- `dependencies` arg for `info`
+- "{x}pp" to `whatif` description
+- separate description for `whatif` scores outside the top 100
+
+### Removed
+- `tropicalweather`
+- `globals`/`osc`
+- `scorepost`
+- `sex`
+
 ## [3.19.2] - 2024-08-19
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/7860058fdabb12d9c046a78343bd9ecff6f2d617)</br>

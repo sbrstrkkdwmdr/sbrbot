@@ -30,7 +30,6 @@ import * as msgfunc from './msgfunc.js';
  */
 export async function changelog(input: extypes.commandInput) {
     let commanduser;
-    const offset = 0;
     let version: string = null;
     let useNum: number = null;
     let isList = false;
@@ -45,7 +44,6 @@ export async function changelog(input: extypes.commandInput) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
             }
-
             version = input.args[0] ?? null;
         }
             break;
@@ -55,6 +53,7 @@ export async function changelog(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
+            version = input.obj.options.getString('version');
         }
 
             //==============================================================================================================================================================================================
@@ -445,11 +444,6 @@ export async function convert(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
     }
 
     //==============================================================================================================================================================================================
@@ -774,24 +768,6 @@ export async function country(input: extypes.commandInput) {
                 input.args.splice(input.args.indexOf('-translation'), 1);
             }
             search = input.args.join(' ') ?? null;
-        }
-            break;
-        //==============================================================================================================================================================================================
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            break;
-        case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
         }
             break;
     }
@@ -1476,19 +1452,6 @@ export async function info(input: extypes.commandInput) {
 
         //==============================================================================================================================================================================================
 
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
-            commanduser = input.obj.member.user;
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
     }
 
 
@@ -1586,6 +1549,18 @@ export async function info(input: extypes.commandInput) {
                     .setDescription(`${txt} (${offsetReadable})`);
             }
                 break;
+            case 'dependencies': case 'dep': case 'deps':
+                Embed.setTitle('Dependencies')
+                    .setDescription(`
+Typescript: [${pkgjson.dependencies['typescript'].replace('^', '')}](https://www.typescriptlang.org/)
+Discord.js: [${pkgjson.dependencies['discord.js'].replace('^', '')}](https://discord.js.org/#/docs)
+rosu-pp: [${pkgjson.dependencies['rosu-pp-js'].replace('^', '')}](https://github.com/MaxOhn/rosu-pp-js)
+Axios: [${pkgjson.dependencies['axios'].replace('^', '')}](https://github.com/axios/axios)
+Sequelize: [${pkgjson.dependencies['sequelize'].replace('^', '')}](https://github.com/sequelize/sequelize/)
+Chart.js: [${pkgjson.dependencies['chart.js'].replace('^', '')}](https://www.chartjs.org/)
+sqlite3: [${pkgjson.dependencies['sqlite3'].replace('^', '')}](https://github.com/TryGhost/node-sqlite3)
+`);
+                break;
             default:
                 Embed.setDescription(`\`${input.args[0]}\` is an invalid argument`);
                 break;
@@ -1675,24 +1650,6 @@ export async function invite(input: extypes.commandInput) {
             commanduser = input.obj.author;
         }
             break;
-        //==============================================================================================================================================================================================
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
-            commanduser = input.obj.member.user;
-        }
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
-        case 'link': {
-            input.obj = (input.obj as Discord.Message);
-            commanduser = input.obj.author;
-        }
-            break;
     }
     //==============================================================================================================================================================================================
 
@@ -1706,10 +1663,6 @@ export async function invite(input: extypes.commandInput) {
         options: [],
         config: input.config
     });
-
-    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-
-
 
     //SEND/EDIT MSG==============================================================================================================================================================================================
     const finalMessage = await msgfunc.sendMessage({
@@ -1775,11 +1728,6 @@ export async function math(input: extypes.commandInput) {
 
             //==============================================================================================================================================================================================
 
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
             break;
     }
 
@@ -1976,11 +1924,6 @@ export async function ping(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
     }
 
 
@@ -2034,22 +1977,6 @@ ${calc.toCapital(input.commandType)} edit latency: ${Math.abs(timeToEdit)}ms
                 editAsMsg: true,
             }
         }, input.canReply);
-        // switch (input.commandType) {
-        //     case 'message':
-        //         //@ts-expect-error 'edit' property does not exist on CommandInteraction
-        //         msg.edit({
-        //             embeds: [pingEmbed],
-        //             allowedMentions: { repliedUser: false },
-        //         });
-        //         break;
-        //     case 'interaction':
-        //         //@ts-expect-error 'editReply' property does not exist on Message
-        //         input.obj.editReply({
-        //             embeds: [pingEmbed],
-        //             allowedMentions: { repliedUser: false },
-        //         });
-        //         break;
-        // }
     })
         .catch();
 
@@ -2136,11 +2063,6 @@ export async function remind(input: extypes.commandInput & { reminders: extypes.
 
             //==============================================================================================================================================================================================
 
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
             break;
     }
 
@@ -2277,18 +2199,8 @@ export async function stats(input: extypes.commandInput) {
         }
             break;
 
-        //==============================================================================================================================================================================================
-
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
-            commanduser = input.obj.member.user;
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
             commanduser = input.obj.member.user;
         }
             break;
@@ -2334,7 +2246,6 @@ Guilds: ${totalguilds}
 Users: ${totalusers}
 Commands sent: ${commandssent}
 Prefix: \`${input.config.prefix}\`
-Commands: https://sbrstrkkdwmdr.github.io/sbrbot/commands
 Shards: ${input?.client?.shard?.count ?? 1}
 Current Shard:
 `
@@ -2726,6 +2637,7 @@ export async function weather(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
+            name = input.obj.options.getString('location');
         }
             //==============================================================================================================================================================================================
 
@@ -2736,11 +2648,6 @@ export async function weather(input: extypes.commandInput) {
             useComponents = input.obj.message.components as any[];
             const tempEmb = input.obj.message.embeds[0];
             name = tempEmb.footer.text.split('input: ')[1];
-        }
-            break;
-        case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
         }
             break;
     }
@@ -3028,7 +2935,7 @@ Max: ${dailyData.temperature_2m_max[2]}${weatherUnits.temperature_2m_max} (${cal
                 {
                     name: `Information`,
                     value: `
-${location.admin1 + ',' ?? ''} ${location.country} :flag_${location.country_code.toLowerCase()}:
+${location.admin1 ? location.admin1 + ',' : ''} ${location.country} :flag_${location.country_code.toLowerCase()}:
 Location: (${Math.abs(location.latitude) + latSide}, ${Math.abs(location.longitude) + lonSide})
 Time (local): ${localTime} 
 Time (UTC): ${utctime}
@@ -3123,352 +3030,6 @@ Dominant Direction: ${maxWindDir.short}${maxWindDir.emoji} (${dailyData.winddire
         log.logCommand({
             event: 'Error',
             commandName: 'Weather',
-            commandType: input.commandType,
-            commandId: input.absoluteID,
-            object: input.obj,
-            customString: 'Message failed to send',
-            config: input.config
-        });
-    }
-}
-
-export async function tropicalWeather(input: extypes.commandInput) {
-
-    let commanduser: Discord.User;
-    let system: string;
-    let type: 'active' | 'storm' | 'features' = 'active';
-
-    switch (input.commandType) {
-        case 'message': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
-        }
-            break;
-        //==============================================================================================================================================================================================
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            break;
-        case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
-        }
-            break;
-    }
-    if (input.overrides != null) {
-        system = input.overrides.id as string;
-        type = 'storm';
-    }
-    //==============================================================================================================================================================================================
-
-    log.logCommand({
-        event: 'Command',
-        commandType: input.commandType,
-        commandId: input.absoluteID,
-        commanduser,
-        object: input.obj,
-        commandName: 'TropicalWeather',
-        options: [
-            {
-                name: 'Type',
-                value: type
-            },
-            {
-                name: 'System',
-                value: system
-            },
-        ],
-        config: input.config
-    });
-
-    //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
-    let weatherData: othertypes.tropicalData;
-    if (input.commandType == 'interaction' && input?.overrides?.commandAs == null) {
-        await msgfunc.sendMessage({
-            commandType: input.commandType,
-            obj: input.obj,
-            args: {
-                content: `Loading...`,
-            }
-        }, input.canReply);
-    }
-    if (func.findFile(input.absoluteID, `storm-${system}-tropicalWeatherData`) &&
-        !('error' in func.findFile(input.absoluteID, `storm-${system}-tropicalWeatherData`)) &&
-        input.button != 'Refresh'
-    ) {
-        weatherData = func.findFile(input.absoluteID, `storm-${system}-tropicalWeatherData`);
-    } else {
-        weatherData = await func.getTropical(input.config, type, system);
-    }
-    func.storeFile(weatherData, input.absoluteID, `${type}${type == 'storm' ? '-' + (weatherData?.data as othertypes.tsData)?.id : ''}-tropicalWeatherData`);
-    osufunc.debug(weatherData, 'command', 'tropicalweather', input.obj.guildId, 'weatherdata');
-    const embed = new Discord.EmbedBuilder();
-    let useComponents = [];
-    let useAttach = [];
-    const worldmapPath = `${precomppath}/files/img/map/base.png`;
-    let exInf = '';
-    switch (type) {
-        case 'active': default: {
-            await picker();
-            embed.setTitle(`Currently Active Tropical Storms`);
-            //create image
-            let frimg: Discord.AttachmentBuilder = new Discord.AttachmentBuilder(worldmapPath);
-            const xLen = 1437;
-            const yLen = 720;
-            const xFactor = xLen / 180 / 2;
-            const yFactor = yLen / 90 / 2;
-            const aaaeee = await new Promise((resolve, reject) => {
-                try {
-                    jimp.default.read(worldmapPath).then(async (image) => {
-                        image.brightness(-0.75);
-                        if ((weatherData?.data as othertypes.tsShort[]).length == 0) {
-                            image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_64_WHITE), (xLen / 2), (yLen / 2), {
-                                text: `NO STORMS FOUND`,
-                                alignmentX: jimp.HORIZONTAL_ALIGN_CENTER
-                            },
-                                720, 50
-                            );
-                            resolve(true);
-                        } else {
-                            exInf = `\nStorm locations shown are approximate`;
-                            for (const storm of weatherData?.data as othertypes.tsShort[]) {
-                                let tempData: othertypes.tropicalData;
-                                if (func.findFile(`${storm.id}`, 'storm-tropicalweatherdata') &&
-                                    !('error' in func.findFile(`${storm.id}`, 'storm-tropicalweatherdata')) &&
-                                    input.button != 'Refresh'
-                                ) {
-                                    tempData = func.findFile(`${storm.id}`, 'storm-tropicalweatherdata');
-                                } else {
-                                    tempData = await func.getTropical(input.config, 'storm', storm.id);
-                                }
-                                const inTempData = tempData.data as othertypes.tsData;
-                                func.storeFile((tempData as othertypes.tsData), `${(inTempData as othertypes.tsData).id}`, `storm-tropicalWeatherData`);
-                                const curx = inTempData.position[0];
-                                const cury = inTempData.position[1];
-
-                                image.print(await jimp.default.loadFont(jimp.default.FONT_SANS_16_WHITE), (xLen / 2) + (curx * xFactor), (yLen / 2) - (cury * yFactor), {
-                                    text: `X\n${storm.id.slice(4, inTempData.id.length)}`,
-                                    alignmentX: jimp.HORIZONTAL_ALIGN_CENTER,
-                                    alignmentY: jimp.VERTICAL_ALIGN_MIDDLE,
-                                },
-                                    720, 50
-                                );
-                            }
-                        }
-                        await image.writeAsync(`${path}/cache/commandData/genStormMap-${input.absoluteID}.png`);
-                        resolve(true);
-                    });
-                } catch (err) {
-                    console.log(err);
-                    resolve(false);
-                }
-            });
-            if (aaaeee === true) {
-                try {
-                    frimg = new Discord.AttachmentBuilder(`${path}/cache/commandData/genStormMap-${input.absoluteID}.png`);
-                    useAttach = [frimg];
-                    embed.setImage(`attachment://genStormMap-${input.absoluteID}.png`);
-                } catch (err) {
-                    useAttach = [];
-                }
-            }
-        }
-            break;
-        case 'storm': {
-            await embeddify();
-        } break;
-    }
-
-    async function picker() {
-        const data = weatherData?.data as othertypes.tsShort[];
-        if (data.length > 0) {
-            const Tnames: string[] = [];
-            for (const x of (weatherData?.data as othertypes.tsShort[])) {
-                let first = x.name;
-                let second;
-                // async function doNames(x) {
-                //     return new Promise(async (resolve, reject) => {
-                //         const ifirst = calc.toCapital(x.name);
-                //         let tempData: othertypes.tropicalData;
-                //         if (func.findFile(`${x.id}`, 'storm-tropicalweatherdata') &&
-                //             !('error' in func.findFile(`${x.id}`, 'storm-tropicalweatherdata')) &&
-                //             input.button != 'Refresh'
-                //         ) {
-                //             tempData = func.findFile(`${x.id}`, 'storm-tropicalweatherdata');
-                //         } else {
-                //             tempData = await func.getTropical(input.config, 'storm', x.id);
-                //         }
-                //         const inTempData = tempData.data as othertypes.tsData;
-                //         func.storeFile((tempData as othertypes.tsData), `${(inTempData as othertypes.tsData).id}`, `storm-tropicalweatherdata`);
-                //         if (inTempData?.category) {
-                //             second = inTempData?.category.toUpperCase() + ' ' + ifirst;
-                //         }
-                //         resolve(true);
-                //     });
-                // }
-                const l = await new Promise(async (resolve, reject) => {
-                    const ifirst = calc.toCapital(x.name);
-                    let tempData: othertypes.tropicalData;
-                    if (func.findFile(`${x.id}`, 'storm-tropicalweatherdata') &&
-                        !('error' in func.findFile(`${x.id}`, 'storm-tropicalweatherdata')) &&
-                        input.button != 'Refresh'
-                    ) {
-                        tempData = func.findFile(`${x.id}`, 'storm-tropicalweatherdata');
-                    } else {
-                        tempData = await func.getTropical(input.config, 'storm', x.id);
-                    }
-                    const inTempData = tempData.data as othertypes.tsData;
-                    osufunc.debug(inTempData, 'command', 'tropicalweather', input.obj.guildId, 'stormdata');
-                    func.storeFile((tempData as othertypes.tsData), `${(inTempData as othertypes.tsData).id}`, `storm-tropicalweatherdata`);
-                    if (inTempData?.category) {
-                        second = inTempData?.category.toUpperCase() + ' ' + ifirst;
-                    }
-                    resolve(true);
-                });
-                if (calc.checkIsNumber(x.name)) {
-                    first = x.id.slice(4, x.id.length);
-                    second = x.id.slice(4, x.id.length);
-                }
-                else if (!x.id.includes(x.name)) {
-                    first += ` (${x.id.slice(4, x.id.length)})`;
-                    second += ` (${x.id.slice(4, x.id.length)})`;
-                }
-                if (l === true) {
-                    Tnames.push(second);
-                } else {
-                    Tnames.push(first);
-                }
-            }
-            const tempTxt = (Tnames.length > 0 ? Tnames.join(', ') : 'err') + exInf;
-            embed.setDescription(tempTxt);
-            const inputModal = new Discord.StringSelectMenuBuilder()
-                .setCustomId(`${mainconst.version}-Select-tropicalweather-${commanduser.id}-${input.absoluteID}`)
-                .setPlaceholder('Select a storm');
-
-            for (let i = 0; i < data.length && i < 25; i++) {
-                const current = data[i];
-
-                const altName = current.id.slice(4, current.id.length);
-                const fullname = calc.checkIsNumber(current.name) ? altName : current.name;
-
-                inputModal.addOptions(
-                    new Discord.StringSelectMenuOptionBuilder()
-                        .setLabel(`#${i + 1} | ${fullname}`)
-                        .setDescription(altName)
-                        .setValue(`${current.id}`)
-                );
-            }
-            const buttons = new Discord.ActionRowBuilder();
-            buttons.addComponents(inputModal);
-            useComponents = [buttons];
-        } else {
-            embed.setDescription('No currently active tropical storms found.');
-        }
-
-    }
-
-    async function embeddify() {
-        const data = weatherData?.data as othertypes.tsData;
-        const catData = func.tsCatToString(data.category.toLowerCase());
-        const basin = func.tsBasinToString(data.basin);
-        const basinType = func.tsBasinToType(data.basin);
-        const hurname = basinType == 'Cyclone' ?
-            catData.name_auid : basinType == 'Typhoon' ? catData.name_asia :
-                catData.name;
-        const windDir = func.windToDirection(data?.movement?.bearing ?? 0, true);
-        const altName = data.id.slice(4, data.id.length);
-        const fullname = calc.checkIsNumber(data.name) ? altName :
-            `${data.name} (${altName})`;
-
-        const pcatData = func.tsCatToString(data.max_observed_category.toLowerCase());
-        const phurname = basinType == 'Cyclone' ?
-            pcatData.name_auid : basinType == 'Typhoon' ? pcatData.name_asia :
-                pcatData.name;
-
-        const localtype = '';
-
-        const tempPos = [];
-        if (data.position[0] > 1) {
-            tempPos.push('E');
-        } else {
-            tempPos.push('W');
-        }
-        if (data.position[1] > 1) {
-            tempPos.push('N');
-        } else {
-            tempPos.push('S');
-        }
-        const pos = `${Math.abs(data.position[0])}${tempPos[0]}, ${Math.abs(data.position[1])}${tempPos[1]}`;
-        // switch (basin) {
-        //     case 'North Atlantic': case 'Northeast Pacific': case 'Central Pacific':
-        //         localtype = func.tsNameSSHWS(data.movement.KPH) + ' (SSHWS)';
-        //         break;
-        //     case 'Northwest Pacific':
-        //         localtype = func.tsNameJMA(data.movement.KPH) + ' (JMA)';
-        //         break;
-        //     case 'Southwest Pacific':
-        //         localtype = func.tsNameATCIS(data.movement.KPH) + ' (Australian scale)';
-        //         break;
-        //     case 'South Indian Ocean':
-        //         localtype = func.tsNameMFR(data.movement.KPH) + '( Météo-France)';
-        //         break;
-        //     case 'North Indian Ocean': case 'Arabian Sea': case 'Bay of Bengal':
-        //         localtype = func.tsNameIMD(data.movement.KPH) + ' (IMD)';
-        //         break;
-        // }
-
-        embed.setTitle(`${hurname} ${fullname}`)
-            .setDescription(`Location: ${basin} Basin (${pos})
-Direction: ${windDir.emoji} ${data?.movement?.KPH ?? 'NaN '}km/h ${data?.movement?.MPH ?? 'NaN '}mi/h ${data?.movement?.KTS ?? 'NaN '}kt/s
-Peak: ${phurname}
-`)
-            .setImage(`https://www.force-13.com/floaters/${altName.replace('N', 'L')}/imagery/rb-animated.gif`)
-            .setURL(`https://www.force-13.com/satellite?flt=${altName.replace('N', 'L')}`)
-            //-animated.gif
-            /**
-             * types
-             * visible: vis
-             * true colour: true
-             * shortwave ir: 
-             * rgb:
-             * 
-             */
-            .setColor(colourfunc.hexToDec(`#${catData.colour}`));
-    }
-
-    //SEND/EDIT MSG==============================================================================================================================================================================================
-    const finalMessage = await msgfunc.sendMessage({
-        commandType: input.commandType,
-        obj: input.obj,
-        args: {
-            embeds: [embed],
-            components: useComponents,
-            files: useAttach,
-            edit: true,
-        }
-    }, input.canReply);
-
-    if (finalMessage == true) {
-        log.logCommand({
-            event: 'Success',
-            commandName: 'TropicalWeather',
-            commandType: input.commandType,
-            commandId: input.absoluteID,
-            object: input.obj,
-            config: input.config
-        });
-    } else {
-        log.logCommand({
-            event: 'Error',
-            commandName: 'TropicalWeather',
             commandType: input.commandType,
             commandId: input.absoluteID,
             object: input.obj,

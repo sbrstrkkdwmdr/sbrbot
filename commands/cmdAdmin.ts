@@ -55,11 +55,6 @@ export async function checkperms(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
     }
 
 
@@ -163,20 +158,6 @@ export async function crash(input: extypes.commandInput) {
             break;
 
         //==============================================================================================================================================================================================
-
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
-            commanduser = input.obj.member.user;
-        }
-
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
     }
 
 
@@ -224,26 +205,13 @@ export async function get(input: extypes.commandInput) {
             searchid = input.args[1] ?? null;
         }
             break;
-        //==============================================================================================================================================================================================
+
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
             type = input.obj.options.get('type') as unknown as typex;
             searchid = input.obj.options.get('id');
         }
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            break;
-        case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
-        }
-            break;
     }
     //==============================================================================================================================================================================================
 
@@ -411,11 +379,6 @@ export async function getUser(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
     }
 
 
@@ -573,11 +536,6 @@ export async function getUserAv(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
     }
 
 
@@ -690,19 +648,6 @@ export async function debug(input: extypes.commandInput) {
 
             input.args.shift();
             inputstr = input.args?.join(' ');
-        }
-            break;
-        //==============================================================================================================================================================================================
-        case 'interaction': {
-            input.obj = (input.obj as Discord.ChatInputCommandInteraction);
-            commanduser = input.obj.member.user;
-        }
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
         }
             break;
     }
@@ -1454,11 +1399,6 @@ export async function find(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
     }
 
 
@@ -1804,11 +1744,6 @@ export async function leaveguild(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
     }
 
 
@@ -1907,11 +1842,6 @@ export async function prefix(input: extypes.commandInput) {
             //==============================================================================================================================================================================================
 
             break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
-            break;
     }
 
 
@@ -1941,7 +1871,7 @@ export async function prefix(input: extypes.commandInput) {
         replymsg = 'Error: Guild settings not found';
     } else {
         //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
-         if (typeof newPrefix != 'string' || newPrefix.length < 1 || !(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id, input.config))) {
+        if (typeof newPrefix != 'string' || newPrefix.length < 1 || !(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id, input.config))) {
             replymsg = `The current prefix is \`${curGuildSettings.prefix}\``;
         } else {
             curGuildSettings.update({
@@ -2027,18 +1957,6 @@ export async function purge(input: extypes.commandInput) {
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction<any>);
             commanduser = input.obj.member.user;
-        }
-            //==============================================================================================================================================================================================
-
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction<any>);
-            commanduser = input.obj.member.user;
-        }
-            break;
-        case 'link': {
-            input.obj = (input.obj as Discord.Message<any>);
-            commanduser = input.obj.author;
         }
             break;
     }
@@ -2193,11 +2111,6 @@ export async function servers(input: extypes.commandInput) {
 
             //==============================================================================================================================================================================================
 
-            break;
-        case 'button': {
-            input.obj = (input.obj as Discord.ButtonInteraction);
-            commanduser = input.obj.member.user;
-        }
             break;
     }
 

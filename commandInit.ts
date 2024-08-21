@@ -67,11 +67,6 @@ export default (input: extypes.input) => {
             ]
         },
         {
-            name: 'info',
-            description: 'Displays info about the bot',
-            dmPermission: false,
-        },
-        {
             name: 'math',
             description: 'Solves a simple math problem',
             dmPermission: false,
@@ -158,12 +153,6 @@ export default (input: extypes.input) => {
                 }
             ]
         },
-        {
-            name: 'tropicalweather',
-            description: 'displays a list of all currently active tropical storms',
-            dmPermission: false,
-        },
-
         //below are osu related commands
         {
             name: 'bws',
@@ -1275,7 +1264,7 @@ export default (input: extypes.input) => {
         //     ]
         // },
         {
-            name: 'user',
+            name: 'userinfo',
             description: 'Returns information about a user',
             dmPermission: false,
             options: [
