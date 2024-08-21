@@ -8,7 +8,7 @@
 
 ## [WIP] - 2024-08-21
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/)</br>
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0b4f8ae52e2c0990de01b9a23d4df30e9dbbcc30)</br>
 
 ### Fixed
 - missing interaction option handlers
