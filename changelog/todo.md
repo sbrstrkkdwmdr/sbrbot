@@ -2,6 +2,7 @@
 
 newest-oldest
 
+- [ ] https://stackoverflow.com/questions/59655314/how-to-generate-an-image-from-dynamically-created-html-in-nodejs
 - [x] convert now returns NaN
 - [ ] new graph method doesnt have a background
 - [ ] scoreparse not working with new score ids on website -> https://osu.ppy.sh/scores/osu/4308973497 and https://osu.ppy.sh/scores/1637688819 are the same
