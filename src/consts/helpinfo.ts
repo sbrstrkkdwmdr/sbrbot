@@ -1404,15 +1404,15 @@ const osucmds: commandInfo[] = [
         slashusage: 'ppcalc [query] [id] [mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp]',
         examples: [
             {
-                text: 'ppcalc +EZHTFL',
+                text: 'PREFIXMSGppcalc +EZHTFL',
                 descriptor: 'Calculates the performance for the previous map with easy, halftime and flashlight'
             },
             {
-                text: 'ppcalc 4204 -speed 2 -cs 10',
+                text: 'PREFIXMSGppcalc 4204 -speed 2 -cs 10',
                 descriptor: 'Calculates beatmap 4204 at 2x speed and circle size 10'
             },
             {
-                text: 'ppcalc -bpm 220 -ar 11 -od 11 -cs 5.2',
+                text: 'PREFIXMSGppcalc -bpm 220 -ar 11 -od 11 -cs 5.2',
                 descriptor: 'Calculates the previous beatmap at 220bpm, AR11 OD11 and CS5.2'
             }
         ],
