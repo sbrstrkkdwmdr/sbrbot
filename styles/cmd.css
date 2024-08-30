@@ -3,7 +3,7 @@ html {
 }
 
 .spaceForNav {
-    padding-bottom: 100px;
+    /* padding-bottom: 100px; */
 }
 
 .titlenav {
@@ -49,8 +49,10 @@ li a:hover {
 }
 
 .divCommandDetails {
-    margin-left: 5%;
-    margin-right: 5%;
+    img {
+        width: 100px;
+        height: 100px;
+    }
 }
 
 summary {
@@ -87,22 +89,49 @@ pre {
 
 .exdesc {
     font-family: 'Ubuntu';
-    width: 5%;
     word-wrap: break-word;
 }
 
 .cmdexample {
     border: rgba(0, 0, 0, 0.50);
-    table-layout: fixed;
+
+    td:nth-child(1) {
+        width: 50%;
+    }
+}
+
+.fullClear {
+    margin-bottom: 75px;
+    clear: both;
 }
 
 .table {
-    background-color: rgb(66, 72, 75);
+    background-color: rgb(45, 49, 51);
     padding: 2%;
     border-radius: 5px;
     font-size: 16px;
     table-layout: fixed;
     width: 100%;
+    td:nth-child(1) {
+        font-weight: 1000;
+        text-align: center;
+        color: #ff9100;
+    }
+    td {
+        border: 1px solid #d8d8d8;
+        padding: 10px;
+        width: 5%;
+        word-wrap: normal;
+        border-radius: 2px;
+        font-family: 'Consolas';
+        font-weight: 500;
+    }
+
+    tr:first-child td {
+        font-weight: 1000;
+        text-align: center;
+        color: #ffff00
+    }
 }
 
 .tableBG {
@@ -205,4 +234,50 @@ th {
 
 .command details[open]:hover {
     background-color: rgba(75, 75, 75, 0.5);
+}
+
+.commandButton {
+    background-color: rgba(49, 49, 49, 0.5);
+    color: white;
+    margin: 10px 3%;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 99;
+}
+
+.commandButton:hover {
+    background-color: #4c93af80;
+    color: #4c93af;
+}
+
+.commandSelected {
+    background-color: #4caf5080;
+    color: #4CAF50;
+}
+
+#commandDisplay {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas: ". .";
+    overflow-y: hidden;
+}
+
+#commandSelector {
+    /* float: left; */
+    max-width: 50%;
+    width: max-content;
+    clear: none;
+    padding-left: 15px;
+    overflow: auto;
+}
+
+#commandDetails {
+    display: block;
+    clear: none;
+    float: right;
+    padding: 2%;
+    overflow: auto;
 }
