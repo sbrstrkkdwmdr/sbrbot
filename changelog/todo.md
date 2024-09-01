@@ -2,10 +2,11 @@
 
 newest-oldest
 
+- [ ] support userlinks in commands that take user as a param
 - [ ] https://stackoverflow.com/questions/59655314/how-to-generate-an-image-from-dynamically-created-html-in-nodejs
 - [x] convert now returns NaN
 - [ ] new graph method doesnt have a background
-- [ ] scoreparse not working with new score ids on website -> https://osu.ppy.sh/scores/osu/4308973497 and https://osu.ppy.sh/scores/1637688819 are the same
+- [ ] scoreparse not working with new score ids on website -> https://osu.ppy.sh/scores/osu/4308973497 and https://osu.ppy.sh/scores/1637688819 are the same but only the first link works
 - [x] save osutopdata, pinnedscoresdata and firstsdata by user id instead of command id
 - [x] re-order nochokes scores
 - [x] remove (if FC) from nochokes
