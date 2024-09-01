@@ -1176,8 +1176,8 @@ const osucommands = [
         usage: 'osu [user] [-graph/-g] [-detailed/-d] [-(mode)]',
         slashusage: 'osu [user] [detailed] [mode]',
         linkusage: [
-            'osu.ppy.sh/u/[user]',
-            'osu.ppy.sh/users/[user][/(mode)]',
+            'osu.ppy.sh/u/<user>',
+            'osu.ppy.sh/users/<user>#[(mode)]',
         ],
         aliases: ['o', 'profile', 'user', 'taiko', 'drums', 'fruits', 'ctb', 'catch', 'mania'],
         examples: [
@@ -1777,7 +1777,7 @@ const osucommands = [
     },
     {
         name: 'scoreparse',
-        description: 'Returns information about a score',
+        description: 'Returns information about a score. Doesn\'t work with new score ID system.',
         usage: 'scoreparse <id> [mode]',
         linkusage: [
             'osu.ppy.sh/scores/<mode>/<id>'
