@@ -3,6 +3,7 @@ html {
 }
 
 .spaceForNav {
+    padding-top: 120px;
     /* padding-bottom: 100px; */
 }
 
@@ -14,28 +15,11 @@ html {
     font-size: medium;
 }
 
-.ulcmdnav {
-    list-style-type: none;
-    /* top: 40px; */
-    max-width: 100%;
-    width: 100%;
-    /* margin-right: 0; */
-    /* margin-left: 0; */
-    /* padding: 0; */
-    /* background-color: #000000; */
-    display: flex;
-    justify-content: center;
-
-}
-
-li a:hover {
-    background-color: #4CAF50;
-}
-
 .divSubheading {
     display: flex;
     flex: content;
     justify-content: center;
+    font-size: 24px;
 }
 
 .divCommandDetailsList {
@@ -135,7 +119,7 @@ pre {
 }
 
 .tableBG {
-    background-color: rgba(50, 50, 50, 1);
+    background-color: rgba(50, 50, 50, 0.5);
     margin-right: 25px;
     padding-top: 10px;
     padding-bottom: 10px;

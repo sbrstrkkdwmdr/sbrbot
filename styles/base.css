@@ -30,13 +30,13 @@ body {
     justify-content: center;
 }
 
-.nBar {
+/* .nBar {
     background-color: rgb(51, 68, 101);
     color: #cccccc;
     overflow: hidden;
     box-shadow: 3px 6px 15px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
-}
+} */
 
 .codeblock {
     float: inline-start;
@@ -71,13 +71,13 @@ li {
 }
 
 li a {
-    display: block;
+    /* display: block;
     color: white;
     text-align: center;
     padding: 16px;
     text-decoration: none;
     border-radius: 5px;
-    margin: 0% 0%
+    margin: 0% 0% */
 }
 
 .titlenav {
@@ -86,8 +86,4 @@ li a {
 
 .cmdnav {
     font-size: medium;
-}
-
-li a:hover {
-    background-color: #4CAF50;
 }

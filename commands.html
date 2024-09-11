@@ -2,6 +2,7 @@
 <title>SSoB | bot</title>
 <link rel="stylesheet" href="styles/base.css">
 <link rel="stylesheet" href="styles/cmd.css">
+<link rel="stylesheet" href="styles/nav.css">
 <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Russo+One&family=Ubuntu&display=swap"
     rel="stylesheet">
 <meta charset="utf-8" />
@@ -15,31 +16,29 @@
     <meta property="og:url" content="https://sbrstrkkdwmdr.github.io/sbrbot/commands" />
 </head>
 <!--nav-->
-<nav class="nBar">
-    <div>
-        <ul class="ultitle">
-            <li><a href="index.html" class="titlenav">Home</a></li>
-            <li><a href="commands.html" class="titlenav">Commands</a></li>
-            <li><a href="https://sbrstrkkdwmdr.github.io/" target="_blank" class="titlenav">Contact</a></li>
-        </ul>
-    </div>
-    <div>
-        <ul class="ulcmdnav">
-            <li><a href="#general" class="cmdnav">General Commands</a></li>
-            <li><a href="#osu" class="cmdnav">osu! Commands</a></li>
-            <li><a href="#misc" class="cmdnav">Misc Commands</a></li>
-            <li><a href="#admin" class="cmdnav">Admin Commands</a></li>
-            <li><a href="#buttons" class="cmdnav">Buttons</a></li>
-        </ul>
-    </div>
-</nav>
 
 <body>
-    <div class="title">
-        <center>
-            <h1> Commands </h1>
-        </center>
-    </div>
+    <header>
+        <h1>Command list</h1>
+    </header>
+    <nav class="nBar">
+        <div>
+            <ul class="ulcmdnav">
+                <li><a href="./index.html" class="cmdnav">Home</a></li>
+                <li><a href="./commands.html" class="cmdnav activeNavLink">Command list</a></li>
+                <li><a href="https://sbrstrkkdwmdr.github.io/" class="cmdnav">Contact</a></li>
+            </ul>
+        </div>
+        <div>
+            <ul class="ulcmdnav">
+                <li><a href="#general" class="cmdnav">General Commands</a></li>
+                <li><a href="#osu" class="cmdnav">osu! Commands</a></li>
+                <li><a href="#misc" class="cmdnav">Misc Commands</a></li>
+                <li><a href="#admin" class="cmdnav">Admin Commands</a></li>
+                <li><a href="#buttons" class="cmdnav">Buttons</a></li>
+            </ul>
+        </div>
+    </nav>
     <div class="bodytype">
         <div class="divCommandDetailsList">
             <center>
@@ -49,8 +48,8 @@
                 <br><br>
                 options shown as `(-name)` should be used as follows: `-arg`.<br>
                 ie. `(-mode)` can be either `-osu`, `-taiko`, `-ctb` or `-mania`.
-            <br><br>
-                press <a href="commandtypes.html">here</a> for an explanation on option types
+                <br><br>
+                press <a href="commandtypes.html" class="">here</a> for an explanation on option types
             </center>
         </div>
         <div id="commandDisplay">
@@ -105,10 +104,10 @@
             <div id="commandDetails">
 
             </div>
-        </dvi>
-    </div>
-    <div style="margin-top: 900px;">
-    </div>
+            </dvi>
+        </div>
+        <div style="margin-top: 900px;">
+        </div>
 
     </div>
 
