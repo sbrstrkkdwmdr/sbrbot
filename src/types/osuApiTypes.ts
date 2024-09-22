@@ -567,7 +567,7 @@ export type SpotLight = {
     end_date: Timestamp,
     id: number,
     mode_specific: boolean,
-    participant_coount?: number | null,
+    participant_count?: number | null,
     name: string,
     start_date: Timestamp,
     type: string,
