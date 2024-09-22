@@ -339,10 +339,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
 
     osufunc.userStatsCache([osudata], input.statsCache, osufunc.modeValidator(osudata.playmode), 'User');
 
-    let badgecount = 0;
-    for (const badge of osudata.badges) {
-        badgecount++;
-    }
+    let badgecount = osudata?.badges?.length ?? 0;
     function bwsF(badgenum: number) {
         return badgenum > 0 ?
             osudata.statistics.global_rank ** (0.9937 ** (badgenum ** 2)) :
