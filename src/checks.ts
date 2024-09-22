@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import fetch from 'node-fetch';
 // const config = JSON.parse(fs.readFileSync('../config/config.json', 'utf-8'));
+import * as Discord from 'discord.js';
 import * as extypes from './types/extratypes.js';
-import Discord = require('discord.js');
 
 export function checkConfig(config: object): extypes.config {
     console.log(`

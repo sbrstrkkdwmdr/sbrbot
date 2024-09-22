@@ -14,10 +14,9 @@ let imgParseCooldown = false;
 
 export async function onMessage(
     input: extypes.input,
-    message: Discord.Message<boolean>
+    message: Discord.Message
 ) {
     let canReply = true;
-    //@ts-expect-error message<boolean> is not assignable to message<boolean> (why)
     if (!checks.botHasPerms(message, input.client, ['ReadMessageHistory'])) {
         canReply = false;
     }

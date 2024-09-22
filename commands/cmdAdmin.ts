@@ -82,7 +82,6 @@ export async function checkperms(input: extypes.commandInput) {
         searchUser = commanduser;
     }
 
-    //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
     if (!(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id, input.config))) {
         searchUser = commanduser;
     }
@@ -1510,7 +1509,6 @@ Flags/badges: ${func.userbitflagsToEmoji(userfind.user?.flags)}
             break;
         case 'guild':
             {
-                //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
                 if (!(cmdchecks.isOwner(commanduser.id, input.config) || (id == input.obj.guildId && cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
@@ -1545,7 +1543,6 @@ Stickers: ${guildfind.stickers.cache.size}
             break;
         case 'channel':
             {
-                //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
                 if (!(cmdchecks.isOwner(commanduser.id, input.config) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
@@ -1590,7 +1587,6 @@ Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is onl
             break;
         case 'role':
             {
-                //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
                 if (!(cmdchecks.isOwner(commanduser.id, input.config) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
@@ -1773,7 +1769,6 @@ export async function leaveguild(input: extypes.commandInput) {
         }
         return;
     }
-    //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
     if (cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)) {
         const guild = input.client.guilds.cache.get(input.obj.guildId);
         if (guild) {
@@ -1870,7 +1865,6 @@ export async function prefix(input: extypes.commandInput) {
     if (curGuildSettings == null) {
         replymsg = 'Error: Guild settings not found';
     } else {
-        //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
         if (typeof newPrefix != 'string' || newPrefix.length < 1 || !(cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client) || cmdchecks.isOwner(commanduser.id, input.config))) {
             replymsg = `The current prefix is \`${curGuildSettings.prefix}\``;
         } else {

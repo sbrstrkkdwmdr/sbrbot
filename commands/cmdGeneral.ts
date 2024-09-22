@@ -2043,7 +2043,6 @@ export async function remind(input: extypes.commandInput & { reminders: extypes.
             remindertxt = input.obj.options.getString('reminder');
 
             time = input.obj.options.getString('time').replaceAll(' ', '');
-            //@ts-expect-error Client<boolean> is not assignable to Client<boolean> (why)
             sendtochannel = (cmdchecks.isOwner(commanduser.id, input.config) || cmdchecks.isAdmin(commanduser.id, input.obj.guildId, input.client)) ?
 
                 input.obj.options.getBoolean('sendinchannel') : false;
