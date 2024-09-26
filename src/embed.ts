@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js';
 import fs from 'fs';
+import * as msgfunc from '../commands/msgfunc.js';
 import * as calc from './calc.js';
 import * as cmdchecks from './checks.js';
 import * as emojis from './consts/emojis.js';
@@ -129,64 +130,82 @@ export async function scoreList(
     }
     if (asObj.pp != null) {
         filterinfo += `\npp: ${asObj.pp}`;
-        const tempType: 'l' | 'g' = asObj.pp.includes('<') ? 'l' : 'g';
-        const tempValue = +(asObj.pp.replace('<', '').replace('>', '')) ?? 0;
-        filtereddata = filtereddata.filter(array =>
-            tempType == 'g' ?
-                array.score.pp > tempValue :
-                array.score.pp < tempValue);
+        const tempArg = msgfunc.argRange(asObj.pp, true);
+        if (!isNaN(tempArg.max)) {
+            filtereddata = filtereddata.filter(x => x.score.pp <= tempArg.max);
+        }
+        if (!isNaN(tempArg.min)) {
+            filtereddata = filtereddata.filter(x => x.score.pp >= tempArg.min);
+        }
+        if (!isNaN(tempArg.exact)) {
+            filtereddata = filtereddata.filter(x => Math.round(x.score.pp) == Math.round(tempArg.exact));
+        }
     }
     if (asObj.score != null) {
         filterinfo += `\nscore: ${asObj.score}`;
-        const tempType: 'l' | 'g' = asObj.score.includes('<') ? 'l' : 'g';
-        const tempValue = +(asObj.score.replace('<', '').replace('>', '')) ?? 0;
-        filtereddata = filtereddata.filter(array =>
-            tempType == 'g' ?
-                array.score.score > tempValue :
-                array.score.score < tempValue);
+        const tempArg = msgfunc.argRange(asObj.score, true);
+        if (!isNaN(tempArg.max)) {
+            filtereddata = filtereddata.filter(x => x.score.score <= tempArg.max);
+        }
+        if (!isNaN(tempArg.min)) {
+            filtereddata = filtereddata.filter(x => x.score.score >= tempArg.min);
+        }
+        if (!isNaN(tempArg.exact)) {
+            filtereddata = filtereddata.filter(x => Math.round(x.score.score) == Math.round(tempArg.exact));
+        }
     }
     if (asObj.acc != null) {
         filterinfo += `\nacc: ${asObj.acc}`;
-        const tempType: 'l' | 'g' = asObj.acc.includes('<') ? 'l' : 'g';
-        const tempValue = +(asObj.acc.replace('<', '').replace('>', '')) ?? 0;
-        filtereddata = filtereddata.filter(array =>
-            tempType == 'g' ?
-                array.score.accuracy > tempValue :
-                array.score.accuracy < tempValue);
+        const tempArg = msgfunc.argRange(asObj.acc, true);
+        if (!isNaN(tempArg.max)) {
+            filtereddata = filtereddata.filter(x => x.score.accuracy <= tempArg.max);
+        }
+        if (!isNaN(tempArg.min)) {
+            filtereddata = filtereddata.filter(x => x.score.accuracy >= tempArg.min);
+        }
+        if (!isNaN(tempArg.exact)) {
+            filtereddata = filtereddata.filter(x => x.score.accuracy.toFixed(4) == tempArg.exact.toFixed(4));
+        }
     }
     if (asObj.combo != null) {
         filterinfo += `\ncombo: ${asObj.combo}`;
-        const tempType: 'l' | 'g' = asObj.combo.includes('<') ? 'l' : 'g';
-        const tempValue = +(asObj.combo.replace('<', '').replace('>', '')) ?? 0;
-        filtereddata = filtereddata.filter(array =>
-            tempType == 'g' ?
-                array.score.max_combo > tempValue :
-                array.score.max_combo < tempValue);
+        const tempArg = msgfunc.argRange(asObj.combo, true);
+        if (!isNaN(tempArg.max)) {
+            filtereddata = filtereddata.filter(x => x.score.max_combo <= tempArg.max);
+        }
+        if (!isNaN(tempArg.min)) {
+            filtereddata = filtereddata.filter(x => x.score.max_combo >= tempArg.min);
+        }
+        if (!isNaN(tempArg.exact)) {
+            filtereddata = filtereddata.filter(x => Math.round(x.score.max_combo) == Math.round(tempArg.exact));
+        }
     }
     //only miss and bpm allow for "equal" on top of LT/GT
     if (asObj.miss != null) {
         filterinfo += `\nmiss: ${asObj.miss}`;
-        const tempType: 'l' | 'g' | 'e' = asObj.miss.includes('<') ? 'l' : asObj.miss.includes('>') ? 'g' : 'e';
-        const tempValue = +(asObj.miss.replace('<', '').replace('>', '')) ?? 0;
-        filtereddata = filtereddata.filter(array =>
-            tempType == 'g' ?
-                array.score.statistics.count_miss > tempValue :
-                tempType == 'l' ?
-                    array.score.statistics.count_miss < tempValue :
-                    array.score.statistics.count_miss == tempValue
-        );
+        const tempArg = msgfunc.argRange(asObj.miss, true);
+        if (!isNaN(tempArg.max)) {
+            filtereddata = filtereddata.filter(x => x.score.statistics.count_miss <= tempArg.max);
+        }
+        if (!isNaN(tempArg.min)) {
+            filtereddata = filtereddata.filter(x => x.score.statistics.count_miss >= tempArg.min);
+        }
+        if (!isNaN(tempArg.exact)) {
+            filtereddata = filtereddata.filter(x => Math.round(x.score.statistics.count_miss) == Math.round(tempArg.exact));
+        }
     }
     if (asObj.bpm != null) {
         filterinfo += `\nbpm: ${asObj.bpm}`;
-        const tempType: 'l' | 'g' | 'e' = asObj.bpm.includes('<') ? 'l' : asObj.bpm.includes('>') ? 'g' : 'e';
-        const tempValue = +(asObj.bpm.replace('<', '').replace('>', '')) ?? 0;
-        filtereddata = filtereddata.filter(array =>
-            tempType == 'g' ?
-                array.score.beatmap.bpm > tempValue :
-                tempType == 'l' ?
-                    array.score.beatmap.bpm < tempValue :
-                    array.score.beatmap.bpm == tempValue
-        );
+        const tempArg = msgfunc.argRange(asObj.bpm, true);
+        if (!isNaN(tempArg.max)) {
+            filtereddata = filtereddata.filter(x => x.score.beatmap.bpm <= tempArg.max);
+        }
+        if (!isNaN(tempArg.min)) {
+            filtereddata = filtereddata.filter(x => x.score.beatmap.bpm >= tempArg.min);
+        }
+        if (!isNaN(tempArg.exact)) {
+            filtereddata = filtereddata.filter(x => Math.round(x.score.beatmap.bpm) == Math.round(tempArg.exact));
+        }
     }
 
 
@@ -383,7 +402,7 @@ export async function scoreList(
 
         let weighted;
         if (asObj.showWeights == true) {
-            if(asObj.recalculateWeights){
+            if (asObj.recalculateWeights) {
                 const tempCalc = (0.95 ** scoreoffset);
                 weighted = `\n${(tempMainpp * tempCalc).toFixed(2)}pp Weighted at **${(tempCalc * 100).toFixed(2)}%**`;
             } else {

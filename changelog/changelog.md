@@ -6,7 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
-## [WIP] - 2024-08-21
+### Changed
+- reworked some args to also take a number range (pp, score, bpm, acc, miss) ie. -bpm 180..200 returns scores between 180bpm and 200bpm (inclusive)
+
+## [3.19.3] - 2024-08-21
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0b4f8ae52e2c0990de01b9a23d4df30e9dbbcc30)</br>
 

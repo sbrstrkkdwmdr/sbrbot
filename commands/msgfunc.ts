@@ -903,3 +903,38 @@ export function matchArgMultiple(argFlags: string[], inargs: string[], match?: b
         found, args, output,
     };
 }
+
+export function argRange(arg: string, forceAboveZero: boolean) {
+    let max = NaN;
+    let min = NaN;
+    let exact = NaN;
+    if (arg.includes('>')) {
+        min = +arg.replace('>', '');
+    }
+    if (arg.includes('<')) {
+        max = +arg.replace('<', '');
+    }
+    if (arg.includes('..')) {
+        const arr = arg.split('..');
+        const narr = arr.map(x => +x).filter(x => !isNaN(x)).sort((a, b) => +b - +a);
+        if (narr.length = 2) {
+            max = narr[0];
+            min = narr[1];
+        }
+    }
+    if (isNaN(max) && isNaN(min)) {
+        exact = +exact;
+    }
+    if (forceAboveZero) {
+        return {
+            max: max && max >= 0 ? max : Math.abs(max),
+            min: min && min >= 0 ? min : Math.abs(min),
+            exact: exact && exact >= 0 ? exact : Math.abs(exact),
+        };
+    }
+    return {
+        max,
+        min,
+        exact,
+    };
+}
