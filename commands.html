@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="styles/base.css">
 <link rel="stylesheet" href="styles/cmd.css">
 <link rel="stylesheet" href="styles/nav.css">
+<link rel="stylesheet" href="styles/hideOverflow.css">
 <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Russo+One&family=Ubuntu&display=swap"
     rel="stylesheet">
 <meta charset="utf-8" />
@@ -40,20 +41,21 @@
         </div> -->
     </nav>
     <div class="bodytype">
-        <div class="divCommandDetailsList">
-            <center>
-                formatted as "commandName &ltrequired&gt [optional]".<br><br>
-                options shown as `-name` should be used as follows: `-name arg` or just `-name` if boolean.<br>
-                ie. `-page` can be `-page 3`.<br>Since `-reverse` is boolean, its just used as `-reverse`.
-                <br><br>
-                options shown as `(-name)` should be used as follows: `-arg`.<br>
-                ie. `(-mode)` can be either `-osu`, `-taiko`, `-ctb` or `-mania`.
-                <br><br>
-                press <a href="commandtypes.html" class="">here</a> for an explanation on option types
-            </center>
+        <div id="helpSummary">
+            <div></div>
+            <ul>
+                <li>Arguments are shown as either &ltarg&gt or [arg]. Angled brackets "&ltarg&gt" are required and square brackets "[arg]" are optional.</li>
+                <li>Argument values can be specified with \`-key value\` (ie. \`-page 3\`)</li>
+                <li>Argument values with spaces (such as names) can be specified with quotes ie. "saber strike"</li>
+                <li>You can use \`osuset\` to automatically set your osu! username and gamemode for commands such as \`recent\` (rs)</li>
+                <li>Mods are specified with +[mods] (include), -mx [mods] (match exact) or -me [mods] (exclude). -mx overrides +[mods]</li>
+                <li>Gamemode can be specified by using -(mode) in commands that support it (ie. -taiko)</li>
+                <li>press <a href="commandtypes.html" id="showLink">here</a> for an explanation on option types</li>
+            </ul>
+            <div></div>
         </div>
         <div id="commandDisplay">
-            <div id="commandSelector">
+            <div id="commandSelector" class="commandGridItem">
                 <div>
                     <!-- general commands -->
                     <div class="spaceForNav" id="general"></div>
@@ -101,7 +103,7 @@
                     </div>
                 </div>
             </div>
-            <div id="commandDetails">
+            <div id="commandDetails" class="commandGridItem">
 
             </div>
         </div>
