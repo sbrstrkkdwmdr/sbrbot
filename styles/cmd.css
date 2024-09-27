@@ -1,6 +1,3 @@
-* {
-    overflow: hidden;
-}
 html {
     scroll-behavior: smooth;
 }
@@ -29,6 +26,7 @@ html {
     font-family: 'Ubuntu';
     font-weight: bolder;
     padding: 20px;
+    white-space: pre;
 }
 
 .divCommandName {
@@ -43,15 +41,17 @@ html {
     }
 }
 
-summary {
-    font-size: 24px;
-    list-style: none;
-}
+#helpSummary {
+    font-family: 'Ubuntu';
+    font-weight: bolder;
+    padding: 20px;
+    white-space: pre;
 
-summary:hover {
-    color: black;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: ". .";
 }
-
 
 p {
     font-size: 16px;
@@ -184,44 +184,7 @@ th {
     border-radius: 5px;
     box-shadow: #000000;
     z-index: 98;
-}
-
-.command details {
-    background-color: rgba(49, 49, 49, 0.5);
-    margin-left: 3%;
-    margin-right: 3%;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 99;
-    user-select: none;
-}
-
-.command details[open] {
-    background-color: rgba(75, 75, 75, 0.5);
-    /* margin-left: 3%; */
-    /* margin-right: 3%; */
-    /* margin-top: 10px; */
-    /* margin-bottom: 10px; */
-    /* padding: 10px; */
-    border-radius: 5px;
-    z-index: 99;
-}
-
-.command details:hover {
-    background-color: rgba(255, 255, 255, 0.5);
-    margin-left: 3%;
-    margin-right: 3%;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 99;
-}
-
-.command details[open]:hover {
-    background-color: rgba(75, 75, 75, 0.5);
+    height: 78.1vh;
 }
 
 .commandButton {
@@ -251,28 +214,42 @@ th {
     /* grid-auto-flow: row; */
     grid-template-areas: ". .";
     overflow-y: hidden;
-    height: 54.5vh;
+    height: 52.3vh;
 }
 
 #commandSelector {
-    background-color: #161616;
-    border-radius: 5px;
-    /* float: left; */
     max-width: 50vw;
     width: max-content;
-    clear: none;
     padding-left: 15px;
     overflow-y: auto;
     height: 100%;
 }
 
 #commandDetails {
-    background-color: #161616;
-    border-radius: 5px;
-    display: block;
-    clear: none;
-    float: right;
     padding: 2%;
     overflow: auto;
     height: 100%;
+    h1 {
+        font-size: 36px;
+        margin-bottom: 15px;
+    }
+    h3 {
+        font-size: 18px;
+        margin-top: 15px;
+    }
+}
+
+.commandGridItem {
+    background-color: #161616;
+    border-radius: 5px;
+    clear: none;
+    
+}
+
+.keepPre {
+    white-space: pre;
+}
+
+#showLink {
+    color: #ff8080
 }
