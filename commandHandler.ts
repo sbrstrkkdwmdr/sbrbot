@@ -613,46 +613,6 @@ function execCommand_switch(input: extypes.input, command: string, commandType: 
                 osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
             }
             break;
-        case 'sotarks': case 'sotarksosu':
-            {
-                overrides = {
-                    filterMapper: 'Sotarks'
-                };
-                startType(obj);
-                osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            }
-            break;
-        case 'sotarkstaiko': case 'taikosotarks': case 'sotarkst': case 'tsotarks':
-            {
-                overrides = {
-                    filterMapper: 'Sotarks',
-                    mode: 'taiko'
-                };
-                startType(obj);
-                osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            }
-            break;
-        case 'sotarksfruits': case 'fruitssotarks': case 'fruitsotarks': case 'sotarksfruit': case 'sotarkscatch': case 'catchsotarks':
-        case 'sotarksctb': case 'ctbsotarks': case 'fsotarks': case 'sotarksf': case 'csotarks': case 'sotarksc':
-            {
-                overrides = {
-                    filterMapper: 'Sotarks',
-                    mode: 'fruits'
-                };
-                startType(obj);
-                osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-            }
-            break;
-        case 'sotarksmania': case 'maniasottarks': case 'sotarksm': case 'msotarks': {
-            overrides = {
-                filterMapper: 'Sotarks',
-                mode: 'mania'
-            };
-            startType(obj);
-            osucmds.osutop({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });
-        }
-            break;
-
         case 'pinned': {
             startType(obj);
             osucmds.pinned({ commandType, obj, args, canReply, button, config: input.config, client: input.client, absoluteID, currentDate, overrides, userdata: input.userdata, statsCache: input.statsCache });

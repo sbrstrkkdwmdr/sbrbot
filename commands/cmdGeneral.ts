@@ -1070,43 +1070,42 @@ export async function help(input: extypes.commandInput) {
 
     function commandEmb(command: helpinfo.commandInfo, embed) {
 
-        let desc = '<required arg> [optional arg]\n';
-        desc += command.description + "\n";
+        let desc =
+            "To see full details about this command, visit [here](https://sbrstrkkdwmdr.github.io/sbrbot/commands.html)\n\n" +
+            command.description + "\n";
+        let usetxt = '';
         if (command.usage) {
-            desc += `\nCommand: \`${input.config.prefix}${command.usage}\``;
-        }
-        if (command.slashusage) {
-            desc += `\nSlash Command: \`/${command.slashusage}\``;
+            usetxt += `\`${input.config.prefix}${command.usage}\``;
         }
         if (command.linkusage) {
-            desc += `\nLink Command: ${command.linkusage.map(x => `\`${x}\``).join('\n')}`;
+            usetxt += `### Link Usage\n${command.linkusage.map(x => `\`${x}\``).join('\n')}`;
         }
 
         let exceedTxt = '';
         let exceeds = false;
 
-        const opts = command.options;
-        let opttxt = '';
-        for (let i = 0; i < opts.length; i++) {
-            const reqtxt = opts[i].required ? 'required' : 'optional';
-            const newtxt = `\`${opts[i].name} (${opts[i].type}, ${reqtxt})\`: ${opts[i].description} ${opts[i].options &&
-                !opts[i].options.includes('N/A') && !opts[i].options.includes('null') && !opts[i].options.includes('true') && !opts[i].options.includes('false')
-                ? `(${opts[i].options.map(x =>
-                    x.includes('[') && x.includes(']') && x.includes('(') && x.includes(')')
-                        ? x : `\`${x}\``
-                ).join('/')})` : ''}\n`;
+        // let opttxt = '';
+        // for (const opt of command.options) {
+        //                 // const reqtxt = opt.required ? 'required' : 'optional';
+        //                 const showOptTxt = opt.options &&
+        //                 !opt.options.includes('N/A') && !opt.options.includes('null') && !opt.options.includes('true') && !opt.options.includes('false')
+        //                 ? `(${opt.options.map(x =>
+        //                     x.includes('[') && x.includes(']') && x.includes('(') && x.includes(')')
+        //                         ? x : `\`${x}\``
+        //                 ).join('/')})` : '';
+        //                 // '';
+        //     const newtxt = `\`${opt.name}: ${opt.type}\` ${showOptTxt}\n`;
+        //     if ((opttxt + newtxt).length > 1000) {
+        //         exceeds = true;
+        //         exceedTxt += 'Some options are omitted due to character limits. For a full list check [here](https://sbrstrkkdwmdr.github.io/sbrbot/commands.html#osu)';
+        //         break;
+        //     }
+        //     opttxt += newtxt;
 
-            if ((opttxt + newtxt).length > 1000) {
-                exceeds = true;
-                exceedTxt += 'Some options are omitted due to character limits. For a full list check [here](https://sbrstrkkdwmdr.github.io/sbrbot/commands.html#osu)';
-                break;
-            }
-
-            opttxt += newtxt;
-        }
-        if (opttxt.length < 1) {
-            opttxt = 'No options';
-        }
+        // }
+        // if (opttxt.length < 1) {
+        //     opttxt = 'No options';
+        // }
 
         const commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none';
         // let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
@@ -1115,14 +1114,19 @@ export async function help(input: extypes.commandInput) {
         const commandbuttons = command.buttons && command.buttons.length > 0 ? command.buttons.map(x => `[${x}]`).join('') : 'none';
 
         embed.setTitle("Command info for: " + command.name)
-            .setURL(`https://sbrstrkkdwmdr.github.io/sbrbot/commands.html#${ctname}-${command.name.toLowerCase()}`)
+            .setURL(`https://sbrstrkkdwmdr.github.io/sbrbot/commands.html`)
             .setDescription(desc)
             .addFields([
                 {
-                    name: 'Options',
-                    value: opttxt,
-                    inline: false
+                    name: 'Usage',
+                    value: usetxt,
+                    inline: false,
                 },
+                // {
+                //     name: 'Options',
+                //     value: opttxt,
+                //     inline: false
+                // },
                 {
                     name: 'Aliases',
                     value: commandaliases,
@@ -1297,14 +1301,16 @@ export async function help(input: extypes.commandInput) {
                 .setColor(colours.embedColour.info.dec)
                 .setTitle('Help')
                 .setURL('https://sbrstrkkdwmdr.github.io/sbrbot/commands')
-                .setDescription(`Prefix is: ${input.config.prefix}
+                .setDescription(`Prefix is: MSGPREFIX
+- Use \`MSGPREFIXhelp <command>\` to get more info on a command or \`/help list\` to get a list of commands
+- \`MSGPREFIXhelp category<category>\` will list only commands from that category
 - Arguments are shown as either <arg> or [arg]. Angled brackets "<arg>" are required and square brackets "[arg]" are optional.
-- Use \`/help <command>\` to get more info on a command or \`/help list\` to get a list of commands
-- \`/help category<category>\` will list only commands from that category
-- Arguments with spaces (such as names) can be specified with quotes ie. "saber strike"
-- You can use \`${input.config.prefix}osuset\` to automatically set your osu! username and gamemode for commands such as \`recent\` (rs)
+- Argument values can be specified with \`-key value\` (ie. \`-page 3\`)
+- Argument values with spaces (such as names) can be specified with quotes ie. "saber strike"
+- You can use \`MSGPREFIXosuset\` to automatically set your osu! username and gamemode for commands such as \`recent\` (rs)
 - Mods are specified with +[mods] (include), -mx [mods] (match exact) or -me [mods] (exclude). -mx overrides +[mods]
-`)
+- Gamemode can be specified by using -(mode) in commands that support it (ie. -taiko)
+`.replaceAll('MSGPREFIX', input.config.prefix))
                 .setFooter({
                     text: 'Website: https://sbrstrkkdwmdr.github.io/sbrbot/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
                 }));
@@ -1361,6 +1367,8 @@ export async function help(input: extypes.commandInput) {
     );
     let curpick: any = 'def';
     const push = [];
+
+
 
 
     switch (commandCategory) {
@@ -2038,7 +2046,6 @@ export async function remind(input: extypes.commandInput & { reminders: extypes.
         case 'interaction': {
             input.obj = (input.obj as Discord.ChatInputCommandInteraction);
             commanduser = input.obj.member.user;
-
 
             remindertxt = input.obj.options.getString('reminder');
 

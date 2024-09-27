@@ -8,6 +8,7 @@
 
 ### Changed
 - reworked some args to also take a number range (pp, score, bpm, acc, miss) ie. -bpm 180..200 returns scores between 180bpm and 200bpm (inclusive)
+- make help command look cleaner
 
 ## [3.19.3] - 2024-08-21
 

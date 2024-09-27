@@ -43,7 +43,16 @@ export type commandInfoOptions = {
 };
 
 const mods = 'See [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.html#mods)';
-
+const scoreListString =
+    `Mods can be specified with +[mods], -mx [exact mods] or -me [exclude mods]
+The arguments \`pp\`, \`score\`, \`acc\`, \`bpm\` and \`miss\` use the following format:
+\`-key value\` to filter by that exact value (ie. -bpm 220)
+\`-key >value\` to filter scores below value (ie. -pp >500)
+\`-key <value\` to filter scores above value (ie. -acc >90)
+\`-key min..max\` to filter scores between min and max (ie. -miss 1..3)
+The \`sort\` arg can be specified using -value (ie -sort recent)
+You can also show a single score by using \`-parse <id>\` (ie. -parse 5)
+`;
 
 '&lt';
 '&gt';
@@ -55,7 +64,7 @@ const mods = 'See [here](https://sbrstrkkdwmdr.github.io/sbrbot/commandtypes.htm
 
 const user: commandInfoOptions = {
     name: 'user',
-    type: 'string/ integer/ user mention',
+    type: 'string/integer/user mention',
     required: false,
     description: 'The user to show',
     options: ['N/A'],
@@ -143,7 +152,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         type: 'string',
         required: false,
         description: `Filter scores including these mods. ${mods}`,
-        options: ['N/A'],
+        options: ['+(mods)', '-mods (mods)'],
         defaultValue: 'null',
         examples: ['mods:HDHR', '-mods HDHR'],
         commandTypes: ['message', 'interaction'],
@@ -173,18 +182,17 @@ const scoreListCommandOptions: commandInfoOptions[] = [
     },
     {
         name: 'detailed',
-        type: 'number',
+        type: 'integer',
         required: false,
         description: 'How much information to show about the scores. 0 = less details, 2 = more details',
-        options: ['c/0', '/1', 'd/2'],
-        aliases: ['-d', '-compress', '-c'],
+        options: ['-c', '-d',],
         defaultValue: '1',
         examples: ['detailed:true', '-detailed', '-compress'],
         commandTypes: ['message', 'interaction', 'button']
     },
     {
         name: 'parse',
-        type: 'number',
+        type: 'integer',
         required: false,
         description: 'Parse the score with the specific index',
         options: ['N/A'],
@@ -218,9 +226,9 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         type: 'string',
         required: false,
         description: 'Filters scores to have more/less pp than this value',
-        options: ['>number', '<number',],
+        options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
         defaultValue: 'null',
-        examples: ['-pp >100', '-pp <500'],
+        examples: ['-pp >100', '-pp <500', '100..500'],
         commandTypes: ['message', 'interaction']
     },
     {
@@ -228,7 +236,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         type: 'string',
         required: false,
         description: 'Filters scores to have more/less score than this value',
-        options: ['>number', '<number'],
+        options: ['>number', '<number', 'min..max', 'number'],
         defaultValue: 'null',
         examples: ['-score >1000000', '-score 1000000'],
         commandTypes: ['message', 'interaction']
@@ -238,9 +246,9 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         type: 'string',
         required: false,
         description: 'Filters scores to have more/less accuracy than this value',
-        options: ['>number', '<number'],
+        options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
         defaultValue: 'null',
-        examples: ['-acc >98.80', '-acc <90'],
+        examples: ['-acc >98.80', '-acc <90',],
         commandTypes: ['message', 'interaction']
     },
     {
@@ -248,7 +256,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         type: 'string',
         required: false,
         description: 'Filters scores to have more/less maximum combo than this value',
-        options: ['>number', '<number'],
+        options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
         defaultValue: 'null',
         examples: ['-combo >2000', '-combo <100'],
         commandTypes: ['message', 'interaction']
@@ -258,7 +266,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         type: 'string',
         required: false,
         description: 'Filters scores to have more/less/equal misses than this value',
-        options: ['>number', '<number', 'number'],
+        options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
         defaultValue: 'null',
         examples: ['-miss <10', '-miss >20'],
         commandTypes: ['message', 'interaction'],
@@ -269,7 +277,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
         type: 'string',
         required: false,
         description: 'Filters scores to have more/less/equal bpm than this value',
-        options: ['>number', '<number', 'number'],
+        options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
         defaultValue: 'null',
         examples: ['-bpm <10', '-bpm >20'],
         commandTypes: ['message', 'interaction']
@@ -406,7 +414,7 @@ const cmds: commandInfo[] = [
     },
     {
         name: 'help',
-        description: 'Shows a list of commands or information about a specific command',
+        description: 'Displays useful information about commands.',
         usage: 'help [command]',
         slashusage: 'help [command]',
         examples: [
@@ -794,7 +802,7 @@ const osucmds: commandInfo[] = [
             },
             {
                 name: 'page',
-                type: 'number',
+                type: 'integer',
                 required: false,
                 description: 'The page of the compared plays to show',
                 options: ['N/A'],
@@ -806,7 +814,7 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'firsts',
-        description: 'Shows the #1 global scores of a user',
+        description: 'Shows the #1 global scores of a user\n' + scoreListString,
         usage: 'firsts [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter] [grade]',
         examples: [
@@ -1083,7 +1091,7 @@ const osucmds: commandInfo[] = [
             },
             {
                 name: 'parse',
-                type: 'number',
+                type: 'integer',
                 required: false,
                 description: 'Parse the score with the specific index',
                 options: ['N/A'],
@@ -1158,7 +1166,7 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'nochokes',
-        description: 'Shows the user\'s top plays if no scores had a miss',
+        description: 'Shows the user\'s top plays if no scores had a miss\n' + scoreListString,
         usage: 'nochokes [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter] [grade]',
         examples: [
@@ -1323,7 +1331,7 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'osutop',
-        description: 'Shows the top scores of a user',
+        description: 'Shows the top scores of a user\n' + scoreListString,
         usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter] [grade]',
         examples: [
@@ -1361,17 +1369,13 @@ const osucmds: commandInfo[] = [
             'taikotop', 'toptaiko', 'tt', 'topt',
             'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tf', 'tctb', 'topf', 'topc',
             'maniatop', 'topmania', 'tm', 'topm',
-            'sotarks', 'sotarksosu',
-            'sotarkstaiko', 'taikosotarks', 'sotarkst', 'tsotarks',
-            'sotaksfruits', 'fruitssotarks', 'fruitsotarks', 'sotarksfruit', 'sotarkscatch', 'catchsotarks', 'sotarksctb', 'ctbsotarks', 'sotarksf', 'sotarksc',
-            'sotarksmania', 'maniasotarks', 'sotarksm', 'msotarks'
         ],
         buttons: [buttonsObjs.label.main.refresh, buttonsObjs.label.page.first, buttonsObjs.label.page.previous, buttonsObjs.label.page.search, buttonsObjs.label.page.next, buttonsObjs.label.page.last, buttonsObjs.label.main.detailLess, buttonsObjs.label.main.detailMore, buttonsObjs.label.extras.user],
         options: scoreListCommandOptions
     },
     {
         name: 'pinned',
-        description: 'Shows the pinned scores of a user',
+        description: 'Shows the pinned scores of a user\n' + scoreListString,
         usage: 'pinned [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter] [grade]',
         examples: [
@@ -1665,7 +1669,7 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'recent',
-        description: 'Shows the recent score(s) of a user',
+        description: 'Shows the recent score(s) of a user\nThe following only applies to list mode:\n' + scoreListString,
         usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'recent [user] [page] [mode] [list] [filter] [grade]',
         examples: [
@@ -1840,7 +1844,7 @@ const osucmds: commandInfo[] = [
     },
     {
         name: 'scores',
-        description: 'Shows the scores of a user on a beatmap',
+        description: 'Shows the scores of a user on a beatmap\n' + scoreListString,
         usage: 'scores [user] [id] [-page/-p] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'scores [user] [id] [sort] [reverse] [page] [detailed] [parse] [grade]',
         examples: [
@@ -2654,7 +2658,7 @@ const admincmds: commandInfo[] = [
             },
             {
                 name: 'id',
-                type: 'number',
+                type: 'integer',
                 required: true,
                 description: 'The ID to fetch',
                 options: ['N/A'],
@@ -2737,7 +2741,7 @@ const admincmds: commandInfo[] = [
         options: [
             {
                 name: 'count',
-                type: 'number',
+                type: 'integer',
                 required: false,
                 description: 'The amount of messages to delete',
                 options: ['0-100'],
