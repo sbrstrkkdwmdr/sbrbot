@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<title>SSoB | bot</title>
+<html>
+<meta charset="utf-8">
+<title>SSoB | Main page</title>
 <link rel="stylesheet" href="styles/base.css">
 <link rel="stylesheet" href="styles/nav.css">
+<link rel="stylesheet" href="styles/grid.css">
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu&display=swap" rel="stylesheet">
-<meta charset="utf-8" />
-<html>
 
 <head>
-    <meta name="description" content="SaberStrike osu! bot" />
-    <meta property="og:title" content="SaberStrike osu! bot" />
-    <meta property="og:description" content="SaberStrike osu! bot commands page" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://sbrstrkkdwmdr.github.io/sbrbot/" />
+    <meta name="description" content="SaberStrike osu! bot">
+    <meta property="og:title" content="SaberStrike osu! bot">
+    <meta property="og:description" content="SaberStrike osu! bot commands page">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sbrstrkkdwmdr.github.io/sbrbot/">
 </head>
 <!--nav-->
 
@@ -28,40 +29,55 @@
             </ul>
         </div>
     </nav>
-    <div class="bodypoverlay">
-        <p style="margin-bottom:10%;">
+    <main>
+        <p style="margin-bottom:50px;">
 
         </p>
-        <div class="surround">
-            <h1 style="display:flex;justify-content:center">
-                SSoB <br>
-            </h1>
-        </div>
 
-        <h3 style="display:flex;justify-content:center">About</h3>
-        <pre style="display:flex;justify-content:center">
-        osu! bot
-    </pre>
-        <p style="margin-left:48%;margin-right:45%;">
+        <h3>About</h3>
+        <p>
+            A simple osu! Discord bot
+        </p>
+        <!-- <p style="margin-left:48%;margin-right:45%;">
             Source code <a href="https://github.com/sbrstrkkdwmdr/sbrbot">here</a>
             <a href="https://www.codefactor.io/repository/github/sbrstrkkdwmdr/sbrbot"><img
-                    src="https://www.codefactor.io/repository/github/sbrstrkkdwmdr/sbrbot/badge" alt="CodeFactor" /></a>
+                    src="https://www.codefactor.io/repository/github/sbrstrkkdwmdr/sbrbot/badge" alt="CodeFactor"></a>
         </p>
 
-        <h3 style="display:flex;justify-content:center">Features</h3>
-        <pre style="display:flex;justify-content:center">
-        osu commands
-        osu link/file parsing
-        screenshot parsing (currently disabled)
-        support for osu!, taiko, fruits (catch the beat), mania
-    </pre>
-        <h3 style="display:flex;justify-content:center">Discord Server</h3>
-        <div style="display:flex;justify-content:center">
+        <h3 >Features</h3>
+        <ul>
+            <li>osu commands</li>
+            <li>osu link/file parsing</li>
+            <li>support for osu!, taiko, fruits (catch the beat), mania</li>
+        </ul>
+        </pre>
+        <h3 >Discord Server</h3>
+        <div >
             <a href="https://discord.gg/3P7864BcRT" target="_blank">Link</a>
-        </div>
+        </div> -->
+        <div class="itemGrid">
+            <a href="./commands.html">
+                <div class="item">
+                    <h2>Command list</h2>
+                    <img src="./img/cmdlist.png" height="200" width="200">
+                </div>
+            </a>
+            <a href="https://discord.gg/3P7864BcRT">
+                <div class="item">
+                    <h2>Discord</h2>
+                    <img src="./img/discord-mark-white.svg" height="200" width="200">
+                </div>
+            </a>
+            <a href="https://github.com/sbrstrkkdwmdr/sbrbot">
+                <div class="item">
+                    <h2>Source Code</h2>
+                    <img src="./img/github-mark-white.svg" height="200" width="200">
+                </div>
+            </a>
 
-        <div style="margin-top: 900px;">
         </div>
+        <div style="margin-top: 900px;">
+    </main>
 </body>
 
 </html>

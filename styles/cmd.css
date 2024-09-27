@@ -45,7 +45,7 @@ html {
     font-family: 'Ubuntu';
     font-weight: bolder;
     padding: 20px;
-    white-space: pre;
+    /* white-space: pre; */
 
     display: grid;
     grid-template-columns: 1fr 3fr;
@@ -177,12 +177,6 @@ th {
 }
 
 .bodytype {
-    background-color: #252525;
-    margin-left: 3%;
-    margin-right: 3%;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: #000000;
     z-index: 98;
     height: 78.1vh;
 }
