@@ -34,6 +34,7 @@ export async function changelog(input: extypes.commandInput) {
     let useNum: number = null;
     let isList = false;
     let page: number = null;
+    let foundBool = false;
 
     switch (input.commandType) {
         case 'message': {
@@ -68,17 +69,21 @@ export async function changelog(input: extypes.commandInput) {
             switch (input.button) {
                 case 'BigLeftArrow':
                     useNum = 0;
+                    foundBool = true;
                     break;
                 case 'LeftArrow':
                     useNum = curpage - 1;
+                    foundBool = true;
                     break;
                 case 'RightArrow':
                     useNum = curpage + 1;
+                    foundBool = true;
                     break;
                 case 'BigRightArrow':
                     useNum = parseInt(
                         input.obj.message.embeds[0].footer.text.split('/')[1]
                     ) - 1;
+                    foundBool = true;
                     break;
                 default:
                     useNum = curpage;
@@ -145,7 +150,6 @@ export async function changelog(input: extypes.commandInput) {
     const buttons = new Discord.ActionRowBuilder();
     //get version
     let found: string | number = null;
-    let foundBool = false;
     if (version) {
         //search for version
         if (version?.includes('.')) {
@@ -201,9 +205,13 @@ export async function changelog(input: extypes.commandInput) {
             typeof found === 'string' ?
                 0 : 1;
     }
+    if (!useNum && found) {
+        useNum = +found;
+    }
     const Embed = new Discord.EmbedBuilder();
     const exceeded = 'Exceeded character limit. Please click [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.md) to view the changelog.';
     if (typeof found == 'string') {
+        if (isNaN(useNum)) useNum = 0;
         isList = true;
         // let txt = '' mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n');
         const doc = fs.readFileSync(`${path}/cache/changelog.md`, 'utf-8');

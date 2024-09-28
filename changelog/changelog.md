@@ -6,7 +6,13 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+### Fixed
+
+- changelog left arrow button didn't work going from latest version to WIP
+- changelog versions arg crashing
+
 ### Changed
+
 - reworked some args to also take a number range (pp, score, bpm, acc, miss) ie. -bpm 180..200 returns scores between 180bpm and 200bpm (inclusive)
 - make help command look cleaner
 
@@ -15,20 +21,24 @@
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0b4f8ae52e2c0990de01b9a23d4df30e9dbbcc30)</br>
 
 ### Fixed
+
 - missing interaction option handlers
 - `userinfo` slash command calling `user` (alias of `osu`)
 
 ### Changed
-- changed some interaction commands 
+
+- changed some interaction commands
 - switched `image` to use `axios`
 - links shown in `image` show hyperlinks with page title instead of raw URL
 
 ### Added
+
 - `dependencies` arg for `info`
 - "{x}pp" to `whatif` description
 - separate description for `whatif` scores outside the top 100
 
 ### Removed
+
 - `tropicalweather`
 - `globals`/`osc`
 - `scorepost`
@@ -39,6 +49,7 @@
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/7860058fdabb12d9c046a78343bd9ecff6f2d617)</br>
 
 ### Fixed
+
 - info command crashing (was trying to find chartjs-to-image version)
 
 ## [3.19.1] - 2024-08-19
@@ -46,11 +57,13 @@
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0249671851d3a48131075710074f35aaacf0690d)</br>
 
 ### Fixed
+
 - filtering debug files by server ID not actually returning the filtered list
 - `bg` arg missing from map's help command
 - convert using the `from` value for the `number` value (resulting in NaN output)
 
 ### Added
+
 - aspect ratios in map -bg
 
 ## [3.19.0] - 2024-08-16
@@ -58,19 +71,23 @@
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/363969c0304e3d38a01007645370fc80896c6ea3)</br>
 
 ### Fixed
+
 - changelog not showing WIP
 - ppcalc accuracy list being mis-aligned
 
 ### Added
+
 - `v` alias for `version`
 - new config property "tenorKey"
 - recent and scoreparse shows map strains
 - replace `chartjs-to-image` with `chart.js` and `canvas`
 
 ### Changed
+
 - gif commands now use tenor api when possible
 
 ### Removed
+
 - `chartjs-to-image` dependency
 
 ## [3.18.1] - 2024-07-28
