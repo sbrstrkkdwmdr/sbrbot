@@ -210,8 +210,8 @@ export async function changelog(input: extypes.commandInput) {
     }
     const Embed = new Discord.EmbedBuilder();
     const exceeded = 'Exceeded character limit. Please click [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.md) to view the changelog.';
+    if (isNaN(useNum) || !useNum) useNum = 0;
     if (typeof found == 'string') {
-        if (isNaN(useNum)) useNum = 0;
         isList = true;
         // let txt = '' mainconst.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDateFormatted})\``).join('\n');
         const doc = fs.readFileSync(`${path}/cache/changelog.md`, 'utf-8');
