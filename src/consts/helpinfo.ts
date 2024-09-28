@@ -223,7 +223,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
     },
     {
         name: 'pp',
-        type: 'string',
+        type: 'float/range',
         required: false,
         description: 'Filters scores to have more/less pp than this value',
         options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
@@ -233,7 +233,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
     },
     {
         name: 'score',
-        type: 'string',
+        type: 'int/range',
         required: false,
         description: 'Filters scores to have more/less score than this value',
         options: ['>number', '<number', 'min..max', 'number'],
@@ -243,7 +243,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
     },
     {
         name: 'acc',
-        type: 'string',
+        type: 'float/range',
         required: false,
         description: 'Filters scores to have more/less accuracy than this value',
         options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
@@ -253,7 +253,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
     },
     {
         name: 'combo',
-        type: 'string',
+        type: 'integer/range',
         required: false,
         description: 'Filters scores to have more/less maximum combo than this value',
         options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
@@ -263,7 +263,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
     },
     {
         name: 'miss',
-        type: 'string',
+        type: 'integer/range',
         required: false,
         description: 'Filters scores to have more/less/equal misses than this value',
         options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
@@ -274,7 +274,7 @@ const scoreListCommandOptions: commandInfoOptions[] = [
     },
     {
         name: 'bpm',
-        type: 'string',
+        type: 'float/range',
         required: false,
         description: 'Filters scores to have more/less/equal bpm than this value',
         options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
