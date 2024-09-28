@@ -1683,19 +1683,19 @@ const osucmds: commandInfo[] = [
             },
             {
                 text: 'PREFIXMSGrs -p 2 -list',
-                descriptor: 'Shows the second page of your recent scores in a list'
+                descriptor: 'Shows the second page of a list of your recent scores'
             },
             {
                 text: 'PREFIXMSGrsbest',
-                descriptor: 'Shows your recent scores in a list, sorted by pp'
+                descriptor: 'Shows a list of your recent scores, sorted by pp'
             },
             {
                 text: 'PREFIXMSGrl -mania',
-                descriptor: 'Shows your recent mania scores in a list'
+                descriptor: 'Shows a list of your recent mania scores'
             },
             {
                 text: 'PREFIXMSGrlm @SaberStrike',
-                descriptor: 'Shows SaberStrike\'s recent mania scores in a list'
+                descriptor: 'Shows a list of SaberStrike\'s recent mania scores'
             },
             {
                 text: 'PREFIXMSGrt -p 2',
