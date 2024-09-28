@@ -41,6 +41,8 @@ html {
     }
 }
 
+
+
 #helpSummary {
     font-family: 'Ubuntu';
     font-weight: bolder;
@@ -65,8 +67,16 @@ pre {
     overscroll-behavior: smooth;
 } */
 
+.commandDesc {
+    margin: 1.5em 0;
+}
+
+.commandUsage {
+    margin: 1.5em 0;
+}
+
 .extxt {
-    color: rgb(226, 223, 219);
+    color: #99ff00;
     background-color: rgb(66, 72, 75);
     border-radius: 5px;
     font-family: 'Consolas';
@@ -83,9 +93,6 @@ pre {
 .cmdexample {
     border: rgba(0, 0, 0, 0.50);
 
-    td:nth-child(1) {
-        width: 50%;
-    }
 }
 
 .fullClear {
@@ -216,13 +223,11 @@ th {
     width: max-content;
     padding-left: 15px;
     overflow-y: auto;
-    height: 100%;
 }
 
 #commandDetails {
-    padding: 2%;
+    padding: 0 2em;
     overflow: auto;
-    height: 100%;
     h1 {
         font-size: 36px;
         margin-bottom: 15px;
@@ -237,7 +242,7 @@ th {
     background-color: #161616;
     border-radius: 5px;
     clear: none;
-    
+    height: 100%;
 }
 
 .keepPre {

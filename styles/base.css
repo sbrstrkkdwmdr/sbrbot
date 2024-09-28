@@ -40,14 +40,14 @@ body {
 
 .codeblock {
     float: inline-start;
-    color: rgb(226, 223, 219);
     background-color: rgb(66, 72, 75);
-    margin-right: 25px;
+    margin-right: 0.5em;
     padding-right: 5px;
     padding-left: 5px;
     border-radius: 5px;
     font-family: 'Consolas';
     font-weight: bolder;
+    color: #99ff00;
 }
 
 .surround {
@@ -81,4 +81,13 @@ main {
 
 li {
     list-style-position: inside;
+}
+
+.inlineCodeblock {
+    font-family: 'Consolas';
+    font-weight: bolder;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 0.5em;
+    padding: 0 0.15em;
+    color: #C3E88D;
 }

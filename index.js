@@ -60,13 +60,20 @@ function displayCommand(cmd, mainDiv) {
     mainDiv.append(title);
 
     const details = document.createElement('div');
-    details.classList.add('divCommandDetails')
+    details.classList.add('divCommandDetails');
+
     const desc = document.createElement('p');
-    desc.classList.add("keepPre")
-    desc.innerHTML = cmd.description.includes('http') ?
-        urlToHTML(cmd.description) : cmd.description;
+    desc.classList.add("keepPre");
+    desc.classList.add("commandDesc");
+    let descriptionText = fixCharacters(cmd.description)
+    desc.innerHTML =
+        descriptionText.includes('`') ?
+            toInlineCode(descriptionText) : descriptionText;
+    /* cmd.description.includes('http') ?
+        urlToHTML(cmd.description) : cmd.description; */
 
     const usage = document.createElement('p');
+    usage.classList.add("commandUsage");
     usage.innerHTML = '<h3>Command:</h3>'
     if (cmd.usage) {
         const usediv = document.createElement('div');
@@ -88,7 +95,8 @@ function displayCommand(cmd, mainDiv) {
             usage.append(usediv, document.createElement('br'), document.createElement('br'));
         }
     }
-    details.append(desc, usage);
+    details.append(usage, desc);
+
     if (cmd.aliases.length > 0) {
         const aliasDiv = document.createElement('div');
         aliasDiv.classList.add('fullClear')
@@ -290,3 +298,30 @@ class smoothOpen {
 document.querySelectorAll('details').forEach((el) => {
     new smoothOpen(el);
 });
+
+/**
+ * @param {string} string 
+ */
+function toInlineCode(string) {
+    let newArr = string.split('`');
+    let newString = "";
+    for (let i = 0; i < newArr.length - 1; i++) {
+        console.log(i);
+        console.log(newArr[i]);
+        if (i % 2 == 0) {
+            newString += newArr[i] + "<span class=\"inlineCodeblock\">";
+        } else {
+            newString += newArr[i] + "</span>";
+        }
+    }
+    console.log(newString);
+    return newString;
+}
+
+/**
+ * @param {string} string 
+ */
+function fixCharacters(string) {
+    return string.replaceAll('<', '&lt')
+        .replaceAll('>', '&gt');
+}
