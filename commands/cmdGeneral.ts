@@ -2122,7 +2122,7 @@ export async function remind(input: extypes.commandInput & { reminders: extypes.
         try {
             if (sendchannel == true) {
                 setTimeout(() => {
-                    input.obj.channel.send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` });
+                    (input.obj.channel as Discord.GuildTextBasedChannel).send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` });
                     remReminder(absTime);
                 }, calc.timeToMs(time));
             }

@@ -325,7 +325,6 @@ export async function downloadFile(
 ) {
     const file = fs.createWriteStream(`${output}`);
     await https.get(`${input}`, function (response) {
-        //@ts-expect-error Argument of type 'WriteStream' is not assignable to parameter of type 'WritableStream'.ts(2345)
         response.pipe(file);
     });
 
@@ -352,7 +351,6 @@ export function downloadIMG(
                 reject(new Error('Failed to fetch the image'));
                 return;
             }
-            //@ts-expect-error Argument of type 'WriteStream' is not assignable to parameter of type 'WritableStream'.ts(2345)
             response.pipe(file);
 
             file.on('finish', () => {

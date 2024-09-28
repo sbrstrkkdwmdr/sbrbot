@@ -270,7 +270,7 @@ export function mapToObject_TimingPoints(str: string) {
     const arr: timingPoints[] = [];
     const section = str.split('[TimingPoints]\n')[1]?.split('[')[0];
 
-    for (let i = 0; i < section?.split('\n')?.length ?? 0; i++) {
+    for (let i = 0; i < section?.split('\n')?.length; i++) {
         const cur = section.split('\n')[i];
         if (cur.trim().length == 0) break;
         const curAsArr = cur.split(',');
@@ -293,7 +293,7 @@ export function mapToObject_HitObjects(str: string, mode: osuApiTypes.GameMode) 
     const section = str.split('[HitObjects]')[1];
 
     //for each line, get the hitobject
-    for (let i = 0; i < section?.split('\n')?.length ?? 0; i++) {
+    for (let i = 0; i < section?.split('\n')?.length; i++) {
         const cur = section.split('\n')[i];
         if (!(cur.trim().length == 0)) {
             const currentObject: hitObjects = {

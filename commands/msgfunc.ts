@@ -66,7 +66,7 @@ export async function sendMessage(input: {
             switch (input.commandType) {
                 case 'message': case 'link': {
                     if (!canReply) {
-                        (input.obj as Discord.Message<any>).channel.send({
+                        ((input.obj as Discord.Message<any>).channel as Discord.GuildTextBasedChannel ).send({
                             content: `${input.args.content ?? ''}`,
                             embeds: input.args.embeds ?? [],
                             files: input.args.files ?? [],

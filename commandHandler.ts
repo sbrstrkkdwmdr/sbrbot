@@ -899,7 +899,7 @@ function execCommand_switch(input: extypes.input, command: string, commandType: 
 
 function startType(object: Discord.Message | Discord.Interaction) {
     try {
-        object.channel.sendTyping();
+        (object.channel as Discord.GuildTextBasedChannel ).sendTyping();
         setTimeout(() => {
             return;
         }, 1000);
