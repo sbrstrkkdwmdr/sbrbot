@@ -1498,7 +1498,68 @@ export async function info(input: extypes.commandInput) {
     const serverpfx = curGuildSettings.dataValues.prefix;
 
     // const starttime = new Date((fs.readFileSync(`${path}/debug/starttime.txt`)).toString());
-    //
+    const data = {
+        deps: `Typescript: [${pkgjson.dependencies['typescript'].replace('^', '')}](https://www.typescriptlang.org/)
+Discord.js: [${pkgjson.dependencies['discord.js'].replace('^', '')}](https://discord.js.org/#/docs)
+rosu-pp: [${pkgjson.dependencies['rosu-pp-js'].replace('^', '')}](https://github.com/MaxOhn/rosu-pp-js)
+Axios: [${pkgjson.dependencies['axios'].replace('^', '')}](https://github.com/axios/axios)
+Sequelize: [${pkgjson.dependencies['sequelize'].replace('^', '')}](https://github.com/sequelize/sequelize/)
+Chart.js: [${pkgjson.dependencies['chart.js'].replace('^', '')}](https://www.chartjs.org/)
+sqlite3: [${pkgjson.dependencies['sqlite3'].replace('^', '')}](https://github.com/TryGhost/node-sqlite3)`,
+        uptime: `${calc.secondsToTime(input.client.uptime / 1000)}`,
+        version: pkgjson.version,
+        preGlobal: input.config.prefix.includes('`') ? `"${input.config.prefix}"` : `\`${input.config.prefix}\``,
+        preServer: serverpfx.includes('`') ? `"${serverpfx}"` : `\`${serverpfx}\``,
+        server: mainconst.serverURL,
+        website: mainconst.website,
+        creator: 'https://sbrstrkkdwmdr.github.io/',
+        source: `https://github.com/sbrstrkkdwmdr/sbrbot/`,
+        get tz() {
+            const starttime = new Date((fs.readFileSync(`${path}/debug/starttime.txt`)).toString());
+
+            const txt = starttime.toString().split('(')[1].split(')')[0];
+            //get utc offset
+            const found: timezoneList.timezone[] = [];
+
+            let frTemp: string[] = [];
+            for (const tz of timezoneList.timezones) {
+                frTemp = frTemp.concat(tz.aliases);
+            }
+            const frWords = func.searchMatch(txt, func.removeDupes(frTemp));
+            //convert frWords to tzlist
+
+            for (let i = 0; i < timezoneList.timezones.length && i < 25; i++) {
+                for (const tz of timezoneList.timezones) {
+                    if (tz.aliases.includes(frWords[i])) {
+                        found.push(tz);
+                    }
+                }
+            }
+
+            const offset = found[0].offsetDirection == '+' ?
+                found[0].offsetHours :
+                -found[0].offsetHours;
+            let isOffset = false;
+            for (let i = 0; i < timezoneList.hasDaylight.length; i++) {
+                const curTimeZone = timezoneList.hasDaylight[i];
+                if (curTimeZone.includes.slice().map(x => x.trim().toUpperCase()).includes(txt.trim().toUpperCase()) && curTimeZone.check(input.currentDate)) {
+                    isOffset = true;
+                }
+            }
+            if (txt.toLowerCase().includes('daylight')) isOffset = true;
+
+            const offsetToMinutes = isOffset ? Math.floor(offset * 60) + 60 : Math.floor(offset * 60);
+            const Hrs = offset > 0 ?
+                Math.floor(isOffset ? offset + 1 : offset).toString().padStart(3, '+0') :
+                Math.floor(isOffset ? offset + 1 : offset).toString().replace('-', '').padStart(3, '-0');
+            const offsetReadable = `UTC${Hrs}:${(Math.abs(offsetToMinutes % 60)).toString().padStart(2, '0')}`;
+            return `${txt} (${offsetReadable})`;
+        },
+        shards: input?.client?.shard?.count ?? 1,
+        guilds: input.client.guilds.cache.size,
+        users: input.client.users.cache.size,
+
+    };
     const Embed = new Discord.EmbedBuilder()
         .setColor(colours.embedColour.info.dec)
         .setTitle('Bot Information');
@@ -1507,79 +1568,31 @@ export async function info(input: extypes.commandInput) {
         switch (input.args[0]) {
             case 'uptime':
                 Embed.setTitle('Total uptime')
-                    .setDescription(`${calc.secondsToTime(input.client.uptime / 1000)}`);
+                    .setDescription(data.uptime);
                 break;
             case 'version': case 'v':
                 Embed.setTitle('Bot version')
-                    .setDescription(`${pkgjson.version}`);
+                    .setDescription(data.version);
                 break;
             case 'server':
                 Embed.setTitle('Bot server')
-                    .setDescription(`${mainconst.serverURL}`);
+                    .setDescription(data.server);
                 break;
             case 'website':
                 Embed.setTitle('Bot website')
-                    .setDescription(`${mainconst.website}`);
+                    .setDescription(data.website);
                 break;
-            case 'timezone': case 'tz': {
-                const starttime = new Date((fs.readFileSync(`${path}/debug/starttime.txt`)).toString());
-
-                const txt = starttime.toString().split('(')[1].split(')')[0];
-                //get utc offset
-                const found: timezoneList.timezone[] = [];
-
-                let frTemp: string[] = [];
-                for (const tz of timezoneList.timezones) {
-                    frTemp = frTemp.concat(tz.aliases);
-                }
-                const frWords = func.searchMatch(txt, func.removeDupes(frTemp));
-                //convert frWords to tzlist
-
-                for (let i = 0; i < timezoneList.timezones.length && i < 25; i++) {
-                    for (const tz of timezoneList.timezones) {
-                        if (tz.aliases.includes(frWords[i])) {
-                            found.push(tz);
-                        }
-                    }
-                }
-
-                const offset = found[0].offsetDirection == '+' ?
-                    found[0].offsetHours :
-                    -found[0].offsetHours;
-                let isOffset = false;
-                for (let i = 0; i < timezoneList.hasDaylight.length; i++) {
-                    const curTimeZone = timezoneList.hasDaylight[i];
-                    if (curTimeZone.includes.slice().map(x => x.trim().toUpperCase()).includes(txt.trim().toUpperCase()) && curTimeZone.check(input.currentDate)) {
-                        isOffset = true;
-                    }
-                }
-                if (txt.toLowerCase().includes('daylight')) isOffset = true;
-
-                const offsetToMinutes = isOffset ? Math.floor(offset * 60) + 60 : Math.floor(offset * 60);
-                const Hrs = offset > 0 ?
-                    Math.floor(isOffset ? offset + 1 : offset).toString().padStart(3, '+0') :
-                    Math.floor(isOffset ? offset + 1 : offset).toString().replace('-', '').padStart(3, '-0');
-                const offsetReadable = `UTC${Hrs}:${(Math.abs(offsetToMinutes % 60)).toString().padStart(2, '0')}`;
-
+            case 'timezone': case 'tz':
                 Embed.setTitle('Bot timezone')
-                    .setDescription(`${txt} (${offsetReadable})`);
-            }
+                    .setDescription(data.tz);
                 break;
             case 'dependencies': case 'dep': case 'deps':
                 Embed.setTitle('Dependencies')
-                    .setDescription(`
-Typescript: [${pkgjson.dependencies['typescript'].replace('^', '')}](https://www.typescriptlang.org/)
-Discord.js: [${pkgjson.dependencies['discord.js'].replace('^', '')}](https://discord.js.org/#/docs)
-rosu-pp: [${pkgjson.dependencies['rosu-pp-js'].replace('^', '')}](https://github.com/MaxOhn/rosu-pp-js)
-Axios: [${pkgjson.dependencies['axios'].replace('^', '')}](https://github.com/axios/axios)
-Sequelize: [${pkgjson.dependencies['sequelize'].replace('^', '')}](https://github.com/sequelize/sequelize/)
-Chart.js: [${pkgjson.dependencies['chart.js'].replace('^', '')}](https://www.chartjs.org/)
-sqlite3: [${pkgjson.dependencies['sqlite3'].replace('^', '')}](https://github.com/TryGhost/node-sqlite3)
-`);
+                    .setDescription(data.deps);
                 break;
-                case 'source':case 'code':
-                        Embed.setTitle('Source Code')
-                        .setDescription(`https://github.com/sbrstrkkdwmdr/sbrbot/`)
+            case 'source': case 'code':
+                Embed.setTitle('Source Code')
+                    .setDescription(data.source);
                 break;
             default:
                 Embed.setDescription(`\`${input.args[0]}\` is an invalid argument`);
@@ -1590,36 +1603,27 @@ sqlite3: [${pkgjson.dependencies['sqlite3'].replace('^', '')}](https://github.co
             .setFields([
                 {
                     name: 'Dependencies',
-                    value:
-                        `
-    Typescript: [${pkgjson.dependencies['typescript'].replace('^', '')}](https://www.typescriptlang.org/)
-    Discord.js: [${pkgjson.dependencies['discord.js'].replace('^', '')}](https://discord.js.org/#/docs)
-    rosu-pp: [${pkgjson.dependencies['rosu-pp-js'].replace('^', '')}](https://github.com/MaxOhn/rosu-pp-js)
-    Axios: [${pkgjson.dependencies['axios'].replace('^', '')}](https://github.com/axios/axios)
-    Sequelize: [${pkgjson.dependencies['sequelize'].replace('^', '')}](https://github.com/sequelize/sequelize/)
-    Chart.js: [${pkgjson.dependencies['chart.js'].replace('^', '')}](https://www.chartjs.org/)
-    sqlite3: [${pkgjson.dependencies['sqlite3'].replace('^', '')}](https://github.com/TryGhost/node-sqlite3)
-    `,
+                    value: data.deps,
                     inline: true
                 },
                 {
                     name: 'Statistics',
                     value:
                         `
-    Uptime: ${calc.secondsToTime(input.client.uptime / 1000)}
-    Shards: ${input?.client?.shard?.count ?? 1}
-    Guilds: ${input.client.guilds.cache.size}
-    Users: ${input.client.users.cache.size}`,
+Uptime: ${data.uptime}
+Shards: ${data.shards}
+Guilds: ${data.guilds}
+Users: ${data.users}`,
                     inline: true
                 }
             ])
             .setDescription(`
-    [Created by SaberStrike](https://sbrstrkkdwmdr.github.io/)
-    [Commands](https://sbrstrkkdwmdr.github.io/sbrbot/commands)
-    Global prefix: ${input.config.prefix.includes('`') ? `"${input.config.prefix}"` : `\`${input.config.prefix}\``}
-    Server prefix: ${serverpfx.includes('`') ? `"${serverpfx}"` : `\`${serverpfx}\``}
-    Bot Version: ${pkgjson.version}
-    `);
+[Created by SaberStrike](${data.creator})
+[Commands](${data.website})
+Global prefix: ${data.preGlobal}
+Server prefix: ${data.preServer}
+Bot Version: ${data.version}
+`);
     }
 
 

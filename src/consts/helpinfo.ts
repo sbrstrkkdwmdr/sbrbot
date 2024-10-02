@@ -459,14 +459,14 @@ const cmds: commandInfo[] = [
         description: 'Shows information about the bot',
         usage: 'info [arg]',
         examples: [],
-        aliases: ['[arg]'],
+        aliases: ['i', '[arg]'],
         options: [
             {
                 name: 'arg',
                 type: 'string',
                 required: false,
                 description: 'Return just that specific value',
-                options: ['uptime', 'version', 'server', 'website', 'timezone'],
+                options: ['uptime', 'version', 'server', 'website', 'timezone', 'source'],
                 defaultValue: 'null',
                 examples: ['N/A'],
                 commandTypes: ['message', 'interaction']

@@ -6,6 +6,12 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+### Changed
+- store all info variables in one object
+
+### Added
+- source code param in info
+
 ## [3.19.4] - 2024-09-28
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/e3820a0eb58b40d7a52792298d8aaa34f57a50a2)</br>
