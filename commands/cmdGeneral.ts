@@ -1577,6 +1577,10 @@ Chart.js: [${pkgjson.dependencies['chart.js'].replace('^', '')}](https://www.cha
 sqlite3: [${pkgjson.dependencies['sqlite3'].replace('^', '')}](https://github.com/TryGhost/node-sqlite3)
 `);
                 break;
+                case 'source':case 'code':
+                        Embed.setTitle('Source Code')
+                        .setDescription(`https://github.com/sbrstrkkdwmdr/sbrbot/`)
+                break;
             default:
                 Embed.setDescription(`\`${input.args[0]}\` is an invalid argument`);
                 break;
