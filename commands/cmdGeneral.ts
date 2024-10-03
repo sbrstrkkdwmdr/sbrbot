@@ -1092,29 +1092,6 @@ export async function help(input: extypes.commandInput) {
         let exceedTxt = '';
         let exceeds = false;
 
-        // let opttxt = '';
-        // for (const opt of command.options) {
-        //                 // const reqtxt = opt.required ? 'required' : 'optional';
-        //                 const showOptTxt = opt.options &&
-        //                 !opt.options.includes('N/A') && !opt.options.includes('null') && !opt.options.includes('true') && !opt.options.includes('false')
-        //                 ? `(${opt.options.map(x =>
-        //                     x.includes('[') && x.includes(']') && x.includes('(') && x.includes(')')
-        //                         ? x : `\`${x}\``
-        //                 ).join('/')})` : '';
-        //                 // '';
-        //     const newtxt = `\`${opt.name}: ${opt.type}\` ${showOptTxt}\n`;
-        //     if ((opttxt + newtxt).length > 1000) {
-        //         exceeds = true;
-        //         exceedTxt += 'Some options are omitted due to character limits. For a full list check [here](https://sbrstrkkdwmdr.github.io/sbrbot/commands.html#osu)';
-        //         break;
-        //     }
-        //     opttxt += newtxt;
-
-        // }
-        // if (opttxt.length < 1) {
-        //     opttxt = 'No options';
-        // }
-
         const commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none';
         // let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none'
         const commandexamples = command.examples && command.examples.length > 0 ? command.examples.slice(0, 5).map(x => x.text).join('\n').replaceAll('PREFIXMSG', input.config.prefix) : 'none';
@@ -1332,12 +1309,16 @@ export async function help(input: extypes.commandInput) {
     function categorise(type: 'cmds' | 'osucmds' | 'admincmds' | 'othercmds') {
         let desctxt = '';
         for (let i = 0; i < helpinfo[type].length; i++) {
-            desctxt += `\n\`${helpinfo[type][i].name}\`: ${helpinfo[type][i].description}`;
+            desctxt += `\n\`${helpinfo[type][i].name}\`: ${helpinfo[type][i].description.split('.')[0]}`;
         }
         if (desctxt == '') {
             desctxt = 'No commands in this category';
         }
         commandfound = true;
+        if(desctxt.length > 4000){
+            desctxt = desctxt.slice(0, 3900);
+            desctxt += "\n\nThe text has reached maximum length. See [here](https://sbrstrkkdwmdr.github.io/sbrbot/commands) for the rest of the commands";
+        }
         return desctxt;
     }
 

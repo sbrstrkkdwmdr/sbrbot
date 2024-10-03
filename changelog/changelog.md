@@ -6,6 +6,9 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+### Fixed
+- help category text exceeding character limit
+
 ### Changed
 - store all info variables in one object
 
