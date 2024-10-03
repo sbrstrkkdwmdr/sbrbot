@@ -959,7 +959,7 @@ export async function help(input: extypes.commandInput) {
 
     let commanduser;
     let rdm = false;
-    let commandfound: boolean = false;
+    let commandfound: boolean = false as boolean;
 
     let commandCategory: string = 'default';
     let command: string;
@@ -1394,7 +1394,6 @@ export async function help(input: extypes.commandInput) {
             break;
     }
 
-    //@ts-expect-error false and true no overlap error
     if (commandfound == true) {
         for (let i = 0; i < curpick.length && i < 25; i++) {
             push.push(
