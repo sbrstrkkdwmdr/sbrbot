@@ -2185,7 +2185,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
 
 
     const parseArgs = await msgfunc.parseArgs_scoreList(input);
-    if(parseArgs.error){
+    if (parseArgs.error) {
         return;
     }
     const commanduser: Discord.User = parseArgs.commanduser;
@@ -3200,7 +3200,7 @@ Has replay: ${score.replay_available == 1 ? '✅' : '❌'}
 export async function osutop(input: extypes.commandInput & { statsCache: any; }) {
 
     const parseArgs = await msgfunc.parseArgs_scoreList(input);
-    if(parseArgs.error){
+    if (parseArgs.error) {
         return;
     }
     const commanduser: Discord.User = parseArgs.commanduser;
@@ -3722,7 +3722,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 export async function pinned(input: extypes.commandInput & { statsCache: any; }) {
 
     const parseArgs = await msgfunc.parseArgs_scoreList(input);
-    if(parseArgs.error){
+    if (parseArgs.error) {
         return;
     }
     const commanduser: Discord.User = parseArgs.commanduser;
@@ -4940,8 +4940,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                     .setDescription(`
 [\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()).string : ''} 
 ${totaldiff}⭐ | ${input.config.useEmojis.gamemodes ? emojis.gamemodes[curscore.mode] : curscore.mode}
-<t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>
-${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}`)
+<t:${Math.floor(new Date(curscore.created_at).getTime() / 1000)}:F>`)
                     .addFields([
                         {
                             name: 'SCORE DETAILS',
@@ -5177,15 +5176,10 @@ ${srStr}
         } else {
             switch (scoredetailed) {
                 case 0: case 2: {
-                    const txt = `${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
-                    ${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}` + scoresarg.string.join('');
-                    rsEmbed.setDescription(txt);
+                    rsEmbed.setDescription(scoresarg.string.join(''));
                 }
                     break;
                 case 1: default: {
-                    rsEmbed.setDescription(`${scoresarg.filter}\nPage: ${scoresarg.usedPage + 1}/${scoresarg.maxPages}
-                    ${input.config.useEmojis.gamemodes ? emojis.gamemodes[mode] : mode}
-                    `);
                     rsEmbed.addFields(scoresarg.fields);
                 }
                     break;
@@ -11230,7 +11224,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                 }
 
                 embedescription = `**[${firstuser.username}](https://osu.ppy.sh/users/${firstuser.id})** and **[${seconduser.username}](https://osu.ppy.sh/users/${seconduser.id})** have ${filterfirst.length} shared scores`;
-                embedStyle += ` | ${page + 1}/${Math.ceil(filterfirst.length / 5)}`
+                embedStyle += ` | ${page + 1}/${Math.ceil(filterfirst.length / 5)}`;
                 for (const score of arrscore) {
                     usefields.push({
                         name: def.invisbleChar,
