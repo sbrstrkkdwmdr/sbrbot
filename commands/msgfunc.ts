@@ -1,5 +1,8 @@
+//for parsing args and sending messages
+
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
+import { path } from '../path.js';
 import * as flags from '../src/consts/argflags.js';
 import * as buttonsthing from '../src/consts/buttons.js';
 import * as errors from '../src/consts/errors.js';
@@ -66,7 +69,7 @@ export async function sendMessage(input: {
             switch (input.commandType) {
                 case 'message': case 'link': {
                     if (!canReply) {
-                        ((input.obj as Discord.Message<any>).channel as Discord.GuildTextBasedChannel ).send({
+                        ((input.obj as Discord.Message<any>).channel as Discord.GuildTextBasedChannel).send({
                             content: `${input.args.content ?? ''}`,
                             embeds: input.args.embeds ?? [],
                             files: input.args.files ?? [],
@@ -288,7 +291,7 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
 
     let sort: embedStuff.scoreSort = null;
     let reverse = false;
-    let mode = 'osu';
+    let mode:osuApiTypes.GameMode = 'osu';
     let filteredMapper = null;
     let filteredMods = null;
     let exactMods = null;
@@ -465,7 +468,7 @@ export async function parseArgs_scoreList_interaction(input: extypes.commandInpu
     const scoredetailed = input.obj.options.getBoolean('detailed') ? 1 : 0;
     const sort = input.obj.options.getString('sort') as embedStuff.scoreSort ?? null;
     const reverse = input.obj.options.getBoolean('reverse') ?? false;
-    const mode = input.obj.options.getString('mode') ?? 'osu';
+    const mode = (input.obj.options.getString('mode') ?? 'osu') as osuApiTypes.GameMode;
     const filteredMapper = input.obj.options.getString('mapper') ?? null;
     const filterTitle = input.obj.options.getString('filter') ?? null;
     const parseId = input.obj.options.getInteger('parse') ?? null;
@@ -658,7 +661,7 @@ export async function parseArgs_scoreList(input: extypes.commandInput) {
 
     let sort: embedStuff.scoreSort = null;
     let reverse = false;
-    let mode = 'osu';
+    let mode:osuApiTypes.GameMode = 'osu';
 
     let filteredMapper = null;
     let filterTitle = null;
@@ -678,6 +681,7 @@ export async function parseArgs_scoreList(input: extypes.commandInput) {
     let combo = null;
     let miss = null;
     let bpm = null;
+    let error = false;
 
     switch (input.commandType) {
         case 'message': {
@@ -741,28 +745,36 @@ export async function parseArgs_scoreList(input: extypes.commandInput) {
             input.obj = (input.obj as Discord.ButtonInteraction);
 
             commanduser = input.obj.member.user;
-            const temp = await parseArgs_scoreList_button(input);
+            const temp = getButtonArgs(input.absoluteID);
+            if (temp.error) {
+                input.obj.reply({
+                    content: errors.paramFileMissing,
+                    ephemeral: true,
+                    allowedMentions: { repliedUser: false }
+                });
+                error = true;
+            }
             user = temp.user;
             searchid = temp.searchid;
-            page = temp.page;
-            scoredetailed = temp.scoredetailed;
-            sort = temp.sort;
+            page = buttonPage(temp.page, temp.maxPage, input.button);
+            scoredetailed = buttonDetail(temp.detailed, input.button);
+            sort = temp.sortScore;
             reverse = temp.reverse;
             mode = temp.mode;
-            filteredMapper = temp.filteredMapper;
-            filteredMods = temp.filteredMods;
+            filteredMapper = temp.filterMapper;
             filterTitle = temp.filterTitle;
-            parseScore = temp.parseScore;
-            parseId = temp.parseId;
             filterRank = temp.filterRank;
-            exactMods = temp.exactMods;
-            excludeMods = temp.excludeMods;
-            pp = temp.pp;
-            score = temp.score;
-            acc = temp.acc;
-            combo = temp.combo;
-            miss = temp.miss;
-            bpm = temp.bpm;
+            parseScore = temp.parse;
+            parseId = temp.parseId;
+            filteredMods = temp.modsInclude;
+            exactMods = temp.modsExact;
+            excludeMods = temp.modsExclude;
+            pp = temp.filterPp;
+            score = temp.filterScore;
+            acc = temp.filterAcc;
+            combo = temp.filterCombo;
+            miss = temp.filterMiss;
+            bpm = temp.filterBpm;
         }
             break;
     }
@@ -775,7 +787,7 @@ export async function parseArgs_scoreList(input: extypes.commandInput) {
         parseScore, parseId,
         filteredMods, exactMods, excludeMods,
         pp, score, acc, combo, miss,
-        bpm
+        bpm, error
     };
 }
 
@@ -937,4 +949,106 @@ export function argRange(arg: string, forceAboveZero: boolean) {
         min,
         exact,
     };
+}
+
+export type params = {
+    error?: boolean,
+    searchid?: string,
+    user?: string,
+    page?: number,
+    maxPage?: number,
+    mode?: osuApiTypes.GameMode,
+    userId?: string,
+    mapId?: string,
+    spotlight?: string,
+    detailed?: number,
+    filter?: string,
+    list?: boolean, //recent
+    fails?: number, //recent
+    nochokes?: boolean, //top
+    rankingtype?: osuApiTypes.RankingType, //ranking
+    country?: string, //ranking
+    //scorelist AND ubm
+    parse?: boolean,
+    parseId?: string,
+    filterTitle?: string,
+    //scorelist
+    sortScore?: embedStuff.scoreSort,
+    reverse?: boolean,
+    filterMapper?: string,
+    filterMods?: string,
+    filterRank?: osuApiTypes.Rank,
+    modsInclude?: string,
+    modsExact?: string,
+    modsExclude?: string,
+    filterPp?: string,
+    filterScore?: string,
+    filterAcc?: string,
+    filterCombo?: string,
+    filterMiss?: string,
+    filterBpm?: string,
+
+
+    //map
+    overrideSpeed?: number,
+    overrideBpm?: number,
+    ppCalc?: boolean,
+    maptitleq?: string,
+
+    //ubm
+    sortMap?: extypes.ubmSort,
+    mapType?: extypes.ubmFilter,
+    //compare
+    searchIdFirst?: string,
+    searchIdSecond?: string,
+    compareFirst?: string,
+    compareSecond?: string,
+    type?: string,
+};
+
+export function getButtonArgs(commandId: string | number) {
+    if (fs.existsSync(`${path}/cache/params/${commandId}.json`)) {
+        const x = fs.readFileSync(`${path}/cache/params/${commandId}.json`, 'utf-8');
+        return JSON.parse(x) as params;
+    }
+    return {
+        error: true
+    };
+}
+
+export function storeButtonArgs(commandId: string | number, params: params) {
+    fs.writeFileSync(`${path}/cache/params/${commandId}.json`, JSON.stringify(params, null, 2));
+}
+
+export function buttonPage(page: number, max: number, button: extypes.commandButtonTypes) {
+    switch (button) {
+        case 'BigLeftArrow':
+            page = 1;
+            break;
+        case 'LeftArrow':
+            page--;
+            break;
+        case 'RightArrow':
+            page++;
+            break;
+        case 'BigRightArrow':
+            page = max;
+            break;
+    }
+    return page;
+}
+
+export function buttonDetail(level: number, button: extypes.commandButtonTypes) {
+    switch (button) {
+        case 'Detail0':
+            level = 0;
+            break;
+        case 'Detail1': case 'DetailDisable':
+            level = 1;
+            break;
+        case 'Detail2': case 'DetailEnable':
+            level = 2;
+            break;
+    }
+    return level;
 }

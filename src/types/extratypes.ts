@@ -37,7 +37,7 @@ export type input = {
     guildSettings?,
     trackDb?,
     statsCache?;
-}
+};
 
 export type guildSettings = {
     guildid: number | string,
@@ -329,3 +329,9 @@ export type reminder = {
     text: string,
     userID: string,
 };
+export type ubmFilter = 'favourite' | 'graveyard' | 'loved' | 'pending' | 'ranked' | 'nominated' | 'guest' | 'most_played';
+export type ubmSort = 'title' | 'artist' |
+    'difficulty' | 'status' |
+    'fails' | 'plays' |
+    'dateadded' | 'favourites' | 'bpm' |
+    'cs' | 'ar' | 'od' | 'hp' | 'length';

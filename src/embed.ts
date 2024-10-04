@@ -462,7 +462,8 @@ ${pptxt} ${weighted}
         maxPages: Math.ceil(newData.length / perPage),
         isFirstPage: asObj.page == 0,
         isLastPage: asObj.page >= Math.ceil(newData.length / perPage) - 1,
-        usedPage: asObj.page
+        usedPage: asObj.page,
+        lastPage: Math.ceil(newData.length / perPage)
     };
 
 }

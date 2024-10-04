@@ -11,6 +11,7 @@
 
 ### Changed
 - store all info variables in one object
+- store command params locally within the bot instead of in embed descriptions
 
 ### Added
 - source code param in info
