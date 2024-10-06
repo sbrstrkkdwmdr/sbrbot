@@ -351,7 +351,6 @@ export default (input: extypes.input) => {
      */
     function clearParseArgs() {
         const files = fs.readdirSync(`${path}/cache/params`);
-        console.log(files);
         for (const file of files) {
             fs.stat(`${path}/cache/params/` + file, (err, stat) => {
                 if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24)) {
