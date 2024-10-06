@@ -986,12 +986,12 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                     }
                 }
             }
-            const temppath = `${filespath}/maps.txt`;
-            fs.writeFileSync(temppath, acceptFiles.join('\n'), 'utf-8');
+            const temppath = `${filespath}/maps.md`;
+            fs.writeFileSync(temppath, acceptFiles.join('\n').replaceAll('[\`', '[').replaceAll('\`]', ']'), 'utf-8');
             const embeds = [];
             let content = '';
             let files = [];
-            if (acceptFiles.join('\n').length < 2000) {
+            if (acceptFiles.join('\n').length < 4000) {
                 embeds.push(
                     new Discord.EmbedBuilder()
                         .setTitle(`${acceptFiles.length} maps stored in cache.`)
