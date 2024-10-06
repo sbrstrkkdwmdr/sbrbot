@@ -5,7 +5,7 @@ newest-oldest
 - [ ] support userlinks in commands that take user as a param
 - [ ] https://stackoverflow.com/questions/59655314/how-to-generate-an-image-from-dynamically-created-html-in-nodejs
 - [x] convert now returns NaN
-- [ ] new graph method doesnt have a background
+- [ ] fix new graph method not having a background
 - [ ] scoreparse not working with new score ids on website -> https://osu.ppy.sh/scores/osu/4308973497 and https://osu.ppy.sh/scores/1637688819 are the same but only the first link works
 - [x] save osutopdata, pinnedscoresdata and firstsdata by user id instead of command id
 - [x] re-order nochokes scores
@@ -39,21 +39,21 @@ newest-oldest
 - [ ] put strains and fails graph on the same graph
 - [x] add timezone options to time (ie AEDT, CST)
 - [x] add `most played`, `ranked` etc. aliases to `userbeatmaps`
-- [ ] command options like filter and sort in a separate embed or section (partially implemented)
+- [x] command options like filter and sort in a separate embed or section (partially implemented)
 - [x] edit arg handling in score list commands
 - [x] add score + rank filter to score list commands
-- [ ] profile card command (like show a jpg)
 - [x] make all button emojies the same theme
 - [x] osu map ranks command (#1s, #10s etc.) (FEATURE REMOVED 202X-XX-XX)
 - [ ] show fail point on `recent` strains graph
 - [x] health + strains graph (`recent` and `scoreparse`)
-- [ ] score title/thumbnail generator
 - [x] fix map parser
 - [x] fix pages on maplb
 - [x] recommend map command
 
 ## DEPRECATED
 won't be implemented
+- [ ] profile card command (like show a jpg)
+- [ ] score title/thumbnail generator
 - [ ] PV=nRT, n=m/M calculations
 - [ ] unstable rate calculator
 - [ ] render command
