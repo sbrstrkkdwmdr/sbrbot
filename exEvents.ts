@@ -10,7 +10,8 @@ export default (input: extypes.input) => {
 
     setInterval(() => {
         clearMapFiles();
-    }, 60 * 60 * 1000);
+        clearParseArgs();
+    }, 60 * 60 * 1000); 
 
     setInterval(() => {
         clearCommandCache();
@@ -19,7 +20,9 @@ export default (input: extypes.input) => {
     setInterval(async () => {
         getOnlineChangelog();
     }, 1000 * 60 * 60 * 6);
+
     clearMapFiles();
+    clearParseArgs();
     clearCommandCache();
     getOnlineChangelog();
 
@@ -340,6 +343,23 @@ export default (input: extypes.input) => {
                 }
             });
 
+        }
+    }
+
+    /**
+     * clear files used for command params
+     */
+    function clearParseArgs() {
+        const files = fs.readdirSync(`${path}/cache/params`);
+        console.log(files);
+        for (const file of files) {
+            fs.stat(`${path}/cache/params/` + file, (err, stat) => {
+                if ((new Date().getTime() - stat.mtimeMs) > (1000 * 60 * 60 * 24)) {
+                    fs.unlinkSync(`${path}/cache/params/` + file);
+                    log.toOutput(`Deleted file ${path}/cache/params/` + file, input.config);
+                    // fs.appendFileSync('logs/updates.log', `\ndeleted file "${file}" at ` + new Date().toLocaleString() + '\n')
+                }
+            });
         }
     }
 
