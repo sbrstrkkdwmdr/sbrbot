@@ -8,7 +8,7 @@
 
 ## [3.19.5] - 2024-10-08
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/e9c26176beba53303cd26d3f7b43ae9f00c646da)</br>
 
 ### Fixed
 - help category text exceeding character limit
