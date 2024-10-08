@@ -1,6 +1,6 @@
-export const version = '20240928';
+export const version = '20241008';
 
-export const versionAlt = '3.19.4';
+export const versionAlt = '3.19.5';
 
 export const versions: {
     name: string,
@@ -11,6 +11,11 @@ export const versions: {
             name: 'WIP',
             releaseDate: NaN,
             releaseDateFormatted: 'xxxx-xx-xx'
+        },
+        {
+            name: '3.19.5',
+            releaseDate: 20241008,
+            releaseDateFormatted: '2024-10-08'
         },
         {
             name: '3.19.4',
