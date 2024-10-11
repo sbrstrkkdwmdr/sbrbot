@@ -201,7 +201,7 @@ ${badge.image_url.length != 0 ? `[Image](${badge.image_url})` : ''}`,
             }
         }, input.canReply);
 
-        if (finalMessage == true) {
+        if (finalMessage) {
             log.logCommand({
                 event: 'Success',
                 commandName: 'badges',
@@ -390,7 +390,7 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'bws',
@@ -674,7 +674,7 @@ export async function lb(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'lb',
@@ -708,6 +708,8 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
     let type: osuApiTypes.RankingType = 'performance';
     let page = 0;
     let spotlight;
+    let parse: boolean = false;
+    let parseId: string;
 
     const embedStyle: extypes.osuCmdStyle = 'L';
 
@@ -724,6 +726,12 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
                 const temp = await msgfunc.parseArgsMode(input);
                 input.args = temp.args;
                 mode = temp.mode;
+            }
+            if (input.args.includes('-parse')) {
+                parse = true;
+                const temp = func.parseArg(input.args, '-parse', 'number', 1, null, true);
+                parseId = temp.value;
+                input.args = temp.newArgs;
             }
 
             input.args = msgfunc.cleanArgs(input.args);
@@ -911,6 +919,30 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
         osufunc.userStatsCache(rankingdata.ranking, input.statsCache, osufunc.modeValidator(mode), 'Stat');
     }
 
+    if (parse) {
+        let pid = parseInt(parseId) - 1;
+        if(pid < 0){
+            pid = 0;
+        }
+        if(pid > rankingdata.ranking.length){
+            pid = rankingdata.ranking.length - 1;
+        }
+
+        input.overrides = {
+            mode,
+            id: rankingdata?.ranking[pid]?.user.id,
+            commanduser,
+            commandAs: input.commandType
+        };
+        if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
+            await msgfunc.errorAndAbort(input, 'osu', true, `${errors.uErr.osu.score.nf} at index ${pid}`, true);
+            return;
+        }
+        input.commandType = 'other';
+        await osu(input);
+        return;
+    }
+
     const embed = new Discord.EmbedBuilder()
         .setFooter({
             text: `${embedStyle} | ${page + 1}/${Math.ceil(rankingdata.ranking.length / 5)}`
@@ -982,7 +1014,7 @@ ${curuser.hit_accuracy == null ? '---' : curuser.hit_accuracy.toFixed(2)}% | ${c
     }, input.canReply);
 
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'ranking',
@@ -1126,7 +1158,7 @@ export async function rankpp(input: extypes.commandInput & { statsCache: any; })
     }, input.canReply);
 
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'rank/pp',
@@ -1494,7 +1526,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         `\n**Peak Rank**: #${func.separateNum(osudata.rank_highest.rank)} (<t:${new Date(osudata.rank_highest.updated_at).getTime() / 1000}:R>)` :
         '';
 
-    const onlinestatus = osudata.is_online == true ?
+    const onlinestatus = osudata.is_online ?
         `**${emojis.onlinestatus.online} Online**` :
         (new Date(osudata.last_visit)).getTime() != 0 ?
             `**${emojis.onlinestatus.offline} Offline** | Last online <t:${(new Date(osudata.last_visit)).getTime() / 1000}:R>`
@@ -1607,7 +1639,7 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
         return [ChartsEmbedRank, ChartsEmbedPlay];
     }
 
-    if (graphonly == true) {
+    if (graphonly) {
         embedStyle = 'G';
         const graphembeds = await getGraphs();
         useEmbeds = graphembeds;
@@ -1794,7 +1826,7 @@ ${supporter} ${onlinestatus}
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'osu',
@@ -2153,7 +2185,7 @@ ${actText}`);
     }, input.canReply
     );
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'recent_activity',
@@ -2483,7 +2515,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         firstscoresdata = firstscoresdata.filter(x => x.rank == filterRank);
     }
 
-    if (parseScore == true) {
+    if (parseScore) {
         let pid = parseInt(parseId) - 1;
         if (pid < 0) {
             pid = 0;
@@ -2627,7 +2659,7 @@ export async function firsts(input: extypes.commandInput & { statsCache: any; })
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'firsts',
@@ -2905,7 +2937,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
         const lbdata = lbdataf.scores;
 
-        if (parseScore == true) {
+        if (parseScore) {
             let pid = parseInt(parseId) - 1;
             if (pid < 0) {
                 pid = 0;
@@ -3050,7 +3082,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
 
         func.storeFile(lbdataReq, input.absoluteID, 'lbdata');
 
-        if (parseScore == true) {
+        if (parseScore) {
             let pid = parseInt(parseId) - 1;
             if (pid < 0) {
                 pid = 0;
@@ -3171,7 +3203,7 @@ Has replay: ${score.replay_available == 1 ? '✅' : '❌'}
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'maplb',
@@ -3246,7 +3278,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
             sort = input.overrides.sort;
         }
         if (input.overrides.reverse != null) {
-            reverse = input.overrides.reverse === true;
+            reverse = input.overrides.reverse;
         }
         if (input.overrides.mode != null) {
             mode = input.overrides.mode;
@@ -3266,7 +3298,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
 
 
     const commandButtonName: 'osutop' | 'nochokes' =
-        noMiss == true ? 'nochokes' : 'osutop';
+        noMiss ? 'nochokes' : 'osutop';
 
     log.logCommand({
         event: 'Command',
@@ -3524,7 +3556,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         osutopdata = osutopdata.filter(x => x.rank == filterRank);
     }
 
-    if (parseScore == true) {
+    if (parseScore) {
         let pid = parseInt(parseId) - 1;
         if (pid < 0) {
             pid = 0;
@@ -3693,7 +3725,7 @@ export async function osutop(input: extypes.commandInput & { statsCache: any; })
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: commandButtonName,
@@ -4020,7 +4052,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     if (filterRank) {
         pinnedscoresdata = pinnedscoresdata.filter(x => x.rank == filterRank);
     }
-    if (parseScore == true) {
+    if (parseScore) {
         let pid = parseInt(parseId) - 1;
         if (pid < 0) {
             pid = 0;
@@ -4168,7 +4200,7 @@ export async function pinned(input: extypes.commandInput & { statsCache: any; })
     }, input.canReply);
 
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'pinned',
@@ -5100,7 +5132,7 @@ ${srStr}
         }
         useFiles.push(strainsgraph.path);
         rsEmbed.setImage(`attachment://${strainsgraph.filename}.jpg`);
-    } else if (list == true) {
+    } else if (list) {
         rsEmbed
             .setColor(colours.embedColour.scorelist.dec)
             .setTitle(`Recent ${showFails == 1 ? 'plays' : 'passes'} for ${osudata.username}`)
@@ -5220,7 +5252,7 @@ ${srStr}
     }, input.canReply);
 
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'recent',
@@ -5475,7 +5507,7 @@ ${isfail}
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'replayparse',
@@ -5981,7 +6013,7 @@ ${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata
                         name: 'Score details',
                         value:
                             `
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? ('| ' + (input.config.useEmojis.mods == true ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join('')).string}**`)) : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? ('| ' + (input.config.useEmojis.mods ? scoredata.mods.map(x => emojis.mods[x.toLowerCase()]).join('') : `**${osumodcalc.OrderMods(scoredata.mods.join('')).string}**`)) : ''}
 ${hitlist}
 ${scoredata.max_combo == mxcombo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mxcombo}x**
 `                        ,
@@ -6087,7 +6119,7 @@ ${srStr}
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'scoreparse',
@@ -6464,7 +6496,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
 
     osufunc.debug(scoredataReq, 'command', 'scores', input.obj.guildId, 'scoreData');
 
-    if (parseScore == true) {
+    if (parseScore) {
         let pid = parseInt(parseId) - 1;
         if (pid < 0) {
             pid = 0;
@@ -6622,7 +6654,7 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'scores',
@@ -7104,7 +7136,7 @@ ${pp?.ignored > 0 ? `Skipped: ${pp?.ignored}` : ''}
                 files: useFiles
             }
         }, input.canReply);
-        if (finalMessage == true) {
+        if (finalMessage) {
             log.logCommand({
                 event: 'Success',
                 commandName: 'scorestats',
@@ -7582,7 +7614,7 @@ ${emojis.mapobjs.star}${(score[0]?.difficulty?.stars ?? mapdata.difficulty_ratin
     }, input.canReply);
 
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'simulate',
@@ -8343,10 +8375,10 @@ export async function map(input: extypes.commandInput) {
         let hitlength = useMapdata.hit_length;
         const oldOverrideSpeed = overrideSpeed;
 
-        if (overrideBpm != null && isNaN(overrideBpm) == false && (overrideSpeed == null || isNaN(overrideSpeed) == true) && overrideBpm != useMapdata.bpm) {
+        if (overrideBpm != null && isNaN(overrideBpm) == false && (overrideSpeed == null || isNaN(overrideSpeed)) && overrideBpm != useMapdata.bpm) {
             overrideSpeed = overrideBpm / useMapdata.bpm;
         }
-        if (overrideSpeed != null && isNaN(overrideSpeed) == false && (overrideBpm == null || isNaN(overrideBpm) == true) && overrideSpeed != 1) {
+        if (overrideSpeed != null && isNaN(overrideSpeed) == false && (overrideBpm == null || isNaN(overrideBpm)) && overrideSpeed != 1) {
             overrideBpm = useMapdata.bpm * overrideSpeed;
         }
         if (mapmods.includes('DT') || mapmods.includes('NC')) {
@@ -8745,7 +8777,7 @@ HP${baseHP}`;
                 }${useMapdata.status == 'loved' ?
                     `Loved <t:${Math.floor(new Date(mapdata.beatmapset.ranked_date).getTime() / 1000)}:R>` : ''
                 }\n` +
-                `${mapdata.beatmapset.video == true ? '📺' : ''} ${mapdata.beatmapset.storyboard == true ? '🎨' : ''}`;
+                `${mapdata.beatmapset.video ? '📺' : ''} ${mapdata.beatmapset.storyboard ? '🎨' : ''}`;
 
             Embed
                 .setAuthor({
@@ -9011,7 +9043,7 @@ HP${baseHP}`;
     }, input.canReply);
 
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'map',
@@ -9175,7 +9207,7 @@ export async function randomMap(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'map (random)',
@@ -9375,7 +9407,7 @@ Pool of ${randomMap.poolSize}
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'recmap',
@@ -9631,7 +9663,7 @@ HitObjects: ${mapParsed.hitObjects?.length}
     }, input.canReply
     );
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'map (local)',
@@ -10067,7 +10099,7 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
                 );
     }
 
-    if (parseMap == true) {
+    if (parseMap) {
         let pid = parseInt(parseId) - 1;
         if (pid < 0) {
             pid = 0;
@@ -10191,7 +10223,7 @@ Page: ${page + 1}/${Math.ceil(mapsarg.maxPages)}${filterTitle ? `\nFilter: ${fil
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'userbeatmaps',
@@ -10380,7 +10412,7 @@ export async function trackadd(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'track add',
@@ -10563,7 +10595,7 @@ export async function trackremove(input: extypes.commandInput) {
     }, input.canReply);
 
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'track remove',
@@ -10694,7 +10726,7 @@ export async function trackchannel(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'track channel',
@@ -10815,7 +10847,7 @@ export async function tracklist(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'track list',
@@ -11307,7 +11339,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'compare',
@@ -11586,7 +11618,7 @@ export async function osuset(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'osuset',
@@ -11756,35 +11788,35 @@ export async function saved(input: extypes.commandInput) {
 
     if (cuser) {
         const fields = [];
-        if (show.name == true) {
+        if (show.name) {
             fields.push({
                 name: 'Username',
                 value: `${cuser.osuname && cuser.mode.length > 1 ? cuser.osuname : 'undefined'}`,
                 inline: true
             });
         }
-        if (show.mode == true) {
+        if (show.mode) {
             fields.push({
                 name: 'Mode',
                 value: `${cuser.mode && cuser.mode.length > 1 ? cuser.mode : 'osu (default)'}`,
                 inline: true
             });
         }
-        if (show.skin == true) {
+        if (show.skin) {
             fields.push({
                 name: 'Skin',
                 value: `${cuser.skin && cuser.skin.length > 1 ? cuser.skin : 'None'}`,
                 inline: true
             });
         }
-        if (show.tz == true) {
+        if (show.tz) {
             fields.push({
                 name: 'Timezone',
                 value: `${cuser.timezone && cuser.timezone.length > 1 ? cuser.timezone : 'None'}`,
                 inline: true
             });
         }
-        if (show.weather == true) {
+        if (show.weather) {
             fields.push({
                 name: 'Location',
                 value: `${cuser.location && cuser.location.length > 1 ? cuser.location : 'None'}`,
@@ -11805,7 +11837,7 @@ export async function saved(input: extypes.commandInput) {
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'saved',
@@ -12078,7 +12110,7 @@ Their new rank would be **${Math.round(guessrank)}** (+${Math.round(osudata?.sta
         }
     }, input.canReply);
 
-    if (finalMessage == true) {
+    if (finalMessage) {
         log.logCommand({
             event: 'Success',
             commandName: 'whatif',

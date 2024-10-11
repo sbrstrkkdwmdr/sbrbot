@@ -1596,7 +1596,7 @@ const osucmds: commandInfo[] = [
     {
         name: 'ranking',
         description: 'Displays the global leaderboards.',
-        usage: 'ranking [country] [-page/-p][-(mode)]',
+        usage: 'ranking [country] [-page/-p][-(mode)] [-parse]',
         slashusage: 'ranking [country] [mode] [page] [type] [spotlight]',
         examples: [
             {
@@ -1663,6 +1663,16 @@ const osucmds: commandInfo[] = [
             options: ['N/A'],
             defaultValue: 'latest',
             examples: ['spotlight:227'],
+            commandTypes: ['message', 'interaction']
+        },
+        {
+            name: 'parse',
+            type: 'integer',
+            required: false,
+            description: 'Parses the user with the given index',
+            options: ['N/A'],
+            defaultValue: '1',
+            examples: ['parse:3', '-parse 727'],
             commandTypes: ['message', 'interaction']
         },
         ]

@@ -34,7 +34,8 @@ export const uErr = {
             user: 'Could not find user [ID]',
             user_msp: 'No previous user id found in this guild',
             mostplayed: 'Could not find the user\'s most played beatmaps',
-            rsact: 'Could not find the user\'s recent activity'
+            rsact: 'Could not find the user\'s recent activity',
+            nf: 'Could not find the requested user'
         },
         rankings: 'Could not fetch rankings',
         datamissing: 'Missing data',
