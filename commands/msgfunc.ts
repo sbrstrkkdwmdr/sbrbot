@@ -10,10 +10,10 @@ import * as mainconst from '../src/consts/main.js';
 import * as embedStuff from '../src/embed.js';
 import * as func from '../src/func.js';
 import * as log from '../src/log.js';
+import * as osufunc from '../src/osufunc.js';
 import * as osumodcalc from '../src/osumodcalc.js';
 import * as extypes from '../src/types/extratypes.js';
 import * as osuApiTypes from '../src/types/osuApiTypes.js';
-
 
 export async function sendMessage(input: {
     commandType: extypes.commandType,
@@ -443,8 +443,12 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
         filteredMods.includes(' ') ? filteredMods = filteredMods.split(' ')[0] : null;
         input.args = input.args.join(' ').replace('+', '').replace(filteredMods, '').split(' ');
     }
-    user = input.args.join(' ')?.replaceAll('"', '');
-    if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+    const usertemp = fetchUser(input.args.join(' '))
+    user = usertemp.id; 
+    if(usertemp.mode && !mode){
+        mode = usertemp.mode;
+    }
+    if (!user || user.includes(searchid)) {
         user = null;
     }
     return {
@@ -1051,4 +1055,206 @@ export function buttonDetail(level: number, button: extypes.commandButtonTypes) 
             break;
     }
     return level;
+}
+
+/**
+ * checks url for beatmap id. if url given is just a number, then map id is the number
+ * @param url the url to check
+ * @param callIfMapIdNull if only set id is found, then send an api request to fetch the map id
+ */
+export async function mapIdFromLink(url: string, callIfMapIdNull: boolean, config: extypes.config) {
+    if (url.includes(' ')) {
+        const temp = url.split(' ');
+        //get arg that has osu.ppy.sh
+        for (let i = 0; i < temp.length; i++) {
+            const curarg = temp[i];
+            if (curarg.includes('osu.ppy.sh')) {
+                url = curarg;
+                break;
+            }
+        }
+    }
+
+    const object: {
+        set: number,
+        mode: osuApiTypes.GameMode,
+        map: number,
+    } = {
+        set: null,
+        mode: null,
+        map: null,
+    };
+
+    //patterns: 
+    /**
+     *
+     * osu.ppy.sh/b/{map}
+     * osu.ppy.sh/b/{map}?m={mode}
+     * osu.ppy.sh/beatmaps/{map}
+     * osu.ppy.sh/beatmaps/{map}?m={mode}
+     * osu.ppy.sh/s/{set} //mapset
+     * osu.ppy.sh/s/{set}#{mode}/{map}
+     * osu.ppy.sh/beatmapsets/{set}
+     * osu.ppy.sh/beatmapsets/{set}#{mode}/{map}
+     */
+
+    switch (true) {
+        case url.includes('?m='): {
+            const modeTemp = url.split('?m=')[1];
+            if (isNaN(+modeTemp)) {
+                object.mode = modeTemp as osuApiTypes.GameMode;
+            } else {
+                object.mode = osumodcalc.ModeIntToName(+modeTemp);
+            }
+            if (url.includes('/b/')) {
+                object.map = +url.split('?m=')[0].split('/b/')[1];
+            } else if (url.includes('/beatmaps/')) {
+                object.map = +url.split('?m=')[0].split('/beatmaps/')[1];
+            }
+        }
+            break;
+        case url.includes('/b/'):
+            object.map = +url.split('/b/')[1];
+            break;
+        case url.includes('beatmaps/'):
+            object.map = +url.split('/beatmaps/')[1];
+            break;
+        case url.includes('beatmapsets') && url.includes('#'): {
+            object.set = +url.split('beatmapsets/')[1].split('#')[0];
+            const modeTemp = url.split('#')[1].split('/')[0];
+            if (isNaN(+modeTemp)) {
+                object.mode = modeTemp as osuApiTypes.GameMode;
+            } else {
+                object.mode = osumodcalc.ModeIntToName(+modeTemp);
+            }
+            object.map = +url.split('#')[1].split('/')[1];
+        } break;
+        case url.includes('/s/') && url.includes('#'): {
+            object.set = +url.split('/s/')[1].split('#')[0];
+            const modeTemp = url.split('#')[1].split('/')[0];
+            if (isNaN(+modeTemp)) {
+                object.mode = modeTemp as osuApiTypes.GameMode;
+            } else {
+                object.mode = osumodcalc.ModeIntToName(+modeTemp);
+            }
+            object.map = +url.split('#')[1].split('/')[1];
+        } break;
+        case url.includes('/s/'):
+            object.set = +url.split('/s/')[1];
+            break;
+        case url.includes('beatmapsets/'):
+            object.set = +url.split('/beatmapsets/')[1];
+            break;
+        case !isNaN(+url):
+            object.map = +url;
+            break;
+    }
+    if (callIfMapIdNull && object.map == null && object.set) {
+        const bmsdataReq = await osufunc.apiget({
+            type: 'mapset_get',
+            params: {
+                id: object.set
+            },
+            config
+        });
+        object.map = (bmsdataReq.apiData as osuApiTypes.Beatmapset)?.beatmaps?.[0]?.id ?? null;
+    }
+    return object;
+}
+
+export function fetchUser(url: string) {
+    if (url.includes(' ')) {
+        const temp = url.split(' ');
+        //get arg that has osu.ppy.sh
+        for (let i = 0; i < temp.length; i++) {
+            const curarg = temp[i];
+            if (curarg.includes('osu.ppy.sh')) {
+                url = curarg;
+                break;
+            }
+        }
+    }
+    const object: {
+        id: string,
+        mode: osuApiTypes.GameMode,
+    } = {
+        id: null,
+        mode: null,
+    };
+    /**
+     * patterns:
+     * osu.ppy.sh/u/{id}
+     * osu.ppy.sh/users/{id}
+     * osu.ppy.sh/users/{id}/{mode}
+     * "{username}"
+     * {username}
+     */
+    switch (true) {
+        case url.includes('osu.ppy.sh'):
+            switch (true) {
+                case url.includes('/u/'):
+                    object.id = url.split('/u/')[1];
+                    break;
+                case url.includes('/users/'):
+                    object.id = url.split('/users/')[1];
+                    if (url.split('/users/')[1].includes('/')) {
+                        object.id = url.split('/users/')[1].split('/')[0];
+                        object.mode = (url.split('/users/')[1].split('/')[1]) as osuApiTypes.GameMode;
+                    }
+                    break;
+            }
+            break;
+        case url.includes("\""):
+            object.id = url.split('"')[1];
+            break;
+        default:
+            object.id = url;
+            break;
+    }
+    if(object.id.trim() == ""){
+        object.id = null
+    }
+    return object;
+}
+
+/**
+ * credit to chatgpt
+ */
+export function parseUsers(input: string): [string | null, string | null] {
+    // Regular expressions to match user patterns
+    const regexPatterns = [
+        /osu\.ppy\.sh\/u\/([^\/]+)/,                // Matches osu.ppy.sh/u/{id}
+        /osu\.ppy\.sh\/users\/([^\/]+)/,            // Matches osu.ppy.sh/users/{id}
+        /osu\.ppy\.sh\/users\/([^\/]+)\/([^\/]+)/,  // Matches osu.ppy.sh/users/{id}/{mode}
+        /"([^"]+)"/,                                // Matches "{username}"
+        /([^\/\s]+)/,                               // Matches {username}
+    ];
+
+    let foo: string | null = null;
+    let bar: string | null = null;
+
+    // Check each regex pattern for matches
+    for (const pattern of regexPatterns) {
+        const match = input.match(pattern);
+        if (match) {
+            // Determine which group to assign to foo and bar
+            if (pattern.source.includes('users/{id}/{mode}')) {
+                foo = match[1]; // {id}
+                bar = match[2]; // {mode}
+            } else if (pattern.source.includes('users/{id}')) {
+                foo = match[1]; // {id}
+                bar = null;     // No second value
+            } else {
+                if (!foo) {
+                    foo = match[1] || match[0]; // Match the first capturing group or the whole match for usernames
+                } else {
+                    bar = match[1] || match[0]; // Match the first capturing group or the whole match for usernames
+                }
+            }
+            // If both values are found, we can break early
+            if (foo && bar) break;
+        }
+    }
+
+    return [foo, bar];
 }

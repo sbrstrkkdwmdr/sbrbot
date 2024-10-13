@@ -9,6 +9,9 @@
 ### Added
 - `-parse` arg in `ranking` command
 
+### Changed
+- user can be set by using profile links
+
 ## [3.19.5] - 2024-10-08
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/e9c26176beba53303cd26d3f7b43ae9f00c646da)</br>

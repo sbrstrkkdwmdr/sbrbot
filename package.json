@@ -5,7 +5,7 @@
     "main": "dist/main.js",
     "type": "module",
     "scripts": {
-        "test": "ts-node-transpile-only main.ts",
+        "test": "tsc && node --experimental-json-modules --trace-warnings dist/tests/index.test.js",
         "build": "tsc",
         "run": "node --experimental-json-modules --trace-warnings dist/main.js",
         "update": "git pull && tsc",

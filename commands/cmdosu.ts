@@ -1,6 +1,5 @@
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
-import * as jimp from 'jimp';
 import * as osuclasses from 'osu-classes';
 import * as osuparsers from 'osu-parsers';
 import * as rosu from 'rosu-pp-js';
@@ -46,8 +45,9 @@ export async function badges(input: extypes.commandInput & { statsCache: any; })
 
                 input.args = msgfunc.cleanArgs(input.args);
 
-                user = input.args.join(' ')?.replaceAll('"', '');
-                if (!input.args[0] || input.args[0].includes(searchid)) {
+                const usertemp = msgfunc.fetchUser(input.args.join(' '));
+                user = usertemp.id;
+                if (!user || user.includes(searchid)) {
                     user = null;
                 }
             }
@@ -243,8 +243,9 @@ export async function bws(input: extypes.commandInput & { statsCache: any; }) {
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            user = input.args.join(' ')?.replaceAll('"', '');
-            if (!input.args[0] || input.args[0].includes(searchid)) {
+            const usertemp = msgfunc.fetchUser(input.args.join(' '));
+            user = usertemp.id;
+            if (!user || user.includes(searchid)) {
                 user = null;
             }
         }
@@ -921,10 +922,10 @@ export async function ranking(input: extypes.commandInput & { statsCache: any; }
 
     if (parse) {
         let pid = parseInt(parseId) - 1;
-        if(pid < 0){
+        if (pid < 0) {
             pid = 0;
         }
-        if(pid > rankingdata.ranking.length){
+        if (pid > rankingdata.ranking.length) {
             pid = rankingdata.ranking.length - 1;
         }
 
@@ -1220,8 +1221,12 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            user = input.args.join(' ')?.replaceAll('"', '');
-            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+            const usertemp = msgfunc.fetchUser(input.args.join(' '));
+            user = usertemp.id;
+            if (usertemp.mode && !mode) {
+                mode = usertemp.mode;
+            }
+            if (!user || user.includes(searchid)) {
                 user = null;
             }
         }
@@ -1299,17 +1304,14 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
 
             commanduser = input.obj.author;
 
-            const msgnohttp: string = input.obj.content.replace('https://', '').replace('http://', '').replace('www.', '');
-
-            searchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
-            user = msgnohttp.includes(' ') ? msgnohttp.split('/')[2].split(' ')[0] : msgnohttp.split('/')[2];
-            mode = msgnohttp.includes(' ') ?
-                msgnohttp.split('/')[3] ?
-                    msgnohttp.split('/')[3].split(' ')[0] : null
-                :
-                msgnohttp.split('/')[3] ?
-                    msgnohttp.split('/')[3] : null;
-            //u
+            const usertemp = msgfunc.fetchUser(input.obj.content);
+            user = usertemp.id;
+            if (usertemp.mode && !mode) {
+                mode = usertemp.mode;
+            }
+            if (!user || user.includes(searchid)) {
+                user = null;
+            }
         }
     }
 
@@ -1871,8 +1873,9 @@ export async function recent_activity(input: extypes.commandInput & { statsCache
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            user = input.args.join(' ')?.replaceAll('"', '');
-            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+            const usertemp = msgfunc.fetchUser(input.args.join(' '));
+            user = usertemp.id;
+            if (!user || user.includes(searchid)) {
                 user = null;
             }
         }
@@ -2722,7 +2725,7 @@ export async function maplb(input: extypes.commandInput & { statsCache: any; }) 
             }
             input.args = msgfunc.cleanArgs(input.args);
 
-            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true, input.config)).map;
+            mapid = (await msgfunc.mapIdFromLink(input.args.join(' '), true, input.config)).map;
         }
             break;
 
@@ -6194,17 +6197,25 @@ export async function scores(input: extypes.commandInput & { statsCache: any; })
                 scoredetailed = 0;
                 input.args = lessDetailArgFinder.args;
             }
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
+            }
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true, input.config)).map;
+            mapid = (await msgfunc.mapIdFromLink(input.args.join(' '), true, input.config)).map;
             if (mapid != null) {
                 input.args.splice(input.args.indexOf(input.args.find(arg => arg.includes('https://osu.ppy.sh/'))), 1);
             }
 
-            user = input.args.join(' ')?.replaceAll('"', '');
-
-            if (!input.args[0] || input.args.join(' ').includes(searchid) || user == undefined) {
+            const usertemp = msgfunc.fetchUser(input.args.join(' '));
+            user = usertemp.id;
+            if (usertemp.mode && !mode) {
+                mode = usertemp.mode;
+            }
+            if (!user || user.includes(searchid)) {
                 user = null;
             }
         }
@@ -6732,8 +6743,12 @@ export async function scorestats(input: extypes.commandInput) {
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            user = input.args.join(' ')?.replaceAll('"', '');
-            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+            const usertemp = msgfunc.fetchUser(input.args.join(' '));
+            user = usertemp.id;
+            if (usertemp.mode && !mode) {
+                mode = usertemp.mode;
+            }
+            if (!user || user.includes(searchid)) {
                 user = null;
             }
         }
@@ -7315,7 +7330,7 @@ export async function simulate(input: extypes.commandInput) {
                 }
                 input.args = input.args.slice(0, i).concat(input.args.slice(i + 1, input.args.length));
             }
-            mapid = (await osufunc.mapIdFromLink(input.args.join(' '), true, input.config)).map;
+            mapid = (await msgfunc.mapIdFromLink(input.args.join(' '), true, input.config)).map;
         }
             break;
 
@@ -7746,7 +7761,7 @@ export async function map(input: extypes.commandInput) {
             input.args = modeTemp.args;
 
             input.args = msgfunc.cleanArgs(input.args);
-            const mapTemp = await osufunc.mapIdFromLink(input.args.join(' '), true, input.config);
+            const mapTemp = await msgfunc.mapIdFromLink(input.args.join(' '), true, input.config);
             mapid = mapTemp.map;
             mapTemp.mode ? forceMode = mapTemp.mode : null;
         }
@@ -7810,7 +7825,7 @@ export async function map(input: extypes.commandInput) {
                         messagenohttp.split('q=')[1].split('&')[0] :
                         messagenohttp.split('q=')[1];
             } else {
-                const mapTemp = await osufunc.mapIdFromLink(messagenohttp, true, input.config);
+                const mapTemp = await msgfunc.mapIdFromLink(messagenohttp, true, input.config);
                 mapid = mapTemp.map;
                 forceMode = mapTemp.mode ?? forceMode;
                 if (!(mapTemp.map || mapTemp.set)) {
@@ -9785,8 +9800,9 @@ export async function userBeatmaps(input: extypes.commandInput & { statsCache: a
 
             input.args = msgfunc.cleanArgs(input.args);
 
-            user = input.args.join(' ')?.replaceAll('"', '');
-            if (!input.args[0] || input.args.join(' ').includes(searchid)) {
+            const usertemp = msgfunc.fetchUser(input.args.join(' '));
+            user = usertemp.id;
+            if (!user || user.includes(searchid)) {
                 user = null;
             }
         }
@@ -10891,6 +10907,11 @@ export async function compare(input: extypes.commandInput) {
         case 'message': {
             input.obj = (input.obj as Discord.Message);
             commanduser = input.obj.author;
+            {
+                const temp = await msgfunc.parseArgsMode(input);
+                input.args = temp.args;
+                mode = temp.mode;
+            }
             if (input.obj.mentions.users.size > 1) {
                 firstsearchid = input.obj.mentions.users.size > 0 ? input.obj.mentions.users.first().id : input.obj.author.id;
                 secondsearchid = input.obj.mentions.users.size > 1 ? input.obj.mentions.users.at(1).id : null;
@@ -10900,11 +10921,11 @@ export async function compare(input: extypes.commandInput) {
             } else {
                 firstsearchid = input.obj.author.id;
             }
-            first = null;
-            second = input.args[0] ?? null;
-            if (input.args[1]) {
-                first = input.args[0];
-                second = input.args[1];
+            const parseUsers = msgfunc.parseUsers(input.args.join(' '));
+            second = parseUsers[0];
+            if (parseUsers[1]) {
+                first = parseUsers[0];
+                second = parseUsers[1];
             }
             first != null && first.includes(firstsearchid) ? first = null : null;
             second != null && second.includes(secondsearchid) ? second = null : null;
@@ -11891,15 +11912,25 @@ export async function whatif(input: extypes.commandInput & { statsCache: any; })
             if (!isNaN(+input.args[0])) {
                 pp = +input.args[0];
             }
-
-            if ((input.args[0] && input.args[1])) {
-                if (input.args[0].includes(searchid)) {
-                    user = null;
-                } else {
-                    user = input.args[0];
+            input.args.forEach(x => {
+                if (!isNaN(+x)) {
+                    pp = +x;
                 }
-                pp = input.args[1] ?? null;
+            });
+            for (const x of input.args) {
+                if (!isNaN(+x)) {
+                    pp = +x;
+                    break;
+                }
+            }
 
+            const usertemp = msgfunc.fetchUser(input.args.join(' '));
+            user = usertemp.id;
+            if (usertemp.mode && !mode) {
+                mode = usertemp.mode;
+            }
+            if (!user || user.includes(searchid)) {
+                user = null;
             }
         }
             break;

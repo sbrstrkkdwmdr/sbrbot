@@ -15,8 +15,8 @@
         "commands/**/*",
         "config/**/*",
         "src/**/*",
+        "tests/",
         "*",
-        "test/*"
     ],
     "exclude": [
         "setup.ts",
