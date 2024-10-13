@@ -291,7 +291,7 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
 
     let sort: embedStuff.scoreSort = null;
     let reverse = false;
-    let mode:osuApiTypes.GameMode = 'osu';
+    let mode: osuApiTypes.GameMode = 'osu';
     let filteredMapper = null;
     let filteredMods = null;
     let exactMods = null;
@@ -443,9 +443,9 @@ export async function parseArgs_scoreList_message(input: extypes.commandInput) {
         filteredMods.includes(' ') ? filteredMods = filteredMods.split(' ')[0] : null;
         input.args = input.args.join(' ').replace('+', '').replace(filteredMods, '').split(' ');
     }
-    const usertemp = fetchUser(input.args.join(' '))
-    user = usertemp.id; 
-    if(usertemp.mode && !mode){
+    const usertemp = fetchUser(input.args.join(' '));
+    user = usertemp.id;
+    if (usertemp.mode && !mode) {
         mode = usertemp.mode;
     }
     if (!user || user.includes(searchid)) {
@@ -665,7 +665,7 @@ export async function parseArgs_scoreList(input: extypes.commandInput) {
 
     let sort: embedStuff.scoreSort = null;
     let reverse = false;
-    let mode:osuApiTypes.GameMode = 'osu';
+    let mode: osuApiTypes.GameMode = 'osu';
 
     let filteredMapper = null;
     let filterTitle = null;
@@ -1211,49 +1211,65 @@ export function fetchUser(url: string) {
             object.id = url;
             break;
     }
-    if(object.id.trim() == ""){
-        object.id = null
+    if (object.id.trim() == "") {
+        object.id = null;
     }
     return object;
 }
 
 /**
- * credit to chatgpt
+
  */
 export function parseUsers(input: string): [string | null, string | null] {
-    // Regular expressions to match user patterns
-    const regexPatterns = [
-        /osu\.ppy\.sh\/u\/([^\/]+)/,                // Matches osu.ppy.sh/u/{id}
-        /osu\.ppy\.sh\/users\/([^\/]+)/,            // Matches osu.ppy.sh/users/{id}
-        /osu\.ppy\.sh\/users\/([^\/]+)\/([^\/]+)/,  // Matches osu.ppy.sh/users/{id}/{mode}
-        /"([^"]+)"/,                                // Matches "{username}"
-        /([^\/\s]+)/,                               // Matches {username}
-    ];
-
     let foo: string | null = null;
     let bar: string | null = null;
-
-    // Check each regex pattern for matches
-    for (const pattern of regexPatterns) {
-        const match = input.match(pattern);
-        if (match) {
-            // Determine which group to assign to foo and bar
-            if (pattern.source.includes('users/{id}/{mode}')) {
-                foo = match[1]; // {id}
-                bar = match[2]; // {mode}
-            } else if (pattern.source.includes('users/{id}')) {
-                foo = match[1]; // {id}
-                bar = null;     // No second value
+    /**
+     * patterns:
+     * osu.ppy.sh/u/{id}
+     * osu.ppy.sh/users/{id}
+     * osu.ppy.sh/users/{id}/{mode}
+     * "{username}"
+     * {username}
+     */
+    let tempString;
+    let continues = false;
+    for (const string of input.split(' ')) {
+        if (continues) {
+            tempString += string + ' ';
+            if (string.includes('"')) {
+                continues = false;
+                tempString = tempString.replaceAll('"', '').trim();
             } else {
-                if (!foo) {
-                    foo = match[1] || match[0]; // Match the first capturing group or the whole match for usernames
-                } else {
-                    bar = match[1] || match[0]; // Match the first capturing group or the whole match for usernames
-                }
+                continue;
             }
-            // If both values are found, we can break early
-            if (foo && bar) break;
+        } else {
+            switch (true) {
+                case string.includes('osu.ppy.sh/u/'):
+                    tempString = string.split('osu.ppy.sh/u/')[1];
+                    break;
+                case string.includes('osu.ppy.sh/users/'):
+                    tempString = string.split('osu.ppy.sh/users/')[1];
+                    if (tempString.includes('/')) {
+                        tempString = tempString.split('/')[0];
+                    }
+                    break;
+                case string.startsWith('"'):
+                    continues = true;
+                    tempString = string + ' ';
+                    continue;
+                    break;
+                default:
+                    tempString = string;
+                    break;
+            }
         }
+        if (foo && bar) break;
+        if (foo) {
+            bar = tempString;
+        } else {
+            foo = tempString;
+        }
+
     }
 
     return [foo, bar];

@@ -3,10 +3,18 @@ const testPasses: {
     pass: boolean;
 }[] = [];
 
+/**
+ * 
+ * @param name name of test
+ * @param input input value
+ * @param output value to equal
+ * doesnt work on arrays
+ */
 export function test(name: string, input, output): boolean {
     
     console.log(input);
-    if (input === output) {
+    console.log(output);
+    if (input == output) {
         testPasses.push({
             name,
             pass: true
@@ -17,7 +25,7 @@ export function test(name: string, input, output): boolean {
             pass: false
         });
     }
-    return input === output;
+    return input == output;
 }
 
 export function checkTests() {

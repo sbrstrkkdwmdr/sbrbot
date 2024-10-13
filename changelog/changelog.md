@@ -11,6 +11,7 @@
 
 ### Changed
 - user can be set by using profile links
+- update how user names are fetched
 
 ## [3.19.5] - 2024-10-08
 
