@@ -2,7 +2,7 @@
 
 newest-oldest
 
-- [ ] support userlinks in commands that take user as a param
+- [x] support userlinks in commands that take user as a param
 - [ ] https://stackoverflow.com/questions/59655314/how-to-generate-an-image-from-dynamically-created-html-in-nodejs
 - [x] convert now returns NaN
 - [ ] fix new graph method not having a background
