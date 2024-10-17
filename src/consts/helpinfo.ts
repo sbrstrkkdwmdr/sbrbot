@@ -2627,7 +2627,7 @@ const admincmds: commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The type of debug to perform',
-                options: ['commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps', 'ls'],
+                options: ['commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps', 'ls', 'memory'],
                 defaultValue: 'list options',
                 examples: [''],
                 commandTypes: ['message',]

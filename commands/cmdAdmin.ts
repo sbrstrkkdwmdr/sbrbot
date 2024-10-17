@@ -621,7 +621,8 @@ export async function debug(input: extypes.commandInput) {
         'forcetrack' | 'curcmdid' |
         'logs' | 'ls' |
         'clear' |
-        'ip' | 'tcp' | 'location';
+        'ip' | 'tcp' | 'location' |
+        'memory';
 
     let type: debugtype;
     let inputstr;
@@ -1106,9 +1107,25 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                 content: response.decline[Math.floor(Math.random() * response.decline.length)]
             };
             break;
+        case 'memory':
+            const tomb = (into: number) => Math.round(into / 1024 / 1024 * 100) / 100;
+            const memdat = process.memoryUsage();
+            
+            const embed = new Discord.EmbedBuilder()
+                .setTitle('Current Memory Usage')
+                .setDescription(`
+RSS:        ${tomb(memdat.rss)} MiB
+Heap Total: ${tomb(memdat.heapTotal)} MiB
+Heap Used:  ${tomb(memdat.heapUsed)} MiB
+External:   ${tomb(memdat.external)} MiB
+`);
+            usemsgArgs = {
+                embeds: [embed]
+            }
+            break;
         default: {
             const expectArgs = [
-                'commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps', 'ls'];
+                'commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps', 'ls', 'ip', 'memory'];
             usemsgArgs = {
                 content: `Valid types are: ${expectArgs.map(x => `\`${x}\``).join(', ')}`
             };
