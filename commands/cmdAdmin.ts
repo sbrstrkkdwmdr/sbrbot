@@ -2141,7 +2141,7 @@ export async function servers(input: extypes.commandInput) {
 
     //ACTUAL COMMAND STUFF==============================================================================================================================================================================================
 
-    const servers = (input.client.guilds.cache.map(guild => ` **${guild.name}** => \`${guild.id}\` | <@${guild.ownerId}> \`||\``)).join('');
+    const servers = (input.client.guilds.cache.map(guild => ` **${guild.name}** => \`${guild.id}\` | <@${guild.ownerId}> \n`)).join('');
     const embed = new Discord.EmbedBuilder()
         .setTitle(`This client is in ${input.client.guilds.cache.size} guilds`)
         .setDescription(`${servers}`);
