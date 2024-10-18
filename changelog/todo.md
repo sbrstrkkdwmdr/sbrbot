@@ -2,6 +2,7 @@
 
 newest-oldest
 
+- [ ] bot docs allow search by command alias
 - [x] support userlinks in commands that take user as a param
 - [ ] https://stackoverflow.com/questions/59655314/how-to-generate-an-image-from-dynamically-created-html-in-nodejs
 - [x] convert now returns NaN
