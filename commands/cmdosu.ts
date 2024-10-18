@@ -1309,9 +1309,6 @@ export async function osu(input: extypes.commandInput & { statsCache: any; }) {
             if (usertemp.mode && !mode) {
                 mode = usertemp.mode;
             }
-            if (!user || user.includes(searchid)) {
-                user = null;
-            }
         }
     }
 

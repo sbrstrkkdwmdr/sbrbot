@@ -1202,7 +1202,7 @@ const osucmds: commandInfo[] = [
         slashusage: 'osu [user] [detailed] [mode]',
         linkusage: [
             'osu.ppy.sh/u/<user>',
-            'osu.ppy.sh/users/<user>#[(mode)]',
+            'osu.ppy.sh/users/<user>/[(mode)]',
         ],
         aliases: ['o', 'profile', 'user', 'taiko', 'drums', 'fruits', 'ctb', 'catch', 'mania'],
         examples: [
