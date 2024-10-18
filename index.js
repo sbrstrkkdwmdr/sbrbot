@@ -325,3 +325,17 @@ function fixCharacters(string) {
     return string.replaceAll('<', '&lt')
         .replaceAll('>', '&gt');
 }
+
+document.getElementById("command-search").addEventListener("input", (e) => {
+    const val = e.target.value.trim();
+    console.log(val);
+    const commands = document.getElementsByClassName("commandButton");
+    for (var i = 0; i < commands.length; i++) {
+        element = commands[i];
+        if(val.includes(element.innerHTML) || element.innerHTML.includes(val)){
+            element.style.display = 'inherit';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+});

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<meta charset="utf-8" >
+<meta charset="utf-8">
 <title>SSoB | Commands</title>
 <link rel="stylesheet" href="styles/base.css">
 <link rel="stylesheet" href="styles/cmd.css">
@@ -10,11 +10,11 @@
     rel="stylesheet">
 
 <head>
-    <meta name="description" content="SaberStrike osu! bot" >
-    <meta property="og:title" content="SaberStrike osu! bot" >
-    <meta property="og:description" content="SaberStrike osu! bot commands page" >
-    <meta property="og:type" content="website" >
-    <meta property="og:url" content="https://sbrstrkkdwmdr.github.io/sbrbot/commands" >
+    <meta name="description" content="SaberStrike osu! bot">
+    <meta property="og:title" content="SaberStrike osu! bot">
+    <meta property="og:description" content="SaberStrike osu! bot commands page">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sbrstrkkdwmdr.github.io/sbrbot/commands">
 </head>
 <!--nav-->
 
@@ -42,14 +42,20 @@
     </nav>
     <main class="bodytype">
         <div id="helpSummary">
-            <div></div>
+            <div>
+                <label for="command-search">Search for a command</label>
+                <input type="search" id="command-search">
+            </div>
             <ul>
                 <li>Arguments are shown as either &ltarg&gt or [arg]. Angled brackets "&ltarg&gt" are required and
                     square brackets "[arg]" are optional.</li>
-                <li>Argument values can be specified with <span class="inlineCodeblock">-key value</span> (ie. <span class="inlineCodeblock">-page 3</span>)</li>
+                <li>Argument values can be specified with <span class="inlineCodeblock">-key value</span> (ie. <span
+                        class="inlineCodeblock">-page 3</span>)</li>
                 <li>Argument values with spaces (such as names) can be specified with quotes ie. "saber strike"</li>
-                <li>You can use <span class="inlineCodeblock">osuset</span> to automatically set your osu! username and gamemode for commands such as
-                    <span class="inlineCodeblock">recent</span> (rs)</li>
+                <li>You can use <span class="inlineCodeblock">osuset</span> to automatically set your osu! username and
+                    gamemode for commands such as
+                    <span class="inlineCodeblock">recent</span> (rs)
+                </li>
                 <li>Mods are specified with +[mods] (include), -mx [mods] (match exact) or -me [mods] (exclude). -mx
                     overrides +[mods]</li>
                 <li>Gamemode can be specified by using -(mode) in commands that support it (ie. -taiko)</li>
@@ -59,20 +65,17 @@
         </div>
         <div id="commandDisplay">
             <div id="commandSelector" class="commandGridItem">
+                <!-- general commands -->
+                <div class="spaceForNav" id="general"></div>
                 <div>
-                    <!-- general commands -->
-                    <div class="spaceForNav" id="general"></div>
-                    <div>
-                        <h2 class="divSubheading">General Commands</h2>
-                        <div id="generalcmd" class="divCommandDetailsList">
+                    <h2 class="divSubheading">General Commands</h2>
+                    <div id="generalcmd" class="divCommandDetailsList">
 
-                        </div>
                     </div>
                 </div>
 
                 <!-- osu commands -->
                 <div class="spaceForNav" id="osu"></div>
-
                 <div>
                     <h2 class="divSubheading">osu! commands</h2>
                     <div id="osucmd" class="divCommandDetailsList">

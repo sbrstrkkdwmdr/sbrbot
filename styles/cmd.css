@@ -26,7 +26,6 @@ html {
     font-family: 'Ubuntu';
     font-weight: bolder;
     padding: 20px;
-    white-space: pre;
 }
 
 .divCommandName {
@@ -221,7 +220,7 @@ th {
 #commandSelector {
     max-width: 50vw;
     width: max-content;
-    padding-left: 15px;
+    min-width: 15vw;
     overflow-y: auto;
 }
 
@@ -251,4 +250,25 @@ th {
 
 #showLink {
     color: #ff8080
+}
+
+/* search elements */
+#command-search {
+    background-color: rgba(0, 0, 0, 0.50);
+    color:white;
+    margin-top: 0.5em;
+    gap: .25rem;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    /* Ensure padding is included in width/height */
+    position: relative;
+    /* Ensure z-index works */
+    padding: 5px;
+    border-radius: 0.5em;
+    width: 15vw;
+}
+
+label {
+    font-size: 24px;
 }
