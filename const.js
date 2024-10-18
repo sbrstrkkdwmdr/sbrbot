@@ -287,7 +287,7 @@ const scoreListCommandOptions = [
 const generalcommands = [
     {
         name: 'changelog',
-        description: 'Displays the changes for the current version or version requested',
+        description: 'Displays the changes for the current version or version requested.',
         usage: 'changelog [version]',
         slashusage: 'changelog [version]',
         examples: [
@@ -324,7 +324,7 @@ const generalcommands = [
     },
     {
         name: 'convert',
-        description: 'Converts a number from one unit/base to another',
+        description: 'Converts a number from one unit/base to another.',
         usage: 'convert [from] [to] [number]',
         slashusage: 'convert <from> [to] [number]',
         examples: [
@@ -373,7 +373,7 @@ const generalcommands = [
     },
     {
         name: 'country',
-        description: 'Displays information for a given country',
+        description: 'Displays information for a given country.',
         usage: '[-type] <search>',
         slashusage: '<search>',
         examples: [
@@ -455,17 +455,17 @@ const generalcommands = [
     },
     {
         name: 'info',
-        description: 'Shows information about the bot',
+        description: 'Shows information about the bot.',
         usage: 'info [arg]',
         examples: [],
-        aliases: ['[arg]'],
+        aliases: ['i', '[arg]'],
         options: [
             {
                 name: 'arg',
                 type: 'string',
                 required: false,
                 description: 'Return just that specific value',
-                options: ['uptime', 'version', 'server', 'website', 'timezone'],
+                options: ['uptime', 'version', 'server', 'website', 'timezone', 'source'],
                 defaultValue: 'null',
                 examples: ['N/A'],
                 commandTypes: ['message', 'interaction']
@@ -474,7 +474,7 @@ const generalcommands = [
     },
     {
         name: 'invite',
-        description: 'Sends the bot\'s public invite',
+        description: 'Sends the bot\'s public invite.',
         usage: 'invite',
         examples: [],
         aliases: [],
@@ -482,7 +482,7 @@ const generalcommands = [
     },
     {
         name: 'math',
-        description: 'Solves a math problem',
+        description: 'Solves a math problem.',
         usage: 'math <problem>',
         slashusage: 'math <type> <num1> [num2]',
         examples: [
@@ -556,7 +556,7 @@ operators: *, /, +, -, (, )
     },
     {
         name: 'ping',
-        description: 'Pings the bot and returns the latency',
+        description: 'Pings the bot and returns the latency.',
         usage: 'ping',
         slashusage: 'ping',
         examples: [],
@@ -625,7 +625,7 @@ operators: *, /, +, -, (, )
     },
     {
         name: 'stats',
-        description: 'Shows the bot\'s statistics',
+        description: 'Shows the bot\'s statistics.',
         usage: 'stats',
         examples: [],
         aliases: [],
@@ -633,7 +633,7 @@ operators: *, /, +, -, (, )
     },
     {
         name: 'time',
-        description: 'Shows the current time in a specific timezone. ',
+        description: 'Shows the current time in a specific timezone.',
         usage: 'time [timezone] [-showutc]',
         slashusage: 'time [timezone]',
         examples: [
@@ -673,7 +673,7 @@ operators: *, /, +, -, (, )
     },
     {
         name: 'weather',
-        description: 'Shows the weather for a specific region',
+        description: 'Shows the weather for a specific region.',
         usage: 'weather <region>',
         slashusage: 'weather <region>',
         examples: [
@@ -701,7 +701,7 @@ operators: *, /, +, -, (, )
 const osucommands = [
     {
         name: 'badges',
-        description: 'Display\'s the user\'s badges',
+        description: 'Display\'s the user\'s badges.',
         usage: 'badges [user]',
         slashusage: 'badges [user]',
         examples: [
@@ -718,7 +718,7 @@ const osucommands = [
     },
     {
         name: 'bws',
-        description: 'Shows the badge weighted rank of a user',
+        description: 'Shows the badge weighted rank of a user.',
         usage: 'bws [user]',
         slashusage: 'bws [user]',
         examples: [
@@ -743,7 +743,7 @@ const osucommands = [
     },
     {
         name: 'compare',
-        description: 'Compares two users\' osu! stats/top plays/scores',
+        description: 'Compares two users\' osu! stats/top plays/scores.',
         usage: 'compare [first] [second]',
         slashusage: 'compare [type] [first] [second]',
         examples: [
@@ -813,7 +813,7 @@ const osucommands = [
     },
     {
         name: 'firsts',
-        description: 'Shows the #1 global scores of a user\n' + scoreListString,
+        description: 'Shows the #1 global scores of a user.\n' + scoreListString,
         usage: 'firsts [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'firsts [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter] [grade]',
         examples: [
@@ -845,7 +845,7 @@ const osucommands = [
     },
     {
         name: 'lb',
-        description: 'Shows the osu! rankings of a server',
+        description: 'Shows the osu! rankings of a server.',
         usage: 'lb [id] [-(mode)]',
         slashusage: 'lb [id] [mode]',
         examples: [],
@@ -887,7 +887,7 @@ const osucommands = [
     },
     {
         name: 'map',
-        description: 'Shows information about a beatmap',
+        description: 'Shows information about a beatmap.',
         usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp] [-ppcalc] [-bg]',
         slashusage: 'map [query] [id] [mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp]',
         linkusage: [
@@ -1042,7 +1042,7 @@ const osucommands = [
     },
     {
         name: 'maplb',
-        description: 'Shows the leaderboard of a map',
+        description: 'Shows the leaderboard of a map.',
         usage: 'maplb [id] [-page/-p] [-parse]',
         slashusage: 'maplb [id] [page] [mods] [parse]',
         examples: [
@@ -1102,7 +1102,7 @@ const osucommands = [
     },
     {
         name: 'maprandom',
-        description: 'Returns the link to a random beatmap. Uses local storage so selection might be limited',
+        description: 'Returns the link to a random beatmap. Uses local storage so selection might be limited.',
         usage: 'maprandom [-(type)]',
         slashusage: 'maprandom [type]',
         examples: [
@@ -1129,7 +1129,7 @@ const osucommands = [
     },
     {
         name: 'maprecommend',
-        description: 'Recommends a random map based off of your total performance',
+        description: 'Recommends a random map based off of your recommended difficulty.',
         usage: 'maprecommend [-range] [user]',
         slashusage: 'maprecommend [range] [user]',
         examples: [
@@ -1165,7 +1165,7 @@ const osucommands = [
     },
     {
         name: 'nochokes',
-        description: 'Shows the user\'s top plays if no scores had a miss\n' + scoreListString,
+        description: 'Shows the user\'s top plays if no scores had a miss.\n' + scoreListString,
         usage: 'nochokes [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'nochokes [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter] [grade]',
         examples: [
@@ -1196,12 +1196,12 @@ const osucommands = [
     },
     {
         name: 'osu',
-        description: 'Shows information about a user\'s osu! profile',
+        description: 'Shows information about a user\'s osu! profile.',
         usage: 'osu [user] [-graph/-g] [-detailed/-d] [-(mode)]',
         slashusage: 'osu [user] [detailed] [mode]',
         linkusage: [
             'osu.ppy.sh/u/<user>',
-            'osu.ppy.sh/users/<user>#[(mode)]',
+            'osu.ppy.sh/users/<user>/[(mode)]',
         ],
         aliases: ['o', 'profile', 'user', 'taiko', 'drums', 'fruits', 'ctb', 'catch', 'mania'],
         examples: [
@@ -1249,7 +1249,7 @@ const osucommands = [
     },
     {
         name: 'osuset',
-        description: 'Sets your osu! username/mode/skin or any setting',
+        description: 'Sets your osu! username/mode/skin or any setting.',
         usage: 'osuset <username> [-(mode)] [-skin] [-timezone] [-location]',
         slashusage: 'osuset <username> [mode] [skin]',
         examples: [
@@ -1330,7 +1330,7 @@ const osucommands = [
     },
     {
         name: 'osutop',
-        description: 'Shows the top scores of a user\n' + scoreListString,
+        description: 'Shows the top scores of a user.\n' + scoreListString,
         usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'osutop [user] [mode] [sort] [reverse] [page] [mapper] [mods] [detailed] [parse] [filter] [grade]',
         examples: [
@@ -1374,7 +1374,7 @@ const osucommands = [
     },
     {
         name: 'pinned',
-        description: 'Shows the pinned scores of a user\n' + scoreListString,
+        description: 'Shows the pinned scores of a user.\n' + scoreListString,
         usage: 'pinned [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'pinned [user] [mode] [sort] [reverse] [page] [mapper] [mods] [parse] [filter] [grade]',
         examples: [
@@ -1402,7 +1402,7 @@ const osucommands = [
     },
     {
         name: 'ppcalc',
-        description: 'Gives the full performance calculations for a map',
+        description: 'Gives the full performance calculations for a map.',
         usage: 'ppcalc [-? "(query)"] [id] +[mods] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
         slashusage: 'ppcalc [query] [id] [mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp]',
         examples: [
@@ -1594,8 +1594,8 @@ const osucommands = [
     },
     {
         name: 'ranking',
-        description: 'Displays the global leaderboards',
-        usage: 'ranking [country] [-page/-p][-(mode)]',
+        description: 'Displays the global leaderboards.',
+        usage: 'ranking [country] [-page/-p][-(mode)] [-parse]',
         slashusage: 'ranking [country] [mode] [page] [type] [spotlight]',
         examples: [
             {
@@ -1664,11 +1664,21 @@ const osucommands = [
             examples: ['spotlight:227'],
             commandTypes: ['message', 'interaction']
         },
+        {
+            name: 'parse',
+            type: 'integer',
+            required: false,
+            description: 'Parses the user with the given index',
+            options: ['N/A'],
+            defaultValue: '1',
+            examples: ['parse:3', '-parse 727'],
+            commandTypes: ['message', 'interaction']
+        },
         ]
     },
     {
         name: 'recent',
-        description: 'Shows the recent score(s) of a user\nThe following only applies to list mode:\n' + scoreListString,
+        description: 'Shows the recent score(s) of a user.\nThe following only applies to list mode:\n' + scoreListString,
         usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'recent [user] [page] [mode] [list] [filter] [grade]',
         examples: [
@@ -1758,7 +1768,7 @@ const osucommands = [
     },
     {
         name: 'recentactivity',
-        description: 'Displays the user\'s most recent activity',
+        description: 'Displays the user\'s most recent activity.',
         usage: 'recentactivity [user] [-page]',
         slashusage: 'recentactivity [user] [page]',
         examples: [],
@@ -1781,7 +1791,7 @@ const osucommands = [
     },
     {
         name: 'saved',
-        description: 'Shows a user\'s saved settings',
+        description: 'Shows a user\'s saved settings.',
         usage: 'saved [user]',
         slashusage: 'saved [user]',
         examples: [
@@ -1843,7 +1853,7 @@ const osucommands = [
     },
     {
         name: 'scores',
-        description: 'Shows the scores of a user on a beatmap\n' + scoreListString,
+        description: 'Shows the scores of a user on a beatmap.\n' + scoreListString,
         usage: 'scores [user] [id] [-page/-p] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
         slashusage: 'scores [user] [id] [sort] [reverse] [page] [detailed] [parse] [grade]',
         examples: [
@@ -1886,7 +1896,7 @@ const osucommands = [
     },
     {
         name: 'scorestats',
-        description: 'Shows the stats of a user\'s scores',
+        description: 'Shows the stats of a user\'s scores.',
         usage: 'scorestats [user] [-(type)] [-(mode)] [all]',
         slashusage: 'scorestats [user] [type] [mode] [all]',
         examples: [
@@ -1937,7 +1947,7 @@ const osucommands = [
     },
     {
         name: 'simulate',
-        description: 'Simulates a score on a beatmap',
+        description: 'Simulates a score on a beatmap.',
         usage: 'simulate [id] +[(mods)]  [-acc] [-combo] [-n300] [-n100] [-n50] [-miss] [-bpm] [-speed]',
         slashusage: 'simulate [id] [mods] [accuracy] [combo] [n300] [n100] [n50] [misses] [bpm] [speed]',
         examples: [
@@ -2079,7 +2089,7 @@ const osucommands = [
     },
     {
         name: 'trackchannel',
-        description: 'Sets the channel to send tracklist updates to',
+        description: 'Sets the channel to send tracklist updates to.',
         usage: 'trackchannel <channel>',
         slashusage: 'trackchannel <channel>',
         examples: [
@@ -2108,7 +2118,7 @@ const osucommands = [
     },
     {
         name: 'tracklist',
-        description: 'Displays a list of the currently tracked users in the server',
+        description: 'Displays a list of the currently tracked users in the server.',
         usage: 'tracklist',
         slashusage: 'tracklist',
         examples: [],
@@ -2138,7 +2148,7 @@ const osucommands = [
     },
     {
         name: 'userbeatmaps',
-        description: 'Shows a user\'s beatmaps (favourites/ranked/pending/graveyard/loved)',
+        description: 'Shows a user\'s beatmaps. (favourites/ranked/pending/graveyard/loved)',
         usage: 'userbeatmaps [user] [-(type)] [-reverse] [-page/-p] [-parse] [-?]',
         slashusage: 'userbeatmaps [user] [type] [reverse] [page] [sort] [parse] [filter]',
         examples: [
@@ -2221,7 +2231,7 @@ const osucommands = [
     },
     {
         name: 'whatif',
-        description: 'Estimates user stats if they gain a certain amount of raw pp',
+        description: 'Estimates user stats if they gain a certain amount of raw pp.',
         usage: 'whatif [user] <pp>',
         slashusage: 'whatif [user] <pp>',
         examples: [
@@ -2255,7 +2265,7 @@ const osucommands = [
 const misccommands = [
     {
         name: '8ball',
-        description: 'Returns a yes/no/maybe answer to a question',
+        description: 'Returns a yes/no/maybe answer to a question.',
         usage: '8ball ',
         slashusage: '8ball ',
         examples: [
@@ -2269,7 +2279,7 @@ const misccommands = [
     },
     {
         name: 'coin',
-        description: 'Flips a coin',
+        description: 'Flips a coin.',
         usage: 'coin',
         slashusage: 'coin',
         examples: [],
@@ -2278,7 +2288,7 @@ const misccommands = [
     },
     {
         name: 'gif',
-        description: 'Sends a gif',
+        description: 'Sends a gif.',
         usage: '<type> [target]',
         slashusage: '<type> <target>',
         examples: [
@@ -2313,7 +2323,7 @@ const misccommands = [
     },
     {
         name: 'image',
-        description: 'Sends an image',
+        description: 'Sends an image.',
         usage: 'image <query>',
         slashusage: 'image <query>',
         examples: [
@@ -2338,7 +2348,7 @@ const misccommands = [
     },
     {
         name: 'inspire',
-        description: 'Sends a randomly generated inspirational quote',
+        description: 'Sends a randomly generated inspirational quote.',
         usage: 'inspire',
         slashusage: 'inspire',
         examples: [],
@@ -2367,7 +2377,7 @@ const misccommands = [
     },
     {
         name: 'poll',
-        description: 'Creates a poll',
+        description: 'Creates a poll.',
         usage: 'poll <question>',
         slashusage: 'poll <question> [options]',
         examples: [
@@ -2406,7 +2416,7 @@ const misccommands = [
     },
     {
         name: 'roll',
-        description: 'Rolls a random number',
+        description: 'Rolls a random number.',
         usage: 'roll [max] [min]',
         slashusage: 'roll [max] [min]',
         examples: [
@@ -2445,7 +2455,7 @@ const misccommands = [
     },
     {
         name: 'say',
-        description: 'Sends a message',
+        description: 'Sends a message.',
         usage: 'say <message>',
         slashusage: 'say <message> [channel]',
         examples: [
@@ -2480,7 +2490,7 @@ const misccommands = [
     },
     {
         name: 'ytsearch',
-        description: 'Searches youtube for a video',
+        description: 'Searches youtube for a video.',
         usage: 'ytsearch <query>',
         slashusage: 'ytsearch <query>',
         examples: [
@@ -2495,7 +2505,7 @@ const misccommands = [
                 name: 'query',
                 type: 'string',
                 required: true,
-                description: 'The video to search for',
+                description: 'The video to search for.',
                 options: ['N/A'],
                 defaultValue: 'N/A',
                 examples: ['osus', 'query:osus'],
@@ -2508,7 +2518,7 @@ const misccommands = [
 const admincommands = [
     {
         name: 'checkperms',
-        description: 'Checks the permissions of the user',
+        description: 'Checks the permissions of the user.',
         usage: 'checkperms [user]',
         slashusage: 'checkperms [user]',
         examples: [
@@ -2524,7 +2534,7 @@ const admincommands = [
     },
     {
         name: 'userinfo',
-        description: 'Returns information about a user',
+        description: 'Returns information about a user.',
         usage: 'userinfo [user]',
         slashusage: 'userinfo [user]',
         examples: [
@@ -2544,7 +2554,7 @@ const admincommands = [
     },
     {
         name: 'avatar',
-        description: 'Gets the avatar of a user',
+        description: 'Gets the avatar of a user.',
         usage: 'avatar [user]',
         slashusage: 'avatar [user]',
         examples: [
@@ -2564,7 +2574,7 @@ const admincommands = [
     },
     {
         name: 'debug',
-        description: 'Runs a debugging command',
+        description: 'Runs a debugging command.',
         usage: 'debug <type> [arg]',
         slashusage: 'debug <type> [arg]',
         examples: [
@@ -2616,7 +2626,7 @@ const admincommands = [
                 type: 'string',
                 required: false,
                 description: 'The type of debug to perform',
-                options: ['commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps', 'ls'],
+                options: ['commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps', 'ls', 'memory'],
                 defaultValue: 'list options',
                 examples: [''],
                 commandTypes: ['message',]
@@ -2634,7 +2644,7 @@ const admincommands = [
     },
     {
         name: 'find',
-        description: 'Finds details of a user/guild/channel/role/emoji/sticker',
+        description: 'Finds details of a user/guild/channel/role/emoji/sticker.',
         usage: 'find <type> <ID>',
         slashusage: 'find <type> <ID>',
         examples: [
@@ -2669,7 +2679,7 @@ const admincommands = [
     },
     {
         name: 'leaveguild',
-        description: 'Makes the bot leave a guild',
+        description: 'Makes the bot leave a guild.',
         usage: 'leaveguild [guild]',
         slashusage: 'leaveguild [guild]',
         examples: [
@@ -2694,7 +2704,7 @@ const admincommands = [
     },
     {
         name: 'prefix',
-        description: 'Set\'s the prefix of the current server',
+        description: 'Set\'s the prefix of the current server.',
         usage: 'prefix <prefix>',
         slashusage: 'prefix <prefix>',
         examples: [
@@ -2719,7 +2729,7 @@ const admincommands = [
     },
     {
         name: 'purge',
-        description: 'Deletes a specified amount of messages from the current channel',
+        description: 'Deletes a specified amount of messages from the current channel.',
         usage: 'purge [count] [user] [-method]',
         slashusage: 'purge [count] [user] [method]',
         examples: [
@@ -2772,7 +2782,7 @@ const admincommands = [
     },
     {
         name: 'servers',
-        description: 'Shows the servers the bot is in',
+        description: 'Shows the servers the bot is in.',
         usage: 'servers',
         slashusage: 'servers',
         examples: [],
