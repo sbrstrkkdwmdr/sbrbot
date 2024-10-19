@@ -56,9 +56,9 @@ const scoreListString =
 The arguments \`pp\`, \`score\`, \`acc\`, \`bpm\` and \`miss\` use the following format:
 \`-key value\` to filter by that exact value (ie. -bpm 220)
 \`-key >value\` to filter scores below value (ie. -pp >500)
-\`-key <value\` to filter scores above value (ie. -acc >90)
+\`-key <value\` to filter scores above value (ie. -acc <90)
 \`-key min..max\` to filter scores between min and max (ie. -miss 1..3)
-The \`sort\` arg can be specified using -value (ie -sort recent)
+The \`sort\` arg can be specified using -value (ie -recent)
 You can also show a single score by using \`-parse <id>\` (ie. -parse 5)
 `;
 
