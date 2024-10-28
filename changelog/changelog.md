@@ -2,14 +2,20 @@
 
 # changelog
 
+## [WIP] - xxxx-xx-xx
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+
 ## [3.19.6] - 2024-10-28
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/1bcddd6319f260ebfb699e8b1c0102373e9c4cbf)</br>
 
 ### Added
+
 - `-parse` arg in `ranking` command
 
 ### Changed
+
 - user can be set by using profile links
 - update how user names are fetched
 
@@ -18,13 +24,16 @@
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/e9c26176beba53303cd26d3f7b43ae9f00c646da)</br>
 
 ### Fixed
+
 - help category text exceeding character limit
 
 ### Changed
+
 - store all info variables in one object
 - store command params locally within the bot instead of in embed descriptions
 
 ### Added
+
 - source code param in info
 
 ## [3.19.4] - 2024-09-28
