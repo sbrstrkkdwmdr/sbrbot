@@ -2,23 +2,23 @@
 
 ## Third-party libraries
 
-| Usage                       | URL                                                                       |
-| --------------------------- | ------------------------------------------------------------------------- |
-| Discord API Wrapper         | [Discord.js](https://discord.js.org/)                                     |
-| Performance/SR calculations | [rosu-pp](https://github.com/MaxOhn/rosu-pp-js)                           |
-| Image to text parser        | [tesseract.js](https://github.com/naptha/tesseract.js)                    |
-| Youtube search              | [yt-search](https://www.npmjs.com/package/yt-search)                      |
-| Database                    | [Sequelize](https://www.npmjs.com/package/sequelize)                      |
-| Mod calculations            | [osumodcalculator](https://www.npmjs.com/package/osumodcalculator)        |
-| Graph/chart generator       | [chartjs](https://www.chartjs.org/)                                       |
-| Graph/chart generator       | [canvas](https://www.npmjs.com/package/canvas)                            |
-| osu!api                     | [osu! api v2](https://osu.ppy.sh/docs/index.html?javascript#introduction) |
-| Api caller                  | [Axios](https://github.com/axios/axios)                                   |
-| Api caller                  | [node-fetch](https://www.npmjs.com/package/node-fetch)                    |
-| osr handler                 | [osureplayparser](https://www.npmjs.com/package/osureplayparser)          |
-| Weather API                 | [open-meteo](https://open-meteo.com)                                      |
-| Tropical Weather API        | [tidetech](https://docs.tidetech.org/storm-api/)                          |
-| Country API                 | [REST Countries](https://restcountries.com/)                              |
+| Usage                       | URL                                                                                 |
+| --------------------------- | ----------------------------------------------------------------------------------- |
+| Discord API Wrapper         | [Discord.js](https://discord.js.org/)                                               |
+| Performance/SR calculations | [rosu-pp](https://github.com/MaxOhn/rosu-pp-js)                                     |
+| Youtube search              | [yt-search](https://www.npmjs.com/package/yt-search)                                |
+| Database                    | [Sequelize](https://www.npmjs.com/package/sequelize)                                |
+| Mod calculations            | [osumodcalculator](https://www.npmjs.com/package/osumodcalculator)                  |
+| Graph/chart generator       | [chartjs](https://www.chartjs.org/)                                                 |
+| Graph/chart generator       | [canvas](https://www.npmjs.com/package/canvas)                                      |
+| osu!api                     | [osu! api v2](https://osu.ppy.sh/docs/index.html?javascript#introduction)           |
+| Api caller                  | [Axios](https://github.com/axios/axios)                                             |
+| osu object handler          | [osu-parsers](https://www.npmjs.com/package/osu-parsers)                            |
+| Weather API                 | [open-meteo](https://open-meteo.com)                                                |
+| Country API                 | [REST Countries](https://restcountries.com/)                                        |
+| Time handler                | [Moment.js](https://momentjs.com/)                                                  |
+| Timezone handler            | [Luxon](https://moment.github.io/luxon/#/)                                          |
+| Timezone list               | [see here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/src/vars/timezones.ts) |
 
 ## Artwork
 
