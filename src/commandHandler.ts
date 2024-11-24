@@ -665,7 +665,7 @@ function runCommand(cmd: string, message: Discord.Message, interaction: Discord.
                 args,
                 date: new Date(),
                 id: helper.tools.commands.getCmdId(),
-                overrides: null,
+                overrides,
                 canReply,
                 type,
             });
