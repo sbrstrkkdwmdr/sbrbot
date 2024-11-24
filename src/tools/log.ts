@@ -55,8 +55,9 @@ Channel ID:   ${message.channelId}`
         ;
     if (opts.length > 0) {
         txt += '\n----------------------------------------------------';
+        let padding = opts.slice().map(x => x.name.length).sort((a, b) => b - a)[0];
         opts.forEach(opt => {
-            txt += `\n${opt.name}:\t\t${opt.value}`;
+            txt += `\n${(opt.name + ':').padEnd(padding, ' ')}${opt.value}`;
         });
     }
     txt += '\n====================================================';
