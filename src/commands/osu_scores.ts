@@ -142,13 +142,13 @@ export const firsts = async (input: bottypes.commandInput) => {
         let newScores = helper.tools.formatter.filterScores(firstscoresdata, parseArgs.sort ?? 'recent',
             {
                 mapper: parseArgs.filteredMapper,
-                modsInclude: parseArgs.filteredMods,
+                modsInclude: parseArgs.modsInclude,
                 title: parseArgs.filterTitle,
                 artist: null,
                 version: null,
                 rank: parseArgs.filterRank,
-                modsExact: parseArgs.exactMods,
-                modsExclude: parseArgs.excludeMods,
+                modsExact: parseArgs.modsExact,
+                modsExclude: parseArgs.modsExclude,
                 pp: parseArgs.pp,
                 score: parseArgs.score,
                 acc: parseArgs.acc,
@@ -189,13 +189,13 @@ export const firsts = async (input: bottypes.commandInput) => {
         firstscoresdata, parseArgs.sort ?? 'recent',
         {
             mapper: parseArgs.filteredMapper,
-            modsInclude: parseArgs.filteredMods,
+            modsInclude: parseArgs.modsInclude,
             title: parseArgs.filterTitle,
             artist: parseArgs.filterArtist,
             version: parseArgs.filterDifficulty,
             rank: parseArgs.filterRank,
-            modsExact: parseArgs.exactMods,
-            modsExclude: parseArgs.excludeMods,
+            modsExact: parseArgs.modsExact,
+            modsExclude: parseArgs.modsExclude,
             pp: parseArgs.pp,
             score: parseArgs.score,
             acc: parseArgs.acc,
@@ -203,7 +203,7 @@ export const firsts = async (input: bottypes.commandInput) => {
             miss: parseArgs.miss,
             bpm: parseArgs.bpm
         }, parseArgs.reverse, parseArgs.scoredetailed, parseArgs.page, true);
-    helper.tools.commands.storeButtonArgs(input.id + '', parseArgs);
+    helper.tools.commands.storeButtonArgs(input.id + '', { ...parseArgs, ...{ maxPage: scoresarg.maxPage } });
 
     firstsEmbed.setFooter({
         text: `${scoresarg.curPage}/${scoresarg.maxPage} | ${parseArgs.mode} | ${reachedMaxCount ? ' | Only first 500 scores are shown' : ''}`
@@ -612,7 +612,7 @@ export const osutop = async (input: bottypes.commandInput) => {
             parseArgs.filteredMapper = input.overrides.filterMapper;
         }
         if (input.overrides.filterMods != null) {
-            parseArgs.filteredMods = input.overrides.filterMods;
+            parseArgs.modsInclude = input.overrides.filterMods;
         }
         if (input.overrides.miss != null) {
             noMiss = true;
@@ -735,13 +735,13 @@ export const osutop = async (input: bottypes.commandInput) => {
         let newScores = helper.tools.formatter.filterScores(osutopdata, parseArgs.sort ?? 'recent',
             {
                 mapper: parseArgs.filteredMapper,
-                modsInclude: parseArgs.filteredMods,
+                modsInclude: parseArgs.modsInclude,
                 title: parseArgs.filterTitle,
                 artist: null,
                 version: null,
                 rank: parseArgs.filterRank,
-                modsExact: parseArgs.exactMods,
-                modsExclude: parseArgs.excludeMods,
+                modsExact: parseArgs.modsExact,
+                modsExclude: parseArgs.modsExclude,
                 pp: parseArgs.pp,
                 score: parseArgs.score,
                 acc: parseArgs.acc,
@@ -790,13 +790,13 @@ export const osutop = async (input: bottypes.commandInput) => {
         osutopdata, parseArgs.sort ?? 'pp',
         {
             mapper: parseArgs.filteredMapper,
-            modsInclude: parseArgs.filteredMods,
+            modsInclude: parseArgs.modsInclude,
             title: parseArgs.filterTitle,
             artist: parseArgs.filterArtist,
             version: parseArgs.filterDifficulty,
             rank: parseArgs.filterRank,
-            modsExact: parseArgs.exactMods,
-            modsExclude: parseArgs.excludeMods,
+            modsExact: parseArgs.modsExact,
+            modsExclude: parseArgs.modsExclude,
             pp: parseArgs.pp,
             score: parseArgs.score,
             acc: parseArgs.acc,
@@ -804,8 +804,7 @@ export const osutop = async (input: bottypes.commandInput) => {
             miss: parseArgs.miss,
             bpm: parseArgs.bpm
         }, parseArgs.reverse, parseArgs.scoredetailed, parseArgs.page, true);
-    helper.tools.commands.storeButtonArgs(input.id + '', parseArgs);
-    helper.tools.commands.storeButtonArgs(input.id + '', parseArgs);
+    helper.tools.commands.storeButtonArgs(input.id + '', { ...parseArgs, ...{ maxPage: scoresarg.maxPage } });
     topEmbed.setFooter({
         text: `${scoresarg.curPage}/${Math.ceil(scoresarg.maxPage)} | ${parseArgs.mode}`
     });
@@ -974,13 +973,13 @@ export const pinned = async (input: bottypes.commandInput) => {
         let newScores = helper.tools.formatter.filterScores(pinnedscoresdata, parseArgs.sort ?? 'recent',
             {
                 mapper: parseArgs.filteredMapper,
-                modsInclude: parseArgs.filteredMods,
+                modsInclude: parseArgs.modsInclude,
                 title: parseArgs.filterTitle,
                 artist: null,
                 version: null,
                 rank: parseArgs.filterRank,
-                modsExact: parseArgs.exactMods,
-                modsExclude: parseArgs.excludeMods,
+                modsExact: parseArgs.modsExact,
+                modsExclude: parseArgs.modsExclude,
                 pp: parseArgs.pp,
                 score: parseArgs.score,
                 acc: parseArgs.acc,
@@ -1020,13 +1019,13 @@ export const pinned = async (input: bottypes.commandInput) => {
         pinnedscoresdata, parseArgs.sort ?? 'recent',
         {
             mapper: parseArgs.filteredMapper,
-            modsInclude: parseArgs.filteredMods,
+            modsInclude: parseArgs.modsInclude,
             title: parseArgs.filterTitle,
             artist: parseArgs.filterArtist,
             version: parseArgs.filterDifficulty,
             rank: parseArgs.filterRank,
-            modsExact: parseArgs.exactMods,
-            modsExclude: parseArgs.excludeMods,
+            modsExact: parseArgs.modsExact,
+            modsExclude: parseArgs.modsExclude,
             pp: parseArgs.pp,
             score: parseArgs.score,
             acc: parseArgs.acc,
@@ -1034,8 +1033,8 @@ export const pinned = async (input: bottypes.commandInput) => {
             miss: parseArgs.miss,
             bpm: parseArgs.bpm
         }, parseArgs.reverse, parseArgs.scoredetailed, parseArgs.page, true);
-    helper.tools.commands.storeButtonArgs(input.id + '', parseArgs);
-    helper.tools.commands.storeButtonArgs(input.id + '', parseArgs);
+    helper.tools.commands.storeButtonArgs(input.id + '', { ...parseArgs, ...{ maxPage: scoresarg.maxPage } });
+    helper.tools.commands.storeButtonArgs(input.id + '', { ...parseArgs, ...{ maxPage: scoresarg.maxPage } });
     pinnedEmbed.setFooter({
         text: `${scoresarg.curPage}/${Math.ceil(scoresarg.maxPage)} | ${parseArgs.mode}`
     });
@@ -1099,8 +1098,8 @@ export const recent = async (input: bottypes.commandInput) => {
     let filterRank: apitypes.Rank = null;
 
     let includeMods = null;
-    let exactMods = null;
-    let excludeMods = null;
+    let modsExact = null;
+    let modsExclude = null;
 
     let pp = null;
     let score = null;
@@ -1140,9 +1139,9 @@ export const recent = async (input: bottypes.commandInput) => {
             scoredetailed = temp.scoredetailed;
             filterRank = temp.filterRank;
 
-            includeMods = temp.filteredMods;
-            exactMods = temp.exactMods;
-            excludeMods = temp.excludeMods;
+            includeMods = temp.modsInclude;
+            modsExact = temp.modsExact;
+            modsExclude = temp.modsExclude;
 
             pp = temp.pp;
             score = temp.score;
@@ -1268,7 +1267,7 @@ export const recent = async (input: bottypes.commandInput) => {
             },
             {
                 name: 'Exact Mods',
-                value: exactMods
+                value: modsExact
             },
             {
                 name: 'Detailed',
@@ -1717,8 +1716,8 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             filterTitle,
             filterRank,
             modsInclude: includeMods,
-            modsExact: exactMods,
-            modsExclude: excludeMods,
+            modsExact: modsExact,
+            modsExclude: modsExclude,
             filterPp: pp,
             filterScore: score,
             filterAcc: acc,
@@ -1843,8 +1842,8 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                 version: null,
                 rank: null,
                 modsInclude: includeMods,
-                modsExact: exactMods,
-                modsExclude: excludeMods,
+                modsExact: modsExact,
+                modsExclude: modsExclude,
                 pp,
                 score,
                 acc,
@@ -1863,8 +1862,8 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             filterTitle,
             filterRank,
             modsInclude: includeMods,
-            modsExact: exactMods,
-            modsExclude: excludeMods,
+            modsExact: modsExact,
+            modsExclude: modsExclude,
             filterPp: pp,
             filterScore: score,
             filterAcc: acc,

@@ -540,6 +540,7 @@ export type params = {
     filterMiss?: string,
     filterBpm?: string,
 
+    sort?: "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss" | bottypes.ubmSort,
 
     //map
     overrideSpeed?: number,
@@ -725,9 +726,9 @@ export async function parseArgs_scoreList_message(input: bottypes.commandInput) 
     let sort: "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss" = null;
     let reverse = false;
     let mode: apitypes.GameMode = 'osu';
-    let filteredMods = null;
-    let exactMods = null;
-    let excludeMods = null;
+    let modsInclude = null;
+    let modsExact = null;
+    let modsExclude = null;
     let filteredMapper = null;
     let filterTitle = null;
     let filterArtist = null;
@@ -780,28 +781,28 @@ export async function parseArgs_scoreList_message(input: bottypes.commandInput) 
         input.args = reverseArgFinder.args;
     }
     if (input.args.includes('-mods')) {
-        const temp = parseArg(input.args, '-mods', 'string', filteredMods, false);
-        filteredMods = temp.value;
+        const temp = parseArg(input.args, '-mods', 'string', modsInclude, false);
+        modsInclude = temp.value;
         input.args = temp.newArgs;
     }
     const mxmodArgFinder = matchArgMultiple(helper.vars.argflags.toFlag(['mx', 'modx',]), input.args, true, 'string');
     if (mxmodArgFinder.found) {
-        exactMods = mxmodArgFinder.output;
+        modsExact = mxmodArgFinder.output;
         input.args = mxmodArgFinder.args;
     }
     if (input.args.includes('-exmod')) {
-        const temp = parseArg(input.args, '-exmod', 'string', excludeMods, false);
-        excludeMods = temp.value;
+        const temp = parseArg(input.args, '-exmod', 'string', modsExclude, false);
+        modsExclude = temp.value;
         input.args = temp.newArgs;
     }
     if (input.args.includes('-me')) {
-        const temp = parseArg(input.args, '-me', 'string', excludeMods, false);
-        excludeMods = temp.value;
+        const temp = parseArg(input.args, '-me', 'string', modsExclude, false);
+        modsExclude = temp.value;
         input.args = temp.newArgs;
     }
     const exmodArgFinder = matchArgMultiple(helper.vars.argflags.toFlag(['me', 'exmod',]), input.args, true, 'string');
     if (exmodArgFinder.found) {
-        excludeMods = exmodArgFinder.output;
+        modsExclude = exmodArgFinder.output;
         input.args = exmodArgFinder.args;
     }
 
@@ -886,9 +887,9 @@ export async function parseArgs_scoreList_message(input: bottypes.commandInput) 
     }
     input.args = cleanArgs(input.args);
     if (input.args.join(' ').includes('+')) {
-        filteredMods = input.args.join(' ').split('+')[1];
-        filteredMods.includes(' ') ? filteredMods = filteredMods.split(' ')[0] : null;
-        input.args = input.args.join(' ').replace('+', '').replace(filteredMods, '').split(' ');
+        modsInclude = input.args.join(' ').split('+')[1];
+        modsInclude.includes(' ') ? modsInclude = modsInclude.split(' ')[0] : null;
+        input.args = input.args.join(' ').replace('+', '').replace(modsInclude, '').split(' ');
     }
     const usertemp = fetchUser(input.args.join(' '));
     user = usertemp.id;
@@ -903,7 +904,7 @@ export async function parseArgs_scoreList_message(input: bottypes.commandInput) 
         sort, reverse, mode,
         filteredMapper, filterTitle, filterArtist, filterDifficulty, filterRank,
         parseScore, parseId,
-        filteredMods, exactMods, excludeMods,
+        modsInclude, modsExact, modsExclude,
         pp, score, acc, combo, miss,
         bpm
     };
@@ -924,9 +925,9 @@ export async function parseArgs_scoreList_interaction(input: bottypes.commandInp
     const filterTitle = input.interaction.options.getString('filter') ?? null;
     const parseId = input.interaction.options.getInteger('parse') ?? null;
     const parseScore = parseId != null ? true : false;
-    const filteredMods = input.interaction.options.getString('mods') ?? null;
-    const exactMods = input.interaction.options.getString('exactmods') ?? null;
-    const excludeMods = input.interaction.options.getString('excludemods') ?? null;
+    const modsInclude = input.interaction.options.getString('mods') ?? null;
+    const modsExact = input.interaction.options.getString('modsExact') ?? null;
+    const modsExclude = input.interaction.options.getString('modsExclude') ?? null;
     const filterRank = input.interaction.options.getString('filterRank') ? osumodcalc.checkGrade(input.interaction.options.getString('filterRank')) : null;
     const pp = input.interaction.options.getString('pp') ?? null;
     const score = input.interaction.options.getString('score') ?? null;
@@ -937,173 +938,82 @@ export async function parseArgs_scoreList_interaction(input: bottypes.commandInp
     return {
         user, searchid, page, scoredetailed,
         sort, reverse, mode,
-        filteredMapper, filteredMods, filterTitle, filterRank,
-        exactMods, excludeMods,
+        filteredMapper, modsInclude, filterTitle, filterRank,
+        modsExact, modsExclude,
         parseScore, parseId,
         pp, score, acc, combo, miss, bpm,
     };
 }
 
 export async function parseArgs_scoreList_button(input: bottypes.commandInput) {
-    let page = 0;
-
     let scoredetailed: number = 1;
-
-    let sort: string = null;
-    let reverse = false;
-    let mode = 'osu';
-
-    let filteredMapper = null;
-    let filteredMods = null;
-    let exactMods = null;
-    let excludeMods = null;
-    let filterTitle = null;
-    let filterRank: apitypes.Rank = null;
-
-    const parseScore = false;
-    const parseId = null;
-    let pp = null;
-    let score = null;
-    let acc = null;
-    let combo = null;
-    let miss = null;
-    const bpm = null;
-
     if (!input.message.embeds[0]) {
         return;
     }
-    const searchid = input.interaction.member.user.id;
 
-    const user = input.message.embeds[0].url.split('users/')[1].split('/')[0];
-    mode = input.message.embeds[0].url.split('users/')[1].split('/')[1];
-    page = 0;
+    const temp = getButtonArgs(input.id);
+    const user = temp?.user;
+    const searchid = temp?.searchid;
+    let page = temp?.page;
+    const mode = temp?.mode;
+    const filteredMapper = temp?.filterMapper;
+    const modsInclude = temp?.modsInclude;
+    const modsExact = temp?.modsExact;
+    const modsExclude = temp?.modsExclude;
+    const filterTitle = temp?.filterTitle;
+    const filterRank = temp?.filterRank;
+    const parseId = null;
+    const parseScore = null;
+    const pp = temp?.filterPp;
+    const score = temp?.filterScore;
+    const acc = temp?.filterAcc;
+    const combo = temp?.filterCombo;
+    const miss = temp?.filterMiss;
+    const bpm = temp?.filterBpm;
+    let sort = temp?.sort;
+    const reverse = temp?.reverse;
 
-    if (input.message.embeds[0].description) {
-        if (input.message.embeds[0].description.includes('mapper')) {
-            filteredMapper = input.message.embeds[0].description.split('mapper: ')[1].split('\n')[0];
-        }
-
-        if (input.message.embeds[0].description.includes('include mods')) {
-            filteredMods = input.message.embeds[0].description.split('include mods: ')[1].split('\n')[0];
-        }
-
-        if (input.message.embeds[0].description.includes('exact mods')) {
-            exactMods = input.message.embeds[0].description.split('exact mods: ')[1].split('\n')[0];
-        }
-        if (input.message.embeds[0].description.includes('exclude mods')) {
-            excludeMods = input.message.embeds[0].description.split('exclude mods: ')[1].split('\n')[0];
-        }
-
-        if (input.message.embeds[0].description.includes('map')) {
-            filterTitle = input.message.embeds[0].description.split('map: ')[1].split('\n')[0];
-        }
-
-        if (input.message.embeds[0].description.includes('rank')) {
-            filterRank = osumodcalc.checkGrade(input.message.embeds[0].description.split('rank: ')[1].split('\n')[0]);
-        }
-
-        if (input.message.embeds[0].description.includes('rank')) {
-            filterRank = osumodcalc.checkGrade(input.message.embeds[0].description.split('rank: ')[1].split('\n')[0]);
-        }
-
-        if (input.message.embeds[0].description.includes('pp:')) {
-            pp = input.message.embeds[0].description.split('pp: ')[1].split('\n')[0];
-        }
-        if (input.message.embeds[0].description.includes('score:')) {
-            score = input.message.embeds[0].description.split('score: ')[1].split('\n')[0];
-        }
-        if (input.message.embeds[0].description.includes('acc:')) {
-            acc = input.message.embeds[0].description.split('acc: ')[1].split('\n')[0];
-        }
-        if (input.message.embeds[0].description.includes('combo:')) {
-            combo = input.message.embeds[0].description.split('combo: ')[1].split('\n')[0];
-        }
-        if (input.message.embeds[0].description.includes('miss:')) {
-            miss = input.message.embeds[0].description.split('miss: ')[1].split('\n')[0];
-        }
-
-
-        const sort1 = input.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
-        switch (true) {
-            case sort1.includes('score'):
-                sort = 'score';
-                break;
-            case sort1.includes('acc'):
-                sort = 'acc';
-                break;
-            case sort1.includes('pp'):
-                sort = 'pp';
-                break;
-            case sort1.includes('old'): case sort1.includes('recent'):
-                sort = 'recent';
-                break;
-            case sort1.includes('combo'):
-                sort = 'combo';
-                break;
-            case sort1.includes('miss'):
-                sort = 'miss';
-                break;
-            case sort1.includes('rank'):
-                sort = 'rank';
-                break;
-
-        }
-
-        const reverse1 = input.message.embeds[0].description.split('sorted by ')[1].split('\n')[0];
-        if (reverse1.includes('lowest') || reverse1.includes('oldest') || (reverse1.includes('most misses'))) {
-            reverse = true;
-        } else {
-            reverse = false;
-        }
-
-        const pageParsed = parseInt((input.message.embeds[0].description).split('Page:')[1].split('/')[0]);
-        page = 0;
-        switch (input.buttonType) {
-            case 'BigLeftArrow':
-                page = 1;
-                break;
-            case 'LeftArrow':
-                page = pageParsed - 1;
-                break;
-            case 'RightArrow':
-                page = pageParsed + 1;
-                break;
-            case 'BigRightArrow':
-
-                page = parseInt((input.message.embeds[0].description).split('Page:')[1].split('/')[1].split('\n')[0]);
-                break;
-            default:
-                page = pageParsed;
-                break;
-        }
-        switch (input.buttonType) {
-            case 'Detail0':
-                scoredetailed = 0;
-                break;
-            case 'Detail1':
-                scoredetailed = 1;
-                break;
-            case 'Detail2':
+    switch (input.buttonType) {
+        case 'BigLeftArrow':
+            page = 1;
+            break;
+        case 'LeftArrow':
+            page -= 1;
+            break;
+        case 'RightArrow':
+            page += 1;
+            break;
+        case 'BigRightArrow':
+            page = temp?.maxPage ?? page;
+            break;
+    }
+    switch (input.buttonType) {
+        case 'Detail0':
+            scoredetailed = 0;
+            break;
+        case 'Detail1':
+            scoredetailed = 1;
+            break;
+        case 'Detail2':
+            scoredetailed = 2;
+            break;
+        default:
+            if (input.message.embeds[0].footer.text.includes('LE')) {
                 scoredetailed = 2;
-                break;
-            default:
-                if (input.message.embeds[0].footer.text.includes('LE')) {
-                    scoredetailed = 2;
-                }
-                if (input.message.embeds[0].footer.text.includes('LC')) {
-                    scoredetailed = 0;
-                }
-                break;
-        }
+            }
+            if (input.message.embeds[0].footer.text.includes('LC')) {
+                scoredetailed = 0;
+            }
+            break;
     }
 
-    return {
-        user, searchid, page, scoredetailed,
-        sort, reverse, mode,
-        filteredMapper, filteredMods, filterTitle, filterRank,
-        parseScore, parseId,
-        exactMods, excludeMods, pp, score, acc, combo, miss, bpm
-    };
+return {
+    user, searchid, page, scoredetailed,
+    sort, reverse, mode,
+    filteredMapper, modsInclude, filterTitle, filterRank,
+    parseScore, parseId,
+    modsExact, modsExclude, pp, score, acc, combo, miss, bpm
+};
 }
 
 export async function parseArgs_scoreList(input: bottypes.commandInput) {
@@ -1129,9 +1039,9 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
     let parseId = null;
 
 
-    let filteredMods = null;
-    let exactMods = null;
-    let excludeMods = null;
+    let modsInclude = null;
+    let modsExact = null;
+    let modsExclude = null;
 
     let pp = null;
     let score = null;
@@ -1154,15 +1064,15 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
             reverse = temp.reverse;
             mode = temp.mode;
             filteredMapper = temp.filteredMapper;
-            filteredMods = temp.filteredMods;
+            modsInclude = temp.modsInclude;
             filterTitle = temp.filterTitle;
             filterArtist = temp.filterArtist;
             filterDifficulty = temp.filterDifficulty;
             parseScore = temp.parseScore;
             parseId = temp.parseId;
             filterRank = temp.filterRank;
-            exactMods = temp.exactMods;
-            excludeMods = temp.excludeMods;
+            modsExact = temp.modsExact;
+            modsExclude = temp.modsExclude;
             pp = temp.pp;
             score = temp.score;
             acc = temp.acc;
@@ -1181,13 +1091,13 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
             reverse = temp.reverse;
             mode = temp.mode;
             filteredMapper = temp.filteredMapper;
-            filteredMods = temp.filteredMods;
+            modsInclude = temp.modsInclude;
             filterTitle = temp.filterTitle;
             parseScore = temp.parseScore;
             parseId = temp.parseId;
             filterRank = temp.filterRank;
-            exactMods = temp.exactMods;
-            excludeMods = temp.excludeMods;
+            modsExact = temp.modsExact;
+            modsExclude = temp.modsExclude;
             pp = temp.pp;
             score = temp.score;
             acc = temp.acc;
@@ -1218,9 +1128,9 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
             filterRank = temp.filterRank;
             parseScore = temp.parse;
             parseId = temp.parseId;
-            filteredMods = temp.modsInclude;
-            exactMods = temp.modsExact;
-            excludeMods = temp.modsExclude;
+            modsInclude = temp.modsInclude;
+            modsExact = temp.modsExact;
+            modsExclude = temp.modsExclude;
             pp = temp.filterPp;
             score = temp.filterScore;
             acc = temp.filterAcc;
@@ -1237,7 +1147,7 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
         sort, reverse, mode,
         filteredMapper, filterTitle, filterArtist, filterDifficulty, filterRank,
         parseScore, parseId,
-        filteredMods, exactMods, excludeMods,
+        modsInclude, modsExact, modsExclude,
         pp, score, acc, combo, miss,
         bpm, error
     };
