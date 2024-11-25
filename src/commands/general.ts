@@ -238,7 +238,6 @@ export const changelog: bottypes.command = async (input: bottypes.commandInput) 
                 const temp = change.replaceAll('###', '').trim();
                 switch (temp) {
                     case 'Fixed':
-
                         txt += helper.tools.colourcalc.codeBlockColourText(temp.toUpperCase(), "yellow", "text");
                         break;
                     case 'Changed':
@@ -1303,7 +1302,7 @@ export const info: bottypes.command = async (input: bottypes.commandInput) => {
                 .setStyle(Discord.ButtonStyle.Link)
         );
 
-    const curGuildSettings = await helper.vars.guildSettings.findOne({ where: { guildid: input.message.guildId } });
+    const curGuildSettings = await helper.vars.guildSettings.findOne({ where: { guildid: input.message?.guildId } });
     const serverpfx = curGuildSettings.dataValues.prefix;
 
     const data = {
@@ -2255,7 +2254,7 @@ export const weather: bottypes.command = async (input: bottypes.commandInput) =>
     }
 
     helper.tools.data.storeFile(locatingData, name, 'weatherlocationdata');
-    helper.tools.other.debug(locatingData as object, 'command', 'weather', input.message.guildId, 'locatingdata');
+    helper.tools.other.debug(locatingData as object, 'command', 'weather', input.message?.guildId, 'locatingdata');
 
     const weatherEmbed = new Discord.EmbedBuilder()
         .setURL(`https://open-meteo.com/en/docs`)
@@ -2292,7 +2291,7 @@ export const weather: bottypes.command = async (input: bottypes.commandInput) =>
             weatherData = await helper.tools.api.getWeather(location.latitude, location.longitude, location);
         }
         helper.tools.data.storeFile(weatherData, location.id, `weatherdata`);
-        helper.tools.other.debug(weatherData as object, 'command', 'weather', input.message.guildId, 'weatherdata');
+        helper.tools.other.debug(weatherData as object, 'command', 'weather', input.message?.guildId, 'weatherdata');
         if (typeof weatherData == 'string') {
             if (weatherData.includes("timeout")) {
                 weatherEmbed.setDescription(helper.vars.errors.timeout);

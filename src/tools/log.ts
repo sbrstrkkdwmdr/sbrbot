@@ -37,8 +37,8 @@ export function commandOptions(
     opts: { name: string, value: any; }[], id: string | number,
     name: string, type: string,
     user: Discord.User | Discord.APIUser,
-    message: Discord.Message<any>,
-    interaction: Discord.Interaction
+    message?: Discord.Message<any>,
+    interaction?: Discord.Interaction
 ) {
     let txt: string =
         `====================================================
@@ -50,8 +50,8 @@ Date:         ${(new Date).toISOString()}
 Date (epoch): ${(new Date).getTime()}
 ID:           ${id}
 Requested by: ${user.username} (${user.id})
-Guild ID:     ${message.guildId}
-Channel ID:   ${message.channelId}`
+Guild ID:     ${message?.guildId ?? interaction?.guildId}
+Channel ID:   ${message?.channelId ?? interaction?.channelId}`
         ;
     if (opts.length > 0) {
         txt += '\n----------------------------------------------------';
@@ -62,7 +62,7 @@ Channel ID:   ${message.channelId}`
     }
     txt += '\n====================================================';
     out(txt,
-        `${helper.vars.path.logs}/${(message.guildId ?? interaction.guildId) ? 'cmd/' + message.guildId + '.log' : 'commands.log'}`, true);
+        `${helper.vars.path.logs}/${(message?.guildId ?? interaction?.guildId) ? 'cmd/' + (message?.guildId ?? interaction?.guildId) + '.log' : 'commands.log'}`, true);
 }
 
 export function commandErr(input: string, id: string | number,
@@ -80,7 +80,7 @@ ID:           ${id}
 ----------------------------------------------------
 ${input}
 ====================================================`;
-    out(output, `${helper.vars.path.logs}/${(message.guildId ?? interaction.guildId) ? 'cmd/' + message.guildId + '.log' : 'commands.log'}`, true);
+    out(output, `${helper.vars.path.logs}/${(message?.guildId ?? interaction.guildId) ? 'cmd/' + message?.guildId + '.log' : 'commands.log'}`, true);
 }
 
 /**

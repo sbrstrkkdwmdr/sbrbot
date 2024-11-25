@@ -169,7 +169,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         mainId = helper.tools.commands.getCmdId();
         command = helper.commands.osu.maps.map;
         foundCommand = true;
-        runCommand(interaction);
+        await runCommand(interaction, 'other', false);
         return;
     }
 
@@ -182,7 +182,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         mainId = helper.tools.commands.getCmdId();
         command = helper.commands.osu.profiles.osu;
         foundCommand = true;
-        runCommand(interaction);
+        await runCommand(interaction, 'other', false);
         return;
     }
     if (button == 'Leaderboard') {
@@ -201,7 +201,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
                 mainId = helper.tools.commands.getCmdId();
                 command = helper.commands.osu.scores.maplb;
                 foundCommand = true;
-                runCommand(interaction);
+                await runCommand(interaction, 'other', false);
                 return;
             }
         }
@@ -214,7 +214,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         overrides.commanduser = interaction.member.user as Discord.User;
         command = helper.commands.osu.scores.scores;
         foundCommand = true;
-        runCommand(interaction);
+        await runCommand(interaction, 'other', false);
         return;
     }
 
@@ -224,7 +224,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         overrides.commanduser = interaction.member.user as Discord.User;
         command = helper.commands.gen.time;
         foundCommand = true;
-        runCommand(interaction);
+        await runCommand(interaction, 'other', false);
         return;
     }
     if (button == 'Time') {
@@ -233,16 +233,11 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         overrides.commanduser = interaction.member.user as Discord.User;
         command = helper.commands.gen.weather;
         foundCommand = true;
-        runCommand(interaction);
+        await runCommand(interaction, 'other', false);
         return;
     }
 
     const nopingcommands = ['scorestats'];
-
-    if (!nopingcommands.includes(cmd)) {
-        // interaction.deferUpdate()
-        //     .catch(error => { });
-    }
 
     switch (cmd) {
         case 'changelog':
@@ -327,20 +322,24 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
             foundCommand = true;
             break;
     }
-    runCommand(interaction);
+    runCommand(interaction, null, true);
 }
 
-function runCommand(interaction: Discord.ButtonInteraction,) {
+async function runCommand(interaction: Discord.ButtonInteraction, overrideType?: "message" | "button" | "interaction" | "link" | "other", defer?: boolean) {
+    if (defer) {
+        await interaction.deferUpdate()
+            .catch(error => { });
+    }
     if (foundCommand) {
-        command({
-            message: interaction.message,
+        await command({
+            message: overrideType == "other" ? null : interaction.message,
             interaction,
             args: [],
             date: new Date(),
             id: mainId,
             overrides,
             canReply: true,
-            type: "button",
+            type: overrideType ?? "button",
         });
     }
 }

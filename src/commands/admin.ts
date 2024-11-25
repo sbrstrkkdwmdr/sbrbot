@@ -49,7 +49,7 @@ export const checkperms = async (input: bottypes.commandInput) => {
         searchUser = commanduser;
     }
 
-    if (!(helper.tools.checks.isAdmin(commanduser.id, input.message.guildId) || helper.tools.checks.isOwner(commanduser.id))) {
+    if (!(helper.tools.checks.isAdmin(commanduser.id, input.message?.guildId) || helper.tools.checks.isOwner(commanduser.id))) {
         searchUser = commanduser;
     }
 
@@ -582,7 +582,7 @@ Owner ID: ${guild.ownerId}
         case 'channels': {
             let serverId: string;
             if (!inputstr || isNaN(+inputstr)) {
-                serverId = input.message.guildId;
+                serverId = input.message?.guildId;
             } else {
                 serverId = inputstr;
             }
@@ -618,7 +618,7 @@ Created:   ${channel.createdAt}
         case 'users': {
             let serverId: string;
             if (!inputstr || isNaN(+inputstr)) {
-                serverId = input.message.guildId;
+                serverId = input.message?.guildId;
             } else {
                 serverId = inputstr;
             }
@@ -715,7 +715,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
         case 'logs': {
             let serverId: string;
             if (!inputstr || isNaN(+inputstr)) {
-                serverId = input.message.guildId;
+                serverId = input.message?.guildId;
             } else {
                 serverId = inputstr;
             }
@@ -1165,7 +1165,7 @@ Flags/badges: ${helper.tools.other.userbitflagsToEmoji(userfind.user?.flags)}
             break;
         case 'guild':
             {
-                if (!(helper.tools.checks.isOwner(commanduser.id) || (id == input.message.guildId && helper.tools.checks.isAdmin(commanduser.id, input.message.guildId)))) {
+                if (!(helper.tools.checks.isOwner(commanduser.id) || (id == input.message?.guildId && helper.tools.checks.isAdmin(commanduser.id, input.message?.guildId)))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
                     const guildfind = helper.vars.client.guilds.cache.get(id);
@@ -1199,7 +1199,7 @@ Stickers: ${guildfind.stickers.cache.size}
             break;
         case 'channel':
             {
-                if (!(helper.tools.checks.isOwner(commanduser.id,) || helper.tools.checks.isAdmin(commanduser.id, input.message.guildId,))) {
+                if (!(helper.tools.checks.isOwner(commanduser.id,) || helper.tools.checks.isAdmin(commanduser.id, input.message?.guildId,))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
                     nullIMG = false;
@@ -1243,7 +1243,7 @@ Messages: ${tempchan.messages.cache.size} \n(Only messages sent while bot is onl
             break;
         case 'role':
             {
-                if (!(helper.tools.checks.isOwner(commanduser.id,) || helper.tools.checks.isAdmin(commanduser.id, input.message.guildId,))) {
+                if (!(helper.tools.checks.isOwner(commanduser.id,) || helper.tools.checks.isAdmin(commanduser.id, input.message?.guildId,))) {
                     Embedr.setDescription('You don\'t have permissions to use this command');
                 } else {
                     let rolefind: Discord.Role;
@@ -1358,7 +1358,7 @@ export const leaveguild = async (input: bottypes.commandInput) => {
         case 'message': {
             input.message = (input.message as Discord.Message);
             commanduser = input.message.author;
-            guildId = input.message.guildId;
+            guildId = input.message?.guildId;
         }
             break;
     }
@@ -1383,8 +1383,8 @@ export const leaveguild = async (input: bottypes.commandInput) => {
         }
         return;
     }
-    if (helper.tools.checks.isAdmin(commanduser.id, input.message.guildId)) {
-        const guild = helper.vars.client.guilds.cache.get(input.message.guildId);
+    if (helper.tools.checks.isAdmin(commanduser.id, input.message?.guildId)) {
+        const guild = helper.vars.client.guilds.cache.get(input.message?.guildId);
         if (guild) {
             guild.leave();
         }
@@ -1433,18 +1433,18 @@ export const prefix = async (input: bottypes.commandInput) => {
         input.message,
         input.interaction,
     );
-    const curGuildSettings = await helper.vars.guildSettings.findOne({ where: { guildid: input.message.guildId } }) as any;
+    const curGuildSettings = await helper.vars.guildSettings.findOne({ where: { guildid: input.message?.guildId } }) as any;
     let replymsg;
     if (curGuildSettings == null) {
         replymsg = 'Error: Guild settings not found';
     } else {
-        if (typeof newPrefix != 'string' || newPrefix.length < 1 || !(helper.tools.checks.isAdmin(commanduser.id, input.message.guildId,) || helper.tools.checks.isOwner(commanduser.id))) {
+        if (typeof newPrefix != 'string' || newPrefix.length < 1 || !(helper.tools.checks.isAdmin(commanduser.id, input.message?.guildId,) || helper.tools.checks.isOwner(commanduser.id))) {
             replymsg = `The current prefix is \`${curGuildSettings?.prefix}\``;
         } else {
             curGuildSettings.update({
                 prefix: newPrefix
             }, {
-                where: { guildid: input.message.guildId }
+                where: { guildid: input.message?.guildId }
             });
             replymsg = `Prefix set to \`${newPrefix}\``;
         }

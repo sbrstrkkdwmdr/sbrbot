@@ -92,7 +92,7 @@ export const firsts = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'firsts', true, helper.vars.errors.noUser(parseArgs.user), true);
@@ -146,7 +146,7 @@ export const firsts = async (input: bottypes.commandInput) => {
     } else {
         await getScoreCount(0);
     }
-    helper.tools.data.debug(firstscoresdata, 'command', 'firsts', input.message.guildId ?? input.interaction.guildId, 'firstsScoresData');
+    helper.tools.data.debug(firstscoresdata, 'command', 'firsts', input.message?.guildId ?? input.interaction.guildId, 'firstsScoresData');
     helper.tools.data.storeFile(firstscoresdata, osudata.id, 'firstscoresdata');
 
     if (parseArgs.parseScore) {
@@ -237,7 +237,7 @@ export const firsts = async (input: bottypes.commandInput) => {
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
-    helper.tools.data.writePreviousId('user', input.message.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
     if (input.type != 'button' || input.buttonType == 'Refresh') {
         try {
             helper.tools.data.updateUserStats(osudata, osudata.playmode,);
@@ -404,7 +404,7 @@ export const maplb = async (input: bottypes.commandInput) => {
     page--;
 
     if (!mapid) {
-        const temp = helper.tools.data.getPreviousId('map', input.message.guildId ?? input.interaction.guildId);
+        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction.guildId);
         mapid = temp.id;
     }
     if (mapid == false) {
@@ -435,7 +435,7 @@ export const maplb = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'maplb', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid), false);
         return;
     }
-    helper.tools.data.debug(mapdataReq, 'command', 'maplb', input.message.guildId ?? input.interaction.guildId, 'mapData');
+    helper.tools.data.debug(mapdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction.guildId, 'mapData');
 
     if (mapdata?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'maplb', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid), true);
@@ -470,7 +470,7 @@ export const maplb = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(lbdataReq, 'command', 'maplb', input.message.guildId ?? input.interaction.guildId, 'lbDataF');
+    helper.tools.data.debug(lbdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction.guildId, 'lbDataF');
 
     if (lbdataf?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'maplb', true, helper.vars.errors.uErr.osu.map.lb.replace('[ID]', mapid), true);
@@ -521,7 +521,7 @@ export const maplb = async (input: bottypes.commandInput) => {
         page = Math.ceil(lbdata.length / 5) - 1;
     }
 
-    helper.tools.data.debug(lbdataReq, 'command', 'maplb', input.message.guildId ?? input.interaction.guildId, 'lbData');
+    helper.tools.data.debug(lbdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction.guildId, 'lbData');
 
     const scoresarg = await helper.tools.formatter.scoreList(lbdata, 'score', {
         mapper: null,
@@ -571,7 +571,7 @@ export const maplb = async (input: bottypes.commandInput) => {
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
-    helper.tools.data.writePreviousId('map', input.message.guildId ?? input.interaction.guildId,
+    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
         {
             id: `${mapdata.id}`,
             apiData: null,
@@ -708,7 +708,7 @@ export const osutop = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'osutop', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', parseArgs.user), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'osutop', true, helper.vars.errors.noUser(parseArgs.user), true);
@@ -744,7 +744,7 @@ export const osutop = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osutopdataReq, 'command', 'osutop', input.message.guildId ?? input.interaction.guildId, 'osuTopData');
+    helper.tools.data.debug(osutopdataReq, 'command', 'osutop', input.message?.guildId ?? input.interaction.guildId, 'osuTopData');
 
     if (osutopdata?.hasOwnProperty('error') || !osutopdata[0]?.user?.username) {
         await helper.tools.commands.errorAndAbort(input, 'osutop', true, `${helper.vars.errors.uErr.osu.scores.best
@@ -846,7 +846,7 @@ export const osutop = async (input: bottypes.commandInput) => {
     }
     topEmbed.setDescription(scoresarg.text);
 
-    helper.tools.data.writePreviousId('user', input.message.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
     if (scoresarg.curPage <= 1) {
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
@@ -962,7 +962,7 @@ export const pinned = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'pinned', input.message.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'pinned', input.message?.guildId ?? input.interaction.guildId, 'osuData');
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'pinned', true, helper.vars.errors.noUser(parseArgs.user), true);
         return;
@@ -997,7 +997,7 @@ export const pinned = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(pinnedscoresdataReq, 'command', 'pinned', input.message.guildId ?? input.interaction.guildId, 'osuTopData');
+    helper.tools.data.debug(pinnedscoresdataReq, 'command', 'pinned', input.message?.guildId ?? input.interaction.guildId, 'osuTopData');
 
     if (pinnedscoresdata?.hasOwnProperty('error') || !pinnedscoresdata[0]?.user?.username) {
         await helper.tools.commands.errorAndAbort(input, 'pinned', true, `${helper.vars.errors.uErr.osu.scores.pinned
@@ -1096,7 +1096,7 @@ export const pinned = async (input: bottypes.commandInput) => {
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
-    helper.tools.data.writePreviousId('user', input.message.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
     if (input.type != 'button' || input.buttonType == 'Refresh') {
         try {
             helper.tools.data.updateUserStats(osudata, osudata.playmode);
@@ -1424,7 +1424,7 @@ export const recent = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'recent', input.message.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.noUser(user), true);
@@ -1459,7 +1459,7 @@ export const recent = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.uErr.osu.scores.recent.replace('[ID]', user), false);
         return;
     }
-    helper.tools.data.debug(rsdataReq, 'command', 'recent', input.message.guildId ?? input.interaction.guildId, 'rsData');
+    helper.tools.data.debug(rsdataReq, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'rsData');
     if (rsdata?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.uErr.osu.scores.recent.replace('[ID]', user), true);
         return;
@@ -1546,7 +1546,7 @@ export const recent = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', `${curbm.id}`), false);
             return;
         }
-        helper.tools.data.debug(mapdataReq, 'command', 'recent', input.message.guildId ?? input.interaction.guildId, 'mapData');
+        helper.tools.data.debug(mapdataReq, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'mapData');
         if (mapdata?.hasOwnProperty('error')) {
             await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', curbm.id.toString()), true);
             return;
@@ -1668,7 +1668,7 @@ export const recent = async (input: bottypes.commandInput) => {
                 curscore.pp ?
                     curscore.pp.toFixed(2) :
                     perf.pp.toFixed(2);
-            helper.tools.data.debug([perf, fcperf, ssperf], 'command', 'recent', input.message.guildId ?? input.interaction.guildId, 'ppCalcing');
+            helper.tools.data.debug([perf, fcperf, ssperf], 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'ppCalcing');
 
             const mxCombo = perf.difficulty.maxCombo ?? mapdata?.max_combo;
 
@@ -1794,19 +1794,19 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(false);
             (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(false);
         }
-        helper.tools.data.writePreviousId('map', input.message.guildId ?? input.interaction.guildId,
+        helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
             {
                 id: `${curbm.id}`,
                 apiData: null,
                 mods: curscore.mods.join()
             });
-        helper.tools.data.writePreviousId('score', input.message.guildId ?? input.interaction.guildId,
+        helper.tools.data.writePreviousId('score', input.message?.guildId ?? input.interaction.guildId,
             {
                 id: `${curscore.id}`,
                 apiData: curscore,
                 mods: curscore.mods.join()
             });
-        helper.tools.data.writePreviousId('user', input.message.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+        helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
         if (buttons.toJSON().components.length >= 5) {
             const xsbuttons = new Discord.ActionRowBuilder()
@@ -1835,9 +1835,9 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             mapLastUpdated: new Date(mapdata.last_updated)
         });
         try {
-            helper.tools.data.debug(strains, 'command', 'recent', input.message.guildId ?? input.interaction.guildId, 'strains');
+            helper.tools.data.debug(strains, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
         } catch (error) {
-            helper.tools.data.debug({ error: error }, 'command', 'recent', input.message.guildId ?? input.interaction.guildId, 'strains');
+            helper.tools.data.debug({ error: error }, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
         }
         let strainsgraph = {
             path: '',
@@ -1941,7 +1941,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         }
     }
-    helper.tools.data.writePreviousId('user', input.message.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
     if (input.type != 'button' || input.buttonType == 'Refresh') {
         try {
@@ -1985,7 +1985,7 @@ export const replayparse = async (input: bottypes.commandInput) => {
     );
     const decoder = new osuparsers.ScoreDecoder();
     const score = await decoder.decodeFromPath(`${helper.vars.path.files}/replays/${input.id}.osr`);
-    helper.tools.data.debug(score, 'fileparse', 'replay', input.message.guildId ?? input.interaction.guildId, 'replayData');
+    helper.tools.data.debug(score, 'fileparse', 'replay', input.message?.guildId ?? input.interaction.guildId, 'replayData');
 
     let mapdataReq: tooltypes.apiReturn<apitypes.Beatmap>;
 
@@ -2005,9 +2005,9 @@ export const replayparse = async (input: bottypes.commandInput) => {
     }
     helper.tools.data.storeFile(mapdataReq, score.info.beatmapHashMD5, 'mapdata');
 
-    helper.tools.data.debug(mapdataReq, 'fileparse', 'replay', input.message.guildId ?? input.interaction.guildId, 'mapData');
+    helper.tools.data.debug(mapdataReq, 'fileparse', 'replay', input.message?.guildId ?? input.interaction.guildId, 'mapData');
     if (mapdata?.id) {
-        typeof mapdata.id == 'number' ? helper.tools.data.writePreviousId('map', input.message.guildId ?? input.interaction.guildId,
+        typeof mapdata.id == 'number' ? helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
             {
                 id: `${mapdata.id}`,
                 apiData: null,
@@ -2034,7 +2034,7 @@ export const replayparse = async (input: bottypes.commandInput) => {
     }
     helper.tools.data.storeFile(osudataReq, osudata.id, 'osudata', helper.tools.other.modeValidator(score.replay.mode));
     helper.tools.data.storeFile(osudataReq, score.info.username, 'osudata', helper.tools.other.modeValidator(score.replay.mode));
-    helper.tools.data.debug(osudataReq, 'fileparse', 'replay', input.message.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'fileparse', 'replay', input.message?.guildId ?? input.interaction.guildId, 'osuData');
     let userid: string | number;
     try {
         userid = osudata.id;
@@ -2274,7 +2274,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     );
 
     if (!scoreid) {
-        const temp = helper.tools.data.getPreviousId('score', input.message.guildId ?? input.interaction.guildId);
+        const temp = helper.tools.data.getPreviousId('score', input.message?.guildId ?? input.interaction.guildId);
         if (temp?.apiData?.best_id && typeof temp?.apiData?.best_id === 'number') {
             scoreid = temp?.apiData?.best_id;
         } else {
@@ -2351,7 +2351,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     const checkDetails = await helper.tools.commands.buttonsAddDetails('scoreparse', commanduser, input.id, buttons, scoredetailed);
     buttons = checkDetails.buttons;
 
-    helper.tools.data.debug(scoredataReq, 'command', 'scoreparse', input.message.guildId ?? input.interaction.guildId, 'scoreData');
+    helper.tools.data.debug(scoredataReq, 'command', 'scoreparse', input.message?.guildId ?? input.interaction.guildId, 'scoreData');
     try {
         scoredata.rank.toUpperCase();
     } catch (error) {
@@ -2395,7 +2395,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'scoreparse', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', scoredata.user.username), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'scoreparse', input.message.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'scoreparse', input.message?.guildId ?? input.interaction.guildId, 'osuData');
     if (osudata?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'scoreparse', true, `${helper.vars.errors.uErr.osu.profile.user
             .replace('[ID]', scoredata?.user?.username)
@@ -2463,7 +2463,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
         });
 
-        helper.tools.data.debug([perf, fcperf, ssperf], 'command', 'scoreparse', input.message.guildId ?? input.interaction.guildId, 'ppCalcing');
+        helper.tools.data.debug([perf, fcperf, ssperf], 'command', 'scoreparse', input.message?.guildId ?? input.interaction.guildId, 'ppCalcing');
     } catch (error) {
         const temp = helper.tools.performance.template(mapdata);
         perf = temp;
@@ -2510,13 +2510,13 @@ ${scoredata.max_combo == mxcombo ? `**${scoredata.max_combo}x**` : `${scoredata.
 ${pptxt}\n${ppissue}
 `);
 
-    helper.tools.data.writePreviousId('score', input.message.guildId ?? input.interaction.guildId,
+    helper.tools.data.writePreviousId('score', input.message?.guildId ?? input.interaction.guildId,
         {
             id: `${scoredata.id}`,
             apiData: scoredata,
             mods: scoredata.mods.join()
         });
-    helper.tools.data.writePreviousId('map', input.message.guildId ?? input.interaction.guildId,
+    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
         {
             id: `${mapdata.id}`,
             apiData: null,
@@ -2545,9 +2545,9 @@ ${pptxt}\n${ppissue}
         mapLastUpdated: new Date(mapdata.last_updated),
     });
     try {
-        helper.tools.data.debug(strains, 'command', 'recent', input.message.guildId ?? input.interaction.guildId, 'strains');
+        helper.tools.data.debug(strains, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
     } catch (error) {
-        helper.tools.data.debug({ error: error }, 'command', 'recent', input.message.guildId ?? input.interaction.guildId, 'strains');
+        helper.tools.data.debug({ error: error }, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
     }
     const strainsgraph =
         await helper.tools.other.graph(strains.strainTime, strains.value, 'Strains', {
@@ -2810,7 +2810,7 @@ export const scores = async (input: bottypes.commandInput) => {
     mode = helper.tools.other.modeValidator(mode);
 
     if (!mapid) {
-        const temp = helper.tools.data.getPreviousId('map', input.message.guildId ?? input.interaction.guildId);
+        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction.guildId);
         mapid = temp.id;
     }
     if (mapid == false) {
@@ -2845,7 +2845,7 @@ export const scores = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'scores', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'scores', input.message.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'scores', input.message?.guildId ?? input.interaction.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'scores', true, helper.vars.errors.noUser(user), true);
@@ -2879,7 +2879,7 @@ export const scores = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'scores', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid), false);
         return;
     }
-    helper.tools.data.debug(mapdataReq, 'command', 'scores', input.message.guildId ?? input.interaction.guildId, 'mapData');
+    helper.tools.data.debug(mapdataReq, 'command', 'scores', input.message?.guildId ?? input.interaction.guildId, 'mapData');
     if (mapdata?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'scores', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid), true);
         return;
@@ -2901,7 +2901,7 @@ export const scores = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'scores', true, helper.vars.errors.uErr.osu.scores.map.replace('[ID]', user).replace('[MID]', mapid), false);
         return;
     }
-    helper.tools.data.debug(scoredataReq, 'command', 'scores', input.message.guildId ?? input.interaction.guildId, 'scoreDataPresort');
+    helper.tools.data.debug(scoredataReq, 'command', 'scores', input.message?.guildId ?? input.interaction.guildId, 'scoreDataPresort');
 
     if (scoredataPresort?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'scores', true, helper.vars.errors.uErr.osu.scores.map.replace('[ID]', user).replace('[MID]', mapid), true);
@@ -2912,7 +2912,7 @@ export const scores = async (input: bottypes.commandInput) => {
 
     const scoredata: apitypes.Score[] = scoredataPresort.scores;
 
-    helper.tools.data.debug(scoredataReq, 'command', 'scores', input.message.guildId ?? input.interaction.guildId, 'scoreData');
+    helper.tools.data.debug(scoredataReq, 'command', 'scores', input.message?.guildId ?? input.interaction.guildId, 'scoreData');
 
     if (parseScore) {
         let pid = parseInt(parseId) - 1;
@@ -2996,8 +2996,8 @@ export const scores = async (input: bottypes.commandInput) => {
     }
     scoresEmbed.setDescription(scoresarg.text);
 
-    helper.tools.data.writePreviousId('user', input.message.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
-    helper.tools.data.writePreviousId('map', input.message.guildId ?? input.interaction.guildId,
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
         {
             id: `${mapdata.id}`,
             apiData: null,
@@ -3210,7 +3210,7 @@ export const scorestats = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'scorestats', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'scorestats', input.message.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'scorestats', input.message?.guildId ?? input.interaction.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'scorestats', true, helper.vars.errors.noUser(user), true);
@@ -3693,7 +3693,7 @@ export const simulate = async (input: bottypes.commandInput) => {
 
 
     if (!mapid) {
-        const temp = helper.tools.data.getPreviousId('map', input.message.guildId ?? input.interaction.guildId);
+        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction.guildId);
         mapid = temp.id;
     }
     if (mapid == false) {
@@ -3712,7 +3712,7 @@ export const simulate = async (input: bottypes.commandInput) => {
         }, input.canReply);
     }
 
-    const tempscore = helper.tools.data.getPreviousId('score', input.message.guildId ?? input.interaction.guildId);
+    const tempscore = helper.tools.data.getPreviousId('score', input.message?.guildId ?? input.interaction.guildId);
     if (tempscore?.apiData && tempscore?.apiData.beatmap.id == mapid) {
         if (!n300 && !n100 && !n50 && !acc) {
             n300 = tempscore.apiData.statistics.count_300;
@@ -3746,7 +3746,7 @@ export const simulate = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'simulate', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid), false);
         return;
     }
-    helper.tools.data.debug(mapdataReq, 'command', 'map', input.message.guildId ?? input.interaction.guildId, 'mapData');
+    helper.tools.data.debug(mapdataReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'mapData');
 
     if (mapdata?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'simulate', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid), true);
@@ -3804,7 +3804,7 @@ export const simulate = async (input: bottypes.commandInput) => {
         clockRate: overrideSpeed,
         mapLastUpdated: new Date(mapdata.last_updated),
     });
-    helper.tools.data.debug([perf, fcperf], 'command', 'simulate', input.message.guildId ?? input.interaction.guildId, 'ppCalc');
+    helper.tools.data.debug([perf, fcperf], 'command', 'simulate', input.message?.guildId ?? input.interaction.guildId, 'ppCalc');
 
     let use300s = (n300 ?? 0);
     const gotTot = use300s + (n100 ?? 0) + (n50 ?? 0) + (nMiss ?? 0);

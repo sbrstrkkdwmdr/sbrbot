@@ -103,7 +103,7 @@ export const badges = async (input: bottypes.commandInput) => {
             return;
         }
 
-        helper.tools.data.debug(osudataReq, 'command', 'badges', input.message.guildId ?? input.interaction.guildId, 'osuData');
+        helper.tools.data.debug(osudataReq, 'command', 'badges', input.message?.guildId ?? input.interaction.guildId, 'osuData');
 
         if (osudata?.hasOwnProperty('error') || !osudata.id) {
             await helper.tools.commands.errorAndAbort(input, 'badges', true, helper.vars.errors.noUser(user), true);
@@ -261,7 +261,7 @@ export const bws = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'bws', input.message.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'bws', input.message?.guildId ?? input.interaction.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'bws', true, helper.vars.errors.noUser(user), true);
@@ -754,7 +754,7 @@ export const ranking = async (input: bottypes.commandInput) => {
 
 
     try {
-        helper.tools.data.debug(rankingdataReq, 'command', 'ranking', input.message.guildId ?? input.interaction.guildId, 'rankingData');
+        helper.tools.data.debug(rankingdataReq, 'command', 'ranking', input.message?.guildId ?? input.interaction.guildId, 'rankingData');
     } catch (e) {
         return;
     }
@@ -1128,7 +1128,7 @@ export const osu = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.noUser(user), true);
@@ -1151,7 +1151,7 @@ export const osu = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
             return;
         }
-        helper.tools.data.debug(osudataReq, 'command', 'osu', input.message.guildId ?? input.interaction.guildId, 'osuData');
+        helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'osuData');
     } else {
         mode = mode ?? 'osu';
     }
@@ -1321,7 +1321,7 @@ export const osu = async (input: bottypes.commandInput) => {
                 await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.uErr.osu.map.group_nf.replace('[TYPE]', 'most played'), false);
                 return;
             }
-            helper.tools.data.debug(mostplayeddataReq, 'command', 'osu', input.message.guildId ?? input.interaction.guildId, 'mostPlayedData');
+            helper.tools.data.debug(mostplayeddataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'mostPlayedData');
 
             if (mostplayeddata?.hasOwnProperty('error')) {
                 await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.uErr.osu.profile.mostplayed, true);
@@ -1393,7 +1393,7 @@ ${supporter} ${onlinestatus}
             useEmbeds = [osuEmbed];
         }
     }
-    helper.tools.data.writePreviousId('user', input.message.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
 
 
@@ -1546,7 +1546,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
                 }
             }, input.canReply);
         }
-        
+
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
     if (helper.tools.data.findFile(user, 'osudata', 'osu') &&
@@ -1565,7 +1565,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'recent_activity', input.message.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'recent_activity', input.message?.guildId ?? input.interaction.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'recent_activity', true, helper.vars.errors.noUser(user), true);
@@ -1606,7 +1606,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'recent_activity', true, helper.vars.errors.uErr.osu.rsact, false);
         return;
     }
-    helper.tools.data.debug(recentActivityReq, 'command', 'recent_activity', input.message.guildId ?? input.interaction.guildId, 'rsactData');
+    helper.tools.data.debug(recentActivityReq, 'command', 'recent_activity', input.message?.guildId ?? input.interaction.guildId, 'rsactData');
 
     if (rsactData?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'recent_activity', true, helper.vars.errors.uErr.osu.profile.rsact, true);
