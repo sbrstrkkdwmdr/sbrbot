@@ -1894,27 +1894,6 @@ const othercmds: bottypes.commandInfo[] = [
         ]
     },
     {
-        name: 'image',
-        description: 'Sends an image.',
-        usage: 'image <query>',
-        examples: [
-            {
-                text: 'PREFIXMSGimage cat',
-                description: 'Sends the first five results of a google image search for "cat"'
-            },
-        ],
-        aliases: ['imagesearch'],
-        args: [
-            {
-                name: 'query',
-                type: 'string',
-                required: true,
-                description: 'The image to search for',
-                defaultValue: 'N/A',
-            }
-        ]
-    },
-    {
         name: 'inspire',
         description: 'Sends a randomly generated inspirational quote.',
         usage: 'inspire',
@@ -2029,27 +2008,6 @@ const othercmds: bottypes.commandInfo[] = [
             }
         ]
     },
-    {
-        name: 'ytsearch',
-        description: 'Searches youtube for a video.',
-        usage: 'ytsearch <query>',
-        examples: [
-            {
-                text: 'PREFIXMSGytsearch never gonna give you up',
-                description: 'Searches youtube for "never gonna give you up"'
-            }
-        ],
-        aliases: ['yt', 'yts'],
-        args: [
-            {
-                name: 'query',
-                type: 'string',
-                required: true,
-                description: 'The video to search for.',
-                defaultValue: 'N/A',
-            }
-        ]
-    }
 ];
 
 const admincmds: bottypes.commandInfo[] = [

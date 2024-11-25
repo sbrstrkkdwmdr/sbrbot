@@ -6,10 +6,17 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+### BREAKING
+- re-organised config files
+
 ### Changed
 - massive codebase rewrite
 - moved all commonly used functions, variables, constants etc. to be accessible via a "helper" module
 - moved everything to `./src/`
+
+### Removed
+- images command
+- ytsearch command 
 
 ## [3.19.6] - 2024-10-28
 
