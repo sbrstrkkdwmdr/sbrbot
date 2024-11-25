@@ -160,12 +160,6 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         }
         overrides.commandAs = 'interaction';
         overrides.commanduser = interaction.member.user as Discord.User;
-        await interaction.reply({
-            content: 'Loading...',
-            allowedMentions: { repliedUser: false },
-
-        });
-        // await osucmds.map({ commandType: 'other', obj, args, canReply, button, config: input.config, client: helper.vars.client, id, currentDate, overrides, userdata: input.userdata });
         mainId = helper.tools.commands.getCmdId();
         command = helper.commands.osu.maps.map;
         foundCommand = true;

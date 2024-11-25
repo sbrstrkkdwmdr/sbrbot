@@ -13,7 +13,7 @@ newest-oldest
 
 
 ### bug fixes
-- [ ] calling map command via button causes an "interaction already replied/deferred" error
+- [x] calling map command via button causes an "interaction already replied/deferred" error
 - [x] buttons that call commands (eg map, user) replace the old embed instead of making a new message
 - [x] page buttons not doing anything
 - [x] overrides via command aliases not working (rl, ubm) 

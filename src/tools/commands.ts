@@ -77,15 +77,20 @@ export async function sendMessage(input: {
                             .catch();
                     }, 1000);
                 } else {
-                    (input.interaction as Discord.ChatInputCommandInteraction<any>).reply({
-                        content: `${input.args.content ?? ''}`,
-                        embeds: input.args.embeds ?? [],
-                        files: input.args.files ?? [],
-                        components: input.args.components ?? [],
-                        allowedMentions: { repliedUser: false },
-                        ephemeral: input.args.ephemeral ?? false
-                    })
-                        .catch();
+                    if (input.interaction.replied) {
+                        input.args.edit = true;
+                        sendMessage(input, canReply);
+                    } else {
+                        (input.interaction as Discord.ChatInputCommandInteraction<any>).reply({
+                            content: `${input.args.content ?? ''}`,
+                            embeds: input.args.embeds ?? [],
+                            files: input.args.files ?? [],
+                            components: input.args.components ?? [],
+                            allowedMentions: { repliedUser: false },
+                            ephemeral: input.args.ephemeral ?? false
+                        })
+                            .catch();
+                    }
                 }
             }
             case 'button': {
