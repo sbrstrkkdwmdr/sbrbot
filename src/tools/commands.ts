@@ -1200,7 +1200,7 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
 }
 
 export async function parseArgsMode(input: bottypes.commandInput) {
-    let mode: apitypes.GameMode = 'osu';
+    let mode: apitypes.GameMode;
     const otemp = matchArgMultiple(['-o', '-osu'], input.args);
     if (otemp.found) {
         mode = 'osu';

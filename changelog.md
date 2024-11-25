@@ -9,10 +9,16 @@
 ### BREAKING
 - re-organised config files
 
+### Fixed
+- new score IDs wouldn't work with scoreparse
+- osuset always setting mode even if mode wasn't defined by the user
+- compare calling the API even if the ID is null/0-length string.
+
 ### Changed
 - massive codebase rewrite
 - moved all commonly used functions, variables, constants etc. to be accessible via a "helper" module
 - moved everything to `./src/`
+- maps now only show the english/romanised titles and artist names
 
 ### Removed
 - images command

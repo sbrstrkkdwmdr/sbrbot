@@ -189,7 +189,9 @@ export const compare = async (input: bottypes.commandInput) => {
                 throw new Error('first user not found');
             }
         }
-
+        if(!first || first.length == 0 || first == ''){
+            throw new Error('Could not find the first user');
+        }
         let firstuserReq: tooltypes.apiReturn<apitypes.User>;
         if (helper.tools.data.findFile(first, 'osudata') &&
             !('error' in helper.tools.data.findFile(first, 'osudata')) &&
@@ -213,7 +215,9 @@ export const compare = async (input: bottypes.commandInput) => {
             return;
         }
 
-
+        if(!second || second.length == 0 || second == ''){
+            throw new Error('Could not find the second user');
+        }
         let seconduserReq: tooltypes.apiReturn<apitypes.User>;
         if (helper.tools.data.findFile(second, 'osudata') &&
             !('error' in helper.tools.data.findFile(second, 'osudata')) &&
@@ -413,11 +417,14 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
     }
 
     const embed = new Discord.EmbedBuilder()
-        .setFooter({
-            text: footer
-        })
         .setTitle(embedTitle)
         .setFields(usefields);
+    if (footer.length > 0) {
+        embed.setFooter({
+            text: footer
+        });
+    }
+
     if (embedescription != null && embedescription.length > 0) { embed.setDescription(embedescription); }
 
 
@@ -1023,7 +1030,7 @@ export const whatif = async (input: bottypes.commandInput) => {
                 }
             }
             if (pp && !isNaN(pp)) {
-                input.args.splice(input.args.indexOf(pp+''), 1);
+                input.args.splice(input.args.indexOf(pp + ''), 1);
             }
 
             const usertemp = helper.tools.commands.fetchUser(input.args.join(' '));
