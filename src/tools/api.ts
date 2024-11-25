@@ -17,6 +17,7 @@ export function oAuth(): apitypes.OAuth {
 
 export async function PostOAuth() {
     return new Promise(async (resolve, reject) => {
+        helper.tools.log.stdout('UPDATE TOKEN: https://osu.ppy.sh/oauth/token');
         /**
          * error: 'unsupported_grant_type',
          * error_description: 'The authorization grant type is not supported by the authorization server.',
@@ -61,6 +62,7 @@ export async function apiGet(input: tooltypes.apiInput) {
         } as tooltypes.apiReturn;
     }
     try {
+        helper.tools.log.stdout('OSU API GET:' + input.url);
         datafirst = (await axios.get(input.url, {
             headers: {
                 Authorization: `Bearer ${oauth.access_token}`,
@@ -258,6 +260,7 @@ export async function dlMap(mapid: number | string, curCall: number, lastUpdated
         if (!fs.existsSync(thispath)) {
             fs.mkdirSync(`${helper.vars.path.main}/files/maps/`, { recursive: true });
         }
+        helper.tools.log.stdout('DOWNLOAD MAP: ' + url);
         const res = await axios.get(url);
         fs.writeFileSync(thispath, res.data, 'utf-8');
         await new Promise((resolve, reject) => {
@@ -326,6 +329,7 @@ export function mapImages(mapSetId: string | number) {
 
 export async function getLocation(name: string) {
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${name.replaceAll(' ', '+')}&count=10&language=en&format=json`;
+    helper.tools.log.stdout('LOCATION: ' + url);
     const data = await axios.get(url)
         .then(x => x.data)
         .catch(err => {
@@ -352,6 +356,7 @@ export async function getWeather(
         + "&current_weather=true&forecast_days=3&past_days=2"
         + "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,precipitation_probability_min,precipitation_probability_mean,windspeed_10m_max,windgusts_10m_max,winddirection_10m_dominant"
         + `&timezone=${location.timezone}`;
+    helper.tools.log.stdout('WEATHER: ' + url);
     const data = await axios.get(url)
         .then(x => x.data)
         .catch(err => {
@@ -575,11 +580,12 @@ export async function getCountryData(search: string, type: countrytypes.countryD
     }
     let data;
     try {
+        helper.tools.log.stdout('COUNTRY: ' + baseURL);
         data = await axios.get(baseURL);
     } catch (err) {
         data = {
             error: err,
-        }
+        };
     }
     return data;
 }
@@ -587,6 +593,7 @@ export async function getCountryData(search: string, type: countrytypes.countryD
 // tenor
 
 export async function getGif(find: string) {
+    helper.tools.log.stdout(`GIF: https://g.tenor.com/v2/search?q=${find}&key=REDACTED&limit=50`);
     const dataf = await axios.get(`https://g.tenor.com/v2/search?q=${find}&key=${helper.vars.config.tenorKey}&limit=50`).catch(err => {
         return {
             data: {

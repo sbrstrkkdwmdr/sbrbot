@@ -27,7 +27,7 @@ export async function onInteraction(interaction: Discord.Interaction) {
     //buttonVer-button-command-specid-id-???
     const buttonsplit = interaction.customId.split('-');
     const buttonVer = buttonsplit[0];
-    const button = buttonsplit[1] as bottypes.buttonType;
+    const buttonType = buttonsplit[1] as bottypes.buttonType;
     const cmd = buttonsplit[2];
     const specid = buttonsplit[3];
     mainId = +buttonsplit[4];
@@ -75,7 +75,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         'ytsearch',
     ];
     const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores'];
-    if (button == 'Search' && PageOnlyCommands.includes(cmd)) {
+    if (buttonType == 'Search' && PageOnlyCommands.includes(cmd)) {
         const menu = new Discord.ModalBuilder()
             .setTitle('Page')
             .setCustomId(`${helper.vars.versions.releaseDate}-SearchMenu-${cmd}-${interaction.user.id}-${mainId}`)
@@ -94,7 +94,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
             .catch(error => { });
         return;
     }
-    if (button.includes('Select')) {
+    if (buttonType.includes('Select')) {
         switch (cmd) {
             case 'map': case 'ppcalc':
                 {
@@ -133,11 +133,11 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         }
     }
 
-    if (button == 'Sort' && ScoreSortCommands.includes(cmd)) {
+    if (buttonType == 'Sort' && ScoreSortCommands.includes(cmd)) {
         interaction.deferUpdate();
         return;
     }
-    if (button == 'SearchMenu' && PageOnlyCommands.includes(cmd)) {
+    if (buttonType == 'SearchMenu' && PageOnlyCommands.includes(cmd)) {
         //interaction is converted to a base interaction first because button interaction and modal submit interaction don't overlap
         const tst = parseInt(((interaction as Discord.BaseInteraction) as Discord.ModalSubmitInteraction).fields.fields.at(0).value);
         if (tst.toString().length < 1) {
@@ -146,12 +146,12 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
             overrides.page = parseInt(((interaction as Discord.BaseInteraction) as Discord.ModalSubmitInteraction).fields.fields.at(0).value);
         }
     }
-    if (button == 'SortMenu' && ScoreSortCommands.includes(cmd)) {
+    if (buttonType == 'SortMenu' && ScoreSortCommands.includes(cmd)) {
         overrides.sort = ((interaction as Discord.BaseInteraction) as Discord.ModalSubmitInteraction).fields.fields.at(0).value;
         overrides.reverse = ((interaction as Discord.BaseInteraction) as Discord.ModalSubmitInteraction).fields.fields.at(1).value as unknown as boolean;
     }
 
-    if (button == 'Map') {
+    if (buttonType == 'Map') {
         overrides.id = buttonsplit[5];
         if (buttonsplit[5].includes('+')) {
             const temp = buttonsplit[5].split('+');
@@ -169,11 +169,11 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         mainId = helper.tools.commands.getCmdId();
         command = helper.commands.osu.maps.map;
         foundCommand = true;
-        await runCommand(interaction, 'other', false);
+        await runCommand(interaction, buttonType, 'other', false);
         return;
     }
 
-    if (button == 'User') {
+    if (buttonType == 'User') {
         overrides.id = buttonsplit[5].split('+')[0];
         overrides.mode = buttonsplit[5].split('+')[1] as apitypes.GameMode;
         overrides.commandAs = 'interaction';
@@ -182,10 +182,10 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         mainId = helper.tools.commands.getCmdId();
         command = helper.commands.osu.profiles.osu;
         foundCommand = true;
-        await runCommand(interaction, 'other', false);
+        await runCommand(interaction, buttonType, 'other', false);
         return;
     }
-    if (button == 'Leaderboard') {
+    if (buttonType == 'Leaderboard') {
         switch (cmd) {
             case 'map': {
                 const curEmbed = obj.message.embeds[0];
@@ -201,39 +201,39 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
                 mainId = helper.tools.commands.getCmdId();
                 command = helper.commands.osu.scores.maplb;
                 foundCommand = true;
-                await runCommand(interaction, 'other', false);
+                await runCommand(interaction, buttonType, 'other', false);
                 return;
             }
         }
     }
 
-    if (button == 'Scores') {
+    if (buttonType == 'Scores') {
         overrides.id = buttonsplit[5].split('+')[0];
         overrides.user = buttonsplit[5].split('+')[1];
         overrides.commandAs = 'interaction';
         overrides.commanduser = interaction.member.user as Discord.User;
         command = helper.commands.osu.scores.scores;
         foundCommand = true;
-        await runCommand(interaction, 'other', false);
+        await runCommand(interaction, buttonType, 'other', false);
         return;
     }
 
-    if (button == 'Weather') {
+    if (buttonType == 'Weather') {
         overrides.id = buttonsplit[5];
         overrides.commandAs = 'interaction';
         overrides.commanduser = interaction.member.user as Discord.User;
         command = helper.commands.gen.time;
         foundCommand = true;
-        await runCommand(interaction, 'other', false);
+        await runCommand(interaction, buttonType, 'other', false);
         return;
     }
-    if (button == 'Time') {
+    if (buttonType == 'Time') {
         overrides.ex = buttonsplit[5];
         overrides.commandAs = 'interaction';
         overrides.commanduser = interaction.member.user as Discord.User;
         command = helper.commands.gen.weather;
         foundCommand = true;
-        await runCommand(interaction, 'other', false);
+        await runCommand(interaction, buttonType, 'other', false);
         return;
     }
 
@@ -322,10 +322,10 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
             foundCommand = true;
             break;
     }
-    runCommand(interaction, null, true);
+    runCommand(interaction, buttonType, null, true);
 }
 
-async function runCommand(interaction: Discord.ButtonInteraction, overrideType?: "message" | "button" | "interaction" | "link" | "other", defer?: boolean) {
+async function runCommand(interaction: Discord.ButtonInteraction, buttonType: bottypes.buttonType, overrideType?: "message" | "button" | "interaction" | "link" | "other", defer?: boolean) {
     if (defer) {
         await interaction.deferUpdate()
             .catch(error => { });
@@ -340,6 +340,7 @@ async function runCommand(interaction: Discord.ButtonInteraction, overrideType?:
             overrides,
             canReply: true,
             type: overrideType ?? "button",
+            buttonType
         });
     }
 }

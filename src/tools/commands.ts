@@ -570,6 +570,9 @@ export function getButtonArgs(commandId: string | number) {
 }
 
 export function storeButtonArgs(commandId: string | number, params: params) {
+    if (params?.page < 1) {
+        params.page = 1;
+    }
     fs.writeFileSync(`${helper.vars.path.main}/cache/params/${commandId}.json`, JSON.stringify(params, null, 2));
 }
 
@@ -987,6 +990,7 @@ export async function parseArgs_scoreList_button(input: bottypes.commandInput) {
             page = temp?.maxPage ?? page;
             break;
     }
+
     switch (input.buttonType) {
         case 'Detail0':
             scoredetailed = 0;
@@ -1007,13 +1011,13 @@ export async function parseArgs_scoreList_button(input: bottypes.commandInput) {
             break;
     }
 
-return {
-    user, searchid, page, scoredetailed,
-    sort, reverse, mode,
-    filteredMapper, modsInclude, filterTitle, filterRank,
-    parseScore, parseId,
-    modsExact, modsExclude, pp, score, acc, combo, miss, bpm
-};
+    return {
+        user, searchid, page, scoredetailed,
+        sort, reverse, mode,
+        filteredMapper, modsInclude, filterTitle, filterRank,
+        parseScore, parseId,
+        modsExact, modsExclude, pp, score, acc, combo, miss, bpm
+    };
 }
 
 export async function parseArgs_scoreList(input: bottypes.commandInput) {
@@ -1082,6 +1086,7 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
         }
             break;
         case 'interaction':
+            commanduser = input.interaction.member.user;
             const temp = await parseArgs_scoreList_interaction(input);
             user = temp.user;
             searchid = temp.searchid;
@@ -1107,36 +1112,72 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
             break;
         case 'button': {
             commanduser = input.interaction.member.user;
-            const temp = getButtonArgs(input.id);
-            if (temp.error) {
-                input.interaction.reply({
-                    content: helper.vars.errors.paramFileMissing,
-                    ephemeral: true,
-                    allowedMentions: { repliedUser: false }
-                });
-                error = true;
+            let scoredetailed: number = 1;
+            if (!input.message.embeds[0]) {
+                return;
             }
-            user = temp.user;
-            searchid = temp.searchid;
-            page = buttonPage(temp.page, temp.maxPage, input.buttonType);
-            scoredetailed = buttonDetail(temp.detailed, input.buttonType);
-            sort = temp.sortScore;
-            reverse = temp.reverse;
-            mode = temp.mode;
-            filteredMapper = temp.filterMapper;
-            filterTitle = temp.filterTitle;
-            filterRank = temp.filterRank;
-            parseScore = temp.parse;
-            parseId = temp.parseId;
-            modsInclude = temp.modsInclude;
-            modsExact = temp.modsExact;
-            modsExclude = temp.modsExclude;
-            pp = temp.filterPp;
-            score = temp.filterScore;
-            acc = temp.filterAcc;
-            combo = temp.filterCombo;
-            miss = temp.filterMiss;
-            bpm = temp.filterBpm;
+
+            const temp = getButtonArgs(input.id);
+            user = temp?.user;
+            searchid = temp?.searchid;
+            page = temp?.page;
+            mode = temp?.mode;
+            filteredMapper = temp?.filterMapper;
+            modsInclude = temp?.modsInclude;
+            modsExact = temp?.modsExact;
+            modsExclude = temp?.modsExclude;
+            filterTitle = temp?.filterTitle;
+            filterRank = temp?.filterRank;
+            parseId = null;
+            parseScore = null;
+            pp = temp?.filterPp;
+            score = temp?.filterScore;
+            acc = temp?.filterAcc;
+            combo = temp?.filterCombo;
+            miss = temp?.filterMiss;
+            bpm = temp?.filterBpm;
+            sort = temp?.sort as any;
+            reverse = temp?.reverse;
+
+            console.log(page);
+
+            switch (input.buttonType) {
+                case 'BigLeftArrow':
+                    page = 1;
+                    break;
+                case 'LeftArrow':
+                    page -= 1;
+                    break;
+                case 'RightArrow':
+                    page += 1;
+                    break;
+                case 'BigRightArrow':
+                    page = temp?.maxPage ?? page;
+                    break;
+            }
+
+            console.log(page);
+            console.log(input.buttonType);
+
+            switch (input.buttonType) {
+                case 'Detail0':
+                    scoredetailed = 0;
+                    break;
+                case 'Detail1':
+                    scoredetailed = 1;
+                    break;
+                case 'Detail2':
+                    scoredetailed = 2;
+                    break;
+                default:
+                    if (input.message.embeds[0].footer.text.includes('LE')) {
+                        scoredetailed = 2;
+                    }
+                    if (input.message.embeds[0].footer.text.includes('LC')) {
+                        scoredetailed = 0;
+                    }
+                    break;
+            }
         }
             break;
     }

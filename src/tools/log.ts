@@ -29,7 +29,7 @@ function appendTime(str: string) {
 
 // use this as you would with console.log()
 export function stdout(message?: any, ...optionalParams: any[]) {
-    let text = util.format(message, optionalParams);
+    let text = util.format(message, optionalParams ?? null);
     out(text, `${helper.vars.path.logs}/console.log`);
 }
 

@@ -15,7 +15,7 @@ newest-oldest
 ### bug fixes
 - [ ] calling map command via button causes an "interaction already replied/deferred" error
 - [x] buttons that call commands (eg map, user) replace the old embed instead of making a new message
-- [ ] page buttons not doing anything
+- [x] page buttons not doing anything
 - [x] overrides via command aliases not working (rl, ubm) 
 - [x] whatif accepting ALL arguments as the user argument (whatif 300 -> "could not find user 300", whatif saberstrike 300 -> "could not find user saberstrike 300)
 - [x] scoreparse not working with new score ids

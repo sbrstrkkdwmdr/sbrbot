@@ -988,7 +988,7 @@ export const pinned = async (input: bottypes.commandInput) => {
     ) {
         pinnedscoresdataReq = helper.tools.data.findFile(osudata.id, 'topscoresdata');
     } else {
-        pinnedscoresdataReq = await helper.tools.api.getScoresBest(osudata.id, parseArgs.mode, []);
+        pinnedscoresdataReq = await helper.tools.api.getScoresPinned(osudata.id, parseArgs.mode, []);
     }
 
     let pinnedscoresdata: apitypes.Score[] & apitypes.Error = pinnedscoresdataReq.apiData;
