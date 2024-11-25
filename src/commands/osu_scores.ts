@@ -64,6 +64,17 @@ export const firsts = async (input: bottypes.commandInput) => {
         parseArgs.user = cuser?.username ?? '';
     }
 
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
+    }
+
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
     if (helper.tools.data.findFile(parseArgs.user, 'osudata', parseArgs.mode) &&
@@ -400,7 +411,16 @@ export const maplb = async (input: bottypes.commandInput) => {
         helper.tools.commands.missingPrevID_map(input, 'maplb');
         return;
     }
-
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
+    }
     let mapdataReq: tooltypes.apiReturn<apitypes.Beatmap>;
     if (helper.tools.data.findFile(mapid, 'mapdata') &&
         !('error' in helper.tools.data.findFile(mapid, 'mapdata')) &&
@@ -662,7 +682,16 @@ export const osutop = async (input: bottypes.commandInput) => {
     }
 
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons(commandButtonName, parseArgs.commanduser, input.id);
-
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
+    }
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
     if (helper.tools.data.findFile(parseArgs.user, 'osudata', helper.tools.other.modeValidator(parseArgs.mode)) &&
@@ -905,6 +934,16 @@ export const pinned = async (input: bottypes.commandInput) => {
         parseArgs.user = cuser?.username ?? '';
     }
 
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
+    }
 
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
@@ -1359,7 +1398,16 @@ export const recent = async (input: bottypes.commandInput) => {
 
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('recent', commanduser, input.id);
 
-
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
+    }
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
     if (helper.tools.data.findFile(user, 'osudata', helper.tools.other.modeValidator(mode)) &&
@@ -2241,6 +2289,17 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             }, input.canReply);
             return;
         }
+    }
+
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
     }
     let scoredataReq: tooltypes.apiReturn<apitypes.Score>;
 

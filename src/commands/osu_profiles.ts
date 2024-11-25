@@ -73,6 +73,18 @@ export const badges = async (input: bottypes.commandInput) => {
             const cuser = helper.vars.client.users.cache.get(searchid);
             user = cuser.username;
         }
+
+        if (input.type == 'interaction') {
+            await helper.tools.commands.sendMessage({
+                type: input.type,
+                message: input.message,
+                interaction: input.interaction,
+                args: {
+                    content: 'Loading...'
+                }
+            }, input.canReply);
+        }
+
         let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
         if (helper.tools.data.findFile(user, 'osudata', helper.tools.other.modeValidator('osu')) &&
@@ -220,6 +232,18 @@ export const bws = async (input: bottypes.commandInput) => {
         const cuser = helper.vars.client.users.cache.get(searchid);
         user = cuser.username;
     }
+
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
+    }
+
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
     if (helper.tools.data.findFile(user, 'osudata', helper.tools.other.modeValidator('osu')) &&
@@ -409,6 +433,16 @@ export const lb = async (input: bottypes.commandInput) => {
         input.interaction,
     );
 
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
+    }
 
     if (page < 2 || typeof page != 'number') {
         page = 1;
@@ -1066,6 +1100,16 @@ export const osu = async (input: bottypes.commandInput) => {
     }
 
     mode = mode ? helper.tools.other.modeValidator(mode) : null;
+        if (input.type == 'interaction') {
+            await helper.tools.commands.sendMessage({
+                type: input.type,
+                message: input.message,
+                interaction: input.interaction,
+                args: {
+                    content: 'Loading...'
+                }
+            }, input.canReply);
+        }
 
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
@@ -1492,7 +1536,17 @@ export const recent_activity = async (input: bottypes.commandInput) => {
         page = 1;
     }
     page--;
-
+        if (input.type == 'interaction') {
+            await helper.tools.commands.sendMessage({
+                type: input.type,
+                message: input.message,
+                interaction: input.interaction,
+                args: {
+                    content: 'Loading...'
+                }
+            }, input.canReply);
+        }
+        
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
     if (helper.tools.data.findFile(user, 'osudata', 'osu') &&

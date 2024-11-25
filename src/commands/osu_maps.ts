@@ -351,6 +351,16 @@ export const map = async (input: bottypes.commandInput) => {
         .setCustomId(`${helper.vars.versions.releaseDate}-Select-map-${commanduser.id}-${input.id}-search`)
         .setPlaceholder('Select a map');
 
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
+    }
     //fetch map data and mapset data from id
     if (maptitleq == null) {
         if (helper.tools.data.findFile(mapid, 'mapdata') &&
@@ -1450,7 +1460,7 @@ export const recMap = async (input: bottypes.commandInput) => {
     }
 
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
-    
+
 
     if (helper.tools.data.findFile(user, 'osudata', helper.tools.other.modeValidator(mode)) &&
         !('error' in helper.tools.data.findFile(user, 'osudata', helper.tools.other.modeValidator(mode))) &&
@@ -1996,7 +2006,16 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
         const cuser = helper.vars.client.users.cache.get(searchid);
         user = cuser.username;
     }
-
+        if (input.type == 'interaction') {
+            await helper.tools.commands.sendMessage({
+                type: input.type,
+                message: input.message,
+                interaction: input.interaction,
+                args: {
+                    content: 'Loading...'
+                }
+            }, input.canReply);
+        }
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
     if (helper.tools.data.findFile(user, 'osudata', helper.tools.other.modeValidator('osu')) &&
