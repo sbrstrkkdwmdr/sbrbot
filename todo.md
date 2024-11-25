@@ -15,7 +15,7 @@ newest-oldest
 ### bug fixes
 - [ ] page buttons not doing anything
 - [x] overrides via command aliases not working (rl, ubm) 
-- [ ] whatif accepting ALL arguments as the user argument (whatif 300 -> "could not find user 300", whatif saberstrike 300 -> "could not find user saberstrike 300)
+- [x] whatif accepting ALL arguments as the user argument (whatif 300 -> "could not find user 300", whatif saberstrike 300 -> "could not find user saberstrike 300)
 - [x] scoreparse not working with new score ids
 
 ## pre 4.0.0 

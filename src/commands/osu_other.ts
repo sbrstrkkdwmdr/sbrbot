@@ -294,7 +294,7 @@ export const compare = async (input: bottypes.commandInput) => {
 
                 const firsttopdata: apitypes.Score[] & apitypes.Error = firsttopdataReq.apiData;
                 if (firsttopdataReq?.error) {
-                    await helper.tools.commands.errorAndAbort(input, 'compare', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', firstuser.id+''), false);
+                    await helper.tools.commands.errorAndAbort(input, 'compare', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', firstuser.id + ''), false);
                     return;
                 }
                 if (firsttopdata?.hasOwnProperty('error')) {
@@ -316,7 +316,7 @@ export const compare = async (input: bottypes.commandInput) => {
 
                 const secondtopdata: apitypes.Score[] & apitypes.Error = secondtopdataReq.apiData;
                 if (secondtopdataReq?.error) {
-                    await helper.tools.commands.errorAndAbort(input, 'compare', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', seconduser.id+''), false);
+                    await helper.tools.commands.errorAndAbort(input, 'compare', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', seconduser.id + ''), false);
                     return;
                 }
                 if (secondtopdata?.hasOwnProperty('error')) {
@@ -1022,6 +1022,9 @@ export const whatif = async (input: bottypes.commandInput) => {
                     break;
                 }
             }
+            if (pp && !isNaN(pp)) {
+                input.args.splice(input.args.indexOf(pp+''), 1);
+            }
 
             const usertemp = helper.tools.commands.fetchUser(input.args.join(' '));
             user = usertemp.id;
@@ -1083,7 +1086,9 @@ export const whatif = async (input: bottypes.commandInput) => {
         input.message,
         input.interaction,
     );
-
+    if (!pp || isNaN(pp) || pp > 10000) {
+        input.message.reply("Please define a valid PP value to calculate");
+    }
 
     //if user is null, use searchid
     if (user == null) {
@@ -1098,10 +1103,6 @@ export const whatif = async (input: bottypes.commandInput) => {
     if (user == null) {
         const cuser = helper.vars.client.users.cache.get(searchid);
         user = cuser.username;
-    }
-
-    if (!pp) {
-        pp = 100;
     }
 
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
