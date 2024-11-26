@@ -352,8 +352,6 @@ export const lb = async (input: bottypes.commandInput) => {
         }
             break;
 
-
-
         case 'interaction': {
             input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
             commanduser = input.interaction.member.user;
@@ -1315,8 +1313,8 @@ export const osu = async (input: bottypes.commandInput) => {
             }
             const graphembeds = await getGraphs();
 
-            const mostplayeddataReq = await helper.tools.api.getUserMostPlayed(osudata.id, []);
-            const mostplayeddata: apitypes.BeatmapPlaycount[] = mostplayeddataReq.apiData;
+            const mostplayeddataReq: tooltypes.apiReturn<apitypes.BeatmapPlayCountArr> = await helper.tools.api.getUserMostPlayed(osudata.id, []);
+            const mostplayeddata: apitypes.BeatmapPlayCountArr = mostplayeddataReq.apiData;
             if (mostplayeddataReq?.error) {
                 await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.uErr.osu.map.group_nf.replace('[TYPE]', 'most played'), false);
                 return;

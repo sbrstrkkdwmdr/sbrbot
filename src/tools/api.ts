@@ -235,7 +235,7 @@ export async function getUserMaps(id: number, category: string, extra: string[])
 }
 
 export async function getUserMostPlayed(id: number, extra: string[]) {
-    let url = baseUrl + `users/${id}/beatmapsets/favourite?limit=100`;
+    let url = baseUrl + `users/${id}/beatmapsets/most_played?limit=100`;
     return await apiGet({
         url,
         extra
