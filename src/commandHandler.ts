@@ -25,14 +25,15 @@ export async function onInteraction(interaction: Discord.Interaction) {
     overrides = null;
     if (!(interaction.type === Discord.InteractionType.ApplicationCommand)) { return; }
     interaction = interaction as Discord.ChatInputCommandInteraction;
-    // interaction.reply({
-    //     content: 'Interaction based commands are currently unsupported in this version',
-    //     allowedMentions: { repliedUser: false },
-    //     ephemeral: true
-    // });
-    let args = [];
-    const cmd = interaction.commandName;
-    runCommand(cmd, null, interaction, args, true, 'message');
+    interaction.reply({
+        content: 'Interaction based commands are currently unsupported in this version',
+        allowedMentions: { repliedUser: false },
+        ephemeral: true
+    });
+    return;
+    // let args = [];
+    // const cmd = interaction.commandName;
+    // runCommand(cmd, null, interaction, args, true, 'interaction');
 }
 
 // permissions
@@ -133,22 +134,22 @@ function commandCheck(cmd: string, message: Discord.Message, interaction: Discor
 
     const missingPermsBot: Discord.PermissionsString[] = [];
     const missingPermsUser: string[] = [];
-    if (requireEmbedCommands.includes(cmd) && !helper.tools.checks.botHasPerms(message, ['EmbedLinks'])) {
+    if (requireEmbedCommands.includes(cmd) && !helper.tools.checks.botHasPerms(message ?? interaction, ['EmbedLinks'])) {
         missingPermsBot.push('EmbedLinks');
     }
-    if (requireReactions.includes(cmd) && !helper.tools.checks.botHasPerms(message, ['AddReactions'])) {
+    if (requireReactions.includes(cmd) && !helper.tools.checks.botHasPerms(message ?? interaction, ['AddReactions'])) {
         missingPermsBot.push('AddReactions');
     }
-    if (requireMsgManage.includes(cmd) && !helper.tools.checks.botHasPerms(message, ['ManageMessages'])) {
+    if (requireMsgManage.includes(cmd) && !helper.tools.checks.botHasPerms(message ?? interaction, ['ManageMessages'])) {
         missingPermsBot.push('ManageMessages');
     }
-    if (botRequireAdmin.includes(cmd) && !helper.tools.checks.botHasPerms(message, ['Administrator'])) {
+    if (botRequireAdmin.includes(cmd) && !helper.tools.checks.botHasPerms(message ?? interaction, ['Administrator'])) {
         missingPermsBot.push('Administrator');
     }
-    if (userRequireAdminOrOwner.includes(cmd) && !(helper.tools.checks.isAdmin(message.author.id, message.guildId) || helper.tools.checks.isOwner(message.author.id))) {
+    if (userRequireAdminOrOwner.includes(cmd) && !(helper.tools.checks.isAdmin(message?.author?.id ?? interaction.member.user.id, message?.guildId ?? interaction.guildId) || helper.tools.checks.isOwner(message?.author?.id ?? interaction.member.user.id))) {
         missingPermsUser.push('Administrator');
     }
-    if (userRequireOwner.includes(cmd) && !helper.tools.checks.isOwner(message.author.id)) {
+    if (userRequireOwner.includes(cmd) && !helper.tools.checks.isOwner(message?.author?.id ?? interaction.member.user.id)) {
         missingPermsUser.push('Owner');
     }
 

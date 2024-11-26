@@ -19,6 +19,7 @@ import * as argflags from './vars/argFlags.js';
 import * as buttons from './vars/buttons.js';
 import * as colours from './vars/colours.js';
 import * as commandData from './vars/commandData.js';
+import * as commandopts from './vars/commandopts.js';
 import * as conversions from './vars/conversions.js';
 import * as defaults from './vars/defaults.js';
 import * as emojis from './vars/emojis.js';
@@ -69,8 +70,9 @@ export const vars = {
     argflags,
     buttons,
     colours,
-    conversions,
+    commandopts,
     commandData,
+    conversions,
     defaults,
     emojis,
     errors,
