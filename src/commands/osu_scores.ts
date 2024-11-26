@@ -46,9 +46,6 @@ export const firsts = async (input: bottypes.commandInput) => {
             .setEmoji(helper.vars.buttons.label.main.refresh),
     );
 
-    const checkDetails = await helper.tools.commands.buttonsAddDetails('firsts', parseArgs.commanduser, input.id, buttons, parseArgs.scoredetailed);
-    buttons = checkDetails.buttons;
-
     //if user is null, use searchid
     if (parseArgs.user == null) {
         const cuser = await helper.tools.data.searchUser(parseArgs.searchid, true);
@@ -538,7 +535,7 @@ export const maplb = async (input: bottypes.commandInput) => {
         combo: null,
         miss: null,
         bpm: null,
-    }, false, 1, page, false, true, false);
+    }, false, 1, page, false, true, false, mapdata);
 
     helper.tools.commands.storeButtonArgs(input.id + '', {
         mapId: mapid,
@@ -662,9 +659,6 @@ export const osutop = async (input: bottypes.commandInput) => {
                 .setStyle(helper.vars.buttons.type.current)
                 .setEmoji(helper.vars.buttons.label.main.refresh),
         );
-
-    const checkDetails = await helper.tools.commands.buttonsAddDetails(commandButtonName, parseArgs.commanduser, input.id, buttons, parseArgs.scoredetailed);
-    buttons = checkDetails.buttons;
 
     //if user is null, use searchid
     if (parseArgs.user == null) {
@@ -904,9 +898,6 @@ export const pinned = async (input: bottypes.commandInput) => {
                 .setStyle(helper.vars.buttons.type.current)
                 .setEmoji(helper.vars.buttons.label.main.refresh),
         );
-
-    const checkDetails = await helper.tools.commands.buttonsAddDetails('pinned', parseArgs.commanduser, input.id, buttons, parseArgs.scoredetailed);
-    buttons = checkDetails.buttons;
 
     helper.tools.log.commandOptions(
         helper.tools.log.objectLoggable(parseArgs),
@@ -1387,14 +1378,6 @@ export const recent = async (input: bottypes.commandInput) => {
         page = 1;
     }
     page--;
-
-    const checkDetails = await helper.tools.commands.buttonsAddDetails('recent', commanduser, input.id, buttons, scoredetailed, {
-        compact: true,
-        compact_rem: true,
-        detailed: true,
-        detailed_rem: true
-    });
-    buttons = checkDetails.buttons;
 
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('recent', commanduser, input.id);
 
@@ -2348,9 +2331,6 @@ export const scoreparse = async (input: bottypes.commandInput) => {
         );
 
 
-    const checkDetails = await helper.tools.commands.buttonsAddDetails('scoreparse', commanduser, input.id, buttons, scoredetailed);
-    buttons = checkDetails.buttons;
-
     helper.tools.data.debug(scoredataReq, 'command', 'scoreparse', input.message?.guildId ?? input.interaction.guildId, 'scoreData');
     try {
         scoredata.rank.toUpperCase();
@@ -2733,9 +2713,6 @@ export const scores = async (input: bottypes.commandInput) => {
                 .setEmoji(helper.vars.buttons.label.main.refresh),
         );
 
-    const checkDetails = await helper.tools.commands.buttonsAddDetails('scores', commanduser, input.id, buttons, scoredetailed);
-    buttons = checkDetails.buttons;
-
     helper.tools.log.commandOptions(
         [
             {
@@ -2969,7 +2946,7 @@ export const scores = async (input: bottypes.commandInput) => {
             combo: null,
             miss: null,
             bpm: null
-        }, reverse, scoredetailed, page, false, false, false);
+        }, reverse, scoredetailed, page, false, false, false, mapdata);
     helper.tools.commands.storeButtonArgs(input.id + '', {
         user,
         searchid,

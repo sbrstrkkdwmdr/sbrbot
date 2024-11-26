@@ -13,6 +13,7 @@ newest-oldest
 
 
 ### bug fixes
+- [ ] mods not working in pp calculations
 - [x] calling map command via button causes an "interaction already replied/deferred" error
 - [x] buttons that call commands (eg map, user) replace the old embed instead of making a new message
 - [x] page buttons not doing anything

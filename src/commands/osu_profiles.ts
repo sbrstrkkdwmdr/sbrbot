@@ -411,7 +411,7 @@ export const lb = async (input: bottypes.commandInput) => {
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('lb', commanduser, input.id);
 
     helper.tools.log.commandOptions(
-        [            {
+        [{
             name: 'Page',
             value: page
         },
@@ -706,7 +706,7 @@ export const ranking = async (input: bottypes.commandInput) => {
     let extras = [];
     if (country != 'ALL') {
         // validate country
-        if(!helper.tools.other.validCountryCodeA2(country)){
+        if (!helper.tools.other.validCountryCodeA2(country)) {
             await helper.tools.commands.sendMessage({
                 type: input.type,
                 message: input.message,
@@ -719,11 +719,11 @@ export const ranking = async (input: bottypes.commandInput) => {
             return;
         }
         if (type == 'performance') {
-            extras.push(`country=${country}`)
+            extras.push(`country=${country}`);
         }
     }
     if (type == 'charts' && !isNaN(+spotlight)) {
-        extras.push(`spotlight=${spotlight}`)
+        extras.push(`spotlight=${spotlight}`);
 
     }
 
@@ -817,7 +817,7 @@ export const ranking = async (input: bottypes.commandInput) => {
     if (page > Math.ceil(rankingdata.ranking.length / 5)) {
         page = Math.ceil(rankingdata.ranking.length / 5);
     }
-    helper.tools.calculate.numberShorthand
+    helper.tools.calculate.numberShorthand;
     for (let i = 0; i < 5 && i + (page * 5) < rankingdata.ranking.length; i++) {
         const curuser = rankingdata.ranking[i + (page * 5)];
         if (!curuser) break;
@@ -1039,13 +1039,7 @@ export const osu = async (input: bottypes.commandInput) => {
     );
 
 
-    const buttons = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${helper.vars.versions.releaseDate}-Refresh-osu-${commanduser.id}-${input.id}`)
-                .setStyle(helper.vars.buttons.type.current)
-                .setEmoji(helper.vars.buttons.label.main.refresh),
-        );
+    const buttons = new Discord.ActionRowBuilder();
     if (graphonly != true) {
         buttons.addComponents(
             new Discord.ButtonBuilder()
@@ -1098,16 +1092,16 @@ export const osu = async (input: bottypes.commandInput) => {
     }
 
     mode = mode ? helper.tools.other.modeValidator(mode) : null;
-        if (input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: input.type,
-                message: input.message,
-                interaction: input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, input.canReply);
-        }
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
+    }
 
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
@@ -1221,9 +1215,9 @@ export const osu = async (input: bottypes.commandInput) => {
             break;
     }
 
-    const gradeCounts = 
+    const gradeCounts =
         `${helper.vars.emojis.grades.XH}${grades.ssh} ${helper.vars.emojis.grades.X}${grades.ss} ${helper.vars.emojis.grades.SH}${grades.sh} ${helper.vars.emojis.grades.S}${grades.s} ${helper.vars.emojis.grades.A}${grades.a}`;
-        // `XH${grades.ssh} X}{grades.ss} SH${grades.sh} S}{grades.s} A}{grades.a}`;
+    // `XH${grades.ssh} X}{grades.ss} SH${grades.sh} S}{grades.s} A}{grades.a}`;
 
     const osuEmbed = new Discord.EmbedBuilder()
         .setColor(helper.vars.colours.embedColour.user.dec)
@@ -1534,16 +1528,16 @@ export const recent_activity = async (input: bottypes.commandInput) => {
         page = 1;
     }
     page--;
-        if (input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: input.type,
-                message: input.message,
-                interaction: input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, input.canReply);
-        }
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
+    }
 
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
@@ -1596,7 +1590,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
     ) {
         recentActivityReq = helper.tools.data.findFile(input.id, 'rsactdata');
     } else {
-        recentActivityReq = await helper.tools.api.getUserActivity(osudata.id,[]);
+        recentActivityReq = await helper.tools.api.getUserActivity(osudata.id, []);
     }
 
     const rsactData: apitypes.Event[] & apitypes.Error = recentActivityReq.apiData;

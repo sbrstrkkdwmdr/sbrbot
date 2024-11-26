@@ -46,8 +46,9 @@ export async function scoreList(
     showOriginalIndex: boolean,
     showUsername?: boolean,
     showMap?: boolean,
+    overrideMap?: apitypes.Beatmap
 ): Promise<formatterInfo> {
-    const newScores = filterScores(scores, sort, filter, reverse);
+    const newScores = filterScores(scores, sort, filter, reverse, overrideMap);
     if (newScores.length == 0) {
         return {
             text: 'No scores were found (check the filter options)',
@@ -67,7 +68,7 @@ export async function scoreList(
         const score = newScores[i + offset];
         if (!score) break;
         const perf = await helper.tools.performance.calcScore({
-            mapid: score.beatmap.id,
+            mapid: (overrideMap ?? score.beatmap).id,
             mode: score.mode,
             mods: score.mods.join(''),
             accuracy: score.accuracy,
@@ -77,10 +78,10 @@ export async function scoreList(
             miss: score.statistics.count_miss,
             hitkatu: score.statistics.count_katu,
             maxcombo: score.max_combo,
-            mapLastUpdated: new Date(score.beatmap.last_updated),
+            mapLastUpdated: new Date((overrideMap ?? score.beatmap).last_updated),
         });
         const fc = await helper.tools.performance.calcFullCombo({
-            mapid: score.beatmap.id,
+            mapid: (overrideMap ?? score.beatmap).id,
             mode: score.mode,
             mods: score.mods.join(''),
             accuracy: score.accuracy,
@@ -89,18 +90,19 @@ export async function scoreList(
             hit50: score.statistics.count_50,
             hitkatu: score.statistics.count_katu,
             maxcombo: score.max_combo,
-            mapLastUpdated: new Date(score.beatmap.last_updated),
+            mapLastUpdated: new Date((overrideMap ?? score.beatmap).last_updated),
         });
         let info = `**#${(showOriginalIndex ? score.originalIndex : i) + 1}`;
         if (showMap != false) {
-            info += `・[${score.beatmapset.title} [${score.beatmap.version}]](https://osu.ppy.sh/scores/${score.mode}/${score.id})`;
+            info += `・[${score.beatmapset.title} [${(overrideMap ?? score.beatmap).version}]](https://osu.ppy.sh/scores/${score.mode}/${score.id})`;
         }
-        if(showUsername){
+        if (showUsername) {
             info += `・[${score.user.username}](https://osu.ppy.sh/u/${score.user_id})`;
         }
         info +=
-            `**\n\`${hitList(score.mode, score.statistics)}\` | ${score.max_combo} | ${(score.accuracy * 100).toFixed(2)} | ${helper.vars.emojis.grades[score.rank]}
-\`${helper.tools.calculate.numberShorthand(score.score)}\` | ${dateToDiscordFormat(new Date(score.created_at))}
+            `**
+\`${helper.tools.calculate.numberShorthand(score.score)}\` |${score.mods.length > 0 ? ' **' + score.mods.join('') + '** |' : ''} ${dateToDiscordFormat(new Date(score.created_at))}
+\`${hitList(score.mode, score.statistics)}\` | ${score.max_combo} | ${(score.accuracy * 100).toFixed(2)} | ${helper.vars.emojis.grades[score.rank]}
 ${perf.pp.toFixed(2)}pp`;
         if (!score.perfect) {
             info += '(' + fc.pp.toFixed(2) + 'pp if FC)';
@@ -150,6 +152,7 @@ export function filterScores(
         bpm: string,
     },
     reverse: boolean,
+    overrideMap?: apitypes.Beatmap
 ) {
     let newScores: indexedScore[] = [];
     for (let i = 0; i < scores.length; i++) {
@@ -158,7 +161,7 @@ export function filterScores(
     }
     if (filter.mapper) {
         newScores = newScores.filter(score =>
-            matchesString(score.beatmapset.user.username, filter.mapper) || matchesString(score.beatmapset.user_id + '', filter.mapper) || matchesString(score.beatmap.user_id + '', filter.mapper));
+            matchesString(score.beatmapset.user.username, filter.mapper) || matchesString(score.beatmapset.user_id + '', filter.mapper) || matchesString((overrideMap ?? score.beatmap).user_id + '', filter.mapper));
     }
     if (filter.title) {
         newScores = newScores.filter(score =>
@@ -170,7 +173,7 @@ export function filterScores(
     }
     if (filter.version) {
         newScores = newScores.filter(score =>
-            matchesString(score.beatmap.version, filter.version));
+            matchesString((overrideMap ?? score.beatmap).version, filter.version));
     }
     if (filter.pp) {
         const tempArg = argRange(filter.pp, true);
@@ -227,10 +230,10 @@ export function filterScores(
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
                 tempArg.max ?
-                    score.beatmap.bpm <= tempArg.max :
+                    (overrideMap ?? score.beatmap).bpm <= tempArg.max :
                     tempArg.min ?
-                        score.beatmap.bpm >= tempArg.min :
-                        score.beatmap.bpm == tempArg.exact : true);
+                        (overrideMap ?? score.beatmap).bpm >= tempArg.min :
+                        (overrideMap ?? score.beatmap).bpm == tempArg.exact : true);
     }
     if (filter.modsInclude?.includes('NM')) {
         filter.modsExact = filter.modsInclude.replace('NM', '');

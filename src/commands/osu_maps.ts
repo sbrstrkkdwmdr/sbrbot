@@ -1987,9 +1987,6 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
             .setEmoji(helper.vars.buttons.label.main.refresh),
     );
 
-    const checkDetails = await helper.tools.commands.buttonsAddDetails('userbeatmaps', commanduser, input.id, buttons, mapDetailed);
-    buttons = checkDetails.buttons;
-
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
     }
