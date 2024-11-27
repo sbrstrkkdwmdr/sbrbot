@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![website](https://img.shields.io/badge/website-FFA41C?style=for-the-badge&logoColor=white)](https://sbrstrkkdwmdr.github.io/sbrbot/commands)</br>
+[![website](https://img.shields.io/badge/website-FFA41C?style=for-the-badge&logoColor=white)](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands)</br>
 [![CodeFactor](https://www.codefactor.io/repository/github/sbrstrkkdwmdr/sbrbot/badge)](https://www.codefactor.io/repository/github/sbrstrkkdwmdr/sbrbot)
 [![license](https://img.shields.io/github/license/sbrstrkkdwmdr/sbrbot?label=license)](https://github.com/sbrstrkkdwmdr/sbrbot/LICENSE)
 [![stars](https://img.shields.io/github/stars/sbrstrkkdwmdr/sbrbot)](https://github.com/sbrstrkkdwmdr/sbrbot)

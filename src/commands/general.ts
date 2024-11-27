@@ -965,7 +965,7 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
     let ctname = 'generalcmd';
     function commandEmb(command: bottypes.commandInfo, embed) {
         let desc =
-            "To see full details about this command, visit [here](https://sbrstrkkdwmdr.github.io/sbrbot/commands.html)\n\n" +
+            "To see full details about this command, visit [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands.html)\n\n" +
             command.description + "\n";
         let usetxt = '';
         if (command.usage) {
@@ -983,7 +983,7 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
         const commandexamples = command.examples && command.examples.length > 0 ? command.examples.slice(0, 5).map(x => x.text).join('\n').replaceAll('PREFIXMSG', helper.vars.config.prefix) : 'none';
 
         embed.setTitle("Command info for: " + command.name)
-            .setURL(`https://sbrstrkkdwmdr.github.io/sbrbot/commands.html`)
+            .setURL(`https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands.html`)
             .setDescription(desc)
             .addFields([
                 {
@@ -1017,7 +1017,7 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
             useEmbeds.push(new Discord.EmbedBuilder()
                 .setColor(helper.vars.colours.embedColour.info.dec)
                 .setTitle('Command List')
-                .setURL('https://sbrstrkkdwmdr.github.io/sbrbot/commands')
+                .setURL('https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands')
                 .setDescription('use `/help <command>` to get more info on a command')
                 .addFields([
                     {
@@ -1042,7 +1042,7 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
                     },
                 ])
                 .setFooter({
-                    text: 'Website: https://sbrstrkkdwmdr.github.io/sbrbot/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
+                    text: 'Website: https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
                 }));
             commandCategory = 'default';
         } else if (command != null) {
@@ -1142,7 +1142,7 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
             useEmbeds.push(new Discord.EmbedBuilder()
                 .setColor(helper.vars.colours.embedColour.info.dec)
                 .setTitle('Help')
-                .setURL('https://sbrstrkkdwmdr.github.io/sbrbot/commands')
+                .setURL('https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands')
                 .setDescription(`Prefix is: MSGPREFIX
 - Use \`MSGPREFIXhelp <command>\` to get more info on a command or \`/help list\` to get a list of commands
 - \`MSGPREFIXhelp category<category>\` will list only commands from that category
@@ -1154,7 +1154,7 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
 - Gamemode can be specified by using -(mode) in commands that support it (ie. -taiko)
 `.replaceAll('MSGPREFIX', helper.vars.config.prefix))
                 .setFooter({
-                    text: 'Website: https://sbrstrkkdwmdr.github.io/sbrbot/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
+                    text: 'Website: https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
                 }));
             commandCategory = 'default';
         }
@@ -1174,7 +1174,7 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
         commandfound = true;
         if (desctxt.length > 4000) {
             desctxt = desctxt.slice(0, 3900);
-            desctxt += "\n\nThe text has reached maximum length. See [here](https://sbrstrkkdwmdr.github.io/sbrbot/commands) for the rest of the commands";
+            desctxt += "\n\nThe text has reached maximum length. See [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands) for the rest of the commands";
         }
         return desctxt;
     }
@@ -1298,7 +1298,7 @@ export const info: bottypes.command = async (input: bottypes.commandInput) => {
         .addComponents(
             new Discord.ButtonBuilder()
                 .setLabel('Info')
-                .setURL('https://sbrstrkkdwmdr.github.io/sbrbot/')
+                .setURL('https://sbrstrkkdwmdr.github.io/projects/ssob_docs/')
                 .setStyle(Discord.ButtonStyle.Link)
         );
 

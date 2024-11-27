@@ -661,12 +661,6 @@ export const ranking = async (input: bottypes.commandInput) => {
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('ranking', commanduser, input.id);
 
     const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${helper.vars.versions.releaseDate}-Refresh-ranking-${commanduser.id}-${input.id}`)
-                .setStyle(helper.vars.buttons.type.current)
-                .setEmoji(helper.vars.buttons.label.main.refresh),
-        );
     helper.tools.log.commandOptions(
         [
             {
@@ -1482,12 +1476,6 @@ export const recent_activity = async (input: bottypes.commandInput) => {
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('recentactivity', commanduser, input.id);
 
     const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${helper.vars.versions.releaseDate}-Refresh-recentactivity-${commanduser.id}-${input.id}`)
-                .setStyle(helper.vars.buttons.type.current)
-                .setEmoji(helper.vars.buttons.label.main.refresh),
-        );
     helper.tools.log.commandOptions(
         [
             {

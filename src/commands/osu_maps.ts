@@ -238,12 +238,7 @@ export const map = async (input: bottypes.commandInput) => {
 
 
 
-    const buttons = new Discord.ActionRowBuilder().addComponents(
-        new Discord.ButtonBuilder()
-            .setCustomId(`${helper.vars.versions.releaseDate}-Refresh-map-${commanduser.id}-${input.id}`)
-            .setStyle(helper.vars.buttons.type.current)
-            .setEmoji(helper.vars.buttons.label.main.refresh),
-    );
+    const buttons = new Discord.ActionRowBuilder()
     helper.tools.log.commandOptions(
         [
             {
@@ -1980,12 +1975,7 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
 
 
 
-    let buttons = new Discord.ActionRowBuilder().addComponents(
-        new Discord.ButtonBuilder()
-            .setCustomId(`${helper.vars.versions.releaseDate}-Refresh-userbeatmaps-${commanduser.id}-${input.id}`)
-            .setStyle(helper.vars.buttons.type.current)
-            .setEmoji(helper.vars.buttons.label.main.refresh),
-    );
+    let buttons = new Discord.ActionRowBuilder()
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;

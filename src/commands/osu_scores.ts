@@ -39,12 +39,8 @@ export const firsts = async (input: bottypes.commandInput) => {
 
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('firsts', parseArgs.commanduser, input.id);
 
-    let buttons = new Discord.ActionRowBuilder().addComponents(
-        new Discord.ButtonBuilder()
-            .setCustomId(`${helper.vars.versions.releaseDate}-Refresh-firsts-${parseArgs.commanduser.id}-${input.id}`)
-            .setStyle(helper.vars.buttons.type.current)
-            .setEmoji(helper.vars.buttons.label.main.refresh),
-    );
+    let buttons = new Discord.ActionRowBuilder();
+
 
     //if user is null, use searchid
     if (parseArgs.user == null) {
@@ -360,13 +356,7 @@ export const maplb = async (input: bottypes.commandInput) => {
     }
 
 
-    const buttons = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${helper.vars.versions.releaseDate}-Refresh-maplb-${commanduser.id}-${input.id}`)
-                .setStyle(helper.vars.buttons.type.current)
-                .setEmoji(helper.vars.buttons.label.main.refresh),
-        );
+    const buttons = new Discord.ActionRowBuilder();
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('maplb', commanduser, input.id);
 
     helper.tools.log.commandOptions(
@@ -652,13 +642,7 @@ export const osutop = async (input: bottypes.commandInput) => {
         input.interaction,
     );
 
-    let buttons = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${helper.vars.versions.releaseDate}-Refresh-${commandButtonName}-${parseArgs.commanduser.id}-${input.id}`)
-                .setStyle(helper.vars.buttons.type.current)
-                .setEmoji(helper.vars.buttons.label.main.refresh),
-        );
+    let buttons = new Discord.ActionRowBuilder();
 
     //if user is null, use searchid
     if (parseArgs.user == null) {
@@ -891,13 +875,7 @@ export const pinned = async (input: bottypes.commandInput) => {
 
 
 
-    let buttons = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${helper.vars.versions.releaseDate}-Refresh-pinned-${parseArgs.commanduser.id}-${input.id}`)
-                .setStyle(helper.vars.buttons.type.current)
-                .setEmoji(helper.vars.buttons.label.main.refresh),
-        );
+    let buttons = new Discord.ActionRowBuilder();
 
     helper.tools.log.commandOptions(
         helper.tools.log.objectLoggable(parseArgs),
@@ -1345,15 +1323,6 @@ export const recent = async (input: bottypes.commandInput) => {
     );
 
     let buttons = new Discord.ActionRowBuilder();
-    if (scoredetailed != 1) {
-        buttons
-            .addComponents(
-                new Discord.ButtonBuilder()
-                    .setCustomId(`${helper.vars.versions.releaseDate}-Refresh-recent-${commanduser.id}-${input.id}`)
-                    .setStyle(helper.vars.buttons.type.current)
-                    .setEmoji(helper.vars.buttons.label.main.refresh),
-            );
-    }
 
 
 
@@ -2317,10 +2286,6 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     let buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${helper.vars.versions.releaseDate}-Refresh-scoreparse-${commanduser.id}-${input.id}`)
-                .setStyle(helper.vars.buttons.type.current)
-                .setEmoji(helper.vars.buttons.label.main.refresh),
-            new Discord.ButtonBuilder()
                 .setCustomId(`${helper.vars.versions.releaseDate}-Map-scoreparse-any-${input.id}-${scoredata?.beatmap?.id}${scoredata.mods ? '+' + scoredata.mods.join() : ''}`)
                 .setStyle(helper.vars.buttons.type.current)
                 .setEmoji(helper.vars.buttons.label.extras.map),
@@ -2705,13 +2670,7 @@ export const scores = async (input: bottypes.commandInput) => {
 
 
 
-    let buttons = new Discord.ActionRowBuilder()
-        .addComponents(
-            new Discord.ButtonBuilder()
-                .setCustomId(`${helper.vars.versions.releaseDate}-Refresh-scores-${commanduser.id}-${input.id}`)
-                .setStyle(helper.vars.buttons.type.current)
-                .setEmoji(helper.vars.buttons.label.main.refresh),
-        );
+    let buttons = new Discord.ActionRowBuilder();
 
     helper.tools.log.commandOptions(
         [
