@@ -186,7 +186,7 @@ export function loops() {
 
     // other
     async function getOnlineChangelog() {
-        await axios.get(`https://raw.githubusercontent.com/sbrstrkkdwmdr/sbrbot/main/changelog/changelog.md`)
+        await axios.get(`https://raw.githubusercontent.com/sbrstrkkdwmdr/sbrbot/main/changelog.md`)
             .then(data => {
                 fs.writeFileSync(`${helper.vars.path.cache}/changelog.md`, data.data);
             })

@@ -178,7 +178,7 @@ export const changelog: bottypes.command = async (input: bottypes.commandInput) 
         useNum = +found;
     }
     const Embed = new Discord.EmbedBuilder();
-    const exceeded = 'Exceeded character limit. Please click [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog/changelog.md) to view the changelog.';
+    const exceeded = 'Exceeded character limit. Please click [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog.md) to view the changelog.';
     if (isNaN(useNum) || !useNum) useNum = 0;
     if (typeof found == 'string') {
         isList = true;
@@ -211,7 +211,7 @@ export const changelog: bottypes.command = async (input: bottypes.commandInput) 
         const document = /* useGit ? */
             fs.readFileSync(`${helper.vars.path.main}/cache/changelog.md`, 'utf-8');
         /*             :
-                    fs.readFileSync(`${precomphelper.vars.path.main}/changelog/changelog.txt`, 'utf-8'); */
+                    fs.readFileSync(`${precomphelper.vars.path.main}/changelog.txt`, 'utf-8'); */
         const list = document.split('## [');
         list.shift();
         if (useNum >= list.length) {
