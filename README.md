@@ -1,3 +1,5 @@
+# SSoB
+
 <div align="center">
 
 [![website](https://img.shields.io/badge/website-FFA41C?style=for-the-badge&logoColor=white)](https://sbrstrkkdwmdr.github.io/sbrbot/commands)</br>
@@ -17,7 +19,7 @@
 
 </div>
 
-## install/setup
+## Install/setup
 
 install nodejs (v16) [here](https://nodejs.org/en/download/)
 
@@ -31,50 +33,29 @@ in the `./config/` folder rename `tempconfig.json` to `config.json`
 
 ```json
 {
-  "important": {
-    "token": "create app and get token here => https://discord.com/developers/applications",
-    "osuClientID": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
-    "osuClientSecret": "create client here => https://osu.ppy.sh/home/account/edit#oauth",
-    "osuApiKey": "get api key here => https://osu.ppy.sh/home/account/edit#legacy-api"
-  },
-  "prefix": "string",
-  "ownerusers": ["user id", "user id 2"],
-  "google": {
-    "apiKey": "tutorial below",
-    "engineId": "tutorial below"
-  },
-  "useScreenshotParse": false,
-  "LogApiCalls": true,
-  "LogApiCallsToFile": true,
-  "enableTracking": true,
-  "storeCommandLogs": true,
-  "useEmojis": {
-    "gamemodes": true,
-    "scoreGrades": true,
-    "mods": false
-  }
+    "token": "xxx",
+    "osu": {
+        "clientId": "xxx",
+        "clientSecret": "xxx"
+    },
+    "prefix": "xxx",
+    "owners": ["xxx"],
+    "tenorKey": "xxx",
+    "enableTracking": true,
+    "logs": {
+        "console": true,
+        "file": true
+    }
 }
 ```
 
-change the values in `config.json` </br>
+change the values in `config.json` (see [here](#config-properties)) </br>
 rename `TEMPLATE.sqlite` to `database.sqlite`</br>
 check `src/consts/emojis.ts` and `src/consts/buttons.ts` and change the emojis that are formatted as <:name:ID:> (reupload\* to a private server that the bot is in) </br>
-emoji images are found under `./files/img/emojis/`
+emoji images are found under `./files/emojis/` </br>
 to get the emoji id, type the emoji then put a `\` in front of it</br>
 to compile the bot the bot run `tsc` or `npm run build`</br>
 to run the compiled code run `npm run run` </br>
-
-## image search setup
-
-go to https://cse.google.com/cse/all or https://programmablesearchengine.google.com/controlpanel/all </br>
-press "Add"</br>
-in "what to search" enter "www.google.com/imghp"</br>
-in search settings, set enable "image search" and "search entire web"</br>
-press customise </br>
-copy the search engine id and paste it in the google.engineId field</br>
-scroll down and press "Get Started" on "Custom Search JSON API" (limited)</br>
-press "Get a Key" and create a new project </br>
-copy the key and paste it into the google.apiKey field </br>
 
 ## required permissions
 
@@ -87,46 +68,34 @@ disabling these permissions will disable the commands listed
 | ManageMessages | To bulk delete messages                                   | purge                     |
 | Administrator  | To access certain data                                    | checkperms, get, userinfo |
 
-## credits
+### running
 
-see [here](https://github.com/sbrstrkkdwmdr/sbrbot/CREDITS.md)
+`tsc && node dist/src/main.js`
 
-## config properties
+(for some reason using the same command via package.json scripts causes errors with discord.js/typings/index.ts)
 
-| Property           | Type     | Description                                                                                                                                     | Default |
-| ------------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| important          | object   | see below                                                                                                                                       | {}      |
-| prefix             | string   | a string at the start of each message to detect if a message is a command. ie `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't. | sbr-    |
-| ownerusers         | string[] | an array of user ids stored as strings. users with these ids can use any command                                                                | []      |
-| google             | object   | see below                                                                                                                                       | {}      |
-| useScreenshotParse | boolean  | enables/disables the detection of maps in screenshots. Can cause crashes due to high CPU and memory usage                                       | false   |
-| LogApiCalls        | boolean  | enables/disables logging output to the console                                                                                                  | true    |
-| LogApiCallsToFile  | boolean  | enables/disable console output being logged to `logs/console.log`. Still saves logs even if `LogApiCalls` is false                              | false   |
-| enableTracking     | boolean  | enables/disables osutrack. Users can still be added/removed but scores won't be updated.                                                        | false   |
-| storeCommandLogs   | boolean  | enables/disables logs being stored locally                                                                                                      | false   |
-| useEmojis          | object   | see below                                                                                                                                       | {}      |
-| tenorKey           | string   | see [here](https://developers.google.com/tenor/guides/quickstart) (same steps as google api key)                                                | null    |
+## Config Properties
 
-### important
+| Property       | Type     | Description                                                                                                                                                                                           |
+| -------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| token          | string   | application token for bot to connect to discords API. </br>go to https://discord.com/developers/applications, create a new app, and create a new bot under the bot section. copy the token from there |
+| osu            | object   | see [here](#config-osu-properties)                                                                                                                                                                    |
+| prefix         | string   | a string at the start of each message to detect if a message is a command. ie `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't.                                                       |
+| owners         | string[] | an array of user ids stored as strings. users with these ids can use any command                                                                                                                      |
+| tenorKey       | string   | Used for running gif commands (hug, punch, slap). see [here](https://developers.google.com/tenor/guides/quickstart)                                                                                   |
+| enableTracking | boolean  | Enables/disables osu!track                                                                                                                                                                            |
+| logs           | object   | see [here](#config-logging-properties)                                                                                                                                                                |
 
-| Property        | Type   | Description                                                                                                                                                                                           | Default |
-| --------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| token           | string | application token for bot to connect to discords API. </br>go to https://discord.com/developers/applications, create a new app, and create a new bot under the bot section. copy the token from there | N/A     |
-| osuClientID     | string | the client id of an osu! api v2 app                                                                                                                                                                   | null    |
-| osuClientSecret | string | the secret/token of an osu! api v2 app                                                                                                                                                                | null    |
-| osuApiKey       | string | the api key used for osu api v1 (only currently used for maplb with mods)                                                                                                                             | null    |
+### Config osu properties
 
-### google
+| Property     | Type   | Description                                                                                             |
+| ------------ | ------ | ------------------------------------------------------------------------------------------------------- |
+| clientId     | string | the client id of an osu! api v2 app. [Create client here](https://osu.ppy.sh/home/account/edit#oauth)   |
+| clientSecret | string | the secret/token of an osu! api v2 app [Create client here](https://osu.ppy.sh/home/account/edit#oauth) |
 
-| Property | Type   | Description                                                 | Default |
-| -------- | ------ | ----------------------------------------------------------- | ------- |
-| apiKey   | string | the api key of a google programmable search engine          | null    |
-| engineId | string | the search engine id of a google programmable search engine | null    |
+### Config logging properties
 
-### useEmojis
-
-| Property    | Type    | Description                                                      | Default |
-| ----------- | ------- | ---------------------------------------------------------------- | ------- |
-| gamemodes   | boolean | enables/disables gamemodes being shown as emojis instead of text | true    |
-| scoreGrades | boolean | enables/disables rank letters shown as emojis instead of text    | true    |
-| mods        | boolean | enables/disables mods shown as emojis instead of text            | false   |
+| Property | Type    | Description                                          |
+| -------- | ------- | ---------------------------------------------------- |
+| console  | boolean | Logs are output to the console                       |
+| file     | boolean | Logs are saved to the logs folder (`dist/src/logs/`) |

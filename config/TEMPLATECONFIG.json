@@ -1,0 +1,15 @@
+{
+    "token": "xxx",
+    "osu": {
+        "clientId": "xxx",
+        "clientSecret": "xxx"
+    },
+    "prefix": "xxx",
+    "owners": ["id1", "id2"],
+    "tenorKey": "https://developers.google.com/tenor/guides/quickstart",
+    "enableTracking": true,
+    "logs": {
+        "console": true,
+        "file": true
+    }
+}

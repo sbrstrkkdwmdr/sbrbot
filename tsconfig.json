@@ -3,7 +3,7 @@
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
         "lib": [
-            "ES2021"
+            "ES2022",
         ],
         "resolveJsonModule": true,
         "sourceMap": true,
@@ -12,11 +12,8 @@
         "skipLibCheck": true
     },
     "include": [
-        "commands/**/*",
-        "config/**/*",
+        "config/*",
         "src/**/*",
-        "tests/",
-        "*",
     ],
     "exclude": [
         "setup.ts",
