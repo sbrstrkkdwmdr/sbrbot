@@ -56,6 +56,7 @@ emoji images are found under `./files/emojis/` </br>
 to get the emoji id, type the emoji then put a `\` in front of it</br>
 to compile the bot the bot run `tsc` or `npm run build`</br>
 to run the compiled code run `npm run run` </br>
+to compile then immediately run `npm run br` </br>
 
 ## required permissions
 
@@ -67,12 +68,6 @@ disabling these permissions will disable the commands listed
 | AddReactions   | The poll/vote command requires reactions for voting       | poll                      |
 | ManageMessages | To bulk delete messages                                   | purge                     |
 | Administrator  | To access certain data                                    | checkperms, get, userinfo |
-
-### running
-
-`tsc && node dist/src/main.js`
-
-(for some reason using the same command via package.json scripts causes errors with discord.js/typings/index.ts)
 
 ## Config Properties
 

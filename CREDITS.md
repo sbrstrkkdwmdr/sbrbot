@@ -6,8 +6,8 @@
 | --------------------------- | ----------------------------------------------------------------------------------- |
 | Discord API Wrapper         | [Discord.js](https://discord.js.org/)                                               |
 | Performance/SR calculations | [rosu-pp](https://github.com/MaxOhn/rosu-pp-js)                                     |
-| Youtube search              | [yt-search](https://www.npmjs.com/package/yt-search)                                |
 | Database                    | [Sequelize](https://www.npmjs.com/package/sequelize)                                |
+| Database                    | [sqlite3](https://www.npmjs.com/package/sqlite3)                                    |
 | Mod calculations            | [osumodcalculator](https://www.npmjs.com/package/osumodcalculator)                  |
 | Graph/chart generator       | [chartjs](https://www.chartjs.org/)                                                 |
 | Graph/chart generator       | [canvas](https://www.npmjs.com/package/canvas)                                      |
