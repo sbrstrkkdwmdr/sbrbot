@@ -2,6 +2,9 @@
 
 newest-oldest
 
+## current
+- [ ] `recent` showing star rating as `undefined`
+
 ## 4.0.0 rewrite
 - [x] re-implement all commands
 - [x] command handler

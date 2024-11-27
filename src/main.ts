@@ -170,12 +170,12 @@ client.once('ready', () => {
 ====================================================
 BOT IS NOW ONLINE
 ----------------------------------------------------
-Boot time:                ${timetostart}ms
-Current Time:             ${currentDate.toLocaleString()}
-Current Time (ISO):       ${currentDate.toISOString()}
-Current Time (epoch, ms): ${currentDate.getTime()}
-Current Client:           ${client.user.tag} 
-Current Client ID:        ${client.user.id}
+Boot time:        ${timetostart}ms
+Time:             ${currentDate.toLocaleString()}
+Time (ISO):       ${currentDate.toISOString()}
+Time (epoch, ms): ${currentDate.getTime()}
+Client:           ${client.user.tag} 
+Client ID:        ${client.user.id}
 ====================================================
 `);
 

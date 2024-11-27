@@ -62,7 +62,7 @@ export async function apiGet(input: tooltypes.apiInput) {
         } as tooltypes.apiReturn;
     }
     try {
-        helper.tools.log.stdout('OSU API GET:' + input.url);
+        helper.tools.log.stdout('OSU API GET: ' + input.url);
         datafirst = (await axios.get(input.url, {
             headers: {
                 Authorization: `Bearer ${oauth.access_token}`,
