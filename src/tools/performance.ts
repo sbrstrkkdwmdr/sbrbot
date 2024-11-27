@@ -49,7 +49,6 @@ export async function calcScore(input: {
     const baseScore: rosu.PerformanceArgs = {
         mods: osumodcalc.ModStringToInt(mods),
         accuracy: input.accuracy ?? 100,
-        clockRate: input.clockRate ?? 1,
     };
     if (input.maxcombo != null && !isNaN(input.maxcombo)) {
         baseScore['combo'] = input.maxcombo;
@@ -83,6 +82,9 @@ export async function calcScore(input: {
     }
     if (input.customHP != null && !isNaN(input.customHP)) {
         baseScore['hp'] = input.customHP;
+    }
+    if (input.clockRate != null && !isNaN(input.clockRate)) {
+        baseScore['clockRate'] = input.clockRate;
     }
     const perf: rosu.Performance = new rosu.Performance(baseScore);
     const final = perf.calculate(map);
@@ -196,7 +198,7 @@ export async function calcStrains(input: {
     map.free();
     return strains;
 }
-let x:rosu.GameMode;
+let x: rosu.GameMode;
 export function template(mapdata: apitypes.Beatmap) {
     return {
         pp: 0,
