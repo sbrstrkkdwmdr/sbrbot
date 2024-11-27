@@ -4,7 +4,7 @@
 
 ## [4.0.0] - 2024-11-27
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/da0affdb8c0b3c2513e41dccd28a052f90d50686)</br>
 
 ### BREAKING
 - re-organised config files
