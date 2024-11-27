@@ -147,7 +147,6 @@ export function loops() {
                 60 * 1000 : temp * 1000;
         }
     }
-    // osu track
 
     // clear cache
     const cacheById = [
@@ -164,7 +163,7 @@ export function loops() {
         'mapdataRanked', 'mapdataLoved', 'mapdataApproved',
         'bmsdataRanked', 'bmsdataLoved', 'bmsdataApproved',
     ];
-    
+
     function clearMapFiles() {
         const files = fs.readdirSync(`${helper.vars.path.files}/maps`);
         for (const file of files) {
@@ -193,7 +192,7 @@ export function loops() {
             })
             .catch(error => {
                 helper.tools.log.stdout('ERROR FETCHING GIT');
-                helper.tools.log.out(`${helper.vars.path.logs}/err.log`,JSON.stringify(error));
+                helper.tools.log.out(`${helper.vars.path.logs}/err.log`, JSON.stringify(error));
             });
     }
     function clearCommandCache() {
@@ -263,6 +262,28 @@ export function loops() {
             });
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    // osu track
+    let enableTrack = helper.vars.config.enableTracking;
+    const totalTime = 60 * 1000 * 60; //requests every 60 min
+    if (enableTrack == true) {
+        a();
+        setInterval(() => {
+            a();
+        }, totalTime);
+    }
+    function a() {
+        try {
+            helper.tools.track.trackUsers(totalTime);
+        } catch (err) {
+            helper.tools.log.stdout(err);
+            helper.tools.log.stdout('temporarily disabling tracking for an hour');
+            enableTrack = false;
+            setTimeout(() => {
+                enableTrack = true;
+            }, totalTime);
         }
     }
 }
