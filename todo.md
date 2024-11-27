@@ -3,7 +3,7 @@
 newest-oldest
 
 ## current
-- [ ] `recent` showing star rating as `undefined`
+- [x] `recent` showing star rating as `undefined`
 
 ## 4.0.0 rewrite
 - [x] re-implement all commands
@@ -12,7 +12,7 @@ newest-oldest
 - [x] button handler
 - [ ] interaction handler
 - [x] loops
-- [ ] bug fixing
+- [x] bug fixing
 
 
 ### bug fixes
@@ -26,7 +26,7 @@ newest-oldest
 
 ## pre 4.0.0 
 
-- [ ] bot docs allow search by command alias
+- [x] bot docs allow search by command alias
 - [x] support userlinks in commands that take user as a param
 - [ ] https://stackoverflow.com/questions/59655314/how-to-generate-an-image-from-dynamically-created-html-in-nodejs
 - [x] convert now returns NaN

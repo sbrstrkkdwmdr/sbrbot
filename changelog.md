@@ -2,9 +2,13 @@
 
 # changelog
 
-## [WIP] - xxxx-xx-xx
+## [4.0.1] - xxxx-xx-xx
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
+
+### FIXED
+
+-   `recent` showing star rating as `undefined`
 
 ## [4.0.0] - 2024-11-27
 

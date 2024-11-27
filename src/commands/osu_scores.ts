@@ -1559,7 +1559,6 @@ export const recent = async (input: bottypes.commandInput) => {
             case 'mania':
                 totalhits = gamehits.count_geki + gamehits.count_300 + gamehits.count_katu + gamehits.count_100 + gamehits.count_50 + gamehits.count_miss;
         }
-        let totaldiff: string;
         let hitlist: string;
 
         const getHits = helper.tools.formatter.returnHits(gamehits, curscore.mode);
@@ -1616,7 +1615,7 @@ export const recent = async (input: bottypes.commandInput) => {
                 maxcombo: curscore.max_combo,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
             });
-            rspp =
+        rspp =
                 curscore.pp ?
                     curscore.pp.toFixed(2) :
                     perf.pp.toFixed(2);
@@ -1644,6 +1643,7 @@ export const recent = async (input: bottypes.commandInput) => {
             ppissue = helper.vars.errors.uErr.osu.performance.crash;
             helper.tools.log.commandErr(error, input.id, 'firsts', input.message, input.interaction);
         }
+        let totaldiff: string = (perf.difficulty.stars ?? 0).toFixed(2);
 
         const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
         let msToFail: number, curbmpasstime: number, guesspasspercentage: number;
