@@ -2432,7 +2432,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     if (scoredata.max_combo == mxCombo && scoredata.accuracy == 1) {
         fcflag = 'FC';
     }
-    let pptxt = `${perf.pp.toFixed(2)}pp` + fcflag;
+    let pptxt = `${(scoredata?.pp ?? perf.pp).toFixed(2)}pp` + fcflag;
 
     const mxcombo =
         perf.difficulty.maxCombo;

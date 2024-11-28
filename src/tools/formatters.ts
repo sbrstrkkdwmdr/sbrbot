@@ -103,7 +103,7 @@ export async function scoreList(
             `**
 \`${helper.tools.calculate.numberShorthand(score.score)}\` |${score.mods.length > 0 ? ' **' + score.mods.join('') + '** |' : ''} ${dateToDiscordFormat(new Date(score.created_at))}
 \`${hitList(score.mode, score.statistics)}\` | ${score.max_combo} | ${(score.accuracy * 100).toFixed(2)} | ${helper.vars.emojis.grades[score.rank]}
-${perf.pp.toFixed(2)}pp`;
+${(score?.pp ?? perf.pp).toFixed(2)}pp`;
         if (!score.perfect) {
             info += '(' + fc.pp.toFixed(2) + 'pp if FC)';
         }

@@ -6,9 +6,12 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
-### FIXED
+### Fixed
 
 -   `recent` showing star rating as `undefined`
+
+### Changed
+- use api pp value if available
 
 ## [4.0.0] - 2024-11-27
 
