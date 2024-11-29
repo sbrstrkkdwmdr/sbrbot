@@ -53,6 +53,7 @@ export async function apiGet(input: tooltypes.apiInput) {
     let data: tooltypes.apiReturn;
     let datafirst;
     input.url = helper.tools.other.appendUrlParamsString(input.url, input.extra ?? []);
+    input.url = encodeURI(input.url);
     // helper.tools.log.stdout(input.url);
     if (input.tries >= 5) {
         return {
@@ -180,8 +181,14 @@ export async function getUserMapScores(userid: string | number, mapid: number, e
         extra
     }) as tooltypes.apiReturn<apitypes.ScoreArrA>;
 }
-export async function getMapLeaderboard(id: number, mode: string, extra: string[]) {
+export async function getMapLeaderboard(id: number, mode: string, mods: string, extra: string[]) {
     let url = baseUrl + `beatmaps/${id}/scores?mode=${helper.tools.other.modeValidator(mode)}&legacy_only=0&limit=100`;
+    if (mods) {
+        let tempmods = osumodcalc.modHandler(mods, mode as apitypes.GameMode);
+        tempmods.forEach(mod => {
+            url += `&mods[]=${mod}`;
+        });
+    }
     return await apiGet({
         url,
         extra
@@ -191,7 +198,10 @@ export async function getMapLeaderboardNonLegacy(id: number, mode: string, mods:
     mode = helper.tools.other.modeValidator(mode);
     let url = baseUrl + `beatmaps/${id}/solo-scores?mode=${mode}&legacy_only=0&limit=100`;
     if (mods) {
-        url += `&mods=${osumodcalc.modHandler(mods, mode as apitypes.GameMode).join('')}`;
+        let tempmods = osumodcalc.modHandler(mods, mode as apitypes.GameMode);
+        tempmods.forEach(mod => {
+            url += `&mods[]=${mod}`;
+        });
     }
     return await apiGet({
         url,

@@ -8,14 +8,20 @@
 
 ### Fixed
 
-- `recent` showing star rating as `undefined`
-- non-legacy scores breaking score formatter
+-   `recent` showing star rating as `undefined`
+-   non-legacy scores breaking score formatter
+-   maplb mods arg not working
 
 ### Changed
-- use api pp value if available
+
+-   use api pp value if available
+-   show `x` after combo (score list)
+-   show max combo (score list)
+-   show % after accuracy (score list)
 
 ### Added
-- support for non-legacy scores
+
+-   support for non-legacy scores
 
 ## [4.0.0] - 2024-11-27
 
