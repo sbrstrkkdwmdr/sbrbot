@@ -5,6 +5,7 @@ newest-oldest
 ## current
 - [ ] pages buttons not working
 - [ ] `changelog` pages being broken after using select page 
+- [ ] maplb doesnt filter by mods
 - [x] `recent` showing star rating as `undefined`
 
 ## 4.0.0 rewrite
