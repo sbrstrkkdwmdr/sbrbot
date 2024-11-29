@@ -113,23 +113,25 @@ export async function scoreList(
         if (showUsername) {
             info += `・[${score.user.username}](https://osu.ppy.sh/u/${score.user_id})`;
         }
+        let combo = `${score.max_combo}/**${fc.difficulty.maxCombo}x**`;
+        if (score.max_combo == fc.difficulty.maxCombo) combo = `**${score.max_combo}x**`;
         if (scoretype == 'legacy') {
             score = score as indexedScore<apitypes.ScoreLegacy>;
             info +=
                 `**
     \`${helper.tools.calculate.numberShorthand(score.score)}\` |${score.mods.length > 0 ? ' **' + score.mods.join('') + '** |' : ''} ${dateToDiscordFormat(new Date(score.created_at))}
-    \`${hitList(score.mode, score.statistics)}\` | ${score.max_combo} | ${(score.accuracy * 100).toFixed(2)} | ${helper.vars.emojis.grades[score.rank]}
+    \`${hitList(score.mode, score.statistics)}\` | ${combo} | ${(score.accuracy * 100).toFixed(2)}% | ${helper.vars.emojis.grades[score.rank]}
     ${(score?.pp ?? perf.pp).toFixed(2)}pp`;
         } else {
             const tempScore = score as indexedScore<apitypes.Score>;
             info +=
                 `**
     \`${helper.tools.calculate.numberShorthand(tempScore.total_score)}\` |${tempScore.mods.length > 0 ? ' **' + tempScore.mods.map(x => x.acronym).join('') + '** |' : ''} ${dateToDiscordFormat(new Date(tempScore.ended_at))}
-    \`${hitList(convertedScore.mode, convertedScore.statistics)}\` | ${score.max_combo} | ${(score.accuracy * 100).toFixed(2)} | ${helper.vars.emojis.grades[score.rank]}
+    \`${hitList(convertedScore.mode, convertedScore.statistics)}\` | ${combo} | ${(score.accuracy * 100).toFixed(2)}% | ${helper.vars.emojis.grades[score.rank]}
     ${(score?.pp ?? perf.pp).toFixed(2)}pp`;
         }
         if (!convertedScore?.perfect) {
-            info += '(' + fc.pp.toFixed(2) + 'pp if FC)';
+            info += ' (' + fc.pp.toFixed(2) + 'pp if FC)';
         }
         info += '\n\n';
         text += info;
