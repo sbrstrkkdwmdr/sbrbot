@@ -104,7 +104,7 @@ export const firsts = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(osudataReq, osudata.id, 'osudata', parseArgs.mode);
     helper.tools.data.storeFile(osudataReq, parseArgs.user, 'osudata', parseArgs.mode);
 
-    let firstscoresdata: apitypes.Score[] & apitypes.Error = [];
+    let firstscoresdata: apitypes.ScoreLegacy[] & apitypes.Error = [];
     async function getScoreCount(cinitnum) {
         if (cinitnum >= 499) {
             reachedMaxCount = true;
@@ -112,7 +112,7 @@ export const firsts = async (input: bottypes.commandInput) => {
         }
 
         const fdReq: tooltypes.apiReturn = await helper.tools.api.getScoresFirst(osudata.id, parseArgs.mode, ['offset=' + cinitnum]);
-        const fd: apitypes.Score[] & apitypes.Error = fdReq.apiData;
+        const fd: apitypes.ScoreLegacy[] & apitypes.Error = fdReq.apiData;
         if (fdReq?.error) {
             await helper.tools.commands.errorAndAbort(input, 'firsts', true, helper.vars.errors.uErr.osu.scores.first.replace('[ID]', parseArgs.user), false);
             return;
@@ -143,7 +143,7 @@ export const firsts = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(firstscoresdata, osudata.id, 'firstscoresdata');
 
     if (parseArgs.parseScore) {
-        let newScores = helper.tools.formatter.filterScores(firstscoresdata, parseArgs.sort ?? 'recent',
+        let newScores = helper.tools.formatter.filterScoresLegacy(firstscoresdata, parseArgs.sort ?? 'recent',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -159,7 +159,7 @@ export const firsts = async (input: bottypes.commandInput) => {
                 combo: parseArgs.combo,
                 miss: parseArgs.miss,
                 bpm: parseArgs.bpm
-            }, parseArgs.reverse,);
+            }, parseArgs.reverse,) as apitypes.ScoreLegacy[];
         let pid = +parseArgs.parseId - 1;
         if (isNaN(pid) || pid < 0) {
             pid = 0;
@@ -190,7 +190,7 @@ export const firsts = async (input: bottypes.commandInput) => {
     firstsEmbed = helper.tools.formatter.userAuthor(osudata, firstsEmbed);
 
     const scoresarg = await helper.tools.formatter.scoreList(
-        firstscoresdata, parseArgs.sort ?? 'recent',
+        firstscoresdata, 'legacy', parseArgs.sort ?? 'recent',
         {
             mapper: parseArgs.filteredMapper,
             modsInclude: parseArgs.modsInclude,
@@ -439,19 +439,17 @@ export const maplb = async (input: bottypes.commandInput) => {
     }
     const lbEmbed = new Discord.EmbedBuilder();
 
-    let lbdataReq: tooltypes.apiReturn<apitypes.BeatmapScores>;
+    let lbdataReq: tooltypes.apiReturn<apitypes.BeatmapScores<apitypes.Score>>;
     if (helper.tools.data.findFile(input.id, 'lbdata') &&
         input.type == 'button' &&
         !('error' in helper.tools.data.findFile(input.id, 'lbdata')) &&
         input.buttonType != 'Refresh'
     ) {
         lbdataReq = helper.tools.data.findFile(input.id, 'lbdata');
-    } else if (mods) {
-        lbdataReq = await helper.tools.api.getMapLeaderboardNonLegacy(mapid, mapdata.mode, mods, []);
     } else {
-        lbdataReq = await helper.tools.api.getMapLeaderboard(mapid, mapdata.mode, []);
+        lbdataReq = await helper.tools.api.getMapLeaderboardNonLegacy(mapid, mapdata.mode, mods, []);
     }
-    const lbdataf: apitypes.BeatmapScores = lbdataReq.apiData;
+    const lbdataf: apitypes.BeatmapScores<apitypes.Score> = lbdataReq.apiData;
     if (lbdataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'maplb', true, helper.vars.errors.uErr.osu.map.lb.replace('[ID]', mapid), false);
         return;
@@ -476,7 +474,7 @@ export const maplb = async (input: bottypes.commandInput) => {
             pid = lbdata.length - 1;
         }
         input.overrides = {
-            mode: lbdata?.[0]?.mode ?? 'osu',
+            mode: osumodcalc.ModeIntToName(lbdata?.[0]?.ruleset_id),
             id: lbdata?.[pid]?.best_id,
             commanduser,
             commandAs: input.type
@@ -510,7 +508,7 @@ export const maplb = async (input: bottypes.commandInput) => {
 
     helper.tools.data.debug(lbdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction.guildId, 'lbData');
 
-    const scoresarg = await helper.tools.formatter.scoreList(lbdata, 'score', {
+    const scoresarg = await helper.tools.formatter.scoreList(lbdata, 'current', 'score', {
         mapper: null,
         title: null,
         artist: null,
@@ -705,7 +703,7 @@ export const osutop = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(osudataReq, osudata.id, 'osudata', helper.tools.other.modeValidator(parseArgs.mode));
     helper.tools.data.storeFile(osudataReq, parseArgs.user, 'osudata', helper.tools.other.modeValidator(parseArgs.mode));
 
-    let osutopdataReq: tooltypes.apiReturn<apitypes.Score[]>;
+    let osutopdataReq: tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
     if (helper.tools.data.findFile(osudata.id, 'topscoresdata') &&
         input.type == 'button' &&
         !('error' in helper.tools.data.findFile(osudata.id, 'topscoresdata')) &&
@@ -716,7 +714,7 @@ export const osutop = async (input: bottypes.commandInput) => {
         osutopdataReq = await helper.tools.api.getScoresBest(osudata.id, parseArgs.mode, []);
     }
 
-    let osutopdata: apitypes.Score[] & apitypes.Error = osutopdataReq.apiData;
+    let osutopdata: apitypes.ScoreLegacy[] & apitypes.Error = osutopdataReq.apiData;
     if (osutopdataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'osutop', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', parseArgs.user), false);
         return;
@@ -739,7 +737,7 @@ export const osutop = async (input: bottypes.commandInput) => {
     }
 
     if (parseArgs.parseScore) {
-        let newScores = helper.tools.formatter.filterScores(osutopdata, parseArgs.sort ?? 'recent',
+        let newScores = helper.tools.formatter.filterScoresLegacy(osutopdata, parseArgs.sort ?? 'recent',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -755,17 +753,17 @@ export const osutop = async (input: bottypes.commandInput) => {
                 combo: parseArgs.combo,
                 miss: parseArgs.miss,
                 bpm: parseArgs.bpm
-            }, parseArgs.reverse,);
+            }, parseArgs.reverse,) as apitypes.ScoreLegacy[];
         let pid = parseInt(parseArgs.parseId) - 1;
         if (pid < 0) {
             pid = 0;
         }
-        if (pid > osutopdata.length) {
-            pid = osutopdata.length - 1;
+        if (pid > newScores.length) {
+            pid = newScores.length - 1;
         }
         input.overrides = {
-            mode: osutopdata?.[0]?.mode ?? 'osu',
-            id: osutopdata?.[pid]?.best_id,
+            mode: newScores?.[0]?.mode ?? 'osu',
+            id: newScores?.[pid]?.best_id,
             commanduser: parseArgs.commanduser,
             commandAs: input.type
         };
@@ -794,7 +792,7 @@ export const osutop = async (input: bottypes.commandInput) => {
     }
 
     const scoresarg = await helper.tools.formatter.scoreList(
-        osutopdata, parseArgs.sort ?? 'pp',
+        osutopdata, 'legacy', parseArgs.sort ?? 'pp',
         {
             mapper: parseArgs.filteredMapper,
             modsInclude: parseArgs.modsInclude,
@@ -949,7 +947,7 @@ export const pinned = async (input: bottypes.commandInput) => {
             .setEmoji(helper.vars.buttons.label.extras.user),
     );
 
-    let pinnedscoresdataReq: tooltypes.apiReturn<apitypes.Score[]>;
+    let pinnedscoresdataReq: tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
     if (helper.tools.data.findFile(osudata.id, 'topscoresdata') &&
         input.type == 'button' &&
         !('error' in helper.tools.data.findFile(osudata.id, 'topscoresdata')) &&
@@ -960,7 +958,7 @@ export const pinned = async (input: bottypes.commandInput) => {
         pinnedscoresdataReq = await helper.tools.api.getScoresPinned(osudata.id, parseArgs.mode, []);
     }
 
-    let pinnedscoresdata: apitypes.Score[] & apitypes.Error = pinnedscoresdataReq.apiData;
+    let pinnedscoresdata: apitypes.ScoreLegacy[] & apitypes.Error = pinnedscoresdataReq.apiData;
     if (pinnedscoresdataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'pinned', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', parseArgs.user), false);
         return;
@@ -978,7 +976,7 @@ export const pinned = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(pinnedscoresdataReq, osudata.id, 'pinnedscoresdata');
 
     if (parseArgs.parseScore) {
-        let newScores = helper.tools.formatter.filterScores(pinnedscoresdata, parseArgs.sort ?? 'recent',
+        let newScores = helper.tools.formatter.filterScoresLegacy(pinnedscoresdata, parseArgs.sort ?? 'recent',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -994,17 +992,17 @@ export const pinned = async (input: bottypes.commandInput) => {
                 combo: parseArgs.combo,
                 miss: parseArgs.miss,
                 bpm: parseArgs.bpm
-            }, parseArgs.reverse,);
+            }, parseArgs.reverse,) as apitypes.ScoreLegacy[];
         let pid = parseInt(parseArgs.parseId) - 1;
         if (pid < 0) {
             pid = 0;
         }
-        if (pid > pinnedscoresdata.length) {
-            pid = pinnedscoresdata.length - 1;
+        if (pid > newScores.length) {
+            pid = newScores.length - 1;
         }
         input.overrides = {
-            mode: pinnedscoresdata?.[0]?.mode ?? 'osu',
-            id: pinnedscoresdata?.[pid]?.best_id,
+            mode: newScores?.[0]?.mode ?? 'osu',
+            id: newScores?.[pid]?.best_id,
             commanduser: parseArgs.commanduser,
             commandAs: input.type
         };
@@ -1024,7 +1022,7 @@ export const pinned = async (input: bottypes.commandInput) => {
         .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`);
     pinnedEmbed = helper.tools.formatter.userAuthor(osudata, pinnedEmbed);
     const scoresarg = await helper.tools.formatter.scoreList(
-        pinnedscoresdata, parseArgs.sort ?? 'recent',
+        pinnedscoresdata, 'legacy', parseArgs.sort ?? 'recent',
         {
             mapper: parseArgs.filteredMapper,
             modsInclude: parseArgs.modsInclude,
@@ -1395,7 +1393,7 @@ export const recent = async (input: bottypes.commandInput) => {
             .setEmoji(helper.vars.buttons.label.extras.user),
     );
 
-    let rsdataReq: tooltypes.apiReturn<apitypes.Score[]>;
+    let rsdataReq: tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
     if (helper.tools.data.findFile(input.id, 'rsdata') &&
         input.type == 'button' &&
         !('error' in helper.tools.data.findFile(input.id, 'rsdata')) &&
@@ -1406,7 +1404,7 @@ export const recent = async (input: bottypes.commandInput) => {
         rsdataReq = await helper.tools.api.getScoresRecent(osudata.id, mode, [`include_fails=${showFails}`]);
     }
 
-    let rsdata: apitypes.Score[] & apitypes.Error = rsdataReq.apiData;
+    let rsdata: apitypes.ScoreLegacy[] & apitypes.Error = rsdataReq.apiData;
     if (rsdataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.uErr.osu.scores.recent.replace('[ID]', user), false);
         return;
@@ -1615,7 +1613,7 @@ export const recent = async (input: bottypes.commandInput) => {
                 maxcombo: curscore.max_combo,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
             });
-        rspp =
+            rspp =
                 curscore.pp ?
                     curscore.pp.toFixed(2) :
                     perf.pp.toFixed(2);
@@ -1834,7 +1832,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             rsEmbed.setTitle(`Best recent ${showFails == 1 ? 'plays' : 'passes'} for ${osudata.username}`);
         }
         page++;
-        const scoresarg = await helper.tools.formatter.scoreList(rsdata, sort,
+        const scoresarg = await helper.tools.formatter.scoreList(rsdata, 'legacy', sort,
             {
                 mapper: null,
                 artist: null,
@@ -2253,7 +2251,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             }
         }, input.canReply);
     }
-    let scoredataReq: tooltypes.apiReturn<apitypes.Score>;
+    let scoredataReq: tooltypes.apiReturn<apitypes.ScoreLegacy>;
 
     if (helper.tools.data.findFile(scoreid, 'scoredata') &&
         !('error' in helper.tools.data.findFile(scoreid, 'scoredata')) &&
@@ -2267,7 +2265,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
 
     }
 
-    const scoredata: apitypes.Score = scoredataReq.apiData;
+    const scoredata: apitypes.ScoreLegacy = scoredataReq.apiData;
     if (scoredataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'scoreparse', true, helper.vars.errors.uErr.osu.score.nd
             .replace('[SID]', scoreid.toString())
@@ -2846,7 +2844,7 @@ export const scores = async (input: bottypes.commandInput) => {
 
     helper.tools.data.storeFile(scoredataReq, input.id, 'scores');
 
-    const scoredata: apitypes.Score[] = scoredataPresort.scores;
+    const scoredata: apitypes.ScoreLegacy[] = scoredataPresort.scores;
 
     helper.tools.data.debug(scoredataReq, 'command', 'scores', input.message?.guildId ?? input.interaction.guildId, 'scoreData');
 
@@ -2889,7 +2887,7 @@ export const scores = async (input: bottypes.commandInput) => {
     if (page > Math.ceil(scoredata.length / 5)) {
         page = Math.ceil(scoredata.length / 5) - 1;
     }
-    const scoresarg = await helper.tools.formatter.scoreList(scoredata, sort,
+    const scoresarg = await helper.tools.formatter.scoreList(scoredata, 'legacy', sort,
         {
             mapper: null,
             artist: null,
@@ -3163,10 +3161,10 @@ export const scorestats = async (input: bottypes.commandInput) => {
             .setEmoji(helper.vars.buttons.label.extras.user),
     );
 
-    let scoresdata: apitypes.Score[] & apitypes.Error = [];
+    let scoresdata: apitypes.ScoreLegacy[] & apitypes.Error = [];
 
     async function getScoreCount(cinitnum: number) {
-        let req: tooltypes.apiReturn<apitypes.Score[]>;
+        let req: tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
         switch (scoreTypes) {
             case 'firsts':
                 req = await helper.tools.api.getScoresBest(osudata.id, helper.tools.other.modeValidator(mode), [`offset=${cinitnum}`]);
@@ -3181,7 +3179,7 @@ export const scorestats = async (input: bottypes.commandInput) => {
                 req = await helper.tools.api.getScoresBest(osudata.id, helper.tools.other.modeValidator(mode), []);
                 break;
         }
-        const fd: apitypes.Score[] & apitypes.Error = req.apiData;
+        const fd: apitypes.ScoreLegacy[] & apitypes.Error = req.apiData;
         if (req?.error) {
             await helper.tools.commands.errorAndAbort(input, 'scorestats', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', user).replace('top', scoreTypes == 'best' ? 'top' : scoreTypes), false);
             return;

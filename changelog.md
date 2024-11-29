@@ -8,10 +8,14 @@
 
 ### Fixed
 
--   `recent` showing star rating as `undefined`
+- `recent` showing star rating as `undefined`
+- non-legacy scores breaking score formatter
 
 ### Changed
 - use api pp value if available
+
+### Added
+- support for non-legacy scores
 
 ## [4.0.0] - 2024-11-27
 

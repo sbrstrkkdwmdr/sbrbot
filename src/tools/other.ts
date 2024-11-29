@@ -705,7 +705,7 @@ export function scoreIsComplete(
     };
 }
 
-export function filterScoreQuery(scores: apitypes.Score[], search: string) {
+export function filterScoreQuery(scores: apitypes.ScoreLegacy[], search: string) {
     return scores.filter((score) =>
         (
             score.beatmapset.title.toLowerCase().replaceAll(' ', '')

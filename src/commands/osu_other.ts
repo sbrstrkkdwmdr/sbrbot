@@ -286,7 +286,7 @@ export const compare = async (input: bottypes.commandInput) => {
                 break;
             case 'top': {
                 page;
-                let firsttopdataReq: tooltypes.apiReturn<apitypes.Score[]>;
+                let firsttopdataReq: tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
                 if (helper.tools.data.findFile(input.id, 'firsttopdata') &&
                     !('error' in helper.tools.data.findFile(input.id, 'firsttopdata')) &&
                     input.buttonType != 'Refresh'
@@ -296,7 +296,7 @@ export const compare = async (input: bottypes.commandInput) => {
                     firsttopdataReq = await helper.tools.api.getScoresBest(firstuser.id, mode, []);
                 }
 
-                const firsttopdata: apitypes.Score[] & apitypes.Error = firsttopdataReq.apiData;
+                const firsttopdata: apitypes.ScoreLegacy[] & apitypes.Error = firsttopdataReq.apiData;
                 if (firsttopdataReq?.error) {
                     await helper.tools.commands.errorAndAbort(input, 'compare', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', firstuser.id + ''), false);
                     return;
@@ -308,7 +308,7 @@ export const compare = async (input: bottypes.commandInput) => {
                     return;
                 }
 
-                let secondtopdataReq: tooltypes.apiReturn<apitypes.Score[]>;
+                let secondtopdataReq: tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
                 if (helper.tools.data.findFile(input.id, 'secondtopdata') &&
                     !('error' in helper.tools.data.findFile(input.id, 'secondtopdata')) &&
                     input.buttonType != 'Refresh'
@@ -318,7 +318,7 @@ export const compare = async (input: bottypes.commandInput) => {
                     secondtopdataReq = await helper.tools.api.getScoresBest(seconduser.id, mode, []);
                 }
 
-                const secondtopdata: apitypes.Score[] & apitypes.Error = secondtopdataReq.apiData;
+                const secondtopdata: apitypes.ScoreLegacy[] & apitypes.Error = secondtopdataReq.apiData;
                 if (secondtopdataReq?.error) {
                     await helper.tools.commands.errorAndAbort(input, 'compare', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', seconduser.id + ''), false);
                     return;
@@ -344,9 +344,9 @@ export const compare = async (input: bottypes.commandInput) => {
                 const arrscore = [];
 
                 for (let i = 0; i < filterfirst.length && i < 5; i++) {
-                    const firstscore: apitypes.Score = filterfirst[i + (page * 5)];
+                    const firstscore: apitypes.ScoreLegacy = filterfirst[i + (page * 5)];
                     if (!firstscore) break;
-                    const secondscore: apitypes.Score = secondtopdata.find(score => score.beatmap.id == firstscore.beatmap.id);
+                    const secondscore: apitypes.ScoreLegacy = secondtopdata.find(score => score.beatmap.id == firstscore.beatmap.id);
                     if (secondscore == null) break;
                     const firstscorestr =
                         `\`${firstscore.pp.toFixed(2)}pp | ${(firstscore.accuracy * 100).toFixed(2)}% ${firstscore.mods.length > 0 ? '| +' + firstscore.mods.join('') : ''}`;//.padEnd(30, ' ').substring(0, 30)
@@ -1155,7 +1155,7 @@ export const whatif = async (input: bottypes.commandInput) => {
     const osutopdataReq: tooltypes.apiReturn = await helper.tools.api.getScoresBest(osudata.id, mode, []);
 
 
-    const osutopdata: apitypes.Score[] & apitypes.Error = osutopdataReq.apiData; helper.tools.data.debug(osutopdataReq, 'command', 'whatif', input.message?.guildId ?? input.interaction.guildId, 'osuTopData');
+    const osutopdata: apitypes.ScoreLegacy[] & apitypes.Error = osutopdataReq.apiData; helper.tools.data.debug(osutopdataReq, 'command', 'whatif', input.message?.guildId ?? input.interaction.guildId, 'osuTopData');
     if (osutopdataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'whatif', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', user), false);
         return;

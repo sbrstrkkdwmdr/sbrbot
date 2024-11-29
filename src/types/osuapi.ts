@@ -243,9 +243,12 @@ export type BeatmapsetDiscussionVote = {
 
 //==============================================================================================================================================================================================
 
-export type BeatmapScores = {
-    scores: Score[],
-    userScore: Score | null,
+/**
+ * T is either Score or LegacyScore
+ */
+export type BeatmapScores<T> = {
+    scores: T[],
+    userScore: T | null,
 } & Error;
 
 //==============================================================================================================================================================================================
@@ -524,7 +527,7 @@ export type Rankings = {
 
 //==============================================================================================================================================================================================
 
-export type Score = {
+export type ScoreLegacy = {
     accuracy: number,
     beatmap?: Beatmap,
     beatmapset?: Beatmapset,
@@ -535,19 +538,20 @@ export type Score = {
     max_combo: number,
     mode_int: number,
     mode: GameMode,
-    mods: Mod[],
+    mods: string[],
     passed: boolean,
     perfect: boolean,
     pp: number,
     preserve?: boolean,
     processed?: boolean,
-    rank_country?: string,
+    rank_country?: string | number,
     rank_global?: string | number,
     rank: Rank,
     replay: boolean,
     room_id?: number,
     ruleset_id?: number,
     score: number,
+    scores_around?: MultiplayerScoresAround,
     statistics: Statistics,
     type?: string,
     user_id: number,
@@ -560,6 +564,51 @@ export type Score = {
         pp: number,
     },
 } & Error;
+
+export type Score = {
+    accuracy: number,
+    beatmap_id?: number,
+    beatmap?: Beatmap,
+    beatmapset?: Beatmapset,
+    best_id?: number,
+    build_id?: number,
+    classic_total_score: number,
+    current_user_attributes?: {
+        pin: boolean,
+    };
+    ended_at: Timestamp,
+    has_replay: boolean,
+    id: number,
+    is_perfect_combo: boolean,
+    legacy_perfect: boolean;
+    legacy_score_id: number;
+    legacy_total_score: number;
+    max_combo: number,
+    maximum_statistics: ScoreStatistics;
+    mods: Mod[],
+    passed: boolean,
+    playlist_item_id: number,
+    pp?: number,
+    position?: number,
+    preserve: boolean,
+    processed: boolean,
+    rank: Rank,
+    rank_country?: string | number,
+    rank_global?: string | number,
+    room_id?: number,
+    ruleset_id: number,
+    scores_around?: MultiplayerScoresAround,
+    started_at: Timestamp,
+    statistics: ScoreStatistics;
+    total_score: number;
+    type: string,
+    user_id: number,
+    user?: UserCompact,
+    weight?: {
+        percentage: number,
+        pp: number,
+    },
+};
 
 //==============================================================================================================================================================================================
 
@@ -680,7 +729,7 @@ export type User = UserCompact & {
 } & Error;
 
 export type ScoreArrA = {
-    scores: Score[];
+    scores: ScoreLegacy[];
 } & Error;
 
 
@@ -908,18 +957,28 @@ type Post = {
 };
 
 //scores
-type Mod = string;
+type Mod = {
+    acronym: string;
+};
 //'NM' | ''
 
 export type Rank = 'XH' | 'X' | 'SH' | 'S' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 
-export type Statistics = {
+export type Statistics = { //legacy score statistics
     count_100: number,
     count_300: number,
     count_50: number,
     count_geki: number,
     count_katu: number,
     count_miss: number;
+};
+
+export type ScoreStatistics = {
+    great: number,
+    ok?: number,
+    meh?: number,
+    miss?: number,
+    legacy_combo_increase?: number, // max stats
 };
 
 //newspost

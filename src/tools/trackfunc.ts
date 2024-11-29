@@ -59,7 +59,7 @@ export async function editTrackUser(fr: {
 
 export async function trackUser(fr: { user: string, mode: string, inital?: boolean; }) {
     if (!fr.user) return;
-    const curdata: apitypes.Score[] & apitypes.Error = (await helper.tools.api.getScoresBest(fr.user, helper.tools.other.modeValidator(fr.mode), [])).apiData;
+    const curdata: apitypes.ScoreLegacy[] & apitypes.Error = (await helper.tools.api.getScoresBest(fr.user, helper.tools.other.modeValidator(fr.mode), [])).apiData;
     const thisUser: apitypes.User = (await helper.tools.api.getUser(fr.user, helper.tools.other.modeValidator(fr.mode), [])).apiData;
     if (!curdata?.[0]?.user_id) return;
 
@@ -71,7 +71,7 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
     }
     if (curdata?.[0]?.user_id) {
         if (fs.existsSync(`${helper.vars.path.main}/trackingFiles/${curdata[0].user_id}_${fr.mode}.json`)) {
-            let previous: apitypes.Score[] & apitypes.Error;
+            let previous: apitypes.ScoreLegacy[] & apitypes.Error;
             try {
                 previous = JSON.parse(fs.readFileSync(`${helper.vars.path.main}/trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, 'utf-8'));
             }
@@ -96,7 +96,7 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
 
 export async function getEmbed(
     data: {
-        scoredata: apitypes.Score,
+        scoredata: apitypes.ScoreLegacy,
         scorepos: number,
     },
 ) {

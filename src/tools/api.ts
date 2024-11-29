@@ -136,21 +136,21 @@ export async function getScoreWithMode(id: string | number, mode: string, extra:
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.Score>;
+    }) as tooltypes.apiReturn<apitypes.ScoreLegacy>;
 }
 export async function getScore(id: string | number, extra: string[]) {
     let url = baseUrl + `scores/${id}`;
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.Score>;
+    }) as tooltypes.apiReturn<apitypes.ScoreLegacy>;
 }
 export async function getScoresRecent(id: string | number, mode: string, extra: string[]) {
     let url = baseUrl + `users/${id}/scores/recent?mode=${helper.tools.other.modeValidator(mode)}&legacy_only=0&limit=100`;
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.Score[]>;
+    }) as tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
 }
 export async function getScoresBest(id: string | number, mode: string, extra: string[]) {
     let url = baseUrl + `users/${id}/scores/best?mode=${helper.tools.other.modeValidator(mode)}&legacy_only=0&limit=100`;
@@ -164,14 +164,14 @@ export async function getScoresFirst(id: string | number, mode: string, extra: s
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.Score[]>;
+    }) as tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
 }
 export async function getScoresPinned(id: string | number, mode: string, extra: string[]) {
     let url = baseUrl + `users/${id}/scores/pinned?mode=${helper.tools.other.modeValidator(mode)}&legacy_only=0&limit=100`;
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.Score[]>;
+    }) as tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
 }
 export async function getUserMapScores(userid: string | number, mapid: number, extra: string[]) {
     let url = baseUrl + `beatmaps/${mapid}/scores/users/${userid}/all?legacy_only=0`;
@@ -185,7 +185,7 @@ export async function getMapLeaderboard(id: number, mode: string, extra: string[
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.BeatmapScores>;
+    }) as tooltypes.apiReturn<apitypes.BeatmapScores<apitypes.ScoreLegacy>>;
 }
 export async function getMapLeaderboardNonLegacy(id: number, mode: string, mods: string, extra: string[]) {
     mode = helper.tools.other.modeValidator(mode);
@@ -196,7 +196,7 @@ export async function getMapLeaderboardNonLegacy(id: number, mode: string, mods:
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.BeatmapScores>;
+    }) as tooltypes.apiReturn<apitypes.BeatmapScores<apitypes.Score>>;
 }
 export async function getMap(id: number, extra?: string[]) {
     let url = baseUrl + 'beatmaps/' + id;
