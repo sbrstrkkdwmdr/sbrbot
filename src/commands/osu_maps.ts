@@ -1975,7 +1975,7 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
 
 
 
-    let buttons = new Discord.ActionRowBuilder()
+    const buttons = new Discord.ActionRowBuilder()
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;

@@ -978,7 +978,7 @@ export async function parseArgs_scoreList_button(input: bottypes.commandInput) {
     const combo = temp?.filterCombo;
     const miss = temp?.filterMiss;
     const bpm = temp?.filterBpm;
-    let sort = temp?.sort;
+    const sort = temp?.sort;
     const reverse = temp?.reverse;
 
     switch (input.buttonType) {
@@ -1058,7 +1058,7 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
     let combo = null;
     let miss = null;
     let bpm = null;
-    let error = false;
+    const error = false;
 
     switch (input.type) {
         case 'message': {
@@ -1090,7 +1090,7 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
             bpm = temp.bpm;
         }
             break;
-        case 'interaction':
+        case 'interaction': {
             commanduser = input.interaction.member.user;
             const temp = await parseArgs_scoreList_interaction(input);
             user = temp.user;
@@ -1114,6 +1114,7 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
             combo = temp.combo;
             miss = temp.miss;
             bpm = temp.bpm;
+        }
             break;
         case 'button': {
             commanduser = input.interaction.member.user;

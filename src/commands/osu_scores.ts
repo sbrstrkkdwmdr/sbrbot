@@ -39,7 +39,7 @@ export const firsts = async (input: bottypes.commandInput) => {
 
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('firsts', parseArgs.commanduser, input.id);
 
-    let buttons = new Discord.ActionRowBuilder();
+    const buttons = new Discord.ActionRowBuilder();
 
 
     //if user is null, use searchid
@@ -143,7 +143,7 @@ export const firsts = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(firstscoresdata, osudata.id, 'firstscoresdata');
 
     if (parseArgs.parseScore) {
-        let newScores = helper.tools.formatter.filterScoresLegacy(firstscoresdata, parseArgs.sort ?? 'recent',
+        const newScores = helper.tools.formatter.filterScoresLegacy(firstscoresdata, parseArgs.sort ?? 'recent',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -640,7 +640,7 @@ export const osutop = async (input: bottypes.commandInput) => {
         input.interaction,
     );
 
-    let buttons = new Discord.ActionRowBuilder();
+    const buttons = new Discord.ActionRowBuilder();
 
     //if user is null, use searchid
     if (parseArgs.user == null) {
@@ -714,7 +714,7 @@ export const osutop = async (input: bottypes.commandInput) => {
         osutopdataReq = await helper.tools.api.getScoresBest(osudata.id, parseArgs.mode, []);
     }
 
-    let osutopdata: apitypes.ScoreLegacy[] & apitypes.Error = osutopdataReq.apiData;
+    const osutopdata: apitypes.ScoreLegacy[] & apitypes.Error = osutopdataReq.apiData;
     if (osutopdataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'osutop', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', parseArgs.user), false);
         return;
@@ -731,13 +731,8 @@ export const osutop = async (input: bottypes.commandInput) => {
 
     helper.tools.data.storeFile(osutopdataReq, osudata.id, 'topscoresdata');
 
-    let showtrue = false;
-    if (parseArgs.sort != 'pp') {
-        showtrue = true;
-    }
-
     if (parseArgs.parseScore) {
-        let newScores = helper.tools.formatter.filterScoresLegacy(osutopdata, parseArgs.sort ?? 'recent',
+        const newScores = helper.tools.formatter.filterScoresLegacy(osutopdata, parseArgs.sort ?? 'recent',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -873,7 +868,7 @@ export const pinned = async (input: bottypes.commandInput) => {
 
 
 
-    let buttons = new Discord.ActionRowBuilder();
+    const buttons = new Discord.ActionRowBuilder();
 
     helper.tools.log.commandOptions(
         helper.tools.log.objectLoggable(parseArgs),
@@ -958,7 +953,7 @@ export const pinned = async (input: bottypes.commandInput) => {
         pinnedscoresdataReq = await helper.tools.api.getScoresPinned(osudata.id, parseArgs.mode, []);
     }
 
-    let pinnedscoresdata: apitypes.ScoreLegacy[] & apitypes.Error = pinnedscoresdataReq.apiData;
+    const pinnedscoresdata: apitypes.ScoreLegacy[] & apitypes.Error = pinnedscoresdataReq.apiData;
     if (pinnedscoresdataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'pinned', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', parseArgs.user), false);
         return;
@@ -976,7 +971,7 @@ export const pinned = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(pinnedscoresdataReq, osudata.id, 'pinnedscoresdata');
 
     if (parseArgs.parseScore) {
-        let newScores = helper.tools.formatter.filterScoresLegacy(pinnedscoresdata, parseArgs.sort ?? 'recent',
+        const newScores = helper.tools.formatter.filterScoresLegacy(pinnedscoresdata, parseArgs.sort ?? 'recent',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -1320,7 +1315,7 @@ export const recent = async (input: bottypes.commandInput) => {
         input.interaction,
     );
 
-    let buttons = new Discord.ActionRowBuilder();
+    const buttons = new Discord.ActionRowBuilder();
 
 
 
@@ -1639,7 +1634,6 @@ export const recent = async (input: bottypes.commandInput) => {
             ppissue = helper.vars.errors.uErr.osu.performance.crash;
             helper.tools.log.commandErr(error, input.id, 'firsts', input.message, input.interaction);
         }
-        let totaldiff: string = (perf.difficulty.stars ?? 0).toFixed(2);
 
         const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
         let msToFail: number, curbmpasstime: number, guesspasspercentage: number;
@@ -1683,7 +1677,7 @@ export const recent = async (input: bottypes.commandInput) => {
         rsEmbed
             .setDescription(`
 [\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()).string : ''} 
-${totaldiff}⭐ | ${helper.vars.emojis.gamemodes[curscore.mode]}
+${(perf.difficulty.stars ?? 0).toFixed(2)}⭐ | ${helper.vars.emojis.gamemodes[curscore.mode]}
 ${helper.tools.formatter.dateToDiscordFormat(new Date(curscore.created_at), 'F')}
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}
 `)
@@ -1791,7 +1785,8 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             path: '',
             filename: '',
         };
-        if (curscore.rank.toUpperCase() == 'F' && false) {
+        // for when i figure out how to add fail point to strains graph
+        /* if (curscore.rank.toUpperCase() == 'F' && false) {
             strainsgraph =
                 await helper.tools.other.graph(
                     strains.strainTime, strains.value, 'Strains', {
@@ -1806,7 +1801,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                     null,
                     [totalhits - 1]
                 );
-        } else {
+        } else */ {
             strainsgraph =
                 await helper.tools.other.graph(strains.strainTime, strains.value, 'Strains', {
                     startzero: true,
@@ -1824,8 +1819,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
         rsEmbed
             .setColor(helper.vars.colours.embedColour.scorelist.dec)
             .setTitle(`Recent ${showFails == 1 ? 'plays' : 'passes'} for ${osudata.username}`)
-            .setThumbnail(`${osudata.avatar_url ?? helper.vars.defaults.images.any.url}`)
-            ;
+            .setThumbnail(`${osudata.avatar_url ?? helper.vars.defaults.images.any.url}`);
         if (sort == 'pp') {
             rsEmbed.setTitle(`Best recent ${showFails == 1 ? 'plays' : 'passes'} for ${osudata.username}`);
         }
@@ -2279,7 +2273,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     }
     helper.tools.data.storeFile(scoredataReq, scoreid, 'scoredata', helper.tools.other.modeValidator(scoredata.mode));
 
-    let buttons = new Discord.ActionRowBuilder()
+    const buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
                 .setCustomId(`${helper.vars.versions.releaseDate}-Map-scoreparse-any-${input.id}-${scoredata?.beatmap?.id}${scoredata.mods ? '+' + scoredata.mods.join() : ''}`)
@@ -2426,8 +2420,6 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     if (scoredata.max_combo == mxCombo && scoredata.accuracy == 1) {
         fcflag = 'FC';
     }
-    let pptxt = `${(scoredata?.pp ?? perf.pp).toFixed(2)}pp` + fcflag;
-
     const mxcombo =
         perf.difficulty.maxCombo;
     mapdata.max_combo;
@@ -2446,7 +2438,7 @@ ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.lengt
 [Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
 \`${hitlist}\`
 ${scoredata.max_combo == mxcombo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mxcombo}x**
-${pptxt}\n${ppissue}
+${`${(scoredata?.pp ?? perf.pp).toFixed(2)}pp` + fcflag}\n${ppissue}
 `);
 
     helper.tools.data.writePreviousId('score', input.message?.guildId ?? input.interaction.guildId,
@@ -2664,7 +2656,7 @@ export const scores = async (input: bottypes.commandInput) => {
 
 
 
-    let buttons = new Discord.ActionRowBuilder();
+    const buttons = new Discord.ActionRowBuilder();
 
     helper.tools.log.commandOptions(
         [
@@ -3764,7 +3756,7 @@ export const simulate = async (input: bottypes.commandInput) => {
     const scoreEmbed = new Discord.EmbedBuilder()
         .setTitle(`Simulated play on \n\`${title}\``)
         .setURL(`https://osu.ppy.sh/b/${mapid}`)
-        .setThumbnail(`https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg` || `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
+        .setThumbnail(mapdata?.beatmapset_id ? `https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg` : `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
         .addFields([
             {
                 name: 'Score Details',

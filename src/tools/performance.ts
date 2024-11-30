@@ -139,7 +139,7 @@ export async function calcMap(input: {
 }) {
     const values: rosu.PerformanceAttributes[] = [];
     for (let i = 0; i < 10; i++) {
-        let temp = {
+        const temp = {
             mapid: input.mapid,
             mode: input.mode,
             mods: input.mods,
@@ -170,15 +170,11 @@ export async function calcStrains(input: {
     const mapPath = await helper.tools.api.dlMap(input.mapid, 0, input.mapLastUpdated);
     const map = new rosu.Beatmap(fs.readFileSync(mapPath, 'utf-8'));
     map.convert(osumodcalc.ModeNameToInt(input.mode));
-    let strainValues =
+    const strainValues =
         new rosu.Difficulty({
             mods: osumodcalc.ModStringToInt(input.mods),
         })
             .strains(map);
-    let strains: {
-        strainTime: string[],
-        value: number[],
-    };
     const straintimes = [];
     const totalval = [];
 
@@ -205,7 +201,7 @@ export async function calcStrains(input: {
         const curtimestr = Math.floor(curtime / 60) + ':' + `${(curtime % 60) < 10 ? '0' + Math.floor(curtime % 60) : Math.floor(curtime % 60)}`;
         straintimes.push(curtimestr);
     }
-    strains = {
+    const strains = {
         strainTime: straintimes,
         value: totalval,
     };

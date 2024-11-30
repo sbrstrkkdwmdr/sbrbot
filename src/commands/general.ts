@@ -190,7 +190,7 @@ export const changelog: bottypes.command = async (input: bottypes.commandInput) 
         if (useNum + 1 >= Math.ceil(helper.vars.versions.versions.length / 10)) {
             useNum = Math.ceil(helper.vars.versions.versions.length / 10) - 1;
         }
-        let pageOffset = useNum * 10;
+        const pageOffset = useNum * 10;
         for (let i = 0; pageOffset + i < helper.vars.versions.versions.length && i < 10; i++) {
             const sumVer = helper.vars.versions.versions[pageOffset + i];
             const useVer = list[pageOffset + i];
@@ -279,8 +279,7 @@ Total of ${changesList.filter(x => !x.includes('### ')).length} changes.${txt}
 `)
             .setFooter({
                 text: `${useNum + 1}/${helper.vars.versions.versions.length}`
-            })
-            ;
+            });
     }
 
     if (isList) {
@@ -731,7 +730,7 @@ export const country: bottypes.command = async (input: bottypes.commandInput) =>
         data = await helper.tools.api.getCountryData(search, type);
     }
 
-    if(data.hasOwnProperty('error')){
+    if (data.hasOwnProperty('error')) {
         helper.tools.commands.sendMessage({
             type: input.type,
             message: input.message,
@@ -964,9 +963,6 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
     const useComponents: any = [buttons];
     let ctname = 'generalcmd';
     function commandEmb(command: bottypes.commandInfo, embed) {
-        let desc =
-            "To see full details about this command, visit [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands.html)\n\n" +
-            command.description + "\n";
         let usetxt = '';
         if (command.usage) {
             usetxt += `\`${helper.vars.config.prefix}${command.usage}\``;
@@ -975,8 +971,8 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
             usetxt += `### Link Usage\n${command.linkUsage.map(x => `\`${x}\``).join('\n')}`;
         }
 
-        let exceedTxt = '';
-        let exceeds = false;
+        // let exceedTxt = '';
+        // let exceeds = false;
 
         const commandaliases = command.aliases && command.aliases.length > 0 ? command.aliases.join(', ') : 'none';
         // let commandexamples = command.examples && command.examples.length > 0 ? command.examples.join('\n').replaceAll('PREFIXMSG', helper.vars.config.prefix) : 'none'
@@ -984,7 +980,7 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
 
         embed.setTitle("Command info for: " + command.name)
             .setURL(`https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands.html`)
-            .setDescription(desc)
+            .setDescription("To see full details about this command, visit [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands.html)\n\n" + command.description + "\n")
             .addFields([
                 {
                     name: 'Usage',
@@ -1002,15 +998,15 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
                     inline: false
                 },
             ]);
-        if (exceeds) {
-            embed.addFields([
-                {
-                    name: 'Error',
-                    value: exceedTxt,
-                    inline: false
-                }
-            ]);
-        }
+        // if (exceeds) {
+        //     embed.addFields([
+        //         {
+        //             name: 'Error',
+        //             value: exceedTxt,
+        //             inline: false
+        //         }
+        //     ]);
+        // }
     }
     function getemb() {
         if (command == 'list') {
@@ -1205,8 +1201,7 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
                 .setEmoji('❓' as Discord.APIMessageComponentEmoji)
                 .setLabel('Misc')
                 .setValue('CategoryMenu-misc'),
-        )
-        ;
+        );
     useComponents.push(
         new Discord.ActionRowBuilder()
             .setComponents(selectCategoryMenu)
@@ -1536,8 +1531,7 @@ export const math: bottypes.command = async (input: bottypes.commandInput) => {
     if (type == 'basic') {
         const string = input.args.join(' ')
             .replaceAll('^', '**')
-            .trim()
-            ;
+            .trim();
         let isErr = false;
         const evalstr: string = await helper.tools.calculate.stringMath(string)
             .catch(x => {
@@ -1580,7 +1574,7 @@ export const math: bottypes.command = async (input: bottypes.commandInput) => {
                 }
                 equation = (`${helper.tools.calculate.pythag(num1, num2)}`);
                 break;
-            case 'sigfig':
+            case 'sigfig': {
                 if (!num2) {
                     num2 = null;
                 }
@@ -1589,6 +1583,7 @@ export const math: bottypes.command = async (input: bottypes.commandInput) => {
                 }
                 const sf = helper.tools.calculate.sigfig(num1, num2);
                 equation = (`${sf.number}\nTo ${sf.sigfig} significant figures`);
+            }
                 break;
             case 'ardt':
                 equation = (`AR${osumodcalc.DoubleTimeAR(num1).ar}, ${osumodcalc.DoubleTimeAR(num1).ms}ms`);
@@ -2179,7 +2174,6 @@ export const weather: bottypes.command = async (input: bottypes.commandInput) =>
 
     switch (input.type) {
         case 'message': {
-            ;
             commanduser = input.message.author;
             name = input.args.join(' ');
         }

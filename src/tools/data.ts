@@ -157,7 +157,7 @@ const cacheById = [
  * @param id command id. if storing a map use the map id/md5 or user id if storing a user
  * @param name 
  */
-export function storeFile(data: string | {}, id: string | number, name: string, mode?: apitypes.GameMode, type?: string) {
+export function storeFile(data: any, id: string | number, name: string, mode?: apitypes.GameMode, type?: string) {
     mode = helper.tools.other.modeValidator(mode);
     try {
         let path = `${helper.vars.path.main}/cache/commandData/`;
@@ -236,7 +236,7 @@ export function storeFile(data: string | {}, id: string | number, name: string, 
  * @returns 
  */
 export function findFile(id: string | number, name: string, mode?: apitypes.GameMode, type?: string) {
-    let path = `${helper.vars.path.cache}/commandData/`;
+    const path = `${helper.vars.path.cache}/commandData/`;
     if (cacheById.some(x => name.includes(x))) {
         if (fs.existsSync(path + `${name.toLowerCase()}${id}.json`)) {
             return JSON.parse(fs.readFileSync(path + `${name.toLowerCase()}${id}.json`, 'utf-8'));
@@ -423,9 +423,7 @@ export function recommendMap(baseRating: number, retrieve: 'closest' | 'random',
         .sort((a, b) =>
             Math.abs(baseRating - a.difficulty_rating)
             - Math.abs(baseRating - b.difficulty_rating)
-        )
-
-        ;
+        );
     if (sorted.length == 0) {
         obj['hasErr'] = true;
         obj['err'] = 'No maps found for the given gamemode';

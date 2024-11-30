@@ -120,7 +120,7 @@ export const badges = async (input: bottypes.commandInput) => {
 
         helper.tools.data.userStatsCache([osudata], helper.tools.other.modeValidator(osudata.playmode), 'User');
 
-        let badgecount = osudata.badges.length;
+        const badgecount = osudata?.badges?.length ?? 0;
 
         const embed = new Discord.EmbedBuilder()
             .setAuthor({
@@ -278,7 +278,7 @@ export const bws = async (input: bottypes.commandInput) => {
 
     helper.tools.data.userStatsCache([osudata], helper.tools.other.modeValidator(osudata.playmode), 'User');
 
-    let badgecount = osudata?.badges?.length ?? 0;
+    const badgecount = osudata?.badges?.length ?? 0;
     function bwsF(badgenum: number) {
         return badgenum > 0 ?
             osudata.statistics.global_rank ** (0.9937 ** (badgenum ** 2)) :
@@ -697,7 +697,7 @@ export const ranking = async (input: bottypes.commandInput) => {
     }
     page--;
 
-    let extras = [];
+    const extras = [];
     if (country != 'ALL') {
         // validate country
         if (!helper.tools.other.validCountryCodeA2(country)) {
@@ -1176,13 +1176,11 @@ export const osu = async (input: bottypes.commandInput) => {
         `**${helper.vars.emojis.onlinestatus.online} Online**` :
         (new Date(osudata.last_visit)).getTime() != 0 ?
             `**${helper.vars.emojis.onlinestatus.offline} Offline** | Last online <t:${(new Date(osudata.last_visit)).getTime() / 1000}:R>`
-            : `**${helper.vars.emojis.onlinestatus.offline} Offline**`
-        ;
+            : `**${helper.vars.emojis.onlinestatus.offline} Offline**`;
 
     const prevnames = osudata.previous_usernames.length > 0 ?
         '**Previous Usernames:** ' + osudata.previous_usernames.join(', ') :
-        ''
-        ;
+        '';
 
     const playcount = osustats.play_count == null ?
         '---' :
@@ -1618,8 +1616,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
             iconURL: `${`https://osuhelper.vars.argflags.omkserver.nl/${osudata.country_code}.png`}`
         })
         .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`)
-        .setDescription(`Page: ${page + 1}/${Math.ceil(rsactData.length / pageLength)}`)
-        ;
+        .setDescription(`Page: ${page + 1}/${Math.ceil(rsactData.length / pageLength)}`);
 
     let actText = '';
 
@@ -1684,8 +1681,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
             } break;
             case 'usernameChange': {
                 const temp = curEv as apitypes.EventUsernameChange;
-                obj.desc = `Changed their username from ${temp.user.previousUsername} to ${temp.user.username} <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`
-                    ;
+                obj.desc = `Changed their username from ${temp.user.previousUsername} to ${temp.user.username} <t:${(new Date(temp.created_at).getTime()) / 1000}:R>`;
             } break;
         }
         actText += `**${obj.number})** ${obj.desc}\n\n`;

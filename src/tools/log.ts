@@ -18,7 +18,7 @@ function appendTime(str: string) {
     const time = '[' + rn.format("YYYY-MM-DD HH:mm:ss") + '] ';
     let out = '';
     if (str.includes('\n')) {
-        let split = str.split('\n').map(x =>
+        const split = str.split('\n').map(x =>
             time + x);
         out = split.join('\n');
     } else {
@@ -29,7 +29,7 @@ function appendTime(str: string) {
 
 // use this as you would with console.log()
 export function stdout(message?: any, ...optionalParams: any[]) {
-    let text = optionalParams ? util.format(message) : util.format(message, optionalParams ?? null);
+    const text = optionalParams ? util.format(message) : util.format(message, optionalParams ?? null);
     out(text, `${helper.vars.path.logs}/console.log`);
 }
 
@@ -51,11 +51,10 @@ Date (epoch): ${(new Date).getTime()}
 ID:           ${id}
 Requested by: ${user.username} (${user.id})
 Guild ID:     ${message?.guildId ?? interaction?.guildId}
-Channel ID:   ${message?.channelId ?? interaction?.channelId}`
-        ;
+Channel ID:   ${message?.channelId ?? interaction?.channelId}`;
     if (opts.length > 0) {
         txt += '\n----------------------------------------------------';
-        let padding = opts.slice().map(x => x.name.length).sort((a, b) => b - a)[0];
+        const padding = opts.slice().map(x => x.name.length).sort((a, b) => b - a)[0];
         opts.forEach(opt => {
             txt += `\n${(opt.name + ':').padEnd(padding, ' ')}${opt.value}`;
         });
@@ -69,7 +68,7 @@ export function commandErr(input: string, id: string | number,
     name: string, message: Discord.Message<any>, interaction: Discord.Interaction
 ) {
 
-    let output = `
+    const output = `
 ====================================================
 ERROR
 ----------------------------------------------------

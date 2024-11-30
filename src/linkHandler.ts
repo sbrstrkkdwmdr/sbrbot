@@ -6,7 +6,7 @@ import * as bottypes from './types/bot.js';
 import * as tooltypes from './types/tools.js';
 
 let command: bottypes.command;
-let overrides: bottypes.overrides = {
+const overrides: bottypes.overrides = {
 
 };
 let id:number;

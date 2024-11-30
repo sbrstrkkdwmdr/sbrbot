@@ -189,7 +189,7 @@ export const compare = async (input: bottypes.commandInput) => {
                 throw new Error('first user not found');
             }
         }
-        if(!first || first.length == 0 || first == ''){
+        if (!first || first.length == 0 || first == '') {
             throw new Error('Could not find the first user');
         }
         let firstuserReq: tooltypes.apiReturn<apitypes.User>;
@@ -215,7 +215,7 @@ export const compare = async (input: bottypes.commandInput) => {
             return;
         }
 
-        if(!second || second.length == 0 || second == ''){
+        if (!second || second.length == 0 || second == '') {
             throw new Error('Could not find the second user');
         }
         let seconduserReq: tooltypes.apiReturn<apitypes.User>;
@@ -1195,7 +1195,6 @@ export const whatif = async (input: bottypes.commandInput) => {
         .setColor(helper.vars.colours.embedColour.query.dec)
         .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`);
     embed = helper.tools.formatter.userAuthor(osudata, embed);
-    ;
     if (ppindex + 1 > 100) {
         embed.setDescription(
             `A ${pp}pp score would be outside of their top 100 plays and be weighted at 0%.

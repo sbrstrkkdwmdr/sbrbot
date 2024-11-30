@@ -192,7 +192,16 @@ function commandCheck(cmd: string, message: Discord.Message, interaction: Discor
         return false;
     }
     if (['hug', 'kiss', 'lick', 'pet', 'punch', 'slap',].includes(cmd) && helper.vars.config.tenorKey == 'INVALID_ID') {
-
+        helper.tools.commands.sendMessage({
+            type: "message",
+            message,
+            interaction,
+            args: {
+                content: 'gif commands cannot be currently used (error: unset tenor key)'
+            },
+        },
+            canReply);
+        return false;
     }
     return true;
 }
@@ -378,7 +387,7 @@ function commandSelect(cmd: string, args: string[]) {
                 overrides = {
                     mode: 'taiko'
                 };
-                command = helper.commands.osu.scores.osutop;;
+                command = helper.commands.osu.scores.osutop;
             }
             break;
         case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tctb': case 'tf': case 'topf': case 'topc':
@@ -386,7 +395,7 @@ function commandSelect(cmd: string, args: string[]) {
                 overrides = {
                     mode: 'fruits'
                 };
-                command = helper.commands.osu.scores.osutop;;
+                command = helper.commands.osu.scores.osutop;
             }
             break;
         case 'maniatop': case 'topmania': case 'tm': case 'topm':
@@ -394,7 +403,7 @@ function commandSelect(cmd: string, args: string[]) {
                 overrides = {
                     mode: 'mania'
                 };
-                command = helper.commands.osu.scores.osutop;;
+                command = helper.commands.osu.scores.osutop;
             }
             break;
         case 'pinned':
@@ -650,7 +659,7 @@ function commandSelect(cmd: string, args: string[]) {
 }
 
 function runCommand(cmd: string, message: Discord.Message, interaction: Discord.ChatInputCommandInteraction, args: string[], canReply: boolean, type: "message" | "interaction") {
-    let isValid = commandCheck(cmd, message, interaction, canReply);
+    const isValid = commandCheck(cmd, message, interaction, canReply);
     if (isValid) {
         const helpOverrides: string[] = ['-h', '-help', '--h', '--help'];
         if (helpOverrides.some(x => args?.includes(x))) {

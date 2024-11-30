@@ -280,8 +280,8 @@ export function numBaseToInt(input: "Binary" | "Octal" | "Decimal" | "Hexadecima
 }
 
 export function numConvert(value: string, inBase: number, outBase: number) {
-    let init = parseInt(value as string, inBase);
-    let outVal = init.toString(outBase);
+    const init = parseInt(value as string, inBase);
+    const outVal = init.toString(outBase);
     return outVal;
 }
 

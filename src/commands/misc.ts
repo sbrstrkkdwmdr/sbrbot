@@ -82,9 +82,7 @@ export const coin = async (input: bottypes.commandInput) => {
     const file = new Discord.AttachmentBuilder(`${helper.vars.path.precomp}/files/img/coin/${msg}.png`);
     const embed = new Discord.EmbedBuilder()
         .setTitle(msg)
-        .setImage(`attachment://${msg}.png`)
-
-        ;
+        .setImage(`attachment://${msg}.png`);
 
     
     await helper.tools.commands.sendMessage({
@@ -198,8 +196,7 @@ export const gif = async (input: bottypes.commandInput) => {
 
     const embed = new Discord.EmbedBuilder()
         .setTitle(baseString.replace('user', commanduser.username).replace('target', secondaryUser.username))
-        .setImage(gifSelection[Math.floor(Math.random() * gifSelection.length)])
-        ;
+        .setImage(gifSelection[Math.floor(Math.random() * gifSelection.length)]);
 
     
     await helper.tools.commands.sendMessage({

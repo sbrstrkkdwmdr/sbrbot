@@ -5,7 +5,7 @@ import * as path from '../path.js';
 import * as bottypes from '../types/bot.js';
 
 export function checkConfig() {
-    let config = JSON.parse(fs.readFileSync(path.precomp + '/config/config.json', 'utf-8'));
+    const config = JSON.parse(fs.readFileSync(path.precomp + '/config/config.json', 'utf-8'));
     if (!config.hasOwnProperty("token")) {
         throw new Error('missing `token` value in config');
     }

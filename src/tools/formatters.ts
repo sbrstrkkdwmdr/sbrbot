@@ -62,10 +62,10 @@ export async function scoreList(
     }
     let max = 5;
     if (detail == 2) max = 10;
-    let maxPage = Math.ceil(newScores.length / max);
+    const maxPage = Math.ceil(newScores.length / max);
     if (isNaN(page) || page < 1) page = 1;
     if (page > maxPage) page = maxPage;
-    let offset = (page - 1) * max;
+    const offset = (page - 1) * max;
     let text = '';
 
     for (let i = 0; i < max && i < newScores.length - offset; i++) {
@@ -498,10 +498,10 @@ export function mapList(
 ): formatterInfo {
     mapsets = filterMaps(mapsets, sort, filter, reverse);
 
-    let maxPage = Math.ceil(mapsets.length / 5);
+    const maxPage = Math.ceil(mapsets.length / 5);
     if (isNaN(page) || page < 1) page = 1;
     if (page > maxPage) page = maxPage;
-    let offset = (page - 1) * 5;
+    const offset = (page - 1) * 5;
 
     let text = '';
     for (let i = 0; i < 5 && i < mapsets.length - offset; i++) {
@@ -642,10 +642,10 @@ export function mapPlaysList(
 ): formatterInfo {
     mapsets = filterMapPlays(mapsets, sort, filter, reverse);
 
-    let maxPage = Math.ceil(mapsets.length / 5);
+    const maxPage = Math.ceil(mapsets.length / 5);
     if (page > maxPage) page = maxPage;
     if (page < 1) page = 1;
-    let offset = (page - 1) * 5;
+    const offset = (page - 1) * 5;
 
     let text = '';
     for (let i = 0; i < 5 && i < mapsets.length - offset; i++) {
@@ -795,7 +795,7 @@ export function argRange(arg: string, forceAboveZero: boolean) {
     if (arg.includes('..')) {
         const arr = arg.split('..');
         const narr = arr.map(x => +x).filter(x => !isNaN(x)).sort((a, b) => +b - +a);
-        if (narr.length = 2) {
+        if (narr.length == 2) {
             max = narr[0];
             min = narr[1];
         }

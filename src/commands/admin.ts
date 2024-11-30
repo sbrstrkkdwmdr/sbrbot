@@ -379,8 +379,7 @@ export const debug = async (input: bottypes.commandInput) => {
         'pusers' | 'prevuser' |
         'users' | 'errors' | 'trueall' |
         'maps' | 'map' | 'pp' |
-        'graph'
-        ;
+        'graph';
 
     switch (type) {
         //return api files for []
@@ -746,43 +745,25 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             const files: string[] = [];
             //command data
             const cmdCache = fs.readdirSync(`${helper.vars.path.main}/cache/commandData`);
-            fields.push(intofield('Cache', cmdCache, `${helper.vars.path.files}/cmdcache.txt`));
+            fields.push(debugIntoField('Cache', cmdCache, `${helper.vars.path.files}/cmdcache.txt`, files));
             //debug
             const debugCMD = fs.readdirSync(`${helper.vars.path.main}/cache/debug/command`);
             const debugFP = fs.readdirSync(`${helper.vars.path.main}/cache/debug/fileparse`);
             const debugCache = debugCMD.concat(debugFP);
-            fields.push(intofield('Debug', debugCache, `${helper.vars.path.files}/debugcache.txt`, true));
+            fields.push(debugIntoField('Debug', debugCache, `${helper.vars.path.files}/debugcache.txt`, files, true));
             //error files
             const errf = fs.readdirSync(`${helper.vars.path.main}/cache/errors`);
-            fields.push(intofield('Error files', errf, `${helper.vars.path.files}/errcache.txt`));
+            fields.push(debugIntoField('Error files', errf, `${helper.vars.path.files}/errcache.txt`, files));
             //previous files
             const prevF = fs.readdirSync(`${helper.vars.path.main}/cache/previous`);
-            fields.push(intofield('Previous files', prevF, `${helper.vars.path.files}/prevcache.txt`));
+            fields.push(debugIntoField('Previous files', prevF, `${helper.vars.path.files}/prevcache.txt`, files));
             //map files
             const mapC = fs.readdirSync(`${helper.vars.path.files}/maps`);
-            fields.push(intofield('Map files', mapC, `${helper.vars.path.files}/mapcache.txt`));
+            fields.push(debugIntoField('Map files', mapC, `${helper.vars.path.files}/mapcache.txt`, files));
 
             const embed = new Discord.EmbedBuilder()
                 .setTitle('Files')
                 .setFields(fields);
-            function form(s: string[], variant?: number) {
-                return variant == 1 ?
-                    s.map(x => `\`${x}\`\n`).join('')
-                    :
-                    s.map(x => `\`${x}\`, `).join('');
-            }
-            function intofield(name: string, cache: string[], temppath: string, alt?: boolean) {
-                let value = `${alt ? 'Folders' : 'Files'}: ${cache.length}`;
-                if (cache.length > 25) {
-                    fs.writeFileSync(temppath, form(cache, 1), 'utf-8');
-                    files.push(temppath);
-                } else {
-                    value += `\n${form(cache)}`;
-                }
-                return {
-                    name, value
-                } as Discord.APIEmbedField;
-            }
             usemsgArgs = {
                 embeds: [embed],
                 files
@@ -794,7 +775,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                 content: helper.vars.responses.decline[Math.floor(Math.random() * helper.vars.responses.decline.length)]
             };
             break;
-        case 'memory':
+        case 'memory': {
             const tomb = (into: number) => Math.round(into / 1024 / 1024 * 100) / 100;
             const memdat = process.memoryUsage();
 
@@ -809,6 +790,7 @@ External:   ${tomb(memdat.external)} MiB
             usemsgArgs = {
                 embeds: [embed]
             };
+        }
             break;
         default: {
             const expectArgs = [
@@ -883,7 +865,7 @@ External:   ${tomb(memdat.external)} MiB
                 };
             }
                 break;
-            case 'pp':
+            case 'pp': {
                 helper.tools.log.stdout(`manually clearing all map files in ${helper.vars.path.files}/maps/`,);
                 const curpath = `${helper.vars.path.files}/maps`;
                 const files = fs.readdirSync(curpath);
@@ -891,6 +873,7 @@ External:   ${tomb(memdat.external)} MiB
                     fs.unlinkSync(`${curpath}/` + file);
                     helper.tools.log.stdout(`${curpath}/` + file,);
                 }
+            }
                 break;
             case 'map': case 'maps': { // clears all maps and mapset files
                 helper.tools.log.stdout(`manually clearing all map and mapset files in ${helper.vars.path.main}/cache/commandData/ and ${helper.vars.path.files}/maps/`);
@@ -1021,6 +1004,25 @@ External:   ${tomb(memdat.external)} MiB
         args: usemsgArgs
     }, input.canReply);
 };
+
+function debugForm(s: string[], variant?: number) {
+    return variant == 1 ?
+        s.map(x => `\`${x}\`\n`).join('')
+        :
+        s.map(x => `\`${x}\`, `).join('');
+}
+function debugIntoField(name: string, cache: string[], temppath: string, files: string[], alt?: boolean) {
+    let value = `${alt ? 'Folders' : 'Files'}: ${cache.length}`;
+    if (cache.length > 25) {
+        fs.writeFileSync(temppath, debugForm(cache, 1), 'utf-8');
+        files.push(temppath);
+    } else {
+        value += `\n${debugForm(cache)}`;
+    }
+    return {
+        name, value
+    } as Discord.APIEmbedField;
+}
 
 /**
  * find user/role/channel/guild/emoji from id 
@@ -1278,7 +1280,7 @@ Guild: ${guild.name} | ${guild.id}
             }
             break;
         case 'emoji': {
-            let emojifind = helper.vars.client.emojis.cache.get(id);
+            const emojifind = helper.vars.client.emojis.cache.get(id);
             if (emojifind) {
                 Embedr
                     .setAuthor({ name: `EMOJI ${id}` })
@@ -1522,7 +1524,7 @@ export const purge = async (input: bottypes.commandInput) => {
         input.interaction,
     );
 
-    
+
     let user: Discord.GuildMember;
     if (filter.userid) {
         filter.byUser = true;
@@ -1569,8 +1571,7 @@ export const purge = async (input: bottypes.commandInput) => {
                 content = `Purged ${amt} message(s)${filter.byUser ? ` from user ${user?.displayName}(${user?.id})` : ''}.`;
             }).catch(x => {
                 content = helper.vars.errors.uErr.admin.purge.fail
-                    .replace('[COUNT]', `${purgeCount}`) + `\n${helper.vars.errors.uErr.admin.purge.failTime}`
-                    ;
+                    .replace('[COUNT]', `${purgeCount}`) + `\n${helper.vars.errors.uErr.admin.purge.failTime}`;
                 helper.tools.log.commandErr(helper.vars.errors.uErr.admin.purge.fail
                     .replace('[COUNT]', `${purgeCount}`) + `\n${helper.vars.errors.uErr.admin.purge.failTime}`,
                     input.id, 'purge', input.message, input.interaction
@@ -1623,7 +1624,7 @@ export const servers = async (input: bottypes.commandInput) => {
         input.message,
         input.interaction,
     );
-    
+
 
     const servers = (helper.vars.client.guilds.cache.map(guild => ` **${guild.name}** => \`${guild.id}\` | <@${guild.ownerId}> \n`)).join('');
     const embed = new Discord.EmbedBuilder()

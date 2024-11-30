@@ -7,7 +7,7 @@ import * as apitypes from './types/osuapi.js';
 const buttonWarnedUsers = new Set();
 let command: bottypes.command;
 let foundCommand = true;
-let overrides: bottypes.overrides = {
+const overrides: bottypes.overrides = {
     commandAs: 'button',
 };
 let mainId: number;
