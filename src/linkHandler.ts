@@ -11,12 +11,12 @@ const overrides: bottypes.overrides = {
 };
 let id:number;
 export async function onMessage(message: Discord.Message) {
+    if (!(message.content.startsWith('http') || message.content.includes('osu.') || message.attachments.size > 0)) {
+        return;
+    }
     let canReply = true;
     if (!helper.tools.checks.botHasPerms(message, ['ReadMessageHistory'])) {
         canReply = false;
-    }
-    if (!(message.content.startsWith('http') || message.content.includes('osu.') || message.attachments.size > 0)) {
-        return;
     }
 
 
