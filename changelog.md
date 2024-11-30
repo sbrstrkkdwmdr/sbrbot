@@ -11,6 +11,7 @@
 -   `recent` showing star rating as `undefined`
 -   non-legacy scores breaking score formatter
 -   maplb mods arg not working
+-   fc and SS pp being lower than expected
 
 ### Changed
 

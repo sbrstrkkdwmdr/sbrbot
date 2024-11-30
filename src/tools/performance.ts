@@ -102,7 +102,6 @@ export async function calcFullCombo(input: {
     hit100?: number;
     hit50?: number;
     hitkatu?: number;
-    maxcombo?: number,
     mapLastUpdated: Date,
     customCS?: number,
     customAR?: number,
@@ -110,7 +109,22 @@ export async function calcFullCombo(input: {
     customHP?: number,
 }) {
     input['miss'] = 0;
-    return await calcScore(input);
+    return await calcScore({
+        mapid: input.mapid,
+        mode: input.mode,
+        mods: input.mods,
+        accuracy: input.accuracy,
+        clockRate: input.clockRate,
+        hit300: input.hit300,
+        hit50: input.hit50,
+        hitkatu: input.hitkatu,
+        miss: 0,
+        mapLastUpdated: input.mapLastUpdated,
+        customCS: input.customCS,
+        customAR: input.customAR,
+        customOD: input.customOD,
+        customHP: input.customHP
+    });
 }
 export async function calcMap(input: {
     mapid: number,

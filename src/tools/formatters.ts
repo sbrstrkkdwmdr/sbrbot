@@ -97,7 +97,6 @@ export async function scoreList(
             hit100: convertedScore.statistics.count_100,
             hit50: convertedScore.statistics.count_50,
             hitkatu: convertedScore.statistics.count_katu,
-            maxcombo: convertedScore.max_combo,
             mapLastUpdated: new Date((overrideMap ?? score.beatmap).last_updated),
         });
         let info = `**#${(showOriginalIndex ? score.originalIndex : i) + 1}`;

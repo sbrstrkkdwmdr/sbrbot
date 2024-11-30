@@ -1595,22 +1595,20 @@ export const recent = async (input: bottypes.commandInput) => {
                 passedObjects: failed.objectsHit,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
             });
-            fcperf = await helper.tools.performance.calcScore({
+            fcperf = await helper.tools.performance.calcFullCombo({
                 mods: curscore.mods.join('').length > 1 ?
                     curscore.mods.join('') : 'NM',
                 mode: curscore.mode,
                 mapid: curscore.beatmap.id,
                 accuracy: curscore.accuracy,
-                maxcombo: curscore.max_combo,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
             });
-            ssperf = await helper.tools.performance.calcScore({
+            ssperf = await helper.tools.performance.calcFullCombo({
                 mods: curscore.mods.join('').length > 1 ?
                     curscore.mods.join('') : 'NM',
                 mode: curscore.mode,
                 mapid: curscore.beatmap.id,
                 accuracy: 1,
-                maxcombo: curscore.max_combo,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
             });
             rspp =
@@ -2387,22 +2385,20 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             maxcombo: scoredata.max_combo,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
         });
-        fcperf = await helper.tools.performance.calcScore({
+        fcperf = await helper.tools.performance.calcFullCombo({
             mods: scoredata.mods.join('').length > 1 ?
                 scoredata.mods.join('') : 'NM',
             mode: scoredata.mode,
             mapid: scoredata.beatmap.id,
             accuracy: scoredata.accuracy,
-            maxcombo: scoredata.max_combo,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
         });
-        ssperf = await helper.tools.performance.calcScore({
+        ssperf = await helper.tools.performance.calcFullCombo({
             mods: scoredata.mods.join('').length > 1 ?
                 scoredata.mods.join('') : 'NM',
             mode: scoredata.mode,
             mapid: scoredata.beatmap.id,
             accuracy: 1,
-            maxcombo: scoredata.max_combo,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
         });
 
@@ -3734,7 +3730,6 @@ export const simulate = async (input: bottypes.commandInput) => {
         hit100: n100,
         hit50: n50,
         accuracy: acc,
-        maxcombo: combo,
         clockRate: overrideSpeed,
         mapLastUpdated: new Date(mapdata.last_updated),
     });

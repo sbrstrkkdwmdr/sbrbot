@@ -119,7 +119,7 @@ export async function getEmbed(
             break;
     }
 
-    const ppcalc = await helper.tools.performance.calcScore({
+    const perf = await helper.tools.performance.calcScore({
         mods: curscore.mods.join('').length > 1 ?
             curscore.mods.join('') : 'NM',
         mode: curscore.mode,
@@ -129,21 +129,20 @@ export async function getEmbed(
         maxcombo: curscore.max_combo,
         mapLastUpdated: new Date(curscore.beatmap.last_updated)
     });
-    const ppfc = await helper.tools.performance.calcFullCombo({
+    const fcperf = await helper.tools.performance.calcFullCombo({
         mods: curscore.mods.join('').length > 1 ?
             curscore.mods.join('') : 'NM',
         mode: curscore.mode,
         mapid: curscore.beatmap.id,
         accuracy: curscore.accuracy,
-        maxcombo: curscore.max_combo,
         mapLastUpdated: new Date(curscore.beatmap.last_updated)
     });
 
     let pp: string;
-    const mxCombo = ppcalc.difficulty.maxCombo;
-    const usepp = data.scoredata.pp ?? ppcalc.pp;
+    const mxCombo = perf.difficulty.maxCombo;
+    const usepp = data.scoredata.pp ?? perf.pp;
     if (data.scoredata.accuracy != 1) {
-        pp = `${usepp}pp ${data.scoredata.max_combo == mxCombo ? '(FC)' : `(${ppfc.pp.toFixed(2)} if FC)`}`;
+        pp = `${usepp}pp ${data.scoredata.max_combo == mxCombo ? '(FC)' : `(${fcperf.pp.toFixed(2)} if FC)`}`;
     } else {
         pp = `${usepp}pp (SS)`;
     }
@@ -160,7 +159,7 @@ export async function getEmbed(
         .setImage(`${data.scoredata.beatmapset.covers['cover@2x']}`)
         .setDescription(
             `${data.scoredata.mods.length > 0 ? '+' + data.scoredata.mods.join('') + ' | ' : ''} **Score set** <t:${new Date(data.scoredata.created_at).getTime() / 1000}:R>\n` +
-            `${(data.scoredata.accuracy * 100).toFixed(2)}% | ${helper.tools.formatter.gradeToEmoji(data.scoredata.rank)} | ${(ppcalc.difficulty.stars ?? data.scoredata.beatmap.difficulty_rating).toFixed(2)}⭐\n` +
+            `${(data.scoredata.accuracy * 100).toFixed(2)}% | ${helper.tools.formatter.gradeToEmoji(data.scoredata.rank)} | ${(perf.difficulty.stars ?? data.scoredata.beatmap.difficulty_rating).toFixed(2)}⭐\n` +
             `${helper.tools.formatter.hitList(data.scoredata.mode, {
                 count_geki: data.scoredata.statistics.count_geki,
                 count_300: data.scoredata.statistics.count_300,
