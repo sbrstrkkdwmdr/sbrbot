@@ -86,7 +86,7 @@ export function isAdmin(userid: string | number, guildid: string | number,) {
     try {
         if (helper.vars.client.guilds.cache.has(`${guildid}`)) {
             const curguild = helper.vars.client.guilds.cache.get(`${guildid}`);
-            const curmem = curguild.members.cache.has(`${userid}`) ? curguild.members.cache.get(`${userid}`) : null;
+            const curmem = curguild?.members?.cache?.has(`${userid}`) ? curguild?.members?.cache?.get(`${userid}`) : null;
             if (curmem != null) {
                 if (curmem.permissions.toArray().includes('Administrator')) {
                     return true;
@@ -106,7 +106,8 @@ export function isAdmin(userid: string | number, guildid: string | number,) {
  */
 export function botHasPerms(object: Discord.Interaction | Discord.Message, requiredPerms: Discord.PermissionsString[]) {
     const guild = helper.vars.client.guilds.cache.get(object.guildId);
-    const botmember = guild.members.cache.get(helper.vars.client.user.id);
+    const botmember = guild?.members?.cache?.get(helper.vars.client.user.id);
+    if (!botmember) return false;
     const botperms = botmember.permissions.toArray();
     //if all of the elements in requiredPerms are in botperms return true
     const len = requiredPerms.length;
