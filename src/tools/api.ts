@@ -237,7 +237,7 @@ export async function getMapSearch(search: string, extra: string[]) {
     }) as tooltypes.apiReturn<apitypes.BeatmapsetSearch>;
 }
 export async function getUserMaps(id: number, category: string, extra: string[]) {
-    let url = baseUrl + `users/${id}/beatmapsets/${category}?limit=100`;
+    const url = baseUrl + `users/${id}/beatmapsets/${category}?limit=100`;
     return await apiGet({
         url,
         extra
