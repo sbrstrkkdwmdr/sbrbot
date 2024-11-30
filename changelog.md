@@ -19,6 +19,7 @@
 -   show `x` after combo (score list)
 -   show max combo (score list)
 -   show % after accuracy (score list)
+-   adjusted map time is now formatted like other adjusted values
 
 ### Added
 

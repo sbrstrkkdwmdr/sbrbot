@@ -1020,7 +1020,7 @@ HP${baseHP}`;
                         name: helper.vars.defaults.invisbleChar,
                         value: `${helper.vars.emojis.mapobjs.bpm}${baseBPM}\n` +
                             `${helper.vars.emojis.mapobjs.circle}${useMapdata.count_circles} \n${helper.vars.emojis.mapobjs.slider}${useMapdata.count_sliders} \n${helper.vars.emojis.mapobjs.spinner}${useMapdata.count_spinners}\n` +
-                            `${helper.vars.emojis.mapobjs.total_length}${allvals.length != useMapdata.hit_length ? `${allvals.details.lengthFull}(${helper.tools.calculate.secondsToTime(useMapdata.hit_length)})` : allvals.details.lengthFull}\n`,
+                            `${helper.vars.emojis.mapobjs.total_length}${allvals.length != useMapdata.hit_length ? `${helper.tools.calculate.secondsToTime(useMapdata.hit_length)}=>${allvals.details.lengthFull}` : allvals.details.lengthFull}\n`,
                         inline: true
                     },
                     {
