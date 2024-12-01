@@ -4,8 +4,8 @@ newest-oldest
 
 ## current
 - [x] fc pp being way lower than expected
-- [ ] pages buttons not working
-- [ ] `changelog` pages being broken after using select page 
+- [x] pages buttons not working
+- [x] `changelog` pages being broken after using select page 
 - [x] maplb doesnt filter by mods
 - [x] `recent` showing star rating as `undefined`
 

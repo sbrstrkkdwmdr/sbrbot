@@ -11,7 +11,8 @@
 -   `recent` showing star rating as `undefined`
 -   non-legacy scores breaking score formatter
 -   maplb mods arg not working
--   fc and SS pp being lower than expected
+-   FC and SS pp being lower than expected (due to accidentally parsing combo)
+-   page buttons not working after using a select page button (caused by global overrides value not being reset)
 
 ### Changed
 

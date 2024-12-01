@@ -7,13 +7,16 @@ import * as apitypes from './types/osuapi.js';
 const buttonWarnedUsers = new Set();
 let command: bottypes.command;
 let foundCommand = true;
-const overrides: bottypes.overrides = {
+let overrides: bottypes.overrides = {
     commandAs: 'button',
 };
 let mainId: number;
 export async function onInteraction(interaction: Discord.Interaction) {
     if (!(interaction.type == Discord.InteractionType.MessageComponent || interaction.type == Discord.InteractionType.ModalSubmit)) return;
     if (interaction.applicationId != helper.vars.client.application.id) return;
+    overrides = {
+        commandAs: 'button',
+    }
     let canReply = true;
     if (!helper.tools.checks.botHasPerms(interaction, ['ReadMessageHistory'])) {
         canReply = false;

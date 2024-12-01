@@ -1145,8 +1145,6 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
             sort = temp?.sort as any;
             reverse = temp?.reverse;
 
-            console.log(page);
-
             switch (input.buttonType) {
                 case 'BigLeftArrow':
                     page = 1;
@@ -1161,9 +1159,6 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
                     page = temp?.maxPage ?? page;
                     break;
             }
-
-            console.log(page);
-            console.log(input.buttonType);
 
             switch (input.buttonType) {
                 case 'Detail0':
