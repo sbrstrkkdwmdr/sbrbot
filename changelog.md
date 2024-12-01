@@ -17,6 +17,7 @@
 -   maplb mods arg not working
 -   FC and SS pp being lower than expected (due to accidentally parsing combo)
 -   page buttons not working after using a select page button (caused by global overrides value not being reset)
+-   `maplb` page buttons not working
 
 ### Changed
 

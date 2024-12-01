@@ -384,12 +384,6 @@ export const maplb = async (input: bottypes.commandInput) => {
         input.interaction,
     );
 
-
-    if (page < 2 || typeof page != 'number') {
-        page = 1;
-    }
-    page--;
-
     if (!mapid) {
         const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction.guildId);
         mapid = temp.id;
