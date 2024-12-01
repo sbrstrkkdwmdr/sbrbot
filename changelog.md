@@ -8,7 +8,7 @@
 
 ## [4.0.1] - xxxx-xx-xx
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/cc69e396e74631ca1c364bb5100967bd72fd80e7)</br>
 
 ### Fixed
 
