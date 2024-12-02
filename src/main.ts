@@ -187,7 +187,6 @@ Client ID:        ${client.user.id}
 
     const makeDir = [
         'trackingFiles',
-        'debug',
         'logs',
         // 'logs/gen',
         'logs/cmd',

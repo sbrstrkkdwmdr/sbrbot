@@ -6,6 +6,14 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+### Changed
+
+-   moved `debug clear [arg]` to `clear <arg>`
+
+### Added
+
+-   `clear` command
+
 ## [4.0.1] - xxxx-xx-xx
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/350b5cabe974df940d68623dd51131f855e423b6)</br>

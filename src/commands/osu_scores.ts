@@ -238,7 +238,7 @@ export const firsts = async (input: bottypes.commandInput) => {
             helper.tools.log.commandErr(error, input.id, 'firsts', input.message, input.interaction);
         }
     }
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+    
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -566,7 +566,7 @@ export const maplb = async (input: bottypes.commandInput) => {
             .setEmoji(helper.vars.buttons.label.extras.map)
     );
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+    
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -829,7 +829,7 @@ export const osutop = async (input: bottypes.commandInput) => {
         }
     }
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+    
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -1062,7 +1062,7 @@ export const pinned = async (input: bottypes.commandInput) => {
     }
 
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+    
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -2098,7 +2098,7 @@ ${isfail}
         )
         .setImage(`attachment://${chart}.jpg`);
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+    
 
     await helper.tools.commands.sendMessage({
         type: input.type,
@@ -2486,7 +2486,7 @@ ${`${(scoredata?.pp ?? perf.pp).toFixed(2)}pp` + fcflag}\n${ppissue}
         });
     scoreembed.setImage(`attachment://${strainsgraph.filename}.jpg`);
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+    
 
     await helper.tools.commands.sendMessage({
         type: input.type,
@@ -2930,7 +2930,7 @@ export const scores = async (input: bottypes.commandInput) => {
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+    
 
     await helper.tools.commands.sendMessage({
         type: input.type,
@@ -3802,7 +3802,7 @@ ${helper.vars.emojis.mapobjs.star}${(perf?.difficulty?.stars ?? mapdata.difficul
             },
         ]);
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+    
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,

@@ -102,6 +102,7 @@ function commandCheck(cmd: string, message: Discord.Message, interaction: Discor
         //admin
         'avatar', 'av', 'pfp',
         'checkperms', 'fetchperms', 'checkpermissions', 'permissions', 'perms',
+        'clear',
         'find', 'get',
         'prefix', 'servers', 'userinfo'
     ];
@@ -126,7 +127,7 @@ function commandCheck(cmd: string, message: Discord.Message, interaction: Discor
     ];
 
     const userRequireOwner: string[] = [
-        'crash', 'debug', 'servers'
+        'crash', 'clear', 'debug', 'servers'
     ];
 
     const disabled: string[] = [
@@ -570,6 +571,9 @@ function commandSelect(cmd: string, args: string[]) {
             break;
         case 'crash':
             command = helper.commands.admin.crash;
+            break;
+        case 'clear':
+            command = helper.commands.admin.clear;
             break;
         case 'debug':
             command = helper.commands.admin.debug;

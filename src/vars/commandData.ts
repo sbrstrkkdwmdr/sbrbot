@@ -2065,6 +2065,23 @@ const admincmds: bottypes.commandInfo[] = [
         ]
     },
     {
+        name: 'clear',
+        description: 'Clears cached data within the bot',
+        usage: 'clear <arg>',
+        examples: [],
+        aliases: [],
+        args: [
+            {
+                name: 'arg',
+                type: 'integer/string',
+                required: false,
+                description: 'the types of files to clear (read the options section)',
+                options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
+                defaultValue: 'temporary files only',
+            }
+        ]
+    },
+    {
         name: 'debug',
         description: 'Runs a debugging command.',
         usage: 'debug <type> [arg]',
@@ -2123,9 +2140,9 @@ const admincmds: bottypes.commandInfo[] = [
                 name: 'arg',
                 type: 'integer/string',
                 required: false,
-                description: 'commandfile -> the id of the command to search for\ncommandfiletype -> the name of the command to search\nlogs -> the ID of the guild to send logs from\nclear -> the types of files to clear (read the options section)',
+                description: 'commandfile -> the id of the command to search for\ncommandfiletype -> the name of the command to search\nlogs -> the ID of the guild to send logs from',
                 options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
-                defaultValue: 'commandfile -> latest command\ncommandfiletype -> list options\nlogs -> current server\n clear -> temporary files only',
+                defaultValue: 'commandfile -> latest command\ncommandfiletype -> list options\nlogs -> current server',
             }
         ]
     },

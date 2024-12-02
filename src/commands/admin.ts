@@ -75,7 +75,7 @@ export const checkperms = async (input: bottypes.commandInput) => {
 
 
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+
 
     await helper.tools.commands.sendMessage({
         type: input.type,
@@ -86,6 +86,204 @@ export const checkperms = async (input: bottypes.commandInput) => {
         }
     }, input.canReply);
 };
+
+/**
+ * clear cache files
+ */
+export const clear = async (input: bottypes.commandInput) => {
+
+    let commanduser: Discord.User | Discord.APIUser;
+    let type: string;
+    switch (input.type) {
+        case 'message': {
+            commanduser = input.message.author;
+            type = input?.args[0];
+        }
+            break;
+    }
+
+    helper.tools.log.commandOptions(
+        [
+            {
+                name: 'user',
+                value: type
+            }
+        ],
+        input.id,
+        'clear',
+        input.type,
+        commanduser,
+        input.message,
+        input.interaction,
+    );
+    let embed = new Discord.EmbedBuilder()
+        .setTitle('Clearing cache');
+
+    embed = clearCache(type, embed);
+
+    await helper.tools.commands.sendMessage({
+        type: input.type,
+        message: input.message,
+        interaction: input.interaction,
+        args: {
+            embeds: [embed],
+        }
+    }, input.canReply);
+};
+
+function clearCache(type: string, embed: Discord.EmbedBuilder) {
+    switch (type) {
+        case 'normal': default: { //clears all temprary files (cache/commandData)
+            helper.tools.log.stdout(`manually clearing temporary files in ${helper.vars.path.main}/cache/commandData/`);
+            const curpath = `${helper.vars.path.main}/cache/commandData`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                const keep = ['Approved', 'Ranked', 'Loved', 'Qualified'];
+                if (!keep.some(x => file.includes(x))) {
+                    fs.unlinkSync(`${curpath}/` + file);
+                    helper.tools.log.stdout(`Deleted file: ${curpath}/` + file);
+                }
+            }
+            embed.setDescription(`Clearing temporary files in ./cache/commandData/\n(ranked/loved/approved maps are kept)`);
+        }
+            break;
+        case 'all': { //clears all files in commandData
+            helper.tools.log.stdout(`manually clearing all files in ${helper.vars.path.main}/cache/commandData/`);
+            const curpath = `${helper.vars.path.main}/cache/commandData`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                fs.unlinkSync(`${curpath}/` + file);
+                helper.tools.log.stdout(`Deleted file: ${curpath}/` + file);
+            }
+            embed.setDescription(`Clearing all files in ./cache/commandData/`);
+        }
+            break;
+        case 'trueall': { //clears everything in cache
+            embed = clearCache('all', embed);
+            embed = clearCache('previous', embed);
+            embed = clearCache('errors', embed);
+            embed = clearCache('map', embed);
+            embed = clearCache('params', embed);
+            embed = clearCache('graphs', embed);
+            embed.setDescription(`Clearing all files in ./cache/ and ./files/maps`);
+        }
+            break;
+        case 'pp': {
+            helper.tools.log.stdout(`manually clearing all map files in ${helper.vars.path.files}/maps/`,);
+            const curpath = `${helper.vars.path.files}/maps`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                fs.unlinkSync(`${curpath}/` + file);
+                helper.tools.log.stdout(`Deleted file: ${curpath}/` + file,);
+            }
+            embed.setDescription(`Clearing all files in ./files/maps`);
+        }
+            break;
+        case 'map': case 'maps': { // clears all maps and mapset files
+            helper.tools.log.stdout(`manually clearing all map and mapset files in ${helper.vars.path.main}/cache/commandData/ and ${helper.vars.path.files}/maps/`);
+            const curpath1 = `${helper.vars.path.main}/cache/commandData`;
+            const files1 = fs.readdirSync(curpath1);
+            for (const file of files1) {
+                if (file.includes('bmsdata') || file.includes('mapdata')) {
+                    fs.unlinkSync(`${curpath1}/` + file);
+                    helper.tools.log.stdout(`Deleted file: ${curpath1}/` + file);
+                }
+            }
+            const curpath2 = `${helper.vars.path.files}/maps`;
+            const files2 = fs.readdirSync(curpath2);
+            for (const file of files2) {
+                fs.unlinkSync(`${curpath2}/` + file);
+                helper.tools.log.stdout(`Deleted file: ${curpath2}/` + file);
+            }
+            embed.setDescription(`Clearing all map-related files in ./cache/commandData/ and ./files/maps/`);
+        }
+            break;
+        case 'users': { //clears all osudata files
+            helper.tools.log.stdout(`manually clearing all osudata files in ${helper.vars.path.main}/cache/commandData/`);
+            const curpath = `${helper.vars.path.main}/cache/commandData`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                if (file.includes('osudata')) {
+                    fs.unlinkSync(`Deleted file: ${curpath}/` + file);
+                    helper.tools.log.stdout(`${curpath}/` + file,);
+                }
+            }
+            embed.setDescription(`Clearing all user data files in ./cache/commandData/`);
+        }
+            break;
+        case 'previous': { // clears all previous files
+            helper.tools.log.stdout(`manually clearing all prev files in ${helper.vars.path.main}/cache/previous/`,);
+            const curpath = `${helper.vars.path.main}/cache/previous`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                fs.unlinkSync(`${curpath}/` + file);
+                helper.tools.log.stdout(`Deleted file: ${curpath}/` + file,);
+            }
+            embed.setDescription(`Clearing all files in ./cache/previous/`);
+        }
+            break;
+        case 'pmaps': { // clears all previous map files
+            helper.tools.log.stdout(`manually clearing all prevmap files in ${helper.vars.path.main}/cache/previous/`,);
+            const curpath = `${helper.vars.path.main}/cache/previous`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                if (file.includes('map')) {
+                    fs.unlinkSync(`${curpath}/` + file);
+                    helper.tools.log.stdout(`Deleted file: ${curpath}/` + file,);
+                }
+            }
+            embed.setDescription(`Clearing all previous map files in ./cache/previous/`);
+        }
+            break;
+        case 'pscores': { // clears all previous score files
+            helper.tools.log.stdout(`manually clearing all prev score files in ${helper.vars.path.main}/cache/previous/`,);
+            const curpath = `${helper.vars.path.main}/cache/previous`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                if (file.includes('score')) {
+                    fs.unlinkSync(`${curpath}/` + file);
+                    helper.tools.log.stdout(`Deleted file: ${curpath}/` + file);
+                }
+            }
+            embed.setDescription(`Clearing all previous score files in ./cache/previous/`);
+        }
+        case 'pusers': { // clears all previous user files
+            helper.tools.log.stdout(`manually clearing all prev user files in ${helper.vars.path.main}/cache/previous/`);
+            const curpath = `${helper.vars.path.main}/cache/previous`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                if (file.includes('user')) {
+                    fs.unlinkSync(`${curpath}/` + file);
+                    helper.tools.log.stdout(`Deleted file: ${curpath}/` + file);
+                }
+            }
+            embed.setDescription(`Clearing all previous user files in ./cache/previous/`);
+        }
+            break;
+        case 'errors': { //clears all errors
+            helper.tools.log.stdout(`manually clearing all err files in ${helper.vars.path.main}/cache/errors/`);
+            const curpath = `${helper.vars.path.main}/cache/errors`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                fs.unlinkSync(`${curpath}/` + file);
+                helper.tools.log.stdout(`Deleted file: ${curpath}/` + file);
+            }
+            embed.setDescription(`Clearing error files in ./cache/errors/`);
+        }
+            break;
+        case 'graph': {
+            helper.tools.log.stdout(`manually clearing all graph files in ${helper.vars.path.main}/cache/graphs/`);
+            const curpath = `${helper.vars.path.main}/cache/graphs`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                fs.unlinkSync(`${curpath}/` + file);
+                helper.tools.log.stdout(`Deleted file: ${curpath}/` + file);
+            }
+            embed.setDescription(`Clearing graph files in ./cache/graphs/`);
+        }
+    }
+    return embed;
+}
 
 /**
  * force crash bot
@@ -226,7 +424,7 @@ export const getUser = async (input: bottypes.commandInput) => {
     });
 
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+
 
     await helper.tools.commands.sendMessage({
         type: input.type,
@@ -731,15 +929,6 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             }
         }
             break;
-        case 'clear': {
-            //all in command data, temporary files, permanent files, all in previous
-            const ctype = input.args[0] as clearTypes;
-            usemsgArgs = {
-                content: `Clearing files...`
-            };
-            clear(ctype);
-        }
-            break;
         case 'ls': {
             const fields: Discord.RestOrArray<Discord.APIEmbedField> = [];
             const files: string[] = [];
@@ -824,179 +1013,6 @@ External:   ${tomb(memdat.external)} MiB
         };
     }
 
-    function clear(tincan: clearTypes) {
-        switch (tincan) {
-            case 'normal': default: { //clears all temprary files (cache/commandData)
-                helper.tools.log.stdout(`manually clearing temporary files in ${helper.vars.path.main}/cache/commandData/`);
-                const curpath = `${helper.vars.path.main}/cache/commandData`;
-                const files = fs.readdirSync(curpath);
-                for (const file of files) {
-                    const keep = ['Approved', 'Ranked', 'Loved', 'Qualified'];
-                    if (!keep.some(x => file.includes(x))) {
-                        fs.unlinkSync(`${curpath}/` + file);
-                        helper.tools.log.stdout(`${curpath}/` + file);
-                    }
-                }
-                usemsgArgs = {
-                    content: `Clearing temporary files in ./cache/commandData/`
-                };
-            }
-                break;
-            case 'all': { //clears all files in commandData
-                helper.tools.log.stdout(`manually clearing all files in ${helper.vars.path.main}/cache/commandData/`);
-                const curpath = `${helper.vars.path.main}/cache/commandData`;
-                const files = fs.readdirSync(curpath);
-                for (const file of files) {
-                    fs.unlinkSync(`${curpath}/` + file);
-                    helper.tools.log.stdout(`${curpath}/` + file);
-                }
-                usemsgArgs = {
-                    content: `Clearing all files in ./cache/commandData/`
-                };
-            }
-                break;
-            case 'trueall': { //clears everything in cache
-                clear('all');
-                clear('previous');
-                clear('errors');
-                clear('map');
-                usemsgArgs = {
-                    content: `Clearing all files in ./cache/commandData/`
-                };
-            }
-                break;
-            case 'pp': {
-                helper.tools.log.stdout(`manually clearing all map files in ${helper.vars.path.files}/maps/`,);
-                const curpath = `${helper.vars.path.files}/maps`;
-                const files = fs.readdirSync(curpath);
-                for (const file of files) {
-                    fs.unlinkSync(`${curpath}/` + file);
-                    helper.tools.log.stdout(`${curpath}/` + file,);
-                }
-            }
-                break;
-            case 'map': case 'maps': { // clears all maps and mapset files
-                helper.tools.log.stdout(`manually clearing all map and mapset files in ${helper.vars.path.main}/cache/commandData/ and ${helper.vars.path.files}/maps/`);
-                const curpath1 = `${helper.vars.path.main}/cache/commandData`;
-                const files1 = fs.readdirSync(curpath1);
-                for (const file of files1) {
-                    if (file.includes('bmsdata') || file.includes('mapdata')) {
-                        fs.unlinkSync(`${curpath1}/` + file);
-                        helper.tools.log.stdout(`${curpath1}/` + file);
-                    }
-                }
-                const curpath2 = `${helper.vars.path.files}/maps`;
-                const files2 = fs.readdirSync(curpath2);
-                for (const file of files2) {
-                    fs.unlinkSync(`${curpath2}/` + file);
-                    helper.tools.log.stdout(`${curpath2}/` + file);
-                }
-                usemsgArgs = {
-                    content: `Clearing all map-related files in ./cache/commandData/ and ./files/maps/`
-                };
-            }
-                break;
-            case 'users': { //clears all osudata files
-                helper.tools.log.stdout(`manually clearing all osudata files in ${helper.vars.path.main}/cache/commandData/`);
-                const curpath = `${helper.vars.path.main}/cache/commandData`;
-                const files = fs.readdirSync(curpath);
-                for (const file of files) {
-                    if (file.includes('osudata')) {
-                        fs.unlinkSync(`${curpath}/` + file);
-                        helper.tools.log.stdout(`${curpath}/` + file,);
-                    }
-                }
-                usemsgArgs = {
-                    content: `Clearing all osudata files in ./cache/commandData/`
-                };
-            }
-                break;
-            case 'previous': { // clears all previous files
-                helper.tools.log.stdout(`manually clearing all prev files in ${helper.vars.path.main}/cache/previous/`,);
-                const curpath = `${helper.vars.path.main}/cache/previous`;
-                const files = fs.readdirSync(curpath);
-                for (const file of files) {
-                    fs.unlinkSync(`${curpath}/` + file);
-                    helper.tools.log.stdout(`${curpath}/` + file,);
-                }
-                usemsgArgs = {
-                    content: `Clearing all previous files in ./cache/previous/`
-                };
-            }
-                break;
-            case 'pmaps': { // clears all previous map files
-                helper.tools.log.stdout(`manually clearing all prevmap files in ${helper.vars.path.main}/cache/previous/`,);
-                const curpath = `${helper.vars.path.main}/cache/previous`;
-                const files = fs.readdirSync(curpath);
-                for (const file of files) {
-                    if (file.includes('map')) {
-                        fs.unlinkSync(`${curpath}/` + file);
-                        helper.tools.log.stdout(`${curpath}/` + file,);
-                    }
-                }
-                usemsgArgs = {
-                    content: `Clearing all previous map files in ./cache/previous/`
-                };
-            }
-                break;
-            case 'pscores': { // clears all previous score files
-                helper.tools.log.stdout(`manually clearing all prev score files in ${helper.vars.path.main}/cache/previous/`,);
-                const curpath = `${helper.vars.path.main}/cache/previous`;
-                const files = fs.readdirSync(curpath);
-                for (const file of files) {
-                    if (file.includes('score')) {
-                        fs.unlinkSync(`${curpath}/` + file);
-                        helper.tools.log.stdout(`${curpath}/` + file);
-                    }
-                }
-                usemsgArgs = {
-                    content: `Clearing all previous score files in ./cache/previous/`
-                };
-            }
-            case 'pusers': { // clears all previous user files
-                helper.tools.log.stdout(`manually clearing all prev user files in ${helper.vars.path.main}/cache/previous/`);
-                const curpath = `${helper.vars.path.main}/cache/previous`;
-                const files = fs.readdirSync(curpath);
-                for (const file of files) {
-                    if (file.includes('user')) {
-                        fs.unlinkSync(`${curpath}/` + file);
-                        helper.tools.log.stdout(`${curpath}/` + file);
-                    }
-                }
-                usemsgArgs = {
-                    content: `Clearing all previous user files in ./cache/previous/`
-                };
-            }
-                break;
-            case 'errors': { //clears all errors
-                helper.tools.log.stdout(`manually clearing all err files in ${helper.vars.path.main}/cache/errors/`);
-                const curpath = `${helper.vars.path.main}/cache/errors`;
-                const files = fs.readdirSync(curpath);
-                for (const file of files) {
-                    fs.unlinkSync(`${curpath}/` + file);
-                    helper.tools.log.stdout(`${curpath}/` + file);
-                }
-                usemsgArgs = {
-                    content: `Clearing error files in ./cache/errors/`
-                };
-            }
-                break;
-            case 'graph': {
-                helper.tools.log.stdout(`manually clearing all graph files in ${helper.vars.path.main}/cache/graphs/`);
-                const curpath = `${helper.vars.path.main}/cache/graphs`;
-                const files = fs.readdirSync(curpath);
-                for (const file of files) {
-                    fs.unlinkSync(`${curpath}/` + file);
-                    helper.tools.log.stdout(`${curpath}/` + file);
-                }
-                usemsgArgs = {
-                    content: `Clearing graph files in ./cache/graphs/`
-                };
-            }
-        }
-    }
-
-    //SEND/EDIT MSG==============================================================================================================================================================================================
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -1336,7 +1352,7 @@ Valid Types: user, guild, channel, role, emoji
         Embedr
             .setThumbnail(`attachment://blank.png`);
     }
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+
 
     await helper.tools.commands.sendMessage({
         type: input.type,
@@ -1393,7 +1409,7 @@ export const leaveguild = async (input: bottypes.commandInput) => {
         return;
     }
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+
 
     await helper.tools.commands.sendMessage({
         type: input.type,
@@ -1452,7 +1468,7 @@ export const prefix = async (input: bottypes.commandInput) => {
         }
     }
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+
 
     await helper.tools.commands.sendMessage({
         type: input.type,
@@ -1590,7 +1606,7 @@ export const purge = async (input: bottypes.commandInput) => {
         }
     }
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -1646,7 +1662,7 @@ export const servers = async (input: bottypes.commandInput) => {
         };
     }
 
-    //SEND/EDIT MSG==============================================================================================================================================================================================
+
 
     await helper.tools.commands.sendMessage({
         type: input.type,
