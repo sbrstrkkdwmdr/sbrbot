@@ -72,7 +72,7 @@ export const compare = async (input: bottypes.commandInput) => {
             commanduser = input.interaction.member.user;
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.reply({
+                input.interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
                     ephemeral: true,
                     allowedMentions: { repliedUser: false }

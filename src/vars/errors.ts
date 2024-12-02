@@ -11,7 +11,7 @@ export const osuTrackApiError = `Something went wrong with the osu!track api.`;
 
 export const timeout = `The connection timed out`;
 
-export const paramFileMissing = `This command has expired and the buttons can no longer be used. Commands automatically expire after 24h of not being used.`;
+export const paramFileMissing = `This command has expired and the buttons can no longer be used.\nCommands will automatically expire after 24h of not being used.`;
 
 export function anyError() {
     const errs = [

@@ -8,6 +8,7 @@
 
 ### Fixed
 - `maplb` score indexes not matching page number
+- switched interaction#reply to followUp on error messages
 
 ### Changed
 

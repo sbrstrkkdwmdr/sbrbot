@@ -137,7 +137,7 @@ export const map = async (input: bottypes.commandInput) => {
             commanduser = input.interaction.member.user;
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.reply({
+                input.interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
                     ephemeral: true,
                     allowedMentions: { repliedUser: false }
@@ -1872,7 +1872,7 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
 
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.reply({
+                input.interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
                     ephemeral: true,
                     allowedMentions: { repliedUser: false }
