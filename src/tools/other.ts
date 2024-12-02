@@ -676,28 +676,21 @@ export function userbitflagsToEmoji(flags: Discord.UserFlagsBitField) {
     return newArr;
 }
 
+export function scoreTotalHits(stats: apitypes.ScoreStatistics) {
+    let total = 0;
+    for (const value in stats) {
+        total += stats[value];
+    }
+    return total;
+}
+
 export function scoreIsComplete(
-    mode: apitypes.GameMode,
-    obj: apitypes.Statistics,
+    stats: apitypes.ScoreStatistics,
     circles: number,
     sliders: number,
     spinners: number,
 ) {
-    let total = 0;
-    switch (mode) {
-        case 'osu': default:
-            total = obj.count_300 + obj.count_100 + obj.count_50 + obj.count_miss;
-            break;
-        case 'taiko':
-            total = obj.count_300 + obj.count_100 + obj.count_miss;
-            break;
-        case 'fruits':
-            total = obj.count_300 + obj.count_100 + obj.count_50 + obj.count_miss;
-            break;
-        case 'mania':
-            total = obj.count_geki + obj.count_300 + obj.count_katu + obj.count_100 + obj.count_50 + obj.count_miss;
-            break;
-    }
+    let total = scoreTotalHits(stats);
     return {
         passed: total == circles + sliders + spinners,
         objectsHit: total,
@@ -705,7 +698,7 @@ export function scoreIsComplete(
     };
 }
 
-export function filterScoreQuery(scores: apitypes.ScoreLegacy[], search: string) {
+export function filterScoreQuery(scores: apitypes.Score[], search: string) {
     return scores.filter((score) =>
         (
             score.beatmapset.title.toLowerCase().replaceAll(' ', '')

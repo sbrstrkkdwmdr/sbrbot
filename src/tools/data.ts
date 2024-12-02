@@ -291,7 +291,7 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
     try {
         const init = JSON.parse(fs.readFileSync(`${helper.vars.path.cache}/previous/${type}${serverId}.json`, 'utf-8')) as {
             id: string | false,
-            apiData: apitypes.ScoreLegacy,
+            apiData: apitypes.Score,
             mods: string,
             default: boolean,
             mode: apitypes.GameMode;
@@ -300,7 +300,7 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
     } catch (error) {
         const data: {
             id: string | false,
-            apiData: apitypes.ScoreLegacy,
+            apiData: apitypes.Score,
             mods: string;
             default: boolean,
             mode: apitypes.GameMode;
@@ -317,7 +317,7 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
 }
 export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string, data: {
     id: string,
-    apiData: apitypes.ScoreLegacy,
+    apiData: apitypes.Score,
     mods: string,
     mode?: apitypes.GameMode,
     default?: boolean;

@@ -701,7 +701,7 @@ export const map = async (input: bottypes.commandInput) => {
         try {
             ppComputed = await helper.tools.performance.calcMap({
                 mods: mapmods,
-                mode: useMapdata.mode,
+                mode: useMapdata.mode_int,
                 mapid: useMapdata.id,
                 clockRate: overrideSpeed ?? 1,
                 customCS,
@@ -923,7 +923,7 @@ HP${baseHP}`;
             const strains = await helper.tools.performance.calcStrains(
                 {
                     mapid: mapdata.id,
-                    mode: useMapdata.mode,
+                    mode: useMapdata.mode_int,
                     mods: mapmods,
                     mapLastUpdated: new Date(useMapdata.last_updated),
                 });

@@ -68,7 +68,8 @@ export async function apiGet(input: tooltypes.apiInput) {
             headers: {
                 Authorization: `Bearer ${oauth.access_token}`,
                 "Content-Type": "application/json",
-                Accept: "application/json"
+                Accept: "application/json",
+                "x-api-version": "20220705"
             }
         }).catch(err => {
             if (err?.response?.data?.authentication == 'basic') {
@@ -137,21 +138,21 @@ export async function getScoreWithMode(id: string | number, mode: string, extra:
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.ScoreLegacy>;
+    }) as tooltypes.apiReturn<apitypes.Score>;
 }
 export async function getScore(id: string | number, extra: string[]) {
     const url = baseUrl + `scores/${id}`;
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.ScoreLegacy>;
+    }) as tooltypes.apiReturn<apitypes.Score>;
 }
 export async function getScoresRecent(id: string | number, mode: string, extra: string[]) {
     const url = baseUrl + `users/${id}/scores/recent?mode=${helper.tools.other.modeValidator(mode)}&legacy_only=0&limit=100`;
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
+    }) as tooltypes.apiReturn<apitypes.Score[]>;
 }
 export async function getScoresBest(id: string | number, mode: string, extra: string[]) {
     const url = baseUrl + `users/${id}/scores/best?mode=${helper.tools.other.modeValidator(mode)}&legacy_only=0&limit=100`;
@@ -165,14 +166,14 @@ export async function getScoresFirst(id: string | number, mode: string, extra: s
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
+    }) as tooltypes.apiReturn<apitypes.Score[]>;
 }
 export async function getScoresPinned(id: string | number, mode: string, extra: string[]) {
     const url = baseUrl + `users/${id}/scores/pinned?mode=${helper.tools.other.modeValidator(mode)}&legacy_only=0&limit=100`;
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
+    }) as tooltypes.apiReturn<apitypes.Score[]>;
 }
 export async function getUserMapScores(userid: string | number, mapid: number, extra: string[]) {
     const url = baseUrl + `beatmaps/${mapid}/scores/users/${userid}/all?legacy_only=0`;
@@ -192,7 +193,7 @@ export async function getMapLeaderboard(id: number, mode: string, mods: string, 
     return await apiGet({
         url,
         extra
-    }) as tooltypes.apiReturn<apitypes.BeatmapScores<apitypes.ScoreLegacy>>;
+    }) as tooltypes.apiReturn<apitypes.BeatmapScores<apitypes.Score>>;
 }
 export async function getMapLeaderboardNonLegacy(id: number, mode: string, mods: string, extra: string[]) {
     mode = helper.tools.other.modeValidator(mode);

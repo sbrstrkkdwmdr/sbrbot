@@ -104,7 +104,7 @@ export const firsts = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(osudataReq, osudata.id, 'osudata', parseArgs.mode);
     helper.tools.data.storeFile(osudataReq, parseArgs.user, 'osudata', parseArgs.mode);
 
-    let firstscoresdata: apitypes.ScoreLegacy[] & apitypes.Error = [];
+    let firstscoresdata: apitypes.Score[] & apitypes.Error = [];
     async function getScoreCount(cinitnum) {
         if (cinitnum >= 499) {
             reachedMaxCount = true;
@@ -112,7 +112,7 @@ export const firsts = async (input: bottypes.commandInput) => {
         }
 
         const fdReq: tooltypes.apiReturn = await helper.tools.api.getScoresFirst(osudata.id, parseArgs.mode, ['offset=' + cinitnum]);
-        const fd: apitypes.ScoreLegacy[] & apitypes.Error = fdReq.apiData;
+        const fd: apitypes.Score[] & apitypes.Error = fdReq.apiData;
         if (fdReq?.error) {
             await helper.tools.commands.errorAndAbort(input, 'firsts', true, helper.vars.errors.uErr.osu.scores.first.replace('[ID]', parseArgs.user), false);
             return;
@@ -143,7 +143,7 @@ export const firsts = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(firstscoresdata, osudata.id, 'firstscoresdata');
 
     if (parseArgs.parseScore) {
-        const newScores = helper.tools.formatter.filterScoresLegacy(firstscoresdata, parseArgs.sort ?? 'recent',
+        const newScores = helper.tools.formatter.filterScores(firstscoresdata, parseArgs.sort ?? 'recent',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -159,7 +159,7 @@ export const firsts = async (input: bottypes.commandInput) => {
                 combo: parseArgs.combo,
                 miss: parseArgs.miss,
                 bpm: parseArgs.bpm
-            }, parseArgs.reverse,) as apitypes.ScoreLegacy[];
+            }, parseArgs.reverse,) as apitypes.Score[];
         let pid = +parseArgs.parseId - 1;
         if (isNaN(pid) || pid < 0) {
             pid = 0;
@@ -168,8 +168,7 @@ export const firsts = async (input: bottypes.commandInput) => {
             pid = newScores.length - 1;
         }
         input.overrides = {
-            mode: newScores?.[0]?.mode ?? 'osu',
-            id: newScores?.[pid]?.best_id,
+            id: newScores?.[pid]?.id,
             commanduser: parseArgs.commanduser,
             commandAs: input.type
         };
@@ -185,12 +184,12 @@ export const firsts = async (input: bottypes.commandInput) => {
     let firstsEmbed = new Discord.EmbedBuilder()
         .setColor(helper.vars.colours.embedColour.scorelist.dec)
         .setTitle(`#1 scores for ${osudata.username}`)
-        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${firstscoresdata?.[0]?.mode ?? helper.tools.other.modeValidator(parseArgs.mode)}#top_ranks`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osumodcalc.ModeIntToName(firstscoresdata?.[0]?.ruleset_id)}#top_ranks`)
         .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`);
     firstsEmbed = helper.tools.formatter.userAuthor(osudata, firstsEmbed);
 
     const scoresarg = await helper.tools.formatter.scoreList(
-        firstscoresdata, 'legacy', parseArgs.sort ?? 'recent',
+        firstscoresdata, 'current', parseArgs.sort ?? 'recent',
         {
             mapper: parseArgs.filteredMapper,
             modsInclude: parseArgs.modsInclude,
@@ -238,7 +237,7 @@ export const firsts = async (input: bottypes.commandInput) => {
             helper.tools.log.commandErr(error, input.id, 'firsts', input.message, input.interaction);
         }
     }
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -566,7 +565,7 @@ export const maplb = async (input: bottypes.commandInput) => {
             .setEmoji(helper.vars.buttons.label.extras.map)
     );
 
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -697,7 +696,7 @@ export const osutop = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(osudataReq, osudata.id, 'osudata', helper.tools.other.modeValidator(parseArgs.mode));
     helper.tools.data.storeFile(osudataReq, parseArgs.user, 'osudata', helper.tools.other.modeValidator(parseArgs.mode));
 
-    let osutopdataReq: tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
+    let osutopdataReq: tooltypes.apiReturn<apitypes.Score[]>;
     if (helper.tools.data.findFile(osudata.id, 'topscoresdata') &&
         input.type == 'button' &&
         !('error' in helper.tools.data.findFile(osudata.id, 'topscoresdata')) &&
@@ -708,7 +707,7 @@ export const osutop = async (input: bottypes.commandInput) => {
         osutopdataReq = await helper.tools.api.getScoresBest(osudata.id, parseArgs.mode, []);
     }
 
-    const osutopdata: apitypes.ScoreLegacy[] & apitypes.Error = osutopdataReq.apiData;
+    const osutopdata: apitypes.Score[] & apitypes.Error = osutopdataReq.apiData;
     if (osutopdataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'osutop', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', parseArgs.user), false);
         return;
@@ -726,7 +725,7 @@ export const osutop = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(osutopdataReq, osudata.id, 'topscoresdata');
 
     if (parseArgs.parseScore) {
-        const newScores = helper.tools.formatter.filterScoresLegacy(osutopdata, parseArgs.sort ?? 'recent',
+        const newScores = helper.tools.formatter.filterScores(osutopdata, parseArgs.sort ?? 'recent',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -742,7 +741,7 @@ export const osutop = async (input: bottypes.commandInput) => {
                 combo: parseArgs.combo,
                 miss: parseArgs.miss,
                 bpm: parseArgs.bpm
-            }, parseArgs.reverse,) as apitypes.ScoreLegacy[];
+            }, parseArgs.reverse,) as apitypes.Score[];
         let pid = parseInt(parseArgs.parseId) - 1;
         if (pid < 0) {
             pid = 0;
@@ -751,8 +750,8 @@ export const osutop = async (input: bottypes.commandInput) => {
             pid = newScores.length - 1;
         }
         input.overrides = {
-            mode: newScores?.[0]?.mode ?? 'osu',
-            id: newScores?.[pid]?.best_id,
+
+            id: newScores?.[pid]?.id,
             commanduser: parseArgs.commanduser,
             commandAs: input.type
         };
@@ -770,18 +769,20 @@ export const osutop = async (input: bottypes.commandInput) => {
         .setColor(helper.vars.colours.embedColour.scorelist.dec)
         .setTitle(`${commandButtonName == 'osutop' ? 'Top' : 'Top no choke'} plays of ${osudata.username}`)
         .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`)
-        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osutopdata?.[0]?.mode ?? helper.tools.other.modeValidator(parseArgs.mode)}#top_ranks`);
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osumodcalc.ModeIntToName(osutopdata?.[0]?.ruleset_id)}#top_ranks`);
     topEmbed = helper.tools.formatter.userAuthor(osudata, topEmbed);
 
     if (commandButtonName == 'nochokes') {
         for (const score of osutopdata) {
-            score.statistics.count_miss = 0;
-            score.perfect = true;
+            score.statistics.miss = 0;
+            score.max_combo = null;
+            score.pp = null;
+            score.is_perfect_combo = true;
         }
     }
 
     const scoresarg = await helper.tools.formatter.scoreList(
-        osutopdata, 'legacy', parseArgs.sort ?? 'pp',
+        osutopdata, 'current', parseArgs.sort ?? 'pp',
         {
             mapper: parseArgs.filteredMapper,
             modsInclude: parseArgs.modsInclude,
@@ -829,7 +830,7 @@ export const osutop = async (input: bottypes.commandInput) => {
         }
     }
 
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -936,7 +937,7 @@ export const pinned = async (input: bottypes.commandInput) => {
             .setEmoji(helper.vars.buttons.label.extras.user),
     );
 
-    let pinnedscoresdataReq: tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
+    let pinnedscoresdataReq: tooltypes.apiReturn<apitypes.Score[]>;
     if (helper.tools.data.findFile(osudata.id, 'topscoresdata') &&
         input.type == 'button' &&
         !('error' in helper.tools.data.findFile(osudata.id, 'topscoresdata')) &&
@@ -947,7 +948,7 @@ export const pinned = async (input: bottypes.commandInput) => {
         pinnedscoresdataReq = await helper.tools.api.getScoresPinned(osudata.id, parseArgs.mode, []);
     }
 
-    const pinnedscoresdata: apitypes.ScoreLegacy[] & apitypes.Error = pinnedscoresdataReq.apiData;
+    const pinnedscoresdata: apitypes.Score[] & apitypes.Error = pinnedscoresdataReq.apiData;
     if (pinnedscoresdataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'pinned', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', parseArgs.user), false);
         return;
@@ -965,7 +966,7 @@ export const pinned = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(pinnedscoresdataReq, osudata.id, 'pinnedscoresdata');
 
     if (parseArgs.parseScore) {
-        const newScores = helper.tools.formatter.filterScoresLegacy(pinnedscoresdata, parseArgs.sort ?? 'recent',
+        const newScores = helper.tools.formatter.filterScores(pinnedscoresdata, parseArgs.sort ?? 'recent',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -981,7 +982,7 @@ export const pinned = async (input: bottypes.commandInput) => {
                 combo: parseArgs.combo,
                 miss: parseArgs.miss,
                 bpm: parseArgs.bpm
-            }, parseArgs.reverse,) as apitypes.ScoreLegacy[];
+            }, parseArgs.reverse,) as apitypes.Score[];
         let pid = parseInt(parseArgs.parseId) - 1;
         if (pid < 0) {
             pid = 0;
@@ -990,8 +991,8 @@ export const pinned = async (input: bottypes.commandInput) => {
             pid = newScores.length - 1;
         }
         input.overrides = {
-            mode: newScores?.[0]?.mode ?? 'osu',
-            id: newScores?.[pid]?.best_id,
+
+            id: newScores?.[pid]?.id,
             commanduser: parseArgs.commanduser,
             commandAs: input.type
         };
@@ -1007,11 +1008,11 @@ export const pinned = async (input: bottypes.commandInput) => {
     let pinnedEmbed = new Discord.EmbedBuilder()
         .setColor(helper.vars.colours.embedColour.scorelist.dec)
         .setTitle(`Pinned scores for ${osudata.username}`)
-        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${pinnedscoresdata?.[0]?.mode ?? helper.tools.other.modeValidator(parseArgs.mode)}#top_ranks`)
+        .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osumodcalc.ModeIntToName(pinnedscoresdata?.[0]?.ruleset_id)}#top_ranks`)
         .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`);
     pinnedEmbed = helper.tools.formatter.userAuthor(osudata, pinnedEmbed);
     const scoresarg = await helper.tools.formatter.scoreList(
-        pinnedscoresdata, 'legacy', parseArgs.sort ?? 'recent',
+        pinnedscoresdata, 'current', parseArgs.sort ?? 'recent',
         {
             mapper: parseArgs.filteredMapper,
             modsInclude: parseArgs.modsInclude,
@@ -1062,7 +1063,7 @@ export const pinned = async (input: bottypes.commandInput) => {
     }
 
 
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -1382,7 +1383,7 @@ export const recent = async (input: bottypes.commandInput) => {
             .setEmoji(helper.vars.buttons.label.extras.user),
     );
 
-    let rsdataReq: tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
+    let rsdataReq: tooltypes.apiReturn<apitypes.Score[]>;
     if (helper.tools.data.findFile(input.id, 'rsdata') &&
         input.type == 'button' &&
         !('error' in helper.tools.data.findFile(input.id, 'rsdata')) &&
@@ -1393,7 +1394,7 @@ export const recent = async (input: bottypes.commandInput) => {
         rsdataReq = await helper.tools.api.getScoresRecent(osudata.id, mode, [`include_fails=${showFails}`]);
     }
 
-    let rsdata: apitypes.ScoreLegacy[] & apitypes.Error = rsdataReq.apiData;
+    let rsdata: apitypes.Score[] & apitypes.Error = rsdataReq.apiData;
     if (rsdataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.uErr.osu.scores.recent.replace('[ID]', user), false);
         return;
@@ -1457,16 +1458,12 @@ export const recent = async (input: bottypes.commandInput) => {
             return;
         }
 
-        if (curscore.replay) {
-            curscore.replay;
-        }
-
         const curbm = curscore.beatmap;
         const curbms = curscore.beatmapset;
 
         buttons.addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${helper.vars.versions.releaseDate}-Map-recent-any-${input.id}-${curscore.beatmap.id}${curscore.mods ? '+' + curscore.mods.join() : ''}`)
+                .setCustomId(`${helper.vars.versions.releaseDate}-Map-recent-any-${input.id}-${curscore.beatmap.id}${curscore.mods ? '+' + curscore.mods.map(x => x.acronym).join() : ''}`)
                 .setStyle(helper.vars.buttons.type.current)
                 .setEmoji(helper.vars.buttons.label.extras.map),
         );
@@ -1492,64 +1489,65 @@ export const recent = async (input: bottypes.commandInput) => {
         }
 
         helper.tools.data.storeFile(mapdataReq, curbm.id, 'mapdata');
-        let cg;
+        let cg: osumodcalc.AccGrade;
         const gamehits = curscore.statistics;
-        switch (rsdata[0].mode) {
-            case 'osu': default:
+        apitypes.RulesetEnum.osu;
+        switch (rsdata[0].ruleset_id) {
+            case apitypes.RulesetEnum.osu: default:
                 cg = osumodcalc.calcgrade(
-                    gamehits.count_300,
-                    gamehits.count_100,
-                    gamehits.count_50,
-                    gamehits.count_miss
+                    gamehits.great,
+                    (gamehits.ok ?? 0),
+                    (gamehits.meh ?? 0),
+                    (gamehits.miss ?? 0)
                 );
                 break;
-            case 'taiko':
+            case apitypes.RulesetEnum.taiko:
                 cg = osumodcalc.calcgradeTaiko(
-                    gamehits.count_300,
-                    gamehits.count_100,
-                    gamehits.count_miss
+                    gamehits.great,
+                    (gamehits.good ?? 0),
+                    (gamehits.miss ?? 0)
                 );
                 break;
-            case 'fruits':
+            case apitypes.RulesetEnum.fruits:
                 cg = osumodcalc.calcgradeCatch(
-                    gamehits.count_300,
-                    gamehits.count_100,
-                    gamehits.count_50,
-                    gamehits.count_katu,
-                    gamehits.count_miss
+                    gamehits.great,
+                    (gamehits.ok ?? 0),
+                    (gamehits.meh ?? 0),
+                    gamehits.small_tick_hit,
+                    (gamehits.miss ?? 0)
                 );
                 break;
-            case 'mania':
+            case apitypes.RulesetEnum.mania:
                 cg = osumodcalc.calcgradeMania(
-                    gamehits.count_geki,
-                    gamehits.count_300,
-                    gamehits.count_katu,
-                    gamehits.count_100,
-                    gamehits.count_50,
-                    gamehits.count_miss
+                    (gamehits.perfect ?? 0),
+                    gamehits.great,
+                    gamehits.good,
+                    (gamehits.ok ?? 0),
+                    (gamehits.meh ?? 0),
+                    (gamehits.miss ?? 0)
                 );
                 break;
         }
         let rspassinfo = '';
         let totalhits;
 
-        switch (rsdata[0].mode) {
-            case 'osu': default:
-                totalhits = gamehits.count_300 + gamehits.count_100 + gamehits.count_50 + gamehits.count_miss;
+        switch (rsdata[0].ruleset_id) {
+            case apitypes.RulesetEnum.osu: default:
+                totalhits = gamehits.great + (gamehits.ok ?? 0) + (gamehits.meh ?? 0) + (gamehits.miss ?? 0);
                 break;
-            case 'taiko':
-                totalhits = gamehits.count_300 + gamehits.count_100 + gamehits.count_miss;
+            case apitypes.RulesetEnum.taiko:
+                totalhits = gamehits.great + (gamehits.good ?? 0) + (gamehits.miss ?? 0);
                 break;
-            case 'fruits':
-                totalhits = gamehits.count_300 + gamehits.count_100 + gamehits.count_50 + gamehits.count_katu + gamehits.count_miss;
+            case apitypes.RulesetEnum.fruits:
+                totalhits = gamehits.great + (gamehits.ok ?? 0) + (gamehits.meh ?? 0) + gamehits.small_tick_hit + (gamehits.miss ?? 0);
                 break;
-            case 'mania':
-                totalhits = gamehits.count_geki + gamehits.count_300 + gamehits.count_katu + gamehits.count_100 + gamehits.count_50 + gamehits.count_miss;
+            case apitypes.RulesetEnum.mania:
+                totalhits = (gamehits.perfect ?? 0) + gamehits.great + gamehits.good + (gamehits.ok ?? 0) + (gamehits.meh ?? 0) + (gamehits.miss ?? 0);
         }
         let hitlist: string;
 
-        const getHits = helper.tools.formatter.returnHits(gamehits, curscore.mode);
-        const failed = helper.tools.other.scoreIsComplete(curscore.mode,
+        const getHits = helper.tools.formatter.returnHits(gamehits, curscore.ruleset_id);
+        const failed = helper.tools.other.scoreIsComplete(
             curscore.statistics,
             mapdata.count_circles,
             mapdata.count_sliders,
@@ -1574,28 +1572,28 @@ export const recent = async (input: bottypes.commandInput) => {
         let fcflag = '';
         try {
             perf = await helper.tools.performance.calcScore({
-                mods: curscore.mods.join('').length > 1 ?
-                    curscore.mods.join('') : 'NM',
-                mode: curscore.mode,
+                mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
+                    curscore.mods.map(x => x.acronym).join('') : 'NM',
+                mode: curscore.ruleset_id,
                 mapid: curscore.beatmap.id,
-                miss: gamehits.count_miss,
+                miss: (gamehits.miss ?? 0),
                 accuracy: curscore.accuracy,
                 maxcombo: curscore.max_combo,
                 passedObjects: failed.objectsHit,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
             });
             fcperf = await helper.tools.performance.calcFullCombo({
-                mods: curscore.mods.join('').length > 1 ?
-                    curscore.mods.join('') : 'NM',
-                mode: curscore.mode,
+                mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
+                    curscore.mods.map(x => x.acronym).join('') : 'NM',
+                mode: curscore.ruleset_id,
                 mapid: curscore.beatmap.id,
                 accuracy: curscore.accuracy,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
             });
             ssperf = await helper.tools.performance.calcFullCombo({
-                mods: curscore.mods.join('').length > 1 ?
-                    curscore.mods.join('') : 'NM',
-                mode: curscore.mode,
+                mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
+                    curscore.mods.map(x => x.acronym).join('') : 'NM',
+                mode: curscore.ruleset_id,
                 mapid: curscore.beatmap.id,
                 accuracy: 1,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
@@ -1645,7 +1643,7 @@ export const recent = async (input: bottypes.commandInput) => {
         if (curscore.rank.toUpperCase() == 'F') {
             rspassinfo = `${guesspasspercentage.toFixed(2)}% completed (${helper.tools.calculate.secondsToTime(curbmpasstime)}/${helper.tools.calculate.secondsToTime(curbm.total_length)})`;
             rsgrade =
-                helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[osumodcalc.calcgrade(gamehits.count_300, gamehits.count_100, gamehits.count_50, gamehits.count_miss).grade]} if pass)`;
+                helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[osumodcalc.calcgrade(gamehits.great, (gamehits.ok ?? 0), (gamehits.meh ?? 0), (gamehits.miss ?? 0)).grade]} if pass)`;
         }
 
         const fulltitle = `${mapdata.beatmapset.artist} - ${mapdata.beatmapset.title} [${mapdata.version}]`;
@@ -1665,20 +1663,20 @@ export const recent = async (input: bottypes.commandInput) => {
                 url: `https://osu.ppy.sh/users/${osudata.id}`,
                 iconURL: `${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`
             })
-            .setTitle(`#${page + 1} most recent ${showFails == 1 ? 'play' : 'pass'} for ${curscore.user.username} | <t:${new Date(curscore.created_at).getTime() / 1000}:R>`)
-            .setURL(`https://osu.ppy.sh/scores/${curscore.mode}/${curscore.best_id}`)
+            .setTitle(`#${page + 1} most recent ${showFails == 1 ? 'play' : 'pass'} for ${curscore.user.username} | <t:${new Date(curscore.ended_at).getTime() / 1000}:R>`)
+            .setURL(`https://osu.ppy.sh/scores/${curscore.ruleset_id}/${curscore.best_id}`)
             .setThumbnail(`${curbms.covers.list}`);
         rsEmbed
             .setDescription(`
-[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.join('').toUpperCase()).string : ''} 
-${(perf.difficulty.stars ?? 0).toFixed(2)}⭐ | ${helper.vars.emojis.gamemodes[curscore.mode]}
-${helper.tools.formatter.dateToDiscordFormat(new Date(curscore.created_at), 'F')}
+[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.map(x => x.acronym).join('').toUpperCase()).string : ''} 
+${(perf.difficulty.stars ?? 0).toFixed(2)}⭐ | ${helper.vars.emojis.gamemodes[curscore.ruleset_id]}
+${helper.tools.formatter.dateToDiscordFormat(new Date(curscore.ended_at), 'F')}
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}
 `)
             .addFields([
                 {
                     name: 'SCORE DETAILS',
-                    value: `${helper.tools.calculate.separateNum(curscore.score)}\n${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.mode}/${curscore.id}/download)\n` : ''}` +
+                    value: `${helper.tools.calculate.separateNum(curscore.total_score)}\n${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.has_replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.id}/download)\n` : ''}` +
                         `${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\`\n${curscore.max_combo == mxcombo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mxcombo}x** combo`,
                     inline: true
                 },
@@ -1734,13 +1732,13 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             {
                 id: `${curbm.id}`,
                 apiData: null,
-                mods: curscore.mods.join()
+                mods: curscore.mods.map(x => x.acronym).join()
             });
         helper.tools.data.writePreviousId('score', input.message?.guildId ?? input.interaction.guildId,
             {
                 id: `${curscore.id}`,
                 apiData: curscore,
-                mods: curscore.mods.join()
+                mods: curscore.mods.map(x => x.acronym).join()
             });
         helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
@@ -1766,8 +1764,8 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
         // strains graph
         const strains = await helper.tools.performance.calcStrains({
             mapid: mapdata.id,
-            mode: curscore.mode,
-            mods: curscore.mods.join(''),
+            mode: curscore.ruleset_id,
+            mods: curscore.mods.map(x => x.acronym).join(''),
             mapLastUpdated: new Date(mapdata.last_updated)
         });
         try {
@@ -1818,7 +1816,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             rsEmbed.setTitle(`Best recent ${showFails == 1 ? 'plays' : 'passes'} for ${osudata.username}`);
         }
         page++;
-        const scoresarg = await helper.tools.formatter.scoreList(rsdata, 'legacy', sort,
+        const scoresarg = await helper.tools.formatter.scoreList(rsdata, 'current', sort,
             {
                 mapper: null,
                 artist: null,
@@ -2015,15 +2013,8 @@ export const replayparse = async (input: bottypes.commandInput) => {
             cg = osumodcalc.calcgradeMania(score.info.countGeki, score.info.count300, score.info.countKatu, score.info.count100, score.info.count50, score.info.countMiss);
             break;
     }
-    const failed = helper.tools.other.scoreIsComplete(osumodcalc.ModeIntToName(score.replay.mode),
-        {
-            count_geki: score.info.countGeki,
-            count_300: score.info.count300,
-            count_katu: score.info.countKatu,
-            count_100: score.info.count100,
-            count_50: score.info.count50,
-            count_miss: score.info.countMiss,
-        },
+    const failed = helper.tools.other.scoreIsComplete(
+        score.info as any,
         mapdata.count_circles,
         mapdata.count_sliders,
         mapdata.count_spinners,
@@ -2036,7 +2027,7 @@ export const replayparse = async (input: bottypes.commandInput) => {
         perf = await helper.tools.performance.calcScore(
             {
                 mods: osumodcalc.ModIntToString(score.info?.mods?.bitwise ?? 0),
-                mode: osumodcalc.ModeIntToName(score.replay.mode),
+                mode: score.replay.mode,
                 mapid: mapdata.id,
                 miss: score.info.countMiss,
                 accuracy: cg.accuracy,
@@ -2047,7 +2038,7 @@ export const replayparse = async (input: bottypes.commandInput) => {
         );
         fcperf = await helper.tools.performance.calcFullCombo({
             mods: osumodcalc.ModIntToString(score.info?.mods?.bitwise ?? 0),
-            mode: osumodcalc.ModeIntToName(score.replay.mode),
+            mode: score.replay.mode,
             mapid: mapdata.id,
             accuracy: cg.accuracy,
             mapLastUpdated: new Date(mapdata.last_updated)
@@ -2098,7 +2089,7 @@ ${isfail}
         )
         .setImage(`attachment://${chart}.jpg`);
 
-    
+
 
     await helper.tools.commands.sendMessage({
         type: input.type,
@@ -2237,7 +2228,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             }
         }, input.canReply);
     }
-    let scoredataReq: tooltypes.apiReturn<apitypes.ScoreLegacy>;
+    let scoredataReq: tooltypes.apiReturn<apitypes.Score>;
 
     if (helper.tools.data.findFile(scoreid, 'scoredata') &&
         !('error' in helper.tools.data.findFile(scoreid, 'scoredata')) &&
@@ -2251,7 +2242,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
 
     }
 
-    const scoredata: apitypes.ScoreLegacy = scoredataReq.apiData;
+    const scoredata: apitypes.Score = scoredataReq.apiData;
     if (scoredataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'scoreparse', true, helper.vars.errors.uErr.osu.score.nd
             .replace('[SID]', scoreid.toString())
@@ -2265,12 +2256,12 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             .replace('[MODE]', scoremode), true);
         return;
     }
-    helper.tools.data.storeFile(scoredataReq, scoreid, 'scoredata', helper.tools.other.modeValidator(scoredata.mode));
+    helper.tools.data.storeFile(scoredataReq, scoreid, 'scoredata', helper.tools.other.modeValidator(scoredata.ruleset_id));
 
     const buttons = new Discord.ActionRowBuilder()
         .addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${helper.vars.versions.releaseDate}-Map-scoreparse-any-${input.id}-${scoredata?.beatmap?.id}${scoredata.mods ? '+' + scoredata.mods.join() : ''}`)
+                .setCustomId(`${helper.vars.versions.releaseDate}-Map-scoreparse-any-${input.id}-${scoredata?.beatmap?.id}${scoredata.mods ? '+' + scoredata.mods.map(x => x.acronym).join() : ''}`)
                 .setStyle(helper.vars.buttons.type.current)
                 .setEmoji(helper.vars.buttons.label.extras.map),
             new Discord.ButtonBuilder()
@@ -2310,13 +2301,13 @@ export const scoreparse = async (input: bottypes.commandInput) => {
 
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
-    if (helper.tools.data.findFile(scoredata.user.username, 'osudata', scoredata.mode) &&
-        !('error' in helper.tools.data.findFile(scoredata.user.username, 'osudata', scoredata.mode)) &&
+    if (helper.tools.data.findFile(scoredata.user.username, 'osudata', helper.tools.other.modeValidator(scoredata.ruleset_id)) &&
+        !('error' in helper.tools.data.findFile(scoredata.user.username, 'osudata', helper.tools.other.modeValidator(scoredata.ruleset_id))) &&
         input.buttonType != 'Refresh'
     ) {
-        osudataReq = helper.tools.data.findFile(scoredata.user.username, 'osudata', scoredata.mode);
+        osudataReq = helper.tools.data.findFile(scoredata.user.username, 'osudata', helper.tools.other.modeValidator(scoredata.ruleset_id));
     } else {
-        osudataReq = await helper.tools.api.getUser(scoredata.user.username, scoredata.mode, []);
+        osudataReq = await helper.tools.api.getUser(scoredata.user.username, helper.tools.other.modeValidator(scoredata.ruleset_id), []);
     }
 
     const osudata: apitypes.User = osudataReq.apiData;
@@ -2332,21 +2323,21 @@ export const scoreparse = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.userStatsCache([osudata], scoredata.mode, 'User');
+    helper.tools.data.userStatsCache([osudata], helper.tools.other.modeValidator(scoredata.ruleset_id), 'User');
 
-    helper.tools.data.storeFile(osudataReq, osudata.id, 'osudata', scoredata.mode);
-    helper.tools.data.storeFile(osudataReq, scoredata.user.username, 'osudata', scoredata.mode);
+    helper.tools.data.storeFile(osudataReq, osudata.id, 'osudata', helper.tools.other.modeValidator(scoredata.ruleset_id));
+    helper.tools.data.storeFile(osudataReq, scoredata.user.username, 'osudata', helper.tools.other.modeValidator(scoredata.ruleset_id));
 
 
     const scoregrade = helper.vars.emojis.grades[scoredata.rank.toUpperCase()];
 
     const gamehits = scoredata.statistics;
 
-    const mode = scoredata.mode;
+    const mode = scoredata.ruleset_id;
     let hitlist: string;
     let ppissue: string = '';
 
-    const getHits = helper.tools.formatter.returnHits(gamehits, scoredata.mode);
+    const getHits = helper.tools.formatter.returnHits(gamehits, scoredata.ruleset_id);
 
     switch (scoredetailed) {
         default: {
@@ -2364,27 +2355,27 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     let ssperf: rosu.PerformanceAttributes;
     try {
         perf = await helper.tools.performance.calcScore({
-            mods: scoredata.mods.join('').length > 1 ?
-                scoredata.mods.join('') : 'NM',
-            mode: scoredata.mode,
+            mods: scoredata.mods.map(x => x.acronym).join('').length > 1 ?
+                scoredata.mods.map(x => x.acronym).join('') : 'NM',
+            mode: scoredata.ruleset_id,
             mapid: scoredata.beatmap.id,
-            miss: gamehits.count_miss,
+            miss: (gamehits.miss ?? 0),
             accuracy: scoredata.accuracy,
             maxcombo: scoredata.max_combo,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
         });
         fcperf = await helper.tools.performance.calcFullCombo({
-            mods: scoredata.mods.join('').length > 1 ?
-                scoredata.mods.join('') : 'NM',
-            mode: scoredata.mode,
+            mods: scoredata.mods.map(x => x.acronym).join('').length > 1 ?
+                scoredata.mods.map(x => x.acronym).join('') : 'NM',
+            mode: scoredata.ruleset_id,
             mapid: scoredata.beatmap.id,
             accuracy: scoredata.accuracy,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
         });
         ssperf = await helper.tools.performance.calcFullCombo({
-            mods: scoredata.mods.join('').length > 1 ?
-                scoredata.mods.join('') : 'NM',
-            mode: scoredata.mode,
+            mods: scoredata.mods.map(x => x.acronym).join('').length > 1 ?
+                scoredata.mods.map(x => x.acronym).join('') : 'NM',
+            mode: scoredata.ruleset_id,
             mapid: scoredata.beatmap.id,
             accuracy: 1,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
@@ -2426,9 +2417,9 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     scoreembed = helper.tools.formatter.userAuthor(osudata, scoreembed);
 
     scoreembed
-        .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.mode}/${scoredata.id}/download)` : ''}
-${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + `**${osumodcalc.OrderMods(scoredata.mods.join('')).string}**` : ''}
-<t:${Math.floor(new Date(scoredata.created_at).getTime() / 1000)}:F> | ${helper.tools.formatter.dateToDiscordFormat(new Date(scoredata.created_at))}
+        .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.has_replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.ruleset_id}/${scoredata.id}/download)` : ''}
+${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + `**${osumodcalc.OrderMods(scoredata.mods.map(x => x.acronym).join('')).string}**` : ''}
+<t:${Math.floor(new Date(scoredata.ended_at).getTime() / 1000)}:F> | ${helper.tools.formatter.dateToDiscordFormat(new Date(scoredata.ended_at))}
 [Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
 \`${hitlist}\`
 ${scoredata.max_combo == mxcombo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mxcombo}x**
@@ -2439,13 +2430,13 @@ ${`${(scoredata?.pp ?? perf.pp).toFixed(2)}pp` + fcflag}\n${ppissue}
         {
             id: `${scoredata.id}`,
             apiData: scoredata,
-            mods: scoredata.mods.join()
+            mods: scoredata.mods.map(x => x.acronym).join()
         });
     helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
         {
             id: `${mapdata.id}`,
             apiData: null,
-            mods: scoredata.mods.join()
+            mods: scoredata.mods.map(x => x.acronym).join()
         }
     );
 
@@ -2465,8 +2456,8 @@ ${`${(scoredata?.pp ?? perf.pp).toFixed(2)}pp` + fcflag}\n${ppissue}
     // strains graph
     const strains = await helper.tools.performance.calcStrains({
         mapid: mapdata.id,
-        mode: scoredata.mode,
-        mods: scoredata.mods.join(''),
+        mode: scoredata.ruleset_id,
+        mods: scoredata.mods.map(x => x.acronym).join(''),
         mapLastUpdated: new Date(mapdata.last_updated),
     });
     try {
@@ -2486,7 +2477,7 @@ ${`${(scoredata?.pp ?? perf.pp).toFixed(2)}pp` + fcflag}\n${ppissue}
         });
     scoreembed.setImage(`attachment://${strainsgraph.filename}.jpg`);
 
-    
+
 
     await helper.tools.commands.sendMessage({
         type: input.type,
@@ -2826,7 +2817,7 @@ export const scores = async (input: bottypes.commandInput) => {
 
     helper.tools.data.storeFile(scoredataReq, input.id, 'scores');
 
-    const scoredata: apitypes.ScoreLegacy[] = scoredataPresort.scores;
+    const scoredata: apitypes.Score[] = scoredataPresort.scores;
 
     helper.tools.data.debug(scoredataReq, 'command', 'scores', input.message?.guildId ?? input.interaction.guildId, 'scoreData');
 
@@ -2839,9 +2830,9 @@ export const scores = async (input: bottypes.commandInput) => {
             pid = scoredata.length - 1;
         }
         input.overrides = {
-            mode: scoredata?.[0]?.mode ?? 'osu',
+            mode: helper.tools.other.modeValidator(scoredata?.[0]?.ruleset_id) ?? 'osu',
             id: scoredata.slice().sort((a, b) =>
-                (new Date(b.created_at)).getTime() - (new Date(a.created_at)).getTime()
+                (new Date(b.ended_at)).getTime() - (new Date(a.ended_at)).getTime()
             )?.[pid]?.best_id,
             commanduser,
             commandAs: input.type
@@ -2869,7 +2860,7 @@ export const scores = async (input: bottypes.commandInput) => {
     if (page > Math.ceil(scoredata.length / 5)) {
         page = Math.ceil(scoredata.length / 5) - 1;
     }
-    const scoresarg = await helper.tools.formatter.scoreList(scoredata, 'legacy', sort,
+    const scoresarg = await helper.tools.formatter.scoreList(scoredata, 'current', sort,
         {
             mapper: null,
             artist: null,
@@ -2930,7 +2921,7 @@ export const scores = async (input: bottypes.commandInput) => {
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
-    
+
 
     await helper.tools.commands.sendMessage({
         type: input.type,
@@ -3143,10 +3134,10 @@ export const scorestats = async (input: bottypes.commandInput) => {
             .setEmoji(helper.vars.buttons.label.extras.user),
     );
 
-    let scoresdata: apitypes.ScoreLegacy[] & apitypes.Error = [];
+    let scoresdata: apitypes.Score[] & apitypes.Error = [];
 
     async function getScoreCount(cinitnum: number) {
-        let req: tooltypes.apiReturn<apitypes.ScoreLegacy[]>;
+        let req: tooltypes.apiReturn<apitypes.Score[]>;
         switch (scoreTypes) {
             case 'firsts':
                 req = await helper.tools.api.getScoresBest(osudata.id, helper.tools.other.modeValidator(mode), [`offset=${cinitnum}`]);
@@ -3161,7 +3152,7 @@ export const scorestats = async (input: bottypes.commandInput) => {
                 req = await helper.tools.api.getScoresBest(osudata.id, helper.tools.other.modeValidator(mode), []);
                 break;
         }
-        const fd: apitypes.ScoreLegacy[] & apitypes.Error = req.apiData;
+        const fd: apitypes.Score[] & apitypes.Error = req.apiData;
         if (req?.error) {
             await helper.tools.commands.errorAndAbort(input, 'scorestats', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', user).replace('top', scoreTypes == 'best' ? 'top' : scoreTypes), false);
             return;
@@ -3210,7 +3201,7 @@ export const scorestats = async (input: bottypes.commandInput) => {
         const mods = helper.tools.calculate.findMode(scoresdata.map(x => {
             return x.mods.length == 0 ?
                 'NM' :
-                x.mods.join('');
+                x.mods.map(x => x.acronym).join('');
         }));
         const grades = helper.tools.calculate.findMode(scoresdata.map(x => x.rank));
         const acc = helper.tools.calculate.stats(scoresdata.map(x => x.accuracy));
@@ -3225,11 +3216,11 @@ export const scorestats = async (input: bottypes.commandInput) => {
             for (const score of scoresdata) {
                 calculations.push(
                     await helper.tools.performance.calcScore({
-                        mods: score.mods.join('').length > 1 ?
-                            score.mods.join('') : 'NM',
-                        mode: score.mode,
+                        mods: score.mods.map(x => x.acronym).join('').length > 1 ?
+                            score.mods.map(x => x.acronym).join('') : 'NM',
+                        mode: score.ruleset_id,
                         mapid: score.beatmap.id,
-                        miss: score.statistics.count_miss,
+                        miss: score.statistics.miss,
                         accuracy: score.accuracy,
                         maxcombo: score.max_combo,
                         mapLastUpdated: new Date(score.beatmap.last_updated)
@@ -3631,19 +3622,19 @@ export const simulate = async (input: bottypes.commandInput) => {
     const tempscore = helper.tools.data.getPreviousId('score', input.message?.guildId ?? input.interaction.guildId);
     if (tempscore?.apiData && tempscore?.apiData.beatmap.id == mapid) {
         if (!n300 && !n100 && !n50 && !acc) {
-            n300 = tempscore.apiData.statistics.count_300;
-            n100 = tempscore.apiData.statistics.count_100;
-            n50 = tempscore.apiData.statistics.count_50;
+            n300 = tempscore.apiData.statistics.great;
+            n100 = tempscore.apiData.statistics.ok;
+            n50 = tempscore.apiData.statistics.meh;
             acc = tempscore.apiData.accuracy * 100;
         }
         if (!nMiss) {
-            nMiss = tempscore.apiData.statistics.count_miss;
+            nMiss = tempscore.apiData.statistics.miss;
         }
         if (!combo) {
             combo = tempscore.apiData.max_combo;
         }
         if (!mods) {
-            mods = tempscore.apiData.mods.join('');
+            mods = tempscore.apiData.mods.map(x => x.acronym).join('');
         }
     }
 
@@ -3697,7 +3688,7 @@ export const simulate = async (input: bottypes.commandInput) => {
 
     const perf = await helper.tools.performance.calcScore({
         mods,
-        mode: 'osu',
+        mode: 0,
         mapid,
         hit300: n300,
         hit100: n100,
@@ -3710,7 +3701,7 @@ export const simulate = async (input: bottypes.commandInput) => {
     });
     const fcperf = await helper.tools.performance.calcFullCombo({
         mods,
-        mode: 'osu',
+        mode: 0,
         mapid,
         hit300: n300,
         hit100: n100,
@@ -3739,7 +3730,7 @@ export const simulate = async (input: bottypes.commandInput) => {
 
     const mapPerf = await helper.tools.performance.calcMap({
         mods,
-        mode: 'osu',
+        mode: 0,
         mapid,
         clockRate: overrideSpeed,
         mapLastUpdated: new Date(mapdata.last_updated)
@@ -3802,7 +3793,7 @@ ${helper.vars.emojis.mapobjs.star}${(perf?.difficulty?.stars ?? mapdata.difficul
             },
         ]);
 
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,

@@ -7,12 +7,14 @@
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
 ### Fixed
-- `maplb` score indexes not matching page number
-- switched interaction#reply to followUp on error messages
+
+-   `maplb` score indexes not matching page number
+-   switched interaction#reply to followUp on error messages
 
 ### Changed
 
 -   moved `debug clear [arg]` to `clear <arg>`
+-   implement [x-api-version header](https://osu.ppy.sh/docs/index.html#api-versions) (force all commands to use new score type)
 
 ### Added
 

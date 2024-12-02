@@ -48,7 +48,7 @@ export type Beatmap = BeatmapCompact & {
     hit_length: number,
     is_scoreable: boolean,
     last_updated: Timestamp,
-    mode_int: number,
+    mode_int: Ruleset,
     passcount: number,
     playcount: number,
     ranked: number,
@@ -419,6 +419,15 @@ export type ForumTopic = {
 
 export type GameMode = ('osu' | 'taiko' | 'fruits' | 'mania');
 
+export type Ruleset = number;
+
+export enum RulesetEnum {
+    osu = 0,
+    taiko = 1,
+    fruits = 2,
+    mania = 3
+}
+
 export type GithubUser = {
     display_name: string,
     github_url?: string | null,
@@ -536,7 +545,7 @@ export type ScoreLegacy = {
     id: number,
     match?: any,
     max_combo: number,
-    mode_int: number,
+    mode_int: Ruleset,
     mode: GameMode,
     mods: string[],
     passed: boolean,
@@ -549,7 +558,7 @@ export type ScoreLegacy = {
     rank: Rank,
     replay: boolean,
     room_id?: number,
-    ruleset_id?: number,
+    ruleset_id?: Ruleset,
     score: number,
     scores_around?: MultiplayerScoresAround,
     statistics: Statistics,
@@ -728,8 +737,12 @@ export type User = UserCompact & {
     website?: string | null,
 } & Error;
 
-export type ScoreArrA = {
+export type ScoreArrALegacy = {
     scores: ScoreLegacy[];
+} & Error;
+
+export type ScoreArrA = {
+    scores: Score[];
 } & Error;
 
 
@@ -974,10 +987,14 @@ export type Statistics = { //legacy score statistics
 };
 
 export type ScoreStatistics = {
-    great: number,
-    ok?: number,
-    meh?: number,
-    miss?: number,
+    perfect?: number, // geki/300+
+    great: number, // 300
+    good?: number, // katu/200
+    ok?: number, // 100
+    meh?: number, // 50
+    miss?: number, // miss
+    small_tick_miss?: number, // katu
+    small_tick_hit?: number, // count 50
     legacy_combo_increase?: number, // max stats
 };
 

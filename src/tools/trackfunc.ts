@@ -59,7 +59,7 @@ export async function editTrackUser(fr: {
 
 export async function trackUser(fr: { user: string, mode: string, inital?: boolean; }) {
     if (!fr.user) return;
-    const curdata: apitypes.ScoreLegacy[] & apitypes.Error = (await helper.tools.api.getScoresBest(fr.user, helper.tools.other.modeValidator(fr.mode), [])).apiData;
+    const curdata: apitypes.Score[] & apitypes.Error = (await helper.tools.api.getScoresBest(fr.user, helper.tools.other.modeValidator(fr.mode), [])).apiData;
     const thisUser: apitypes.User = (await helper.tools.api.getUser(fr.user, helper.tools.other.modeValidator(fr.mode), [])).apiData;
     if (!curdata?.[0]?.user_id) return;
 
@@ -71,7 +71,7 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
     }
     if (curdata?.[0]?.user_id) {
         if (fs.existsSync(`${helper.vars.path.main}/trackingFiles/${curdata[0].user_id}_${fr.mode}.json`)) {
-            let previous: apitypes.ScoreLegacy[] & apitypes.Error;
+            let previous: apitypes.Score[] & apitypes.Error;
             try {
                 previous = JSON.parse(fs.readFileSync(`${helper.vars.path.main}/trackingFiles/${curdata[0].user_id}_${fr.mode}.json`, 'utf-8'));
             }
@@ -96,35 +96,20 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
 
 export async function getEmbed(
     data: {
-        scoredata: apitypes.ScoreLegacy,
+        scoredata: apitypes.Score,
         scorepos: number,
     },
 ) {
     const curscore = data.scoredata;
     const scorestats = data.scoredata.statistics;
-    let totalhits = 0;
-
-    switch (curscore.mode) {
-        case 'osu': default:
-            totalhits = scorestats.count_300 + scorestats.count_100 + scorestats.count_50 + scorestats.count_miss;
-            break;
-        case 'taiko':
-            totalhits = scorestats.count_300 + scorestats.count_100 + scorestats.count_miss;
-            break;
-        case 'fruits':
-            totalhits = scorestats.count_300 + scorestats.count_100 + scorestats.count_50 + scorestats.count_miss;
-            break;
-        case 'mania':
-            totalhits = scorestats.count_geki + scorestats.count_300 + scorestats.count_katu + scorestats.count_100 + scorestats.count_50 + scorestats.count_miss;
-            break;
-    }
+    let totalhits = helper.tools.other.scoreTotalHits(scorestats);
 
     const perf = await helper.tools.performance.calcScore({
         mods: curscore.mods.join('').length > 1 ?
             curscore.mods.join('') : 'NM',
-        mode: curscore.mode,
+        mode: curscore.ruleset_id,
         mapid: curscore.beatmap.id,
-        miss: curscore.statistics.count_miss,
+        miss: curscore.statistics.miss,
         accuracy: curscore.accuracy,
         maxcombo: curscore.max_combo,
         mapLastUpdated: new Date(curscore.beatmap.last_updated)
@@ -132,7 +117,7 @@ export async function getEmbed(
     const fcperf = await helper.tools.performance.calcFullCombo({
         mods: curscore.mods.join('').length > 1 ?
             curscore.mods.join('') : 'NM',
-        mode: curscore.mode,
+        mode: curscore.ruleset_id,
         mapid: curscore.beatmap.id,
         accuracy: curscore.accuracy,
         mapLastUpdated: new Date(curscore.beatmap.last_updated)
@@ -158,16 +143,9 @@ export async function getEmbed(
         .setThumbnail(`${data.scoredata?.user?.avatar_url ?? helper.vars.defaults.images.user.url}`)
         .setImage(`${data.scoredata.beatmapset.covers['cover@2x']}`)
         .setDescription(
-            `${data.scoredata.mods.length > 0 ? '+' + data.scoredata.mods.join('') + ' | ' : ''} **Score set** <t:${new Date(data.scoredata.created_at).getTime() / 1000}:R>\n` +
+            `${data.scoredata.mods.length > 0 ? '+' + data.scoredata.mods.join('') + ' | ' : ''} **Score set** <t:${new Date(data.scoredata.ended_at).getTime() / 1000}:R>\n` +
             `${(data.scoredata.accuracy * 100).toFixed(2)}% | ${helper.tools.formatter.gradeToEmoji(data.scoredata.rank)} | ${(perf.difficulty.stars ?? data.scoredata.beatmap.difficulty_rating).toFixed(2)}⭐\n` +
-            `${helper.tools.formatter.hitList(data.scoredata.mode, {
-                count_geki: data.scoredata.statistics.count_geki,
-                count_300: data.scoredata.statistics.count_300,
-                count_katu: data.scoredata.statistics.count_katu,
-                count_100: data.scoredata.statistics.count_100,
-                count_50: data.scoredata.statistics.count_50,
-                count_miss: data.scoredata.statistics.count_miss,
-            })} | ${data.scoredata.max_combo}x\n` +
+            `${helper.tools.formatter.returnHits(data.scoredata.statistics, data.scoredata.ruleset_id)} | ${data.scoredata.max_combo}x\n` +
             `${pp}`
         );
     return embed;

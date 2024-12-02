@@ -77,7 +77,7 @@ export async function scoreList(
         }
         const perf = await helper.tools.performance.calcScore({
             mapid: (overrideMap ?? convertedScore.beatmap).id,
-            mode: convertedScore.mode,
+            mode: score.ruleset_id,
             mods: convertedScore.mods.join(''),
             accuracy: score.accuracy,
             hit300: convertedScore.statistics.count_300,
@@ -90,7 +90,7 @@ export async function scoreList(
         });
         const fc = await helper.tools.performance.calcFullCombo({
             mapid: (overrideMap ?? score.beatmap).id,
-            mode: convertedScore.mode,
+            mode: score.ruleset_id,
             mods: convertedScore.mods.join(''),
             accuracy: convertedScore.accuracy,
             hit300: convertedScore.statistics.count_300,
@@ -112,8 +112,8 @@ export async function scoreList(
         if (showUsername) {
             info += `・[${score.user.username}](https://osu.ppy.sh/u/${score.user_id})`;
         }
-        let combo = `${score.max_combo}/**${fc.difficulty.maxCombo}x**`;
-        if (score.max_combo == fc.difficulty.maxCombo) combo = `**${score.max_combo}x**`;
+        let combo = `${score?.max_combo}/**${fc.difficulty.maxCombo}x**`;
+        if (score.max_combo == fc.difficulty.maxCombo || !score.max_combo) combo = `**${score.max_combo}x**`;
         if (scoretype == 'legacy') {
             score = score as indexedScore<apitypes.ScoreLegacy>;
             info +=
@@ -948,7 +948,7 @@ export function difficultyColour(difficulty: number) {
     }
 }
 
-export function returnHits(hits: apitypes.Statistics, mode: apitypes.GameMode) {
+export function returnHits(hits: apitypes.ScoreStatistics, mode: apitypes.Ruleset) {
     const object: {
         short: string,
         long: string,
@@ -959,99 +959,99 @@ export function returnHits(hits: apitypes.Statistics, mode: apitypes.GameMode) {
         ex: []
     };
     switch (mode) {
-        case 'osu':
-            object.short = `${hits.count_300}/${hits.count_100}/${hits.count_50}/${hits.count_miss}`;
-            object.long = `**300:** ${hits.count_300} \n **100:** ${hits.count_100} \n **50:** ${hits.count_50} \n **Miss:** ${hits.count_miss}`;
+        case apitypes.RulesetEnum.osu:
+            object.short = `${hits.great}/${hits.ok}/${hits.meh}/${hits.miss}`;
+            object.long = `**300:** ${hits.great} \n **100:** ${hits.ok} \n **50:** ${hits.meh} \n **Miss:** ${hits.miss}`;
             object.ex = [
                 {
                     name: '300',
-                    value: hits.count_300
+                    value: hits.great
                 },
                 {
                     name: '100',
-                    value: hits.count_100
+                    value: hits.ok
                 },
                 {
                     name: '50',
-                    value: hits.count_50
+                    value: hits.meh
                 },
                 {
                     name: 'Miss',
-                    value: hits.count_miss
+                    value: hits.miss
                 }
             ];
             break;
-        case 'taiko':
-            object.short = `${hits.count_300}/${hits.count_100}/${hits.count_miss}`;
-            object.long = `**Great:** ${hits.count_300} \n **Good:** ${hits.count_100} \n **Miss:** ${hits.count_miss}`;
+        case apitypes.RulesetEnum.taiko:
+            object.short = `${hits.great}/${hits.good}/${hits.miss}`;
+            object.long = `**Great:** ${hits.great} \n **Good:** ${hits.good} \n **Miss:** ${hits.miss}`;
             object.ex = [
                 {
                     name: 'Great',
-                    value: hits.count_300
+                    value: hits.great
                 },
                 {
                     name: 'Good',
-                    value: hits.count_100
+                    value: hits.good
                 },
                 {
                     name: 'Miss',
-                    value: hits.count_miss
+                    value: hits.miss
                 }
             ];
             break;
-        case 'fruits':
-            object.short = `${hits.count_300}/${hits.count_100}/${hits.count_50}/${hits.count_miss}/${hits.count_katu}`;
-            object.long = `**Fruits:** ${hits.count_300} \n **Drops:** ${hits.count_100} \n **Droplets:** ${hits.count_50} \n **Miss:** ${hits.count_miss} \n **Miss(droplets):** ${hits.count_katu}`;
+        case apitypes.RulesetEnum.fruits:
+            object.short = `${hits.great}/${hits.ok}/${hits.small_tick_hit}/${hits.miss}/${hits.small_tick_miss}`;
+            object.long = `**Fruits:** ${hits.great} \n **Drops:** ${hits.ok} \n **Droplets:** ${hits.small_tick_hit} \n **Miss:** ${hits.miss} \n **Miss(droplets):** ${hits.small_tick_miss}`;
             object.ex = [
                 {
                     name: 'Fruits',
-                    value: hits.count_300
+                    value: hits.great
                 },
                 {
                     name: 'Drops',
-                    value: hits.count_100
+                    value: hits.ok
                 },
                 {
                     name: 'Droplets',
-                    value: hits.count_50
+                    value: hits.small_tick_hit
                 },
                 {
                     name: 'Miss',
-                    value: hits.count_miss
+                    value: hits.miss
                 },
                 {
                     name: 'Miss(droplets)',
-                    value: hits.count_katu
+                    value: hits.small_tick_miss
                 },
             ];
             break;
-        case 'mania':
-            object.short = `${hits.count_geki}/${hits.count_300}/${hits.count_katu}/${hits.count_100}/${hits.count_50}/${hits.count_miss}`;
-            object.long = `**300+:** ${hits.count_geki} \n **300:** ${hits.count_300} \n **200:** ${hits.count_katu} \n **100:** ${hits.count_100} \n **50:** ${hits.count_50} \n **Miss:** ${hits.count_miss}`;
+        case apitypes.RulesetEnum.mania:
+            object.short = `${hits.perfect}/${hits.great}/${hits.good}/${hits.ok}/${hits.meh}/${hits.miss}`;
+            object.long = `**300+:** ${hits.perfect} \n **300:** ${hits.great} \n **200:** ${hits.good} \n **100:** ${hits.ok} \n **50:** ${hits.meh} \n **Miss:** ${hits.miss}`;
             object.ex = [
                 {
                     name: '300+',
-                    value: hits.count_geki
+                    value: hits.perfect
                 },
                 {
                     name: '300',
-                    value: hits.count_300
+                    value: hits.great
                 },
                 {
                     name: '200',
-                    value: hits.count_katu
+                    value: hits.good
                 },
                 {
                     name: '100',
-                    value: hits.count_100
+                    value: hits.ok
                 },
                 {
                     name: '50',
-                    value: hits.count_50
+                    value: hits.meh
                 },
                 {
                     name: 'Miss',
-                    value: hits.count_miss
+                    value: hits.miss
                 }
             ];
             break;

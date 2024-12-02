@@ -8,7 +8,7 @@ import * as apitypes from '../types/osuapi.js';
 /** */
 export async function calcScore(input: {
     mapid: number,
-    mode: apitypes.GameMode,
+    mode: rosu.GameMode,
     mods: string,
     accuracy: number,
     clockRate?: number,
@@ -31,6 +31,9 @@ export async function calcScore(input: {
     }
     const mapPath = await helper.tools.api.dlMap(input.mapid, 0, input.mapLastUpdated);
     const map = new rosu.Beatmap(fs.readFileSync(mapPath, 'utf-8'));
+    if (input.mode != map.mode && map.mode == rosu.GameMode.Osu) {
+        map.convert(input.mode);
+    }
     const mods = input.mods ?
         input.mods.length < 1 ?
             'NM' :
@@ -87,6 +90,7 @@ export async function calcScore(input: {
         baseScore['clockRate'] = input.clockRate;
     }
     const perf: rosu.Performance = new rosu.Performance(baseScore);
+
     const final = perf.calculate(map);
     perf.free();
     map.free();
@@ -94,7 +98,7 @@ export async function calcScore(input: {
 }
 export async function calcFullCombo(input: {
     mapid: number,
-    mode: apitypes.GameMode,
+    mode: rosu.GameMode,
     mods: string,
     accuracy: number,
     clockRate?: number,
@@ -128,7 +132,7 @@ export async function calcFullCombo(input: {
 }
 export async function calcMap(input: {
     mapid: number,
-    mode: apitypes.GameMode,
+    mode: rosu.GameMode,
     mods: string,
     mapLastUpdated: Date,
     clockRate: number,
@@ -159,7 +163,7 @@ export async function calcMap(input: {
 }
 export async function calcStrains(input: {
     mapid: number,
-    mode: apitypes.GameMode,
+    mode: rosu.GameMode,
     mods: string,
     mapLastUpdated: Date,
 }) {
@@ -169,7 +173,9 @@ export async function calcStrains(input: {
     }
     const mapPath = await helper.tools.api.dlMap(input.mapid, 0, input.mapLastUpdated);
     const map = new rosu.Beatmap(fs.readFileSync(mapPath, 'utf-8'));
-    map.convert(osumodcalc.ModeNameToInt(input.mode));
+    if (input.mode != map.mode && map.mode == rosu.GameMode.Osu) {
+        map.convert(input.mode);
+    }
     const strainValues =
         new rosu.Difficulty({
             mods: osumodcalc.ModStringToInt(input.mods),
@@ -178,20 +184,20 @@ export async function calcStrains(input: {
     const straintimes = [];
     const totalval = [];
 
-    for (let i = 0; i < strainValues.aim.length; i++) {
+    for (let i = 0; i < (strainValues?.aim ?? strainValues?.color ?? strainValues?.movement ?? strainValues?.strains).length; i++) {
         const offset = i;
         let curval: number;
         switch (input.mode) {
-            case 'osu': default: {
+            case rosu.GameMode.Osu: default: {
                 curval = strainValues.aim[offset] + strainValues.aimNoSliders[offset] + strainValues.speed[offset] + strainValues.flashlight[offset];
             } break;
-            case 'taiko': {
+            case rosu.GameMode.Taiko: {
                 curval = strainValues.color[offset] + strainValues.rhythm[offset] + strainValues.stamina[offset];
             } break;
-            case 'fruits': {
+            case rosu.GameMode.Catch: {
                 curval = strainValues.movement[offset];
             } break;
-            case 'mania': {
+            case rosu.GameMode.Mania: {
                 curval = strainValues.strains[offset];
             } break;
         }
