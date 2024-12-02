@@ -17,7 +17,7 @@
 
 -   `clear` command
 
-## [4.0.1] - xxxx-xx-xx
+## [4.0.1] - 2024-12-01
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/350b5cabe974df940d68623dd51131f855e423b6)</br>
 
