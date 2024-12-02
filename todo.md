@@ -4,7 +4,7 @@ newest-oldest
 
 ## current
 - [ ] api returning empty data not being caught properly
-- [ ] maplb score #s not updating with the page
+- [x] maplb score #s not updating with the page
 - [x] fc pp being way lower than expected
 - [x] pages buttons not working
 - [x] `changelog` pages being broken after using select page 
