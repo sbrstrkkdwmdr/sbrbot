@@ -134,8 +134,8 @@ export const clear = async (input: bottypes.commandInput) => {
 function clearCache(type: string, embed: Discord.EmbedBuilder) {
     switch (type) {
         case 'normal': default: { //clears all temprary files (cache/commandData)
-            helper.tools.log.stdout(`manually clearing temporary files in ${helper.vars.path.main}/cache/commandData/`);
-            const curpath = `${helper.vars.path.main}/cache/commandData`;
+            helper.tools.log.stdout(`manually clearing temporary files in ${helper.vars.path.cache}/commandData/`);
+            const curpath = `${helper.vars.path.cache}/commandData`;
             const files = fs.readdirSync(curpath);
             for (const file of files) {
                 const keep = ['Approved', 'Ranked', 'Loved', 'Qualified'];
@@ -148,8 +148,8 @@ function clearCache(type: string, embed: Discord.EmbedBuilder) {
         }
             break;
         case 'all': { //clears all files in commandData
-            helper.tools.log.stdout(`manually clearing all files in ${helper.vars.path.main}/cache/commandData/`);
-            const curpath = `${helper.vars.path.main}/cache/commandData`;
+            helper.tools.log.stdout(`manually clearing all files in ${helper.vars.path.cache}/commandData/`);
+            const curpath = `${helper.vars.path.cache}/commandData`;
             const files = fs.readdirSync(curpath);
             for (const file of files) {
                 fs.unlinkSync(`${curpath}/` + file);
@@ -180,8 +180,8 @@ function clearCache(type: string, embed: Discord.EmbedBuilder) {
         }
             break;
         case 'map': case 'maps': { // clears all maps and mapset files
-            helper.tools.log.stdout(`manually clearing all map and mapset files in ${helper.vars.path.main}/cache/commandData/ and ${helper.vars.path.files}/maps/`);
-            const curpath1 = `${helper.vars.path.main}/cache/commandData`;
+            helper.tools.log.stdout(`manually clearing all map and mapset files in ${helper.vars.path.cache}/commandData/ and ${helper.vars.path.files}/maps/`);
+            const curpath1 = `${helper.vars.path.cache}/commandData`;
             const files1 = fs.readdirSync(curpath1);
             for (const file of files1) {
                 if (file.includes('bmsdata') || file.includes('mapdata')) {
@@ -199,8 +199,8 @@ function clearCache(type: string, embed: Discord.EmbedBuilder) {
         }
             break;
         case 'users': { //clears all osudata files
-            helper.tools.log.stdout(`manually clearing all osudata files in ${helper.vars.path.main}/cache/commandData/`);
-            const curpath = `${helper.vars.path.main}/cache/commandData`;
+            helper.tools.log.stdout(`manually clearing all osudata files in ${helper.vars.path.cache}/commandData/`);
+            const curpath = `${helper.vars.path.cache}/commandData`;
             const files = fs.readdirSync(curpath);
             for (const file of files) {
                 if (file.includes('osudata')) {
@@ -212,8 +212,8 @@ function clearCache(type: string, embed: Discord.EmbedBuilder) {
         }
             break;
         case 'previous': { // clears all previous files
-            helper.tools.log.stdout(`manually clearing all prev files in ${helper.vars.path.main}/cache/previous/`,);
-            const curpath = `${helper.vars.path.main}/cache/previous`;
+            helper.tools.log.stdout(`manually clearing all prev files in ${helper.vars.path.cache}/previous/`,);
+            const curpath = `${helper.vars.path.cache}/previous`;
             const files = fs.readdirSync(curpath);
             for (const file of files) {
                 fs.unlinkSync(`${curpath}/` + file);
@@ -223,8 +223,8 @@ function clearCache(type: string, embed: Discord.EmbedBuilder) {
         }
             break;
         case 'pmaps': { // clears all previous map files
-            helper.tools.log.stdout(`manually clearing all prevmap files in ${helper.vars.path.main}/cache/previous/`,);
-            const curpath = `${helper.vars.path.main}/cache/previous`;
+            helper.tools.log.stdout(`manually clearing all prevmap files in ${helper.vars.path.cache}/previous/`,);
+            const curpath = `${helper.vars.path.cache}/previous`;
             const files = fs.readdirSync(curpath);
             for (const file of files) {
                 if (file.includes('map')) {
@@ -236,8 +236,8 @@ function clearCache(type: string, embed: Discord.EmbedBuilder) {
         }
             break;
         case 'pscores': { // clears all previous score files
-            helper.tools.log.stdout(`manually clearing all prev score files in ${helper.vars.path.main}/cache/previous/`,);
-            const curpath = `${helper.vars.path.main}/cache/previous`;
+            helper.tools.log.stdout(`manually clearing all prev score files in ${helper.vars.path.cache}/previous/`,);
+            const curpath = `${helper.vars.path.cache}/previous`;
             const files = fs.readdirSync(curpath);
             for (const file of files) {
                 if (file.includes('score')) {
@@ -248,8 +248,8 @@ function clearCache(type: string, embed: Discord.EmbedBuilder) {
             embed.setDescription(`Clearing all previous score files in ./cache/previous/`);
         }
         case 'pusers': { // clears all previous user files
-            helper.tools.log.stdout(`manually clearing all prev user files in ${helper.vars.path.main}/cache/previous/`);
-            const curpath = `${helper.vars.path.main}/cache/previous`;
+            helper.tools.log.stdout(`manually clearing all prev user files in ${helper.vars.path.cache}/previous/`);
+            const curpath = `${helper.vars.path.cache}/previous`;
             const files = fs.readdirSync(curpath);
             for (const file of files) {
                 if (file.includes('user')) {
@@ -261,8 +261,8 @@ function clearCache(type: string, embed: Discord.EmbedBuilder) {
         }
             break;
         case 'errors': { //clears all errors
-            helper.tools.log.stdout(`manually clearing all err files in ${helper.vars.path.main}/cache/errors/`);
-            const curpath = `${helper.vars.path.main}/cache/errors`;
+            helper.tools.log.stdout(`manually clearing all err files in ${helper.vars.path.cache}/errors/`);
+            const curpath = `${helper.vars.path.cache}/errors`;
             const files = fs.readdirSync(curpath);
             for (const file of files) {
                 fs.unlinkSync(`${curpath}/` + file);
@@ -272,14 +272,24 @@ function clearCache(type: string, embed: Discord.EmbedBuilder) {
         }
             break;
         case 'graph': {
-            helper.tools.log.stdout(`manually clearing all graph files in ${helper.vars.path.main}/cache/graphs/`);
-            const curpath = `${helper.vars.path.main}/cache/graphs`;
+            helper.tools.log.stdout(`manually clearing all graph files in ${helper.vars.path.cache}/graphs/`);
+            const curpath = `${helper.vars.path.cache}/graphs`;
             const files = fs.readdirSync(curpath);
             for (const file of files) {
                 fs.unlinkSync(`${curpath}/` + file);
                 helper.tools.log.stdout(`Deleted file: ${curpath}/` + file);
             }
             embed.setDescription(`Clearing graph files in ./cache/graphs/`);
+        }
+        case 'params': {
+            helper.tools.log.stdout(`manually clearing all param files in ${helper.vars.path.cache}/params/`);
+            const curpath = `${helper.vars.path.cache}/params`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                fs.unlinkSync(`${curpath}/` + file);
+                helper.tools.log.stdout(`Deleted file: ${curpath}/` + file);
+            }
+            embed.setDescription(`Clearing param files in ./cache/params/`);
         }
     }
     return embed;
@@ -588,7 +598,7 @@ export const debug = async (input: bottypes.commandInput) => {
             } else {
                 cmdidcur = inputstr;
             }
-            const files = fs.readdirSync(`${helper.vars.path.main}/cache/commandData/`);
+            const files = fs.readdirSync(`${helper.vars.path.cache}/commandData/`);
             if (files.length < 1) {
                 usemsgArgs = {
                     content: 'Cache folder is currently empty'
@@ -607,7 +617,7 @@ export const debug = async (input: bottypes.commandInput) => {
                 } else {
                     usemsgArgs = {
                         content: `Files found matching ${cmdidcur}: `,
-                        files: searchfiles.map(x => `${helper.vars.path.main}/cache/commandData/` + x)
+                        files: searchfiles.map(x => `${helper.vars.path.cache}/commandData/` + x)
                     };
                 }
             }
@@ -620,7 +630,7 @@ export const debug = async (input: bottypes.commandInput) => {
                     content: `No search query given`
                 };
             }
-            const files = fs.readdirSync(`${helper.vars.path.main}/cache/debug/command`);
+            const files = fs.readdirSync(`${helper.vars.path.cache}/debug/command`);
             if (files.length < 1) {
                 usemsgArgs = {
                     content: 'Cache folder is currently empty'
@@ -734,13 +744,13 @@ export const debug = async (input: bottypes.commandInput) => {
                     case 'weather':
                     case 'tropicalweather':
                         {
-                            await findAndReturn(`${helper.vars.path.main}/cache/debug/command`, resString, tempId);
+                            await findAndReturn(`${helper.vars.path.cache}/debug/command`, resString, tempId);
                         }
                         break;
                     case 'map (file)':
                     case 'replay':
                         {
-                            await findAndReturn(`${helper.vars.path.main}/cache/debug/fileparse`, resString, tempId);
+                            await findAndReturn(`${helper.vars.path.cache}/debug/fileparse`, resString, tempId);
                         }
                         break;
                     default:
@@ -857,7 +867,7 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             } else {
                 type = inputstr;
             }
-            const directory = `${helper.vars.path.main}/cache/commandData`;
+            const directory = `${helper.vars.path.cache}/commandData`;
             const dirFiles = fs.readdirSync(directory);
             const acceptFiles: string[] = [];
             for (const file of dirFiles) {
@@ -933,18 +943,18 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             const fields: Discord.RestOrArray<Discord.APIEmbedField> = [];
             const files: string[] = [];
             //command data
-            const cmdCache = fs.readdirSync(`${helper.vars.path.main}/cache/commandData`);
+            const cmdCache = fs.readdirSync(`${helper.vars.path.cache}/commandData`);
             fields.push(debugIntoField('Cache', cmdCache, `${helper.vars.path.files}/cmdcache.txt`, files));
             //debug
-            const debugCMD = fs.readdirSync(`${helper.vars.path.main}/cache/debug/command`);
-            const debugFP = fs.readdirSync(`${helper.vars.path.main}/cache/debug/fileparse`);
+            const debugCMD = fs.readdirSync(`${helper.vars.path.cache}/debug/command`);
+            const debugFP = fs.readdirSync(`${helper.vars.path.cache}/debug/fileparse`);
             const debugCache = debugCMD.concat(debugFP);
             fields.push(debugIntoField('Debug', debugCache, `${helper.vars.path.files}/debugcache.txt`, files, true));
             //error files
-            const errf = fs.readdirSync(`${helper.vars.path.main}/cache/errors`);
+            const errf = fs.readdirSync(`${helper.vars.path.cache}/errors`);
             fields.push(debugIntoField('Error files', errf, `${helper.vars.path.files}/errcache.txt`, files));
             //previous files
-            const prevF = fs.readdirSync(`${helper.vars.path.main}/cache/previous`);
+            const prevF = fs.readdirSync(`${helper.vars.path.cache}/previous`);
             fields.push(debugIntoField('Previous files', prevF, `${helper.vars.path.files}/prevcache.txt`, files));
             //map files
             const mapC = fs.readdirSync(`${helper.vars.path.files}/maps`);
