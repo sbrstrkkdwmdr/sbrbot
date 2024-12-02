@@ -6,6 +6,9 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+### Fixed
+- `maplb` score indexes not matching page number
+
 ### Changed
 
 -   moved `debug clear [arg]` to `clear <arg>`

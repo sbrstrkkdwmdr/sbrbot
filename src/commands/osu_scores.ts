@@ -517,7 +517,7 @@ export const maplb = async (input: bottypes.commandInput) => {
         combo: null,
         miss: null,
         bpm: null,
-    }, false, 1, page, false, true, false, mapdata);
+    }, false, 1, page, true, true, false, mapdata);
 
     helper.tools.commands.storeButtonArgs(input.id + '', {
         mapId: mapid,
