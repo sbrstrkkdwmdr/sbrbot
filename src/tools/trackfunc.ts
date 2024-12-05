@@ -105,8 +105,8 @@ export async function getEmbed(
     let totalhits = helper.tools.other.scoreTotalHits(scorestats);
 
     const perf = await helper.tools.performance.calcScore({
-        mods: curscore.mods.join('').length > 1 ?
-            curscore.mods.join('') : 'NM',
+        mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
+            curscore.mods.map(x => x.acronym).join('') : 'NM',
         mode: curscore.ruleset_id,
         mapid: curscore.beatmap.id,
         miss: curscore.statistics.miss,
@@ -115,8 +115,8 @@ export async function getEmbed(
         mapLastUpdated: new Date(curscore.beatmap.last_updated)
     });
     const fcperf = await helper.tools.performance.calcFullCombo({
-        mods: curscore.mods.join('').length > 1 ?
-            curscore.mods.join('') : 'NM',
+        mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
+            curscore.mods.map(x => x.acronym).join('') : 'NM',
         mode: curscore.ruleset_id,
         mapid: curscore.beatmap.id,
         accuracy: curscore.accuracy,
@@ -143,9 +143,9 @@ export async function getEmbed(
         .setThumbnail(`${data.scoredata?.user?.avatar_url ?? helper.vars.defaults.images.user.url}`)
         .setImage(`${data.scoredata.beatmapset.covers['cover@2x']}`)
         .setDescription(
-            `${data.scoredata.mods.length > 0 ? '+' + data.scoredata.mods.join('') + ' | ' : ''} **Score set** <t:${new Date(data.scoredata.ended_at).getTime() / 1000}:R>\n` +
+            `${data.scoredata.mods.length > 0 ? '+' + data.scoredata.mods.map(x => x.acronym).join('') + ' | ' : ''} **Score set** <t:${new Date(data.scoredata.ended_at).getTime() / 1000}:R>\n` +
             `${(data.scoredata.accuracy * 100).toFixed(2)}% | ${helper.tools.formatter.gradeToEmoji(data.scoredata.rank)} | ${(perf.difficulty.stars ?? data.scoredata.beatmap.difficulty_rating).toFixed(2)}⭐\n` +
-            `${helper.tools.formatter.returnHits(data.scoredata.statistics, data.scoredata.ruleset_id)} | ${data.scoredata.max_combo}x\n` +
+            `${helper.tools.formatter.returnHits(data.scoredata.statistics, data.scoredata.ruleset_id).short} | ${data.scoredata.max_combo}x\n` +
             `${pp}`
         );
     return embed;
