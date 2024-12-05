@@ -142,7 +142,7 @@ export async function calcMap(input: {
     customHP?: number,
 }) {
     const values: rosu.PerformanceAttributes[] = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 11; i++) {
         const temp = {
             mapid: input.mapid,
             mode: input.mode,

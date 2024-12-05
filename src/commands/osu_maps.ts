@@ -238,7 +238,7 @@ export const map = async (input: bottypes.commandInput) => {
 
 
 
-    const buttons = new Discord.ActionRowBuilder()
+    const buttons = new Discord.ActionRowBuilder();
     helper.tools.log.commandOptions(
         [
             {
@@ -695,6 +695,12 @@ export const map = async (input: bottypes.commandInput) => {
         const mapimg = helper.vars.emojis.gamemodes[useMapdata.mode];
 
         let ppComputed: rosu.PerformanceAttributes[];
+        let pphd: rosu.PerformanceAttributes;
+        let pphr: rosu.PerformanceAttributes;
+        let ppdt: rosu.PerformanceAttributes;
+        let pphdhr: rosu.PerformanceAttributes;
+        let pphddt: rosu.PerformanceAttributes;
+        let pphddthr: rosu.PerformanceAttributes;
         let ppissue: string;
         let totaldiff: string | number = useMapdata.difficulty_rating;
 
@@ -703,7 +709,79 @@ export const map = async (input: bottypes.commandInput) => {
                 mods: mapmods,
                 mode: useMapdata.mode_int,
                 mapid: useMapdata.id,
-                clockRate: overrideSpeed ?? 1,
+                clockRate: overrideSpeed,
+                customCS,
+                customAR,
+                customOD,
+                customHP,
+                mapLastUpdated: new Date(useMapdata.last_updated)
+            });
+            pphd = await helper.tools.performance.calcFullCombo({
+                mapid: useMapdata.id,
+                mods: 'HD',
+                mode: useMapdata.mode_int,
+                clockRate: overrideSpeed,
+                accuracy: 100,
+                customCS,
+                customAR,
+                customOD,
+                customHP,
+                mapLastUpdated: new Date(useMapdata.last_updated)
+            });
+            pphr = await helper.tools.performance.calcFullCombo({
+                mapid: useMapdata.id,
+                mods: 'HR',
+                mode: useMapdata.mode_int,
+                clockRate: overrideSpeed,
+                accuracy: 100,
+                customCS,
+                customAR,
+                customOD,
+                customHP,
+                mapLastUpdated: new Date(useMapdata.last_updated)
+            });
+            ppdt = await helper.tools.performance.calcFullCombo({
+                mapid: useMapdata.id,
+                mods: 'DT',
+                mode: useMapdata.mode_int,
+                clockRate: overrideSpeed,
+                accuracy: 100,
+                customCS,
+                customAR,
+                customOD,
+                customHP,
+                mapLastUpdated: new Date(useMapdata.last_updated)
+            });
+            pphdhr = await helper.tools.performance.calcFullCombo({
+                mapid: useMapdata.id,
+                mods: 'HDHR',
+                mode: useMapdata.mode_int,
+                clockRate: overrideSpeed,
+                accuracy: 100,
+                customCS,
+                customAR,
+                customOD,
+                customHP,
+                mapLastUpdated: new Date(useMapdata.last_updated)
+            });
+            pphddt = await helper.tools.performance.calcFullCombo({
+                mapid: useMapdata.id,
+                mods: 'HDDT',
+                mode: useMapdata.mode_int,
+                clockRate: overrideSpeed,
+                accuracy: 100,
+                customCS,
+                customAR,
+                customOD,
+                customHP,
+                mapLastUpdated: new Date(useMapdata.last_updated)
+            });
+            pphddthr = await helper.tools.performance.calcFullCombo({
+                mapid: useMapdata.id,
+                mods: 'HDDTHR',
+                mode: useMapdata.mode_int,
+                clockRate: overrideSpeed,
+                accuracy: 100,
                 customCS,
                 customAR,
                 customOD,
@@ -739,7 +817,20 @@ export const map = async (input: bottypes.commandInput) => {
                 ppComputedTemp,
                 ppComputedTemp,
                 ppComputedTemp,
+                ppComputedTemp,
+                ppComputedTemp,
+                ppComputedTemp,
+                ppComputedTemp,
+                ppComputedTemp,
+                ppComputedTemp,
+                ppComputedTemp,
             ];
+            pphd = ppComputedTemp;
+            pphr = ppComputedTemp;
+            ppdt = ppComputedTemp;
+            pphdhr = ppComputedTemp;
+            pphddt = ppComputedTemp;
+            pphddthr = ppComputedTemp;
         }
         const baseCS = allvals.cs != useMapdata.cs ? `${useMapdata.cs}=>${allvals.cs}` : allvals.cs;
         const baseAR = allvals.ar != useMapdata.ar ? `${useMapdata.ar}=>${allvals.ar}` : allvals.ar;
@@ -879,27 +970,25 @@ ${ppComputed[0].ppFlashlight > 0 ? `\`Flashlight ${ppComputed[10].ppFlashlight?.
                     {
                         name: 'PP',
                         value:
-                            `\`SS: \` ${ppComputed[0].pp?.toFixed(2)} \n ` +
-                            `\`99%:\` ${ppComputed[1].pp?.toFixed(2)} \n ` +
-                            `\`98%:\` ${ppComputed[2].pp?.toFixed(2)} \n ` +
-                            `\`97%:\` ${ppComputed[3].pp?.toFixed(2)} \n ` +
-                            `\`96%:\` ${ppComputed[4].pp?.toFixed(2)} \n ` +
-                            `\`95%:\` ${ppComputed[5].pp?.toFixed(2)} \n ` +
-                            `\`94%:\` ${ppComputed[6].pp?.toFixed(2)} \n ` +
-                            `\`93%:\` ${ppComputed[7].pp?.toFixed(2)} \n ` +
-                            `\`92%:\` ${ppComputed[8].pp?.toFixed(2)} \n ` +
-                            `\`91%:\` ${ppComputed[9].pp?.toFixed(2)} \n ` +
-                            `\`90%:\` ${ppComputed[10].pp?.toFixed(2)} \n ` +
-                            `\`89%:\` ${ppComputed[11].pp?.toFixed(2)} \n ` +
-                            `\`88%:\` ${ppComputed[12].pp?.toFixed(2)} \n ` +
-                            `\`87%:\` ${ppComputed[13].pp?.toFixed(2)} \n ` +
-                            `\`86%:\` ${ppComputed[14].pp?.toFixed(2)} \n ` +
-                            `\`85%:\` ${ppComputed[15].pp?.toFixed(2)} \n ` +
-                            `\`84%:\` ${ppComputed[16].pp?.toFixed(2)} \n ` +
-                            `\`83%:\` ${ppComputed[17].pp?.toFixed(2)} \n ` +
-                            `\`82%:\` ${ppComputed[18].pp?.toFixed(2)} \n ` +
-                            `\`81%:\` ${ppComputed[19].pp?.toFixed(2)} \n ` +
-                            `\`80%:\` ${ppComputed[20].pp?.toFixed(2)} \n ` +
+                            `\`SS:    \` ${ppComputed[0].pp?.toFixed(2)} \n ` +
+                            `\`99%:   \` ${ppComputed[1].pp?.toFixed(2)} \n ` +
+                            `\`98%:   \` ${ppComputed[2].pp?.toFixed(2)} \n ` +
+                            `\`97%:   \` ${ppComputed[3].pp?.toFixed(2)} \n ` +
+                            `\`96%:   \` ${ppComputed[4].pp?.toFixed(2)} \n ` +
+                            `\`95%:   \` ${ppComputed[5].pp?.toFixed(2)} \n ` +
+                            `\`94%:   \` ${ppComputed[6].pp?.toFixed(2)} \n ` +
+                            `\`93%:   \` ${ppComputed[7].pp?.toFixed(2)} \n ` +
+                            `\`92%:   \` ${ppComputed[8].pp?.toFixed(2)} \n ` +
+                            `\`91%:   \` ${ppComputed[9].pp?.toFixed(2)} \n ` +
+                            `\`90%:   \` ${ppComputed[10].pp?.toFixed(2)} \n ` +
+                            `---===MODDED===---\n` +
+                            `\`HD:    \` ${pphd.pp?.toFixed(2)} \n ` +
+                            `\`HR:    \` ${pphr.pp?.toFixed(2)} \n ` +
+                            `\`DT:    \` ${ppdt.pp?.toFixed(2)} \n ` +
+                            `\`HDHR:  \` ${pphdhr.pp?.toFixed(2)} \n ` +
+                            `\`HDDT:  \` ${pphddt.pp?.toFixed(2)} \n ` +
+                            `\`HDDTHR:\` ${pphddthr.pp?.toFixed(2)} \n ` +
+
                             `\n${ppissue}`
                         ,
                         inline: true
@@ -1975,7 +2064,7 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
 
 
 
-    const buttons = new Discord.ActionRowBuilder()
+    const buttons = new Discord.ActionRowBuilder();
 
     if (page < 2 || typeof page != 'number' || isNaN(page)) {
         page = 1;
@@ -1993,16 +2082,16 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
         const cuser = helper.vars.client.users.cache.get(searchid);
         user = cuser.username;
     }
-        if (input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: input.type,
-                message: input.message,
-                interaction: input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, input.canReply);
-        }
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
+    }
     let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
     if (helper.tools.data.findFile(user, 'osudata', helper.tools.other.modeValidator('osu')) &&

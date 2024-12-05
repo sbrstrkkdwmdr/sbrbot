@@ -281,10 +281,10 @@ export async function mapIdFromLink(url: string, callIfMapIdNull: boolean,) {
             object.map = +url;
             break;
     }
-    if (callIfMapIdNull && object.map == null && object.set) {
-        const bmsdataReq = await helper.tools.api.getMapset(object.set, []);
-        object.map = (bmsdataReq.apiData as apitypes.Beatmapset)?.beatmaps?.[0]?.id ?? null;
-    }
+    // if (callIfMapIdNull && object.map == null && object.set) {
+    //     const bmsdataReq = await helper.tools.api.getMapset(object.set, []);
+    //     object.map = (bmsdataReq.apiData as apitypes.Beatmapset)?.beatmaps?.[0]?.id ?? null;
+    // }
     return object;
 }
 

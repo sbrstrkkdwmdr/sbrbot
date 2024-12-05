@@ -10,6 +10,9 @@
 
 -   `maplb` score indexes not matching page number
 -   switched interaction#reply to followUp on error messages
+-   ppcalc calling values that dont exist
+-   get map method calling `beatmapsets/undefined`
+-   undefined mapset artist/title crashing on loop
 
 ### Changed
 
@@ -19,6 +22,7 @@
 ### Added
 
 -   `clear` command
+-   show different mod combos in ppcalc
 
 ## [4.0.1] - 2024-12-01
 

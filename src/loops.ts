@@ -44,7 +44,7 @@ export function loops() {
             string = 'you';
             fr = 3;
         } else {
-            string = `${map.beatmapset.artist} - ${map.beatmapset.title}`;
+            string = `${map?.beatmapset?.artist ?? 'UNKNOWN ARTIST'} - ${map?.beatmapset?.title ?? 'UNKNOWN TITLE'}`;
             fr = 2;
         }
 
