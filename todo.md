@@ -3,6 +3,7 @@
 newest-oldest
 
 ## current
+- [ ] AR in `map` and `ppcalc` being higher than expected
 - [x] previously requested maps calling the wrong beatmap ID
 - [x] maps unable to request beatmapset
 - [x] maplb score #s not updating with the page
