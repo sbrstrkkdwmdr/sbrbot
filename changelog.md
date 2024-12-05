@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+## [4.0.2] - 2024-12-05
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
+
 ### Fixed
 
 -   `maplb` score indexes not matching page number
