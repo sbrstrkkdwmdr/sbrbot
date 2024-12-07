@@ -691,7 +691,6 @@ export const map = async (input: bottypes.commandInput) => {
         const allvals = osumodcalc.calcValuesAlt(
             inallvals.cs, inallvals.ar, inallvals.od, inallvals.hp, inallvals.bpm, hitlength, oldOverrideSpeed
         );
-
         const mapimg = helper.vars.emojis.gamemodes[useMapdata.mode];
 
         let ppComputed: rosu.PerformanceAttributes[];
