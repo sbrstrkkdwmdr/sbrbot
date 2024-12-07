@@ -22,7 +22,7 @@ const ranks = [
 ];
 
 export async function scoreList(
-    scores: apitypes.ScoreLegacy[] | apitypes.Score[],
+    scores: apitypes.Score[],
     scoretype: 'legacy' | 'current',
     sort: 'pp' | 'score' | 'recent' | 'acc' | 'combo' | 'miss' | 'rank',
     filter: {
@@ -49,10 +49,7 @@ export async function scoreList(
     showMap?: boolean,
     overrideMap?: apitypes.Beatmap
 ): Promise<formatterInfo> {
-    const newScores =
-        scoretype == 'legacy' ?
-            filterScoresLegacy(scores as apitypes.ScoreLegacy[], sort, filter, reverse, overrideMap) :
-            filterScores(scores as apitypes.Score[], sort, filter, reverse, overrideMap);
+    const newScores = filterScores(scores as apitypes.Score[], sort, filter, reverse, overrideMap);
     if (newScores.length == 0) {
         return {
             text: 'No scores were found (check the filter options)',
@@ -71,65 +68,42 @@ export async function scoreList(
     for (let i = 0; i < max && i < newScores.length - offset; i++) {
         let score = newScores[i + offset];
         if (!score) break;
-        let convertedScore = score as apitypes.ScoreLegacy;
-        if (scoretype == 'current') {
-            convertedScore = CurrentToLegacyScore(score as apitypes.Score);
-        }
+        // let convertedScore = CurrentToLegacyScore(score as apitypes.Score);
         const perf = await helper.tools.performance.calcScore({
-            mapid: (overrideMap ?? convertedScore.beatmap).id,
+            mapid: overrideMap?.id ?? score.beatmap_id,
             mode: score.ruleset_id,
-            mods: convertedScore.mods.join(''),
+            mods: score.mods.map(x => x.acronym).join(''),
             accuracy: score.accuracy,
-            hit300: convertedScore.statistics.count_300,
-            hit100: convertedScore.statistics.count_100,
-            hit50: convertedScore.statistics.count_50,
-            miss: convertedScore.statistics.count_miss,
-            hitkatu: convertedScore.statistics.count_katu,
-            maxcombo: convertedScore.max_combo,
-            mapLastUpdated: new Date((overrideMap ?? convertedScore.beatmap).last_updated),
+            stats: score.statistics,
+            maxcombo: score.max_combo,
+            mapLastUpdated: new Date((overrideMap ?? score.beatmap).last_updated),
         });
         const fc = await helper.tools.performance.calcFullCombo({
             mapid: (overrideMap ?? score.beatmap).id,
             mode: score.ruleset_id,
-            mods: convertedScore.mods.join(''),
-            accuracy: convertedScore.accuracy,
-            hit300: convertedScore.statistics.count_300,
-            hit100: convertedScore.statistics.count_100,
-            hit50: convertedScore.statistics.count_50,
-            hitkatu: convertedScore.statistics.count_katu,
+            mods: score.mods.map(x => x.acronym).join(''),
+            accuracy: score.accuracy,
+            stats: score.statistics,
             mapLastUpdated: new Date((overrideMap ?? score.beatmap).last_updated),
         });
         let info = `**#${(showOriginalIndex ? score.originalIndex : i) + 1}`;
         if (showMap != false) {
-            if (scoretype == 'legacy') {
-                score = score as indexedScore<apitypes.ScoreLegacy>;
-                info += `・[${score.beatmapset.title} [${(overrideMap ?? score.beatmap).version}]](https://osu.ppy.sh/scores/${score.mode}/${score.id})`;
-            } else {
-                score = score as indexedScore<apitypes.Score>;
-                info += `・[${score.beatmapset.title} [${(overrideMap ?? score.beatmap).version}]](https://osu.ppy.sh/scores/${score.id})`;
-            }
+            score = score as indexedScore<apitypes.Score>;
+            info += `・[${score.beatmapset.title} [${(overrideMap ?? score.beatmap).version}]](https://osu.ppy.sh/scores/${score.id})`;
         }
         if (showUsername) {
             info += `・[${score.user.username}](https://osu.ppy.sh/u/${score.user_id})`;
         }
         let combo = `${score?.max_combo}/**${fc.difficulty.maxCombo}x**`;
         if (score.max_combo == fc.difficulty.maxCombo || !score.max_combo) combo = `**${score.max_combo}x**`;
-        if (scoretype == 'legacy') {
-            score = score as indexedScore<apitypes.ScoreLegacy>;
-            info +=
-                `**
-    \`${helper.tools.calculate.numberShorthand(score.score)}\` |${score.mods.length > 0 ? ' **' + score.mods.join('') + '** |' : ''} ${dateToDiscordFormat(new Date(score.created_at))}
-    \`${hitList(score.mode, score.statistics)}\` | ${combo} | ${(score.accuracy * 100).toFixed(2)}% | ${helper.vars.emojis.grades[score.rank]}
-    ${(score?.pp ?? perf.pp).toFixed(2)}pp`;
-        } else {
-            const tempScore = score as indexedScore<apitypes.Score>;
-            info +=
-                `**
+        const tempScore = score as indexedScore<apitypes.Score>;
+        info +=
+            `**
     \`${helper.tools.calculate.numberShorthand(tempScore.total_score)}\` |${tempScore.mods.length > 0 ? ' **' + tempScore.mods.map(x => x.acronym).join('') + '** |' : ''} ${dateToDiscordFormat(new Date(tempScore.ended_at))}
-    \`${hitList(convertedScore.mode, convertedScore.statistics)}\` | ${combo} | ${(score.accuracy * 100).toFixed(2)}% | ${helper.vars.emojis.grades[score.rank]}
+    \`${returnHits(score.statistics, score.ruleset_id).short}\` | ${combo} | ${(score.accuracy * 100).toFixed(2)}% | ${helper.vars.emojis.grades[score.rank]}
     ${(score?.pp ?? perf.pp).toFixed(2)}pp`;
-        }
-        if (!convertedScore?.perfect) {
+
+        if (!score?.is_perfect_combo) {
             info += ' (' + fc.pp.toFixed(2) + 'pp if FC)';
         }
         info += '\n\n';
@@ -948,6 +922,20 @@ export function difficultyColour(difficulty: number) {
     }
 }
 
+export function nonNullStats(hits: apitypes.ScoreStatistics): apitypes.ScoreStatistics {
+    return {
+        perfect: hits.perfect ?? 0,
+        great: hits.great,
+        good: hits?.good ?? 0,
+        ok: hits?.ok ?? 0,
+        meh: hits?.meh ?? 0,
+        miss: hits?.miss ?? 0,
+        small_tick_hit: hits?.small_tick_hit ?? 0,
+        small_tick_miss: hits?.small_tick_miss ?? 0,
+        legacy_combo_increase: hits?.legacy_combo_increase ?? 0,
+    };
+}
+
 export function returnHits(hits: apitypes.ScoreStatistics, mode: apitypes.Ruleset) {
     const object: {
         short: string,
@@ -958,6 +946,7 @@ export function returnHits(hits: apitypes.ScoreStatistics, mode: apitypes.Rulese
         long: '',
         ex: []
     };
+    hits = nonNullStats(hits);
     switch (mode) {
         case apitypes.RulesetEnum.osu:
             object.short = `${hits.great}/${hits.ok}/${hits.meh}/${hits.miss}`;

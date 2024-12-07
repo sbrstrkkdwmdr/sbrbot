@@ -748,3 +748,50 @@ export async function getFailPoint(
 export function validCountryCodeA2(code: string) {
     return helper.vars.iso._3166_1_alpha2.some(x => x == code.toUpperCase());
 }
+
+export function lazerToOldStatistics(stats: apitypes.ScoreStatistics, mode: apitypes.Ruleset): apitypes.Statistics {
+    let foo: apitypes.Statistics;
+    switch (mode) {
+        case 0:
+            foo = {
+                count_300: stats?.great ?? 0,
+                count_100: stats?.ok ?? 0,
+                count_50: stats?.meh ?? 0,
+                count_miss: stats?.miss ?? 0,
+                count_geki: NaN,
+                count_katu: NaN
+            };
+            break;
+        case 1:
+            foo = {
+                count_300: stats.great,
+                count_100: stats?.good ?? 0,
+                count_50: NaN,
+                count_miss: stats?.miss ?? 0,
+                count_geki: NaN,
+                count_katu: NaN
+            };
+            break;
+        case 2:
+            foo = {
+                count_300: stats.great, // fruits
+                count_100: stats?.ok ?? 0, // drops
+                count_50: stats?.small_tick_hit ?? 0, // droplets 
+                count_miss: stats?.miss ?? 0, //
+                count_geki: NaN,
+                count_katu: stats?.small_tick_miss ?? 0, // droplets miss
+            };
+            break;
+        case 3:
+            foo = {
+                count_geki: stats?.perfect ?? 0,
+                count_300: stats.great,
+                count_katu: stats?.good ?? 0,
+                count_100: stats?.ok ?? 0,
+                count_50: stats?.meh ?? 0,
+                count_miss: stats?.miss ?? 0,
+            };
+            break;
+    }
+    return foo;
+}

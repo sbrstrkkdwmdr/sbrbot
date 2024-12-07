@@ -6,6 +6,13 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+### Fixed
+
+-   `map` and `ppcalc` having insanely high AR values
+
+### Changed
+- update `rosu-pp-js` to `2.0.0`
+
 ## [4.0.2] - 2024-12-05
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0b6b401a4fa95c9aa1fd6431499d2b21e79f2a90)</br>

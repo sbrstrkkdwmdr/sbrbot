@@ -109,7 +109,7 @@ export async function getEmbed(
             curscore.mods.map(x => x.acronym).join('') : 'NM',
         mode: curscore.ruleset_id,
         mapid: curscore.beatmap.id,
-        miss: curscore.statistics.miss,
+        stats: scorestats,
         accuracy: curscore.accuracy,
         maxcombo: curscore.max_combo,
         mapLastUpdated: new Date(curscore.beatmap.last_updated)

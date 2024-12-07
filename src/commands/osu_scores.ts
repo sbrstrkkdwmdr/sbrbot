@@ -1576,7 +1576,7 @@ export const recent = async (input: bottypes.commandInput) => {
                     curscore.mods.map(x => x.acronym).join('') : 'NM',
                 mode: curscore.ruleset_id,
                 mapid: curscore.beatmap.id,
-                miss: (gamehits.miss ?? 0),
+                stats: curscore.statistics,
                 accuracy: curscore.accuracy,
                 maxcombo: curscore.max_combo,
                 passedObjects: failed.objectsHit,
@@ -2029,7 +2029,10 @@ export const replayparse = async (input: bottypes.commandInput) => {
                 mods: osumodcalc.ModIntToString(score.info?.mods?.bitwise ?? 0),
                 mode: score.replay.mode,
                 mapid: mapdata.id,
-                miss: score.info.countMiss,
+                stats: {
+                    great: score.info.count300,
+                    miss: score.info.countMiss
+                },
                 accuracy: cg.accuracy,
                 maxcombo: score.info.maxCombo,
                 passedObjects: failed.objectsHit,
@@ -2359,7 +2362,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
                 scoredata.mods.map(x => x.acronym).join('') : 'NM',
             mode: scoredata.ruleset_id,
             mapid: scoredata.beatmap.id,
-            miss: (gamehits.miss ?? 0),
+            stats: scoredata.statistics,
             accuracy: scoredata.accuracy,
             maxcombo: scoredata.max_combo,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
@@ -3220,7 +3223,7 @@ export const scorestats = async (input: bottypes.commandInput) => {
                             score.mods.map(x => x.acronym).join('') : 'NM',
                         mode: score.ruleset_id,
                         mapid: score.beatmap.id,
-                        miss: score.statistics.miss,
+                        stats: score.statistics,
                         accuracy: score.accuracy,
                         maxcombo: score.max_combo,
                         mapLastUpdated: new Date(score.beatmap.last_updated)
@@ -3685,15 +3688,17 @@ export const simulate = async (input: bottypes.commandInput) => {
         overrideSpeed *= 0.75;
         overrideBpm *= 1.5;
     }
-
+    const scorestat: apitypes.ScoreStatistics = {
+        great: n300,
+        ok: n100,
+        meh: n50,
+        miss: nMiss ?? 0,
+    };
     const perf = await helper.tools.performance.calcScore({
         mods,
         mode: 0,
         mapid,
-        hit300: n300,
-        hit100: n100,
-        hit50: n50,
-        miss: nMiss,
+        stats: scorestat,
         accuracy: acc,
         maxcombo: combo,
         clockRate: overrideSpeed,
@@ -3703,9 +3708,7 @@ export const simulate = async (input: bottypes.commandInput) => {
         mods,
         mode: 0,
         mapid,
-        hit300: n300,
-        hit100: n100,
-        hit50: n50,
+        stats: scorestat,
         accuracy: acc,
         clockRate: overrideSpeed,
         mapLastUpdated: new Date(mapdata.last_updated),

@@ -12,11 +12,7 @@ export async function calcScore(input: {
     mods: string,
     accuracy: number,
     clockRate?: number,
-    hit300?: number;
-    hit100?: number;
-    hit50?: number;
-    miss?: number;
-    hitkatu?: number;
+    stats?: apitypes.ScoreStatistics,
     maxcombo?: number,
     passedObjects?: number,
     mapLastUpdated: Date,
@@ -53,41 +49,45 @@ export async function calcScore(input: {
         mods: osumodcalc.ModStringToInt(mods),
         accuracy: input.accuracy ?? 100,
     };
+    const oldStats = helper.tools.other.lazerToOldStatistics(input.stats, input.mode);
     if (input.maxcombo != null && !isNaN(input.maxcombo)) {
-        baseScore['combo'] = input.maxcombo;
+        baseScore.combo = input.maxcombo;
     }
     if (input.passedObjects != null && !isNaN(input.passedObjects)) {
-        baseScore['passedObjects'] = input.passedObjects;
+        baseScore.passedObjects = input.passedObjects;
     }
-    if (input.hit300 != null && !isNaN(input.hit300)) {
-        baseScore['n300'] = input.hit300;
+    if (oldStats.count_300 != null && !isNaN(oldStats.count_300)) {
+        baseScore.n300 = oldStats.count_300;
     }
-    if (input.hit100 != null && !isNaN(input.hit100)) {
-        baseScore['n100'] = input.hit100;
+    if (oldStats.count_100 != null && !isNaN(oldStats.count_100)) {
+        baseScore.n100 = oldStats.count_100;
     }
-    if (input.hit50 != null && !isNaN(input.hit50)) {
-        baseScore['n50'] = input.hit50;
+    if (oldStats.count_50 != null && !isNaN(oldStats.count_50)) {
+        baseScore.n50 = oldStats.count_50;
     }
-    if (input.miss != null && !isNaN(input.miss)) {
-        baseScore['misses'] = input.miss;
+    if (oldStats.count_miss != null && !isNaN(oldStats.count_miss)) {
+        baseScore.misses = oldStats.count_miss;
     }
-    if (input.hitkatu != null && !isNaN(input.hitkatu)) {
-        baseScore['nKatu'] = input.hitkatu;
+    if (oldStats.count_katu != null && !isNaN(oldStats.count_katu)) {
+        baseScore.nKatu = oldStats.count_katu;
     }
     if (input.customCS != null && !isNaN(input.customCS)) {
-        baseScore['cs'] = input.customCS;
+        baseScore.cs = input.customCS;
     }
     if (input.customAR != null && !isNaN(input.customAR)) {
-        baseScore['ar'] = input.customAR;
+        baseScore.ar = input.customAR;
     }
     if (input.customOD != null && !isNaN(input.customOD)) {
-        baseScore['od'] = input.customOD;
+        baseScore.od = input.customOD;
     }
     if (input.customHP != null && !isNaN(input.customHP)) {
-        baseScore['hp'] = input.customHP;
+        baseScore.hp = input.customHP;
     }
     if (input.clockRate != null && !isNaN(input.clockRate)) {
-        baseScore['clockRate'] = input.clockRate;
+        baseScore.clockRate = input.clockRate;
+    }
+    if (input.mods.includes('CL')) {
+        baseScore.lazer = false;
     }
     const perf: rosu.Performance = new rosu.Performance(baseScore);
 
@@ -102,27 +102,21 @@ export async function calcFullCombo(input: {
     mods: string,
     accuracy: number,
     clockRate?: number,
-    hit300?: number;
-    hit100?: number;
-    hit50?: number;
-    hitkatu?: number;
+    stats?: apitypes.ScoreStatistics,
     mapLastUpdated: Date,
     customCS?: number,
     customAR?: number,
     customOD?: number,
     customHP?: number,
 }) {
-    input['miss'] = 0;
+    input.stats.miss = 0;
     return await calcScore({
         mapid: input.mapid,
         mode: input.mode,
         mods: input.mods,
         accuracy: input.accuracy,
         clockRate: input.clockRate,
-        hit300: input.hit300,
-        hit50: input.hit50,
-        hitkatu: input.hitkatu,
-        miss: 0,
+        stats: input.stats,
         mapLastUpdated: input.mapLastUpdated,
         customCS: input.customCS,
         customAR: input.customAR,
@@ -215,9 +209,10 @@ export async function calcStrains(input: {
     return strains;
 }
 let x: rosu.GameMode;
-export function template(mapdata: apitypes.Beatmap) {
+export function template(mapdata: apitypes.Beatmap): rosu.PerformanceAttributes {
     return {
         pp: 0,
+        estimatedUnstableRate: 0,
         difficulty: {
             mode: 0,
             stars: mapdata.difficulty_rating,
@@ -248,7 +243,14 @@ export function template(mapdata: apitypes.Beatmap) {
             },
             hp: mapdata.drain,
             isConvert: mapdata.convert,
-            nObjects: mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners
+            nObjects: mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners,
+            aimDifficultStrainCount: null,
+            speedDifficultStrainCount: null,
+            greatHitWindow: 0,
+            nHoldNotes: 0,
+            nLargeTicks: 0,
+            monoStaminaFactor: 0,
+            okHitWindow: 0
         },
         ppAccuracy: 0,
         ppAim: 0,
