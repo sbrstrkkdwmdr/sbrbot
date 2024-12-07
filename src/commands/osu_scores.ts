@@ -1772,7 +1772,8 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             helper.tools.data.debug(strains, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
         } catch (error) {
             helper.tools.data.debug({ error: error }, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
-        }
+        helper.tools.log.stdout(error);
+    }
         let strainsgraph = {
             path: '',
             filename: '',
@@ -2049,6 +2050,7 @@ export const replayparse = async (input: bottypes.commandInput) => {
         ppissue = '';
     } catch (error) {
         ppissue = helper.vars.errors.uErr.osu.performance.mapMissing;
+        helper.tools.log.stdout(error);
     }
 
     try {
@@ -2371,6 +2373,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             mods: scoredata.mods.map(x => x.acronym).join('').length > 1 ?
                 scoredata.mods.map(x => x.acronym).join('') : 'NM',
             mode: scoredata.ruleset_id,
+            stats: scoredata.statistics,
             mapid: scoredata.beatmap.id,
             accuracy: scoredata.accuracy,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
@@ -2378,6 +2381,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
         ssperf = await helper.tools.performance.calcFullCombo({
             mods: scoredata.mods.map(x => x.acronym).join('').length > 1 ?
                 scoredata.mods.map(x => x.acronym).join('') : 'NM',
+            stats: scoredata.statistics,
             mode: scoredata.ruleset_id,
             mapid: scoredata.beatmap.id,
             accuracy: 1,
@@ -2391,6 +2395,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
         fcperf = temp;
         ssperf = temp;
         ppissue = 'Error - pp calculator could not fetch beatmap';
+        helper.tools.log.stdout(error);
     }
 
     const fulltitle = `${mapdata.beatmapset.artist} - ${mapdata.beatmapset.title} [${mapdata.version}]`;
@@ -2467,6 +2472,7 @@ ${`${(scoredata?.pp ?? perf.pp).toFixed(2)}pp` + fcflag}\n${ppissue}
         helper.tools.data.debug(strains, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
     } catch (error) {
         helper.tools.data.debug({ error: error }, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
+        helper.tools.log.stdout(error);
     }
     const strainsgraph =
         await helper.tools.other.graph(strains.strainTime, strains.value, 'Strains', {

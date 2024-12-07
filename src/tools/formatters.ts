@@ -924,8 +924,8 @@ export function difficultyColour(difficulty: number) {
 
 export function nonNullStats(hits: apitypes.ScoreStatistics): apitypes.ScoreStatistics {
     return {
-        perfect: hits.perfect ?? 0,
-        great: hits.great,
+        perfect: hits?.perfect ?? 0,
+        great: hits?.great ?? 0,
         good: hits?.good ?? 0,
         ok: hits?.ok ?? 0,
         meh: hits?.meh ?? 0,

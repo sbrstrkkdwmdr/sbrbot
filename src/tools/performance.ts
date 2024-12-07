@@ -109,6 +109,12 @@ export async function calcFullCombo(input: {
     customOD?: number,
     customHP?: number,
 }) {
+    if(!input.stats){
+        input.stats = helper.tools.formatter.nonNullStats(input.stats);
+    }
+    if(input.stats.great == 0 && input.stats.perfect == 0){
+        input.stats.great = NaN
+    }
     input.stats.miss = 0;
     return await calcScore({
         mapid: input.mapid,
@@ -144,7 +150,10 @@ export async function calcMap(input: {
             mapLastUpdated: input.mapLastUpdated,
             clockRate: input.clockRate,
             accuracy: 100 - i,
-            miss: 0,
+            stats: {
+                great: NaN,
+                miss: 0,
+            },
             customCS: input.customCS,
             customAR: input.customAR,
             customHP: input.customHP,
