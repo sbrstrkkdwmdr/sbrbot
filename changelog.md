@@ -9,9 +9,11 @@
 ### Fixed
 
 -   `map` and `ppcalc` having insanely high AR values
+-   `dt`, `hddt` and `hddthr` in `ppcalc` being too low
 
 ### Changed
-- update `rosu-pp-js` to `2.0.0`
+
+-   update `rosu-pp-js` to `2.0.0`
 
 ## [4.0.2] - 2024-12-05
 
