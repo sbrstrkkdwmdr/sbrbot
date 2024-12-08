@@ -1588,6 +1588,7 @@ export const recent = async (input: bottypes.commandInput) => {
                 mode: curscore.ruleset_id,
                 mapid: curscore.beatmap.id,
                 accuracy: curscore.accuracy,
+                stats: curscore.statistics,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
             });
             ssperf = await helper.tools.performance.calcFullCombo({
@@ -2045,6 +2046,10 @@ export const replayparse = async (input: bottypes.commandInput) => {
             mode: score.replay.mode,
             mapid: mapdata.id,
             accuracy: cg.accuracy,
+            stats: {
+                great: score.info.count300,
+                miss: score.info.countMiss
+            },
             mapLastUpdated: new Date(mapdata.last_updated)
         });
         ppissue = '';
