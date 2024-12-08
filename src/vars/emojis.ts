@@ -24,8 +24,12 @@ export const gamemodes = {
     standard: '<:modeosu:1174502725967429682>', //standard, STD, osu!
     osu: '<:modeosu:1174502725967429682>',
     taiko: '<:modetaiko:1174502730086223997>', //taiko, drums
-    fruits: '<:modefruits:1174502718224744538>', //catch, catch the beat, ctb
-    mania: '<:modemania:1174502721110409317>' //piano
+    fruits: '<:modefruits:1174502718224744538>', //fruits, catch, catch the beat, ctb
+    mania: '<:modemania:1174502721110409317>', //piano
+    0: '<:modeosu:1174502725967429682>', // std
+    1: '<:modetaiko:1174502730086223997>', // taiko
+    2: '<:modefruits:1174502718224744538>', //fruits
+    3: '<:modemania:1174502721110409317>', // mania
 };
 
 // files/img/osu/status-(x).png

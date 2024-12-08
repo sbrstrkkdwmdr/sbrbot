@@ -10,6 +10,7 @@
 
 -   `map` and `ppcalc` having insanely high AR values
 -   `dt`, `hddt` and `hddthr` in `ppcalc` being too low
+-   mode emojis returning undefined (gamemode is string, ruleset_id is int)
 
 ### Changed
 
