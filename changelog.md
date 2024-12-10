@@ -16,6 +16,7 @@
 ### Changed
 
 -   update `rosu-pp-js` to `2.0.0`
+-   if score ID is null, then link to beatmap instead
 
 ## [4.0.2] - 2024-12-05
 

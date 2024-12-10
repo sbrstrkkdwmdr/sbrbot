@@ -89,7 +89,7 @@ export async function scoreList(
         let info = `**#${(showOriginalIndex ? score.originalIndex : i) + 1}`;
         if (showMap != false) {
             score = score as indexedScore<apitypes.Score>;
-            info += `・[${score.beatmapset.title} [${(overrideMap ?? score.beatmap).version}]](https://osu.ppy.sh/scores/${score.id})`;
+            info += `・[${score.beatmapset.title} [${(overrideMap ?? score.beatmap).version}]](https://osu.ppy.sh/${score.id ? `scores/${score.id}` : `b/${(overrideMap ?? score.beatmap).id}`})`;
         }
         if (showUsername) {
             info += `・[${score.user.username}](https://osu.ppy.sh/u/${score.user_id})`;

@@ -1665,7 +1665,7 @@ export const recent = async (input: bottypes.commandInput) => {
                 iconURL: `${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`
             })
             .setTitle(`#${page + 1} most recent ${showFails == 1 ? 'play' : 'pass'} for ${curscore.user.username} | <t:${new Date(curscore.ended_at).getTime() / 1000}:R>`)
-            .setURL(`https://osu.ppy.sh/scores/${curscore.ruleset_id}/${curscore.best_id}`)
+            .setURL(curscore.id ? `https://osu.ppy.sh/scores/${curscore.id}` : `https://osu.ppy.sh/b/${curbm.id}`)
             .setThumbnail(`${curbms.covers.list}`);
         rsEmbed
             .setDescription(`
@@ -2425,7 +2425,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     let scoreembed = new Discord.EmbedBuilder()
         .setColor(helper.vars.colours.embedColour.score.dec)
         .setTitle(fulltitle)
-        .setURL(`https://osu.ppy.sh/scores/${mode ? mode + '/' + scoreid : scoreid}`)
+        .setURL(scoredata.id ? `https://osu.ppy.sh/scores/${scoredata.id}` : `https://osu.ppy.sh/b/${scoredata.id}`)
         .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`);
     scoreembed = helper.tools.formatter.userAuthor(osudata, scoreembed);
 
