@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+## [4.0.3] - 2024-12-11
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/)</br>
+
 ### Fixed
 
 -   `map` and `ppcalc` having insanely high AR values
