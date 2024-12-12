@@ -819,8 +819,18 @@ export function gradeToEmoji(str: string) {
 
 
 export function userAuthor(osudata: apitypes.User, embed: Discord.EmbedBuilder) {
+    let name = osudata.username;
+    if (osudata?.statistics?.global_rank) {
+        name += ` | #${helper.tools.calculate.separateNum(osudata?.statistics?.global_rank)}`;
+    }
+    if (osudata?.statistics?.country_rank) {
+        name += ` | #${helper.tools.calculate.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code}`;
+    }
+    if (osudata?.statistics?.pp) {
+        name += ` | ${helper.tools.calculate.separateNum(osudata?.statistics?.pp)}pp`;
+    }
     embed.setAuthor({
-        name: `${osudata.username} | #${helper.tools.calculate.separateNum(osudata?.statistics?.global_rank)} | #${helper.tools.calculate.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${helper.tools.calculate.separateNum(osudata?.statistics?.pp)}pp`,
+        name,
         url: `https://osu.ppy.sh/users/${osudata.id}`,
         iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
     });

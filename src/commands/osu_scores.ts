@@ -2098,7 +2098,6 @@ ${isfail}
  * parse score and return data
  */
 export const scoreparse = async (input: bottypes.commandInput) => {
-
     let commanduser: Discord.User | Discord.APIUser;
 
     let scorelink: string;
@@ -2113,11 +2112,10 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             commanduser = input.message.author;
 
             scorelink = null;
-            scoremode = (input.args[1] ?? 'osu') as apitypes.GameMode;
+            scoremode = input.args[1] as apitypes.GameMode;
             scoreid = input.args[0];
             if (input?.args[0]?.includes('https://')) {
-                const messagenohttp = input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
-                const temp = helper.tools.commands.scoreIdFromLink(messagenohttp);
+                const temp = helper.tools.commands.scoreIdFromLink(scorelink);
                 scoremode = temp.mode;
                 scoreid = temp.id;
             }

@@ -6,14 +6,19 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
-### Fixed 
-- `top` sorting by `recent` instead of `pp` when parsing single scores
+### Fixed
+
+-   `top` sorting by `recent` instead of `pp` when parsing single scores
+-   `scoreparse` via command not working with new score IDs (would automatically set mode which switches it to old format)
 
 ### Added
-- score list single score parse now can also be specified similar to the way bathbot does it (`top -parse 20` and `top20` both parse the 20th score)
 
-### Changed 
-- `recentscore` aliases
+-   score list single score parse now can also be specified similar to the way bathbot does it (`top -parse 20` and `top20` both parse the 20th score)
+
+### Changed
+
+-   `recentscore` aliases
+-   don't show rank and pp in author field if the value is null or 0
 
 ## [4.0.3] - 2024-12-11
 
