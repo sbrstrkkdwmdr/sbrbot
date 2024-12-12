@@ -143,7 +143,7 @@ export const firsts = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(firstscoresdata, osudata.id, 'firstscoresdata');
 
     if (parseArgs.parseScore) {
-        const newScores = helper.tools.formatter.filterScores(firstscoresdata, parseArgs.sort ?? 'recent',
+        const newScores = helper.tools.formatter.filterScores(firstscoresdata, parseArgs.sort ?? 'pp',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -725,7 +725,7 @@ export const osutop = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(osutopdataReq, osudata.id, 'topscoresdata');
 
     if (parseArgs.parseScore) {
-        const newScores = helper.tools.formatter.filterScores(osutopdata, parseArgs.sort ?? 'recent',
+        const newScores = helper.tools.formatter.filterScores(osutopdata, parseArgs.sort ?? 'pp',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -750,7 +750,6 @@ export const osutop = async (input: bottypes.commandInput) => {
             pid = newScores.length - 1;
         }
         input.overrides = {
-
             id: newScores?.[pid]?.id,
             commanduser: parseArgs.commanduser,
             commandAs: input.type
@@ -966,7 +965,7 @@ export const pinned = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(pinnedscoresdataReq, osudata.id, 'pinnedscoresdata');
 
     if (parseArgs.parseScore) {
-        const newScores = helper.tools.formatter.filterScores(pinnedscoresdata, parseArgs.sort ?? 'recent',
+        const newScores = helper.tools.formatter.filterScores(pinnedscoresdata, parseArgs.sort ?? 'pp',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -991,7 +990,6 @@ export const pinned = async (input: bottypes.commandInput) => {
             pid = newScores.length - 1;
         }
         input.overrides = {
-
             id: newScores?.[pid]?.id,
             commanduser: parseArgs.commanduser,
             commandAs: input.type

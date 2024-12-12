@@ -6,6 +6,15 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+### Fixed 
+- `top` sorting by `recent` instead of `pp` when parsing single scores
+
+### Added
+- score list single score parse now can also be specified similar to the way bathbot does it (`top -parse 20` and `top20` both parse the 20th score)
+
+### Changed 
+- `recentscore` aliases
+
 ## [4.0.3] - 2024-12-11
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/035d1305bdaf8a684ba74d57b2cca2f558191748)</br>
