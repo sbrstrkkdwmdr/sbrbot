@@ -49,11 +49,13 @@ const rslist = [
 ];
 const scorelist = [
     'firsts', 'firstplaceranks', 'fpr', 'fp', '#1s', 'first', '#1', '1s',
+    'leaderboard', 'maplb', 'mapleaderboard', 'ml',
     'nochokes', 'nc',
     'osutop', 'top', 't', 'ot', 'topo', 'toposu',
     'taikotop', 'toptaiko', 'tt', 'topt',
     'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tf', 'tctb', 'topf', 'topc',
     'maniatop', 'topmania', 'tm', 'topm',
+    'scores', 'c',
     'pinned', 'pins'
 ].concat(rslist).sort((a, b) => b.length - a.length);
 
@@ -82,7 +84,6 @@ function commandCheck(cmd: string, message: Discord.Message, interaction: Discor
         //osu
         'bws', 'badgeweightsystem', 'badgeweight', 'badgeweightseed', 'badgerank',
         'compare', 'common',
-        'leaderboard', 'maplb', 'mapleaderboard', 'ml',
         'lb',
         'map', 'm',
         'maprandom', 'f2', 'maprand', 'mapsuggest', 'randommap', 'randmap',
@@ -95,7 +96,6 @@ function commandCheck(cmd: string, message: Discord.Message, interaction: Discor
         'recentactivity', 'recentact', 'rsact',
         'saved',
         'scoreparse', 'score', 'sp',
-        'scores', 'c',
         'scorestats', 'ss',
         'simplay', 'simulate', 'sim',
         'skin',
