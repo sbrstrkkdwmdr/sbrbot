@@ -818,8 +818,8 @@ export function gradeToEmoji(str: string) {
 }
 
 
-export function userAuthor(osudata: apitypes.User, embed: Discord.EmbedBuilder) {
-    let name = osudata.username;
+export function userAuthor(osudata: apitypes.User, embed: Discord.EmbedBuilder, replaceName?: string) {
+    let name = replaceName ?? osudata.username;
     if (osudata?.statistics?.global_rank) {
         name += ` | #${helper.tools.calculate.separateNum(osudata?.statistics?.global_rank)}`;
     }
@@ -1107,4 +1107,57 @@ export function CurrentToLegacyScore(score: apitypes.Score): apitypes.ScoreLegac
         user: score.user,
         weight: score.weight
     };
+}
+
+export function sortDescription(type: "pp" | "score" | "recent" | "acc" | "combo" | "miss" | "rank", reverse: boolean) {
+    let x: string;
+    switch (type) {
+        case 'pp':
+            x = 'highest performance';
+            break;
+        case 'score':
+            x = 'highest score';
+            break;
+        case 'recent':
+            x = 'most recent';
+            break;
+        case 'acc':
+            x = 'highest accuracy';
+            break;
+        case 'combo':
+            x = 'highest combo';
+            break;
+        case 'miss':
+            x = 'lowest miss count';
+            break;
+        case 'rank':
+            x = 'best rank';
+            break;
+    }
+    if(reverse){
+        switch (type) {
+            case 'pp':
+                x = 'lowest performance';
+                break;
+            case 'score':
+                x = 'lowest score';
+                break;
+            case 'recent':
+                x = 'oldest';
+                break;
+            case 'acc':
+                x = 'lowest accuracy';
+                break;
+            case 'combo':
+                x = 'lowest combo';
+                break;
+            case 'miss':
+                x = 'highest miss count';
+                break;
+            case 'rank':
+                x = 'best rank';
+                break;
+        }
+    }
+    return x;
 }
