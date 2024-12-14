@@ -10,6 +10,7 @@
 
 -   `top` sorting by `recent` instead of `pp` when parsing single scores
 -   `scoreparse` via command not working with new score IDs (would automatically set mode which switches it to old format)
+-   `recent` not including failed scores
 
 ### Added
 
