@@ -148,28 +148,28 @@ export async function getScore(id: string | number, extra: string[]) {
     }) as tooltypes.apiReturn<apitypes.Score>;
 }
 export async function getScoresRecent(id: string | number, mode: string, extra: string[]) {
-    const url = baseUrl + `users/${id}/scores/recent?mode=${helper.tools.other.modeValidator(mode)}&legacy_only=0&limit=100`;
+    const url = baseUrl + `users/${id}/scores/recent?mode=${helper.tools.other.modeValidator(mode)}&limit=100&include_fails=1`;
     return await apiGet({
         url,
         extra
     }) as tooltypes.apiReturn<apitypes.Score[]>;
 }
 export async function getScoresBest(id: string | number, mode: string, extra: string[]) {
-    const url = baseUrl + `users/${id}/scores/best?mode=${helper.tools.other.modeValidator(mode)}&legacy_only=0&limit=100`;
+    const url = baseUrl + `users/${id}/scores/best?mode=${helper.tools.other.modeValidator(mode)}&limit=100`;
     return await apiGet({
         url,
         extra
     });
 }
 export async function getScoresFirst(id: string | number, mode: string, extra: string[]) {
-    const url = baseUrl + `users/${id}/scores/firsts?mode=${helper.tools.other.modeValidator(mode)}&legacy_only=0&limit=100`;
+    const url = baseUrl + `users/${id}/scores/firsts?mode=${helper.tools.other.modeValidator(mode)}&limit=100`;
     return await apiGet({
         url,
         extra
     }) as tooltypes.apiReturn<apitypes.Score[]>;
 }
 export async function getScoresPinned(id: string | number, mode: string, extra: string[]) {
-    const url = baseUrl + `users/${id}/scores/pinned?mode=${helper.tools.other.modeValidator(mode)}&legacy_only=0&limit=100`;
+    const url = baseUrl + `users/${id}/scores/pinned?mode=${helper.tools.other.modeValidator(mode)}&limit=100`;
     return await apiGet({
         url,
         extra
@@ -183,7 +183,7 @@ export async function getUserMapScores(userid: string | number, mapid: number, e
     }) as tooltypes.apiReturn<apitypes.ScoreArrA>;
 }
 export async function getMapLeaderboard(id: number, mode: string, mods: string, extra: string[]) {
-    let url = baseUrl + `beatmaps/${id}/scores?mode=${helper.tools.other.modeValidator(mode)}&legacy_only=0&limit=100`;
+    let url = baseUrl + `beatmaps/${id}/scores?mode=${helper.tools.other.modeValidator(mode)}&limit=100`;
     if (mods) {
         const tempmods = osumodcalc.modHandler(mods, mode as apitypes.GameMode);
         tempmods.forEach(mod => {
@@ -197,7 +197,7 @@ export async function getMapLeaderboard(id: number, mode: string, mods: string, 
 }
 export async function getMapLeaderboardNonLegacy(id: number, mode: string, mods: string, extra: string[]) {
     mode = helper.tools.other.modeValidator(mode);
-    let url = baseUrl + `beatmaps/${id}/solo-scores?mode=${mode}&legacy_only=0&limit=100`;
+    let url = baseUrl + `beatmaps/${id}/solo-scores?mode=${mode}&limit=100`;
     if (mods) {
         const tempmods = osumodcalc.modHandler(mods, mode as apitypes.GameMode);
         tempmods.forEach(mod => {

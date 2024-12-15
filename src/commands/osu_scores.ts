@@ -143,7 +143,7 @@ export const firsts = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(firstscoresdata, osudata.id, 'firstscoresdata');
 
     if (parseArgs.parseScore) {
-        const newScores = helper.tools.formatter.filterScores(firstscoresdata, parseArgs.sort ?? 'recent',
+        const newScores = helper.tools.formatter.filterScores(firstscoresdata, parseArgs.sort ?? 'pp',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -170,8 +170,10 @@ export const firsts = async (input: bottypes.commandInput) => {
         input.overrides = {
             id: newScores?.[pid]?.id,
             commanduser: parseArgs.commanduser,
-            commandAs: input.type
+            commandAs: input.type,
+            ex: `${osudata.username}'s ${helper.tools.calculate.toOrdinal(pid + 1)} ${parseArgs.sort == 'pp' ? helper.tools.formatter.sortDescription(parseArgs.sort ?? 'pp', parseArgs.reverse) + ' ' : ''}#1 score`
         };
+        
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             await helper.tools.commands.errorAndAbort(input, 'firsts', true, `${helper.vars.errors.uErr.osu.score.nf} at index ${pid}`, true);
             return;
@@ -189,7 +191,7 @@ export const firsts = async (input: bottypes.commandInput) => {
     firstsEmbed = helper.tools.formatter.userAuthor(osudata, firstsEmbed);
 
     const scoresarg = await helper.tools.formatter.scoreList(
-        firstscoresdata, 'current', parseArgs.sort ?? 'recent',
+        firstscoresdata, parseArgs.sort ?? 'recent',
         {
             mapper: parseArgs.filteredMapper,
             modsInclude: parseArgs.modsInclude,
@@ -459,18 +461,17 @@ export const maplb = async (input: bottypes.commandInput) => {
     const lbdata = lbdataf.scores;
 
     if (parseScore) {
-        let pid = parseInt(parseId) - 1;
-        if (pid < 0) {
+        let pid = +(parseId) - 1;
+        if (isNaN(pid) || pid < 0) {
             pid = 0;
         }
         if (pid > lbdata.length) {
             pid = lbdata.length - 1;
         }
         input.overrides = {
-            mode: osumodcalc.ModeIntToName(lbdata?.[0]?.ruleset_id),
-            id: lbdata?.[pid]?.best_id,
+            id: lbdata?.[pid]?.id,
             commanduser,
-            commandAs: input.type
+            commandAs: input.type,
         };
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             await helper.tools.commands.errorAndAbort(input, 'maplb', true, `${helper.vars.errors.uErr.osu.score.nf} at index ${pid}`, true);
@@ -501,22 +502,7 @@ export const maplb = async (input: bottypes.commandInput) => {
 
     helper.tools.data.debug(lbdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction.guildId, 'lbData');
 
-    const scoresarg = await helper.tools.formatter.scoreList(lbdata, 'current', 'score', {
-        mapper: null,
-        title: null,
-        artist: null,
-        version: null,
-        modsInclude: null,
-        modsExact: null,
-        modsExclude: null,
-        rank: null,
-        pp: null,
-        score: null,
-        acc: null,
-        combo: null,
-        miss: null,
-        bpm: null,
-    }, false, 1, page, true, true, false, mapdata);
+    const scoresarg = await helper.tools.formatter.scoreList(lbdata, 'score', null, false, 1, page, true, true, false, mapdata);
 
     helper.tools.commands.storeButtonArgs(input.id + '', {
         mapId: mapid,
@@ -724,8 +710,17 @@ export const osutop = async (input: bottypes.commandInput) => {
 
     helper.tools.data.storeFile(osutopdataReq, osudata.id, 'topscoresdata');
 
+    if (commandButtonName == 'nochokes') {
+        for (const score of osutopdata) {
+            score.statistics.miss = 0;
+            score.max_combo = null;
+            score.pp = null;
+            score.is_perfect_combo = true;
+        }
+    }
+
     if (parseArgs.parseScore) {
-        const newScores = helper.tools.formatter.filterScores(osutopdata, parseArgs.sort ?? 'recent',
+        const newScores = helper.tools.formatter.filterScores(osutopdata, parseArgs.sort ?? 'pp',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -742,7 +737,7 @@ export const osutop = async (input: bottypes.commandInput) => {
                 miss: parseArgs.miss,
                 bpm: parseArgs.bpm
             }, parseArgs.reverse,) as apitypes.Score[];
-        let pid = parseInt(parseArgs.parseId) - 1;
+        let pid = +(parseArgs.parseId) - 1;
         if (pid < 0) {
             pid = 0;
         }
@@ -750,10 +745,11 @@ export const osutop = async (input: bottypes.commandInput) => {
             pid = newScores.length - 1;
         }
         input.overrides = {
-
             id: newScores?.[pid]?.id,
             commanduser: parseArgs.commanduser,
-            commandAs: input.type
+            commandAs: input.type,
+            ex: `${osudata.username}'s ${helper.tools.calculate.toOrdinal(pid + 1)} ${parseArgs.sort == 'pp' ? helper.tools.formatter.sortDescription(parseArgs.sort ?? 'pp', parseArgs.reverse) + ' ' : ''}${commandButtonName == 'nochokes' ? 'no choke' : 'top'} score`,
+            type: commandButtonName == 'nochokes' ? 'nochoke' : null,
         };
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             await helper.tools.commands.errorAndAbort(input, 'osutop', true, `${helper.vars.errors.uErr.osu.score.nf} at index ${pid}`, true);
@@ -772,17 +768,8 @@ export const osutop = async (input: bottypes.commandInput) => {
         .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osumodcalc.ModeIntToName(osutopdata?.[0]?.ruleset_id)}#top_ranks`);
     topEmbed = helper.tools.formatter.userAuthor(osudata, topEmbed);
 
-    if (commandButtonName == 'nochokes') {
-        for (const score of osutopdata) {
-            score.statistics.miss = 0;
-            score.max_combo = null;
-            score.pp = null;
-            score.is_perfect_combo = true;
-        }
-    }
-
     const scoresarg = await helper.tools.formatter.scoreList(
-        osutopdata, 'current', parseArgs.sort ?? 'pp',
+        osutopdata, parseArgs.sort ?? 'pp',
         {
             mapper: parseArgs.filteredMapper,
             modsInclude: parseArgs.modsInclude,
@@ -857,7 +844,7 @@ export const pinned = async (input: bottypes.commandInput) => {
 
     if (input.overrides) {
         if (input.overrides.page != null) {
-            parseArgs.page = parseInt(`${input.overrides.page}`);
+            parseArgs.page = +(`${input.overrides.page}`);
         }
     }
 
@@ -966,7 +953,7 @@ export const pinned = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(pinnedscoresdataReq, osudata.id, 'pinnedscoresdata');
 
     if (parseArgs.parseScore) {
-        const newScores = helper.tools.formatter.filterScores(pinnedscoresdata, parseArgs.sort ?? 'recent',
+        const newScores = helper.tools.formatter.filterScores(pinnedscoresdata, parseArgs.sort ?? 'pp',
             {
                 mapper: parseArgs.filteredMapper,
                 modsInclude: parseArgs.modsInclude,
@@ -983,7 +970,7 @@ export const pinned = async (input: bottypes.commandInput) => {
                 miss: parseArgs.miss,
                 bpm: parseArgs.bpm
             }, parseArgs.reverse,) as apitypes.Score[];
-        let pid = parseInt(parseArgs.parseId) - 1;
+        let pid = +(parseArgs.parseId) - 1;
         if (pid < 0) {
             pid = 0;
         }
@@ -991,10 +978,10 @@ export const pinned = async (input: bottypes.commandInput) => {
             pid = newScores.length - 1;
         }
         input.overrides = {
-
             id: newScores?.[pid]?.id,
             commanduser: parseArgs.commanduser,
-            commandAs: input.type
+            commandAs: input.type,
+            ex: `${osudata.username}'s ${helper.tools.calculate.toOrdinal(pid + 1)} ${parseArgs.sort == 'pp' ? helper.tools.formatter.sortDescription(parseArgs.sort ?? 'pp', parseArgs.reverse) + ' ' : ''}pinned score`
         };
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             await helper.tools.commands.errorAndAbort(input, 'pinned', true, `${helper.vars.errors.uErr.osu.score.nf} at index ${pid}`, true);
@@ -1012,7 +999,7 @@ export const pinned = async (input: bottypes.commandInput) => {
         .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`);
     pinnedEmbed = helper.tools.formatter.userAuthor(osudata, pinnedEmbed);
     const scoresarg = await helper.tools.formatter.scoreList(
-        pinnedscoresdata, 'current', parseArgs.sort ?? 'recent',
+        pinnedscoresdata, parseArgs.sort ?? 'recent',
         {
             mapper: parseArgs.filteredMapper,
             modsInclude: parseArgs.modsInclude,
@@ -1203,7 +1190,7 @@ export const recent = async (input: bottypes.commandInput) => {
     }
     if (input.overrides) {
         if (input.overrides.page != null) {
-            page = parseInt(`${input.overrides.page}`);
+            page = +(`${input.overrides.page}`);
         }
         if (input.overrides.type != null) {
             if (input.overrides.type == 'list') {
@@ -1773,8 +1760,8 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             helper.tools.data.debug(strains, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
         } catch (error) {
             helper.tools.data.debug({ error: error }, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
-        helper.tools.log.stdout(error);
-    }
+            helper.tools.log.stdout(error);
+        }
         let strainsgraph = {
             path: '',
             filename: '',
@@ -1818,7 +1805,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             rsEmbed.setTitle(`Best recent ${showFails == 1 ? 'plays' : 'passes'} for ${osudata.username}`);
         }
         page++;
-        const scoresarg = await helper.tools.formatter.scoreList(rsdata, 'current', sort,
+        const scoresarg = await helper.tools.formatter.scoreList(rsdata, sort,
             {
                 mapper: null,
                 artist: null,
@@ -2116,13 +2103,13 @@ ${isfail}
  * parse score and return data
  */
 export const scoreparse = async (input: bottypes.commandInput) => {
-
     let commanduser: Discord.User | Discord.APIUser;
 
     let scorelink: string;
     let scoremode: apitypes.GameMode;
     let scoreid: number | string;
-
+    let nochoke: boolean = false;
+    let overrideAuthor: string;
 
     let scoredetailed: number = 1;
 
@@ -2131,11 +2118,10 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             commanduser = input.message.author;
 
             scorelink = null;
-            scoremode = (input.args[1] ?? 'osu') as apitypes.GameMode;
+            scoremode = input.args[1] as apitypes.GameMode;
             scoreid = input.args[0];
             if (input?.args[0]?.includes('https://')) {
-                const messagenohttp = input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
-                const temp = helper.tools.commands.scoreIdFromLink(messagenohttp);
+                const temp = helper.tools.commands.scoreIdFromLink(scorelink);
                 scoremode = temp.mode;
                 scoreid = temp.id;
             }
@@ -2184,6 +2170,12 @@ export const scoreparse = async (input: bottypes.commandInput) => {
         }
         if (input.overrides?.commandAs != null) {
             input.type = input.overrides.commandAs;
+        }
+        if (input.overrides?.ex != null) {
+            overrideAuthor = input.overrides.ex as string;
+        }
+        if (input.overrides?.type == 'nochoke') {
+            nochoke = true;
         }
     }
 
@@ -2408,6 +2400,14 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     const mxCombo = perf.difficulty.maxCombo ?? mapdata?.max_combo;
     let fcflag = '';
 
+    if (nochoke) {
+        perf = fcperf;
+        scoredata.max_combo = mxCombo;
+        scoredata.pp = null;
+        scoredata.statistics.miss = 0;
+        scoredata.is_perfect_combo = true;
+    }
+
     if (scoredata.accuracy < 1 && scoredata.max_combo == mxCombo) {
         fcflag = ` FC | **${ssperf.pp.toFixed(2)}**pp IF SS`;
     }
@@ -2418,16 +2418,13 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     if (scoredata.max_combo == mxCombo && scoredata.accuracy == 1) {
         fcflag = 'FC';
     }
-    const mxcombo =
-        perf.difficulty.maxCombo;
-    mapdata.max_combo;
 
     let scoreembed = new Discord.EmbedBuilder()
         .setColor(helper.vars.colours.embedColour.score.dec)
         .setTitle(fulltitle)
         .setURL(scoredata.id ? `https://osu.ppy.sh/scores/${scoredata.id}` : `https://osu.ppy.sh/b/${scoredata.id}`)
         .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`);
-    scoreembed = helper.tools.formatter.userAuthor(osudata, scoreembed);
+    scoreembed = helper.tools.formatter.userAuthor(osudata, scoreembed, overrideAuthor);
 
     scoreembed
         .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.has_replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.ruleset_id}/${scoredata.id}/download)` : ''}
@@ -2435,7 +2432,7 @@ ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.lengt
 <t:${Math.floor(new Date(scoredata.ended_at).getTime() / 1000)}:F> | ${helper.tools.formatter.dateToDiscordFormat(new Date(scoredata.ended_at))}
 [Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
 \`${hitlist}\`
-${scoredata.max_combo == mxcombo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mxcombo}x**
+${scoredata.max_combo == mxCombo ? `**${scoredata.max_combo}x**` : `${scoredata.max_combo}x`}/**${mxCombo}x**
 ${`${(scoredata?.pp ?? perf.pp).toFixed(2)}pp` + fcflag}\n${ppissue}
 `);
 
@@ -2836,18 +2833,15 @@ export const scores = async (input: bottypes.commandInput) => {
     helper.tools.data.debug(scoredataReq, 'command', 'scores', input.message?.guildId ?? input.interaction.guildId, 'scoreData');
 
     if (parseScore) {
-        let pid = parseInt(parseId) - 1;
-        if (pid < 0) {
+        let pid = +(parseId) - 1;
+        if (isNaN(pid) || pid < 0) {
             pid = 0;
         }
         if (pid > scoredata.length) {
             pid = scoredata.length - 1;
         }
         input.overrides = {
-            mode: helper.tools.other.modeValidator(scoredata?.[0]?.ruleset_id) ?? 'osu',
-            id: scoredata.slice().sort((a, b) =>
-                (new Date(b.ended_at)).getTime() - (new Date(a.ended_at)).getTime()
-            )?.[pid]?.best_id,
+            id: scoredata?.[pid]?.id,
             commanduser,
             commandAs: input.type
         };
@@ -2874,7 +2868,7 @@ export const scores = async (input: bottypes.commandInput) => {
     if (page > Math.ceil(scoredata.length / 5)) {
         page = Math.ceil(scoredata.length / 5) - 1;
     }
-    const scoresarg = await helper.tools.formatter.scoreList(scoredata, 'current', sort,
+    const scoresarg = await helper.tools.formatter.scoreList(scoredata, sort,
         {
             mapper: null,
             artist: null,
@@ -3492,31 +3486,31 @@ export const simulate = async (input: bottypes.commandInput) => {
                 acc = parseFloat(ctn.split('accuracy=')[1].split(' ')[0]);
             }
             if (ctn.includes('combo=')) {
-                combo = parseInt(ctn.split('combo=')[1].split(' ')[0]);
+                combo = +(ctn.split('combo=')[1].split(' ')[0]);
             }
             if (ctn.includes('n300=')) {
-                n300 = parseInt(ctn.split('n300=')[1].split(' ')[0]);
+                n300 = +(ctn.split('n300=')[1].split(' ')[0]);
             }
             if (ctn.includes('300s=')) {
-                n300 = parseInt(ctn.split('300s=')[1].split(' ')[0]);
+                n300 = +(ctn.split('300s=')[1].split(' ')[0]);
             }
             if (ctn.includes('n100=')) {
-                n100 = parseInt(ctn.split('n100=')[1].split(' ')[0]);
+                n100 = +(ctn.split('n100=')[1].split(' ')[0]);
             }
             if (ctn.includes('100s=')) {
-                n100 = parseInt(ctn.split('100s=')[1].split(' ')[0]);
+                n100 = +(ctn.split('100s=')[1].split(' ')[0]);
             }
             if (ctn.includes('n50=')) {
-                n50 = parseInt(ctn.split('n50=')[1].split(' ')[0]);
+                n50 = +(ctn.split('n50=')[1].split(' ')[0]);
             }
             if (ctn.includes('50s=')) {
-                n50 = parseInt(ctn.split('50s=')[1].split(' ')[0]);
+                n50 = +(ctn.split('50s=')[1].split(' ')[0]);
             }
             if (ctn.includes('miss=')) {
-                nMiss = parseInt(ctn.split('miss=')[1].split(' ')[0]);
+                nMiss = +(ctn.split('miss=')[1].split(' ')[0]);
             }
             if (ctn.includes('misses=')) {
-                nMiss = parseInt(ctn.split('misses=')[1].split(' ')[0]);
+                nMiss = +(ctn.split('misses=')[1].split(' ')[0]);
             }
             if (input.args.includes('bpm=')) {
                 overrideBpm = parseFloat(ctn.split('bpm=')[1].split(' ')[0]);

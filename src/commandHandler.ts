@@ -2,7 +2,7 @@ import * as Discord from 'discord.js';
 import * as helper from './helper.js';
 import * as bottypes from './types/bot.js';
 
-let command: bottypes.command;
+let command: bottypes.command = null;
 let overrides: bottypes.overrides = {};
 let foundCommand = true;
 export function onMessage(message: Discord.Message) {
@@ -36,6 +36,29 @@ export async function onInteraction(interaction: Discord.Interaction) {
     // runCommand(cmd, null, interaction, args, true, 'interaction');
 }
 
+const rslist = [
+    'recent', 'recentscore', 'rs', 'r',
+    'recenttaiko', 'rt',
+    'recentfruits', 'rf', 'rctb',
+    'recentmania', 'rm',
+    'rslist', 'recentlist', 'rl',
+    'recentlisttaiko', 'rlt',
+    'recentlistfruits', 'rlf', 'rlctb', 'rlc',
+    'recentlistmania', 'rlm',
+    'rb', 'recentbest', 'rsbest',
+];
+const scorelist = [
+    'firsts', 'firstplaceranks', 'fpr', 'fp', '#1s', 'first', '#1', '1s',
+    'leaderboard', 'maplb', 'mapleaderboard', 'ml',
+    'nochokes', 'nc',
+    'osutop', 'top', 't', 'ot', 'topo', 'toposu',
+    'taikotop', 'toptaiko', 'tt', 'topt',
+    'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tf', 'tctb', 'topf', 'topc',
+    'maniatop', 'topmania', 'tm', 'topm',
+    'scores', 'c',
+    'pinned', 'pins'
+].concat(rslist).sort((a, b) => b.length - a.length);
+
 // permissions
 function commandCheck(cmd: string, message: Discord.Message, interaction: Discord.ChatInputCommandInteraction, canReply: boolean) {
     //perms bot needs
@@ -61,38 +84,18 @@ function commandCheck(cmd: string, message: Discord.Message, interaction: Discor
         //osu
         'bws', 'badgeweightsystem', 'badgeweight', 'badgeweightseed', 'badgerank',
         'compare', 'common',
-        'firsts', 'firstplaceranks', 'fpr', 'fp', '#1s', 'first', '#1', '1s',
-        'leaderboard', 'maplb', 'mapleaderboard', 'ml',
         'lb',
         'map', 'm',
         'maprandom', 'f2', 'maprand', 'mapsuggest', 'randommap', 'randmap',
         'osu', 'profile', 'o', 'user', 'taiko', 'drums', 'fruits', 'ctb', 'catch', 'mania',
         'osuseet', 'setuser', 'set', 'setmode', 'setskin',
         'nochokes', 'nc',
-        'osutop', 'top', 't', 'ot', 'toposu', 'topo',
-        'taikotop', 'toptaiko', 'tt', 'topt',
-        'ctbtop', 'fruitstop', 'catchtop', 'topctb', 'topfruits', 'topcatch', 'tctb', 'tf', 'topf', 'topc',
-        'maniatop', 'topmania', 'tm', 'topm',
-        'sotarks', 'sotarksosu', 'sotarkstaiko', 'taikosotarks', 'sotarkst', 'tsotarks',
-        'sotarksfruits', 'fruitssotarks', 'fruitsotarks', 'sotarksfruit', 'sotarkscatch', 'catchsotarks', 'sotarksctb', 'ctbsotarks', 'fsotarks', 'sotarksf', 'csotarks', 'sotarksc',
-        'sotarksmania', 'maniasotarks', 'sotarksm', 'msotarks',
-        'pinned',
         'ppcalc', 'mapcalc', 'mapperf', 'maperf', 'mappp',
         'pp', 'rank',
         'ranking', 'rankings',
-        'rs', 'recent', 'r',
-        'rs best', 'recent best', 'rsbest', 'recentbest', 'rb',
-        'recentlist', 'rl',
-        'recentlisttaiko', 'rlt',
-        'recentlistfruits', 'rlf', 'rlctb', 'rlc',
-        'recentlistmania', 'rlm',
-        'recenttaiko', 'rt',
-        'recentfruits', 'rf', 'rctb',
-        'recentmania', 'rm',
         'recentactivity', 'recentact', 'rsact',
         'saved',
         'scoreparse', 'score', 'sp',
-        'scores', 'c',
         'scorestats', 'ss',
         'simplay', 'simulate', 'sim',
         'skin',
@@ -105,7 +108,7 @@ function commandCheck(cmd: string, message: Discord.Message, interaction: Discor
         'clear',
         'find', 'get',
         'prefix', 'servers', 'userinfo'
-    ];
+    ].concat(scorelist);
     const requireReactions: string[] = [
         'poll', 'vote'
     ];
@@ -208,6 +211,24 @@ function commandCheck(cmd: string, message: Discord.Message, interaction: Discor
 }
 
 function commandSelect(cmd: string, args: string[]) {
+    let tnum: string;
+    if (scorelist.some(x => cmd.startsWith(x)) && !scorelist.some(x => cmd == x)) {
+        let cont: boolean = true;
+        scorelist.some(x => {
+            if (cmd.startsWith(x) && cont) {
+                tnum = cmd.replace(x, '');
+                if (!isNaN(+tnum)) {
+                    cmd = x;
+                    cont = false;
+                }
+            }
+            return null;
+        });
+    }
+    if (!isNaN(+tnum)) {
+        if (rslist.includes(cmd)) args.push('-p', tnum);
+        else args.push('-parse', tnum);
+    }
     switch (cmd) {
         // gen
         case 'changelog': case 'clog': case 'changes':
@@ -410,11 +431,31 @@ function commandSelect(cmd: string, args: string[]) {
         case 'pinned':
             command = helper.commands.osu.scores.pinned;
             break;
-        case 'rs': case 'recent': case 'r':
+        case 'recent': case 'rs': case 'recentscore': case 'r':
             command = helper.commands.osu.scores.recent;
             break;
-        case 'rs best': case 'recent best':
-        case 'rsbest': case 'recentbest': case 'rb': {
+        case 'recenttaiko': case 'rt': {
+            overrides = {
+                mode: 'taiko'
+            };
+            command = helper.commands.osu.scores.recent;
+        }
+            break;
+        case 'recentfruits': case 'rf': case 'rctb': {
+            overrides = {
+                mode: 'fruits'
+            };
+            command = helper.commands.osu.scores.recent;
+        }
+            break;
+        case 'recentmania': case 'rm': {
+            overrides = {
+                mode: 'mania'
+            };
+            command = helper.commands.osu.scores.recent;
+        }
+            break;
+        case 'recentbest': case 'rsbest': case 'rb': {
             overrides = {
                 type: 'list',
                 sort: 'pp'
@@ -422,7 +463,7 @@ function commandSelect(cmd: string, args: string[]) {
             command = helper.commands.osu.scores.recent;
         }
             break;
-        case 'recentlist': case 'rl': {
+        case 'recentlist': case 'rl': case 'rslist': {
             overrides = {
                 type: 'list',
                 sort: 'recent'
@@ -453,27 +494,6 @@ function commandSelect(cmd: string, args: string[]) {
                 type: 'list',
                 mode: 'mania',
                 sort: 'recent'
-            };
-            command = helper.commands.osu.scores.recent;
-        }
-            break;
-        case 'recenttaiko': case 'rt': {
-            overrides = {
-                mode: 'taiko'
-            };
-            command = helper.commands.osu.scores.recent;
-        }
-            break;
-        case 'recentfruits': case 'rf': case 'rctb': {
-            overrides = {
-                mode: 'fruits'
-            };
-            command = helper.commands.osu.scores.recent;
-        }
-            break;
-        case 'recentmania': case 'rm': {
-            overrides = {
-                mode: 'mania'
             };
             command = helper.commands.osu.scores.recent;
         }
@@ -671,7 +691,7 @@ function runCommand(cmd: string, message: Discord.Message, interaction: Discord.
             cmd = 'help';
         }
         commandSelect(cmd, args);
-        if (foundCommand) {
+        if (foundCommand && command) {
             startType(message ?? interaction);
             command({
                 message,

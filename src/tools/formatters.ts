@@ -23,7 +23,6 @@ const ranks = [
 
 export async function scoreList(
     scores: apitypes.Score[],
-    scoretype: 'legacy' | 'current',
     sort: 'pp' | 'score' | 'recent' | 'acc' | 'combo' | 'miss' | 'rank',
     filter: {
         mapper: string,
@@ -158,23 +157,23 @@ export function filterScoresLegacy(
         const newScore = { ...scores[i], ...{ originalIndex: i } };
         newScores.push(newScore);
     }
-    if (filter.mapper) {
+    if (filter?.mapper) {
         newScores = newScores.filter(score =>
             matchesString(score.beatmapset.user.username, filter.mapper) || matchesString(score.beatmapset.user_id + '', filter.mapper) || matchesString((overrideMap ?? score.beatmap).user_id + '', filter.mapper));
     }
-    if (filter.title) {
+    if (filter?.title) {
         newScores = newScores.filter(score =>
             matchesString(score.beatmapset.title, filter.title) || matchesString(score.beatmapset.title_unicode, filter.title));
     }
-    if (filter.artist) {
+    if (filter?.artist) {
         newScores = newScores.filter(score =>
             matchesString(score.beatmapset.artist, filter.artist) || matchesString(score.beatmapset.artist_unicode, filter.artist));
     }
-    if (filter.version) {
+    if (filter?.version) {
         newScores = newScores.filter(score =>
             matchesString((overrideMap ?? score.beatmap).version, filter.version));
     }
-    if (filter.pp) {
+    if (filter?.pp) {
         const tempArg = argRange(filter.pp, true);
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
@@ -184,7 +183,7 @@ export function filterScoresLegacy(
                         score.pp >= tempArg.min :
                         score.pp == tempArg.exact : true);
     }
-    if (filter.score) {
+    if (filter?.score) {
         const tempArg = argRange(filter.score, true);
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
@@ -194,7 +193,7 @@ export function filterScoresLegacy(
                         score.score >= tempArg.min :
                         score.score == tempArg.exact : true);
     }
-    if (filter.acc) {
+    if (filter?.acc) {
         const tempArg = argRange(filter.acc, true);
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
@@ -204,7 +203,7 @@ export function filterScoresLegacy(
                         score.accuracy * 100 >= tempArg.min :
                         score.accuracy * 100 == tempArg.exact : true);
     }
-    if (filter.combo) {
+    if (filter?.combo) {
         const tempArg = argRange(filter.combo, true);
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
@@ -214,7 +213,7 @@ export function filterScoresLegacy(
                         score.max_combo >= tempArg.min :
                         score.max_combo == tempArg.exact : true);
     }
-    if (filter.miss) {
+    if (filter?.miss) {
         const tempArg = argRange(filter.miss, true);
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
@@ -224,7 +223,7 @@ export function filterScoresLegacy(
                         score.statistics.count_miss >= tempArg.min :
                         score.statistics.count_miss == tempArg.exact : true);
     }
-    if (filter.bpm) {
+    if (filter?.bpm) {
         const tempArg = argRange(filter.bpm, true);
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
@@ -234,11 +233,11 @@ export function filterScoresLegacy(
                         (overrideMap ?? score.beatmap).bpm >= tempArg.min :
                         (overrideMap ?? score.beatmap).bpm == tempArg.exact : true);
     }
-    if (filter.modsInclude?.includes('NM')) {
+    if (filter?.modsInclude?.includes('NM')) {
         filter.modsExact = filter.modsInclude.replace('NM', '');
         filter.modsInclude = null;
     }
-    if (filter.modsInclude) {
+    if (filter?.modsInclude) {
         newScores = newScores.filter(score => {
             let x: boolean = true;
             score.mods.forEach(mod => {
@@ -249,13 +248,13 @@ export function filterScoresLegacy(
             return x;
         });
     }
-    if (filter.modsExact && !filter.modsInclude) {
+    if (filter?.modsExact && !filter.modsInclude) {
         if (['NM', 'NONE', 'NO', 'NOMOD'].some(mod => mod == filter.modsExact.toUpperCase())) {
             newScores = newScores.filter(score => score.mods.length == 0);
         } else {
             newScores = newScores.filter(score => score.mods.join('') == osumodcalc.modHandler(filter.modsExact, score.mode).join(''));
         }
-    } else if (filter.modsExclude) {
+    } else if (filter?.modsExclude) {
         newScores = newScores.filter(score => {
             let x: boolean = true;
             score.mods.forEach(mod => {
@@ -321,23 +320,23 @@ export function filterScores(
         const newScore = { ...scores[i], ...{ originalIndex: i } };
         newScores.push(newScore);
     }
-    if (filter.mapper) {
+    if (filter?.mapper) {
         newScores = newScores.filter(score =>
             matchesString(score.beatmapset.user.username, filter.mapper) || matchesString(score.beatmapset.user_id + '', filter.mapper) || matchesString((overrideMap ?? score.beatmap).user_id + '', filter.mapper));
     }
-    if (filter.title) {
+    if (filter?.title) {
         newScores = newScores.filter(score =>
             matchesString(score.beatmapset.title, filter.title) || matchesString(score.beatmapset.title_unicode, filter.title));
     }
-    if (filter.artist) {
+    if (filter?.artist) {
         newScores = newScores.filter(score =>
             matchesString(score.beatmapset.artist, filter.artist) || matchesString(score.beatmapset.artist_unicode, filter.artist));
     }
-    if (filter.version) {
+    if (filter?.version) {
         newScores = newScores.filter(score =>
             matchesString((overrideMap ?? score.beatmap).version, filter.version));
     }
-    if (filter.pp) {
+    if (filter?.pp) {
         const tempArg = argRange(filter.pp, true);
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
@@ -347,7 +346,7 @@ export function filterScores(
                         score.pp >= tempArg.min :
                         score.pp == tempArg.exact : true);
     }
-    if (filter.score) {
+    if (filter?.score) {
         const tempArg = argRange(filter.score, true);
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
@@ -357,7 +356,7 @@ export function filterScores(
                         score.total_score >= tempArg.min :
                         score.total_score == tempArg.exact : true);
     }
-    if (filter.acc) {
+    if (filter?.acc) {
         const tempArg = argRange(filter.acc, true);
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
@@ -367,7 +366,7 @@ export function filterScores(
                         score.accuracy * 100 >= tempArg.min :
                         score.accuracy * 100 == tempArg.exact : true);
     }
-    if (filter.combo) {
+    if (filter?.combo) {
         const tempArg = argRange(filter.combo, true);
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
@@ -377,7 +376,7 @@ export function filterScores(
                         score.max_combo >= tempArg.min :
                         score.max_combo == tempArg.exact : true);
     }
-    if (filter.miss) {
+    if (filter?.miss) {
         const tempArg = argRange(filter.miss, true);
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
@@ -387,7 +386,7 @@ export function filterScores(
                         (score.statistics.miss ?? 0) >= tempArg.min :
                         (score.statistics.miss ?? 0) == tempArg.exact : true);
     }
-    if (filter.bpm) {
+    if (filter?.bpm) {
         const tempArg = argRange(filter.bpm, true);
         newScores = newScores.filter(score =>
             !isNaN(tempArg.max) && !isNaN(tempArg.min) && !isNaN(tempArg.exact) ?
@@ -397,11 +396,11 @@ export function filterScores(
                         (overrideMap ?? score.beatmap).bpm >= tempArg.min :
                         (overrideMap ?? score.beatmap).bpm == tempArg.exact : true);
     }
-    if (filter.modsInclude?.includes('NM')) {
+    if (filter?.modsInclude?.includes('NM')) {
         filter.modsExact = filter.modsInclude.replace('NM', '');
         filter.modsInclude = null;
     }
-    if (filter.modsInclude) {
+    if (filter?.modsInclude) {
         newScores = newScores.filter(score => {
             let x: boolean = true;
             score.mods.forEach(mod => {
@@ -412,13 +411,13 @@ export function filterScores(
             return x;
         });
     }
-    if (filter.modsExact && !filter.modsInclude) {
+    if (filter?.modsExact && !filter.modsInclude) {
         if (['NM', 'NONE', 'NO', 'NOMOD'].some(mod => mod == filter.modsExact.toUpperCase())) {
             newScores = newScores.filter(score => score.mods.length == 0);
         } else {
             newScores = newScores.filter(score => score.mods.map(x => x.acronym).join('') == osumodcalc.modHandler(filter.modsExact, osumodcalc.ModeIntToName(score.ruleset_id)).join(''));
         }
-    } else if (filter.modsExclude) {
+    } else if (filter?.modsExclude) {
         newScores = newScores.filter(score => {
             let x: boolean = true;
             score.mods.forEach(mod => {
@@ -517,24 +516,24 @@ export function filterMaps(
     },
     reverse: boolean,
 ) {
-    if (filter.version) {
+    if (filter?.version) {
         mapsets = mapsets.filter(mapset => {
             let x = false;
             mapset.beatmaps.forEach(beatmap => { x = matchesString(beatmap.version, filter.version); });
             return x;
         });
     }
-    if (filter.mapper) {
+    if (filter?.mapper) {
         mapsets = mapsets.filter(mapset => {
             let x = false;
             mapset.beatmaps.forEach(beatmap => { x = matchesString(beatmap.user_id + '', filter.mapper); });
             return x || matchesString(mapset.user.username, filter.mapper) || matchesString(mapset.user_id + '', filter.mapper);
         });
     }
-    if (filter.artist) {
+    if (filter?.artist) {
         mapsets = mapsets.filter(mapset => matchesString(mapset.artist, filter.artist) || matchesString(mapset.artist_unicode, filter.artist));
     }
-    if (filter.title) {
+    if (filter?.title) {
         mapsets = mapsets.filter(mapset => matchesString(mapset.title, filter.title) || matchesString(mapset.title_unicode, filter.title));
     }
     switch (sort) {
@@ -652,19 +651,19 @@ export function filterMapPlays(
     },
     reverse: boolean,
 ) {
-    if (filter.version) {
+    if (filter?.version) {
         mapsets = mapsets.filter(mapset => matchesString(mapset.beatmap.version, filter.version)
         );
     }
-    if (filter.mapper) {
+    if (filter?.mapper) {
         mapsets = mapsets.filter(mapset =>
             matchesString(mapset.beatmap.user_id + '', filter.mapper) || matchesString(mapset.beatmapset.user.username, filter.mapper) || matchesString(mapset.beatmapset.user_id + '', filter.mapper)
         );
     }
-    if (filter.artist) {
+    if (filter?.artist) {
         mapsets = mapsets.filter(mapset => matchesString(mapset.beatmapset.artist, filter.artist) || matchesString(mapset.beatmapset.artist_unicode, filter.artist));
     }
-    if (filter.title) {
+    if (filter?.title) {
         mapsets = mapsets.filter(mapset => matchesString(mapset.beatmapset.title, filter.title) || matchesString(mapset.beatmapset.title_unicode, filter.title));
     }
     switch (sort) {
@@ -819,9 +818,19 @@ export function gradeToEmoji(str: string) {
 }
 
 
-export function userAuthor(osudata: apitypes.User, embed: Discord.EmbedBuilder) {
+export function userAuthor(osudata: apitypes.User, embed: Discord.EmbedBuilder, replaceName?: string) {
+    let name = replaceName ?? osudata.username;
+    if (osudata?.statistics?.global_rank) {
+        name += ` | #${helper.tools.calculate.separateNum(osudata?.statistics?.global_rank)}`;
+    }
+    if (osudata?.statistics?.country_rank) {
+        name += ` | #${helper.tools.calculate.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code}`;
+    }
+    if (osudata?.statistics?.pp) {
+        name += ` | ${helper.tools.calculate.separateNum(osudata?.statistics?.pp)}pp`;
+    }
     embed.setAuthor({
-        name: `${osudata.username} | #${helper.tools.calculate.separateNum(osudata?.statistics?.global_rank)} | #${helper.tools.calculate.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${helper.tools.calculate.separateNum(osudata?.statistics?.pp)}pp`,
+        name,
         url: `https://osu.ppy.sh/users/${osudata.id}`,
         iconURL: `${`https://osuflags.omkserver.nl/${osudata.country_code}.png`}`
     });
@@ -1098,4 +1107,57 @@ export function CurrentToLegacyScore(score: apitypes.Score): apitypes.ScoreLegac
         user: score.user,
         weight: score.weight
     };
+}
+
+export function sortDescription(type: "pp" | "score" | "recent" | "acc" | "combo" | "miss" | "rank", reverse: boolean) {
+    let x: string;
+    switch (type) {
+        case 'pp':
+            x = 'highest performance';
+            break;
+        case 'score':
+            x = 'highest score';
+            break;
+        case 'recent':
+            x = 'most recent';
+            break;
+        case 'acc':
+            x = 'highest accuracy';
+            break;
+        case 'combo':
+            x = 'highest combo';
+            break;
+        case 'miss':
+            x = 'lowest miss count';
+            break;
+        case 'rank':
+            x = 'best rank';
+            break;
+    }
+    if(reverse){
+        switch (type) {
+            case 'pp':
+                x = 'lowest performance';
+                break;
+            case 'score':
+                x = 'lowest score';
+                break;
+            case 'recent':
+                x = 'oldest';
+                break;
+            case 'acc':
+                x = 'lowest accuracy';
+                break;
+            case 'combo':
+                x = 'lowest combo';
+                break;
+            case 'miss':
+                x = 'highest miss count';
+                break;
+            case 'rank':
+                x = 'best rank';
+                break;
+        }
+    }
+    return x;
 }
