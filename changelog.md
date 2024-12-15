@@ -21,6 +21,7 @@
 -   `recentscore` aliases
 -   don't show rank and pp in author field if the value is null or 0
 -   single scores via `-parse` from scorelist commands show what scorelist they came from
+-   grab changelog from `dev` branch instead of `main`
 
 ## [4.0.3] - 2024-12-11
 
