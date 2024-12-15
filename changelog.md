@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+## [4.0.4] - 2024-12-15
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
+
 ### Fixed
 
 -   `top` sorting by `recent` instead of `pp` when parsing single scores

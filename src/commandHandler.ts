@@ -217,8 +217,10 @@ function commandSelect(cmd: string, args: string[]) {
         scorelist.some(x => {
             if (cmd.startsWith(x) && cont) {
                 tnum = cmd.replace(x, '');
-                cmd = x;
-                cont = false;
+                if (!isNaN(+tnum)) {
+                    cmd = x;
+                    cont = false;
+                }
             }
             return null;
         });
