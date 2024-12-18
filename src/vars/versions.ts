@@ -1,6 +1,6 @@
-export const releaseDate = '20241215';
+export const releaseDate = '20241218';
 
-export const current = '4.0.4';
+export const current = '4.0.5';
 
 export const versions: {
     name: string,
@@ -9,6 +9,10 @@ export const versions: {
         { // keep this 
             name: 'WIP',
             releaseDate: 'xxxx-xx-xx'
+        },
+        {
+            name: '4.0.5',
+            releaseDate: '2024-12-18'
         },
         {
             name: '4.0.4',

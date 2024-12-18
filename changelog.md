@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+## [4.0.5] - 2024-12-18
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/)</br>
+
 ### Fixed
 
 - scorelist commands sometimes having the gamemode in the footer show as `undefined`
