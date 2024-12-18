@@ -6,6 +6,17 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+## [4.0.5] - 2024-12-18
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/5c36d8cd93b03d25a0b2a537506ede93f8e43057)</br>
+
+### Fixed
+
+- scorelist commands sometimes having the gamemode in the footer show as `undefined`
+- mods exclude using mods include value
+- using `-mx NM` includes `CL` scores
+- filtering `DT` and `NC` (or `HT` and `DC`) doesn't filter both
+
 ## [4.0.4] - 2024-12-15
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/5dfe5e2351609e9dec92b8c871fa1a7ccfc5c071)</br>
