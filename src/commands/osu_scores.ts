@@ -502,7 +502,7 @@ export const maplb = async (input: bottypes.commandInput) => {
 
     helper.tools.data.debug(lbdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction.guildId, 'lbData');
 
-    const scoresarg = await helper.tools.formatter.scoreList(lbdata, 'score', null, false, 1, page, true, true, false, mapdata);
+    const scoresarg = await helper.tools.formatter.scoreList(lbdata, 'score', null, false, 1, page, true, 'map_leaderboard', mapdata);
 
     helper.tools.commands.storeButtonArgs(input.id + '', {
         mapId: mapid,
@@ -1821,7 +1821,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                 combo,
                 miss,
                 bpm
-            }, false, scoredetailed, page, true, false, true);
+            }, false, scoredetailed, page, true,);
         helper.tools.commands.storeButtonArgs(input.id, {
             user,
             searchid,
@@ -2884,7 +2884,7 @@ export const scores = async (input: bottypes.commandInput) => {
             combo: null,
             miss: null,
             bpm: null
-        }, reverse, scoredetailed, page, false, false, false, mapdata);
+        }, reverse, scoredetailed, page, false, 'single_map', mapdata);
     helper.tools.commands.storeButtonArgs(input.id + '', {
         user,
         searchid,

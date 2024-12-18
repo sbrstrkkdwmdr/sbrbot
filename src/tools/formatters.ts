@@ -44,8 +44,7 @@ export async function scoreList(
     detail: number,
     page: number,
     showOriginalIndex: boolean,
-    showUsername?: boolean,
-    showMap?: boolean,
+    preset?: 'map_leaderboard' | 'single_map',
     overrideMap?: apitypes.Beatmap
 ): Promise<formatterInfo> {
     const newScores = filterScores(scores as apitypes.Score[], sort, filter, reverse, overrideMap);
@@ -86,21 +85,26 @@ export async function scoreList(
             mapLastUpdated: new Date((overrideMap ?? score.beatmap).last_updated),
         });
         let info = `**#${(showOriginalIndex ? score.originalIndex : i) + 1}`;
-        if (showMap != false) {
-            score = score as indexedScore<apitypes.Score>;
-            info += `・[${score.beatmapset.title} [${(overrideMap ?? score.beatmap).version}]](https://osu.ppy.sh/${score.id ? `scores/${score.id}` : `b/${(overrideMap ?? score.beatmap).id}`})`;
-        }
-        if (showUsername) {
-            info += `・[${score.user.username}](https://osu.ppy.sh/u/${score.user_id})`;
+        switch (preset) {
+            case 'map_leaderboard':
+                info += `・[${score.user.username}](https://osu.ppy.sh/${score.id ? `scores/${score.id}` : `u/${score.user_id}`})`;
+                break;
+            case 'single_map':
+                info += `・[${score.mods.map(x => x.acronym).join('')}](https://osu.ppy.sh/scores/${score.id})`;
+                break;
+            default:
+                info += `・[${score.beatmapset.title} [${(overrideMap ?? score.beatmap).version}]](https://osu.ppy.sh/${score.id ? `scores/${score.id}` : `b/${(overrideMap ?? score.beatmap).id}`})`;
+                break;
         }
         let combo = `${score?.max_combo}/**${fc.difficulty.maxCombo}x**`;
         if (score.max_combo == fc.difficulty.maxCombo || !score.max_combo) combo = `**${score.max_combo}x**`;
         const tempScore = score as indexedScore<apitypes.Score>;
+        
         info +=
-            `**
-    \`${helper.tools.calculate.numberShorthand(tempScore.total_score)}\` |${tempScore.mods.length > 0 ? ' **' + tempScore.mods.map(x => x.acronym).join('') + '** |' : ''} ${dateToDiscordFormat(new Date(tempScore.ended_at))}
-    \`${returnHits(score.statistics, score.ruleset_id).short}\` | ${combo} | ${(score.accuracy * 100).toFixed(2)}% | ${helper.vars.emojis.grades[score.rank]}
-    ${(score?.pp ?? perf.pp).toFixed(2)}pp`;
+            `** ${dateToDiscordFormat(new Date(tempScore.ended_at))}
+${helper.vars.emojis.grades[score.rank]}\` | ${helper.tools.calculate.numberShorthand(tempScore.total_score)}\` | ${tempScore.mods.length > 0 && preset != 'single_map' ? ' **' + tempScore.mods.map(x => x.acronym).join('') + '**' : ''}
+\`${returnHits(score.statistics, score.ruleset_id).short}\` | ${combo} | ${(score.accuracy * 100).toFixed(2)}% 
+${(score?.pp ?? perf.pp).toFixed(2)}pp`;
 
         if (!score?.is_perfect_combo) {
             info += ' (' + fc.pp.toFixed(2) + 'pp if FC)';
