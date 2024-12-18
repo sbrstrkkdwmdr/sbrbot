@@ -413,7 +413,7 @@ export function filterScores(
     }
     if (filter?.modsExact && !filter.modsInclude) {
         if (['NM', 'NONE', 'NO', 'NOMOD'].some(mod => mod == filter.modsExact.toUpperCase())) {
-            newScores = newScores.filter(score => score.mods.length == 0);
+            newScores = newScores.filter(score => score.mods.length == 0 || score.mods.map(x => x.acronym).join('') == 'CL' || score.mods.map(x => x.acronym).join('') == 'LZ');
         } else {
             newScores = newScores.filter(score => score.mods.map(x => x.acronym).join('') == osumodcalc.modHandler(filter.modsExact, osumodcalc.ModeIntToName(score.ruleset_id)).join(''));
         }
@@ -421,7 +421,7 @@ export function filterScores(
         newScores = newScores.filter(score => {
             let x: boolean = true;
             score.mods.forEach(mod => {
-                if (osumodcalc.modHandler(filter.modsInclude, osumodcalc.ModeIntToName(score.ruleset_id)).includes(mod.acronym as osumodcalc.Mods)) {
+                if (osumodcalc.modHandler(filter.modsExclude, osumodcalc.ModeIntToName(score.ruleset_id)).includes(mod.acronym as osumodcalc.Mods)) {
                     x = false;
                 }
             });
@@ -1134,7 +1134,7 @@ export function sortDescription(type: "pp" | "score" | "recent" | "acc" | "combo
             x = 'best rank';
             break;
     }
-    if(reverse){
+    if (reverse) {
         switch (type) {
             case 'pp':
                 x = 'lowest performance';

@@ -9,6 +9,8 @@
 ### Fixed
 
 - scorelist commands sometimes having the gamemode in the footer show as `undefined`
+- mods exclude using mods include value
+- using `-mx NM` includes `CL` scores
 
 ## [4.0.4] - 2024-12-15
 
