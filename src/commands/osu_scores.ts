@@ -211,7 +211,7 @@ export const firsts = async (input: bottypes.commandInput) => {
     helper.tools.commands.storeButtonArgs(input.id + '', { ...parseArgs, ...{ maxPage: scoresarg.maxPage } });
 
     firstsEmbed.setFooter({
-        text: `${scoresarg.curPage}/${scoresarg.maxPage} | ${parseArgs.mode} | ${reachedMaxCount ? ' | Only first 500 scores are shown' : ''}`
+        text: `${scoresarg.curPage}/${scoresarg.maxPage} | ${parseArgs?.mode ?? osumodcalc.ModeIntToName(firstscoresdata?.[0]?.ruleset_id)} | ${reachedMaxCount ? ' | Only first 500 scores are shown' : ''}`
     });
     if (scoresarg.text.includes('ERROR')) {
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
@@ -788,7 +788,7 @@ export const osutop = async (input: bottypes.commandInput) => {
         }, parseArgs.reverse, parseArgs.scoredetailed, parseArgs.page, true);
     helper.tools.commands.storeButtonArgs(input.id + '', { ...parseArgs, ...{ maxPage: scoresarg.maxPage } });
     topEmbed.setFooter({
-        text: `${scoresarg.curPage}/${Math.ceil(scoresarg.maxPage)} | ${parseArgs.mode}`
+        text: `${scoresarg.curPage}/${Math.ceil(scoresarg.maxPage)} | ${parseArgs?.mode ?? osumodcalc.ModeIntToName(osutopdata?.[0]?.ruleset_id)}`
     });
     if (scoresarg.text.includes('ERROR')) {
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
@@ -1019,7 +1019,7 @@ export const pinned = async (input: bottypes.commandInput) => {
     helper.tools.commands.storeButtonArgs(input.id + '', { ...parseArgs, ...{ maxPage: scoresarg.maxPage } });
     helper.tools.commands.storeButtonArgs(input.id + '', { ...parseArgs, ...{ maxPage: scoresarg.maxPage } });
     pinnedEmbed.setFooter({
-        text: `${scoresarg.curPage}/${Math.ceil(scoresarg.maxPage)} | ${parseArgs.mode}`
+        text: `${scoresarg.curPage}/${Math.ceil(scoresarg.maxPage)} | ${parseArgs?.mode ?? osumodcalc.ModeIntToName(pinnedscoresdata?.[0]?.ruleset_id)}`
     });
     if (scoresarg.text.includes('ERROR')) {
         pinnedEmbed.setDescription('**ERROR**\nNo scores found');
@@ -1845,7 +1845,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             list: true,
         });
         rsEmbed.setFooter({
-            text: `${scoresarg.curPage}/${scoresarg.maxPage} | ${mode}`
+            text: `${scoresarg.curPage}/${scoresarg.maxPage} | ${mode ?? osumodcalc.ModeIntToName(rsdata?.[0]?.ruleset_id)}`
         });
         if (scoresarg.text.includes('ERROR')) {
             (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
@@ -2899,7 +2899,7 @@ export const scores = async (input: bottypes.commandInput) => {
         parseId,
     });
     scoresEmbed.setFooter({
-        text: `${scoresarg.curPage}/${scoresarg.maxPage} | ${mode}`
+        text: `${scoresarg.curPage}/${scoresarg.maxPage} | ${mode ?? osumodcalc.ModeIntToName(scoredata?.[0]?.ruleset_id)}`
     });
     if (scoresarg.text.includes('ERROR')) {
         scoresEmbed.setDescription('**ERROR**\nNo scores found');
