@@ -418,10 +418,17 @@ export function filterScores(
             newScores = newScores.filter(score => score.mods.map(x => x.acronym).join('') == osumodcalc.modHandler(filter.modsExact, osumodcalc.ModeIntToName(score.ruleset_id)).join(''));
         }
     } else if (filter?.modsExclude) {
+        const xlModsArr = osumodcalc.modHandler(filter.modsExclude, osumodcalc.ModeIntToName(newScores?.[0]?.ruleset_id ?? 0));
+        if (filter.modsExclude.includes('DT') && filter.modsExclude.includes('NC')) {
+            xlModsArr.push('DT');
+        }
+        if (filter.modsExclude.includes('HT') && filter.modsExclude.includes('DC')) {
+            xlModsArr.push('DC');
+        }
         newScores = newScores.filter(score => {
             let x: boolean = true;
             score.mods.forEach(mod => {
-                if (osumodcalc.modHandler(filter.modsExclude, osumodcalc.ModeIntToName(score.ruleset_id)).includes(mod.acronym as osumodcalc.Mods)) {
+                if (xlModsArr.includes(mod.acronym as osumodcalc.Mods)) {
                     x = false;
                 }
             });

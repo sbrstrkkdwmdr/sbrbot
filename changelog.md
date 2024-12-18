@@ -11,6 +11,7 @@
 - scorelist commands sometimes having the gamemode in the footer show as `undefined`
 - mods exclude using mods include value
 - using `-mx NM` includes `CL` scores
+- filtering `DT` and `NC` (or `HT` and `DC`) doesn't filter both
 
 ## [4.0.4] - 2024-12-15
 
