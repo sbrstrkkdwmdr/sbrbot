@@ -1067,7 +1067,7 @@ export const pinned = async (input: bottypes.commandInput) => {
  * most recent score or list of recent scores
  */
 export const recent = async (input: bottypes.commandInput) => {
-
+    
     let commanduser: Discord.User | Discord.APIUser;
 
     let user;
@@ -1617,7 +1617,7 @@ export const recent = async (input: bottypes.commandInput) => {
 
         const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
         let msToFail: number, curbmpasstime: number, guesspasspercentage: number;
-        if (curscore.rank.toUpperCase() == 'F') {
+        if (!curscore.passed) {
             msToFail = await helper.tools.other.getFailPoint(totalhits, `${helper.vars.path.files}/maps/${curbm.id}.osu`);
             curbmpasstime = Math.floor(msToFail / 1000);
             guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
@@ -1628,10 +1628,10 @@ export const recent = async (input: bottypes.commandInput) => {
 
         let rsgrade;
         rsgrade = helper.vars.emojis.grades[curscore.rank.toUpperCase()];
-        if (curscore.rank.toUpperCase() == 'F') {
+        if (!curscore.passed) {
             rspassinfo = `${guesspasspercentage.toFixed(2)}% completed (${helper.tools.calculate.secondsToTime(curbmpasstime)}/${helper.tools.calculate.secondsToTime(curbm.total_length)})`;
             rsgrade =
-                helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[osumodcalc.calcgrade(gamehits.great, (gamehits.ok ?? 0), (gamehits.meh ?? 0), (gamehits.miss ?? 0)).grade]} if pass)`;
+                helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[curscore.rank.toUpperCase()]} if pass)`;
         }
 
         const fulltitle = `${mapdata.beatmapset.artist} - ${mapdata.beatmapset.title} [${mapdata.version}]`;

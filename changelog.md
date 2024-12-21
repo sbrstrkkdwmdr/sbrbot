@@ -6,9 +6,15 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+### Fixed
+
+- some scorelist filter args returning null 
+- failed scores not displaying pass %
+
 ### Changed
 
-- scorelist formatter
+- scorelist filter args are rounded
+- scorelist filter args accept !<x> (filter by values that dont equal that number)
 
 ## [4.0.5] - 2024-12-18
 
