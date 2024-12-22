@@ -1,5 +1,7 @@
 # SSoB
 
+A discord bot for osu! related stuff
+
 <div align="center">
 
 [![website](https://img.shields.io/badge/website-FFA41C?style=for-the-badge&logoColor=white)](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands)</br>
