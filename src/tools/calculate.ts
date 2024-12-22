@@ -93,7 +93,7 @@ export function scientificNotation(input: number, significantFigures: number) {
 }
 
 /**
- * @info separates numbers ie 3000000 -> 3,000,000
+ * @info separates numbers eg. 3000000 -> 3,000,000
  * @param number 
  * @param separator default is ,
  * @returns string with numbers separated. Doesn't separate values after the decimal point.

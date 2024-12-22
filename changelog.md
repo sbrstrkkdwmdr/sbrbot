@@ -178,7 +178,7 @@
 
 ### Changed
 
--   reworked some args to also take a number range (pp, score, bpm, acc, miss) ie. -bpm 180..200 returns scores between 180bpm and 200bpm (inclusive)
+-   reworked some args to also take a number range (pp, score, bpm, acc, miss) eg. -bpm 180..200 returns scores between 180bpm and 200bpm (inclusive)
 -   make help command look cleaner
 
 ## [3.19.3] - 2024-08-21
@@ -429,7 +429,7 @@
 
 ### Changed
 
--   convert - input value can be in any spot ie `[in] [out] [val]`, as well as `[val] [in] [out]` and `[in] [val] [out]` all are valid
+-   convert - input value can be in any spot eg. `[in] [out] [val]`, as well as `[val] [in] [out]` and `[in] [val] [out]` all are valid
 -   lb - update interaction version
 -   wording
 -   change `find`'s default image

@@ -639,7 +639,7 @@ export type SpotLights = {
  * iso 8601 date
  * ${YYYY}-${MM}-${DD}T${hh}:${mm}:${ss}+${hh}:${mm}
  * year-month-dayThour-minute-second+hour:minute
- * ie 2019-09-05T06:31:20+00:00
+ * eg. 2019-09-05T06:31:20+00:00
 */
 export type Timestamp = `${number}-${number}-${number}T${number}:${number}:${number}${'+' | '-'}${number}:${number}`; //& Error
 

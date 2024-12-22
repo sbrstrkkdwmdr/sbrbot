@@ -508,7 +508,7 @@ export const getUserAv = async (input: bottypes.commandInput) => {
 };
 
 /**
- * return debug stuff ie command files, server list, etc.
+ * return debug stuff eg. command files, server list, etc.
  */
 export const debug = async (input: bottypes.commandInput) => {
     let commanduser: Discord.User | Discord.APIUser;
