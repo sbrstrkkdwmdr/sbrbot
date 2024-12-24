@@ -605,6 +605,14 @@ export async function getCountryData(search: string, type: countrytypes.countryD
 
 export async function getGif(find: string) {
     helper.tools.log.stdout(`GIF: https://g.tenor.com/v2/search?q=${find}&key=REDACTED&limit=50`);
+    if (helper.vars.config.tenorKey == 'INVALID_ID') {
+        return {
+            data: {
+                error: "Invalid or missing tenor key",
+                results: [],
+            }
+        }
+    };
     const dataf = await axios.get(`https://g.tenor.com/v2/search?q=${find}&key=${helper.vars.config.tenorKey}&limit=50`).catch(err => {
         return {
             data: {
