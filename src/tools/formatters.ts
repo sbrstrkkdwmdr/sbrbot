@@ -67,6 +67,7 @@ export async function scoreList(
         let score = newScores[i + offset];
         if (!score) break;
         // let convertedScore = CurrentToLegacyScore(score as apitypes.Score);
+        const overrides = helper.tools.calculate.modOverrides(score.mods);
         const perf = await helper.tools.performance.calcScore({
             mapid: overrideMap?.id ?? score.beatmap_id,
             mode: score.ruleset_id,
@@ -75,6 +76,11 @@ export async function scoreList(
             stats: score.statistics,
             maxcombo: score.max_combo,
             mapLastUpdated: new Date((overrideMap ?? score.beatmap).last_updated),
+            customAR: overrides.ar,
+            customHP: overrides.hp,
+            customCS: overrides.cs,
+            customOD: overrides.od,
+            clockRate: overrides.speed,
         });
         const fc = await helper.tools.performance.calcFullCombo({
             mapid: (overrideMap ?? score.beatmap).id,
@@ -83,6 +89,11 @@ export async function scoreList(
             accuracy: score.accuracy,
             stats: score.statistics,
             mapLastUpdated: new Date((overrideMap ?? score.beatmap).last_updated),
+            customAR: overrides.ar,
+            customHP: overrides.hp,
+            customCS: overrides.cs,
+            customOD: overrides.od,
+            clockRate: overrides.speed,
         });
         let info = `**#${(showOriginalIndex ? score.originalIndex : i) + 1}`;
         switch (preset) {

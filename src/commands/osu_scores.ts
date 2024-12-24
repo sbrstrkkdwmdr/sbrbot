@@ -173,7 +173,7 @@ export const firsts = async (input: bottypes.commandInput) => {
             commandAs: input.type,
             ex: `${osudata.username}'s ${helper.tools.calculate.toOrdinal(pid + 1)} ${parseArgs.sort == 'pp' ? helper.tools.formatter.sortDescription(parseArgs.sort ?? 'pp', parseArgs.reverse) + ' ' : ''}#1 score`
         };
-        
+
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             await helper.tools.commands.errorAndAbort(input, 'firsts', true, `${helper.vars.errors.uErr.osu.score.nf} at index ${pid}`, true);
             return;
@@ -1067,7 +1067,7 @@ export const pinned = async (input: bottypes.commandInput) => {
  * most recent score or list of recent scores
  */
 export const recent = async (input: bottypes.commandInput) => {
-    
+
     let commanduser: Discord.User | Discord.APIUser;
 
     let user;
@@ -1558,6 +1558,7 @@ export const recent = async (input: bottypes.commandInput) => {
         let ssperf: rosu.PerformanceAttributes;
         let fcflag = '';
         try {
+            const overrides = helper.tools.calculate.modOverrides(curscore.mods);
             perf = await helper.tools.performance.calcScore({
                 mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
                     curscore.mods.map(x => x.acronym).join('') : 'NM',
@@ -1568,6 +1569,11 @@ export const recent = async (input: bottypes.commandInput) => {
                 maxcombo: curscore.max_combo,
                 passedObjects: failed.objectsHit,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
+                customAR: overrides.ar,
+                customHP: overrides.hp,
+                customCS: overrides.cs,
+                customOD: overrides.od,
+                clockRate: overrides.speed,
             });
             fcperf = await helper.tools.performance.calcFullCombo({
                 mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
@@ -1577,6 +1583,11 @@ export const recent = async (input: bottypes.commandInput) => {
                 accuracy: curscore.accuracy,
                 stats: curscore.statistics,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
+                customAR: overrides.ar,
+                customHP: overrides.hp,
+                customCS: overrides.cs,
+                customOD: overrides.od,
+                clockRate: overrides.speed,
             });
             ssperf = await helper.tools.performance.calcFullCombo({
                 mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
@@ -1585,6 +1596,11 @@ export const recent = async (input: bottypes.commandInput) => {
                 mapid: curscore.beatmap.id,
                 accuracy: 1,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
+                customAR: overrides.ar,
+                customHP: overrides.hp,
+                customCS: overrides.cs,
+                customOD: overrides.od,
+                clockRate: overrides.speed,
             });
             rspp =
                 curscore.pp ?
@@ -2356,6 +2372,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     let fcperf: rosu.PerformanceAttributes;
     let ssperf: rosu.PerformanceAttributes;
     try {
+        const overrides = helper.tools.calculate.modOverrides(scoredata.mods);
         perf = await helper.tools.performance.calcScore({
             mods: scoredata.mods.map(x => x.acronym).join('').length > 1 ?
                 scoredata.mods.map(x => x.acronym).join('') : 'NM',
@@ -2365,6 +2382,11 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             accuracy: scoredata.accuracy,
             maxcombo: scoredata.max_combo,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
+            customAR: overrides.ar,
+            customHP: overrides.hp,
+            customCS: overrides.cs,
+            customOD: overrides.od,
+            clockRate: overrides.speed,
         });
         fcperf = await helper.tools.performance.calcFullCombo({
             mods: scoredata.mods.map(x => x.acronym).join('').length > 1 ?
@@ -2374,6 +2396,11 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             mapid: scoredata.beatmap.id,
             accuracy: scoredata.accuracy,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
+            customAR: overrides.ar,
+            customHP: overrides.hp,
+            customCS: overrides.cs,
+            customOD: overrides.od,
+            clockRate: overrides.speed,
         });
         ssperf = await helper.tools.performance.calcFullCombo({
             mods: scoredata.mods.map(x => x.acronym).join('').length > 1 ?
@@ -2383,6 +2410,11 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             mapid: scoredata.beatmap.id,
             accuracy: 1,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
+            customAR: overrides.ar,
+            customHP: overrides.hp,
+            customCS: overrides.cs,
+            customOD: overrides.od,
+            clockRate: overrides.speed,
         });
 
         helper.tools.data.debug([perf, fcperf, ssperf], 'command', 'scoreparse', input.message?.guildId ?? input.interaction.guildId, 'ppCalcing');
@@ -3699,7 +3731,7 @@ export const simulate = async (input: bottypes.commandInput) => {
         meh: n50,
         miss: nMiss ?? 0,
     };
-    const perf = await helper.tools.performance.calcScore({
+const perf = await helper.tools.performance.calcScore({
         mods,
         mode: 0,
         mapid,

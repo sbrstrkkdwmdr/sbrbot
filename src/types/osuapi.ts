@@ -970,8 +970,54 @@ type Post = {
 };
 
 //scores
-type Mod = {
+// https://github.com/ppy/osu-web/blob/master/database/mods.json
+export type Mod = {
+    name?: string,
     acronym: string;
+    settings?: {
+        retries?: number, // EZ
+        speed_change?: number, // HT, DC, DT, NC
+        adjust_pitch?: boolean, // HT, DT, WU, WD, AS
+        restart?: boolean, // SD, PF, AC
+        only_fade_approach_circles?: boolean, //HD
+        follow_delay?: number, //FL
+        size_multiplier?: number, //FL
+        combo_based_size?: boolean, //FL
+        minimum_accuracy?: number, //AC
+        accuracy_judge_mode?: number, //AC
+        seed?: number, //TP, RD
+        metronome?: boolean,//TP
+        circle_size?: number,//DA
+        approach_rate?: number,//DA
+        drain_rate?: number,//DA
+        overall_difficulty?: number,//DA
+        extended_limits?: boolean,//DA
+        no_slider_head_accuracy?: boolean, //CL
+        classic_note_lock?: boolean, //CL
+        always_play_tail_sample?: boolean, //CL
+        fade_hit_circle_early?: boolean, //CL
+        classic_health?: boolean, //CL
+        angle_sharpness?: number, //RD
+        reflection?: string, //MR
+        strength?: number; //WG
+        start_scale?: number, //GR, DF
+        initial_rate?: number; //WU, WD, AS
+        final_rate?: number; //WU, WD
+        spin_speed?: number, //BR
+        direction?: string, //BR
+        scale?: number, //AD
+        style?: string, //AD
+        inverse_muting?: boolean, //MU
+        enable_metronome?: boolean, //MU
+        mute_combo_count?: number, //MU
+        affects_hit_sounds?: boolean, //MU
+        hidden_combo_count?: number, //NS,
+        attraction_strength?: number, //MG
+        max_depth?: number, //DP
+        show_approach_circles?: boolean, //DP
+        max_size_combo_count?: number, //BM
+        max_cursor_size?: number, //BM
+    };
 };
 //'NM' | ''
 

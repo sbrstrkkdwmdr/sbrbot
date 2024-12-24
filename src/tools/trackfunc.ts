@@ -104,6 +104,7 @@ export async function getEmbed(
     const scorestats = data.scoredata.statistics;
     let totalhits = helper.tools.other.scoreTotalHits(scorestats);
 
+    const overrides = helper.tools.calculate.modOverrides(curscore.mods);
     const perf = await helper.tools.performance.calcScore({
         mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
             curscore.mods.map(x => x.acronym).join('') : 'NM',
@@ -112,7 +113,12 @@ export async function getEmbed(
         stats: scorestats,
         accuracy: curscore.accuracy,
         maxcombo: curscore.max_combo,
-        mapLastUpdated: new Date(curscore.beatmap.last_updated)
+        mapLastUpdated: new Date(curscore.beatmap.last_updated),
+        customAR: overrides.ar,
+        customHP: overrides.hp,
+        customCS: overrides.cs,
+        customOD: overrides.od,
+        clockRate: overrides.speed,
     });
     const fcperf = await helper.tools.performance.calcFullCombo({
         mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
@@ -120,7 +126,12 @@ export async function getEmbed(
         mode: curscore.ruleset_id,
         mapid: curscore.beatmap.id,
         accuracy: curscore.accuracy,
-        mapLastUpdated: new Date(curscore.beatmap.last_updated)
+        mapLastUpdated: new Date(curscore.beatmap.last_updated),
+        customAR: overrides.ar,
+        customHP: overrides.hp,
+        customCS: overrides.cs,
+        customOD: overrides.od,
+        clockRate: overrides.speed,
     });
 
     let pp: string;
