@@ -19,6 +19,7 @@
 ### Added
 
 - support for mod settings (eg. difficulty adjust)
+- CS/AR/OD/HP args for simulate
 
 ## [4.0.5] - 2024-12-18
 

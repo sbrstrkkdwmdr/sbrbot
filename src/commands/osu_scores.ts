@@ -3435,7 +3435,10 @@ export const simulate = async (input: bottypes.commandInput) => {
     let nMiss = null;
     let overrideSpeed = 1;
     let overrideBpm: number = null;
-
+    let customCS;
+    let customAR;
+    let customOD;
+    let customHP;
 
     switch (input.type) {
         case 'message': {
@@ -3508,47 +3511,25 @@ export const simulate = async (input: bottypes.commandInput) => {
                 overrideSpeed = temp.value;
                 input.args = temp.newArgs;
             }
-            if (ctn.includes('mods=')) {
-                mods = ctn.split('mods=')[1].split(' ')[0];
+            if (input.args.includes('-cs')) {
+                const temp = helper.tools.commands.parseArg(input.args, '-cs', 'number', customCS);
+                customCS = temp.value;
+                input.args = temp.newArgs;
             }
-            if (ctn.includes('acc=')) {
-                acc = parseFloat(ctn.split('acc=')[1].split(' ')[0]);
+            if (input.args.includes('-ar')) {
+                const temp = helper.tools.commands.parseArg(input.args, '-ar', 'number', customAR);
+                customAR = temp.value;
+                input.args = temp.newArgs;
             }
-            if (ctn.includes('accuracy=')) {
-                acc = parseFloat(ctn.split('accuracy=')[1].split(' ')[0]);
+            if (input.args.includes('-od')) {
+                const temp = helper.tools.commands.parseArg(input.args, '-od', 'number', customOD);
+                customOD = temp.value;
+                input.args = temp.newArgs;
             }
-            if (ctn.includes('combo=')) {
-                combo = +(ctn.split('combo=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('n300=')) {
-                n300 = +(ctn.split('n300=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('300s=')) {
-                n300 = +(ctn.split('300s=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('n100=')) {
-                n100 = +(ctn.split('n100=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('100s=')) {
-                n100 = +(ctn.split('100s=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('n50=')) {
-                n50 = +(ctn.split('n50=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('50s=')) {
-                n50 = +(ctn.split('50s=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('miss=')) {
-                nMiss = +(ctn.split('miss=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('misses=')) {
-                nMiss = +(ctn.split('misses=')[1].split(' ')[0]);
-            }
-            if (input.args.includes('bpm=')) {
-                overrideBpm = parseFloat(ctn.split('bpm=')[1].split(' ')[0]);
-            }
-            if (input.args.includes('speed=')) {
-                overrideSpeed = parseFloat(ctn.split('speed=')[1].split(' ')[0]);
+            if (input.args.includes('-hp')) {
+                const temp = helper.tools.commands.parseArg(input.args, '-hp', 'number', customHP);
+                customHP = temp.value;
+                input.args = temp.newArgs;
             }
             input.args = helper.tools.commands.cleanArgs(input.args);
 
@@ -3740,6 +3721,10 @@ const perf = await helper.tools.performance.calcScore({
         maxcombo: combo,
         clockRate: overrideSpeed,
         mapLastUpdated: new Date(mapdata.last_updated),
+        customCS,
+        customAR,
+        customOD,
+        customHP,
     });
     const fcperf = await helper.tools.performance.calcFullCombo({
         mods,
@@ -3749,6 +3734,10 @@ const perf = await helper.tools.performance.calcScore({
         accuracy: acc,
         clockRate: overrideSpeed,
         mapLastUpdated: new Date(mapdata.last_updated),
+        customCS,
+        customAR,
+        customOD,
+        customHP,
     });
     helper.tools.data.debug([perf, fcperf], 'command', 'simulate', input.message?.guildId ?? input.interaction.guildId, 'ppCalc');
 

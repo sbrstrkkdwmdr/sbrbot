@@ -1610,7 +1610,7 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'simulate',
         description: 'Simulates a score on a beatmap.',
-        usage: 'simulate [id] +[(mods)]  [-acc] [-combo] [-n300] [-n100] [-n50] [-miss] [-bpm] [-speed]',
+        usage: 'simulate [id] +[(mods)]  [-acc] [-combo] [-n300] [-n100] [-n50] [-miss] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
         examples: [
             {
                 text: 'PREFIXMSGsimulate +HDHR misses=0 acc=97.86',
@@ -1688,8 +1688,36 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'float',
                 required: false,
                 description: 'The speed multiplier to simulate the score with',
-                defaultValue: '1',
-            }
+                defaultValue: '1 (or mod)',
+            },
+            {
+                name: 'cs',
+                type: 'float',
+                required: false,
+                description: 'The circle size to simulate the score with',
+                defaultValue: 'Map CS',
+            },
+            {
+                name: 'ar',
+                type: 'float',
+                required: false,
+                description: 'The approach to simulate the score with',
+                defaultValue: 'Map AR',
+            },
+            {
+                name: 'od',
+                type: 'float',
+                required: false,
+                description: 'The overall difficulty to simulate the score with',
+                defaultValue: 'Map OD',
+            },
+            {
+                name: 'hp',
+                type: 'float',
+                required: false,
+                description: 'The hp/drain to simulate the score with',
+                defaultValue: 'Map HP',
+            },
         ]
     },
     {
