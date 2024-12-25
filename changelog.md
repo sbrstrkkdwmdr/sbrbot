@@ -14,11 +14,11 @@
 ### Changed
 
 - scorelist filter args are rounded
-- scorelist filter args accept !<x> (filter by values that dont equal that number)
 
 ### Added
 
 - support for mod settings (eg. difficulty adjust)
+- scorelist filter args accept !<x> (filter by values that dont equal that number)
 - CS/AR/OD/HP args for simulate
 
 ## [4.0.5] - 2024-12-18
