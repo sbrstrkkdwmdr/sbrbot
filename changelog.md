@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+## [4.0.6] - 2024-12-27
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
+
 ### Fixed
 
 - some scorelist filter args returning null 
@@ -15,6 +19,7 @@
 ### Changed
 
 - scorelist filter args are rounded
+- some info args work as stand-alone commands
 
 ### Added
 
