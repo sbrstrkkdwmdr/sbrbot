@@ -6,6 +6,27 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
+## [4.0.6] - 2024-12-27
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/f15046246426210ab38207662c489c986f2bbd3a)</br>
+
+### Fixed
+
+- some scorelist filter args returning null 
+- failed scores not displaying pass %
+- bot not accepting commands after a single mispelt/non-existant command call
+
+### Changed
+
+- scorelist filter args are rounded
+- some info args work as stand-alone commands
+
+### Added
+
+- support for mod settings (eg. difficulty adjust)
+- scorelist filter args accept !<x> (filter by values that dont equal that number)
+- CS/AR/OD/HP args for simulate
+
 ## [4.0.5] - 2024-12-18
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/5c36d8cd93b03d25a0b2a537506ede93f8e43057)</br>
@@ -168,7 +189,7 @@
 
 ### Changed
 
--   reworked some args to also take a number range (pp, score, bpm, acc, miss) ie. -bpm 180..200 returns scores between 180bpm and 200bpm (inclusive)
+-   reworked some args to also take a number range (pp, score, bpm, acc, miss) eg. -bpm 180..200 returns scores between 180bpm and 200bpm (inclusive)
 -   make help command look cleaner
 
 ## [3.19.3] - 2024-08-21
@@ -419,7 +440,7 @@
 
 ### Changed
 
--   convert - input value can be in any spot ie `[in] [out] [val]`, as well as `[val] [in] [out]` and `[in] [val] [out]` all are valid
+-   convert - input value can be in any spot eg. `[in] [out] [val]`, as well as `[val] [in] [out]` and `[in] [val] [out]` all are valid
 -   lb - update interaction version
 -   wording
 -   change `find`'s default image

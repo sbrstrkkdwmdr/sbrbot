@@ -6,12 +6,12 @@ const mods = 'See [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/comm
 const scoreListString =
     `Mods can be specified with +[mods], -mx [exact mods] or -me [exclude mods]
 The arguments \`pp\`, \`score\`, \`acc\`, \`bpm\` and \`miss\` use the following format:
-\`-key value\` to filter by that exact value (ie. -bpm 220)
-\`-key >value\` to filter scores below value (ie. -pp >500)
-\`-key <value\` to filter scores above value (ie. -acc <90)
-\`-key min..max\` to filter scores between min and max (ie. -miss 1..3)
+\`-key value\` to filter by that exact value (eg. -bpm 220)
+\`-key >value\` to filter scores below value (eg. -pp >500)
+\`-key <value\` to filter scores above value (eg. -acc <90)
+\`-key min..max\` to filter scores between min and max (eg. -miss 1..3)
 The \`sort\` arg can be specified using -value (ie -recent)
-You can also show a single score by using \`-parse <id>\` (ie. -parse 5)
+You can also show a single score by using \`-parse <id>\` (eg. -parse 5)
 `;
 
 /**
@@ -146,48 +146,48 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         name: 'pp',
         type: 'float/range',
         required: false,
-        description: 'Filters scores to have more/less pp than this value',
-        options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
+        description: 'Filters scores to have more/less/equal/not equal pp than/to this value',
+        options: ['>(number)', '<(number)', '(min)..(max)', '(number)', '!(number)'],
         defaultValue: 'null',
     },
     {
         name: 'score',
         type: 'int/range',
         required: false,
-        description: 'Filters scores to have more/less score than this value',
-        options: ['>number', '<number', 'min..max', 'number'],
+        description: 'Filters scores to have more/less/equal/not equal total score than/to this value',
+        options: ['>(number)', '<(number)', '(min)..(max)', '(number)', '!(number)'],
         defaultValue: 'null',
     },
     {
         name: 'acc',
         type: 'float/range',
         required: false,
-        description: 'Filters scores to have more/less accuracy than this value',
-        options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
+        description: 'Filters scores to have more/less/equal/not equal accuracy than/to this value',
+        options: ['>(number)', '<(number)', '(min)..(max)', '(number)', '!(number)'],
         defaultValue: 'null',
     },
     {
         name: 'combo',
         type: 'integer/range',
         required: false,
-        description: 'Filters scores to have more/less maximum combo than this value',
-        options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
+        description: 'Filters scores to have more/less/equal/not equal max combo than/to this value',
+        options: ['>(number)', '<(number)', '(min)..(max)', '(number)', '!(number)'],
         defaultValue: 'null',
     },
     {
         name: 'miss',
         type: 'integer/range',
         required: false,
-        description: 'Filters scores to have more/less/equal misses than this value',
-        options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
+        description: 'Filters scores to have more/less/equal/not equal misses than/to this value',
+        options: ['>(number)', '<(number)', '(min)..(max)', '(number)', '!(number)'],
         defaultValue: 'null',
     },
     {
         name: 'bpm',
         type: 'float/range',
         required: false,
-        description: 'Filters scores to have more/less/equal bpm than this value',
-        options: ['>(number)', '<(number)', '(min)..(max)', '(number)'],
+        description: 'Filters scores to have more/less/equal/not equal bpm than/to this value',
+        options: ['>(number)', '<(number)', '(min)..(max)', '(number)', '!(number)'],
         defaultValue: 'null',
     },
 ];
@@ -1610,7 +1610,7 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'simulate',
         description: 'Simulates a score on a beatmap.',
-        usage: 'simulate [id] +[(mods)]  [-acc] [-combo] [-n300] [-n100] [-n50] [-miss] [-bpm] [-speed]',
+        usage: 'simulate [id] +[(mods)]  [-acc] [-combo] [-n300] [-n100] [-n50] [-miss] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
         examples: [
             {
                 text: 'PREFIXMSGsimulate +HDHR misses=0 acc=97.86',
@@ -1688,8 +1688,36 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'float',
                 required: false,
                 description: 'The speed multiplier to simulate the score with',
-                defaultValue: '1',
-            }
+                defaultValue: '1 (or mod)',
+            },
+            {
+                name: 'cs',
+                type: 'float',
+                required: false,
+                description: 'The circle size to simulate the score with',
+                defaultValue: 'Map CS',
+            },
+            {
+                name: 'ar',
+                type: 'float',
+                required: false,
+                description: 'The approach to simulate the score with',
+                defaultValue: 'Map AR',
+            },
+            {
+                name: 'od',
+                type: 'float',
+                required: false,
+                description: 'The overall difficulty to simulate the score with',
+                defaultValue: 'Map OD',
+            },
+            {
+                name: 'hp',
+                type: 'float',
+                required: false,
+                description: 'The hp/drain to simulate the score with',
+                defaultValue: 'Map HP',
+            },
         ]
     },
     {

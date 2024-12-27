@@ -1143,11 +1143,11 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
 - Use \`MSGPREFIXhelp <command>\` to get more info on a command or \`/help list\` to get a list of commands
 - \`MSGPREFIXhelp category<category>\` will list only commands from that category
 - Arguments are shown as either <arg> or [arg]. Angled brackets "<arg>" are required and square brackets "[arg]" are optional.
-- Argument values can be specified with \`-key value\` (ie. \`-page 3\`)
-- Argument values with spaces (such as names) can be specified with quotes ie. "saber strike"
+- Argument values can be specified with \`-key value\` (eg. \`-page 3\`)
+- Argument values with spaces (such as names) can be specified with quotes eg. "saber strike"
 - You can use \`MSGPREFIXosuset\` to automatically set your osu! username and gamemode for commands such as \`recent\` (rs)
 - Mods are specified with +[mods] (include), -mx [mods] (match exact) or -me [mods] (exclude). -mx overrides +[mods]
-- Gamemode can be specified by using -(mode) in commands that support it (ie. -taiko)
+- Gamemode can be specified by using -(mode) in commands that support it (eg. -taiko)
 `.replaceAll('MSGPREFIX', helper.vars.config.prefix))
                 .setFooter({
                     text: 'Website: https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
@@ -1366,7 +1366,7 @@ sqlite3: [${pkgjson.dependencies['sqlite3'].replace('^', '')}](https://github.co
         .setColor(helper.vars.colours.embedColour.info.dec)
         .setTitle('Bot Information');
     if (input.args.length > 0) {
-        ['uptime', 'version', 'server', 'website', 'timezone', 'v'];
+        ['uptime', 'server', 'website', 'timezone', 'version', 'v', 'dependencies', 'deps', 'source'];
         switch (input.args[0]) {
             case 'uptime':
                 Embed.setTitle('Total uptime')

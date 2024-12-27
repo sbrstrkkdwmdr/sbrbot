@@ -1,5 +1,7 @@
 # SSoB
 
+A discord bot for osu! related stuff
+
 <div align="center">
 
 [![website](https://img.shields.io/badge/website-FFA41C?style=for-the-badge&logoColor=white)](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands)</br>
@@ -75,7 +77,7 @@ disabling these permissions will disable the commands listed
 | -------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | token          | string   | application token for bot to connect to discords API. </br>go to https://discord.com/developers/applications, create a new app, and create a new bot under the bot section. copy the token from there |
 | osu            | object   | see [here](#config-osu-properties)                                                                                                                                                                    |
-| prefix         | string   | a string at the start of each message to detect if a message is a command. ie `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't.                                                       |
+| prefix         | string   | a string at the start of each message to detect if a message is a command. eg. `!` => `!ping` would ping the bot and `?ping` or `ping` wouldn't.                                                       |
 | owners         | string[] | an array of user ids stored as strings. users with these ids can use any command                                                                                                                      |
 | tenorKey       | string   | Used for running gif commands (hug, punch, slap). see [here](https://developers.google.com/tenor/guides/quickstart)                                                                                   |
 | enableTracking | boolean  | Enables/disables osu!track                                                                                                                                                                            |

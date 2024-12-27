@@ -96,7 +96,7 @@ const embedColour = {
 };
 /**
  * [nm
- * ie [31m
+ * eg. [31m
  */
 export const codeBlockColour = {
     text: {

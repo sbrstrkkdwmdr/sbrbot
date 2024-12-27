@@ -1,4 +1,5 @@
 import * as helper from '../helper.js';
+import * as apitypes from '../types/osuapi.js';
 import * as conversions from '../vars/conversions.js';
 /**
  * eg 1,000 -> 1k
@@ -93,7 +94,7 @@ export function scientificNotation(input: number, significantFigures: number) {
 }
 
 /**
- * @info separates numbers ie 3000000 -> 3,000,000
+ * @info separates numbers eg. 3000000 -> 3,000,000
  * @param number 
  * @param separator default is ,
  * @returns string with numbers separated. Doesn't separate values after the decimal point.
@@ -638,4 +639,35 @@ export function isWithinValue(input: number, value: number, against: number) {
     const lowerBound = against - value;
     const upperBound = against + value;
     return input >= lowerBound && input <= upperBound;
+}
+
+
+export function modOverrides(mods: apitypes.Mod[]) { 
+    let speed:number;
+    let cs:number;
+    let ar:number;
+    let od:number;
+    let hp:number;
+    mods.forEach(mod => {
+        if(mod?.settings?.speed_change){
+            speed = mod?.settings?.speed_change
+        }
+        if(mod?.settings?.circle_size){
+            cs = mod?.settings?.circle_size
+        }
+        if(mod?.settings?.approach_rate){
+            ar = mod?.settings?.approach_rate
+        }
+        if(mod?.settings?.overall_difficulty){
+            od = mod?.settings?.overall_difficulty
+        }
+        if(mod?.settings?.drain_rate){
+            hp = mod?.settings?.drain_rate
+        }
+    });
+
+    return {
+        cs, ar, hp, od, speed
+    }
+
 }

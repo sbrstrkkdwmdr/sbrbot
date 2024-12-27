@@ -3,6 +3,8 @@
 newest-oldest
 
 ## current
+- [x] custom cs,ar,od,hp in simulate
+- [x] handling for mod adjustments (DA, DT rate change)
 - [x] AR in `map` and `ppcalc` being higher than expected
 - [x] previously requested maps calling the wrong beatmap ID
 - [x] maps unable to request beatmapset
@@ -59,7 +61,7 @@ newest-oldest
 - [x] random string gen recursive function
 - [x] label all versions in changelog.txt commits
 - [x] add energy, area, angle and speed conversions
-- [ ] time command can parse a time ie in (x) hours
+- [ ] time command can parse a time eg. in (x) hours
 - [x] add button version and current version to outdated command message
 - [x] make option options more distinct in helpinfo
 - [x] show timezone map on time command

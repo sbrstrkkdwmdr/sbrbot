@@ -173,7 +173,7 @@ export const firsts = async (input: bottypes.commandInput) => {
             commandAs: input.type,
             ex: `${osudata.username}'s ${helper.tools.calculate.toOrdinal(pid + 1)} ${parseArgs.sort == 'pp' ? helper.tools.formatter.sortDescription(parseArgs.sort ?? 'pp', parseArgs.reverse) + ' ' : ''}#1 score`
         };
-        
+
         if (input.overrides.id == null || typeof input.overrides.id == 'undefined') {
             await helper.tools.commands.errorAndAbort(input, 'firsts', true, `${helper.vars.errors.uErr.osu.score.nf} at index ${pid}`, true);
             return;
@@ -502,7 +502,7 @@ export const maplb = async (input: bottypes.commandInput) => {
 
     helper.tools.data.debug(lbdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction.guildId, 'lbData');
 
-    const scoresarg = await helper.tools.formatter.scoreList(lbdata, 'score', null, false, 1, page, true, true, false, mapdata);
+    const scoresarg = await helper.tools.formatter.scoreList(lbdata, 'score', null, false, 1, page, true, 'map_leaderboard', mapdata);
 
     helper.tools.commands.storeButtonArgs(input.id + '', {
         mapId: mapid,
@@ -1558,6 +1558,7 @@ export const recent = async (input: bottypes.commandInput) => {
         let ssperf: rosu.PerformanceAttributes;
         let fcflag = '';
         try {
+            const overrides = helper.tools.calculate.modOverrides(curscore.mods);
             perf = await helper.tools.performance.calcScore({
                 mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
                     curscore.mods.map(x => x.acronym).join('') : 'NM',
@@ -1568,6 +1569,11 @@ export const recent = async (input: bottypes.commandInput) => {
                 maxcombo: curscore.max_combo,
                 passedObjects: failed.objectsHit,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
+                customAR: overrides.ar,
+                customHP: overrides.hp,
+                customCS: overrides.cs,
+                customOD: overrides.od,
+                clockRate: overrides.speed,
             });
             fcperf = await helper.tools.performance.calcFullCombo({
                 mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
@@ -1577,6 +1583,11 @@ export const recent = async (input: bottypes.commandInput) => {
                 accuracy: curscore.accuracy,
                 stats: curscore.statistics,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
+                customAR: overrides.ar,
+                customHP: overrides.hp,
+                customCS: overrides.cs,
+                customOD: overrides.od,
+                clockRate: overrides.speed,
             });
             ssperf = await helper.tools.performance.calcFullCombo({
                 mods: curscore.mods.map(x => x.acronym).join('').length > 1 ?
@@ -1585,6 +1596,11 @@ export const recent = async (input: bottypes.commandInput) => {
                 mapid: curscore.beatmap.id,
                 accuracy: 1,
                 mapLastUpdated: new Date(curscore.beatmap.last_updated),
+                customAR: overrides.ar,
+                customHP: overrides.hp,
+                customCS: overrides.cs,
+                customOD: overrides.od,
+                clockRate: overrides.speed,
             });
             rspp =
                 curscore.pp ?
@@ -1617,7 +1633,7 @@ export const recent = async (input: bottypes.commandInput) => {
 
         const curbmhitobj = mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners;
         let msToFail: number, curbmpasstime: number, guesspasspercentage: number;
-        if (curscore.rank.toUpperCase() == 'F') {
+        if (!curscore.passed) {
             msToFail = await helper.tools.other.getFailPoint(totalhits, `${helper.vars.path.files}/maps/${curbm.id}.osu`);
             curbmpasstime = Math.floor(msToFail / 1000);
             guesspasspercentage = Math.abs((totalhits / curbmhitobj) * 100);
@@ -1628,10 +1644,10 @@ export const recent = async (input: bottypes.commandInput) => {
 
         let rsgrade;
         rsgrade = helper.vars.emojis.grades[curscore.rank.toUpperCase()];
-        if (curscore.rank.toUpperCase() == 'F') {
+        if (!curscore.passed) {
             rspassinfo = `${guesspasspercentage.toFixed(2)}% completed (${helper.tools.calculate.secondsToTime(curbmpasstime)}/${helper.tools.calculate.secondsToTime(curbm.total_length)})`;
             rsgrade =
-                helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[osumodcalc.calcgrade(gamehits.great, (gamehits.ok ?? 0), (gamehits.meh ?? 0), (gamehits.miss ?? 0)).grade]} if pass)`;
+                helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[curscore.rank.toUpperCase()]} if pass)`;
         }
 
         const fulltitle = `${mapdata.beatmapset.artist} - ${mapdata.beatmapset.title} [${mapdata.version}]`;
@@ -1821,7 +1837,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
                 combo,
                 miss,
                 bpm
-            }, false, scoredetailed, page, true, false, true);
+            }, false, scoredetailed, page, true,);
         helper.tools.commands.storeButtonArgs(input.id, {
             user,
             searchid,
@@ -2356,6 +2372,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     let fcperf: rosu.PerformanceAttributes;
     let ssperf: rosu.PerformanceAttributes;
     try {
+        const overrides = helper.tools.calculate.modOverrides(scoredata.mods);
         perf = await helper.tools.performance.calcScore({
             mods: scoredata.mods.map(x => x.acronym).join('').length > 1 ?
                 scoredata.mods.map(x => x.acronym).join('') : 'NM',
@@ -2365,6 +2382,11 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             accuracy: scoredata.accuracy,
             maxcombo: scoredata.max_combo,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
+            customAR: overrides.ar,
+            customHP: overrides.hp,
+            customCS: overrides.cs,
+            customOD: overrides.od,
+            clockRate: overrides.speed,
         });
         fcperf = await helper.tools.performance.calcFullCombo({
             mods: scoredata.mods.map(x => x.acronym).join('').length > 1 ?
@@ -2374,6 +2396,11 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             mapid: scoredata.beatmap.id,
             accuracy: scoredata.accuracy,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
+            customAR: overrides.ar,
+            customHP: overrides.hp,
+            customCS: overrides.cs,
+            customOD: overrides.od,
+            clockRate: overrides.speed,
         });
         ssperf = await helper.tools.performance.calcFullCombo({
             mods: scoredata.mods.map(x => x.acronym).join('').length > 1 ?
@@ -2383,6 +2410,11 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             mapid: scoredata.beatmap.id,
             accuracy: 1,
             mapLastUpdated: new Date(scoredata.beatmap.last_updated),
+            customAR: overrides.ar,
+            customHP: overrides.hp,
+            customCS: overrides.cs,
+            customOD: overrides.od,
+            clockRate: overrides.speed,
         });
 
         helper.tools.data.debug([perf, fcperf, ssperf], 'command', 'scoreparse', input.message?.guildId ?? input.interaction.guildId, 'ppCalcing');
@@ -2884,7 +2916,7 @@ export const scores = async (input: bottypes.commandInput) => {
             combo: null,
             miss: null,
             bpm: null
-        }, reverse, scoredetailed, page, false, false, false, mapdata);
+        }, reverse, scoredetailed, page, false, 'single_map', mapdata);
     helper.tools.commands.storeButtonArgs(input.id + '', {
         user,
         searchid,
@@ -3403,7 +3435,10 @@ export const simulate = async (input: bottypes.commandInput) => {
     let nMiss = null;
     let overrideSpeed = 1;
     let overrideBpm: number = null;
-
+    let customCS;
+    let customAR;
+    let customOD;
+    let customHP;
 
     switch (input.type) {
         case 'message': {
@@ -3476,47 +3511,25 @@ export const simulate = async (input: bottypes.commandInput) => {
                 overrideSpeed = temp.value;
                 input.args = temp.newArgs;
             }
-            if (ctn.includes('mods=')) {
-                mods = ctn.split('mods=')[1].split(' ')[0];
+            if (input.args.includes('-cs')) {
+                const temp = helper.tools.commands.parseArg(input.args, '-cs', 'number', customCS);
+                customCS = temp.value;
+                input.args = temp.newArgs;
             }
-            if (ctn.includes('acc=')) {
-                acc = parseFloat(ctn.split('acc=')[1].split(' ')[0]);
+            if (input.args.includes('-ar')) {
+                const temp = helper.tools.commands.parseArg(input.args, '-ar', 'number', customAR);
+                customAR = temp.value;
+                input.args = temp.newArgs;
             }
-            if (ctn.includes('accuracy=')) {
-                acc = parseFloat(ctn.split('accuracy=')[1].split(' ')[0]);
+            if (input.args.includes('-od')) {
+                const temp = helper.tools.commands.parseArg(input.args, '-od', 'number', customOD);
+                customOD = temp.value;
+                input.args = temp.newArgs;
             }
-            if (ctn.includes('combo=')) {
-                combo = +(ctn.split('combo=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('n300=')) {
-                n300 = +(ctn.split('n300=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('300s=')) {
-                n300 = +(ctn.split('300s=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('n100=')) {
-                n100 = +(ctn.split('n100=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('100s=')) {
-                n100 = +(ctn.split('100s=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('n50=')) {
-                n50 = +(ctn.split('n50=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('50s=')) {
-                n50 = +(ctn.split('50s=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('miss=')) {
-                nMiss = +(ctn.split('miss=')[1].split(' ')[0]);
-            }
-            if (ctn.includes('misses=')) {
-                nMiss = +(ctn.split('misses=')[1].split(' ')[0]);
-            }
-            if (input.args.includes('bpm=')) {
-                overrideBpm = parseFloat(ctn.split('bpm=')[1].split(' ')[0]);
-            }
-            if (input.args.includes('speed=')) {
-                overrideSpeed = parseFloat(ctn.split('speed=')[1].split(' ')[0]);
+            if (input.args.includes('-hp')) {
+                const temp = helper.tools.commands.parseArg(input.args, '-hp', 'number', customHP);
+                customHP = temp.value;
+                input.args = temp.newArgs;
             }
             input.args = helper.tools.commands.cleanArgs(input.args);
 
@@ -3699,7 +3712,7 @@ export const simulate = async (input: bottypes.commandInput) => {
         meh: n50,
         miss: nMiss ?? 0,
     };
-    const perf = await helper.tools.performance.calcScore({
+const perf = await helper.tools.performance.calcScore({
         mods,
         mode: 0,
         mapid,
@@ -3708,6 +3721,10 @@ export const simulate = async (input: bottypes.commandInput) => {
         maxcombo: combo,
         clockRate: overrideSpeed,
         mapLastUpdated: new Date(mapdata.last_updated),
+        customCS,
+        customAR,
+        customOD,
+        customHP,
     });
     const fcperf = await helper.tools.performance.calcFullCombo({
         mods,
@@ -3717,6 +3734,10 @@ export const simulate = async (input: bottypes.commandInput) => {
         accuracy: acc,
         clockRate: overrideSpeed,
         mapLastUpdated: new Date(mapdata.last_updated),
+        customCS,
+        customAR,
+        customOD,
+        customHP,
     });
     helper.tools.data.debug([perf, fcperf], 'command', 'simulate', input.message?.guildId ?? input.interaction.guildId, 'ppCalc');
 

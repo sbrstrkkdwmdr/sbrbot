@@ -4,7 +4,6 @@ import * as bottypes from './types/bot.js';
 
 let command: bottypes.command = null;
 let overrides: bottypes.overrides = {};
-let foundCommand = true;
 export function onMessage(message: Discord.Message) {
     command = null;
     overrides = null;
@@ -58,6 +57,8 @@ const scorelist = [
     'scores', 'c',
     'pinned', 'pins'
 ].concat(rslist).sort((a, b) => b.length - a.length);
+
+const infoArgs = ['uptime', 'server', 'website', 'timezone', 'version', 'v', 'dependencies', 'deps', 'source'];
 
 // permissions
 function commandCheck(cmd: string, message: Discord.Message, interaction: Discord.ChatInputCommandInteraction, canReply: boolean) {
@@ -229,6 +230,11 @@ function commandSelect(cmd: string, args: string[]) {
         if (rslist.includes(cmd)) args.push('-p', tnum);
         else args.push('-parse', tnum);
     }
+    if (infoArgs.some(x => cmd.includes(x))) {
+        args = [cmd]
+        cmd = 'x';
+    }
+
     switch (cmd) {
         // gen
         case 'changelog': case 'clog': case 'changes':
@@ -677,7 +683,7 @@ function commandSelect(cmd: string, args: string[]) {
             command = helper.commands.fun.roll;
             break;
         default:
-            foundCommand = false;
+            command = null;
             break;
     }
 }
@@ -691,7 +697,7 @@ function runCommand(cmd: string, message: Discord.Message, interaction: Discord.
             cmd = 'help';
         }
         commandSelect(cmd, args);
-        if (foundCommand && command) {
+        if (command) {
             startType(message ?? interaction);
             command({
                 message,

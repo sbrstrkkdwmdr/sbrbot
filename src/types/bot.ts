@@ -26,7 +26,7 @@ export type commandInfoOption = {
  * c.parseArgs();
  * c.execute();
  * args are meant to be a key-value object
- * ie
+ * eg.
  * 
  */
 
