@@ -58,6 +58,8 @@ const scorelist = [
     'pinned', 'pins'
 ].concat(rslist).sort((a, b) => b.length - a.length);
 
+const infoArgs = ['uptime', 'server', 'website', 'timezone', 'version', 'v', 'dependencies', 'deps', 'source'];
+
 // permissions
 function commandCheck(cmd: string, message: Discord.Message, interaction: Discord.ChatInputCommandInteraction, canReply: boolean) {
     //perms bot needs
@@ -228,6 +230,11 @@ function commandSelect(cmd: string, args: string[]) {
         if (rslist.includes(cmd)) args.push('-p', tnum);
         else args.push('-parse', tnum);
     }
+    if (infoArgs.some(x => cmd.includes(x))) {
+        args = [cmd]
+        cmd = 'x';
+    }
+
     switch (cmd) {
         // gen
         case 'changelog': case 'clog': case 'changes':

@@ -1366,7 +1366,7 @@ sqlite3: [${pkgjson.dependencies['sqlite3'].replace('^', '')}](https://github.co
         .setColor(helper.vars.colours.embedColour.info.dec)
         .setTitle('Bot Information');
     if (input.args.length > 0) {
-        ['uptime', 'version', 'server', 'website', 'timezone', 'v'];
+        ['uptime', 'server', 'website', 'timezone', 'version', 'v', 'dependencies', 'deps', 'source'];
         switch (input.args[0]) {
             case 'uptime':
                 Embed.setTitle('Total uptime')
