@@ -4,7 +4,6 @@ import * as bottypes from './types/bot.js';
 
 let command: bottypes.command = null;
 let overrides: bottypes.overrides = {};
-let foundCommand = true;
 export function onMessage(message: Discord.Message) {
     command = null;
     overrides = null;
@@ -677,7 +676,7 @@ function commandSelect(cmd: string, args: string[]) {
             command = helper.commands.fun.roll;
             break;
         default:
-            foundCommand = false;
+            command = null;
             break;
     }
 }
@@ -691,7 +690,7 @@ function runCommand(cmd: string, message: Discord.Message, interaction: Discord.
             cmd = 'help';
         }
         commandSelect(cmd, args);
-        if (foundCommand && command) {
+        if (command) {
             startType(message ?? interaction);
             command({
                 message,

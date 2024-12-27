@@ -16,7 +16,7 @@
         "axios": "^1.7.9",
         "canvas": "^2.11.2",
         "chart.js": "^4.4.7",
-        "discord-api-types": "^0.37.111",
+        "discord-api-types": "^0.37.114",
         "discord.js": "^14.16.3",
         "luxon": "^3.5.0",
         "moment": "^2.30.1",

@@ -10,6 +10,7 @@
 
 - some scorelist filter args returning null 
 - failed scores not displaying pass %
+- bot not accepting commands after a single mispelt/non-existant command call
 
 ### Changed
 

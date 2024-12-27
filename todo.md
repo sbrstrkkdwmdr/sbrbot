@@ -3,7 +3,7 @@
 newest-oldest
 
 ## current
-- [x] custom cs,ar,od,hp in simulatez
+- [x] custom cs,ar,od,hp in simulate
 - [x] handling for mod adjustments (DA, DT rate change)
 - [x] AR in `map` and `ppcalc` being higher than expected
 - [x] previously requested maps calling the wrong beatmap ID
