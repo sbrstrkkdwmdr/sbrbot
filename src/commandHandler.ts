@@ -230,9 +230,9 @@ function commandSelect(cmd: string, args: string[]) {
         if (rslist.includes(cmd)) args.push('-p', tnum);
         else args.push('-parse', tnum);
     }
-    if (infoArgs.some(x => cmd.includes(x))) {
+    if (infoArgs.some(x => x.toLowerCase() == cmd.toLowerCase())) {
         args = [cmd]
-        cmd = 'x';
+        cmd = 'info';
     }
 
     switch (cmd) {
@@ -686,6 +686,7 @@ function commandSelect(cmd: string, args: string[]) {
             command = null;
             break;
     }
+    return args;
 }
 
 function runCommand(cmd: string, message: Discord.Message, interaction: Discord.ChatInputCommandInteraction, args: string[], canReply: boolean, type: "message" | "interaction") {
@@ -696,7 +697,7 @@ function runCommand(cmd: string, message: Discord.Message, interaction: Discord.
             args = [cmd];
             cmd = 'help';
         }
-        commandSelect(cmd, args);
+        args = commandSelect(cmd, args);
         if (command) {
             startType(message ?? interaction);
             command({
