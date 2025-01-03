@@ -10,6 +10,7 @@ The arguments \`pp\`, \`score\`, \`acc\`, \`bpm\` and \`miss\` use the following
 \`-key >value\` to filter scores below value (eg. -pp >500)
 \`-key <value\` to filter scores above value (eg. -acc <90)
 \`-key min..max\` to filter scores between min and max (eg. -miss 1..3)
+\`-key !value\` to filter scores that dont equal that value (eg. -bpm !200)
 The \`sort\` arg can be specified using -value (ie -recent)
 You can also show a single score by using \`-parse <id>\` (eg. -parse 5)
 `;

@@ -2,7 +2,7 @@
 
 # changelog
 
-## [WIP] - xxxx-xx-xx
+## [4.0.7] - 2025-01-03
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
 
