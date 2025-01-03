@@ -2,19 +2,23 @@
 
 # changelog
 
+## [WIP] - xxxx-xx-xx
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot)
+
 ## [4.0.7] - 2025-01-03
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/)</br>
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/19716d92696061df63639769fbdd49ce61041670)</br>
 
 ### Fixed
 
-- convert not working
-- some command aliases not working
-- info arg aliases overriding other commands (fixes above)
+-   convert not working
+-   some command aliases not working
+-   info arg aliases overriding other commands (fixes above)
 
 ### Changed
 
-- `rank`/`pp` now says if value is taken from an exact data point
+-   `rank`/`pp` now says if value is taken from an exact data point
 
 ## [4.0.6] - 2024-12-27
 
@@ -22,20 +26,20 @@
 
 ### Fixed
 
-- some scorelist filter args returning null 
-- failed scores not displaying pass %
-- bot not accepting commands after a single mispelt/non-existant command call
+-   some scorelist filter args returning null
+-   failed scores not displaying pass %
+-   bot not accepting commands after a single mispelt/non-existant command call
 
 ### Changed
 
-- scorelist filter args are rounded
-- some info args work as stand-alone commands
+-   scorelist filter args are rounded
+-   some info args work as stand-alone commands
 
 ### Added
 
-- support for mod settings (eg. difficulty adjust)
-- scorelist filter args accept !<x> (filter by values that dont equal that number)
-- CS/AR/OD/HP args for simulate
+-   support for mod settings (eg. difficulty adjust)
+-   scorelist filter args accept !<x> (filter by values that dont equal that number)
+-   CS/AR/OD/HP args for simulate
 
 ## [4.0.5] - 2024-12-18
 
@@ -43,10 +47,10 @@
 
 ### Fixed
 
-- scorelist commands sometimes having the gamemode in the footer show as `undefined`
-- mods exclude using mods include value
-- using `-mx NM` includes `CL` scores
-- filtering `DT` and `NC` (or `HT` and `DC`) doesn't filter both
+-   scorelist commands sometimes having the gamemode in the footer show as `undefined`
+-   mods exclude using mods include value
+-   using `-mx NM` includes `CL` scores
+-   filtering `DT` and `NC` (or `HT` and `DC`) doesn't filter both
 
 ## [4.0.4] - 2024-12-15
 
