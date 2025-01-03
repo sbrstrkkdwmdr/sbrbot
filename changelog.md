@@ -12,6 +12,10 @@
 - some command aliases not working
 - info arg aliases overriding other commands (fixes above)
 
+### Changed
+
+- `rank`/`pp` now says if value is taken from an exact data point
+
 ## [4.0.6] - 2024-12-27
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/f15046246426210ab38207662c489c986f2bbd3a)</br>
