@@ -568,7 +568,10 @@ export async function userStatsCacheFix(mode: apitypes.GameMode) {
     }
 }
 
-export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: number, mode: apitypes.GameMode) {
+export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: number, mode: apitypes.GameMode): Promise<{
+    value: number,
+    isEstimated: boolean,
+}> {
     const users = await helper.vars.statsCache.findAll();
     let pprankarr: { pp: number, rank: number; }[] = [];
     for (let i = 0; i < users.length; i++) {
@@ -602,10 +605,10 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
         const ppData = helper.tools.calculate.stats(tempChecking.map(x => x.pp));
         switch (type) {
             case 'pp->rank': {
-                return rankData.median ?? rankData.mean;
+                return { value: rankData.median ?? rankData.mean, isEstimated: false };
             } break;
             case 'rank->pp': {
-                return ppData.median ?? ppData.mean;
+                return { value: ppData.median ?? ppData.mean, isEstimated: false };
             } break;
         }
     }
@@ -614,14 +617,14 @@ export async function getRankPerformance(type: 'pp->rank' | 'rank->pp', value: n
         case 'pp->rank': {
             data = pprankarr.map(x => [x.pp, Math.log10(x.rank)]);
             const line = stats.linearRegressionLine(stats.linearRegression(data));
-            return (10 ** line(value));
+            return { value: (10 ** line(value)), isEstimated: true };
             //log y
         }
             break;
         case 'rank->pp': {
             data = pprankarr.map(x => [Math.log10(x.rank), x.pp]);
             const line = stats.linearRegressionLine(stats.linearRegression(data));
-            return line(Math.log10(value));
+            return { value: line(Math.log10(value)), isEstimated: true };
             //log x
         }
             break;

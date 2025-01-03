@@ -755,38 +755,34 @@ export const rankpp = async (input: bottypes.commandInput) => {
         .setTitle('null')
         .setDescription('null');
 
-    let returnval: string | number;
+    let output: string;
+    let returnval: {
+        value: number;
+        isEstimated: boolean;
+    } = null;
     const disclaimer = 'Values are very rough estimates (especially pp to rank)';
     switch (type) {
         case 'pp': {
             returnval = await helper.tools.data.getRankPerformance('pp->rank', value, mode);
-            if (typeof returnval == 'number') {
-                returnval = 'approx. rank #' + helper.tools.calculate.separateNum(Math.ceil(returnval));
-            } else {
-                returnval = 'null';
-            }
+            output = 'approx. rank #' + helper.tools.calculate.separateNum(Math.ceil(returnval.value));
             Embed
                 .setTitle(`Approximate rank for ${value}pp`);
         }
             break;
         case 'rank': {
             returnval = await helper.tools.data.getRankPerformance('rank->pp', value, mode);
-            if (typeof returnval == 'number') {
-                returnval = 'approx. ' + helper.tools.calculate.separateNum(returnval.toFixed(2)) + 'pp';
-            } else {
-                returnval = 'null';
-            }
+            output = 'approx. ' + helper.tools.calculate.separateNum(returnval.value.toFixed(2)) + 'pp';
 
             Embed
                 .setTitle(`Approximate performance for rank #${value}`);
         }
             break;
-    }
+    };
 
     const dataSizetxt = await helper.vars.statsCache.count();
-
+    
     Embed
-        .setDescription(`${returnval}\n${helper.vars.emojis.gamemodes[mode ?? 'osu']}\nEstimated from ${dataSizetxt} entries.`);
+        .setDescription(`${output}\n${helper.vars.emojis.gamemodes[mode ?? 'osu']}\n${returnval.isEstimated ? `Estimated from ${dataSizetxt} entries.` : 'Based off matching / similar entry'}`);
 
 
 
@@ -1204,7 +1200,7 @@ Their total pp and rank would not change.
         embed.setDescription(
             `A ${pp}pp score would be their **${helper.tools.calculate.toOrdinal(ppindex + 1)}** top play and would be weighted at **${(weight * 100).toFixed(2)}%**.
 Their pp would change by **${Math.abs((total + bonus) - osudata.statistics.pp).toFixed(2)}pp** and their new total pp would be **${(total + bonus).toFixed(2)}pp**.
-Their new rank would be **${Math.round(guessrank)}** (+${Math.round(osudata?.statistics?.global_rank - guessrank)}).
+Their new rank would be **${Math.round(guessrank.value)}** (+${Math.round(osudata?.statistics?.global_rank - guessrank.value)}).
 `
         );
     }
