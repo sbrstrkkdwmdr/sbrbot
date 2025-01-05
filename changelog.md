@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)
 
+### Fixed
+
+- change `commandtypes.html` links to `types.html` in command data to match latest version of website
+
 ## [4.0.7] - 2025-01-03
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/19716d92696061df63639769fbdd49ce61041670)</br>
