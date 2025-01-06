@@ -3,6 +3,7 @@
 newest-oldest
 
 ## current
+- [x] map PP values all the same
 - [x] custom cs,ar,od,hp in simulate
 - [x] handling for mod adjustments (DA, DT rate change)
 - [x] AR in `map` and `ppcalc` being higher than expected
