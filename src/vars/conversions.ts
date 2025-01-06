@@ -3140,7 +3140,7 @@ export const values: convVal[] = [
                 to: 'Ounce',
                 names: namesList.mass_oz,
                 func: (x) => {
-                    return x;
+                    return x * 16;
                 },
                 text: 'x*16'
             },
