@@ -10,6 +10,7 @@
 
 -   requesting undefined IDs due to incorrect format
 -   map PP all values being the same
+-   fix some conversions
 
 ### Changed
 
