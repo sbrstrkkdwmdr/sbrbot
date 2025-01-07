@@ -35,7 +35,6 @@ export async function calcScore(input: {
             'NM' :
             input.mods :
         'NM';
-
     if (isNaN(input.accuracy)) {
         input.accuracy = 100;
     }
@@ -49,7 +48,7 @@ export async function calcScore(input: {
         mods: osumodcalc.ModStringToInt(mods),
         accuracy: input.accuracy ?? 100,
     };
-    const oldStats = helper.tools.other.lazerToOldStatistics(input.stats, input.mode);
+    const oldStats = helper.tools.other.lazerToOldStatistics(input.stats, input.mode, true);
     if (input.maxcombo != null && !isNaN(input.maxcombo)) {
         baseScore.combo = input.maxcombo;
     }
@@ -109,11 +108,11 @@ export async function calcFullCombo(input: {
     customOD?: number,
     customHP?: number,
 }) {
-    if(!input.stats){
+    if (!input.stats) {
         input.stats = helper.tools.formatter.nonNullStats(input.stats);
     }
-    if(input.stats.great == 0 && input.stats.perfect == 0){
-        input.stats.great = NaN
+    if (input.stats.great == 0 && input.stats.perfect == 0) {
+        input.stats.great = NaN;
     }
     input.stats.miss = 0;
     return await calcScore({
@@ -149,7 +148,7 @@ export async function calcMap(input: {
             mods: input.mods,
             mapLastUpdated: input.mapLastUpdated,
             clockRate: input.clockRate,
-            accuracy: 100 - i,
+            accuracy: (100 - i) / 100,
             stats: {
                 great: NaN,
                 miss: 0,
