@@ -8,7 +8,11 @@
 
 ### Fixed
 
-- change `commandtypes.html` links to `types.html` in command data to match latest version of website
+-   requesting undefined IDs due to incorrect format
+
+### Changed
+
+-   change `commandtypes.html` links to `types.html` in command data to match latest version of website
 
 ## [4.0.7] - 2025-01-03
 
