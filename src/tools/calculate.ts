@@ -8,20 +8,20 @@ import * as conversions from '../vars/conversions.js';
  * 111,111 -> 111.1k
  */
 export function numberShorthand(input: number) {
-    input = +scientificNotation(input, 3);
+    let value = +scientificNotation(input, 3);
     let output = input + '';
     switch (true) {
-        case input >= 1e9:
-            output = input / 1e9 + 'B';
-        case input >= 1e8:
-        case input >= 1e7:
-        case input >= 1e6:
-            output = input / 1e6 + 'M';
+        case value >= 1e9:
+            output = value / 1e9 + 'B';
+        case value >= 1e8:
+        case value >= 1e7:
+        case value >= 1e6:
+            output = value / 1e6 + 'M';
             break;
-        case input >= 1e5:
-        case input >= 1e4:
-        case input >= 1e3:
-            output = input / 1e3 + 'K';
+        case value >= 1e5:
+        case value >= 1e4:
+        case value >= 1e3:
+            output = value / 1e3 + 'K';
             break;
     }
     return output;

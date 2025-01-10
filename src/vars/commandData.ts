@@ -2,7 +2,7 @@ import * as bottypes from '../types/bot.js';
 
 import * as buttonsObjs from './buttons.js';
 
-const mods = 'See [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commandtypes.html#mods)';
+const mods = 'See [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/types.html#mods)';
 const scoreListString =
     `Mods can be specified with +[mods], -mx [exact mods] or -me [exclude mods]
 The arguments \`pp\`, \`score\`, \`acc\`, \`bpm\` and \`miss\` use the following format:
@@ -257,7 +257,7 @@ const cmds: bottypes.commandInfo[] = [
                 name: 'to',
                 type: 'string',
                 required: true,
-                description: 'The unit to convert to. see [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commandtypes.html#conv) for units',
+                description: 'The unit to convert to. see [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/types.html#conv) for units',
                 options: ['help', 'SI units',],
                 defaultValue: 'N/A',
             },

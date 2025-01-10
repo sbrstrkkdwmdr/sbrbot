@@ -21,40 +21,40 @@ export async function calcScore(input: {
     customOD?: number,
     customHP?: number,
 }) {
+    let data = { ...input };
     if (!fs.existsSync(helper.vars.path.main + '/files/maps/')) {
         helper.tools.log.stdout('creating files/maps/');
         fs.mkdirSync(helper.vars.path.main + '/files/maps/');
     }
-    const mapPath = await helper.tools.api.dlMap(input.mapid, 0, input.mapLastUpdated);
+    const mapPath = await helper.tools.api.dlMap(data.mapid, 0, data.mapLastUpdated);
     const map = new rosu.Beatmap(fs.readFileSync(mapPath, 'utf-8'));
-    if (input.mode != map.mode && map.mode == rosu.GameMode.Osu) {
-        map.convert(input.mode);
+    if (data.mode != map.mode && map.mode == rosu.GameMode.Osu) {
+        map.convert(data.mode);
     }
-    const mods = input.mods ?
-        input.mods.length < 1 ?
+    const mods = data.mods ?
+        data.mods.length < 1 ?
             'NM' :
-            input.mods :
+            data.mods :
         'NM';
-
-    if (isNaN(input.accuracy)) {
-        input.accuracy = 100;
+    if (isNaN(data.accuracy)) {
+        data.accuracy = 100;
     }
-    if (input.accuracy <= 1) {
-        input.accuracy *= 100;
+    if (data.accuracy <= 1) {
+        data.accuracy *= 100;
     }
-    if (input.accuracy > 100) {
-        input.accuracy /= 100;
+    if (data.accuracy > 100) {
+        data.accuracy /= 100;
     }
     const baseScore: rosu.PerformanceArgs = {
         mods: osumodcalc.ModStringToInt(mods),
-        accuracy: input.accuracy ?? 100,
+        accuracy: data.accuracy ?? 100,
     };
-    const oldStats = helper.tools.other.lazerToOldStatistics(input.stats, input.mode);
-    if (input.maxcombo != null && !isNaN(input.maxcombo)) {
-        baseScore.combo = input.maxcombo;
+    const oldStats = helper.tools.other.lazerToOldStatistics(data.stats, data.mode, true);
+    if (data.maxcombo != null && !isNaN(data.maxcombo)) {
+        baseScore.combo = data.maxcombo;
     }
-    if (input.passedObjects != null && !isNaN(input.passedObjects)) {
-        baseScore.passedObjects = input.passedObjects;
+    if (data.passedObjects != null && !isNaN(data.passedObjects)) {
+        baseScore.passedObjects = data.passedObjects;
     }
     if (oldStats.count_300 != null && !isNaN(oldStats.count_300)) {
         baseScore.n300 = oldStats.count_300;
@@ -109,13 +109,11 @@ export async function calcFullCombo(input: {
     customOD?: number,
     customHP?: number,
 }) {
-    if(!input.stats){
-        input.stats = helper.tools.formatter.nonNullStats(input.stats);
+    let stats = input.stats ? { ...input.stats } : helper.tools.formatter.nonNullStats(input.stats);
+    if (stats.great == 0 && stats.perfect == 0) {
+        stats.great = NaN;
     }
-    if(input.stats.great == 0 && input.stats.perfect == 0){
-        input.stats.great = NaN
-    }
-    input.stats.miss = 0;
+    stats.miss = 0;
     return await calcScore({
         mapid: input.mapid,
         mode: input.mode,
@@ -149,7 +147,7 @@ export async function calcMap(input: {
             mods: input.mods,
             mapLastUpdated: input.mapLastUpdated,
             clockRate: input.clockRate,
-            accuracy: 100 - i,
+            accuracy: (100 - i) / 100,
             stats: {
                 great: NaN,
                 miss: 0,

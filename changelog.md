@@ -4,7 +4,23 @@
 
 ## [WIP] - xxxx-xx-xx
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot)
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+
+## [4.0.8] - 2025-01-03
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/18e4ee1a4f58745e43168ec03f951448d00b6dbf)</br>
+
+### Fixed
+
+-   requesting undefined IDs due to incorrect format
+-   map PP all values being the same
+-   fix some conversions
+-   score stats being mutated by calc FC function
+-   prevent other possible mutations
+
+### Changed
+
+-   change `commandtypes.html` links to `types.html` in command data to match latest version of website
 
 ## [4.0.7] - 2025-01-03
 
