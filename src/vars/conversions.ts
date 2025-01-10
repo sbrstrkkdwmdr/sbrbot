@@ -340,7 +340,7 @@ export const values: convVal[] = [
                 func: (x) => {
                     return x / 1.215e18;
                 },
-                text: 'x/(1.215e18)'
+                text: 'x/1.215e18'
             },
             toArbitrary
         ]
@@ -405,7 +405,7 @@ export const values: convVal[] = [
                 func: (x) => {
                     return x / 1.012e17;
                 },
-                text: 'x/(1.012e17)'
+                text: 'x/1.012e17'
             },
             toArbitrary
         ]
@@ -470,7 +470,7 @@ export const values: convVal[] = [
                 func: (x) => {
                     return x / 3.086e16;
                 },
-                text: 'x/(3.086e16)'
+                text: 'x/3.086e16'
             },
             toArbitrary
         ]
@@ -525,7 +525,7 @@ export const values: convVal[] = [
                 to: 'Light Year',
                 names: namesList.dist_ly,
                 func: (x) => {
-                    return x;
+                    return x * 1609.344 / 9460730472580800;
                 },
                 text: 'x*1609.344/9460730472580800'
             },
@@ -535,7 +535,7 @@ export const values: convVal[] = [
                 func: (x) => {
                     return x / 1.917e13;
                 },
-                text: 'x/(1.917e13)'
+                text: 'x/1.917e13'
             },
             toArbitrary
         ]
@@ -834,7 +834,7 @@ export const values: convVal[] = [
                 to: 'Millennium',
                 names: namesList.time_mil,
                 func: (x) => {
-                    return x / 86400 / 365.25 / 1000;
+                    return x / 86400 / 365.25 / 1e3;
                 },
                 text: 'x/86400/365.25/1000'
             },
@@ -955,7 +955,7 @@ export const values: convVal[] = [
                 to: 'Millennium',
                 names: namesList.time_mil,
                 func: (x) => {
-                    return x / 1440 / 365.25 / 1000;
+                    return x / 1440 / 365.25 / 1e3;
                 },
                 text: 'x/1440/365.25/1000'
             },
@@ -1076,7 +1076,7 @@ export const values: convVal[] = [
                 to: 'Millennium',
                 names: namesList.time_mil,
                 func: (x) => {
-                    return x / 8766 / 1000;
+                    return x / 8766 / 1e3;
                 },
                 text: 'x/8766/1000'
             },
@@ -1197,7 +1197,7 @@ export const values: convVal[] = [
                 to: 'Millennium',
                 names: namesList.time_mil,
                 func: (x) => {
-                    return x / 365.25 / 1000;
+                    return x / 365.25 / 1e3;
                 },
                 text: 'x/365.25/1000'
             },
@@ -1318,7 +1318,7 @@ export const values: convVal[] = [
                 to: 'Millennium',
                 names: namesList.time_mil,
                 func: (x) => {
-                    return x / 52.1785714286 / 1000;
+                    return x / 52.1785714286 / 1e3;
                 },
                 text: 'x/52.1785714286/1000'
             },
@@ -1439,7 +1439,7 @@ export const values: convVal[] = [
                 to: 'Millennium',
                 names: namesList.time_mil,
                 func: (x) => {
-                    return x / 26.0714285714 / 1000;
+                    return x / 26.0714285714 / 1e3;
                 },
                 text: 'x/26.0714285714/1000'
             },
@@ -1560,7 +1560,7 @@ export const values: convVal[] = [
                 to: 'Millennium',
                 names: namesList.time_mil,
                 func: (x) => {
-                    return x / 12 / 1000;
+                    return x / 12 / 1e3;
                 },
                 text: 'x/12/1000'
             },
@@ -1681,7 +1681,7 @@ export const values: convVal[] = [
                 to: 'Millennium',
                 names: namesList.time_mil,
                 func: (x) => {
-                    return x * 40 / 365.25 / 1000;
+                    return x * 40 / 365.25 / 1e3;
                 },
                 text: 'x*40/365.25/1000'
             },
@@ -1802,7 +1802,7 @@ export const values: convVal[] = [
                 to: 'Millennium',
                 names: namesList.time_mil,
                 func: (x) => {
-                    return x / 1000;
+                    return x / 1e3;
                 },
                 text: 'x/1000'
             },
@@ -1939,9 +1939,9 @@ export const values: convVal[] = [
                 to: 'Eon',
                 names: namesList.time_eon,
                 func: (x) => {
-                    return x / 1e600;
+                    return x / 1e6;
                 },
-                text: 'x/1e600'
+                text: 'x/1e6'
             },
             toArbitrary
         ]
@@ -2060,9 +2060,9 @@ export const values: convVal[] = [
                 to: 'Eon',
                 names: namesList.time_eon,
                 func: (x) => {
-                    return x / 1e60;
+                    return x / 1e6;
                 },
-                text: 'x/1e60'
+                text: 'x/1e6'
             },
             toArbitrary
         ]
@@ -2077,7 +2077,7 @@ export const values: convVal[] = [
                 to: 'Second',
                 names: namesList.time_s,
                 func: (x) => {
-                    return x * 31557600 * 1000;
+                    return x * 31557600 * 1e3;
                 },
                 text: 'x*31557600 *1000'
             },
@@ -2085,7 +2085,7 @@ export const values: convVal[] = [
                 to: 'Minute',
                 names: namesList.time_min,
                 func: (x) => {
-                    return x * 525960 * 1000;
+                    return x * 525960 * 1e3;
                 },
                 text: 'x*525960 *1000'
             },
@@ -2093,7 +2093,7 @@ export const values: convVal[] = [
                 to: 'Hour',
                 names: namesList.time_hr,
                 func: (x) => {
-                    return x * 8766 * 1000;
+                    return x * 8766 * 1e3;
                 },
                 text: 'x*8766 *1000'
             },
@@ -2101,7 +2101,7 @@ export const values: convVal[] = [
                 to: 'Day',
                 names: namesList.time_d,
                 func: (x) => {
-                    return x * 365.25 * 1000;
+                    return x * 365.25 * 1e3;
                 },
                 text: 'x*365.25'
             },
@@ -2109,7 +2109,7 @@ export const values: convVal[] = [
                 to: 'Week',
                 names: namesList.time_wk,
                 func: (x) => {
-                    return x * 52.1785714286 * 1000;
+                    return x * 52.1785714286 * 1e3;
                 },
                 text: 'x*52.1785714286 *1000'
             },
@@ -2117,7 +2117,7 @@ export const values: convVal[] = [
                 to: 'Fortnight',
                 names: namesList.time_fn,
                 func: (x) => {
-                    return x * 26.0714285714 * 1000;
+                    return x * 26.0714285714 * 1e3;
                 },
                 text: 'x*26.0714285714*1000'
             },
@@ -2125,7 +2125,7 @@ export const values: convVal[] = [
                 to: 'Month',
                 names: namesList.time_mth,
                 func: (x) => {
-                    return x * 12 * 1000;
+                    return x * 12 * 1e3;
                 },
                 text: 'x*12 *1000'
             },
@@ -2133,7 +2133,7 @@ export const values: convVal[] = [
                 to: 'Quarantine',
                 names: namesList.time_qua,
                 func: (x) => {
-                    return x * 52.1785714286 / 40 * 1000;
+                    return x * 52.1785714286 / 40 * 1e3;
                 },
                 text: 'x*52.1785714286/40 *1000'
             },
@@ -2141,7 +2141,7 @@ export const values: convVal[] = [
                 to: 'Year',
                 names: namesList.time_yr,
                 func: (x) => {
-                    return x * 1000;
+                    return x * 1e3;
                 },
                 text: 'x *1000'
             },
@@ -2173,7 +2173,7 @@ export const values: convVal[] = [
                 to: 'Megaannum',
                 names: namesList.time_ma,
                 func: (x) => {
-                    return x / 1000;
+                    return x / 1e3;
                 },
                 text: 'x/1000'
             },
@@ -2278,7 +2278,7 @@ export const values: convVal[] = [
                 to: 'Millennium',
                 names: namesList.time_mil,
                 func: (x) => {
-                    return x * 1000;
+                    return x * 1e3;
                 },
                 text: 'x*1000'
             },
@@ -2294,7 +2294,7 @@ export const values: convVal[] = [
                 to: 'Eon',
                 names: namesList.time_eon,
                 func: (x) => {
-                    return x / 1000;
+                    return x / 1e3;
                 },
                 text: 'x/1000'
             },
@@ -2383,17 +2383,17 @@ export const values: convVal[] = [
                 to: 'Decade',
                 names: namesList.time_dec,
                 func: (x) => {
-                    return x * 1e600;
+                    return x * 1e8;
                 },
-                text: 'x*1e600'
+                text: 'x*1e8'
             },
             {
                 to: 'Century',
                 names: namesList.time_cen,
                 func: (x) => {
-                    return x * 1e60;
+                    return x * 1e7;
                 },
-                text: 'x*1e60'
+                text: 'x*1e7'
             },
             {
                 to: 'Millennium',
@@ -2407,7 +2407,7 @@ export const values: convVal[] = [
                 to: 'Megaannum',
                 names: namesList.time_ma,
                 func: (x) => {
-                    return x * 1000;
+                    return x * 1e3;
                 },
                 text: 'x*1000'
             },
@@ -2522,7 +2522,7 @@ export const values: convVal[] = [
                 to: 'Fluid Ounce',
                 names: namesList.vol_floz,
                 func: (x) => {
-                    return x;
+                    return x / 2;
                 },
                 text: 'x/2'
             },
@@ -2775,7 +2775,7 @@ export const values: convVal[] = [
                 func: (x) => {
                     return x / 8;
                 },
-                text: 'x/9'
+                text: 'x/8'
             },
             {
                 to: 'Cubic Metre',
@@ -2854,7 +2854,7 @@ export const values: convVal[] = [
                 to: 'Cubic Metre',
                 names: namesList.vol_m3,
                 func: (x) => {
-                    return x / 1000;
+                    return x / 1e3;
                 },
                 text: 'x/1000'
             },
@@ -2984,7 +2984,7 @@ export const values: convVal[] = [
                 to: 'Litre',
                 names: namesList.vol_l,
                 func: (x) => {
-                    return (x * 1000);
+                    return x * 1e3;
                 },
                 text: 'x*1000'
             },
@@ -3060,7 +3060,7 @@ export const values: convVal[] = [
                 func: (x) => {
                     return x / 1e6;
                 },
-                text: 'x/10^6'
+                text: 'x/1e6'
             },
             toArbitrary
         ]
@@ -3305,7 +3305,7 @@ export const values: convVal[] = [
                 func: (x) => {
                     return x * 1e6;
                 },
-                text: 'xe6'
+                text: 'x*1e6'
             },
             {
                 to: 'Ounce',
@@ -4472,9 +4472,9 @@ export const values: convVal[] = [
                 to: 'Square kilometre',
                 names: namesList.area_km2,
                 func: (x) => {
-                    return x / 1e+6;
+                    return x / 1e6;
                 },
-                text: 'x/1e+6'
+                text: 'x/1e6'
             },
             {
                 to: 'Square mile',
@@ -4791,7 +4791,7 @@ export const values: convVal[] = [
                 to: 'Gradian',
                 names: namesList.angle_grad,
                 func: (x) => {
-                    return x;
+                    return x/0.9;
                 },
                 text: 'x/0.9'
             },
