@@ -108,13 +108,11 @@ export async function calcFullCombo(input: {
     customOD?: number,
     customHP?: number,
 }) {
-    if (!input.stats) {
-        input.stats = helper.tools.formatter.nonNullStats(input.stats);
+    let stats = input.stats ? { ...input.stats } : helper.tools.formatter.nonNullStats(input.stats);
+    if (stats.great == 0 && stats.perfect == 0) {
+        stats.great = NaN;
     }
-    if (input.stats.great == 0 && input.stats.perfect == 0) {
-        input.stats.great = NaN;
-    }
-    input.stats.miss = 0;
+    stats.miss = 0;
     return await calcScore({
         mapid: input.mapid,
         mode: input.mode,
