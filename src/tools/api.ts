@@ -52,8 +52,8 @@ export async function apiGet(input: tooltypes.apiInput) {
     const before = perf.performance.now();
     let data: tooltypes.apiReturn;
     let datafirst;
-    input.url = helper.tools.other.appendUrlParamsString(input.url, input.extra ?? []);
-    input.url = encodeURI(input.url);
+    let url = helper.tools.other.appendUrlParamsString(input.url, input.extra ?? []);
+    url = encodeURI(url);
     // helper.tools.log.stdout(input.url);
     if (input.tries >= 5) {
         return {
@@ -64,7 +64,7 @@ export async function apiGet(input: tooltypes.apiInput) {
     }
     try {
         helper.tools.log.stdout('OSU API GET: ' + input.url);
-        datafirst = (await axios.get(input.url, {
+        datafirst = (await axios.get(url, {
             headers: {
                 Authorization: `Bearer ${oauth.access_token}`,
                 "Content-Type": "application/json",

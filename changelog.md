@@ -12,6 +12,7 @@
 -   map PP all values being the same
 -   fix some conversions
 -   score stats being mutated by calc FC function
+-   prevent other possible mutations
 
 ### Changed
 
