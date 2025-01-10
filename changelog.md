@@ -6,7 +6,7 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
-## [4.0.7] - 2025-01-03
+## [4.0.8] - 2025-01-03
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/18e4ee1a4f58745e43168ec03f951448d00b6dbf)</br>
 
