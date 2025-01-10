@@ -4,7 +4,11 @@
 
 ## [WIP] - xxxx-xx-xx
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot)
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+
+## [4.0.7] - 2025-01-03
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/xxx)</br>
 
 ### Fixed
 
