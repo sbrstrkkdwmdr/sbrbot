@@ -481,7 +481,7 @@ export const osuset = async (input: bottypes.commandInput) => {
                 location = temp.value;
                 input.args = temp.newArgs;
             }
-            const timeArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['timezone', 'tz']), input.args, true, 'string');
+            const timeArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['timezone', 'tz']), input.args, true, 'string', false, false);
             if (timeArgFinder.found) {
                 tz = timeArgFinder.output;
                 input.args = timeArgFinder.args;

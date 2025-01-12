@@ -38,7 +38,7 @@ export const map = async (input: bottypes.commandInput) => {
     switch (input.type) {
         case 'message': {
             commanduser = input.message.author;
-            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args);
+            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args, false, null, false, false);
             if (detailArgFinder.found) {
                 detailed = 2;
                 input.args = detailArgFinder.args;
@@ -64,12 +64,12 @@ export const map = async (input: bottypes.commandInput) => {
                 customAR = temp.value;
                 input.args = temp.newArgs;
             }
-            const customODArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['od', 'accuracy',]), input.args, true);
+            const customODArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['od', 'accuracy',]), input.args, true, 'number', false, false);
             if (customODArgFinder.found) {
                 customOD = customODArgFinder.output;
                 input.args = customODArgFinder.args;
             }
-            const customHPArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['hp', 'drain', 'health']), input.args, true);
+            const customHPArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['hp', 'drain', 'health']), input.args, true, 'number', false, false);
             if (customHPArgFinder.found) {
                 customHP = customHPArgFinder.output;
                 input.args = customHPArgFinder.args;
@@ -97,7 +97,7 @@ export const map = async (input: bottypes.commandInput) => {
             if (input.args.includes('-bg')) {
                 showBg = true;
             }
-            const isppCalcArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['pp', 'calc', 'performance']), input.args);
+            const isppCalcArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['pp', 'calc', 'performance']), input.args, false, null, false, false);
             if (isppCalcArgFinder.found) {
                 isppCalc = true;
                 input.args = isppCalcArgFinder.args;
@@ -1329,37 +1329,37 @@ export const randomMap = async (input: bottypes.commandInput) => {
                 useRandomRanked = true;
                 input.args.splice(input.args.indexOf('-lb'), 1);
             }
-            const mapTypeRankedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapRanked, input.args);
+            const mapTypeRankedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapRanked, input.args, false, null, false, false);
             if (mapTypeRankedArgFinder.found) {
                 mapType = 'Ranked';
                 input.args = mapTypeRankedArgFinder.args;
             }
-            const mapTypeLovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapLove, input.args);
+            const mapTypeLovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapLove, input.args, false, null, false, false);
             if (mapTypeLovedArgFinder.found) {
                 mapType = 'Loved';
                 input.args = mapTypeLovedArgFinder.args;
             }
-            const mapTypeApprovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapApprove, input.args);
+            const mapTypeApprovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapApprove, input.args, false, null, false, false);
             if (mapTypeApprovedArgFinder.found) {
                 mapType = 'Approved';
                 input.args = mapTypeApprovedArgFinder.args;
             }
-            const mapTypeQualifiedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapQualified, input.args);
+            const mapTypeQualifiedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapQualified, input.args, false, null, false, false);
             if (mapTypeQualifiedArgFinder.found) {
                 mapType = 'Qualified';
                 input.args = mapTypeQualifiedArgFinder.args;
             }
-            const mapTypePendArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapPending, input.args);
+            const mapTypePendArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapPending, input.args, false, null, false, false);
             if (mapTypePendArgFinder.found) {
                 mapType = 'Pending';
                 input.args = mapTypePendArgFinder.args;
             }
-            const mapTypeWipArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapWip, input.args);
+            const mapTypeWipArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapWip, input.args, false, null, false, false);
             if (mapTypeWipArgFinder.found) {
                 mapType = 'WIP';
                 input.args = mapTypeWipArgFinder.args;
             }
-            const mapTypeGraveyardArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGraveyard, input.args);
+            const mapTypeGraveyardArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGraveyard, input.args, false, null, false, false);
             if (mapTypeGraveyardArgFinder.found) {
                 mapType = 'Graveyard';
                 input.args = mapTypeGraveyardArgFinder.args;
@@ -1445,7 +1445,7 @@ export const recMap = async (input: bottypes.commandInput) => {
         case 'message': {
 
             commanduser = input.message.author;
-            const usetypeRandomArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['r', 'random', 'f2', 'rdm', 'range', 'diff']), input.args, true);
+            const usetypeRandomArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['r', 'random', 'f2', 'rdm', 'range', 'diff']), input.args, true, 'number', false, false);
             if (usetypeRandomArgFinder.found) {
                 maxRange = usetypeRandomArgFinder.output;
                 useType = 'random';
@@ -1855,53 +1855,53 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
             commanduser = input.message.author;
 
             searchid = input.message.mentions.users.size > 0 ? input.message.mentions.users.first().id : input.message.author.id;
-            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true);
+            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true, 'number', false, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
             }
 
-            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args);
+            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args, false, null, false, false);
             if (detailArgFinder.found) {
                 mapDetailed = 2;
                 input.args = detailArgFinder.args;
             }
-            const filterRankArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapRanked, input.args);
+            const filterRankArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapRanked, input.args, false, null, false, false);
             if (filterRankArgFinder.found) {
                 filter = 'ranked';
                 input.args = filterRankArgFinder.args;
             }
-            const filterFavouritesArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapFavourite, input.args);
+            const filterFavouritesArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapFavourite, input.args, false, null, false, false);
             if (filterFavouritesArgFinder.found) {
                 filter = 'favourite';
                 input.args = filterFavouritesArgFinder.args;
             }
-            const filterGraveyardArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGraveyard, input.args);
+            const filterGraveyardArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGraveyard, input.args, false, null, false, false);
             if (filterGraveyardArgFinder.found) {
                 filter = 'graveyard';
                 input.args = filterGraveyardArgFinder.args;
             }
-            const filterLovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapLove, input.args);
+            const filterLovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapLove, input.args, false, null, false, false);
             if (filterLovedArgFinder.found) {
                 filter = 'loved';
                 input.args = filterLovedArgFinder.args;
             }
-            const filterPendingArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapPending, input.args);
+            const filterPendingArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapPending, input.args, false, null, false, false);
             if (filterPendingArgFinder.found) {
                 filter = 'pending';
                 input.args = filterPendingArgFinder.args;
             }
-            const filterNominatedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapNominated, input.args);
+            const filterNominatedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapNominated, input.args, false, null, false, false);
             if (filterNominatedArgFinder.found) {
                 filter = 'nominated';
                 input.args = filterNominatedArgFinder.args;
             }
-            const filterGuestArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGuest, input.args);
+            const filterGuestArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGuest, input.args, false, null, false, false);
             if (filterGuestArgFinder.found) {
                 filter = 'guest';
                 input.args = filterGuestArgFinder.args;
             }
-            const filterMostPlayedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapMostPlayed, input.args);
+            const filterMostPlayedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapMostPlayed, input.args, false, null, false, false);
             if (filterMostPlayedArgFinder.found) {
                 filter = 'most_played';
                 input.args = filterMostPlayedArgFinder.args;

@@ -25,7 +25,7 @@ export const changelog: bottypes.command = async (input: bottypes.commandInput) 
     switch (input.type) {
         case 'message': {
             commanduser = input.message.author;
-            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true);
+            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true, 'number', false, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
@@ -1900,7 +1900,7 @@ export const time: bottypes.command = async (input: bottypes.commandInput) => {
         case 'message': {
             input.message = (input.message as Discord.Message);
             commanduser = input.message.author;
-            const temp = helper.tools.commands.matchArgMultiple(['-utc', '-gmt'], input.args);
+            const temp = helper.tools.commands.matchArgMultiple(['-utc', '-gmt'], input.args, false, null, false, false);
             showGMT = temp.found ? temp.output : false;
             input.args = temp.args;
             input.args = helper.tools.commands.cleanArgs(input.args);

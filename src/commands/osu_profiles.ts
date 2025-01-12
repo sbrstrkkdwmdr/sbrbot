@@ -594,7 +594,7 @@ export const ranking = async (input: bottypes.commandInput) => {
         case 'message': {
 
             commanduser = input.message.author;
-            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true);
+            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true, 'number', false, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
@@ -660,7 +660,7 @@ export const ranking = async (input: bottypes.commandInput) => {
 
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('ranking', commanduser, input.id);
 
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder();
     helper.tools.log.commandOptions(
         [
             {
@@ -886,12 +886,12 @@ export const osu = async (input: bottypes.commandInput) => {
 
             commanduser = input.message.author;
             searchid = input.message.mentions.users.size > 0 ? input.message.mentions.users.first().id : input.message.author.id;
-            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args);
+            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args, false, null, false, false);
             if (detailArgFinder.found) {
                 detailed = 2;
                 input.args = detailArgFinder.args;
             }
-            const graphArgFinder = helper.tools.commands.matchArgMultiple(['-g', '-graph',], input.args);
+            const graphArgFinder = helper.tools.commands.matchArgMultiple(['-g', '-graph',], input.args, false, null, false, false);
             if (graphArgFinder.found) {
                 graphonly = true;
                 input.args = graphArgFinder.args;
@@ -1409,7 +1409,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
             commanduser = input.message.author;
             searchid = input.message.mentions.users.size > 0 ? input.message.mentions.users.first().id : input.message.author.id;
 
-            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true);
+            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true, 'number', false, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
@@ -1473,7 +1473,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
 
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('recentactivity', commanduser, input.id);
 
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder();
     helper.tools.log.commandOptions(
         [
             {

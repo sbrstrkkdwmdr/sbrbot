@@ -271,7 +271,7 @@ export const maplb = async (input: bottypes.commandInput) => {
 
             commanduser = input.message.author;
 
-            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true);
+            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true, 'number', false, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
@@ -1102,12 +1102,12 @@ export const recent = async (input: bottypes.commandInput) => {
             commanduser = input.message.author;
 
             searchid = input.message.mentions.users.size > 0 ? input.message.mentions.users.first().id : input.message.author.id;
-            const listArgFinder = helper.tools.commands.matchArgMultiple(['-l', '-list', '-detailed'], input.args);
+            const listArgFinder = helper.tools.commands.matchArgMultiple(['-l', '-list', '-detailed'], input.args, false, null, false, false);
             if (listArgFinder.found) {
                 list = true;
                 input.args = listArgFinder.args;
             }
-            const passArgFinder = helper.tools.commands.matchArgMultiple(['-nf', '-nofail', '-pass', '-passes', 'passes=true'], input.args);
+            const passArgFinder = helper.tools.commands.matchArgMultiple(['-nf', '-nofail', '-pass', '-passes', 'passes=true'], input.args, false, null, false, false);
             if (passArgFinder.found) {
                 showFails = 0;
                 input.args = passArgFinder.args;
@@ -2570,17 +2570,17 @@ export const scores = async (input: bottypes.commandInput) => {
                 input.args = temp.newArgs;
             }
 
-            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true);
+            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true, 'number', false, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
             }
-            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args);
+            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args, false, null, false, false);
             if (detailArgFinder.found) {
                 scoredetailed = 2;
                 input.args = detailArgFinder.args;
             }
-            const lessDetailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.compress, input.args);
+            const lessDetailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.compress, input.args, false, null, false, false);
             if (lessDetailArgFinder.found) {
                 scoredetailed = 0;
                 input.args = lessDetailArgFinder.args;
@@ -3003,27 +3003,27 @@ export const scorestats = async (input: bottypes.commandInput) => {
                 input.args = temp.args;
                 mode = temp.mode;
             }
-            const firstArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['first', 'firsts', 'globals', 'global', 'f', 'g']), input.args);
+            const firstArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['first', 'firsts', 'globals', 'global', 'f', 'g']), input.args, false, null, false, false);
             if (firstArgFinder.found) {
                 scoreTypes = 'firsts';
                 input.args = firstArgFinder.args;
             }
-            const topArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['osutop', 'top', 'best', 't', 'b']), input.args);
+            const topArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['osutop', 'top', 'best', 't', 'b']), input.args, false, null, false, false);
             if (topArgFinder.found) {
                 scoreTypes = 'best';
                 input.args = topArgFinder.args;
             }
-            const recentArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['r', 'recent', 'rs']), input.args);
+            const recentArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['r', 'recent', 'rs']), input.args, false, null, false, false);
             if (recentArgFinder.found) {
                 scoreTypes = 'recent';
                 input.args = recentArgFinder.args;
             }
-            const pinnedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['pinned', 'pins', 'pin', 'p']), input.args);
+            const pinnedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['pinned', 'pins', 'pin', 'p']), input.args, false, null, false, false);
             if (pinnedArgFinder.found) {
                 scoreTypes = 'pinned';
                 input.args = pinnedArgFinder.args;
             }
-            const allFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['all', 'd', 'a', 'detailed']), input.args);
+            const allFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['all', 'd', 'a', 'detailed']), input.args, false, null, false, false);
             if (allFinder.found) {
                 all = true;
                 input.args = allFinder.args;
@@ -3451,52 +3451,32 @@ export const simulate = async (input: bottypes.commandInput) => {
                 mods = temp.value;
                 input.args = temp.newArgs;
             }
-            const accArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['acc', 'accuracy', '%',]), input.args, true);
+            const accArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['acc', 'accuracy', '%',]), input.args, true, 'number', false, false);
             if (accArgFinder.found) {
                 acc = accArgFinder.output;
                 input.args = accArgFinder.args;
             }
-            const comboArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['x', 'combo', 'maxcombo',]), input.args, true);
+            const comboArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['x', 'combo', 'maxcombo',]), input.args, true, 'number', false, true);
             if (comboArgFinder.found) {
                 combo = comboArgFinder.output;
                 input.args = comboArgFinder.args;
             }
-            const n300ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n300', '300s',]), input.args, true);
+            const n300ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n300', '300s',]), input.args, true, 'number', false, true);
             if (n300ArgFinder.found) {
                 n300 = n300ArgFinder.output;
                 input.args = n300ArgFinder.args;
             }
-            if (ctn.includes('-n100')) {
-                const temp = helper.tools.commands.parseArg(input.args, '-n100', 'number', n100);
-                n100 = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (ctn.includes('-100s')) {
-                const temp = helper.tools.commands.parseArg(input.args, '-100s', 'number', n100);
-                n100 = temp.value;
-                input.args = temp.newArgs;
-            }
-            const n100ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n100', '100s',]), input.args, true);
+            const n100ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n100', '100s',]), input.args, true, 'number', false, true);
             if (n100ArgFinder.found) {
                 n100 = n100ArgFinder.output;
                 input.args = n100ArgFinder.args;
             }
-            const n50ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n50', '50s',]), input.args, true);
+            const n50ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n50', '50s',]), input.args, true, 'number', false, true);
             if (n50ArgFinder.found) {
                 n50 = n50ArgFinder.output;
                 input.args = n50ArgFinder.args;
             }
-            if (ctn.includes('-miss')) {
-                const temp = helper.tools.commands.parseArg(input.args, '-miss', 'number', nMiss);
-                nMiss = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (ctn.includes('-misses')) {
-                const temp = helper.tools.commands.parseArg(input.args, '-misses', 'number', nMiss);
-                nMiss = temp.value;
-                input.args = temp.newArgs;
-            }
-            const nMissArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['miss', 'misses', 'n0', '0s',]), input.args, true);
+            const nMissArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['miss', 'misses', 'n0', '0s',]), input.args, true, 'number', false, true);
             if (nMissArgFinder.found) {
                 nMiss = nMissArgFinder.output;
                 input.args = nMissArgFinder.args;
@@ -3712,7 +3692,7 @@ export const simulate = async (input: bottypes.commandInput) => {
         meh: n50,
         miss: nMiss ?? 0,
     };
-const perf = await helper.tools.performance.calcScore({
+    const perf = await helper.tools.performance.calcScore({
         mods,
         mode: 0,
         mapid,

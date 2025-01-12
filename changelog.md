@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+### Fixed
+
+-   args with aliases not being parsed properly
+
 ## [4.0.8] - 2025-01-03
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/18e4ee1a4f58745e43168ec03f951448d00b6dbf)</br>
