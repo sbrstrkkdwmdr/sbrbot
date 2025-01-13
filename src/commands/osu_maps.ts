@@ -131,10 +131,9 @@ export const map = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-            if (!input.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
                 input.interaction.followUp({
@@ -299,7 +298,7 @@ export const map = async (input: bottypes.commandInput) => {
     );
 
     if (!mapid) {
-        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction.guildId);
+        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction?.guildId);
         mapid = temp.id;
         if (!mapmods || osumodcalc.OrderMods(mapmods).string.length == 0) {
             mapmods = temp.mods;
@@ -367,7 +366,7 @@ export const map = async (input: bottypes.commandInput) => {
         }
 
         mapdata = mapdataReq.apiData;
-        helper.tools.data.debug(mapdataReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'mapData');
+        helper.tools.data.debug(mapdataReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'mapData');
         if (mapdataReq?.error) {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', `${mapid}`), false);
             return;
@@ -391,7 +390,7 @@ export const map = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.ms.replace('[ID]', `${mapdata.beatmapset_id}`), false);
             return;
         }
-        helper.tools.data.debug(bmsdataReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'bmsData');
+        helper.tools.data.debug(bmsdataReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'bmsData');
 
         if (bmsdata?.hasOwnProperty('error')) {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.ms.replace('[ID]', `${mapdata.beatmapset_id}`), true);
@@ -410,7 +409,7 @@ export const map = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.search, false);
             return;
         }
-        helper.tools.data.debug(mapidtestReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'mapIdTestData');
+        helper.tools.data.debug(mapidtestReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'mapIdTestData');
         helper.tools.data.storeFile(mapidtestReq, maptitleq.replace(/[\W_]+/g, '').replaceAll(' ', '_'), 'mapQuerydata');
 
         if (mapidtest?.hasOwnProperty('error') && !mapidtest.hasOwnProperty('beatmapsets')) {
@@ -473,7 +472,7 @@ export const map = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', usemapidpls), false);
             return;
         }
-        helper.tools.data.debug(mapdataReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'mapData');
+        helper.tools.data.debug(mapdataReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'mapData');
         if (mapdata?.hasOwnProperty('error') || !mapdata.id) {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', usemapidpls), true);
             return;
@@ -511,7 +510,7 @@ export const map = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.ms.replace('[ID]', `${mapdata.beatmapset_id}`), false);
             return;
         }
-        helper.tools.data.debug(bmsdataReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'bmsData');
+        helper.tools.data.debug(bmsdataReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'bmsData');
 
         if (bmsdata?.hasOwnProperty('error')) {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.ms.replace('[ID]', `${mapdata.beatmapset_id}`), true);
@@ -795,7 +794,7 @@ export const map = async (input: bottypes.commandInput) => {
             } catch (error) {
                 totaldiff = useMapdata.difficulty_rating;
             }
-            helper.tools.data.debug(ppComputed, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'ppCalc');
+            helper.tools.data.debug(ppComputed, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'ppCalc');
 
         } catch (error) {
             helper.tools.log.stdout(error);
@@ -1016,10 +1015,10 @@ HP${baseHP}`;
                     mapLastUpdated: new Date(useMapdata.last_updated),
                 });
             try {
-                helper.tools.data.debug(strains, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'strains');
+                helper.tools.data.debug(strains, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'strains');
 
             } catch (error) {
-                helper.tools.data.debug({ error: error }, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'strains');
+                helper.tools.data.debug({ error: error }, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'strains');
             }
             let mapgraph;
             if (strains) {
@@ -1161,7 +1160,7 @@ HP${baseHP}`;
                     return;
                 }
 
-                helper.tools.data.debug(gdReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'guestData');
+                helper.tools.data.debug(gdReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'guestData');
 
                 if (gdData?.hasOwnProperty('error')) {
                     gdData = {
@@ -1244,7 +1243,7 @@ HP${baseHP}`;
 
         embeds.push(Embed);
         embeds.reverse();
-        helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
+        helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction?.guildId,
             {
                 id: `${mapdata.id}`,
                 apiData: null,
@@ -1282,7 +1281,7 @@ HP${baseHP}`;
         };
 
     }
-    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
+    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction?.guildId,
         {
             id: `${mapdata.id}`,
             apiData: null,
@@ -1372,7 +1371,7 @@ export const randomMap = async (input: bottypes.commandInput) => {
 
         case 'interaction':
         case 'button': {
-            commanduser = input.interaction.member.user;
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
         }
     }
     helper.tools.log.commandOptions(
@@ -1480,8 +1479,9 @@ export const recMap = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
             searchid = input.interaction.member.user.id;
         }
             break;
@@ -1559,7 +1559,7 @@ export const recMap = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'recmap', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'recmap', true, helper.vars.errors.noUser(user), true);
@@ -1664,7 +1664,7 @@ Pool of ${randomMap.poolSize}
 //     let errtxt = '';
 //     const decoder = new osuparsers.BeatmapDecoder();
 //     const mapParsed: osuclasses.Beatmap = await decoder.decodeFromPath(mapPath, true);
-//     helper.tools.data.debug(mapParsed, 'fileparse', 'map (file)', input.message?.guildId ?? input.interaction.guildId, 'map');
+//     helper.tools.data.debug(mapParsed, 'fileparse', 'map (file)', input.message?.guildId ?? input.interaction?.guildId, 'map');
 //     let clockRate = 1;
 //     if (mods.includes('DT') || mods.includes('NC')) {
 //         clockRate = 1.5;
@@ -1728,7 +1728,7 @@ Pool of ${randomMap.poolSize}
 
 //         strains = await osufunc.straincalclocal(`${filespath}/errmap.osu`, mods, 0, osumodcalc.ModeIntToName(mapParsed?.mode));
 //     }
-//     helper.tools.data.debug(strains, 'fileparse', 'map (file)', input.message?.guildId ?? input.interaction.guildId, 'strains');
+//     helper.tools.data.debug(strains, 'fileparse', 'map (file)', input.message?.guildId ?? input.interaction?.guildId, 'strains');
 //     try {
 //         const mapgraphInit = await
 //             await func.graph(strains.strainTime, strains.value, 'Strains', {
@@ -1954,9 +1954,9 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
-            if (!input.message.embeds[0]) return;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
 
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
@@ -2107,7 +2107,7 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'userbeatmaps', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'userbeatmaps', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'userbeatmaps', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'userbeatmaps', true, helper.vars.errors.noUser(user), true);
@@ -2162,7 +2162,7 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
         await getScoreCount(0);
     }
 
-    helper.tools.data.debug(maplistdata, 'command', 'userbeatmaps', input.message?.guildId ?? input.interaction.guildId, 'mapListData');
+    helper.tools.data.debug(maplistdata, 'command', 'userbeatmaps', input.message?.guildId ?? input.interaction?.guildId, 'mapListData');
     helper.tools.data.storeFile(maplistdata, osudata.id, 'maplistdata', null, filter);
 
     if (parseMap) {

@@ -65,11 +65,9 @@ export const compare = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            if (!input.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
                 input.interaction.followUp({
@@ -166,10 +164,10 @@ export const compare = async (input: bottypes.commandInput) => {
                     return;
                 }
             } else {
-                if (helper.tools.data.getPreviousId('user', `${input.message?.guildId ?? input.interaction.guildId}`).id == false) {
+                if (helper.tools.data.getPreviousId('user', `${input.message?.guildId ?? input.interaction?.guildId}`).id == false) {
                     throw new Error(`Could not find second user - ${helper.vars.errors.uErr.osu.profile.user_msp}`);
                 }
-                second = helper.tools.data.getPreviousId('user', `${input.message?.guildId ?? input.interaction.guildId}`).id;
+                second = helper.tools.data.getPreviousId('user', `${input.message?.guildId ?? input.interaction?.guildId}`).id;
             }
         }
         if (first == null) {
@@ -406,7 +404,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                 break;
 
         }
-        helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${seconduser.id}`, apiData: null, mods: null });
+        helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction?.guildId, { id: `${seconduser.id}`, apiData: null, mods: null });
     } catch (error) {
         embedTitle = 'Error';
         usefields.push({
@@ -508,8 +506,9 @@ export const osuset = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
         }
             break;
     }
@@ -780,7 +779,7 @@ export const rankpp = async (input: bottypes.commandInput) => {
     };
 
     const dataSizetxt = await helper.vars.statsCache.count();
-    
+
     Embed
         .setDescription(`${output}\n${helper.vars.emojis.gamemodes[mode ?? 'osu']}\n${returnval.isEstimated ? `Estimated from ${dataSizetxt} entries.` : 'Based off matching / similar entry'}`);
 
@@ -834,8 +833,9 @@ export const saved = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
         }
             break;
     }
@@ -1059,8 +1059,9 @@ export const whatif = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
             searchid = commanduser.id;
         }
             break;
@@ -1142,7 +1143,7 @@ export const whatif = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(osudataReq, osudata.id, 'osudata', helper.tools.other.modeValidator(mode));
     helper.tools.data.storeFile(osudataReq, user, 'osudata', helper.tools.other.modeValidator(mode));
 
-    helper.tools.data.debug(osudataReq, 'command', 'whatif', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'whatif', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (mode == null) {
         mode = osudata.playmode;
@@ -1151,7 +1152,7 @@ export const whatif = async (input: bottypes.commandInput) => {
     const osutopdataReq: tooltypes.apiReturn = await helper.tools.api.getScoresBest(osudata.id, mode, []);
 
 
-    const osutopdata: apitypes.ScoreLegacy[] & apitypes.Error = osutopdataReq.apiData; helper.tools.data.debug(osutopdataReq, 'command', 'whatif', input.message?.guildId ?? input.interaction.guildId, 'osuTopData');
+    const osutopdata: apitypes.ScoreLegacy[] & apitypes.Error = osutopdataReq.apiData; helper.tools.data.debug(osutopdataReq, 'command', 'whatif', input.message?.guildId ?? input.interaction?.guildId, 'osuTopData');
     if (osutopdataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'whatif', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', user), false);
         return;

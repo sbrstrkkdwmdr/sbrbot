@@ -9,6 +9,7 @@
 ### Fixed
 
 -   args with aliases not being parsed properly
+-   message commands now work in DMs
 
 ## [4.0.8] - 2025-01-03
 

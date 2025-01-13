@@ -35,7 +35,9 @@ export const changelog: bottypes.command = async (input: bottypes.commandInput) 
             break;
 
         case 'button': {
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
             const curpage = parseInt(
                 input.message.embeds[0].footer.text.split('/')[0]
             ) - 1;
@@ -886,7 +888,9 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
         }
             break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
             if (input.buttonType == 'Random') {
                 rdm = true;
             }
@@ -1908,7 +1912,9 @@ export const time: bottypes.command = async (input: bottypes.commandInput) => {
         }
             break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
         }
             break;
     }
@@ -2179,7 +2185,9 @@ export const weather: bottypes.command = async (input: bottypes.commandInput) =>
         }
             break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
             useComponents = input.message.components as any[];
             const tempEmb = input.message.embeds[0];
             name = tempEmb.footer.text.split('input: ')[1];

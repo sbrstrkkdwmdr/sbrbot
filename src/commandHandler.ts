@@ -151,20 +151,20 @@ function commandCheck(cmd: string, message: Discord.Message, interaction: Discor
     if (botRequireAdmin.includes(cmd) && !helper.tools.checks.botHasPerms(message ?? interaction, ['Administrator'])) {
         missingPermsBot.push('Administrator');
     }
-    if (userRequireAdminOrOwner.includes(cmd) && !(helper.tools.checks.isAdmin(message?.author?.id ?? interaction.member.user.id, message?.guildId ?? interaction.guildId) || helper.tools.checks.isOwner(message?.author?.id ?? interaction.member.user.id))) {
+    if (userRequireAdminOrOwner.includes(cmd) && !(helper.tools.checks.isAdmin(message?.author?.id ?? interaction.member.user.id, message?.guildId ?? interaction?.guildId) || helper.tools.checks.isOwner(message?.author?.id ?? interaction.member.user.id))) {
         missingPermsUser.push('Administrator');
     }
     if (userRequireOwner.includes(cmd) && !helper.tools.checks.isOwner(message?.author?.id ?? interaction.member.user.id)) {
         missingPermsUser.push('Owner');
     }
 
-    if (missingPermsBot.length > 0) {
+    if (missingPermsBot.length > 0 && !(message ?? interaction).channel.isDMBased) {
         helper.tools.commands.sendMessage({
             type: "message",
             message,
             interaction,
             args: {
-                content: 'You do not have permission to use this command.\nMissing permissions: ' + missingPermsBot.join(', ')
+                content: 'The bot is missing permissions.\nMissing permissions: ' + missingPermsBot.join(', ')
             },
 
         },

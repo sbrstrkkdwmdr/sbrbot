@@ -36,8 +36,9 @@ export const add = async (input: bottypes.commandInput) => {
         }
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
         }
             break;
     }
@@ -71,7 +72,7 @@ export const add = async (input: bottypes.commandInput) => {
         }, input.canReply);
         return;
     }
-    const guildsetting = await helper.vars.guildSettings.findOne({ where: { guildid: input.message?.guildId ?? input.interaction.guildId } });
+    const guildsetting = await helper.vars.guildSettings.findOne({ where: { guildid: input.message?.guildId ?? input.interaction?.guildId } });
 
     if (!guildsetting?.dataValues?.trackChannel) {
         await helper.tools.commands.sendMessage({
@@ -129,7 +130,7 @@ export const add = async (input: bottypes.commandInput) => {
         helper.tools.track.editTrackUser({
             userid: osudata.id,
             action: 'add',
-            guildId: input.message?.guildId ?? input.interaction.guildId,
+            guildId: input.message?.guildId ?? input.interaction?.guildId,
             mode: mode
         });
     }
@@ -174,7 +175,9 @@ export const remove = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
         }
             break;
     }
@@ -208,7 +211,7 @@ export const remove = async (input: bottypes.commandInput) => {
         }, input.canReply);
         return;
     }
-    // const guildsetting = await helper.vars.guildSettings.findOne({ where: { guildid: input.message?.guildId ?? input.interaction.guildId } });
+    // const guildsetting = await helper.vars.guildSettings.findOne({ where: { guildid: input.message?.guildId ?? input.interaction?.guildId } });
 
     // if (!guildsetting?.dataValues?.trackChannel) {
     //     await helper.tools.commands.sendMessage({
@@ -264,7 +267,7 @@ export const remove = async (input: bottypes.commandInput) => {
         helper.tools.track.editTrackUser({
             userid: osudata.id,
             action: 'remove',
-            guildId: input.message?.guildId ?? input.interaction.guildId,
+            guildId: input.message?.guildId ?? input.interaction?.guildId,
             mode
         });
     }
@@ -307,8 +310,9 @@ export const channel = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
         }
             break;
     }
@@ -325,7 +329,7 @@ export const channel = async (input: bottypes.commandInput) => {
         input.interaction,
     );
 
-    const guildsetting = await helper.vars.guildSettings.findOne({ where: { guildid: input.message?.guildId ?? input.interaction.guildId } });
+    const guildsetting = await helper.vars.guildSettings.findOne({ where: { guildid: input.message?.guildId ?? input.interaction?.guildId } });
 
     if (!channelId) {
         if (!guildsetting.dataValues.trackChannel) {
@@ -369,7 +373,7 @@ export const channel = async (input: bottypes.commandInput) => {
     await guildsetting.update({
         trackChannel: channelId
     }, {
-        where: { guildid: input.message?.guildId ?? input.interaction.guildId }
+        where: { guildid: input.message?.guildId ?? input.interaction?.guildId }
     });
 
 
@@ -404,7 +408,9 @@ export const list = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
         }
             break;
     }
@@ -442,7 +448,7 @@ export const list = async (input: bottypes.commandInput) => {
             guilds = [];
         }
 
-        //check if input.message?.guildId ?? input.interaction.guildId is in guilds
+        //check if input.message?.guildId ?? input.interaction?.guildId is in guilds
         if (guilds.includes(input.message?.guildId)) {
             userList.push({
                 osuid: `${user.osuid}`,

@@ -41,8 +41,11 @@ export const badges = async (input: bottypes.commandInput) => {
 
                 break;
             case 'button': {
-
-                commanduser = input.interaction.member.user;
+                if (!input.message.embeds[0]) {
+                    return;
+                }
+                input.interaction = (input.interaction as Discord.ButtonInteraction);
+                commanduser = input.interaction?.member?.user ?? input.interaction?.user;
                 searchid = commanduser.id;
             }
                 break;
@@ -103,7 +106,7 @@ export const badges = async (input: bottypes.commandInput) => {
             return;
         }
 
-        helper.tools.data.debug(osudataReq, 'command', 'badges', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+        helper.tools.data.debug(osudataReq, 'command', 'badges', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
         if (osudata?.hasOwnProperty('error') || !osudata.id) {
             await helper.tools.commands.errorAndAbort(input, 'badges', true, helper.vars.errors.noUser(user), true);
@@ -261,7 +264,7 @@ export const bws = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'bws', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'bws', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'bws', true, helper.vars.errors.noUser(user), true);
@@ -375,10 +378,9 @@ export const lb = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            if (!input.message.embeds[0]) {
-                return;
-            }
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
 
             id = input.message.embeds[0].author.name;
             mode = input.message.embeds[0].footer.text.split(' | ')[0];
@@ -629,8 +631,12 @@ export const ranking = async (input: bottypes.commandInput) => {
 
 
             break;
-        case 'button': {
-            commanduser = input.interaction.member.user;
+            case 'button': {
+                if (!input.message.embeds[0]) {
+                    return;
+                }
+                input.interaction = (input.interaction as Discord.ButtonInteraction);
+                commanduser = input.interaction?.member?.user ?? input.interaction?.user;
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
                 input.interaction.followUp({
@@ -746,7 +752,7 @@ export const ranking = async (input: bottypes.commandInput) => {
 
 
     try {
-        helper.tools.data.debug(rankingdataReq, 'command', 'ranking', input.message?.guildId ?? input.interaction.guildId, 'rankingData');
+        helper.tools.data.debug(rankingdataReq, 'command', 'ranking', input.message?.guildId ?? input.interaction?.guildId, 'rankingData');
     } catch (e) {
         return;
     }
@@ -931,12 +937,12 @@ export const osu = async (input: bottypes.commandInput) => {
 
 
             break;
-        case 'button': {
-
-            if (!input.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.interaction.member.user;
+            case 'button': {
+                if (!input.message.embeds[0]) {
+                    return;
+                }
+                input.interaction = (input.interaction as Discord.ButtonInteraction);
+                commanduser = input.interaction?.member?.user ?? input.interaction?.user;
             searchid = commanduser.id;
 
             user = input.message.embeds[0].url.split('users/')[1].split('/')[0];
@@ -1114,7 +1120,7 @@ export const osu = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.noUser(user), true);
@@ -1137,7 +1143,7 @@ export const osu = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
             return;
         }
-        helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+        helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
     } else {
         mode = mode ?? 'osu';
     }
@@ -1305,7 +1311,7 @@ export const osu = async (input: bottypes.commandInput) => {
                 await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.uErr.osu.map.group_nf.replace('[TYPE]', 'most played'), false);
                 return;
             }
-            helper.tools.data.debug(mostplayeddataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'mostPlayedData');
+            helper.tools.data.debug(mostplayeddataReq, 'command', 'osu', input.message?.guildId ?? input.interaction?.guildId, 'mostPlayedData');
 
             if (mostplayeddata?.hasOwnProperty('error')) {
                 await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.uErr.osu.profile.mostplayed, true);
@@ -1377,7 +1383,7 @@ ${supporter} ${onlinestatus}
             useEmbeds = [osuEmbed];
         }
     }
-    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction?.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
 
 
@@ -1435,9 +1441,12 @@ export const recent_activity = async (input: bottypes.commandInput) => {
 
 
             break;
-        case 'button': {
-
-            commanduser = input.interaction.member.user;
+            case 'button': {
+                if (!input.message.embeds[0]) {
+                    return;
+                }
+                input.interaction = (input.interaction as Discord.ButtonInteraction);
+                commanduser = input.interaction?.member?.user ?? input.interaction?.user;
 
             user = input.message.embeds[0].url.split('users/')[1].split('/')[0];
             page = parseInt((input.message.embeds[0].description).split('Page: ')[1].split('/')[0]);
@@ -1543,7 +1552,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'recent_activity', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'recent_activity', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'recent_activity', true, helper.vars.errors.noUser(user), true);
@@ -1584,7 +1593,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'recent_activity', true, helper.vars.errors.uErr.osu.rsact, false);
         return;
     }
-    helper.tools.data.debug(recentActivityReq, 'command', 'recent_activity', input.message?.guildId ?? input.interaction.guildId, 'rsactData');
+    helper.tools.data.debug(recentActivityReq, 'command', 'recent_activity', input.message?.guildId ?? input.interaction?.guildId, 'rsactData');
 
     if (rsactData?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'recent_activity', true, helper.vars.errors.uErr.osu.profile.rsact, true);

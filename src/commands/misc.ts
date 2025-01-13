@@ -13,7 +13,9 @@ export const _8ball = async (input: bottypes.commandInput) => {
         }
             break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
         }
             break;
     }
@@ -84,7 +86,7 @@ export const coin = async (input: bottypes.commandInput) => {
         .setTitle(msg)
         .setImage(`attachment://${msg}.png`);
 
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -198,7 +200,7 @@ export const gif = async (input: bottypes.commandInput) => {
         .setTitle(baseString.replace('user', commanduser.username).replace('target', secondaryUser.username))
         .setImage(gifSelection[Math.floor(Math.random() * gifSelection.length)]);
 
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -253,7 +255,7 @@ export const inspire = async (input: bottypes.commandInput) => {
         .setTitle('Inspirational Quote')
         .setDescription(helper.tools.formatter.toCapital(sendString));
 
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -351,7 +353,7 @@ export const janken = async (input: bottypes.commandInput) => {
         'rock': '🪨',
     };
     content = `${toEmoji[real]} vs. ${toEmoji[pcChoice]} | ` + content;
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -453,7 +455,7 @@ export const poll = async (input: bottypes.commandInput) => {
         .setTitle(`${pollTitle}`)
         .setDescription(`${optsToTxt}`);
 
-    
+
     switch (input.type) {
         case 'message': {
             (input.message.channel as Discord.GuildTextBasedChannel).send({

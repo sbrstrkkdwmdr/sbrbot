@@ -331,7 +331,7 @@ export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string
     return;
 }
 
-export function debug(data: any, type: string, name: string, serverId: string | number, params: string) {
+export function debug(data: any, type: string, name: string, serverId: string, params: string) {
     const pars = params.replaceAll(',', '=');
     if (!fs.existsSync(`${helper.vars.path.cache}/debug/${type}`)) {
         fs.mkdirSync(`${helper.vars.path.cache}/debug/${type}`);

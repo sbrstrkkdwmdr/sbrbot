@@ -1113,12 +1113,10 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
         }
             break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
             let scoredetailed: number = 1;
-            if (!input.message.embeds[0]) {
-                return;
-            }
-
             const temp = getButtonArgs(input.id);
             user = temp?.user;
             searchid = temp?.searchid;
