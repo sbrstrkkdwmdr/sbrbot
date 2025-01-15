@@ -11,6 +11,8 @@
 -   args with aliases not being parsed properly
 -   message commands now work in DMs
 -   scoreparse via command using null score
+-   FC calc still parsing misses
+-   SS still parsing hit100s/50s etc.
 
 ## [4.0.8] - 2025-01-03
 
