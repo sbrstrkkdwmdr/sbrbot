@@ -10,6 +10,7 @@
 
 -   args with aliases not being parsed properly
 -   message commands now work in DMs
+-   scoreparse via command using null score
 
 ## [4.0.8] - 2025-01-03
 

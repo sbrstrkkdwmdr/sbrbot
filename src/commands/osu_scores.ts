@@ -2118,7 +2118,6 @@ ${isfail}
 export const scoreparse = async (input: bottypes.commandInput) => {
     let commanduser: Discord.User | Discord.APIUser;
 
-    let scorelink: string;
     let scoremode: apitypes.GameMode;
     let scoreid: number | string;
     let nochoke: boolean = false;
@@ -2130,11 +2129,10 @@ export const scoreparse = async (input: bottypes.commandInput) => {
         case 'message': {
             commanduser = input.message.author;
 
-            scorelink = null;
             scoremode = input.args[1] as apitypes.GameMode;
             scoreid = input.args[0];
             if (input?.args[0]?.includes('https://')) {
-                const temp = helper.tools.commands.scoreIdFromLink(scorelink);
+                const temp = helper.tools.commands.scoreIdFromLink(input.args[0]);
                 scoremode = temp.mode;
                 scoreid = temp.id;
             }
@@ -2166,7 +2164,7 @@ if (!input.message.embeds[0]) return;
             break;
         case 'link': {
             commanduser = input.message.author;
-            scorelink = input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
+            let scorelink = input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
             const temp = helper.tools.commands.scoreIdFromLink(scorelink);
             scoremode = temp.mode;
             scoreid = temp.id;
@@ -2196,10 +2194,6 @@ if (!input.message.embeds[0]) return;
 
     helper.tools.log.commandOptions(
         [
-            {
-                name: 'Score Link',
-                value: `${scorelink}`
-            },
             {
                 name: 'Score Mode',
                 value: `${scoremode}`
