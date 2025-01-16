@@ -1657,7 +1657,12 @@ if (!input.message.embeds[0]) return;
         const trycountstr = `try #${trycount}`;
         const mxcombo =
             perf.difficulty.maxCombo;
-        mapdata.max_combo;
+        // mapdata.max_combo;
+        let modadjustments = '';
+        if (curscore.mods.filter(x => x?.settings?.speed_change).length > 0){
+            modadjustments += ' (' + curscore.mods.filter(x => x?.settings?.speed_change)[0].settings.speed_change + 'x)';
+        }
+        
         rsEmbed
             .setAuthor({
                 name: `${trycountstr} | #${helper.tools.calculate.separateNum(osudata?.statistics?.global_rank)} | #${helper.tools.calculate.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${helper.tools.calculate.separateNum(osudata?.statistics?.pp)}pp`,
@@ -1669,7 +1674,7 @@ if (!input.message.embeds[0]) return;
             .setThumbnail(`${curbms.covers.list}`);
         rsEmbed
             .setDescription(`
-[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.map(x => x.acronym).join('').toUpperCase()).string : ''} 
+[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.map(x => x.acronym).join('').toUpperCase()).string + modadjustments: ''} 
 ${(perf.difficulty.stars ?? 0).toFixed(2)}⭐ | ${helper.vars.emojis.gamemodes[curscore.ruleset_id]}
 ${helper.tools.formatter.dateToDiscordFormat(new Date(curscore.ended_at), 'F')}
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}

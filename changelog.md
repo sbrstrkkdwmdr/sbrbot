@@ -22,6 +22,7 @@
 ### Added
 
 - reimplemented interaction commands (so far only general)
+- scores show rate change if used
 
 ## [4.0.8] - 2025-01-03
 
