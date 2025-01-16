@@ -87,7 +87,8 @@ export async function sendMessage(input: {
                             files: input.args.files ?? [],
                             components: input.args.components ?? [],
                             allowedMentions: { repliedUser: false },
-                            ephemeral: input.args.ephemeral ?? false
+                            // ephemeral: input.args.ephemeral ?? false,
+                            flags: input.args.ephemeral ? Discord.MessageFlags.Ephemeral : null,
                         })
                             .catch();
                     }

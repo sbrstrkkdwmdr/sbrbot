@@ -138,7 +138,7 @@ if (!input.message.embeds[0]) return;
             if (temp.error) {
                 input.interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
-                    ephemeral: true,
+                    flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
                 return;
@@ -1962,7 +1962,7 @@ if (!input.message.embeds[0]) return;
             if (temp.error) {
                 input.interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
-                    ephemeral: true,
+                    flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
                 return;

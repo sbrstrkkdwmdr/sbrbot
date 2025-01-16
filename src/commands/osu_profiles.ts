@@ -641,7 +641,7 @@ export const ranking = async (input: bottypes.commandInput) => {
             if (temp.error) {
                 input.interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
-                    ephemeral: true,
+                    flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
                 return;

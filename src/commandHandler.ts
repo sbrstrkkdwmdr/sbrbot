@@ -27,7 +27,7 @@ export async function onInteraction(interaction: Discord.Interaction) {
     interaction.reply({
         content: 'Interaction based commands are currently unsupported in this version',
         allowedMentions: { repliedUser: false },
-        ephemeral: true
+        flags: Discord.MessageFlags.Ephemeral,
     });
     return;
     // let args = [];
