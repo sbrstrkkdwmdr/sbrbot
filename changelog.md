@@ -13,16 +13,16 @@
 -   scoreparse via command using null score
 -   FC calc still parsing misses
 -   SS still parsing hit100s/50s etc.
-
+-   buggy osu track score filter
 
 ### Changed
 
-- changelog embed title links to changelog file instead of commit
+-   changelog embed title links to changelog file instead of commit
 
 ### Added
 
-- reimplemented interaction commands (so far only general)
-- scores show rate change if used
+-   reimplemented interaction commands (so far only general)
+-   scores show rate change if used
 
 ## [4.0.8] - 2025-01-03
 
