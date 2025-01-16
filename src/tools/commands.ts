@@ -725,7 +725,7 @@ export function cleanArgs(args: string[]) {
 }
 
 export async function parseArgs_scoreList_message(input: bottypes.commandInput) {
-    let commanduser: Discord.User;
+    let commanduser: Discord.User | Discord.APIUser;
 
     let user;
     let page = 0;

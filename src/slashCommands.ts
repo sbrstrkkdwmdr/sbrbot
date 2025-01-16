@@ -3,7 +3,7 @@ import * as Discord from 'discord.js';
 import * as helper from './helper.js';
 
 export async function main() {
-    const docommands: boolean = false;
+    const docommands: boolean = true;
     if (docommands) run();
     else helper.vars.client.application?.commands.set([]);
 }

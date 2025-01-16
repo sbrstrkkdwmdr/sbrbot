@@ -4,6 +4,7 @@ import * as bottypes from './types/bot.js';
 
 let command: bottypes.command = null;
 let overrides: bottypes.overrides = {};
+const disableSlashCommands = false
 export function onMessage(message: Discord.Message) {
     command = null;
     overrides = null;
@@ -24,15 +25,17 @@ export async function onInteraction(interaction: Discord.Interaction) {
     overrides = null;
     if (!(interaction.type === Discord.InteractionType.ApplicationCommand)) { return; }
     interaction = interaction as Discord.ChatInputCommandInteraction;
-    interaction.reply({
-        content: 'Interaction based commands are currently unsupported in this version',
-        allowedMentions: { repliedUser: false },
-        flags: Discord.MessageFlags.Ephemeral,
-    });
-    return;
-    // let args = [];
-    // const cmd = interaction.commandName;
-    // runCommand(cmd, null, interaction, args, true, 'interaction');
+    if(disableSlashCommands){
+        interaction.reply({
+            content: 'Interaction based commands are currently unsupported in this version',
+            allowedMentions: { repliedUser: false },
+            flags: Discord.MessageFlags.Ephemeral,
+        });
+        return;
+    }
+    let args = [];
+    const cmd = interaction.commandName;
+    runCommand(cmd, null, interaction, args, true, 'interaction');
 }
 
 const rslist = [

@@ -3,7 +3,8 @@
 newest-oldest
 
 ## current
-- [ ] get command to work in DMs
+- [ ] use multi-arg parser for convert
+- [x] get command to work in DMs (atm. only message commands)
 - [ ] interaction commands
 - [x] map PP values all the same
 - [x] custom cs,ar,od,hp in simulate
