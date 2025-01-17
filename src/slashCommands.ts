@@ -629,45 +629,6 @@ function run() {
             ]
         },
         {
-            name: 'trackadd',
-            description: 'Adds a user to the server\'s tracking list',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'user',
-                    description: 'The user to add to the tracking list',
-                    required: true,
-                    type: Discord.ApplicationCommandOptionType.String,
-                }
-            ]
-        },
-        {
-            name: 'trackchannel',
-            description: 'Sets the channel to send tracking updates to',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'channel',
-                    description: 'The channel to send tracking updates to',
-                    required: true,
-                    type: Discord.ApplicationCommandOptionType.Channel,
-                }
-            ]
-        },
-        {
-            name: 'trackremove',
-            description: 'Removes a user from the server\'s tracking list',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'user',
-                    description: 'The user to remove from the tracking list',
-                    required: true,
-                    type: Discord.ApplicationCommandOptionType.String,
-                }
-            ]
-        },
-        {
             name: 'userbeatmaps',
             description: 'Displays the user\'s beatmaps',
             dmPermission: true,
@@ -768,27 +729,6 @@ function run() {
                 }
             ]
         },
-
-
-
-        //below are misc commands
-
-
-
-        // {
-        //     name: 'gif',
-        //     description: 'Sends a random gif',
-        //     dmPermission: false,
-        //     options: [
-        //         {
-        //             name: 'type',
-        //             description: 'The type of gif to send',
-        //             type: Discord.ApplicationCommandOptionType.String,
-        //             required: true,
-        //             choices: helper.vars.commandopts.gifopts,
-        //         }
-        //     ]
-        // },
         {
             name: 'hug',
             description: 'Sends a gif',
