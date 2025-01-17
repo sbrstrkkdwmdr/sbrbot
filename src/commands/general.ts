@@ -35,14 +35,14 @@ export const changelog: bottypes.command = async (input: bottypes.commandInput) 
             break;
         case 'interaction': {
             let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = interaction.user ?? interaction.member.user;
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
             version = interaction.options.getString('version');
         }
             break;
         case 'button': {
             if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             const curpage = parseInt(
                 input.message.embeds[0].footer.text.split('/')[0]
             ) - 1;
@@ -393,7 +393,7 @@ export const convert: bottypes.command = async (input: bottypes.commandInput) =>
             break;
         case 'interaction': {
             let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = interaction.user ?? interaction.member.user;
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
             cat1 = interaction.options.getString('from') ?? cat1;
             cat2 = interaction.options.getString('to') ?? cat2;
             num = interaction.options.getNumber('number') ?? num;
@@ -900,14 +900,14 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
             break;
         case 'interaction': {
             let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = interaction.user ?? interaction.member.user;
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
             command = interaction.options.getString('command');
         }
             break;
         case 'button': {
             if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             if (input.buttonType == 'Random') {
                 rdm = true;
             }
@@ -1299,7 +1299,7 @@ export const info: bottypes.command = async (input: bottypes.commandInput) => {
             break;
         case 'interaction': {
             let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = interaction.user ?? interaction.member.user;
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -1483,7 +1483,7 @@ export const invite: bottypes.command = async (input: bottypes.commandInput) => 
             break;
         case 'interaction': {
             let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = interaction.user ?? interaction.member.user;
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -1520,7 +1520,7 @@ export const math: bottypes.command = async (input: bottypes.commandInput) => {
             break;
         case 'interaction': {
             let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = interaction.user ?? interaction.member.user;
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
             type = interaction.options.getString('type');
             num1 = interaction.options.getNumber('num1');
             num2 = interaction.options.getNumber('num2');
@@ -1684,7 +1684,7 @@ export const ping: bottypes.command = async (input: bottypes.commandInput) => {
             break;
         case 'interaction': {
             let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = interaction.user ?? interaction.member.user;
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -1750,7 +1750,7 @@ ${trueping}`);
     `);
                 intRes.edit({
                     embeds: [pingEmbed]
-                })
+                });
             })
                 .catch();
         }
@@ -1908,7 +1908,7 @@ export const stats: bottypes.command = async (input: bottypes.commandInput) => {
             break;
         case 'interaction': {
             let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = interaction.user ?? interaction.member.user;
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -1985,14 +1985,14 @@ export const time: bottypes.command = async (input: bottypes.commandInput) => {
             break;
         case 'interaction': {
             let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = interaction.user ?? interaction.member.user;
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
             fetchtimezone = interaction.options.getString('timezone');
         }
             break;
         case 'button': {
             if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -2264,14 +2264,14 @@ export const weather: bottypes.command = async (input: bottypes.commandInput) =>
             break;
         case 'interaction': {
             let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = interaction.user ?? interaction.member.user;
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
             name = interaction.options.getString('location');
         }
             break;
         case 'button': {
             if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             useComponents = input.message.components as any[];
             const tempEmb = input.message.embeds[0];
             name = tempEmb.footer.text.split('input: ')[1];
@@ -2339,7 +2339,7 @@ export const weather: bottypes.command = async (input: bottypes.commandInput) =>
             }
         }, input.canReply);
     }
-    
+
     if (helper.tools.data.findFile(name, 'weatherlocationdata') &&
         !('error' in helper.tools.data.findFile(name, 'weatherlocationdata')) &&
         input.buttonType != 'Refresh'

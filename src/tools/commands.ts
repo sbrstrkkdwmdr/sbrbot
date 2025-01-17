@@ -916,30 +916,30 @@ export async function parseArgs_scoreList_message(input: bottypes.commandInput) 
 }
 
 export async function parseArgs_scoreList_interaction(input: bottypes.commandInput) {
-    input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+        let interaction = input.interaction as Discord.ChatInputCommandInteraction;
 
-    const searchid = input.interaction.member.user.id;
+    const searchid = interaction?.member?.user ?? interaction?.user.id;
 
-    const user = input.interaction.options.getString('user') ?? undefined;
-    const page = input.interaction.options.getInteger('page') ?? 0;
-    const scoredetailed = input.interaction.options.getBoolean('detailed') ? 1 : 0;
-    const sort = input.interaction.options.getString('sort') as "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss";
-    const reverse = input.interaction.options.getBoolean('reverse') ?? false;
-    const mode = (input.interaction.options.getString('mode') ?? 'osu') as apitypes.GameMode;
-    const filteredMapper = input.interaction.options.getString('mapper') ?? null;
-    const filterTitle = input.interaction.options.getString('filter') ?? null;
-    const parseId = input.interaction.options.getInteger('parse') ?? null;
+    const user = interaction.options.getString('user') ?? undefined;
+    const page = interaction.options.getInteger('page') ?? 0;
+    const scoredetailed = interaction.options.getBoolean('detailed') ? 1 : 0;
+    const sort = interaction.options.getString('sort') as "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss";
+    const reverse = interaction.options.getBoolean('reverse') ?? false;
+    const mode = (interaction.options.getString('mode') ?? 'osu') as apitypes.GameMode;
+    const filteredMapper = interaction.options.getString('mapper') ?? null;
+    const filterTitle = interaction.options.getString('filter') ?? null;
+    const parseId = interaction.options.getInteger('parse') ?? null;
     const parseScore = parseId != null ? true : false;
-    const modsInclude = input.interaction.options.getString('mods') ?? null;
-    const modsExact = input.interaction.options.getString('modsExact') ?? null;
-    const modsExclude = input.interaction.options.getString('modsExclude') ?? null;
-    const filterRank = input.interaction.options.getString('filterRank') ? osumodcalc.checkGrade(input.interaction.options.getString('filterRank')) : null;
-    const pp = input.interaction.options.getString('pp') ?? null;
-    const score = input.interaction.options.getString('score') ?? null;
-    const acc = input.interaction.options.getString('acc') ?? null;
-    const combo = input.interaction.options.getString('combo') ?? null;
-    const miss = input.interaction.options.getString('miss') ?? null;
-    const bpm = input.interaction.options.getString('bpm') ?? null;
+    const modsInclude = interaction.options.getString('mods') ?? null;
+    const modsExact = interaction.options.getString('modsExact') ?? null;
+    const modsExclude = interaction.options.getString('modsExclude') ?? null;
+    const filterRank = interaction.options.getString('filterRank') ? osumodcalc.checkGrade(interaction.options.getString('filterRank')) : null;
+    const pp = interaction.options.getString('pp') ?? null;
+    const score = interaction.options.getString('score') ?? null;
+    const acc = interaction.options.getString('acc') ?? null;
+    const combo = interaction.options.getString('combo') ?? null;
+    const miss = interaction.options.getString('miss') ?? null;
+    const bpm = interaction.options.getString('bpm') ?? null;
     return {
         user, searchid, page, scoredetailed,
         sort, reverse, mode,
@@ -1088,7 +1088,8 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
         }
             break;
         case 'interaction': {
-            commanduser = input.interaction.member.user;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
             const temp = await parseArgs_scoreList_interaction(input);
             user = temp.user;
             searchid = temp.searchid;
@@ -1115,7 +1116,7 @@ export async function parseArgs_scoreList(input: bottypes.commandInput) {
             break;
         case 'button': {
             if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
+            let interaction = (input.interaction as Discord.ButtonInteraction);
             commanduser = input.interaction?.member?.user ?? input.interaction?.user;
             let scoredetailed: number = 1;
             const temp = getButtonArgs(input.id);

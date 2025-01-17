@@ -117,26 +117,26 @@ export const map = async (input: bottypes.commandInput) => {
 
 
         case 'interaction': {
-            input.interaction = input.interaction as Discord.ChatInputCommandInteraction;
-            commanduser = input.interaction.member.user;
-            mapid = input.interaction.options.getInteger('id');
-            mapmods = input.interaction.options.getString('mods');
-            detailed = input.interaction.options.getBoolean('detailed') ? 2 : 1;
-            maptitleq = input.interaction.options.getString('query');
-            input.interaction.options.getNumber('bpm') ? overrideBpm = input.interaction.options.getNumber('bpm') : null;
-            input.interaction.options.getNumber('speed') ? overrideSpeed = input.interaction.options.getNumber('speed') : null;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            mapid = interaction.options.getInteger('id');
+            mapmods = interaction.options.getString('mods');
+            detailed = interaction.options.getBoolean('detailed') ? 2 : 1;
+            maptitleq = interaction.options.getString('query');
+            interaction.options.getNumber('bpm') ? overrideBpm = interaction.options.getNumber('bpm') : null;
+            interaction.options.getNumber('speed') ? overrideSpeed = interaction.options.getNumber('speed') : null;
         }
 
 
 
             break;
         case 'button': {
-if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? input.interaction?.user;
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.followUp({
+                interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
                     flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
@@ -1471,24 +1471,18 @@ export const recMap = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-
-            commanduser = input.interaction.member.user;
-            searchid = input.interaction.member.user.id;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            searchid = interaction?.member?.user.id ?? interaction?.user.id;
         }
 
 
             break;
         case 'button': {
-if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
-            searchid = input.interaction.member.user.id;
-        }
-            break;
-        case 'link': {
-
-            commanduser = input.message.author;
-            searchid = input.interaction.member.user.id;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? input.interaction?.user;
+            searchid = interaction?.member?.user.id ?? interaction?.user.id;
         }
             break;
     }
@@ -1627,7 +1621,7 @@ Pool of ${randomMap.poolSize}
 
 //         case 'interaction': {
 
-//             commanduser = input.interaction.member.user;
+//             commanduser = interaction?.member?.user ?? interaction?.user;
 //         }
 
 
@@ -1635,7 +1629,7 @@ Pool of ${randomMap.poolSize}
 //             break;
 //         case 'button': {
 
-//             commanduser = input.interaction.member.user;
+//             commanduser = interaction?.member?.user ?? interaction?.user;
 //         }
 //             break;
 //     }
@@ -1934,17 +1928,17 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = input.interaction as Discord.ChatInputCommandInteraction;
-            commanduser = input.interaction.member.user;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
 
-            user = input.interaction.options.getString('user') ?? null;
-            filter = (input.interaction.options.getString('type') ?? 'favourite') as bottypes.ubmFilter;
-            sort = (input.interaction.options.getString('sort') ?? 'dateadded') as bottypes.ubmSort;
-            reverse = input.interaction.options.getBoolean('reverse') ?? false;
-            filterTitle = input.interaction.options.getString('filter');
+            user = interaction.options.getString('user') ?? null;
+            filter = (interaction.options.getString('type') ?? 'favourite') as bottypes.ubmFilter;
+            sort = (interaction.options.getString('sort') ?? 'dateadded') as bottypes.ubmSort;
+            reverse = interaction.options.getBoolean('reverse') ?? false;
+            filterTitle = interaction.options.getString('filter');
 
-            parseId = input.interaction.options.getInteger('parse');
+            parseId = interaction.options.getInteger('parse');
             if (parseId != null) {
                 parseMap = true;
             }
@@ -1954,13 +1948,13 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
 
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.followUp({
+                interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
                     flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }

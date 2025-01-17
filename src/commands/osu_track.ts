@@ -29,16 +29,16 @@ export const add = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = input.interaction as Discord.ChatInputCommandInteraction;
-            commanduser = input.interaction.member.user;
-            user = input.interaction.options.getString('user');
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            user = interaction.options.getString('user');
 
         }
             break;
         case 'button': {
-if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -167,17 +167,17 @@ export const remove = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = input.interaction as Discord.ChatInputCommandInteraction;
-            commanduser = input.interaction.member.user;
-            user = input.interaction.options.getString('user');
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            user = interaction.options.getString('user');
         }
 
 
             break;
         case 'button': {
-if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -302,17 +302,17 @@ export const channel = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = input.interaction as Discord.ChatInputCommandInteraction;
-            commanduser = input.interaction.member.user;
-            channelId = (input.interaction.options.getChannel('channel')).id;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            channelId = (interaction.options.getChannel('channel')).id;
         }
 
 
             break;
         case 'button': {
             if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -402,15 +402,16 @@ export const list = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            commanduser = input.interaction.member.user;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
 
 
             break;
         case 'button': {
-if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
             break;
     }

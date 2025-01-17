@@ -49,13 +49,13 @@ export const compare = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = input.interaction.member.user;
-            type = (input.interaction.options.getString('type') ?? 'profile') as compareType;
-            first = input.interaction.options.getString('first');
-            second = input.interaction.options.getString('second');
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            type = (interaction.options.getString('type') ?? 'profile') as compareType;
+            first = interaction.options.getString('first');
+            second = interaction.options.getString('second');
             firstsearchid = commanduser.id;
-            mode = input.interaction.options.getString('mode') ?? 'osu';
+            mode = interaction.options.getString('mode') ?? 'osu';
             if (second == null && first != null) {
                 second = first;
                 first = null;
@@ -65,12 +65,12 @@ export const compare = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.followUp({
+                interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
                     flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
@@ -494,11 +494,11 @@ export const osuset = async (input: bottypes.commandInput) => {
 
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = input.interaction.member.user;
-            name = input.interaction.options.getString('user');
-            mode = input.interaction.options.getString('mode');
-            skin = input.interaction.options.getString('skin');
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            name = interaction.options.getString('user');
+            mode = interaction.options.getString('mode');
+            skin = interaction.options.getString('skin');
             type = 'interaction';
         }
 
@@ -506,9 +506,9 @@ export const osuset = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -716,10 +716,10 @@ export const rankpp = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = input.interaction.member.user;
-            value = input.interaction.options.getInteger('value') ?? 100;
-            mode = input.interaction.options.getString('mode') as apitypes.GameMode ?? 'osu';
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            value = interaction.options.getInteger('value') ?? 100;
+            mode = interaction.options.getString('mode') as apitypes.GameMode ?? 'osu';
         }
 
 
@@ -826,16 +826,16 @@ export const saved = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-
-            commanduser = input.interaction.member.user;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
 
 
             break;
         case 'button': {
-if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -1043,25 +1043,25 @@ export const whatif = async (input: bottypes.commandInput) => {
 
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
 
-            commanduser = input.interaction.member.user;
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
 
-            user = input.interaction.options.getString('user');
+            user = interaction.options.getString('user');
 
-            mode = input.interaction.options.getString('mode');
+            mode = interaction.options.getString('mode');
 
-            pp = input.interaction.options.getNumber('pp');
+            pp = interaction.options.getNumber('pp');
         }
 
 
 
             break;
         case 'button': {
-if (!input.message.embeds[0]) return;
-            input.interaction = (input.interaction as Discord.ButtonInteraction);
-            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
         }
             break;
