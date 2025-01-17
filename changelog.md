@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+## [4.1.0] - 2025-01-17
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+
 ### Fixed
 
 -   args with aliases not being parsed properly
@@ -21,10 +25,10 @@
 
 ### Added
 
--   reimplemented interaction commands (so far only general)
+-   reimplemented interaction commands (might be buggy)
 -   scores show rate change if used
 
-## [4.0.8] - 2025-01-03
+## [4.0.8] - 2025-01-10
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/18e4ee1a4f58745e43168ec03f951448d00b6dbf)</br>
 

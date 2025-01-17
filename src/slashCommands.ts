@@ -934,37 +934,37 @@ function run() {
             ],
 
         },
-        {
-            name: 'voice',
-            description: 'Controls a user\'s voice settings',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'user',
-                    description: 'The user to control',
-                    type: Discord.ApplicationCommandOptionType.User,
-                    required: true,
-                },
-                {
-                    name: 'type',
-                    description: 'The type of voice control to perform',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: true,
-                    choices: [
-                        { name: 'Mute', value: 'mute' },
-                        { name: 'Deafen', value: 'deafen' },
-                        { name: 'Move to another channel', value: 'move' },
-                        { name: 'Disconnect', value: 'disconnect' }
-                    ]
-                },
-                {
-                    name: 'channel',
-                    description: 'The channel to move the user to',
-                    type: Discord.ApplicationCommandOptionType.Channel,
-                    required: false,
-                }
-            ],
-        },
+        // {
+        //     name: 'voice',
+        //     description: 'Controls a user\'s voice settings',
+        //     dmPermission: false,
+        //     options: [
+        //         {
+        //             name: 'user',
+        //             description: 'The user to control',
+        //             type: Discord.ApplicationCommandOptionType.User,
+        //             required: true,
+        //         },
+        //         {
+        //             name: 'type',
+        //             description: 'The type of voice control to perform',
+        //             type: Discord.ApplicationCommandOptionType.String,
+        //             required: true,
+        //             choices: [
+        //                 { name: 'Mute', value: 'mute' },
+        //                 { name: 'Deafen', value: 'deafen' },
+        //                 { name: 'Move to another channel', value: 'move' },
+        //                 { name: 'Disconnect', value: 'disconnect' }
+        //             ]
+        //         },
+        //         {
+        //             name: 'channel',
+        //             description: 'The channel to move the user to',
+        //             type: Discord.ApplicationCommandOptionType.Channel,
+        //             required: false,
+        //         }
+        //     ],
+        // },
         // {
         //     name: 'find',
         //     description: 'Returns the name of something from the id given',
