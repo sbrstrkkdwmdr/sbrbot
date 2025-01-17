@@ -3,6 +3,9 @@
 newest-oldest
 
 ## current
+- [ ] use multi-arg parser for convert
+- [x] get command to work in DMs (atm. only message commands)
+- [x] interaction commands
 - [x] map PP values all the same
 - [x] custom cs,ar,od,hp in simulate
 - [x] handling for mod adjustments (DA, DT rate change)

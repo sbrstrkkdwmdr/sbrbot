@@ -45,7 +45,7 @@ export async function onInteraction(interaction: Discord.Interaction) {
 Bot version: ${helper.vars.versions.releaseDate} (${helper.vars.versions.current})
 Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name})` : 'INVALID'}
 `,
-            ephemeral: true,
+            flags: Discord.MessageFlags.Ephemeral,
             allowedMentions: { repliedUser: false }
         });
         return;
@@ -55,7 +55,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         if (!buttonWarnedUsers.has(interaction.member.user.id)) {
             await interaction.reply({
                 content: 'You cannot use this button',
-                ephemeral: true,
+                flags: Discord.MessageFlags.Ephemeral,
                 allowedMentions: { repliedUser: false }
             });
             buttonWarnedUsers.add(interaction.member.user.id);

@@ -4,6 +4,7 @@ import * as bottypes from './types/bot.js';
 
 let command: bottypes.command = null;
 let overrides: bottypes.overrides = {};
+const disableSlashCommands = false
 export function onMessage(message: Discord.Message) {
     command = null;
     overrides = null;
@@ -24,15 +25,17 @@ export async function onInteraction(interaction: Discord.Interaction) {
     overrides = null;
     if (!(interaction.type === Discord.InteractionType.ApplicationCommand)) { return; }
     interaction = interaction as Discord.ChatInputCommandInteraction;
-    interaction.reply({
-        content: 'Interaction based commands are currently unsupported in this version',
-        allowedMentions: { repliedUser: false },
-        ephemeral: true
-    });
-    return;
-    // let args = [];
-    // const cmd = interaction.commandName;
-    // runCommand(cmd, null, interaction, args, true, 'interaction');
+    if(disableSlashCommands){
+        interaction.reply({
+            content: 'Interaction based commands are currently unsupported in this version',
+            allowedMentions: { repliedUser: false },
+            flags: Discord.MessageFlags.Ephemeral,
+        });
+        return;
+    }
+    let args = [];
+    const cmd = interaction.commandName;
+    runCommand(cmd, null, interaction, args, true, 'interaction');
 }
 
 const rslist = [
@@ -151,20 +154,20 @@ function commandCheck(cmd: string, message: Discord.Message, interaction: Discor
     if (botRequireAdmin.includes(cmd) && !helper.tools.checks.botHasPerms(message ?? interaction, ['Administrator'])) {
         missingPermsBot.push('Administrator');
     }
-    if (userRequireAdminOrOwner.includes(cmd) && !(helper.tools.checks.isAdmin(message?.author?.id ?? interaction.member.user.id, message?.guildId ?? interaction.guildId) || helper.tools.checks.isOwner(message?.author?.id ?? interaction.member.user.id))) {
+    if (userRequireAdminOrOwner.includes(cmd) && !(helper.tools.checks.isAdmin(message?.author?.id ?? interaction.member.user.id, message?.guildId ?? interaction?.guildId) || helper.tools.checks.isOwner(message?.author?.id ?? interaction.member.user.id))) {
         missingPermsUser.push('Administrator');
     }
     if (userRequireOwner.includes(cmd) && !helper.tools.checks.isOwner(message?.author?.id ?? interaction.member.user.id)) {
         missingPermsUser.push('Owner');
     }
 
-    if (missingPermsBot.length > 0) {
+    if (missingPermsBot.length > 0 && !(message ?? interaction).channel.isDMBased) {
         helper.tools.commands.sendMessage({
             type: "message",
             message,
             interaction,
             args: {
-                content: 'You do not have permission to use this command.\nMissing permissions: ' + missingPermsBot.join(', ')
+                content: 'The bot is missing permissions.\nMissing permissions: ' + missingPermsBot.join(', ')
             },
 
         },

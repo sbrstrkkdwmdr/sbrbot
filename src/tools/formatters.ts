@@ -96,12 +96,16 @@ export async function scoreList(
             clockRate: overrides.speed,
         });
         let info = `**#${(showOriginalIndex ? score.originalIndex : i) + 1}`;
+        let modadjustments = '';
+        if (score.mods.filter(x => x?.settings?.speed_change).length > 0){
+            modadjustments += ' (' + score.mods.filter(x => x?.settings?.speed_change)[0].settings.speed_change + 'x)';
+        }
         switch (preset) {
             case 'map_leaderboard':
                 info += `・[${score.user.username}](https://osu.ppy.sh/${score.id ? `scores/${score.id}` : `u/${score.user_id}`})`;
                 break;
             case 'single_map':
-                info += `・[${score.mods.map(x => x.acronym).join('')}](https://osu.ppy.sh/scores/${score.id})`;
+                info += `・[${osumodcalc.OrderMods(score.mods.map(x => x.acronym).join('')).string + modadjustments}](https://osu.ppy.sh/scores/${score.id})`;
                 break;
             default:
                 info += `・[${score.beatmapset.title} [${(overrideMap ?? score.beatmap).version}]](https://osu.ppy.sh/${score.id ? `scores/${score.id}` : `b/${(overrideMap ?? score.beatmap).id}`})`;
@@ -113,7 +117,7 @@ export async function scoreList(
 
         info +=
             `** ${dateToDiscordFormat(new Date(tempScore.ended_at))}
-${score.passed ? helper.vars.emojis.grades[score.rank] : helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[score.rank]} if pass)`} | \`${helper.tools.calculate.numberShorthand(tempScore.total_score)}\` | ${tempScore.mods.length > 0 && preset != 'single_map' ? ' **' + tempScore.mods.map(x => x.acronym).join('') + '**' : ''}
+${score.passed ? helper.vars.emojis.grades[score.rank] : helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[score.rank]} if pass)`} | \`${helper.tools.calculate.numberShorthand(tempScore.total_score)}\` | ${tempScore.mods.length > 0 && preset != 'single_map' ? ' **' + osumodcalc.OrderMods(tempScore.mods.map(x => x.acronym).join('')).string + modadjustments + '**' : ''}
 \`${returnHits(score.statistics, score.ruleset_id).short}\` | ${combo} | ${(score.accuracy * 100).toFixed(2)}% 
 ${(score?.pp ?? perf.pp).toFixed(2)}pp`;
 

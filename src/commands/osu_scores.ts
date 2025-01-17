@@ -85,7 +85,7 @@ export const firsts = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'firsts', true, helper.vars.errors.noUser(parseArgs.user), true);
@@ -139,7 +139,7 @@ export const firsts = async (input: bottypes.commandInput) => {
     } else {
         await getScoreCount(0);
     }
-    helper.tools.data.debug(firstscoresdata, 'command', 'firsts', input.message?.guildId ?? input.interaction.guildId, 'firstsScoresData');
+    helper.tools.data.debug(firstscoresdata, 'command', 'firsts', input.message?.guildId ?? input.interaction?.guildId, 'firstsScoresData');
     helper.tools.data.storeFile(firstscoresdata, osudata.id, 'firstscoresdata');
 
     if (parseArgs.parseScore) {
@@ -231,7 +231,7 @@ export const firsts = async (input: bottypes.commandInput) => {
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
-    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction?.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
     if (input.type != 'button' || input.buttonType == 'Refresh') {
         try {
             helper.tools.data.updateUserStats(osudata, osudata.playmode,);
@@ -271,7 +271,7 @@ export const maplb = async (input: bottypes.commandInput) => {
 
             commanduser = input.message.author;
 
-            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true);
+            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true, 'number', false, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
@@ -298,12 +298,12 @@ export const maplb = async (input: bottypes.commandInput) => {
 
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = input.interaction.member.user;
-            mapid = input.interaction.options.getInteger('id');
-            page = input.interaction.options.getInteger('page');
-            mapmods = input.interaction.options.getString('mods');
-            parseId = input.interaction.options.getInteger('parse');
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            mapid = interaction.options.getInteger('id');
+            page = interaction.options.getInteger('page');
+            mapmods = interaction.options.getString('mods');
+            parseId = interaction.options.getInteger('parse');
             if (parseId != null) {
                 parseScore = true;
             }
@@ -313,20 +313,18 @@ export const maplb = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            if (!input.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             mapid = input.message.embeds[0].url.split('/b/')[1];
             if (input.message.embeds[0].title.includes('+')) {
                 mapmods = input.message.embeds[0].title.split('+')[1];
             }
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.followUp({
+                interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
-                    ephemeral: true,
+                    flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
                 return;
@@ -386,7 +384,7 @@ export const maplb = async (input: bottypes.commandInput) => {
     );
 
     if (!mapid) {
-        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction.guildId);
+        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction?.guildId);
         mapid = temp.id;
     }
     if (mapid == false) {
@@ -417,7 +415,7 @@ export const maplb = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'maplb', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid), false);
         return;
     }
-    helper.tools.data.debug(mapdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction.guildId, 'mapData');
+    helper.tools.data.debug(mapdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction?.guildId, 'mapData');
 
     if (mapdata?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'maplb', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid), true);
@@ -450,7 +448,7 @@ export const maplb = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(lbdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction.guildId, 'lbDataF');
+    helper.tools.data.debug(lbdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction?.guildId, 'lbDataF');
 
     if (lbdataf?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'maplb', true, helper.vars.errors.uErr.osu.map.lb.replace('[ID]', mapid), true);
@@ -500,7 +498,7 @@ export const maplb = async (input: bottypes.commandInput) => {
         page = Math.ceil(lbdata.length / 5) - 1;
     }
 
-    helper.tools.data.debug(lbdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction.guildId, 'lbData');
+    helper.tools.data.debug(lbdataReq, 'command', 'maplb', input.message?.guildId ?? input.interaction?.guildId, 'lbData');
 
     const scoresarg = await helper.tools.formatter.scoreList(lbdata, 'score', null, false, 1, page, true, 'map_leaderboard', mapdata);
 
@@ -535,7 +533,7 @@ export const maplb = async (input: bottypes.commandInput) => {
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
-    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
+    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction?.guildId,
         {
             id: `${mapdata.id}`,
             apiData: null,
@@ -663,7 +661,7 @@ export const osutop = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'osutop', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', parseArgs.user), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'osutop', true, helper.vars.errors.noUser(parseArgs.user), true);
@@ -699,7 +697,7 @@ export const osutop = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osutopdataReq, 'command', 'osutop', input.message?.guildId ?? input.interaction.guildId, 'osuTopData');
+    helper.tools.data.debug(osutopdataReq, 'command', 'osutop', input.message?.guildId ?? input.interaction?.guildId, 'osuTopData');
 
     if (osutopdata?.hasOwnProperty('error') || !osutopdata[0]?.user?.username) {
         await helper.tools.commands.errorAndAbort(input, 'osutop', true, `${helper.vars.errors.uErr.osu.scores.best
@@ -799,7 +797,7 @@ export const osutop = async (input: bottypes.commandInput) => {
     }
     topEmbed.setDescription(scoresarg.text);
 
-    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction?.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
     if (scoresarg.curPage <= 1) {
         (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
@@ -906,7 +904,7 @@ export const pinned = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'pinned', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'pinned', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'pinned', true, helper.vars.errors.noUser(parseArgs.user), true);
         return;
@@ -941,7 +939,7 @@ export const pinned = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(pinnedscoresdataReq, 'command', 'pinned', input.message?.guildId ?? input.interaction.guildId, 'osuTopData');
+    helper.tools.data.debug(pinnedscoresdataReq, 'command', 'pinned', input.message?.guildId ?? input.interaction?.guildId, 'osuTopData');
 
     if (pinnedscoresdata?.hasOwnProperty('error') || !pinnedscoresdata[0]?.user?.username) {
         await helper.tools.commands.errorAndAbort(input, 'pinned', true, `${helper.vars.errors.uErr.osu.scores.pinned
@@ -1040,7 +1038,7 @@ export const pinned = async (input: bottypes.commandInput) => {
         (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
     }
 
-    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction?.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
     if (input.type != 'button' || input.buttonType == 'Refresh') {
         try {
             helper.tools.data.updateUserStats(osudata, osudata.playmode);
@@ -1102,12 +1100,12 @@ export const recent = async (input: bottypes.commandInput) => {
             commanduser = input.message.author;
 
             searchid = input.message.mentions.users.size > 0 ? input.message.mentions.users.first().id : input.message.author.id;
-            const listArgFinder = helper.tools.commands.matchArgMultiple(['-l', '-list', '-detailed'], input.args);
+            const listArgFinder = helper.tools.commands.matchArgMultiple(['-l', '-list', '-detailed'], input.args, false, null, false, false);
             if (listArgFinder.found) {
                 list = true;
                 input.args = listArgFinder.args;
             }
-            const passArgFinder = helper.tools.commands.matchArgMultiple(['-nf', '-nofail', '-pass', '-passes', 'passes=true'], input.args);
+            const passArgFinder = helper.tools.commands.matchArgMultiple(['-nf', '-nofail', '-pass', '-passes', 'passes=true'], input.args, false, null, false, false);
             if (passArgFinder.found) {
                 showFails = 0;
                 input.args = passArgFinder.args;
@@ -1145,31 +1143,30 @@ export const recent = async (input: bottypes.commandInput) => {
 
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
 
-            commanduser = input.interaction.member.user;
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
-            user = input.interaction.options.getString('user');
-            page = input.interaction.options.getNumber('page');
-            mode = input.interaction.options.getString('mode');
-            list = input.interaction.options.getBoolean('list');
+            user = interaction.options.getString('user');
+            page = interaction.options.getNumber('page');
+            mode = interaction.options.getString('mode');
+            list = interaction.options.getBoolean('list');
 
-            filterTitle = input.interaction.options.getString('filter');
+            filterTitle = interaction.options.getString('filter');
         }
 
 
 
             break;
         case 'button': {
-            if (!input.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.followUp({
+                interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
-                    ephemeral: true,
+                    flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
                 return;
@@ -1351,7 +1348,7 @@ export const recent = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'recent', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.noUser(user), true);
@@ -1386,7 +1383,7 @@ export const recent = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.uErr.osu.scores.recent.replace('[ID]', user), false);
         return;
     }
-    helper.tools.data.debug(rsdataReq, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'rsData');
+    helper.tools.data.debug(rsdataReq, 'command', 'recent', input.message?.guildId ?? input.interaction?.guildId, 'rsData');
     if (rsdata?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.uErr.osu.scores.recent.replace('[ID]', user), true);
         return;
@@ -1469,7 +1466,7 @@ export const recent = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', `${curbm.id}`), false);
             return;
         }
-        helper.tools.data.debug(mapdataReq, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'mapData');
+        helper.tools.data.debug(mapdataReq, 'command', 'recent', input.message?.guildId ?? input.interaction?.guildId, 'mapData');
         if (mapdata?.hasOwnProperty('error')) {
             await helper.tools.commands.errorAndAbort(input, 'recent', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', curbm.id.toString()), true);
             return;
@@ -1606,7 +1603,7 @@ export const recent = async (input: bottypes.commandInput) => {
                 curscore.pp ?
                     curscore.pp.toFixed(2) :
                     perf.pp.toFixed(2);
-            helper.tools.data.debug([perf, fcperf, ssperf], 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'ppCalcing');
+            helper.tools.data.debug([perf, fcperf, ssperf], 'command', 'recent', input.message?.guildId ?? input.interaction?.guildId, 'ppCalcing');
 
             const mxCombo = perf.difficulty.maxCombo ?? mapdata?.max_combo;
 
@@ -1660,7 +1657,12 @@ export const recent = async (input: bottypes.commandInput) => {
         const trycountstr = `try #${trycount}`;
         const mxcombo =
             perf.difficulty.maxCombo;
-        mapdata.max_combo;
+        // mapdata.max_combo;
+        let modadjustments = '';
+        if (curscore.mods.filter(x => x?.settings?.speed_change).length > 0) {
+            modadjustments += ' (' + curscore.mods.filter(x => x?.settings?.speed_change)[0].settings.speed_change + 'x)';
+        }
+
         rsEmbed
             .setAuthor({
                 name: `${trycountstr} | #${helper.tools.calculate.separateNum(osudata?.statistics?.global_rank)} | #${helper.tools.calculate.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${helper.tools.calculate.separateNum(osudata?.statistics?.pp)}pp`,
@@ -1672,7 +1674,7 @@ export const recent = async (input: bottypes.commandInput) => {
             .setThumbnail(`${curbms.covers.list}`);
         rsEmbed
             .setDescription(`
-[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.map(x => x.acronym).join('').toUpperCase()).string : ''} 
+[\`${fulltitle}\`](https://osu.ppy.sh/b/${curbm.id}) ${curscore.mods.length > 0 ? '+' + osumodcalc.OrderMods(curscore.mods.map(x => x.acronym).join('').toUpperCase()).string + modadjustments : ''} 
 ${(perf.difficulty.stars ?? 0).toFixed(2)}⭐ | ${helper.vars.emojis.gamemodes[curscore.ruleset_id]}
 ${helper.tools.formatter.dateToDiscordFormat(new Date(curscore.ended_at), 'F')}
 ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: ${filterRank}\n` : ''}
@@ -1732,19 +1734,19 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(false);
             (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(false);
         }
-        helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
+        helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction?.guildId,
             {
                 id: `${curbm.id}`,
                 apiData: null,
                 mods: curscore.mods.map(x => x.acronym).join()
             });
-        helper.tools.data.writePreviousId('score', input.message?.guildId ?? input.interaction.guildId,
+        helper.tools.data.writePreviousId('score', input.message?.guildId ?? input.interaction?.guildId,
             {
                 id: `${curscore.id}`,
                 apiData: curscore,
                 mods: curscore.mods.map(x => x.acronym).join()
             });
-        helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+        helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction?.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
         if (buttons.toJSON().components.length >= 5) {
             const xsbuttons = new Discord.ActionRowBuilder()
@@ -1773,9 +1775,9 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             mapLastUpdated: new Date(mapdata.last_updated)
         });
         try {
-            helper.tools.data.debug(strains, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
+            helper.tools.data.debug(strains, 'command', 'recent', input.message?.guildId ?? input.interaction?.guildId, 'strains');
         } catch (error) {
-            helper.tools.data.debug({ error: error }, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
+            helper.tools.data.debug({ error: error }, 'command', 'recent', input.message?.guildId ?? input.interaction?.guildId, 'strains');
             helper.tools.log.stdout(error);
         }
         let strainsgraph = {
@@ -1880,7 +1882,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         }
     }
-    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction?.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
     if (input.type != 'button' || input.buttonType == 'Refresh') {
         try {
@@ -1924,7 +1926,7 @@ export const replayparse = async (input: bottypes.commandInput) => {
     );
     const decoder = new osuparsers.ScoreDecoder();
     const score = await decoder.decodeFromPath(`${helper.vars.path.files}/replays/${input.id}.osr`);
-    helper.tools.data.debug(score, 'fileparse', 'replay', input.message?.guildId ?? input.interaction.guildId, 'replayData');
+    helper.tools.data.debug(score, 'fileparse', 'replay', input.message?.guildId ?? input.interaction?.guildId, 'replayData');
 
     let mapdataReq: tooltypes.apiReturn<apitypes.Beatmap>;
 
@@ -1944,9 +1946,9 @@ export const replayparse = async (input: bottypes.commandInput) => {
     }
     helper.tools.data.storeFile(mapdataReq, score.info.beatmapHashMD5, 'mapdata');
 
-    helper.tools.data.debug(mapdataReq, 'fileparse', 'replay', input.message?.guildId ?? input.interaction.guildId, 'mapData');
+    helper.tools.data.debug(mapdataReq, 'fileparse', 'replay', input.message?.guildId ?? input.interaction?.guildId, 'mapData');
     if (mapdata?.id) {
-        typeof mapdata.id == 'number' ? helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
+        typeof mapdata.id == 'number' ? helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction?.guildId,
             {
                 id: `${mapdata.id}`,
                 apiData: null,
@@ -1973,7 +1975,7 @@ export const replayparse = async (input: bottypes.commandInput) => {
     }
     helper.tools.data.storeFile(osudataReq, osudata.id, 'osudata', helper.tools.other.modeValidator(score.replay.mode));
     helper.tools.data.storeFile(osudataReq, score.info.username, 'osudata', helper.tools.other.modeValidator(score.replay.mode));
-    helper.tools.data.debug(osudataReq, 'fileparse', 'replay', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'fileparse', 'replay', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
     let userid: string | number;
     try {
         userid = osudata.id;
@@ -2121,7 +2123,6 @@ ${isfail}
 export const scoreparse = async (input: bottypes.commandInput) => {
     let commanduser: Discord.User | Discord.APIUser;
 
-    let scorelink: string;
     let scoremode: apitypes.GameMode;
     let scoreid: number | string;
     let nochoke: boolean = false;
@@ -2133,11 +2134,10 @@ export const scoreparse = async (input: bottypes.commandInput) => {
         case 'message': {
             commanduser = input.message.author;
 
-            scorelink = null;
             scoremode = input.args[1] as apitypes.GameMode;
             scoreid = input.args[0];
             if (input?.args[0]?.includes('https://')) {
-                const temp = helper.tools.commands.scoreIdFromLink(scorelink);
+                const temp = helper.tools.commands.scoreIdFromLink(input.args[0]);
                 scoremode = temp.mode;
                 scoreid = temp.id;
             }
@@ -2147,7 +2147,9 @@ export const scoreparse = async (input: bottypes.commandInput) => {
 
 
         case 'button': {
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             //osu.ppy.sh/scores/<mode>/<id>
             scoremode = input.message.embeds[0].url.split('scores')[1].split('/')[1] as apitypes.GameMode;
             scoreid = input.message.embeds[0].url.split('scores')[1].split('/')[2];
@@ -2167,7 +2169,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             break;
         case 'link': {
             commanduser = input.message.author;
-            scorelink = input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
+            let scorelink = input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
             const temp = helper.tools.commands.scoreIdFromLink(scorelink);
             scoremode = temp.mode;
             scoreid = temp.id;
@@ -2198,10 +2200,6 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     helper.tools.log.commandOptions(
         [
             {
-                name: 'Score Link',
-                value: `${scorelink}`
-            },
-            {
                 name: 'Score Mode',
                 value: `${scoremode}`
             },
@@ -2219,7 +2217,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
     );
 
     if (!scoreid) {
-        const temp = helper.tools.data.getPreviousId('score', input.message?.guildId ?? input.interaction.guildId);
+        const temp = helper.tools.data.getPreviousId('score', input.message?.guildId ?? input.interaction?.guildId);
         if (temp?.apiData?.best_id && typeof temp?.apiData?.best_id === 'number') {
             scoreid = temp?.apiData?.best_id;
         } else {
@@ -2289,7 +2287,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
         );
 
 
-    helper.tools.data.debug(scoredataReq, 'command', 'scoreparse', input.message?.guildId ?? input.interaction.guildId, 'scoreData');
+    helper.tools.data.debug(scoredataReq, 'command', 'scoreparse', input.message?.guildId ?? input.interaction?.guildId, 'scoreData');
     try {
         scoredata.rank.toUpperCase();
     } catch (error) {
@@ -2333,7 +2331,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'scoreparse', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', scoredata.user.username), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'scoreparse', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'scoreparse', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
     if (osudata?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'scoreparse', true, `${helper.vars.errors.uErr.osu.profile.user
             .replace('[ID]', scoredata?.user?.username)
@@ -2417,7 +2415,7 @@ export const scoreparse = async (input: bottypes.commandInput) => {
             clockRate: overrides.speed,
         });
 
-        helper.tools.data.debug([perf, fcperf, ssperf], 'command', 'scoreparse', input.message?.guildId ?? input.interaction.guildId, 'ppCalcing');
+        helper.tools.data.debug([perf, fcperf, ssperf], 'command', 'scoreparse', input.message?.guildId ?? input.interaction?.guildId, 'ppCalcing');
     } catch (error) {
         const temp = helper.tools.performance.template(mapdata);
         perf = temp;
@@ -2468,13 +2466,13 @@ ${scoredata.max_combo == mxCombo ? `**${scoredata.max_combo}x**` : `${scoredata.
 ${`${(scoredata?.pp ?? perf.pp).toFixed(2)}pp` + fcflag}\n${ppissue}
 `);
 
-    helper.tools.data.writePreviousId('score', input.message?.guildId ?? input.interaction.guildId,
+    helper.tools.data.writePreviousId('score', input.message?.guildId ?? input.interaction?.guildId,
         {
             id: `${scoredata.id}`,
             apiData: scoredata,
             mods: scoredata.mods.map(x => x.acronym).join()
         });
-    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
+    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction?.guildId,
         {
             id: `${mapdata.id}`,
             apiData: null,
@@ -2503,9 +2501,9 @@ ${`${(scoredata?.pp ?? perf.pp).toFixed(2)}pp` + fcflag}\n${ppissue}
         mapLastUpdated: new Date(mapdata.last_updated),
     });
     try {
-        helper.tools.data.debug(strains, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
+        helper.tools.data.debug(strains, 'command', 'recent', input.message?.guildId ?? input.interaction?.guildId, 'strains');
     } catch (error) {
-        helper.tools.data.debug({ error: error }, 'command', 'recent', input.message?.guildId ?? input.interaction.guildId, 'strains');
+        helper.tools.data.debug({ error: error }, 'command', 'recent', input.message?.guildId ?? input.interaction?.guildId, 'strains');
         helper.tools.log.stdout(error);
     }
     const strainsgraph =
@@ -2570,17 +2568,17 @@ export const scores = async (input: bottypes.commandInput) => {
                 input.args = temp.newArgs;
             }
 
-            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true);
+            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true, 'number', false, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
             }
-            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args);
+            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args, false, null, false, false);
             if (detailArgFinder.found) {
                 scoredetailed = 2;
                 input.args = detailArgFinder.args;
             }
-            const lessDetailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.compress, input.args);
+            const lessDetailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.compress, input.args, false, null, false, false);
             if (lessDetailArgFinder.found) {
                 scoredetailed = 0;
                 input.args = lessDetailArgFinder.args;
@@ -2612,16 +2610,16 @@ export const scores = async (input: bottypes.commandInput) => {
 
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
 
-            commanduser = input.interaction.member.user;
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
-            user = input.interaction.options.getString('username');
-            mapid = input.interaction.options.getNumber('id');
-            sort = input.interaction.options.getString('sort') as "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss";
-            reverse = input.interaction.options.getBoolean('reverse');
+            user = interaction.options.getString('username');
+            mapid = interaction.options.getNumber('id');
+            sort = interaction.options.getString('sort') as "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss";
+            reverse = interaction.options.getBoolean('reverse');
 
-            parseId = input.interaction.options.getInteger('parse');
+            parseId = interaction.options.getInteger('parse');
             if (parseId != null) {
                 parseScore = true;
             }
@@ -2631,16 +2629,14 @@ export const scores = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            if (!input.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.followUp({
+                interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
-                    ephemeral: true,
+                    flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
                 return;
@@ -2760,7 +2756,7 @@ export const scores = async (input: bottypes.commandInput) => {
     mode = helper.tools.other.modeValidator(mode);
 
     if (!mapid) {
-        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction.guildId);
+        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction?.guildId);
         mapid = temp.id;
     }
     if (mapid == false) {
@@ -2795,7 +2791,7 @@ export const scores = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'scores', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'scores', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'scores', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'scores', true, helper.vars.errors.noUser(user), true);
@@ -2829,7 +2825,7 @@ export const scores = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'scores', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid), false);
         return;
     }
-    helper.tools.data.debug(mapdataReq, 'command', 'scores', input.message?.guildId ?? input.interaction.guildId, 'mapData');
+    helper.tools.data.debug(mapdataReq, 'command', 'scores', input.message?.guildId ?? input.interaction?.guildId, 'mapData');
     if (mapdata?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'scores', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid), true);
         return;
@@ -2851,7 +2847,7 @@ export const scores = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'scores', true, helper.vars.errors.uErr.osu.scores.map.replace('[ID]', user).replace('[MID]', mapid), false);
         return;
     }
-    helper.tools.data.debug(scoredataReq, 'command', 'scores', input.message?.guildId ?? input.interaction.guildId, 'scoreDataPresort');
+    helper.tools.data.debug(scoredataReq, 'command', 'scores', input.message?.guildId ?? input.interaction?.guildId, 'scoreDataPresort');
 
     if (scoredataPresort?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'scores', true, helper.vars.errors.uErr.osu.scores.map.replace('[ID]', user).replace('[MID]', mapid), true);
@@ -2862,7 +2858,7 @@ export const scores = async (input: bottypes.commandInput) => {
 
     const scoredata: apitypes.Score[] = scoredataPresort.scores;
 
-    helper.tools.data.debug(scoredataReq, 'command', 'scores', input.message?.guildId ?? input.interaction.guildId, 'scoreData');
+    helper.tools.data.debug(scoredataReq, 'command', 'scores', input.message?.guildId ?? input.interaction?.guildId, 'scoreData');
 
     if (parseScore) {
         let pid = +(parseId) - 1;
@@ -2943,8 +2939,8 @@ export const scores = async (input: bottypes.commandInput) => {
     }
     scoresEmbed.setDescription(scoresarg.text);
 
-    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
-    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction?.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction?.guildId,
         {
             id: `${mapdata.id}`,
             apiData: null,
@@ -3003,27 +2999,27 @@ export const scorestats = async (input: bottypes.commandInput) => {
                 input.args = temp.args;
                 mode = temp.mode;
             }
-            const firstArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['first', 'firsts', 'globals', 'global', 'f', 'g']), input.args);
+            const firstArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['first', 'firsts', 'globals', 'global', 'f', 'g']), input.args, false, null, false, false);
             if (firstArgFinder.found) {
                 scoreTypes = 'firsts';
                 input.args = firstArgFinder.args;
             }
-            const topArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['osutop', 'top', 'best', 't', 'b']), input.args);
+            const topArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['osutop', 'top', 'best', 't', 'b']), input.args, false, null, false, false);
             if (topArgFinder.found) {
                 scoreTypes = 'best';
                 input.args = topArgFinder.args;
             }
-            const recentArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['r', 'recent', 'rs']), input.args);
+            const recentArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['r', 'recent', 'rs']), input.args, false, null, false, false);
             if (recentArgFinder.found) {
                 scoreTypes = 'recent';
                 input.args = recentArgFinder.args;
             }
-            const pinnedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['pinned', 'pins', 'pin', 'p']), input.args);
+            const pinnedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['pinned', 'pins', 'pin', 'p']), input.args, false, null, false, false);
             if (pinnedArgFinder.found) {
                 scoreTypes = 'pinned';
                 input.args = pinnedArgFinder.args;
             }
-            const allFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['all', 'd', 'a', 'detailed']), input.args);
+            const allFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['all', 'd', 'a', 'detailed']), input.args, false, null, false, false);
             if (allFinder.found) {
                 all = true;
                 input.args = allFinder.args;
@@ -3043,21 +3039,22 @@ export const scorestats = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
 
-            commanduser = input.interaction.member.user;
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
-            input.interaction.options.getString('user') ? user = input.interaction.options.getString('user') : null;
-            input.interaction.options.getString('type') ? scoreTypes = input.interaction.options.getString('type') as scoretypes : null;
-            input.interaction.options.getString('mode') ? mode = input.interaction.options.getString('mode') as apitypes.GameMode : null;
-            input.interaction.options.getBoolean('all') ? all = input.interaction.options.getBoolean('all') : null;
+            interaction.options.getString('user') ? user = interaction.options.getString('user') : null;
+            interaction.options.getString('type') ? scoreTypes = interaction.options.getString('type') as scoretypes : null;
+            interaction.options.getString('mode') ? mode = interaction.options.getString('mode') as apitypes.GameMode : null;
+            interaction.options.getBoolean('all') ? all = interaction.options.getBoolean('all') : null;
         }
 
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
             user = input.message.embeds[0].author.url.split('/users/')[1].split('/')[0];
             mode = input.message.embeds[0].author.url.split('/users/')[1].split('/')[1] as apitypes.GameMode;
@@ -3157,7 +3154,7 @@ export const scorestats = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'scorestats', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'scorestats', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'scorestats', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'scorestats', true, helper.vars.errors.noUser(user), true);
@@ -3451,52 +3448,32 @@ export const simulate = async (input: bottypes.commandInput) => {
                 mods = temp.value;
                 input.args = temp.newArgs;
             }
-            const accArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['acc', 'accuracy', '%',]), input.args, true);
+            const accArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['acc', 'accuracy', '%',]), input.args, true, 'number', false, false);
             if (accArgFinder.found) {
                 acc = accArgFinder.output;
                 input.args = accArgFinder.args;
             }
-            const comboArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['x', 'combo', 'maxcombo',]), input.args, true);
+            const comboArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['x', 'combo', 'maxcombo',]), input.args, true, 'number', false, true);
             if (comboArgFinder.found) {
                 combo = comboArgFinder.output;
                 input.args = comboArgFinder.args;
             }
-            const n300ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n300', '300s',]), input.args, true);
+            const n300ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n300', '300s',]), input.args, true, 'number', false, true);
             if (n300ArgFinder.found) {
                 n300 = n300ArgFinder.output;
                 input.args = n300ArgFinder.args;
             }
-            if (ctn.includes('-n100')) {
-                const temp = helper.tools.commands.parseArg(input.args, '-n100', 'number', n100);
-                n100 = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (ctn.includes('-100s')) {
-                const temp = helper.tools.commands.parseArg(input.args, '-100s', 'number', n100);
-                n100 = temp.value;
-                input.args = temp.newArgs;
-            }
-            const n100ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n100', '100s',]), input.args, true);
+            const n100ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n100', '100s',]), input.args, true, 'number', false, true);
             if (n100ArgFinder.found) {
                 n100 = n100ArgFinder.output;
                 input.args = n100ArgFinder.args;
             }
-            const n50ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n50', '50s',]), input.args, true);
+            const n50ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n50', '50s',]), input.args, true, 'number', false, true);
             if (n50ArgFinder.found) {
                 n50 = n50ArgFinder.output;
                 input.args = n50ArgFinder.args;
             }
-            if (ctn.includes('-miss')) {
-                const temp = helper.tools.commands.parseArg(input.args, '-miss', 'number', nMiss);
-                nMiss = temp.value;
-                input.args = temp.newArgs;
-            }
-            if (ctn.includes('-misses')) {
-                const temp = helper.tools.commands.parseArg(input.args, '-misses', 'number', nMiss);
-                nMiss = temp.value;
-                input.args = temp.newArgs;
-            }
-            const nMissArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['miss', 'misses', 'n0', '0s',]), input.args, true);
+            const nMissArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['miss', 'misses', 'n0', '0s',]), input.args, true, 'number', false, true);
             if (nMissArgFinder.found) {
                 nMiss = nMissArgFinder.output;
                 input.args = nMissArgFinder.args;
@@ -3547,24 +3524,25 @@ export const simulate = async (input: bottypes.commandInput) => {
         }
             break;
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = input.interaction.member.user;
-            mapid = input.interaction.options.getInteger('id');
-            mods = input.interaction.options.getString('mods');
-            acc = input.interaction.options.getNumber('accuracy');
-            combo = input.interaction.options.getInteger('combo');
-            n300 = input.interaction.options.getInteger('n300');
-            n100 = input.interaction.options.getInteger('n100');
-            n50 = input.interaction.options.getInteger('n50');
-            nMiss = input.interaction.options.getInteger('miss');
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            mapid = interaction.options.getInteger('id');
+            mods = interaction.options.getString('mods');
+            acc = interaction.options.getNumber('accuracy');
+            combo = interaction.options.getInteger('combo');
+            n300 = interaction.options.getInteger('n300');
+            n100 = interaction.options.getInteger('n100');
+            n50 = interaction.options.getInteger('n50');
+            nMiss = interaction.options.getInteger('miss');
         }
 
 
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -3621,7 +3599,7 @@ export const simulate = async (input: bottypes.commandInput) => {
 
 
     if (!mapid) {
-        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction.guildId);
+        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction?.guildId);
         mapid = temp.id;
     }
     if (mapid == false) {
@@ -3640,7 +3618,7 @@ export const simulate = async (input: bottypes.commandInput) => {
         }, input.canReply);
     }
 
-    const tempscore = helper.tools.data.getPreviousId('score', input.message?.guildId ?? input.interaction.guildId);
+    const tempscore = helper.tools.data.getPreviousId('score', input.message?.guildId ?? input.interaction?.guildId);
     if (tempscore?.apiData && tempscore?.apiData.beatmap.id == mapid) {
         if (!n300 && !n100 && !n50 && !acc) {
             n300 = tempscore.apiData.statistics.great;
@@ -3674,7 +3652,7 @@ export const simulate = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'simulate', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid), false);
         return;
     }
-    helper.tools.data.debug(mapdataReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'mapData');
+    helper.tools.data.debug(mapdataReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'mapData');
 
     if (mapdata?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'simulate', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid), true);
@@ -3712,7 +3690,7 @@ export const simulate = async (input: bottypes.commandInput) => {
         meh: n50,
         miss: nMiss ?? 0,
     };
-const perf = await helper.tools.performance.calcScore({
+    const perf = await helper.tools.performance.calcScore({
         mods,
         mode: 0,
         mapid,
@@ -3739,7 +3717,7 @@ const perf = await helper.tools.performance.calcScore({
         customOD,
         customHP,
     });
-    helper.tools.data.debug([perf, fcperf], 'command', 'simulate', input.message?.guildId ?? input.interaction.guildId, 'ppCalc');
+    helper.tools.data.debug([perf, fcperf], 'command', 'simulate', input.message?.guildId ?? input.interaction?.guildId, 'ppCalc');
 
     let use300s = (n300 ?? 0);
     const gotTot = use300s + (n100 ?? 0) + (n50 ?? 0) + (nMiss ?? 0);

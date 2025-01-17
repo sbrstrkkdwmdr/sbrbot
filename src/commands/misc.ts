@@ -12,8 +12,15 @@ export const _8ball = async (input: bottypes.commandInput) => {
             commanduser = input.message.author;
         }
             break;
+        case 'interaction': {
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction.member.user;
+        }
+            break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -84,7 +91,7 @@ export const coin = async (input: bottypes.commandInput) => {
         .setTitle(msg)
         .setImage(`attachment://${msg}.png`);
 
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -109,6 +116,12 @@ export const gif = async (input: bottypes.commandInput) => {
         case 'message': {
             commanduser = input.message.author;
             secondaryUser = input.message.mentions.users.size > 0 ? input.message.mentions.users.first() : input.message.author;
+        }
+            break;
+        case 'interaction': {
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction.member.user;
+            secondaryUser = interaction.options.getUser('target');
         }
             break;
     }
@@ -198,7 +211,7 @@ export const gif = async (input: bottypes.commandInput) => {
         .setTitle(baseString.replace('user', commanduser.username).replace('target', secondaryUser.username))
         .setImage(gifSelection[Math.floor(Math.random() * gifSelection.length)]);
 
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -253,7 +266,7 @@ export const inspire = async (input: bottypes.commandInput) => {
         .setTitle('Inspirational Quote')
         .setDescription(helper.tools.formatter.toCapital(sendString));
 
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -351,7 +364,7 @@ export const janken = async (input: bottypes.commandInput) => {
         'rock': '🪨',
     };
     content = `${toEmoji[real]} vs. ${toEmoji[pcChoice]} | ` + content;
-    
+
     await helper.tools.commands.sendMessage({
         type: input.type,
         message: input.message,
@@ -381,6 +394,13 @@ export const poll = async (input: bottypes.commandInput) => {
             overrideEmojis = ['✔', '❌'];
         }
             break;
+        case 'interaction': {
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            pollTitle = interaction.options.getString('title');
+            pollOpts = interaction.options.getString('options').split('+');
+        }
+            break;
     }
 
     helper.tools.log.commandOptions(
@@ -397,8 +417,6 @@ export const poll = async (input: bottypes.commandInput) => {
         input.message,
         input.interaction,
     );
-
-    const actualOpts: string[] = [];
 
     const react = [
         '🇦',
@@ -429,47 +447,43 @@ export const poll = async (input: bottypes.commandInput) => {
         '🇿'
     ];
 
-    for (let i = 0; i < pollOpts.length; i++) {
-        if (pollOpts[i].length >= 1) {
-            actualOpts.push(pollOpts[i]);
-        }
-    }
     let optsToTxt: string = '';
     const curReactions: string[] = [];
-    for (let i = 0; i < actualOpts.length && i < 26; i++) {
-        if (actualOpts[i] == 'yes') {
+    for (let i = 0; i < pollOpts.length && i < 26; i++) {
+        if (pollOpts[i] == 'yes') {
             optsToTxt += `✔: yes\n`;
             curReactions.push('✔');
-        } else if (actualOpts[i] == 'no') {
+        } else if (pollOpts[i] == 'no') {
             optsToTxt += `❌: no\n`;
             curReactions.push('❌');
         } else {
-            optsToTxt += `${react[i]}: ${actualOpts[i]}\n`;
+            optsToTxt += `${react[i]}: ${pollOpts[i]}\n`;
             curReactions.push(react[i]);
         }
+    }
+
+    if (!pollTitle || pollTitle.length == 0) {
+        pollTitle = helper.vars.defaults.invisbleChar;
+    }
+    if (!optsToTxt || optsToTxt.length == 0) {
+        optsToTxt = helper.vars.defaults.invisbleChar;
     }
 
     const pollEmbed = new Discord.EmbedBuilder()
         .setTitle(`${pollTitle}`)
         .setDescription(`${optsToTxt}`);
 
-    
-    switch (input.type) {
-        case 'message': {
-            (input.message.channel as Discord.GuildTextBasedChannel).send({
-                content: '',
-                embeds: [pollEmbed],
-                files: [],
-                allowedMentions: { repliedUser: false },
-            }).then(message => {
-                for (let i = 0; i < actualOpts.length && i < 26; i++) {
-                    message.react(curReactions[i]);
-                }
-            })
-                .catch();
+    ((input.message || input.interaction).channel as Discord.GuildTextBasedChannel).send({
+        content: '',
+        embeds: [pollEmbed],
+        files: [],
+        allowedMentions: { repliedUser: false },
+    }).then(message => {
+        for (let i = 0; i < pollOpts.length && i < 26; i++) {
+            message.react(curReactions[i]);
         }
-            break;
-    }
+    })
+        .catch();
 
 };
 
@@ -493,6 +507,13 @@ export const roll = async (input: bottypes.commandInput) => {
             if (isNaN(minNum) || !input.args[1]) {
                 minNum = 0;
             }
+        }
+            break;
+        case 'interaction': {
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction.member.user;
+            maxNum = interaction.options.getNumber('max');
+            minNum = interaction.options.getNumber('min');
         }
             break;
     }

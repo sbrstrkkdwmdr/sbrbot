@@ -80,8 +80,10 @@ export async function trackUser(fr: { user: string, mode: string, inital?: boole
                 return;
             }
 
+            const idCollection = previous.map(x => x.id);
             for (let i = 0; i < curdata.length; i++) {
-                if (!previous.find(x => x.best_id == curdata[i].best_id)) {
+                if (!idCollection.includes(curdata[i].id)) {
+                    // console.log(curdata[i].id)
                     sendMsg(await getEmbed({
                         scoredata: curdata[i],
                         scorepos: i,

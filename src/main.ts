@@ -9,7 +9,6 @@ import * as commandHandler from './commandHandler.js';
 import * as helper from './helper.js';
 import * as linkHandler from './linkHandler.js';
 import { loops } from './loops.js';
-import * as track from './osutrack.js';
 import * as slashcmds from './slashCommands.js';
 import * as bottypes from './types/bot.js';
 import * as apitypes from './types/osuapi.js';
@@ -262,6 +261,7 @@ Client ID:        ${client.user.id}
         await buttonHandler.onInteraction(interaction);
     });
     loops();
+    slashcmds.main();
 });
 
 client.login(helper.vars.config.token);

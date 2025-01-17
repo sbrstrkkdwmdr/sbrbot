@@ -89,6 +89,7 @@ export async function calcScore(input: {
     if (input.mods.includes('CL')) {
         baseScore.lazer = false;
     }
+
     const perf: rosu.Performance = new rosu.Performance(baseScore);
 
     const final = perf.calculate(map);
@@ -114,13 +115,19 @@ export async function calcFullCombo(input: {
         stats.great = NaN;
     }
     stats.miss = 0;
+    if (input.accuracy == 100 || input.accuracy == 1) {
+        stats.great = null;
+        stats.good = null;
+        stats.meh = null;
+        stats.ok = null;
+    }
     return await calcScore({
         mapid: input.mapid,
         mode: input.mode,
         mods: input.mods,
         accuracy: input.accuracy,
         clockRate: input.clockRate,
-        stats: input.stats,
+        stats: stats,
         mapLastUpdated: input.mapLastUpdated,
         customCS: input.customCS,
         customAR: input.customAR,

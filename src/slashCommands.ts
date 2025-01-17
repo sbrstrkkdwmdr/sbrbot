@@ -3,7 +3,7 @@ import * as Discord from 'discord.js';
 import * as helper from './helper.js';
 
 export async function main() {
-    const docommands: boolean = false;
+    const docommands: boolean = true;
     if (docommands) run();
     else helper.vars.client.application?.commands.set([]);
 }
@@ -11,10 +11,11 @@ export async function main() {
 function run() {
     const commands = helper.vars.client.application?.commands;
     commands?.set([
+        // gen
         {
             name: 'changelog',
             description: 'Displays the changes for the current version or version requested',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'version',
@@ -27,7 +28,7 @@ function run() {
         {
             name: 'convert',
             description: 'Converts one value to another',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'from',
@@ -54,7 +55,7 @@ function run() {
         {
             name: 'help',
             description: 'Displays all commands',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'command',
@@ -67,7 +68,7 @@ function run() {
         {
             name: 'math',
             description: 'Solves a simple math problem',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'type',
@@ -93,12 +94,12 @@ function run() {
         {
             name: 'ping',
             description: 'Pong!',
-            dmPermission: false,
+            dmPermission: true,
         },
         {
             name: 'remind',
             description: 'Reminds the user of something. If no args are given, a list of pending reminders is returned.',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'time',
@@ -123,12 +124,12 @@ function run() {
         {
             name: 'stats',
             description: 'Displays stats about the bot',
-            dmPermission: false,
+            dmPermission: true,
         },
         {
             name: 'time',
             description: 'Displays the current time',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'timezone',
@@ -141,7 +142,7 @@ function run() {
         {
             name: 'weather',
             description: 'Displays the weather for a given location',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'location',
@@ -151,11 +152,11 @@ function run() {
                 }
             ]
         },
-        //below are osu related commands
+        // osu
         {
             name: 'bws',
             description: 'Shows the badge weighted rank of a user',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'user',
@@ -168,7 +169,7 @@ function run() {
         {
             name: 'compare',
             description: 'Compares two users/top plays',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'type',
@@ -214,7 +215,7 @@ function run() {
         {//alias for compare
             name: 'common',
             description: 'Compares two user\'s top plays',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'first',
@@ -240,7 +241,7 @@ function run() {
         {
             name: 'firsts',
             description: 'Displays the user\'s #1 scores',
-            dmPermission: false,
+            dmPermission: true,
             options: helper.vars.commandopts.playArrayOpts
         },
         {
@@ -266,7 +267,7 @@ function run() {
         {
             name: 'map',
             description: 'Displays the map info of the map',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'id',
@@ -309,126 +310,12 @@ function run() {
                     minValue: 0.1,
                     maxValue: 10
                 }
-            ]
-        },
-        {//alternate command for map
-            name: 'm',
-            description: 'Displays the map info of the map',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'id',
-                    description: 'The id of the map to display',
-                    type: Discord.ApplicationCommandOptionType.Integer,
-                    required: false,
-                    minValue: 1
-                },
-                {
-                    name: 'mods',
-                    description: 'The mods to display the map info of',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                },
-                {
-                    name: 'detailed',
-                    description: 'Show all details',
-                    type: Discord.ApplicationCommandOptionType.Boolean,
-                    required: false,
-                },
-                {
-                    name: 'query',
-                    description: 'The name of the map to display',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                },
-                {
-                    name: 'bpm',
-                    description: 'The BPM to calculate the map with',
-                    type: Discord.ApplicationCommandOptionType.Number,
-                    required: false,
-                    minValue: 1,
-                    maxValue: 1000
-                },
-                {
-                    name: 'speed',
-                    description: 'The speed to calculate the map with',
-                    type: Discord.ApplicationCommandOptionType.Number,
-                    required: false,
-                    minValue: 0.1,
-                    maxValue: 10
-                },
-                {
-                    name: 'cs',
-                    description: 'The circle size to calculate the map with',
-                    type: Discord.ApplicationCommandOptionType.Number,
-                    required: false,
-                    minValue: 0,
-                    maxValue: 11
-                },
-                {
-                    name: 'ar',
-                    description: 'The approach rate to calculate the map with',
-                    type: Discord.ApplicationCommandOptionType.Number,
-                    required: false,
-                    minValue: 0,
-                    maxValue: 11
-                },
-                {
-                    name: 'od',
-                    description: 'The overall difficulty to calculate the map with',
-                    type: Discord.ApplicationCommandOptionType.Number,
-                    required: false,
-                    minValue: 0,
-                    maxValue: 11
-                },
-                {
-                    name: 'hp',
-                    description: 'The health drain rate to calculate the map with',
-                    type: Discord.ApplicationCommandOptionType.Number,
-                    required: false,
-                    minValue: 0,
-                    maxValue: 11
-                },
             ]
         },
         {
             name: 'maplb',
             description: 'Displays the top five plays on a specific map',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'id',
-                    description: 'The id of the map to display',
-                    required: false,
-                    type: Discord.ApplicationCommandOptionType.Integer,
-                },
-                {
-                    name: 'page',
-                    description: 'Which page to display',
-                    required: false,
-                    type: Discord.ApplicationCommandOptionType.Integer,
-                    minValue: 1,
-                    maxValue: 20
-
-                },
-                {
-                    name: 'mods',
-                    description: 'What mods to sort',
-                    required: false,
-                    type: Discord.ApplicationCommandOptionType.String
-                },
-                {
-                    name: 'parse',
-                    description: 'Parse the score with the specified index',
-                    type: Discord.ApplicationCommandOptionType.Integer,
-                    required: false,
-                }
-            ]
-        },
-        {//alternate command for maplb
-            name: 'leaderboard',
-            description: 'Displays the top five plays on a specific map',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'id',
@@ -462,71 +349,13 @@ function run() {
         {
             name: 'nochokes',
             description: 'Displays the user\'s top scores without misses',
-            dmPermission: false,
-            options: helper.vars.commandopts.osutopOpts
-        },
-        {//alternate command for nochokes
-            name: 'nc',
-            description: 'Displays the user\'s top scores without misses',
-            dmPermission: false,
+            dmPermission: true,
             options: helper.vars.commandopts.osutopOpts
         },
         {
             name: 'osu',
             description: 'Displays the user\'s osu! profile',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'user',
-                    description: 'The user to display the profile of',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                },
-                {
-                    name: 'detailed',
-                    description: 'Displays extra information',
-                    type: Discord.ApplicationCommandOptionType.Boolean,
-                    required: false,
-                },
-                {
-                    name: 'mode',
-                    description: 'The mode to display the profile in',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                    choices: helper.vars.commandopts.modeopts
-                }
-            ]
-        },
-        {//alternate command for osu
-            name: 'o',
-            description: 'Displays the user\'s osu! profile',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'user',
-                    description: 'The user to display the profile of',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                },
-                {
-                    name: 'detailed',
-                    description: 'Displays extra information',
-                    type: Discord.ApplicationCommandOptionType.Boolean,
-                    required: false,
-                },
-                {
-                    name: 'mode',
-                    description: 'The mode to display the profile in',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                    choices: helper.vars.commandopts.modeopts
-                }
-            ]
-        },
-        {//alternate command for osu
-            name: 'profile',
-            description: 'Displays the user\'s osu! profile',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'user',
@@ -552,7 +381,7 @@ function run() {
         {
             name: 'osuset',
             description: 'Sets the user\'s osu! profile',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'user',
@@ -579,19 +408,19 @@ function run() {
         {
             name: 'osutop',
             description: 'Displays the top plays of the user',
-            dmPermission: false,
+            dmPermission: true,
             options: helper.vars.commandopts.osutopOpts
         },
         {
             name: 'pinned',
             description: 'Displays the user\'s pinned scores',
-            dmPermission: false,
+            dmPermission: true,
             options: helper.vars.commandopts.playArrayOpts
         },
         {
             name: 'pp',
             description: 'Estimates the rank of a user from the pp given',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'value',
@@ -612,7 +441,7 @@ function run() {
         {
             name: 'rank',
             description: 'Estimates the pp of a user from the rank given',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'value',
@@ -633,7 +462,7 @@ function run() {
         {
             name: 'ranking',
             description: 'Displays the global leaderboards',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'country',
@@ -679,19 +508,13 @@ function run() {
         {
             name: 'recent',
             description: 'Displays the user\'s most recent score',
-            dmPermission: false,
-            options: helper.vars.commandopts.rsopts
-        },
-        {//alternate command recent
-            name: 'rs',
-            description: 'Displays the user\'s most recent score',
-            dmPermission: false,
+            dmPermission: true,
             options: helper.vars.commandopts.rsopts
         },
         {
             name: 'recentactivity',
             description: 'Displays the user\'s most recent activity',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'user',
@@ -710,19 +533,13 @@ function run() {
         {
             name: 'scores',
             description: 'Displays the user\'s scores for a set map',
-            dmPermission: false,
-            options: helper.vars.commandopts.useridsortopts
-        },
-        {//alternate command for scores
-            name: 'c',
-            description: 'Displays the user\'s scores for a set map',
-            dmPermission: false,
+            dmPermission: true,
             options: helper.vars.commandopts.useridsortopts
         },
         {
             name: 'scorestats',
             description: 'Displays statistics for a user\'s scores',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'user',
@@ -759,7 +576,7 @@ function run() {
         {
             name: 'simulate',
             description: 'Simulates a play on a map',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'id',
@@ -812,48 +629,9 @@ function run() {
             ]
         },
         {
-            name: 'trackadd',
-            description: 'Adds a user to the server\'s tracking list',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'user',
-                    description: 'The user to add to the tracking list',
-                    required: true,
-                    type: Discord.ApplicationCommandOptionType.String,
-                }
-            ]
-        },
-        {
-            name: 'trackchannel',
-            description: 'Sets the channel to send tracking updates to',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'channel',
-                    description: 'The channel to send tracking updates to',
-                    required: true,
-                    type: Discord.ApplicationCommandOptionType.Channel,
-                }
-            ]
-        },
-        {
-            name: 'trackremove',
-            description: 'Removes a user from the server\'s tracking list',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'user',
-                    description: 'The user to remove from the tracking list',
-                    required: true,
-                    type: Discord.ApplicationCommandOptionType.String,
-                }
-            ]
-        },
-        {
             name: 'userbeatmaps',
             description: 'Displays the user\'s beatmaps',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'user',
@@ -928,7 +706,7 @@ function run() {
         {
             name: 'whatif',
             description: 'Estimates user stats if they gain a certain amount of raw pp',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'pp',
@@ -951,27 +729,6 @@ function run() {
                 }
             ]
         },
-
-
-
-        //below are misc commands
-
-
-
-        // {
-        //     name: 'gif',
-        //     description: 'Sends a random gif',
-        //     dmPermission: false,
-        //     options: [
-        //         {
-        //             name: 'type',
-        //             description: 'The type of gif to send',
-        //             type: Discord.ApplicationCommandOptionType.String,
-        //             required: true,
-        //             choices: helper.vars.commandopts.gifopts,
-        //         }
-        //     ]
-        // },
         {
             name: 'hug',
             description: 'Sends a gif',
@@ -1051,40 +808,14 @@ function run() {
             ]
         },
         {
-            name: 'image',
-            description: 'Searches the Google API and returns the first five results',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'query',
-                    description: 'The parameters for the search',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: true
-                }
-            ]
-        },
-        {
-            name: 'ytsearch',
-            description: 'Searches the YouTube API and returns the first five results',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'query',
-                    description: 'The parameters for the search',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: true
-                }
-            ]
-        },
-        {
             name: '8ball',
             description: 'Responds to a question',
-            dmPermission: false,
+            dmPermission: true,
         },
         {
             name: 'roll',
             description: 'Returns a random number',
-            dmPermission: false,
+            dmPermission: true,
             options: [
                 {
                     name: 'max',
@@ -1203,37 +934,37 @@ function run() {
             ],
 
         },
-        {
-            name: 'voice',
-            description: 'Controls a user\'s voice settings',
-            dmPermission: false,
-            options: [
-                {
-                    name: 'user',
-                    description: 'The user to control',
-                    type: Discord.ApplicationCommandOptionType.User,
-                    required: true,
-                },
-                {
-                    name: 'type',
-                    description: 'The type of voice control to perform',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: true,
-                    choices: [
-                        { name: 'Mute', value: 'mute' },
-                        { name: 'Deafen', value: 'deafen' },
-                        { name: 'Move to another channel', value: 'move' },
-                        { name: 'Disconnect', value: 'disconnect' }
-                    ]
-                },
-                {
-                    name: 'channel',
-                    description: 'The channel to move the user to',
-                    type: Discord.ApplicationCommandOptionType.Channel,
-                    required: false,
-                }
-            ],
-        },
+        // {
+        //     name: 'voice',
+        //     description: 'Controls a user\'s voice settings',
+        //     dmPermission: false,
+        //     options: [
+        //         {
+        //             name: 'user',
+        //             description: 'The user to control',
+        //             type: Discord.ApplicationCommandOptionType.User,
+        //             required: true,
+        //         },
+        //         {
+        //             name: 'type',
+        //             description: 'The type of voice control to perform',
+        //             type: Discord.ApplicationCommandOptionType.String,
+        //             required: true,
+        //             choices: [
+        //                 { name: 'Mute', value: 'mute' },
+        //                 { name: 'Deafen', value: 'deafen' },
+        //                 { name: 'Move to another channel', value: 'move' },
+        //                 { name: 'Disconnect', value: 'disconnect' }
+        //             ]
+        //         },
+        //         {
+        //             name: 'channel',
+        //             description: 'The channel to move the user to',
+        //             type: Discord.ApplicationCommandOptionType.Channel,
+        //             required: false,
+        //         }
+        //     ],
+        // },
         // {
         //     name: 'find',
         //     description: 'Returns the name of something from the id given',

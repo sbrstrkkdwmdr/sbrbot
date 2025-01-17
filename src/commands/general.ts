@@ -25,7 +25,7 @@ export const changelog: bottypes.command = async (input: bottypes.commandInput) 
     switch (input.type) {
         case 'message': {
             commanduser = input.message.author;
-            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true);
+            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true, 'number', false, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
@@ -33,9 +33,16 @@ export const changelog: bottypes.command = async (input: bottypes.commandInput) 
             version = input.args[0] ?? null;
         }
             break;
-
+        case 'interaction': {
+            let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
+            version = interaction.options.getString('version');
+        }
+            break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             const curpage = parseInt(
                 input.message.embeds[0].footer.text.split('/')[0]
             ) - 1;
@@ -271,7 +278,7 @@ export const changelog: bottypes.command = async (input: bottypes.commandInput) 
 
         Embed
             .setTitle(`${verdata.name.trim()} Changelog`)
-            .setURL(commitURL)
+            .setURL('https://github.com/sbrstrkkdwmdr/sbrbot/blob/dev/changelog.md')
             .setDescription(`commit [${commit.includes('commit/') ?
                 commitURL.split('commit/')[1].trim()?.slice(0, 7)?.trim() : 'null'}](${commitURL})
 Released ${verdata.releaseDate}
@@ -333,7 +340,6 @@ export const convert: bottypes.command = async (input: bottypes.commandInput) =>
     let cat1: string = '';
     let cat2: string = '';
     let num: string | number = 1;
-    let numAsStr: string = num.toString();
     switch (input.type) {
         case 'message': {
             commanduser = input.message.author;
@@ -379,11 +385,18 @@ export const convert: bottypes.command = async (input: bottypes.commandInput) =>
             input.args = helper.tools.commands.cleanArgs(input.args);
             for (const arg of input.args) {
                 if (!isNaN(+arg)) {
-                    num = input.args[2] ?? input.args[0];
-                    numAsStr = `${num}`;
+                    num = +arg;
                     break;
                 }
             }
+        }
+            break;
+        case 'interaction': {
+            let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
+            cat1 = interaction.options.getString('from') ?? cat1;
+            cat2 = interaction.options.getString('to') ?? cat2;
+            num = interaction.options.getNumber('number') ?? num;
         }
             break;
     }
@@ -647,7 +660,7 @@ SF:   ${data.significantFigures}\`
  * get country data
  */
 export const country: bottypes.command = async (input: bottypes.commandInput) => {
-    let commanduser: Discord.User;
+    let commanduser: Discord.User | Discord.APIUser;
     let search: string;
     let type: countrytypes.countryDataSearchTypes = 'name';
 
@@ -885,8 +898,16 @@ export const help: bottypes.command = async (input: bottypes.commandInput) => {
             }
         }
             break;
+        case 'interaction': {
+            let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
+            command = interaction.options.getString('command');
+        }
+            break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             if (input.buttonType == 'Random') {
                 rdm = true;
             }
@@ -1276,6 +1297,11 @@ export const info: bottypes.command = async (input: bottypes.commandInput) => {
             commanduser = input.message.author;
         }
             break;
+        case 'interaction': {
+            let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
+        }
+            break;
     }
 
     helper.tools.log.commandOptions(
@@ -1446,13 +1472,18 @@ Bot Version: ${data.version}
 
 export const invite: bottypes.command = async (input: bottypes.commandInput) => {
 
-    let commanduser: Discord.User;
+    let commanduser: Discord.User | Discord.APIUser;
 
 
     switch (input.type) {
         case 'message': {
             input.message = (input.message as Discord.Message);
             commanduser = input.message.author;
+        }
+            break;
+        case 'interaction': {
+            let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -1476,15 +1507,23 @@ export const math: bottypes.command = async (input: bottypes.commandInput) => {
     let commanduser: Discord.User | Discord.APIUser;
 
     let odcalc: osumodcalc.OverallDifficulty;
-    let type;
-    let num1;
-    let num2;
+    let type: string;
+    let num1: number;
+    let num2: number;
 
     switch (input.type) {
         case 'message': {
             input.message = (input.message as Discord.Message);
             commanduser = input.message.author;
             type = 'basic';
+        }
+            break;
+        case 'interaction': {
+            let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
+            type = interaction.options.getString('type');
+            num1 = interaction.options.getNumber('num1');
+            num2 = interaction.options.getNumber('num2');
         }
             break;
     }
@@ -1643,6 +1682,11 @@ export const ping: bottypes.command = async (input: bottypes.commandInput) => {
             commanduser = input.message.author;
         }
             break;
+        case 'interaction': {
+            let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
+        }
+            break;
     }
     helper.tools.log.commandOptions(
         [],
@@ -1653,7 +1697,7 @@ export const ping: bottypes.command = async (input: bottypes.commandInput) => {
         input.message,
         input.interaction,
     );
-    const trueping = `${helper.tools.formatter.toCapital(input.type)} latency: ${Math.abs(input.message.createdAt.getTime() - new Date().getTime())}ms`;
+    const trueping = `${helper.tools.formatter.toCapital(input.type)} latency: ${Math.abs((input.message ?? input.interaction).createdAt.getTime() - new Date().getTime())}ms`;
 
     const pingEmbed = new Discord.EmbedBuilder()
         .setTitle('Pong!')
@@ -1665,29 +1709,53 @@ ${trueping}`);
 
 
     const preEdit = new Date();
-    input.message.reply({
-        embeds: [pingEmbed],
-        allowedMentions: { repliedUser: false },
-        failIfNotExists: true
-    }).then((msg: Discord.Message | Discord.ChatInputCommandInteraction) => {
-        const timeToEdit = new Date().getTime() - preEdit.getTime();
-        pingEmbed.setDescription(`
-Client latency: ${helper.vars.client.ws.ping}ms
-${trueping}
-${helper.tools.formatter.toCapital(input.type)} edit latency: ${Math.abs(timeToEdit)}ms
-`);
-        helper.tools.commands.sendMessage({
-            type: input.type,
-            message: msg as Discord.Message,
-            interaction: msg as Discord.ChatInputCommandInteraction,
-            args: {
-                embeds: [pingEmbed],
-                edit: true,
-                editAsMsg: true,
+    switch (input.type) {
+        case 'message':
+            {
+                input.message.reply({
+                    embeds: [pingEmbed],
+                    allowedMentions: { repliedUser: false },
+                    failIfNotExists: true
+                }).then((msg: Discord.Message | Discord.ChatInputCommandInteraction) => {
+                    const timeToEdit = new Date().getTime() - preEdit.getTime();
+                    pingEmbed.setDescription(`
+        Client latency: ${helper.vars.client.ws.ping}ms
+        ${trueping}
+        ${helper.tools.formatter.toCapital(input.type)} edit latency: ${Math.abs(timeToEdit)}ms
+        `);
+                    helper.tools.commands.sendMessage({
+                        type: input.type,
+                        message: msg as Discord.Message,
+                        interaction: msg as Discord.ChatInputCommandInteraction,
+                        args: {
+                            embeds: [pingEmbed],
+                            edit: true,
+                            editAsMsg: true,
+                        }
+                    }, input.canReply);
+                })
+                    .catch();
             }
-        }, input.canReply);
-    })
-        .catch();
+            break;
+        case 'interaction': {
+            input.interaction.reply({
+                embeds: [pingEmbed],
+                allowedMentions: { repliedUser: false },
+            }).then((intRes: Discord.InteractionResponse) => {
+                const timeToEdit = new Date().getTime() - preEdit.getTime();
+                pingEmbed.setDescription(`
+    Client latency: ${helper.vars.client.ws.ping}ms
+    ${trueping}
+    ${helper.tools.formatter.toCapital(input.type)} edit latency: ${Math.abs(timeToEdit)}ms
+    `);
+                intRes.edit({
+                    embeds: [pingEmbed]
+                });
+            })
+                .catch();
+        }
+            break;
+    }
 };
 
 /**
@@ -1697,10 +1765,10 @@ export const remind: bottypes.command = async (input: bottypes.commandInput) => 
 
     let commanduser: Discord.User;
 
-    let time;
-    let remindertxt;
-    let sendtochannel;
-    let user: Discord.User;
+    let time: string;
+    let remindertxt: string;
+    let sendtochannel: boolean;
+    // let user: Discord.User;
     let list = false;
 
     switch (input.type) {
@@ -1710,7 +1778,6 @@ export const remind: bottypes.command = async (input: bottypes.commandInput) => 
             time = input.args[0];
             remindertxt = input.args.join(' ').replaceAll(input.args[0], '');
             sendtochannel = false;
-            user = input.message.author;
 
             if (!input.args[0] || input.args[0].includes('remind')) {
                 list = true;
@@ -1730,6 +1797,14 @@ export const remind: bottypes.command = async (input: bottypes.commandInput) => 
             }
         }
             break;
+        case 'interaction': {
+            let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            commanduser = interaction.user;
+            time = interaction.options.getString('time');
+            remindertxt = interaction.options.getString('reminder');
+            sendtochannel = interaction.options.getBoolean('sendinchannel');
+        }
+            break;
     }
     helper.tools.log.commandOptions(
         [
@@ -1745,10 +1820,6 @@ export const remind: bottypes.command = async (input: bottypes.commandInput) => 
                 name: 'SendInChannel',
                 value: sendtochannel
             },
-            {
-                name: 'User',
-                value: user.id
-            }
         ],
         input.id,
         'remind',
@@ -1767,7 +1838,7 @@ export const remind: bottypes.command = async (input: bottypes.commandInput) => 
         try {
             if (sendchannel == true) {
                 setTimeout(() => {
-                    (input.message.channel as Discord.GuildTextBasedChannel).send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` });
+                    ((input.message ?? input.interaction).channel as Discord.GuildTextBasedChannel).send({ content: `Reminder for <@${usersent.id}> \n${remindertxt}` });
                     remReminder(absTime);
                 }, helper.tools.calculate.timeToMs(time));
             }
@@ -1835,6 +1906,11 @@ export const stats: bottypes.command = async (input: bottypes.commandInput) => {
             commanduser = input.message.author;
         }
             break;
+        case 'interaction': {
+            let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
+        }
+            break;
     }
     helper.tools.log.commandOptions(
         [],
@@ -1845,7 +1921,7 @@ export const stats: bottypes.command = async (input: bottypes.commandInput) => {
         input.message,
         input.interaction,
     );
-    const trueping = input.message.createdAt.getTime() - new Date().getTime() + 'ms';
+    const trueping = (input.message ?? input.interaction).createdAt.getTime() - new Date().getTime() + 'ms';
 
     const uptime = Math.round((new Date().getTime() - helper.vars.startTime.getTime()) / 1000);
     const uptimehours = Math.floor(uptime / 3600) >= 10 ? Math.floor(uptime / 3600) : '0' + Math.floor(uptime / 3600);
@@ -1900,15 +1976,23 @@ export const time: bottypes.command = async (input: bottypes.commandInput) => {
         case 'message': {
             input.message = (input.message as Discord.Message);
             commanduser = input.message.author;
-            const temp = helper.tools.commands.matchArgMultiple(['-utc', '-gmt'], input.args);
+            const temp = helper.tools.commands.matchArgMultiple(['-utc', '-gmt'], input.args, false, null, false, false);
             showGMT = temp.found ? temp.output : false;
             input.args = temp.args;
             input.args = helper.tools.commands.cleanArgs(input.args);
             fetchtimezone = input.args.join(' ');
         }
             break;
+        case 'interaction': {
+            let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
+            fetchtimezone = interaction.options.getString('timezone');
+        }
+            break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -2178,8 +2262,16 @@ export const weather: bottypes.command = async (input: bottypes.commandInput) =>
             name = input.args.join(' ');
         }
             break;
+        case 'interaction': {
+            let interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            commanduser = interaction.user ?? interaction?.member?.user ?? interaction?.user;
+            name = interaction.options.getString('location');
+        }
+            break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             useComponents = input.message.components as any[];
             const tempEmb = input.message.embeds[0];
             name = tempEmb.footer.text.split('input: ')[1];
@@ -2236,6 +2328,16 @@ export const weather: bottypes.command = async (input: bottypes.commandInput) =>
             }
         }, input.canReply);
         return;
+    }
+    if (input.type == 'interaction') {
+        await helper.tools.commands.sendMessage({
+            type: input.type,
+            message: input.message,
+            interaction: input.interaction,
+            args: {
+                content: 'Loading...'
+            }
+        }, input.canReply);
     }
 
     if (helper.tools.data.findFile(name, 'weatherlocationdata') &&

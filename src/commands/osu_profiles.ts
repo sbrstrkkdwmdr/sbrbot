@@ -32,17 +32,20 @@ export const badges = async (input: bottypes.commandInput) => {
                 break;
 
             case 'interaction': {
-                input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-                commanduser = input.interaction.member.user;
+                let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+                commanduser = interaction?.member?.user ?? interaction?.user;
                 searchid = commanduser.id;
-                user = input.interaction.options.getString('user');
+                user = interaction.options.getString('user');
             }
 
 
                 break;
             case 'button': {
-
-                commanduser = input.interaction.member.user;
+                if (!input.message.embeds[0]) {
+                    return;
+                }
+                let interaction = (input.interaction as Discord.ButtonInteraction);
+                commanduser = interaction?.member?.user ?? interaction?.user;
                 searchid = commanduser.id;
             }
                 break;
@@ -103,7 +106,7 @@ export const badges = async (input: bottypes.commandInput) => {
             return;
         }
 
-        helper.tools.data.debug(osudataReq, 'command', 'badges', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+        helper.tools.data.debug(osudataReq, 'command', 'badges', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
         if (osudata?.hasOwnProperty('error') || !osudata.id) {
             await helper.tools.commands.errorAndAbort(input, 'badges', true, helper.vars.errors.noUser(user), true);
@@ -195,10 +198,10 @@ export const bws = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = input.interaction.member.user;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
-            user = input.interaction.options.getString('user');
+            user = interaction.options.getString('user');
         }
 
 
@@ -261,7 +264,7 @@ export const bws = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'bws', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'bws', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'bws', true, helper.vars.errors.noUser(user), true);
@@ -353,10 +356,10 @@ export const lb = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = input.interaction.member.user;
-            id = input.interaction.options.getString('id');
-            const gamemode = input.interaction.options.getString('mode');
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            id = interaction.options.getString('id');
+            const gamemode = interaction.options.getString('mode');
             if (!gamemode || gamemode == 'osu' || gamemode == 'o' || gamemode == '0' || gamemode == 'standard' || gamemode == 'std') {
                 mode = 'osu';
             }
@@ -375,10 +378,9 @@ export const lb = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            if (!input.message.embeds[0]) {
-                return;
-            }
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
 
             id = input.message.embeds[0].author.name;
             mode = input.message.embeds[0].footer.text.split(' | ')[0];
@@ -403,7 +405,6 @@ export const lb = async (input: bottypes.commandInput) => {
             if (page < 2) {
                 page == 1;
             }
-            commanduser = input.interaction.member.user;
         }
             break;
     }
@@ -594,7 +595,7 @@ export const ranking = async (input: bottypes.commandInput) => {
         case 'message': {
 
             commanduser = input.message.author;
-            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true);
+            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true, 'number', false, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
@@ -618,24 +619,28 @@ export const ranking = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = input.interaction.member.user;
-            country = input.interaction.options.getString('country') ?? 'ALL';
-            mode = (input.interaction.options.getString('mode') ?? 'osu') as apitypes.GameMode;
-            type = (input.interaction.options.getString('type') ?? 'performance') as apitypes.RankingType;
-            page = input.interaction.options.getInteger('page') ?? 0;
-            spotlight = input.interaction.options.getInteger('spotlight') ?? undefined;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            country = interaction.options.getString('country') ?? 'ALL';
+            mode = (interaction.options.getString('mode') ?? 'osu') as apitypes.GameMode;
+            type = (interaction.options.getString('type') ?? 'performance') as apitypes.RankingType;
+            page = interaction.options.getInteger('page') ?? 0;
+            spotlight = interaction.options.getInteger('spotlight') ?? undefined;
         }
 
 
             break;
         case 'button': {
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) {
+                return;
+            }
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.followUp({
+                interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
-                    ephemeral: true,
+                    flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
                 return;
@@ -660,7 +665,7 @@ export const ranking = async (input: bottypes.commandInput) => {
 
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('ranking', commanduser, input.id);
 
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder();
     helper.tools.log.commandOptions(
         [
             {
@@ -746,7 +751,7 @@ export const ranking = async (input: bottypes.commandInput) => {
 
 
     try {
-        helper.tools.data.debug(rankingdataReq, 'command', 'ranking', input.message?.guildId ?? input.interaction.guildId, 'rankingData');
+        helper.tools.data.debug(rankingdataReq, 'command', 'ranking', input.message?.guildId ?? input.interaction?.guildId, 'rankingData');
     } catch (e) {
         return;
     }
@@ -886,12 +891,12 @@ export const osu = async (input: bottypes.commandInput) => {
 
             commanduser = input.message.author;
             searchid = input.message.mentions.users.size > 0 ? input.message.mentions.users.first().id : input.message.author.id;
-            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args);
+            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args, false, null, false, false);
             if (detailArgFinder.found) {
                 detailed = 2;
                 input.args = detailArgFinder.args;
             }
-            const graphArgFinder = helper.tools.commands.matchArgMultiple(['-g', '-graph',], input.args);
+            const graphArgFinder = helper.tools.commands.matchArgMultiple(['-g', '-graph',], input.args, false, null, false, false);
             if (graphArgFinder.found) {
                 graphonly = true;
                 input.args = graphArgFinder.args;
@@ -918,25 +923,25 @@ export const osu = async (input: bottypes.commandInput) => {
 
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
 
-            commanduser = input.interaction.member.user;
-            searchid = input.interaction.member.user.id;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            searchid = interaction?.member?.user ?? interaction?.user.id;
 
-            user = input.interaction.options.getString('user');
-            detailed = input.interaction.options.getBoolean('detailed') ? 2 : 1;
-            mode = input.interaction.options.getString('mode');
+            user = interaction.options.getString('user');
+            detailed = interaction.options.getBoolean('detailed') ? 2 : 1;
+            mode = interaction.options.getString('mode');
         }
 
 
 
             break;
         case 'button': {
-
             if (!input.message.embeds[0]) {
                 return;
             }
-            commanduser = input.interaction.member.user;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
 
             user = input.message.embeds[0].url.split('users/')[1].split('/')[0];
@@ -1114,7 +1119,7 @@ export const osu = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.noUser(user), true);
@@ -1137,7 +1142,7 @@ export const osu = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
             return;
         }
-        helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+        helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
     } else {
         mode = mode ?? 'osu';
     }
@@ -1305,7 +1310,7 @@ export const osu = async (input: bottypes.commandInput) => {
                 await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.uErr.osu.map.group_nf.replace('[TYPE]', 'most played'), false);
                 return;
             }
-            helper.tools.data.debug(mostplayeddataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'mostPlayedData');
+            helper.tools.data.debug(mostplayeddataReq, 'command', 'osu', input.message?.guildId ?? input.interaction?.guildId, 'mostPlayedData');
 
             if (mostplayeddata?.hasOwnProperty('error')) {
                 await helper.tools.commands.errorAndAbort(input, 'osu', true, helper.vars.errors.uErr.osu.profile.mostplayed, true);
@@ -1377,7 +1382,7 @@ ${supporter} ${onlinestatus}
             useEmbeds = [osuEmbed];
         }
     }
-    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+    helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction?.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
 
 
 
@@ -1409,7 +1414,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
             commanduser = input.message.author;
             searchid = input.message.mentions.users.size > 0 ? input.message.mentions.users.first().id : input.message.author.id;
 
-            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true);
+            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true, 'number', false, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
@@ -1426,18 +1431,21 @@ export const recent_activity = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = input.interaction.member.user;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
-            user = input.interaction.options.getString('user');
-            page = input.interaction.options.getInteger('page');
+            user = interaction.options.getString('user');
+            page = interaction.options.getInteger('page');
         }
 
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) {
+                return;
+            }
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
 
             user = input.message.embeds[0].url.split('users/')[1].split('/')[0];
             page = parseInt((input.message.embeds[0].description).split('Page: ')[1].split('/')[0]);
@@ -1473,7 +1481,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
 
     const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('recentactivity', commanduser, input.id);
 
-    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
+    const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder();
     helper.tools.log.commandOptions(
         [
             {
@@ -1543,7 +1551,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
         return;
     }
 
-    helper.tools.data.debug(osudataReq, 'command', 'recent_activity', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'recent_activity', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'recent_activity', true, helper.vars.errors.noUser(user), true);
@@ -1584,7 +1592,7 @@ export const recent_activity = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'recent_activity', true, helper.vars.errors.uErr.osu.rsact, false);
         return;
     }
-    helper.tools.data.debug(recentActivityReq, 'command', 'recent_activity', input.message?.guildId ?? input.interaction.guildId, 'rsactData');
+    helper.tools.data.debug(recentActivityReq, 'command', 'recent_activity', input.message?.guildId ?? input.interaction?.guildId, 'rsactData');
 
     if (rsactData?.hasOwnProperty('error')) {
         await helper.tools.commands.errorAndAbort(input, 'recent_activity', true, helper.vars.errors.uErr.osu.profile.rsact, true);

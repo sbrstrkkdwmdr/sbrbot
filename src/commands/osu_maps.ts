@@ -38,7 +38,7 @@ export const map = async (input: bottypes.commandInput) => {
     switch (input.type) {
         case 'message': {
             commanduser = input.message.author;
-            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args);
+            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args, false, null, false, false);
             if (detailArgFinder.found) {
                 detailed = 2;
                 input.args = detailArgFinder.args;
@@ -64,12 +64,12 @@ export const map = async (input: bottypes.commandInput) => {
                 customAR = temp.value;
                 input.args = temp.newArgs;
             }
-            const customODArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['od', 'accuracy',]), input.args, true);
+            const customODArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['od', 'accuracy',]), input.args, true, 'number', false, false);
             if (customODArgFinder.found) {
                 customOD = customODArgFinder.output;
                 input.args = customODArgFinder.args;
             }
-            const customHPArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['hp', 'drain', 'health']), input.args, true);
+            const customHPArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['hp', 'drain', 'health']), input.args, true, 'number', false, false);
             if (customHPArgFinder.found) {
                 customHP = customHPArgFinder.output;
                 input.args = customHPArgFinder.args;
@@ -97,7 +97,7 @@ export const map = async (input: bottypes.commandInput) => {
             if (input.args.includes('-bg')) {
                 showBg = true;
             }
-            const isppCalcArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['pp', 'calc', 'performance']), input.args);
+            const isppCalcArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['pp', 'calc', 'performance']), input.args, false, null, false, false);
             if (isppCalcArgFinder.found) {
                 isppCalc = true;
                 input.args = isppCalcArgFinder.args;
@@ -117,29 +117,28 @@ export const map = async (input: bottypes.commandInput) => {
 
 
         case 'interaction': {
-            input.interaction = input.interaction as Discord.ChatInputCommandInteraction;
-            commanduser = input.interaction.member.user;
-            mapid = input.interaction.options.getInteger('id');
-            mapmods = input.interaction.options.getString('mods');
-            detailed = input.interaction.options.getBoolean('detailed') ? 2 : 1;
-            maptitleq = input.interaction.options.getString('query');
-            input.interaction.options.getNumber('bpm') ? overrideBpm = input.interaction.options.getNumber('bpm') : null;
-            input.interaction.options.getNumber('speed') ? overrideSpeed = input.interaction.options.getNumber('speed') : null;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            mapid = interaction.options.getInteger('id');
+            mapmods = interaction.options.getString('mods');
+            detailed = interaction.options.getBoolean('detailed') ? 2 : 1;
+            maptitleq = interaction.options.getString('query');
+            interaction.options.getNumber('bpm') ? overrideBpm = interaction.options.getNumber('bpm') : null;
+            interaction.options.getNumber('speed') ? overrideSpeed = interaction.options.getNumber('speed') : null;
         }
 
 
 
             break;
         case 'button': {
-            if (!input.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? input.interaction?.user;
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.followUp({
+                interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
-                    ephemeral: true,
+                    flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
                 return;
@@ -299,7 +298,7 @@ export const map = async (input: bottypes.commandInput) => {
     );
 
     if (!mapid) {
-        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction.guildId);
+        const temp = helper.tools.data.getPreviousId('map', input.message?.guildId ?? input.interaction?.guildId);
         mapid = temp.id;
         if (!mapmods || osumodcalc.OrderMods(mapmods).string.length == 0) {
             mapmods = temp.mods;
@@ -367,7 +366,7 @@ export const map = async (input: bottypes.commandInput) => {
         }
 
         mapdata = mapdataReq.apiData;
-        helper.tools.data.debug(mapdataReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'mapData');
+        helper.tools.data.debug(mapdataReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'mapData');
         if (mapdataReq?.error) {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', `${mapid}`), false);
             return;
@@ -391,7 +390,7 @@ export const map = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.ms.replace('[ID]', `${mapdata.beatmapset_id}`), false);
             return;
         }
-        helper.tools.data.debug(bmsdataReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'bmsData');
+        helper.tools.data.debug(bmsdataReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'bmsData');
 
         if (bmsdata?.hasOwnProperty('error')) {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.ms.replace('[ID]', `${mapdata.beatmapset_id}`), true);
@@ -410,7 +409,7 @@ export const map = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.search, false);
             return;
         }
-        helper.tools.data.debug(mapidtestReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'mapIdTestData');
+        helper.tools.data.debug(mapidtestReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'mapIdTestData');
         helper.tools.data.storeFile(mapidtestReq, maptitleq.replace(/[\W_]+/g, '').replaceAll(' ', '_'), 'mapQuerydata');
 
         if (mapidtest?.hasOwnProperty('error') && !mapidtest.hasOwnProperty('beatmapsets')) {
@@ -473,7 +472,7 @@ export const map = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', usemapidpls), false);
             return;
         }
-        helper.tools.data.debug(mapdataReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'mapData');
+        helper.tools.data.debug(mapdataReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'mapData');
         if (mapdata?.hasOwnProperty('error') || !mapdata.id) {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', usemapidpls), true);
             return;
@@ -511,7 +510,7 @@ export const map = async (input: bottypes.commandInput) => {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.ms.replace('[ID]', `${mapdata.beatmapset_id}`), false);
             return;
         }
-        helper.tools.data.debug(bmsdataReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'bmsData');
+        helper.tools.data.debug(bmsdataReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'bmsData');
 
         if (bmsdata?.hasOwnProperty('error')) {
             await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.map.ms.replace('[ID]', `${mapdata.beatmapset_id}`), true);
@@ -795,7 +794,7 @@ export const map = async (input: bottypes.commandInput) => {
             } catch (error) {
                 totaldiff = useMapdata.difficulty_rating;
             }
-            helper.tools.data.debug(ppComputed, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'ppCalc');
+            helper.tools.data.debug(ppComputed, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'ppCalc');
 
         } catch (error) {
             helper.tools.log.stdout(error);
@@ -1016,10 +1015,10 @@ HP${baseHP}`;
                     mapLastUpdated: new Date(useMapdata.last_updated),
                 });
             try {
-                helper.tools.data.debug(strains, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'strains');
+                helper.tools.data.debug(strains, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'strains');
 
             } catch (error) {
-                helper.tools.data.debug({ error: error }, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'strains');
+                helper.tools.data.debug({ error: error }, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'strains');
             }
             let mapgraph;
             if (strains) {
@@ -1161,7 +1160,7 @@ HP${baseHP}`;
                     return;
                 }
 
-                helper.tools.data.debug(gdReq, 'command', 'map', input.message?.guildId ?? input.interaction.guildId, 'guestData');
+                helper.tools.data.debug(gdReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'guestData');
 
                 if (gdData?.hasOwnProperty('error')) {
                     gdData = {
@@ -1244,7 +1243,7 @@ HP${baseHP}`;
 
         embeds.push(Embed);
         embeds.reverse();
-        helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
+        helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction?.guildId,
             {
                 id: `${mapdata.id}`,
                 apiData: null,
@@ -1282,7 +1281,7 @@ HP${baseHP}`;
         };
 
     }
-    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction.guildId,
+    helper.tools.data.writePreviousId('map', input.message?.guildId ?? input.interaction?.guildId,
         {
             id: `${mapdata.id}`,
             apiData: null,
@@ -1329,37 +1328,37 @@ export const randomMap = async (input: bottypes.commandInput) => {
                 useRandomRanked = true;
                 input.args.splice(input.args.indexOf('-lb'), 1);
             }
-            const mapTypeRankedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapRanked, input.args);
+            const mapTypeRankedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapRanked, input.args, false, null, false, false);
             if (mapTypeRankedArgFinder.found) {
                 mapType = 'Ranked';
                 input.args = mapTypeRankedArgFinder.args;
             }
-            const mapTypeLovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapLove, input.args);
+            const mapTypeLovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapLove, input.args, false, null, false, false);
             if (mapTypeLovedArgFinder.found) {
                 mapType = 'Loved';
                 input.args = mapTypeLovedArgFinder.args;
             }
-            const mapTypeApprovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapApprove, input.args);
+            const mapTypeApprovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapApprove, input.args, false, null, false, false);
             if (mapTypeApprovedArgFinder.found) {
                 mapType = 'Approved';
                 input.args = mapTypeApprovedArgFinder.args;
             }
-            const mapTypeQualifiedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapQualified, input.args);
+            const mapTypeQualifiedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapQualified, input.args, false, null, false, false);
             if (mapTypeQualifiedArgFinder.found) {
                 mapType = 'Qualified';
                 input.args = mapTypeQualifiedArgFinder.args;
             }
-            const mapTypePendArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapPending, input.args);
+            const mapTypePendArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapPending, input.args, false, null, false, false);
             if (mapTypePendArgFinder.found) {
                 mapType = 'Pending';
                 input.args = mapTypePendArgFinder.args;
             }
-            const mapTypeWipArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapWip, input.args);
+            const mapTypeWipArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapWip, input.args, false, null, false, false);
             if (mapTypeWipArgFinder.found) {
                 mapType = 'WIP';
                 input.args = mapTypeWipArgFinder.args;
             }
-            const mapTypeGraveyardArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGraveyard, input.args);
+            const mapTypeGraveyardArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGraveyard, input.args, false, null, false, false);
             if (mapTypeGraveyardArgFinder.found) {
                 mapType = 'Graveyard';
                 input.args = mapTypeGraveyardArgFinder.args;
@@ -1372,7 +1371,7 @@ export const randomMap = async (input: bottypes.commandInput) => {
 
         case 'interaction':
         case 'button': {
-            commanduser = input.interaction.member.user;
+            commanduser = input.interaction?.member?.user ?? input.interaction?.user;
         }
     }
     helper.tools.log.commandOptions(
@@ -1445,7 +1444,7 @@ export const recMap = async (input: bottypes.commandInput) => {
         case 'message': {
 
             commanduser = input.message.author;
-            const usetypeRandomArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['r', 'random', 'f2', 'rdm', 'range', 'diff']), input.args, true);
+            const usetypeRandomArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['r', 'random', 'f2', 'rdm', 'range', 'diff']), input.args, true, 'number', false, false);
             if (usetypeRandomArgFinder.found) {
                 maxRange = usetypeRandomArgFinder.output;
                 useType = 'random';
@@ -1472,23 +1471,18 @@ export const recMap = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-
-            commanduser = input.interaction.member.user;
-            searchid = input.interaction.member.user.id;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            searchid = interaction?.member?.user.id ?? interaction?.user.id;
         }
 
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
-            searchid = input.interaction.member.user.id;
-        }
-            break;
-        case 'link': {
-
-            commanduser = input.message.author;
-            searchid = input.interaction.member.user.id;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? input.interaction?.user;
+            searchid = interaction?.member?.user.id ?? interaction?.user.id;
         }
             break;
     }
@@ -1559,7 +1553,7 @@ export const recMap = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'recmap', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'osu', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'recmap', true, helper.vars.errors.noUser(user), true);
@@ -1627,7 +1621,7 @@ Pool of ${randomMap.poolSize}
 
 //         case 'interaction': {
 
-//             commanduser = input.interaction.member.user;
+//             commanduser = interaction?.member?.user ?? interaction?.user;
 //         }
 
 
@@ -1635,7 +1629,7 @@ Pool of ${randomMap.poolSize}
 //             break;
 //         case 'button': {
 
-//             commanduser = input.interaction.member.user;
+//             commanduser = interaction?.member?.user ?? interaction?.user;
 //         }
 //             break;
 //     }
@@ -1664,7 +1658,7 @@ Pool of ${randomMap.poolSize}
 //     let errtxt = '';
 //     const decoder = new osuparsers.BeatmapDecoder();
 //     const mapParsed: osuclasses.Beatmap = await decoder.decodeFromPath(mapPath, true);
-//     helper.tools.data.debug(mapParsed, 'fileparse', 'map (file)', input.message?.guildId ?? input.interaction.guildId, 'map');
+//     helper.tools.data.debug(mapParsed, 'fileparse', 'map (file)', input.message?.guildId ?? input.interaction?.guildId, 'map');
 //     let clockRate = 1;
 //     if (mods.includes('DT') || mods.includes('NC')) {
 //         clockRate = 1.5;
@@ -1728,7 +1722,7 @@ Pool of ${randomMap.poolSize}
 
 //         strains = await osufunc.straincalclocal(`${filespath}/errmap.osu`, mods, 0, osumodcalc.ModeIntToName(mapParsed?.mode));
 //     }
-//     helper.tools.data.debug(strains, 'fileparse', 'map (file)', input.message?.guildId ?? input.interaction.guildId, 'strains');
+//     helper.tools.data.debug(strains, 'fileparse', 'map (file)', input.message?.guildId ?? input.interaction?.guildId, 'strains');
 //     try {
 //         const mapgraphInit = await
 //             await func.graph(strains.strainTime, strains.value, 'Strains', {
@@ -1855,53 +1849,53 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
             commanduser = input.message.author;
 
             searchid = input.message.mentions.users.size > 0 ? input.message.mentions.users.first().id : input.message.author.id;
-            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true);
+            const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, input.args, true, 'number', false, true);
             if (pageArgFinder.found) {
                 page = pageArgFinder.output;
                 input.args = pageArgFinder.args;
             }
 
-            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args);
+            const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, input.args, false, null, false, false);
             if (detailArgFinder.found) {
                 mapDetailed = 2;
                 input.args = detailArgFinder.args;
             }
-            const filterRankArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapRanked, input.args);
+            const filterRankArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapRanked, input.args, false, null, false, false);
             if (filterRankArgFinder.found) {
                 filter = 'ranked';
                 input.args = filterRankArgFinder.args;
             }
-            const filterFavouritesArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapFavourite, input.args);
+            const filterFavouritesArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapFavourite, input.args, false, null, false, false);
             if (filterFavouritesArgFinder.found) {
                 filter = 'favourite';
                 input.args = filterFavouritesArgFinder.args;
             }
-            const filterGraveyardArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGraveyard, input.args);
+            const filterGraveyardArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGraveyard, input.args, false, null, false, false);
             if (filterGraveyardArgFinder.found) {
                 filter = 'graveyard';
                 input.args = filterGraveyardArgFinder.args;
             }
-            const filterLovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapLove, input.args);
+            const filterLovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapLove, input.args, false, null, false, false);
             if (filterLovedArgFinder.found) {
                 filter = 'loved';
                 input.args = filterLovedArgFinder.args;
             }
-            const filterPendingArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapPending, input.args);
+            const filterPendingArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapPending, input.args, false, null, false, false);
             if (filterPendingArgFinder.found) {
                 filter = 'pending';
                 input.args = filterPendingArgFinder.args;
             }
-            const filterNominatedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapNominated, input.args);
+            const filterNominatedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapNominated, input.args, false, null, false, false);
             if (filterNominatedArgFinder.found) {
                 filter = 'nominated';
                 input.args = filterNominatedArgFinder.args;
             }
-            const filterGuestArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGuest, input.args);
+            const filterGuestArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGuest, input.args, false, null, false, false);
             if (filterGuestArgFinder.found) {
                 filter = 'guest';
                 input.args = filterGuestArgFinder.args;
             }
-            const filterMostPlayedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapMostPlayed, input.args);
+            const filterMostPlayedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapMostPlayed, input.args, false, null, false, false);
             if (filterMostPlayedArgFinder.found) {
                 filter = 'most_played';
                 input.args = filterMostPlayedArgFinder.args;
@@ -1934,17 +1928,17 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = input.interaction as Discord.ChatInputCommandInteraction;
-            commanduser = input.interaction.member.user;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
 
-            user = input.interaction.options.getString('user') ?? null;
-            filter = (input.interaction.options.getString('type') ?? 'favourite') as bottypes.ubmFilter;
-            sort = (input.interaction.options.getString('sort') ?? 'dateadded') as bottypes.ubmSort;
-            reverse = input.interaction.options.getBoolean('reverse') ?? false;
-            filterTitle = input.interaction.options.getString('filter');
+            user = interaction.options.getString('user') ?? null;
+            filter = (interaction.options.getString('type') ?? 'favourite') as bottypes.ubmFilter;
+            sort = (interaction.options.getString('sort') ?? 'dateadded') as bottypes.ubmSort;
+            reverse = interaction.options.getBoolean('reverse') ?? false;
+            filterTitle = interaction.options.getString('filter');
 
-            parseId = input.interaction.options.getInteger('parse');
+            parseId = interaction.options.getInteger('parse');
             if (parseId != null) {
                 parseMap = true;
             }
@@ -1954,15 +1948,15 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
             if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
 
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.followUp({
+                interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
-                    ephemeral: true,
+                    flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
                 return;
@@ -2107,7 +2101,7 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
         await helper.tools.commands.errorAndAbort(input, 'userbeatmaps', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user), false);
         return;
     }
-    helper.tools.data.debug(osudataReq, 'command', 'userbeatmaps', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'userbeatmaps', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (osudata?.hasOwnProperty('error') || !osudata.id) {
         await helper.tools.commands.errorAndAbort(input, 'userbeatmaps', true, helper.vars.errors.noUser(user), true);
@@ -2162,7 +2156,7 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
         await getScoreCount(0);
     }
 
-    helper.tools.data.debug(maplistdata, 'command', 'userbeatmaps', input.message?.guildId ?? input.interaction.guildId, 'mapListData');
+    helper.tools.data.debug(maplistdata, 'command', 'userbeatmaps', input.message?.guildId ?? input.interaction?.guildId, 'mapListData');
     helper.tools.data.storeFile(maplistdata, osudata.id, 'maplistdata', null, filter);
 
     if (parseMap) {

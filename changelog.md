@@ -6,7 +6,29 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
-## [4.0.8] - 2025-01-03
+## [4.1.0] - 2025-01-17
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/3b5948921a8e94dd79dd36d0bcc108808aea5e1c)</br>
+
+### Fixed
+
+-   args with aliases not being parsed properly
+-   message commands now work in DMs
+-   scoreparse via command using null score
+-   FC calc still parsing misses
+-   SS still parsing hit100s/50s etc.
+-   buggy osu track score filter
+
+### Changed
+
+-   changelog embed title links to changelog file instead of commit
+
+### Added
+
+-   reimplemented interaction commands (might be buggy)
+-   scores show rate change if used
+
+## [4.0.8] - 2025-01-10
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/18e4ee1a4f58745e43168ec03f951448d00b6dbf)</br>
 

@@ -49,13 +49,13 @@ export const compare = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = input.interaction.member.user;
-            type = (input.interaction.options.getString('type') ?? 'profile') as compareType;
-            first = input.interaction.options.getString('first');
-            second = input.interaction.options.getString('second');
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            type = (interaction.options.getString('type') ?? 'profile') as compareType;
+            first = interaction.options.getString('first');
+            second = interaction.options.getString('second');
             firstsearchid = commanduser.id;
-            mode = input.interaction.options.getString('mode') ?? 'osu';
+            mode = interaction.options.getString('mode') ?? 'osu';
             if (second == null && first != null) {
                 second = first;
                 first = null;
@@ -65,16 +65,14 @@ export const compare = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            if (!input.message.embeds[0]) {
-                return;
-            }
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             const temp = helper.tools.commands.getButtonArgs(input.id);
             if (temp.error) {
-                input.interaction.followUp({
+                interaction.followUp({
                     content: helper.vars.errors.paramFileMissing,
-                    ephemeral: true,
+                    flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
                 return;
@@ -166,10 +164,10 @@ export const compare = async (input: bottypes.commandInput) => {
                     return;
                 }
             } else {
-                if (helper.tools.data.getPreviousId('user', `${input.message?.guildId ?? input.interaction.guildId}`).id == false) {
+                if (helper.tools.data.getPreviousId('user', `${input.message?.guildId ?? input.interaction?.guildId}`).id == false) {
                     throw new Error(`Could not find second user - ${helper.vars.errors.uErr.osu.profile.user_msp}`);
                 }
-                second = helper.tools.data.getPreviousId('user', `${input.message?.guildId ?? input.interaction.guildId}`).id;
+                second = helper.tools.data.getPreviousId('user', `${input.message?.guildId ?? input.interaction?.guildId}`).id;
             }
         }
         if (first == null) {
@@ -406,7 +404,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                 break;
 
         }
-        helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction.guildId, { id: `${seconduser.id}`, apiData: null, mods: null });
+        helper.tools.data.writePreviousId('user', input.message?.guildId ?? input.interaction?.guildId, { id: `${seconduser.id}`, apiData: null, mods: null });
     } catch (error) {
         embedTitle = 'Error';
         usefields.push({
@@ -481,7 +479,7 @@ export const osuset = async (input: bottypes.commandInput) => {
                 location = temp.value;
                 input.args = temp.newArgs;
             }
-            const timeArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['timezone', 'tz']), input.args, true, 'string');
+            const timeArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['timezone', 'tz']), input.args, true, 'string', false, false);
             if (timeArgFinder.found) {
                 tz = timeArgFinder.output;
                 input.args = timeArgFinder.args;
@@ -496,11 +494,11 @@ export const osuset = async (input: bottypes.commandInput) => {
 
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = input.interaction.member.user;
-            name = input.interaction.options.getString('user');
-            mode = input.interaction.options.getString('mode');
-            skin = input.interaction.options.getString('skin');
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            name = interaction.options.getString('user');
+            mode = interaction.options.getString('mode');
+            skin = interaction.options.getString('skin');
             type = 'interaction';
         }
 
@@ -508,8 +506,9 @@ export const osuset = async (input: bottypes.commandInput) => {
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -717,10 +716,10 @@ export const rankpp = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
-            commanduser = input.interaction.member.user;
-            value = input.interaction.options.getInteger('value') ?? 100;
-            mode = input.interaction.options.getString('mode') as apitypes.GameMode ?? 'osu';
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
+            value = interaction.options.getInteger('value') ?? 100;
+            mode = interaction.options.getString('mode') as apitypes.GameMode ?? 'osu';
         }
 
 
@@ -780,7 +779,7 @@ export const rankpp = async (input: bottypes.commandInput) => {
     };
 
     const dataSizetxt = await helper.vars.statsCache.count();
-    
+
     Embed
         .setDescription(`${output}\n${helper.vars.emojis.gamemodes[mode ?? 'osu']}\n${returnval.isEstimated ? `Estimated from ${dataSizetxt} entries.` : 'Based off matching / similar entry'}`);
 
@@ -827,15 +826,16 @@ export const saved = async (input: bottypes.commandInput) => {
             break;
 
         case 'interaction': {
-
-            commanduser = input.interaction.member.user;
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
 
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
         }
             break;
     }
@@ -1043,24 +1043,25 @@ export const whatif = async (input: bottypes.commandInput) => {
 
 
         case 'interaction': {
-            input.interaction = (input.interaction as Discord.ChatInputCommandInteraction);
+            let interaction = input.interaction as Discord.ChatInputCommandInteraction;
 
-            commanduser = input.interaction.member.user;
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
 
-            user = input.interaction.options.getString('user');
+            user = interaction.options.getString('user');
 
-            mode = input.interaction.options.getString('mode');
+            mode = interaction.options.getString('mode');
 
-            pp = input.interaction.options.getNumber('pp');
+            pp = interaction.options.getNumber('pp');
         }
 
 
 
             break;
         case 'button': {
-
-            commanduser = input.interaction.member.user;
+            if (!input.message.embeds[0]) return;
+            let interaction = (input.interaction as Discord.ButtonInteraction);
+            commanduser = interaction?.member?.user ?? interaction?.user;
             searchid = commanduser.id;
         }
             break;
@@ -1142,7 +1143,7 @@ export const whatif = async (input: bottypes.commandInput) => {
     helper.tools.data.storeFile(osudataReq, osudata.id, 'osudata', helper.tools.other.modeValidator(mode));
     helper.tools.data.storeFile(osudataReq, user, 'osudata', helper.tools.other.modeValidator(mode));
 
-    helper.tools.data.debug(osudataReq, 'command', 'whatif', input.message?.guildId ?? input.interaction.guildId, 'osuData');
+    helper.tools.data.debug(osudataReq, 'command', 'whatif', input.message?.guildId ?? input.interaction?.guildId, 'osuData');
 
     if (mode == null) {
         mode = osudata.playmode;
@@ -1151,7 +1152,7 @@ export const whatif = async (input: bottypes.commandInput) => {
     const osutopdataReq: tooltypes.apiReturn = await helper.tools.api.getScoresBest(osudata.id, mode, []);
 
 
-    const osutopdata: apitypes.ScoreLegacy[] & apitypes.Error = osutopdataReq.apiData; helper.tools.data.debug(osutopdataReq, 'command', 'whatif', input.message?.guildId ?? input.interaction.guildId, 'osuTopData');
+    const osutopdata: apitypes.ScoreLegacy[] & apitypes.Error = osutopdataReq.apiData; helper.tools.data.debug(osutopdataReq, 'command', 'whatif', input.message?.guildId ?? input.interaction?.guildId, 'osuTopData');
     if (osutopdataReq?.error) {
         await helper.tools.commands.errorAndAbort(input, 'whatif', true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', user), false);
         return;

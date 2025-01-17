@@ -79,7 +79,7 @@ ID:           ${id}
 ----------------------------------------------------
 ${input}
 ====================================================`;
-    out(output, `${helper.vars.path.logs}/${(message?.guildId ?? interaction.guildId) ? 'cmd/' + message?.guildId + '.log' : 'commands.log'}`, true);
+    out(output, `${helper.vars.path.logs}/${(message?.guildId ?? interaction?.guildId) ? 'cmd/' + (message?.guildId ?? interaction?.guildId) + '.log' : 'commands.log'}`, true);
 }
 
 /**
