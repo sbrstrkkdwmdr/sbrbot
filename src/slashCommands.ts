@@ -11,6 +11,7 @@ export async function main() {
 function run() {
     const commands = helper.vars.client.application?.commands;
     commands?.set([
+        // gen
         {
             name: 'changelog',
             description: 'Displays the changes for the current version or version requested',
@@ -151,7 +152,7 @@ function run() {
                 }
             ]
         },
-        //below are osu related commands
+        // osu
         {
             name: 'bws',
             description: 'Shows the badge weighted rank of a user',
@@ -311,123 +312,8 @@ function run() {
                 }
             ]
         },
-        {//alternate command for map
-            name: 'm',
-            description: 'Displays the map info of the map',
-            dmPermission: true
-,
-            options: [
-                {
-                    name: 'id',
-                    description: 'The id of the map to display',
-                    type: Discord.ApplicationCommandOptionType.Integer,
-                    required: false,
-                    minValue: 1
-                },
-                {
-                    name: 'mods',
-                    description: 'The mods to display the map info of',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                },
-                {
-                    name: 'detailed',
-                    description: 'Show all details',
-                    type: Discord.ApplicationCommandOptionType.Boolean,
-                    required: false,
-                },
-                {
-                    name: 'query',
-                    description: 'The name of the map to display',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                },
-                {
-                    name: 'bpm',
-                    description: 'The BPM to calculate the map with',
-                    type: Discord.ApplicationCommandOptionType.Number,
-                    required: false,
-                    minValue: 1,
-                    maxValue: 1000
-                },
-                {
-                    name: 'speed',
-                    description: 'The speed to calculate the map with',
-                    type: Discord.ApplicationCommandOptionType.Number,
-                    required: false,
-                    minValue: 0.1,
-                    maxValue: 10
-                },
-                {
-                    name: 'cs',
-                    description: 'The circle size to calculate the map with',
-                    type: Discord.ApplicationCommandOptionType.Number,
-                    required: false,
-                    minValue: 0,
-                    maxValue: 11
-                },
-                {
-                    name: 'ar',
-                    description: 'The approach rate to calculate the map with',
-                    type: Discord.ApplicationCommandOptionType.Number,
-                    required: false,
-                    minValue: 0,
-                    maxValue: 11
-                },
-                {
-                    name: 'od',
-                    description: 'The overall difficulty to calculate the map with',
-                    type: Discord.ApplicationCommandOptionType.Number,
-                    required: false,
-                    minValue: 0,
-                    maxValue: 11
-                },
-                {
-                    name: 'hp',
-                    description: 'The health drain rate to calculate the map with',
-                    type: Discord.ApplicationCommandOptionType.Number,
-                    required: false,
-                    minValue: 0,
-                    maxValue: 11
-                },
-            ]
-        },
         {
             name: 'maplb',
-            description: 'Displays the top five plays on a specific map',
-            dmPermission: true,
-            options: [
-                {
-                    name: 'id',
-                    description: 'The id of the map to display',
-                    required: false,
-                    type: Discord.ApplicationCommandOptionType.Integer,
-                },
-                {
-                    name: 'page',
-                    description: 'Which page to display',
-                    required: false,
-                    type: Discord.ApplicationCommandOptionType.Integer,
-                    minValue: 1,
-                    maxValue: 20
-
-                },
-                {
-                    name: 'mods',
-                    description: 'What mods to sort',
-                    required: false,
-                    type: Discord.ApplicationCommandOptionType.String
-                },
-                {
-                    name: 'parse',
-                    description: 'Parse the score with the specified index',
-                    type: Discord.ApplicationCommandOptionType.Integer,
-                    required: false,
-                }
-            ]
-        },
-        {//alternate command for maplb
-            name: 'leaderboard',
             description: 'Displays the top five plays on a specific map',
             dmPermission: true,
             options: [
@@ -466,66 +352,8 @@ function run() {
             dmPermission: true,
             options: helper.vars.commandopts.osutopOpts
         },
-        {//alternate command for nochokes
-            name: 'nc',
-            description: 'Displays the user\'s top scores without misses',
-            dmPermission: true,
-            options: helper.vars.commandopts.osutopOpts
-        },
         {
             name: 'osu',
-            description: 'Displays the user\'s osu! profile',
-            dmPermission: true,
-            options: [
-                {
-                    name: 'user',
-                    description: 'The user to display the profile of',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                },
-                {
-                    name: 'detailed',
-                    description: 'Displays extra information',
-                    type: Discord.ApplicationCommandOptionType.Boolean,
-                    required: false,
-                },
-                {
-                    name: 'mode',
-                    description: 'The mode to display the profile in',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                    choices: helper.vars.commandopts.modeopts
-                }
-            ]
-        },
-        {//alternate command for osu
-            name: 'o',
-            description: 'Displays the user\'s osu! profile',
-            dmPermission: true,
-            options: [
-                {
-                    name: 'user',
-                    description: 'The user to display the profile of',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                },
-                {
-                    name: 'detailed',
-                    description: 'Displays extra information',
-                    type: Discord.ApplicationCommandOptionType.Boolean,
-                    required: false,
-                },
-                {
-                    name: 'mode',
-                    description: 'The mode to display the profile in',
-                    type: Discord.ApplicationCommandOptionType.String,
-                    required: false,
-                    choices: helper.vars.commandopts.modeopts
-                }
-            ]
-        },
-        {//alternate command for osu
-            name: 'profile',
             description: 'Displays the user\'s osu! profile',
             dmPermission: true,
             options: [
@@ -683,12 +511,6 @@ function run() {
             dmPermission: true,
             options: helper.vars.commandopts.rsopts
         },
-        {//alternate command recent
-            name: 'rs',
-            description: 'Displays the user\'s most recent score',
-            dmPermission: true,
-            options: helper.vars.commandopts.rsopts
-        },
         {
             name: 'recentactivity',
             description: 'Displays the user\'s most recent activity',
@@ -710,12 +532,6 @@ function run() {
         },
         {
             name: 'scores',
-            description: 'Displays the user\'s scores for a set map',
-            dmPermission: true,
-            options: helper.vars.commandopts.useridsortopts
-        },
-        {//alternate command for scores
-            name: 'c',
             description: 'Displays the user\'s scores for a set map',
             dmPermission: true,
             options: helper.vars.commandopts.useridsortopts
