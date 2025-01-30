@@ -659,10 +659,10 @@ export const map = async (input: bottypes.commandInput) => {
         let hitlength = useMapdata.hit_length;
         const oldOverrideSpeed = overrideSpeed;
 
-        if (overrideBpm != null && isNaN(overrideBpm) == false && (overrideSpeed == null || isNaN(overrideSpeed)) && overrideBpm != useMapdata.bpm) {
+        if (overrideBpm && !isNaN(overrideBpm) && (!overrideSpeed || isNaN(overrideSpeed) || overrideSpeed == 1) && overrideBpm != useMapdata.bpm) {
             overrideSpeed = overrideBpm / useMapdata.bpm;
         }
-        if (overrideSpeed != null && isNaN(overrideSpeed) == false && (overrideBpm == null || isNaN(overrideBpm)) && overrideSpeed != 1) {
+        if (overrideSpeed && !isNaN(overrideSpeed) && (!overrideBpm || isNaN(overrideBpm)) && overrideSpeed != 1) {
             overrideBpm = useMapdata.bpm * overrideSpeed;
         }
         if (mapmods.includes('DT') || mapmods.includes('NC')) {
@@ -682,7 +682,7 @@ export const map = async (input: bottypes.commandInput) => {
             +customAR,
             +customOD,
             +customHP,
-            useMapdata.bpm,
+            overrideBpm ?? useMapdata.bpm,
             hitlength,
             mapmods
         );
@@ -701,7 +701,6 @@ export const map = async (input: bottypes.commandInput) => {
         let pphddthr: rosu.PerformanceAttributes;
         let ppissue: string;
         let totaldiff: string | number = useMapdata.difficulty_rating;
-
         try {
             ppComputed = await helper.tools.performance.calcMap({
                 mods: mapmods,
