@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+## [4.1.1] - 2025-02-05
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+
 ### Fixed
 
 - `map` -bpm arg not working
