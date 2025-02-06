@@ -27,6 +27,10 @@ export type BeatmapCompact = {
     status: string,
     total_length: number,
     user_id: number,
+    owners: {
+        id: number,
+        username: string,
+    }[],
     version: string,
 } & Error;
 

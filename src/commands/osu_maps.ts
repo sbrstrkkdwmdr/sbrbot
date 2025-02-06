@@ -1091,7 +1091,7 @@ HP${baseHP}`;
 
             Embed
                 .setAuthor({
-                    name: `${mapdata.beatmapset.creator}`,
+                    name: `mapped by ${mapdata.beatmapset.creator}`,
                     url: `https://osu.ppy.sh/users/${bmsdata.user_id}`,
                     iconURL: `${bmsdata.user.avatar_url ?? helper.vars.defaults.images.any.url}`,
                 })
@@ -1142,51 +1142,18 @@ HP${baseHP}`;
                     }
                 ]);
 
-            if (mapdata.user_id != mapdata.beatmapset.user_id) {
-                let gdReq: tooltypes.apiReturn<apitypes.User>;
-                let gdData: apitypes.User;
-                if (helper.tools.data.findFile(mapdata.user_id, `osudata`) &&
-                    !('error' in helper.tools.data.findFile(mapdata.user_id, `osudata`)) &&
-                    input.buttonType != 'Refresh') {
-                    gdReq = helper.tools.data.findFile(mapdata.user_id, `osudata`);
-                } else {
-                    gdReq = await helper.tools.api.getUser(mapdata.user_id, mapdata.mode, []);
-                }
-
-                gdData = gdReq.apiData;
-                if (gdReq?.error) {
-                    await helper.tools.commands.errorAndAbort(input, 'map', true, helper.vars.errors.uErr.osu.profile.user.replace('[ID]', `${mapdata.user_id}`), false);
-                    return;
-                }
-
-                helper.tools.data.debug(gdReq, 'command', 'map', input.message?.guildId ?? input.interaction?.guildId, 'guestData');
-
-                if (gdData?.hasOwnProperty('error')) {
-                    gdData = {
-                        username: 'USER_NOT_FOUND',
-                        id: mapdata.user_id,
-                    } as any;
-                    helper.tools.log.commandErr(`Could not find user ${mapdata.user_id} (guest mapper).\nUsing default json file.`, input.id, 'map', input.message, input.interaction);
-                }
-                helper.tools.data.storeFile(gdReq, mapdata.user_id, `osudata`);
-                Embed.setDescription(`Guest difficulty by [${gdData?.username}](https://osu.ppy.sh/users/${mapdata.user_id})`);
-
-                buttons
-                    .addComponents(
-                        new Discord.ButtonBuilder()
-                            .setCustomId(`${helper.vars.versions.releaseDate}-User-map-any-${input.id}-${gdData.id}+${gdData.playmode}`)
-                            .setStyle(helper.vars.buttons.type.current)
-                            .setEmoji(helper.vars.buttons.label.extras.user),
-                    );
-            } else {
-                buttons
-                    .addComponents(
-                        new Discord.ButtonBuilder()
-                            .setCustomId(`${helper.vars.versions.releaseDate}-User-map-any-${input.id}-${mapdata.user_id}+${mapdata.mode}`)
-                            .setStyle(helper.vars.buttons.type.current)
-                            .setEmoji(helper.vars.buttons.label.extras.user),
-                    );
-            }
+            if (!(mapdata.owners.length == 1 && mapdata.owners[0].id == bmsdata.user_id)) {
+                Embed.setDescription("Guest difficulty by " + mapdata.owners.map(x =>
+                    `[${x.username}](https://osu.ppy.sh/u/${x.id})`
+                ).join(' and '));
+            } 
+            buttons
+                .addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId(`${helper.vars.versions.releaseDate}-User-map-any-${input.id}-${mapdata.user_id}+${mapdata.mode}`)
+                        .setStyle(helper.vars.buttons.type.current)
+                        .setEmoji(helper.vars.buttons.label.extras.user),
+                );
 
             buttons.addComponents(
                 new Discord.ButtonBuilder()

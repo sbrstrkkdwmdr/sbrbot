@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+### Changed
+
+- show multiple guest mappers
+
 ## [4.1.1] - 2025-02-05
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/46f27e7c52a9b0cac5bc17178c102995b91c2ac2)</br>
