@@ -24,7 +24,7 @@ A discord bot for osu! related stuff
 ## Install/setup
 
 install nodejs (v16) [here](https://nodejs.org/en/download/)
-
+ 
 install rust [here](https://www.rust-lang.org/tools/install)
 
 install all dependencies with `npm i` in the main directory
