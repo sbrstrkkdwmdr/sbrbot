@@ -8,7 +8,7 @@
 
 ## [4.1.2] - 2025-02-11
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/bb26b635628a8aadde42b67c7e9f3f4194bcfc96)</br>
 
 ### Changed
 
