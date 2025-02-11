@@ -9,6 +9,7 @@
 ### Changed
 
 - show multiple guest mappers
+- scores with classic mod use classic score values
 
 ## [4.1.1] - 2025-02-05
 
