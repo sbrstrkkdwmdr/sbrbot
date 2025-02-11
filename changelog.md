@@ -6,6 +6,15 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+## [4.1.2] - 2025-02-11
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/bb26b635628a8aadde42b67c7e9f3f4194bcfc96)</br>
+
+### Changed
+
+- show multiple guest mappers
+- scores with classic mod use classic score values
+
 ## [4.1.1] - 2025-02-05
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/46f27e7c52a9b0cac5bc17178c102995b91c2ac2)</br>

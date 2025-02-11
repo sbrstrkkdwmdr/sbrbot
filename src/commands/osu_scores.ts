@@ -1663,6 +1663,11 @@ export const recent = async (input: bottypes.commandInput) => {
             modadjustments += ' (' + curscore.mods.filter(x => x?.settings?.speed_change)[0].settings.speed_change + 'x)';
         }
 
+        let useScore =
+            curscore.mods.map(x => x.acronym).includes('CL') ?
+                curscore?.legacy_total_score ?? curscore.classic_total_score :
+                curscore.total_score;
+
         rsEmbed
             .setAuthor({
                 name: `${trycountstr} | #${helper.tools.calculate.separateNum(osudata?.statistics?.global_rank)} | #${helper.tools.calculate.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${helper.tools.calculate.separateNum(osudata?.statistics?.pp)}pp`,
@@ -1682,7 +1687,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             .addFields([
                 {
                     name: 'SCORE DETAILS',
-                    value: `${helper.tools.calculate.separateNum(curscore.total_score)}\n${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.has_replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.id}/download)\n` : ''}` +
+                    value: `${helper.tools.calculate.separateNum(useScore)}\n${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.has_replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.id}/download)\n` : ''}` +
                         `${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\`\n${curscore.max_combo == mxcombo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mxcombo}x** combo`,
                     inline: true
                 },
