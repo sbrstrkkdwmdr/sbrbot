@@ -97,7 +97,7 @@ export async function scoreList(
         });
         let info = `**#${(showOriginalIndex ? score.originalIndex : i) + 1}`;
         let modadjustments = '';
-        if (score.mods.filter(x => x?.settings?.speed_change).length > 0){
+        if (score.mods.filter(x => x?.settings?.speed_change).length > 0) {
             modadjustments += ' (' + score.mods.filter(x => x?.settings?.speed_change)[0].settings.speed_change + 'x)';
         }
         switch (preset) {
@@ -115,14 +115,9 @@ export async function scoreList(
         if (score.max_combo == fc.difficulty.maxCombo || !score.max_combo) combo = `**${score.max_combo}x**`;
         const tempScore = score as indexedScore<apitypes.Score>;
 
-        let useScore =
-            score.mods.map(x => x.acronym).includes('CL') ?
-                score?.legacy_total_score ?? score.classic_total_score :
-                score.total_score;
-
         info +=
             `** ${dateToDiscordFormat(new Date(tempScore.ended_at))}
-${score.passed ? helper.vars.emojis.grades[score.rank] : helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[score.rank]} if pass)`} | \`${helper.tools.calculate.numberShorthand(useScore)}\` | ${tempScore.mods.length > 0 && preset != 'single_map' ? ' **' + osumodcalc.OrderMods(tempScore.mods.map(x => x.acronym).join('')).string + modadjustments + '**' : ''}
+${score.passed ? helper.vars.emojis.grades[score.rank] : helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[score.rank]} if pass)`} | \`${helper.tools.calculate.numberShorthand(helper.tools.other.getTotalScore(score))}\` | ${tempScore.mods.length > 0 && preset != 'single_map' ? ' **' + osumodcalc.OrderMods(tempScore.mods.map(x => x.acronym).join('')).string + modadjustments + '**' : ''}
 \`${returnHits(score.statistics, score.ruleset_id).short}\` | ${combo} | ${(score.accuracy * 100).toFixed(2)}% 
 ${(score?.pp ?? perf.pp).toFixed(2)}pp`;
 

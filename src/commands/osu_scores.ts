@@ -1663,11 +1663,6 @@ export const recent = async (input: bottypes.commandInput) => {
             modadjustments += ' (' + curscore.mods.filter(x => x?.settings?.speed_change)[0].settings.speed_change + 'x)';
         }
 
-        let useScore =
-            curscore.mods.map(x => x.acronym).includes('CL') ?
-                curscore?.legacy_total_score ?? curscore.classic_total_score :
-                curscore.total_score;
-
         rsEmbed
             .setAuthor({
                 name: `${trycountstr} | #${helper.tools.calculate.separateNum(osudata?.statistics?.global_rank)} | #${helper.tools.calculate.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${helper.tools.calculate.separateNum(osudata?.statistics?.pp)}pp`,
@@ -1687,7 +1682,7 @@ ${filterTitle ? `Filter: ${filterTitle}\n` : ''}${filterRank ? `Filter by rank: 
             .addFields([
                 {
                     name: 'SCORE DETAILS',
-                    value: `${helper.tools.calculate.separateNum(useScore)}\n${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.has_replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.id}/download)\n` : ''}` +
+                    value: `${helper.tools.calculate.separateNum(helper.tools.other.getTotalScore(curscore))}\n${(curscore.accuracy * 100).toFixed(2)}% | ${rsgrade}\n ${curscore.has_replay ? `[REPLAY](https://osu.ppy.sh/scores/${curscore.id}/download)\n` : ''}` +
                         `${rspassinfo.length > 1 ? rspassinfo + '\n' : ''}\`${hitlist}\`\n${curscore.max_combo == mxcombo ? `**${curscore.max_combo}x**` : `${curscore.max_combo}x`}/**${mxcombo}x** combo`,
                     inline: true
                 },
@@ -2454,6 +2449,14 @@ export const scoreparse = async (input: bottypes.commandInput) => {
         fcflag = 'FC';
     }
 
+    let scorerank =
+        scoredata.rank_global ? ` #${scoredata.rank_global} global` : '' +
+            scoredata.rank_country ? ` #${scoredata.rank_country} ${osudata.country_code.toUpperCase()} :flag_${osudata.country_code.toLowerCase()}:` : ''
+        ;
+    if (scorerank != '') {
+        scorerank = '| ' + scorerank;
+    }
+
     let scoreembed = new Discord.EmbedBuilder()
         .setColor(helper.vars.colours.embedColour.score.dec)
         .setTitle(fulltitle)
@@ -2461,8 +2464,9 @@ export const scoreparse = async (input: bottypes.commandInput) => {
         .setThumbnail(`${scoredata.beatmapset.covers['list@2x']}`);
     scoreembed = helper.tools.formatter.userAuthor(osudata, scoreembed, overrideAuthor);
 
+
     scoreembed
-        .setDescription(`${scoredata.rank_global ? `\n#${scoredata.rank_global} global` : ''} ${scoredata.has_replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.ruleset_id}/${scoredata.id}/download)` : ''}
+        .setDescription(`${helper.tools.calculate.separateNum(helper.tools.other.getTotalScore(scoredata))} ${scorerank} ${scoredata.has_replay ? `| [REPLAY](https://osu.ppy.sh/scores/${scoredata.ruleset_id}/${scoredata.id}/download)` : ''}
 ${(scoredata.accuracy * 100).toFixed(2)}% | ${scoregrade} ${scoredata.mods.length > 0 ? '| ' + `**${osumodcalc.OrderMods(scoredata.mods.map(x => x.acronym).join('')).string}**` : ''}
 <t:${Math.floor(new Date(scoredata.ended_at).getTime() / 1000)}:F> | ${helper.tools.formatter.dateToDiscordFormat(new Date(scoredata.ended_at))}
 [Beatmap](https://osu.ppy.sh/b/${scoredata.beatmap.id})
