@@ -12,12 +12,13 @@ import * as tooltypes from '../types/tools.js';
 export function appendUrlParamsString(url: string, params: string[]) {
     let temp = url;
     for (let i = 0; i < params.length; i++) {
-        const cur = encodeURIComponent(params[i]);
+        const cur = encodeURIComponent(params[i]).replace('%3D', '=');
         if (!cur) { break; }
         temp.includes('?') ?
             temp += `&${cur}` :
             `?${cur}`;
     }
+    console.log(temp);
     return temp;
 }
 

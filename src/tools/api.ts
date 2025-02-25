@@ -150,7 +150,7 @@ export async function getScore(id: string | number, extra: string[]) {
     }) as tooltypes.apiReturn<apitypes.Score>;
 }
 export async function getScoresRecent(id: string | number, mode: string, extra: string[]) {
-    const url = baseUrl + `users/${id}/scores/recent?mode=${helper.tools.other.modeValidator(mode)}&limit=100&include_fails=1`;
+    const url = baseUrl + `users/${id}/scores/recent?mode=${helper.tools.other.modeValidator(mode)}&limit=100`;
     return await apiGet({
         url,
         extra
@@ -613,7 +613,7 @@ export async function getGif(find: string) {
                 error: "Invalid or missing tenor key",
                 results: [],
             }
-        }
+        };
     };
     const dataf = await axios.get(`https://g.tenor.com/v2/search?q=${find}&key=${helper.vars.config.tenorKey}&limit=50`).catch(err => {
         return {

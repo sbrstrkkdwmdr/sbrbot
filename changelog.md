@@ -9,6 +9,7 @@
 ### Fixed
 
 - fix lazer scores with classic mod showing 0 total score
+- rs "-nf" arg not working properly (uri encoding issue)
 
 ### Added
 
