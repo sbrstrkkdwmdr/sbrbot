@@ -12,12 +12,13 @@ import * as tooltypes from '../types/tools.js';
 export function appendUrlParamsString(url: string, params: string[]) {
     let temp = url;
     for (let i = 0; i < params.length; i++) {
-        const cur = encodeURIComponent(params[i]);
+        const cur = encodeURIComponent(params[i]).replace('%3D', '=');
         if (!cur) { break; }
         temp.includes('?') ?
             temp += `&${cur}` :
             `?${cur}`;
     }
+    console.log(temp);
     return temp;
 }
 
@@ -756,7 +757,7 @@ export function validCountryCodeA2(code: string) {
  */
 export function lazerToOldStatistics(stats: apitypes.ScoreStatistics, mode: apitypes.Ruleset, defaultToNan?: boolean): apitypes.Statistics {
     let foo: apitypes.Statistics;
-    let dv = defaultToNan ? NaN : 0
+    let dv = defaultToNan ? NaN : 0;
     switch (mode) {
         case 0:
             foo = {
@@ -800,4 +801,34 @@ export function lazerToOldStatistics(stats: apitypes.ScoreStatistics, mode: apit
             break;
     }
     return foo;
+}
+
+export function getTotalScore(score: apitypes.Score): number {
+    return score.mods.map(x => x.acronym).includes('CL') ?
+        scoreIsStable(score) ?
+            score?.legacy_total_score :
+            score.classic_total_score :
+        score.total_score;
+
+}
+
+/**
+ * true for stable, false for lazer
+ */
+export function scoreIsStable(score: apitypes.Score): boolean {
+    /**
+ * check score is on stable or lazer
+ * stable ->
+ * mods always include classic (CL)
+ * score build id is null
+ * lazer ->
+ * legacy total score is 0 or null
+ * legacy score id is null (NOT 0)
+ */
+
+    if (score.legacy_total_score == 0) return false;
+    if (score.legacy_score_id == null) return false;
+    if (!score.mods.map(x => x.acronym).includes('CL')) return false;
+    if (score.build_id) return false;
+    return true;
 }

@@ -6,6 +6,20 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+## [4.1.3] - 2025-02-26
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/48f9f59b5bde081561762dca4b2d17922852ed63)</br>
+
+### Fixed
+
+- fix lazer scores with classic mod showing 0 total score
+- rs "-nf" arg not working properly (uri encoding issue)
+
+### Added
+
+- scoreparse shows total score
+- scoreparse shows country rank (if available)
+
 ## [4.1.2] - 2025-02-11
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/bb26b635628a8aadde42b67c7e9f3f4194bcfc96)</br>
