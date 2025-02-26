@@ -1284,6 +1284,10 @@ export const recent = async (input: bottypes.commandInput) => {
             {
                 name: 'BPM',
                 value: bpm
+            },
+            {
+                name: 'Show fails',
+                value: showFails
             }
         ],
         input.id,

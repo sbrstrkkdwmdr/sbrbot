@@ -18,7 +18,6 @@ export function appendUrlParamsString(url: string, params: string[]) {
             temp += `&${cur}` :
             `?${cur}`;
     }
-    console.log(temp);
     return temp;
 }
 
