@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+## [4.1.3] - 2025-02-26
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+
 ### Fixed
 
 - fix lazer scores with classic mod showing 0 total score
