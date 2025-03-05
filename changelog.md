@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+### Fixed
+
+- fix more than two guest mappers
+
 ## [4.1.3] - 2025-02-26
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/48f9f59b5bde081561762dca4b2d17922852ed63)</br>

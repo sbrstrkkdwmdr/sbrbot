@@ -1143,10 +1143,8 @@ HP${baseHP}`;
                 ]);
 
             if (!(mapdata.owners.length == 1 && mapdata.owners[0].id == bmsdata.user_id)) {
-                Embed.setDescription("Guest difficulty by " + mapdata.owners.map(x =>
-                    `[${x.username}](https://osu.ppy.sh/u/${x.id})`
-                ).join(' and '));
-            } 
+                Embed.setDescription("Guest difficulty by " + helper.tools.other.listItems(mapdata.owners.map(x => `[${x.username}](https://osu.ppy.sh/u/${x.id})`)));
+            }
             buttons
                 .addComponents(
                     new Discord.ButtonBuilder()
