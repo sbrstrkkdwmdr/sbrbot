@@ -9,6 +9,7 @@
 ### Fixed
 
 - fix more than two guest mappers
+- mapdata owners can be null
 
 ## [4.1.3] - 2025-02-26
 

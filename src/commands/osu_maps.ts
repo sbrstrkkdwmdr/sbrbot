@@ -1091,7 +1091,7 @@ HP${baseHP}`;
 
             Embed
                 .setAuthor({
-                    name: `mapped by ${mapdata.beatmapset.creator}`,
+                    name: `Mapped by ${mapdata.beatmapset.creator}`,
                     url: `https://osu.ppy.sh/users/${bmsdata.user_id}`,
                     iconURL: `${bmsdata.user.avatar_url ?? helper.vars.defaults.images.any.url}`,
                 })
@@ -1142,7 +1142,7 @@ HP${baseHP}`;
                     }
                 ]);
 
-            if (!(mapdata.owners.length == 1 && mapdata.owners[0].id == bmsdata.user_id)) {
+            if (!(mapdata?.owners?.length == 1 && mapdata?.owners?.[0].id == bmsdata.user_id)) {
                 Embed.setDescription("Guest difficulty by " + helper.tools.other.listItems(mapdata.owners.map(x => `[${x.username}](https://osu.ppy.sh/u/${x.id})`)));
             }
             buttons
