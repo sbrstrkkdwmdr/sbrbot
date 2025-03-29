@@ -9,7 +9,7 @@
 
 ## [4.1.4] - 2025-03-29
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/b1dfdebedf21d46011275dfe4054d96d3cf0d690)</br>
 
 ### Fixed
 
