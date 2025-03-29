@@ -2,9 +2,19 @@
 
 # changelog
 
+
 ## [WIP] - xxxx-xx-xx
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+
+## [4.1.4] - 2025-03-29
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/b1dfdebedf21d46011275dfe4054d96d3cf0d690)</br>
+
+### Fixed
+
+- fix more than two guest mappers
+- mapdata owners can be null
 
 ## [4.1.3] - 2025-02-26
 

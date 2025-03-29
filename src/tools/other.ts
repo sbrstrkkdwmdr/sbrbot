@@ -831,3 +831,17 @@ export function scoreIsStable(score: apitypes.Score): boolean {
     if (score.build_id) return false;
     return true;
 }
+
+export function listItems(list: string[]) {
+    let string = ''
+    if(list.length > 1){
+
+        for (let i = 0; i < list.length - 2; i++) {
+            string += list[i] + ', ';
+        }
+        string += list[list.length - 2] + ' and ' + list[list.length - 1];
+    } else {
+        return list[0];
+    }
+    return string;
+}
