@@ -1142,7 +1142,7 @@ HP${baseHP}`;
                     }
                 ]);
 
-            if (!(mapdata?.owners?.length == 1 && mapdata?.owners?.[0].id == bmsdata.user_id)) {
+            if (mapdata?.owners && !(mapdata?.owners?.length == 1 && mapdata?.owners?.[0].id == bmsdata.user_id)) {
                 Embed.setDescription("Guest difficulty by " + helper.tools.other.listItems(mapdata.owners.map(x => `[${x.username}](https://osu.ppy.sh/u/${x.id})`)));
             }
             buttons
