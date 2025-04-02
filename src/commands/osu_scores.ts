@@ -327,6 +327,7 @@ export const maplb = async (input: bottypes.commandInput) => {
                     flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
+                helper.tools.commands.disableAllButtons(input.message);
                 return;
             }
             mapid = temp.mapId;
@@ -1169,6 +1170,7 @@ export const recent = async (input: bottypes.commandInput) => {
                     flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
+                helper.tools.commands.disableAllButtons(input.message);
                 return;
             }
             searchid = temp.searchid;
@@ -2652,6 +2654,7 @@ export const scores = async (input: bottypes.commandInput) => {
                     flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
+                helper.tools.commands.disableAllButtons(input.message);
                 return;
             }
             user = temp.user;

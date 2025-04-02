@@ -141,6 +141,7 @@ export const map = async (input: bottypes.commandInput) => {
                     flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
+                helper.tools.commands.disableAllButtons(input.message);
                 return;
             }
             mapid = temp.mapId;
@@ -1923,6 +1924,7 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
                     flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
+                helper.tools.commands.disableAllButtons(input.message);
                 return;
             }
             searchid = temp.searchid;

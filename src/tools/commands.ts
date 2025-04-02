@@ -916,7 +916,7 @@ export async function parseArgs_scoreList_message(input: bottypes.commandInput) 
 }
 
 export async function parseArgs_scoreList_interaction(input: bottypes.commandInput) {
-        let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+    let interaction = input.interaction as Discord.ChatInputCommandInteraction;
 
     const searchid = interaction?.member?.user ?? interaction?.user.id;
 
@@ -1255,4 +1255,53 @@ export async function missingPrevID_map(input: bottypes.commandInput, name: stri
         input.interaction
     );
     return;
+}
+
+export function disableAllButtons(msg: Discord.Message) {
+    let components: Discord.ActionRowBuilder<any>[] = [];
+    for (const actionrow of msg.components) {
+        let newActionRow = new Discord.ActionRowBuilder();
+        for (let button of actionrow.components) {
+            let newbutton: Discord.ButtonBuilder
+                | Discord.StringSelectMenuBuilder
+                | Discord.UserSelectMenuBuilder
+                | Discord.RoleSelectMenuBuilder
+                | Discord.MentionableSelectMenuBuilder
+                | Discord.ChannelSelectMenuBuilder;
+            switch (button.type) {
+                case Discord.ComponentType.Button: {
+                    newbutton = Discord.ButtonBuilder.from(button);
+                }
+                    break;
+                case Discord.ComponentType.StringSelect: {
+                    newbutton = Discord.StringSelectMenuBuilder.from(button);
+                }
+                    break;
+                case Discord.ComponentType.UserSelect: {
+                    newbutton = Discord.UserSelectMenuBuilder.from(button);
+                }
+                    break;
+                case Discord.ComponentType.RoleSelect: {
+                    newbutton = Discord.RoleSelectMenuBuilder.from(button);
+                }
+                    break;
+                case Discord.ComponentType.MentionableSelect: {
+                    newbutton = Discord.MentionableSelectMenuBuilder.from(button);
+                }
+                    break;
+                case Discord.ComponentType.ChannelSelect: {
+                    newbutton = Discord.ChannelSelectMenuBuilder.from(button);
+                }
+                    break;
+            }
+            newbutton.setDisabled();
+            newActionRow.addComponents(newbutton);
+        }
+
+        components.push(newActionRow);
+    }
+    msg.edit({
+        components,
+        allowedMentions: { repliedUser: false }
+    })
 }
