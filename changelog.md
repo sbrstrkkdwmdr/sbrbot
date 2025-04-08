@@ -10,6 +10,7 @@
 ### Changed
 
 - command buttons automatically disable after they expire
+- ppcalc modded values no longer use pre-determined clock rate (if the previous map used HDDT, then the DT in the modded section would use 1.5 x 1.5)
 
 ## [4.1.4] - 2025-03-29
 
