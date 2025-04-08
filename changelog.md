@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+## [4.1.5] - 2025-04-08
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/80443db36fefce732b076d3f8fe6448690d28d5a)</br>
+
 ### Changed
 
 -   command buttons automatically disable after they expire
