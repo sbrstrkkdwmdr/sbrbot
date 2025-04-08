@@ -141,6 +141,7 @@ export const map = async (input: bottypes.commandInput) => {
                     flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
+                helper.tools.commands.disableAllButtons(input.message);
                 return;
             }
             mapid = temp.mapId;
@@ -717,7 +718,6 @@ export const map = async (input: bottypes.commandInput) => {
                 mapid: useMapdata.id,
                 mods: 'HD',
                 mode: useMapdata.mode_int,
-                clockRate: overrideSpeed,
                 accuracy: 100,
                 customCS,
                 customAR,
@@ -729,7 +729,6 @@ export const map = async (input: bottypes.commandInput) => {
                 mapid: useMapdata.id,
                 mods: 'HR',
                 mode: useMapdata.mode_int,
-                clockRate: overrideSpeed,
                 accuracy: 100,
                 customCS,
                 customAR,
@@ -741,7 +740,6 @@ export const map = async (input: bottypes.commandInput) => {
                 mapid: useMapdata.id,
                 mods: 'DT',
                 mode: useMapdata.mode_int,
-                clockRate: overrideSpeed * 1.5,
                 accuracy: 100,
                 customCS,
                 customAR,
@@ -753,7 +751,6 @@ export const map = async (input: bottypes.commandInput) => {
                 mapid: useMapdata.id,
                 mods: 'HDHR',
                 mode: useMapdata.mode_int,
-                clockRate: overrideSpeed,
                 accuracy: 100,
                 customCS,
                 customAR,
@@ -765,7 +762,6 @@ export const map = async (input: bottypes.commandInput) => {
                 mapid: useMapdata.id,
                 mods: 'HDDT',
                 mode: useMapdata.mode_int,
-                clockRate: overrideSpeed * 1.5,
                 accuracy: 100,
                 customCS,
                 customAR,
@@ -777,7 +773,6 @@ export const map = async (input: bottypes.commandInput) => {
                 mapid: useMapdata.id,
                 mods: 'HDDTHR',
                 mode: useMapdata.mode_int,
-                clockRate: overrideSpeed * 1.5,
                 accuracy: 100,
                 customCS,
                 customAR,
@@ -1142,7 +1137,7 @@ HP${baseHP}`;
                     }
                 ]);
 
-            if (!(mapdata?.owners?.length == 1 && mapdata?.owners?.[0].id == bmsdata.user_id)) {
+            if (mapdata?.owners && !(mapdata?.owners?.length == 1 && mapdata?.owners?.[0].id == bmsdata.user_id)) {
                 Embed.setDescription("Guest difficulty by " + helper.tools.other.listItems(mapdata.owners.map(x => `[${x.username}](https://osu.ppy.sh/u/${x.id})`)));
             }
             buttons
@@ -1923,6 +1918,7 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
                     flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
+                helper.tools.commands.disableAllButtons(input.message);
                 return;
             }
             searchid = temp.searchid;

@@ -75,6 +75,7 @@ export const compare = async (input: bottypes.commandInput) => {
                     flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
+                helper.tools.commands.disableAllButtons(input.message);
                 return;
             }
             type = temp.type as compareType;

@@ -2,10 +2,24 @@
 
 # changelog
 
-
 ## [WIP] - xxxx-xx-xx
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+
+## [4.1.5] - 2025-04-08
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/80443db36fefce732b076d3f8fe6448690d28d5a)</br>
+
+### Changed
+
+-   command buttons automatically disable after they expire
+-   ppcalc modded values no longer use pre-determined clock rate (if the previous map used HDDT, then the DT in the modded section would use 1.5 x 1.5)
+-   update rosu-pp to v3.0.0
+-   split clear maps into map metadata and map .osu clearing
+
+### Added
+
+-   clear now has a "help" option
 
 ## [4.1.4] - 2025-03-29
 
@@ -13,8 +27,8 @@
 
 ### Fixed
 
-- fix more than two guest mappers
-- mapdata owners can be null
+-   fix more than two guest mappers
+-   mapdata owners can be null
 
 ## [4.1.3] - 2025-02-26
 
@@ -22,13 +36,13 @@
 
 ### Fixed
 
-- fix lazer scores with classic mod showing 0 total score
-- rs "-nf" arg not working properly (uri encoding issue)
+-   fix lazer scores with classic mod showing 0 total score
+-   rs "-nf" arg not working properly (uri encoding issue)
 
 ### Added
 
-- scoreparse shows total score
-- scoreparse shows country rank (if available)
+-   scoreparse shows total score
+-   scoreparse shows country rank (if available)
 
 ## [4.1.2] - 2025-02-11
 
@@ -36,8 +50,8 @@
 
 ### Changed
 
-- show multiple guest mappers
-- scores with classic mod use classic score values
+-   show multiple guest mappers
+-   scores with classic mod use classic score values
 
 ## [4.1.1] - 2025-02-05
 
@@ -45,7 +59,7 @@
 
 ### Fixed
 
-- `map` -bpm arg not working
+-   `map` -bpm arg not working
 
 ## [4.1.0] - 2025-01-17
 

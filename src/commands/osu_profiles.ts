@@ -643,6 +643,7 @@ export const ranking = async (input: bottypes.commandInput) => {
                     flags: Discord.MessageFlags.Ephemeral,
                     allowedMentions: { repliedUser: false }
                 });
+                helper.tools.commands.disableAllButtons(input.message);
                 return;
             }
             page = helper.tools.commands.buttonPage(temp.page, temp.maxPage, input.buttonType);
