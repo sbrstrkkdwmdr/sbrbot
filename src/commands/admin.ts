@@ -162,24 +162,13 @@ function clearCache(type: string, embed: Discord.EmbedBuilder) {
             embed = clearCache('all', embed);
             embed = clearCache('previous', embed);
             embed = clearCache('errors', embed);
-            embed = clearCache('map', embed);
+            embed = clearCache('mapall', embed);
             embed = clearCache('params', embed);
             embed = clearCache('graphs', embed);
             embed.setDescription(`Clearing all files in ./cache/ and ./files/maps`);
         }
             break;
-        case 'pp': {
-            helper.tools.log.stdout(`manually clearing all map files in ${helper.vars.path.files}/maps/`,);
-            const curpath = `${helper.vars.path.files}/maps`;
-            const files = fs.readdirSync(curpath);
-            for (const file of files) {
-                fs.unlinkSync(`${curpath}/` + file);
-                helper.tools.log.stdout(`Deleted file: ${curpath}/` + file,);
-            }
-            embed.setDescription(`Clearing all files in ./files/maps`);
-        }
-            break;
-        case 'map': case 'maps': { // clears all maps and mapset files
+        case 'mapall': case 'mapsall': { // clears all maps and mapset files
             helper.tools.log.stdout(`manually clearing all map and mapset files in ${helper.vars.path.cache}/commandData/ and ${helper.vars.path.files}/maps/`);
             const curpath1 = `${helper.vars.path.cache}/commandData`;
             const files1 = fs.readdirSync(curpath1);
@@ -198,6 +187,29 @@ function clearCache(type: string, embed: Discord.EmbedBuilder) {
             embed.setDescription(`Clearing all map-related files in ./cache/commandData/ and ./files/maps/`);
         }
             break;
+        case 'mapmeta': {
+            helper.tools.log.stdout(`manually clearing all map and mapset files in ${helper.vars.path.cache}/commandData/`);
+            const curpath = `${helper.vars.path.cache}/commandData`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                if (file.includes('bmsdata') || file.includes('mapdata')) {
+                    fs.unlinkSync(`${curpath}/` + file);
+                    helper.tools.log.stdout(`Deleted file: ${curpath}/` + file);
+                }
+            }
+            embed.setDescription(`Clearing all map-related files in ./cache/commandData/`);
+        }
+            break;
+        case 'mapobjects': case 'pp': {
+            helper.tools.log.stdout(`manually clearing all map files in ${helper.vars.path.files}/maps/`);
+            const curpath = `${helper.vars.path.files}/maps`;
+            const files = fs.readdirSync(curpath);
+            for (const file of files) {
+                fs.unlinkSync(`${curpath}/` + file);
+                helper.tools.log.stdout(`Deleted file: ${curpath}/` + file);
+            }
+            embed.setDescription(`Clearing all files in ./files/maps/`);
+        }
         case 'users': { //clears all osudata files
             helper.tools.log.stdout(`manually clearing all osudata files in ${helper.vars.path.cache}/commandData/`);
             const curpath = `${helper.vars.path.cache}/commandData`;
@@ -291,6 +303,29 @@ function clearCache(type: string, embed: Discord.EmbedBuilder) {
             }
             embed.setDescription(`Clearing param files in ./cache/params/`);
         }
+        case 'help': {
+            embed.setDescription(
+                [
+                    ['help', 'show this list'],
+                    ['normal', 'clears all temporary files (maps with leaderboard are kept)'],
+                    ['all', 'clears all files in command cache'],
+                    ['trueall', 'clears all files in all cache folders and `.osu` files'],
+                    ['mapall/mapsall', 'clears all map files and `.osu` files'],
+                    ['mapmeta', 'clears all map files in command cache'],
+                    ['mapobjects/pp', 'clears all `.osu` files'],
+                    ['users', 'clear all osu profile data'],
+                    ['previous', 'clear all previous* files'],
+                    ['pmaps', 'clear all previous* map files'],
+                    ['pscores', 'clear all previous* score files'],
+                    ['pusers', 'clear all previous* user files'],
+                    ['errors', 'clear cached errors'],
+                    ['graph', 'clear cached graphs'],
+                    ['params', 'clear command params (such as sorting order, filters etc.)'],
+                ].map(x => `**${x[0]}**: ${x[1]}`).join('\n') + '\n'
+                + '* previous files store the data of the last object used in that given server/guild'
+            );
+        }
+            break;
     }
     return embed;
 }
