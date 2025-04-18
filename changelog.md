@@ -8,6 +8,10 @@
 
 ## [4.1.5] - 2025-04-08
 
+### Added
+
+- user can be specified with `-u`
+
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/80443db36fefce732b076d3f8fe6448690d28d5a)</br>
 
 ### Changed

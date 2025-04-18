@@ -1878,7 +1878,8 @@ export const userBeatmaps = async (input: bottypes.commandInput) => {
 
             input.args = helper.tools.commands.cleanArgs(input.args);
 
-            const usertemp = helper.tools.commands.fetchUser(input.args.join(' '));
+            const usertemp = helper.tools.commands.fetchUser(input.args);
+            input.args = usertemp.args;
             user = usertemp.id;
             if (!user || user.includes(searchid)) {
                 user = null;

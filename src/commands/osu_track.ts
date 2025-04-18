@@ -24,7 +24,12 @@ export const add = async (input: bottypes.commandInput) => {
                 input.args = temp.args;
                 mode = temp.mode;
             }
-            user = input.args[0];
+            const userArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.user, input.args, true, 'string', true, false);
+            if (userArgFinder.found) {
+                user = userArgFinder.output;
+                input.args = userArgFinder.args;
+            }
+            user = user ?? input.args[0];
         }
             break;
 
@@ -162,7 +167,12 @@ export const remove = async (input: bottypes.commandInput) => {
                 input.args = temp.args;
                 mode = temp.mode;
             }
-            user = input.args[0];
+            const userArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.user, input.args, true, 'string', true, false);
+            if (userArgFinder.found) {
+                user = userArgFinder.output;
+                input.args = userArgFinder.args;
+            }
+            user = user ?? input.args[0];
         }
             break;
 

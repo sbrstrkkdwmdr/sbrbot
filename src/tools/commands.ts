@@ -305,7 +305,8 @@ export async function mapIdFromLink(url: string, callIfMapIdNull: boolean,) {
  * {username}
  * 
  */
-export function fetchUser(url: string) {
+export function fetchUser(args: string[]) {
+    let url = args.join(' ');
     if (url.includes(' ')) {
         const temp = url.split(' ');
         //get arg that has osu.ppy.sh
@@ -320,9 +321,11 @@ export function fetchUser(url: string) {
     const object: {
         id: string,
         mode: apitypes.GameMode,
+        args: string[]
     } = {
         id: null,
         mode: null,
+        args
     };
     /**
      * patterns:
@@ -331,8 +334,15 @@ export function fetchUser(url: string) {
      * osu.ppy.sh/users/{id}/{mode}
      * "{username}"
      * {username}
+     * -u
      */
+    const userArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.user, args, true, 'string', true, false);
     switch (true) {
+        case userArgFinder.found:
+            if (userArgFinder.found) {
+                object.id = userArgFinder.output;
+                object.args = userArgFinder.args;
+            }
         case url.includes('osu.ppy.sh'):
             switch (true) {
                 case url.includes('/u/'):
@@ -896,7 +906,7 @@ export async function parseArgs_scoreList_message(input: bottypes.commandInput) 
         modsInclude.includes(' ') ? modsInclude = modsInclude.split(' ')[0] : null;
         input.args = input.args.join(' ').replace('+', '').replace(modsInclude, '').split(' ');
     }
-    const usertemp = fetchUser(input.args.join(' '));
+    const usertemp = fetchUser(input.args);
     user = usertemp.id;
     if (usertemp.mode && !mode) {
         mode = usertemp.mode;
@@ -1303,5 +1313,5 @@ export function disableAllButtons(msg: Discord.Message) {
     msg.edit({
         components,
         allowedMentions: { repliedUser: false }
-    })
+    });
 }

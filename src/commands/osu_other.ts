@@ -1030,7 +1030,8 @@ export const whatif = async (input: bottypes.commandInput) => {
                 input.args.splice(input.args.indexOf(pp + ''), 1);
             }
 
-            const usertemp = helper.tools.commands.fetchUser(input.args.join(' '));
+            const usertemp = helper.tools.commands.fetchUser(input.args);
+            input.args = usertemp.args;
             user = usertemp.id;
             if (usertemp.mode && !mode) {
                 mode = usertemp.mode;

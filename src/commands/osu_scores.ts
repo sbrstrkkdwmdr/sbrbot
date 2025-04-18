@@ -2611,7 +2611,8 @@ export const scores = async (input: bottypes.commandInput) => {
                 input.args.splice(input.args.indexOf(input.args.find(arg => arg.includes('https://osu.ppy.sh/'))), 1);
             }
 
-            const usertemp = helper.tools.commands.fetchUser(input.args.join(' '));
+            const usertemp = helper.tools.commands.fetchUser(input.args);
+            input.args = usertemp.args;
             user = usertemp.id;
             if (usertemp.mode && !mode) {
                 mode = usertemp.mode;
@@ -3043,7 +3044,8 @@ export const scorestats = async (input: bottypes.commandInput) => {
 
             input.args = helper.tools.commands.cleanArgs(input.args);
 
-            const usertemp = helper.tools.commands.fetchUser(input.args.join(' '));
+            const usertemp = helper.tools.commands.fetchUser(input.args);
+            input.args = usertemp.args;
             user = usertemp.id;
             if (usertemp.mode && !mode) {
                 mode = usertemp.mode;

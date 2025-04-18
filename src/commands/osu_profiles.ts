@@ -23,7 +23,8 @@ export const badges = async (input: bottypes.commandInput) => {
 
                 input.args = helper.tools.commands.cleanArgs(input.args);
 
-                const usertemp = helper.tools.commands.fetchUser(input.args.join(' '));
+                const usertemp = helper.tools.commands.fetchUser(input.args);
+                input.args = usertemp.args;
                 user = usertemp.id;
                 if (!user || user.includes(searchid)) {
                     user = null;
@@ -189,7 +190,8 @@ export const bws = async (input: bottypes.commandInput) => {
 
             input.args = helper.tools.commands.cleanArgs(input.args);
 
-            const usertemp = helper.tools.commands.fetchUser(input.args.join(' '));
+            const usertemp = helper.tools.commands.fetchUser(input.args);
+            input.args = usertemp.args;
             user = usertemp.id;
             if (!user || user.includes(searchid)) {
                 user = null;
@@ -910,7 +912,8 @@ export const osu = async (input: bottypes.commandInput) => {
 
             input.args = helper.tools.commands.cleanArgs(input.args);
 
-            const usertemp = helper.tools.commands.fetchUser(input.args.join(' '));
+            const usertemp = helper.tools.commands.fetchUser(input.args);
+            input.args = usertemp.args;
             user = usertemp.id;
             if (usertemp.mode && !mode) {
                 mode = usertemp.mode;
@@ -984,7 +987,7 @@ export const osu = async (input: bottypes.commandInput) => {
 
             commanduser = input.message.author;
 
-            const usertemp = helper.tools.commands.fetchUser(input.message.content);
+            const usertemp = helper.tools.commands.fetchUser([input.message.content]);
             user = usertemp.id;
             if (usertemp.mode && !mode) {
                 mode = usertemp.mode;
@@ -1423,7 +1426,8 @@ export const recent_activity = async (input: bottypes.commandInput) => {
 
             input.args = helper.tools.commands.cleanArgs(input.args);
 
-            const usertemp = helper.tools.commands.fetchUser(input.args.join(' '));
+            const usertemp = helper.tools.commands.fetchUser(input.args);
+            input.args = usertemp.args;
             user = usertemp.id;
             if (!user || user.includes(searchid)) {
                 user = null;
