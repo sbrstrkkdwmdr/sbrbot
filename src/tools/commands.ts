@@ -321,7 +321,7 @@ export function fetchUser(args: string[]) {
     const object: {
         id: string,
         mode: apitypes.GameMode,
-        args: string[]
+        args: string[];
     } = {
         id: null,
         mode: null,
@@ -1314,4 +1314,13 @@ export function disableAllButtons(msg: Discord.Message) {
         components,
         allowedMentions: { repliedUser: false }
     });
+}
+
+export function getCommand(query: string) {
+    helper.vars.commandData;
+}
+
+export function getCommands(query?: string) {
+    helper.vars.commandData;
+    
 }

@@ -4,6 +4,7 @@ import * as apitypes from '../types/osuapi.js';
 export type commandInfo = {
     name: string,
     description: string,
+    category: 'general' | 'osu_scores' | 'osu_map' | 'osu_profile' | 'osu_track' | 'osu_other' | 'misc' | 'admin';
     usage: string, //name <required arg> [optional arg]
     linkUsage?: string[], // eg. website.com/<page_id>
     aliases: string[],
@@ -15,7 +16,7 @@ export type commandInfoOption = {
     name: string,
     description: string,
     type: string, // string, bool, int, etc.
-    format?: string,
+    format: string[],
     options?: string[],
     required: string | boolean,
     defaultValue: string,

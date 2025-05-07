@@ -15,6 +15,13 @@ The \`sort\` arg can be specified using -value (ie -recent)
 You can also show a single score by using \`-parse <id>\` (eg. -parse 5)
 `;
 
+const range = (key: string): string[] => {
+    const temp = ['>foo', '<foo', 'foo..bar', '!foo'];
+    const temp2: string[] = [];
+    temp.forEach(t => temp2.push('-' + key + ' ' + t));
+    return temp2;
+};
+
 /**
  * <> is required
  * [] is optional
@@ -25,7 +32,7 @@ const user: bottypes.commandInfoOption = {
     type: 'string/integer/user mention',
     required: false,
     description: 'The user to show',
-
+    format: ['foo', '@foo', '-u foo', '-user foo', '-uid foo', 'osu.ppy.sh/u/foo', 'osu.ppy.sh/users/foo'],
     defaultValue: 'The user who ran the command',
 };
 const mode: bottypes.commandInfoOption = {
@@ -34,14 +41,23 @@ const mode: bottypes.commandInfoOption = {
     required: false,
     description: 'The mode to use',
     options: ['osu', 'taiko', 'fruits', 'mania'],
+    format: ['-foo'],
     defaultValue: 'osu',
+};
+const page: bottypes.commandInfoOption = {
+    name: 'page',
+    type: 'integer',
+    required: false,
+    description: 'The page to show',
+    format: ['-p foo', '-page foo'],
+    defaultValue: '1',
 };
 const userTrack: bottypes.commandInfoOption = {
     name: 'user',
     type: 'string',
     required: true,
     description: 'The user to use',
-
+    format: user.format,
     defaultValue: 'N/A',
 };
 const userAdmin: bottypes.commandInfoOption = {
@@ -49,10 +65,18 @@ const userAdmin: bottypes.commandInfoOption = {
     type: 'integer/user mention',
     required: false,
     description: 'The user to use',
-
+    format: user.format,
     defaultValue: 'The user who ran the command',
 };
 
+const scoreListArgs = '[user] [page] [mode] [mapper] [mods] [modx] [exmod] [reverse] [sort] [parse] [query] [detailed] [-grade] [pp] [score] [acc] [combo] [miss] [bpm]';
+const mapformat = ['foo',
+    'osu.ppy.sh/b/foo',
+    'osu.ppy.sh/s/SETID',
+    'osu.ppy.sh/beatmaps/foo',
+    'osu.ppy.sh/beatmapsets/SETID',
+    'osu.ppy.sh/beatmapsets/SETID#MODE/foo'
+];
 const scoreListCommandOptions: bottypes.commandInfoOption[] = [
     user, mode,
     {
@@ -61,6 +85,7 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         required: false,
         description: 'The sort order of the scores',
         options: ['pp', 'score', 'recent', 'acc', 'combo', 'miss', 'rank'],
+        format: ['-foo'],
         defaultValue: 'pp',
     },
     {
@@ -68,23 +93,17 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         type: 'boolean',
         required: false,
         description: 'Whether to reverse the sort order',
-        options: ['true', 'false'],
+        options: ['true', 'false (omit)'],
+        format: ['-rev', '-reverse'],
         defaultValue: 'false',
     },
-    {
-        name: 'page',
-        type: 'integer',
-        required: false,
-        description: 'The page of scores to show',
-
-        defaultValue: '1',
-    },
+    page,
     {
         name: 'mapper',
         type: 'string',
         required: false,
         description: 'The mapper to filter the scores by',
-
+        format: ['-mapper foo'],
         defaultValue: 'null',
     },
     {
@@ -92,7 +111,7 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         type: 'string',
         required: false,
         description: `Filter scores including these mods. ${mods}`,
-        options: ['+(mods)', '-mods (mods)'],
+        format: ['-mods foo', '+foo'],
         defaultValue: 'null',
     },
     {
@@ -100,15 +119,15 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         type: 'string',
         required: false,
         description: `Filter scores with these exact mods. ${mods}`,
-
         defaultValue: 'null',
+        format: ['-mx foo'],
     },
     {
         name: 'exclude mods',
         type: 'string',
         required: false,
         description: `Filter scores to exclude these mods. ${mods}`,
-
+        format: ['-me foo'],
         defaultValue: 'null',
     },
     {
@@ -116,7 +135,7 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         type: 'integer',
         required: false,
         description: 'How much information to show about the scores. 0 = less details, 2 = more details',
-        options: ['-c', '-d',],
+        format: ['-d', '-detailed'],
         defaultValue: '1',
     },
     {
@@ -124,15 +143,15 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         type: 'integer',
         required: false,
         description: 'Parse the score with the specific index',
-
+        format: ['-parse foo'],
         defaultValue: '0',
     },
     {
-        name: 'filter',
+        name: 'query',
         type: 'string',
         required: false,
         description: 'Filters all scores to only show maps with the specified string',
-
+        format: ['-? "foo"'],
         defaultValue: 'null',
     },
     {
@@ -141,6 +160,7 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         required: false,
         description: 'Filters all scores to only show scores matching the given grade/rank',
         options: ['XH', 'SSH', 'X', 'SS', 'SH', 'S', 'A', 'B', 'C', 'D', 'F'],
+        format: ['-foo'],
         defaultValue: 'null',
     },
     {
@@ -148,7 +168,7 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         type: 'float/range',
         required: false,
         description: 'Filters scores to have more/less/equal/not equal pp than/to this value',
-        options: ['>(number)', '<(number)', '(min)..(max)', '(number)', '!(number)'],
+        format: range('pp'),
         defaultValue: 'null',
     },
     {
@@ -156,7 +176,7 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         type: 'int/range',
         required: false,
         description: 'Filters scores to have more/less/equal/not equal total score than/to this value',
-        options: ['>(number)', '<(number)', '(min)..(max)', '(number)', '!(number)'],
+        format: range('score'),
         defaultValue: 'null',
     },
     {
@@ -164,7 +184,7 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         type: 'float/range',
         required: false,
         description: 'Filters scores to have more/less/equal/not equal accuracy than/to this value',
-        options: ['>(number)', '<(number)', '(min)..(max)', '(number)', '!(number)'],
+        format: range('acc'),
         defaultValue: 'null',
     },
     {
@@ -172,7 +192,7 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         type: 'integer/range',
         required: false,
         description: 'Filters scores to have more/less/equal/not equal max combo than/to this value',
-        options: ['>(number)', '<(number)', '(min)..(max)', '(number)', '!(number)'],
+        format: range('combo'),
         defaultValue: 'null',
     },
     {
@@ -180,7 +200,7 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         type: 'integer/range',
         required: false,
         description: 'Filters scores to have more/less/equal/not equal misses than/to this value',
-        options: ['>(number)', '<(number)', '(min)..(max)', '(number)', '!(number)'],
+        format: range('miss'),
         defaultValue: 'null',
     },
     {
@@ -188,7 +208,7 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
         type: 'float/range',
         required: false,
         description: 'Filters scores to have more/less/equal/not equal bpm than/to this value',
-        options: ['>(number)', '<(number)', '(min)..(max)', '(number)', '!(number)'],
+        format: range('bpm'),
         defaultValue: 'null',
     },
 ];
@@ -199,6 +219,7 @@ const cmds: bottypes.commandInfo[] = [
         name: 'changelog',
         description: 'Displays the changes for the current version or version requested.',
         usage: 'changelog [version]',
+        category: 'general',
         examples: [
             {
                 text: 'PREFIXMSGchangelog 0.4.0',
@@ -224,7 +245,7 @@ const cmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The version',
-                options: ['formatted as major.minor.patch (`0.4.1`) or `first`, `second` etc. `pending` shows upcoming changes'],
+                format: ['major.minor.patch (`0.4.1`) or `first`, `second` etc. `pending` shows upcoming changes'],
                 defaultValue: 'latest',
             },
         ]
@@ -233,6 +254,7 @@ const cmds: bottypes.commandInfo[] = [
         name: 'convert',
         description: 'Converts a number from one unit/base to another.',
         usage: 'convert [from] [to] [number]',
+        category: 'general',
         examples: [
             {
                 text: 'PREFIXMSGconvert kilometre mi 10',
@@ -250,7 +272,7 @@ const cmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: true,
                 description: 'The unit to convert from',
-
+                format: ['foo', '-i foo', '-in foo', '-input foo'],
                 defaultValue: 'N/A',
             },
             {
@@ -259,6 +281,7 @@ const cmds: bottypes.commandInfo[] = [
                 required: true,
                 description: 'The unit to convert to. see [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/types.html#conv) for units',
                 options: ['help', 'SI units',],
+                format: ['foo', '-o foo', '-out foo', '-output foo'],
                 defaultValue: 'N/A',
             },
             {
@@ -266,7 +289,7 @@ const cmds: bottypes.commandInfo[] = [
                 type: 'float',
                 required: true,
                 description: 'The number to convert',
-
+                format: ['foo'],
                 defaultValue: 'N/A',
             }
         ]
@@ -276,6 +299,7 @@ const cmds: bottypes.commandInfo[] = [
         description: 'Displays information for a given country.',
         usage: '[-type] <search>',
         aliases: [],
+        category: 'general',
         examples: [
             {
                 text: 'PREFIXMSGcountry australia',
@@ -294,6 +318,7 @@ const cmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'What param to search with',
                 options: ['name', 'fullname', 'code', 'codes', 'demonym', 'capital', 'translation'],
+                format: ['-foo'],
                 defaultValue: 'name',
             },
             {
@@ -301,7 +326,7 @@ const cmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The country to search for',
-
+                format: ['foo'],
                 defaultValue: 'N/A',
             },
         ]
@@ -310,6 +335,7 @@ const cmds: bottypes.commandInfo[] = [
         name: 'help',
         description: 'Displays useful information about commands.',
         usage: 'help [command]',
+        category: 'general',
         examples: [
             {
                 text: 'PREFIXMSGhelp',
@@ -340,6 +366,7 @@ const cmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The command/category to get information about. Categories are always prefixed with `categoryX`.',
                 options: ['list', 'category(category)', '(command)'],
+                format: ['foo'],
                 defaultValue: 'N/A',
             },
         ]
@@ -349,6 +376,7 @@ const cmds: bottypes.commandInfo[] = [
         description: 'Shows information about the bot.',
         usage: 'info [arg]',
         aliases: ['i', '[arg]'],
+        category: 'general',
         args: [
             {
                 name: 'arg',
@@ -356,6 +384,7 @@ const cmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'Return just that specific value',
                 options: ['uptime', 'version', 'server', 'website', 'timezone', 'source'],
+                format: ['foo'],
                 defaultValue: 'null',
             },
         ]
@@ -365,12 +394,14 @@ const cmds: bottypes.commandInfo[] = [
         description: 'Sends the bot\'s public invite.',
         usage: 'invite',
         aliases: [],
+        category: 'general',
     },
     {
         name: 'math',
         description: 'Solves a math problem.',
         usage: 'math <problem>',
         aliases: [],
+        category: 'general',
         examples: [
             {
                 text: 'PREFIXMSGmath 2+2',
@@ -394,6 +425,7 @@ integers (0-9), floats/decimals (.5, 1.34), negatives (-727), exponential notati
 operators: *, /, +, -, (, )
 `,
                 ],
+                format: ['foo'],
                 defaultValue: 'N/A',
             },
             {
@@ -412,6 +444,7 @@ operators: *, /, +, -, (, )
                     'od+dt', 'od+ht', 'od(ms)',
                     'mod int to string'
                 ],
+                format: ['foo'],
                 defaultValue: 'N/A',
             },
             {
@@ -420,13 +453,14 @@ operators: *, /, +, -, (, )
                 required: 'true (if using slash command)',
                 description: 'The first number',
                 defaultValue: 'N/A',
+                format: ['foo'],
             },
             {
                 name: 'num2',
                 type: 'float',
                 required: 'true (sometimes)',
                 description: 'The second number',
-
+                format: ['foo'],
                 defaultValue: 'N/A',
             }
         ]
@@ -436,11 +470,13 @@ operators: *, /, +, -, (, )
         description: 'Pings the bot and returns the latency.',
         usage: 'ping',
         aliases: [],
+        category: 'general',
     },
     {
         name: 'remind',
         description: 'Sets a reminder. Leave all args blank or use the reminders alias to return a list of reminders',
         usage: 'remind [time] [reminder]',
+        category: 'general',
         examples: [
             {
                 text: 'PREFIXMSGremind',
@@ -470,6 +506,7 @@ operators: *, /, +, -, (, )
                     'format: [number][unit] or hh:mm:ss',
                     'units: s, m, h, d, w, y',
                 ],
+                format: ['[number][unit]...', 'hh:mm:ss'],
                 defaultValue: '0s',
             },
             {
@@ -477,7 +514,7 @@ operators: *, /, +, -, (, )
                 type: 'string',
                 required: false,
                 description: 'The reminder',
-
+                format: ['foo'],
                 defaultValue: 'null',
             },
             {
@@ -486,6 +523,7 @@ operators: *, /, +, -, (, )
                 required: false,
                 description: 'Whether to send the reminder in the channel or in a DM. Admin only',
                 options: ['true', 'false'],
+                format: ['foo'],
                 defaultValue: 'false',
             }
         ]
@@ -494,12 +532,14 @@ operators: *, /, +, -, (, )
         name: 'stats',
         description: 'Shows the bot\'s statistics.',
         usage: 'stats',
+        category: 'general',
         aliases: [],
     },
     {
         name: 'time',
         description: 'Shows the current time in a specific timezone.',
         usage: 'time [timezone] [-showutc]',
+        category: 'general',
         examples: [
             {
                 text: 'PREFIXMSGtime',
@@ -518,7 +558,7 @@ operators: *, /, +, -, (, )
                 type: 'string',
                 required: false,
                 description: 'The timezone to show the time in. See [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/src/consts/timezones.ts)',
-                options: ['Formatted as (city), UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
+                format: ['(city), UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
                 defaultValue: 'UTC',
             },
             {
@@ -526,7 +566,7 @@ operators: *, /, +, -, (, )
                 type: 'boolean',
                 required: false,
                 description: 'Whether or not to show the UTC time on top of the requested timezone.',
-
+                format: ['-utc'],
                 defaultValue: '`false` if timezone has a value',
             }
         ]
@@ -535,6 +575,7 @@ operators: *, /, +, -, (, )
         name: 'weather',
         description: 'Shows the weather for a specific region.',
         usage: 'weather <region>',
+        category: 'general',
         examples: [
             {
                 text: 'PREFIXMSGweather auckland',
@@ -549,6 +590,7 @@ operators: *, /, +, -, (, )
                 required: false,
                 description: 'The region to search for',
                 options: ['Country, city, region'],
+                format: ['foo'],
                 defaultValue: 'UTC',
             }
         ]
@@ -560,6 +602,7 @@ const osucmds: bottypes.commandInfo[] = [
         name: 'badges',
         description: 'Display\'s the user\'s badges.',
         usage: 'badges [user]',
+        category: 'osu_profile',
         examples: [
             {
                 text: 'PREFIXMSGbadges cookiezi',
@@ -575,6 +618,7 @@ const osucmds: bottypes.commandInfo[] = [
         name: 'bws',
         description: 'Shows the badge weighted rank of a user.',
         usage: 'bws [user]',
+        category: 'osu_profile',
         examples: [
             {
                 text: 'PREFIXMSGbws',
@@ -598,6 +642,7 @@ const osucmds: bottypes.commandInfo[] = [
         name: 'compare',
         description: 'Compares two users\' osu! stats/top plays/scores.',
         usage: 'compare [first] [second]',
+        category: 'osu_other',
         examples: [
             {
                 text: 'PREFIXMSGcompare SaberStrike',
@@ -626,6 +671,7 @@ const osucmds: bottypes.commandInfo[] = [
                 options: [
                     'profile', 'top plays'
                 ],
+                format: ['foo'],
                 defaultValue: 'user stats (top plays if using "common")',
             },
             {
@@ -633,6 +679,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The first user to compare',
+                format: ['foo', '@foo', 'osu.ppy.sh/u/foo', 'osu.ppy.sh/users/foo'],
                 defaultValue: 'The user who ran the command',
             },
             {
@@ -640,21 +687,17 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The second user to compare',
+                format: ['foo', '@foo', 'osu.ppy.sh/u/foo', 'osu.ppy.sh/users/foo'],
                 defaultValue: 'most recent user fetched in the guild',
             },
-            {
-                name: 'page',
-                type: 'integer',
-                required: false,
-                description: 'The page of the compared plays to show',
-                defaultValue: '1',
-            }
+            page
         ]
     },
     {
         name: 'firsts',
         description: 'Shows the #1 global scores of a user.\n' + scoreListString,
-        usage: 'firsts [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
+        usage: 'firsts ' + scoreListArgs,
+        category: 'osu_scores',
         examples: [
             {
                 text: 'PREFIXMSGfirsts SaberStrike',
@@ -683,7 +726,8 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'lb',
         description: 'Shows the osu! rankings of a server.',
-        usage: 'lb [id] [-(mode)]',
+        usage: 'lb [id] [mode]',
+        category: 'osu_other',
         aliases: [],
         args: [
             {
@@ -691,31 +735,18 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'string/integer',
                 required: false,
                 description: 'The server to get the rankings of. Use global to combine the rankings of all servers the bot is in.',
-
+                format: ['foo'],
                 defaultValue: 'Current server',
             },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The mode to show the leaderboard in',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-            },
-            {
-                name: 'page',
-                type: 'integer',
-                required: false,
-                description: 'The page of users to show',
-
-                defaultValue: '1',
-            }
+            mode,
+            page,
         ]
     },
     {
         name: 'map',
         description: 'Shows information about a beatmap.',
-        usage: 'map [-? "(query)"] [id] +[mods] [-detailed] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp] [-ppcalc] [-bg]',
+        usage: 'map [query] [id] +[mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp] [ppcalc] [bg]',
+        category: 'osu_map',
         linkUsage: [
             'osu.ppy.sh/b/<id> +[mods]',
             'osu.ppy.sh/beatmapsets?q=<query> +[mods]',
@@ -748,6 +779,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The map to search for',
+                format: ['-? "foo"'],
                 defaultValue: 'null',
             },
             {
@@ -755,6 +787,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: false,
                 description: 'The map ID to search for',
+                format: mapformat,
                 defaultValue: 'the most recent map in the guild',
             },
             {
@@ -762,6 +795,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: `The mods to calculate the map with. ${mods}`,
+                format: ['+foo'],
                 defaultValue: 'none',
             },
             {
@@ -770,6 +804,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'Whether to show detailed information about the map',
                 options: ['true', 'false'],
+                format: ['-d', '-detailed'],
                 defaultValue: 'false',
             },
             {
@@ -778,6 +813,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The BPM to calculate the map with. This value is still affected by mods',
                 options: ['1-1000'],
+                format: ['-bpm foo'],
                 defaultValue: 'the map\'s BPM',
             },
             {
@@ -786,6 +822,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The speed multiplier to calculate the map with. Overrides BPM. This value is still affected by mods',
                 options: ['0.1-10'],
+                format: ['-speed foo'],
                 defaultValue: '1',
             },
             {
@@ -794,6 +831,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The circle size to calculate the map with. This value is still affected by mods',
                 options: ['0-11'],
+                format: ['-cs foo'],
                 defaultValue: 'The current map\'s value',
             },
             {
@@ -802,6 +840,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The approach rate to calculate the map with. This value is still affected by mods',
                 options: ['0-11'],
+                format: ['-ar foo'],
                 defaultValue: 'The current map\'s value',
             },
             {
@@ -810,6 +849,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The overall difficulty to calculate the map with. This value is still affected by mods',
                 options: ['0-11'],
+                format: ['-od foo'],
                 defaultValue: 'The current map\'s value',
             },
             {
@@ -818,6 +858,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The drain rate to calculate the map with. This value is still affected by mods',
                 options: ['0-11'],
+                format: ['-hp foo'],
                 defaultValue: 'The current map\'s value',
             },
             {
@@ -825,7 +866,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'boolean',
                 required: false,
                 description: 'Shows only the pp calculations for the map. See [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands.html#osucmd-ppcalc) for more info.',
-
+                format: ['-ppcalc'],
                 defaultValue: 'false',
             },
             {
@@ -833,7 +874,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'boolean',
                 required: false,
                 description: 'Show only the background images of the map',
-
+                format: ['-bg'],
                 defaultValue: 'false',
             },
         ]
@@ -841,7 +882,8 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'maplb',
         description: 'Shows the leaderboard of a map.',
-        usage: 'maplb [id] [-page/-p] [-parse]',
+        usage: 'maplb [id] [page] [parse]',
+        category: 'osu_profile',
         examples: [
             {
                 text: 'PREFIXMSGmaplb 32345',
@@ -860,19 +902,15 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The ID of the map to show the leaderboard of',
                 defaultValue: 'the most recent map in the guild',
+                format: mapformat,
             },
-            {
-                name: 'page',
-                type: 'integer',
-                required: false,
-                description: 'The page of the leaderboard to show',
-                defaultValue: '1',
-            },
+            page,
             {
                 name: 'mods',
                 type: 'string',
                 required: false,
                 description: `The mods to filter the leaderboard by. ${mods}`,
+                format: ['+foo'],
                 defaultValue: 'none',
             },
             {
@@ -880,6 +918,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: false,
                 description: 'Parse the score with the specific index',
+                format: ['-parse foo'],
                 defaultValue: '0',
             },
         ]
@@ -887,7 +926,8 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'maprandom',
         description: 'Returns the link to a random beatmap. Uses local storage so selection might be limited.',
-        usage: 'maprandom [-(type)]',
+        usage: 'maprandom [type]',
+        category: 'osu_map',
         examples: [
             {
                 text: 'PREFIXMSGf2',
@@ -904,14 +944,16 @@ const osucmds: bottypes.commandInfo[] = [
             type: 'string',
             required: false,
             description: 'Filters to only pick from this type of map',
-            options: ['Ranked', 'Loved', 'Approved', 'Qualified', 'Pending', 'WIP', 'Graveyard'],
+            options: ['ranked', 'loved', 'approved', 'qualified', 'pending', 'wip', 'graveyard'],
+            format: ['-foo'],
             defaultValue: 'null',
         }]
     },
     {
         name: 'maprecommend',
         description: 'Recommends a random map based off of your recommended difficulty.',
-        usage: 'maprecommend [-range] [user]',
+        usage: 'maprecommend [range] [user]',
+        category: 'osu_map',
         examples: [
             {
                 text: 'PREFIXMSGmaprec -range 2 SaberStrike',
@@ -927,6 +969,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The maximum difference in star rating the recommended map can be',
                 options: ['range', 'r', 'diff'],
+                format: ['-range foo', '-r foo', '-diff foo'],
                 defaultValue: '1',
             },
             {
@@ -935,6 +978,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'How to fetch the recommended map',
                 options: ['closest', 'random'],
+                format: ['-foo'],
                 defaultValue: 'random',
             }
         ]
@@ -942,7 +986,8 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'nochokes',
         description: 'Shows the user\'s top plays if no scores had a miss.\n' + scoreListString,
-        usage: 'nochokes [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
+        usage: 'nochokes ' + scoreListArgs,
+        category: 'osu_scores',
         examples: [
             {
                 text: 'PREFIXMSGnochokes SaberStrike',
@@ -971,7 +1016,8 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'osu',
         description: 'Shows information about a user\'s osu! profile.',
-        usage: 'osu [user] [-graph/-g] [-detailed/-d] [-(mode)]',
+        usage: 'osu [user] [graph] [detailed] [mode]',
+        category: 'osu_profile',
         linkUsage: [
             'osu.ppy.sh/u/<user>',
             'osu.ppy.sh/users/<user>/[(mode)]',
@@ -1003,6 +1049,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'Whether to show detailed information about the user',
                 options: ['true', 'false'],
+                format: ['-detailed'],
                 defaultValue: 'false',
             },
             {
@@ -1011,6 +1058,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'Whether to show only user statistics graphs',
                 options: ['true', 'false'],
+                format: ['-g'],
                 defaultValue: 'false',
             },
         ]
@@ -1018,7 +1066,8 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'osuset',
         description: 'Sets your osu! username/mode/skin or any setting.',
-        usage: 'osuset <username> [-(mode)] [-skin] [-timezone] [-location]',
+        usage: 'osuset <username> [mode] [skin] [timezone] [location]',
+        category: 'osu_other',
         examples: [
             {
                 text: 'PREFIXMSGosuset SaberStrike',
@@ -1048,21 +1097,16 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: true,
                 description: 'The osu! username to set',
+                format: ['foo'],
                 defaultValue: 'null',
             },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The osu! mode to set',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-            },
+            mode,
             {
                 name: 'skin',
                 type: 'string',
                 required: false,
                 description: 'The skin to set',
+                format: ['-skin foo'],
                 defaultValue: 'osu! default 2014',
             },
             {
@@ -1070,6 +1114,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The timezone to set',
+                format: ['-tz foo'],
                 defaultValue: 'null',
             },
             {
@@ -1077,6 +1122,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The location to set',
+                format: ['-location foo'],
                 defaultValue: 'null',
             }
         ]
@@ -1084,7 +1130,8 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'osutop',
         description: 'Shows the top scores of a user.\n' + scoreListString,
-        usage: 'osutop [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
+        usage: 'osutop ' + scoreListArgs,
+        category: 'osu_scores',
         examples: [
             {
                 text: 'PREFIXMSGosutop SaberStrike',
@@ -1126,7 +1173,8 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'pinned',
         description: 'Shows the pinned scores of a user.\n' + scoreListString,
-        usage: 'pinned [user] [-page/-p] [-(mode)] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
+        usage: 'pinned ' + scoreListArgs,
+        category: 'osu_scores',
         examples: [
             {
                 text: 'PREFIXMSGpinned SaberStrike',
@@ -1150,100 +1198,10 @@ const osucmds: bottypes.commandInfo[] = [
         args: scoreListCommandOptions
     },
     {
-        name: 'ppcalc',
-        description: 'Gives the full performance calculations for a map.',
-        usage: 'ppcalc [-? "(query)"] [id] +[mods] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
-        examples: [
-            {
-                text: 'PREFIXMSGppcalc +EZHTFL',
-                description: 'Calculates the performance for the previous map with easy, halftime and flashlight'
-            },
-            {
-                text: 'PREFIXMSGppcalc 4204 -speed 2 -cs 10',
-                description: 'Calculates beatmap 4204 at 2x speed and circle size 10'
-            },
-            {
-                text: 'PREFIXMSGppcalc -bpm 220 -ar 11 -od 11 -cs 5.2',
-                description: 'Calculates the previous beatmap at 220bpm, AR11 OD11 and CS5.2'
-            }
-        ],
-        aliases: ['mapcalc', 'mapperf', 'maperf', 'mappp'],
-        args: [
-            {
-                name: 'query',
-                type: 'string',
-                required: false,
-                description: 'The map to search for',
-                defaultValue: 'null',
-            },
-            {
-                name: 'id',
-                type: 'integer',
-                required: false,
-                description: 'The map ID to search for',
-                defaultValue: 'the most recent map in the guild',
-            },
-            {
-                name: 'mods',
-                type: 'string',
-                required: false,
-                description: `The mods to calculate the map with. ${mods}`,
-                defaultValue: 'none',
-            },
-            {
-                name: 'bpm',
-                type: 'float',
-                required: false,
-                description: 'The BPM to calculate the map with. This value is still affected by mods',
-                options: ['1-1000'],
-                defaultValue: 'the map\'s BPM',
-            },
-            {
-                name: 'speed',
-                type: 'float',
-                required: false,
-                description: 'The speed multiplier to calculate the map with. Overrides BPM. This value is still affected by mods',
-                options: ['0.1-10'],
-                defaultValue: '1',
-            },
-            {
-                name: 'cs',
-                type: 'float',
-                required: false,
-                description: 'The circle size to calculate the map with. This value is still affected by mods',
-                options: ['0-11'],
-                defaultValue: 'The current map\'s value',
-            },
-            {
-                name: 'ar',
-                type: 'float',
-                required: false,
-                description: 'The approach rate to calculate the map with. This value is still affected by mods',
-                options: ['0-11'],
-                defaultValue: 'The current map\'s value',
-            },
-            {
-                name: 'od',
-                type: 'float',
-                required: false,
-                description: 'The overall difficulty to calculate the map with. This value is still affected by mods',
-                options: ['0-11'],
-                defaultValue: 'The current map\'s value',
-            },
-            {
-                name: 'hp',
-                type: 'float',
-                required: false,
-                description: 'The drain rate to calculate the map with. This value is still affected by mods',
-                options: ['0-11'],
-                defaultValue: 'The current map\'s value',
-            },
-        ]
-    },
-    {
         name: 'pp',
         description: 'Estimates the rank of a user from the pp given. If a value matches the database, that will be used instead of an estimation.',
-        usage: 'pp <value> [-(mode)]',
+        usage: 'pp <value> [mode]',
+        category: 'osu_other',
         examples: [
             {
                 text: 'PREFIXMSGpp 100000',
@@ -1261,22 +1219,17 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: true,
                 description: 'The pp to estimate the rank of',
+                format: ['foo'],
                 defaultValue: 'N/A',
             },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The mode to estimate the rank in',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-            }
+            mode
         ]
     },
     {
         name: 'rank',
         description: 'Estimates the performance points of a user from the rank given. If a value matches the database, that will be used instead of an estimation.',
-        usage: 'rank <value> [-(mode)]',
+        usage: 'rank <value> [mode]',
+        category: 'osu_other',
         examples: [
             {
                 text: 'PREFIXMSGrank 1',
@@ -1294,22 +1247,17 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: true,
                 description: 'The rank to estimate the pp of',
+                format: ['foo'],
                 defaultValue: 'N/A',
             },
-            {
-                name: 'mode',
-                type: 'string',
-                required: false,
-                description: 'The mode to show the scores in',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-            }
+            mode
         ]
     },
     {
         name: 'ranking',
         description: 'Displays the global leaderboards.',
-        usage: 'ranking [country] [-page/-p][-(mode)] [-parse]',
+        usage: 'ranking [country] [page] [mode] [parse]',
+        category: 'osu_profile',
         examples: [
             {
                 text: 'PREFIXMSGranking',
@@ -1330,23 +1278,11 @@ const osucmds: bottypes.commandInfo[] = [
             type: 'string',
             required: false,
             description: 'The country code of the country to use',
+            format: ['+foo'],
             defaultValue: 'global',
         },
-        {
-            name: 'mode',
-            type: 'string',
-            required: false,
-            description: 'The mode to show the scores in',
-            options: ['osu', 'taiko', 'fruits', 'mania'],
-            defaultValue: 'osu',
-        },
-        {
-            name: 'page',
-            type: 'integer',
-            required: false,
-            description: 'The page of scores to show',
-            defaultValue: '1',
-        },
+            mode,
+            page,
         {
             name: 'type',
             type: 'string',
@@ -1354,12 +1290,14 @@ const osucmds: bottypes.commandInfo[] = [
             description: 'The type of leaderboard to show',
             options: ['performance', 'charts', 'score', 'country'],
             defaultValue: 'performance',
+            format: ['type:foo'],
         },
         {
             name: 'spotlight',
             type: 'integer',
             required: false,
             description: 'The spotlight to show the scores of. Only works with type charts',
+            format: ['spotlight:foo'],
             defaultValue: 'latest',
         },
         {
@@ -1367,6 +1305,7 @@ const osucmds: bottypes.commandInfo[] = [
             type: 'integer',
             required: false,
             description: 'Parses the user with the given index',
+            format: ['-parse foo'],
             defaultValue: '1',
         },
         ]
@@ -1374,7 +1313,8 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'recent',
         description: 'Shows the recent score(s) of a user.\nThe following only applies to list mode:\n' + scoreListString,
-        usage: 'recent [user] [-page/-p] [-list/-l] [-(mode)] [-passes/-pass/-nofail/-nf] [-mapper] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
+        usage: 'recent [user] [page] [list] [mode] [passes] [mapper] [mods] [modx] [exmod] [reverse] [sort] [query] [detailed] [grade] [pp] [score] [acc] [combo] [miss] [bpm]',
+        category: 'osu_scores',
         examples: [
             {
                 text: 'PREFIXMSGrecent',
@@ -1429,6 +1369,7 @@ const osucmds: bottypes.commandInfo[] = [
                     required: false,
                     description: 'Whether to show multiple scores. If false, only the most recent score will be shown',
                     options: ['true', 'false'],
+                    format: ['-l', '-list'],
                     defaultValue: 'false',
                 },
                 {
@@ -1437,45 +1378,35 @@ const osucmds: bottypes.commandInfo[] = [
                     required: false,
                     description: 'Whether to show only scores that were passed. If false, all scores will be shown',
                     options: ['true', 'false'],
+                    format: ['-passes', '-nf', '-nofail'],
                     defaultValue: 'true',
                 },
                 {
-                    name: '-?',
+                    name: 'query',
                     type: 'string',
                     required: false,
                     description: 'Filter scores by maps matching the given string',
+                    format: ['-? "foo"'],
                     defaultValue: 'null',
-                },
-                {
-                    name: 'passes',
-                    type: 'boolean',
-                    required: false,
-                    description: 'Whether to show only scores that were passed. If false, all scores will be shown',
-                    options: ['true', 'false'],
-                    defaultValue: 'true',
                 },
             ])
     },
     {
         name: 'recentactivity',
+        category: 'osu_profile',
         description: 'Displays the user\'s most recent activity.',
-        usage: 'recentactivity [user] [-page]',
+        usage: 'recentactivity [user] [page]',
         aliases: ['recentact', 'rsact'],
         args: [
             user,
-            {
-                name: 'page',
-                type: 'integer',
-                required: false,
-                description: 'The page of activities to show',
-                defaultValue: '1',
-            },
+            page,
         ]
     },
     {
         name: 'saved',
         description: 'Shows a user\'s saved settings.',
         usage: 'saved [user]',
+        category: 'osu_other',
         examples: [
             {
                 text: 'PREFIXMSGsaved @SaberStrike',
@@ -1494,6 +1425,7 @@ const osucmds: bottypes.commandInfo[] = [
         linkUsage: [
             'osu.ppy.sh/scores/<mode>/<id>'
         ],
+        category: 'osu_scores',
         examples: [
             {
                 text: 'PREFIXMSGscoreparse 1234567890',
@@ -1515,22 +1447,17 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: true,
                 description: 'The id of the score',
+                format: ['foo', 'osu.ppy.sh/scores/foo'],
                 defaultValue: 'null',
             },
-            {
-                name: 'mode',
-                type: 'string',
-                required: 'false if message command, true if link',
-                description: 'The mode of the score',
-                options: ['osu', 'taiko', 'fruits', 'mania'],
-                defaultValue: 'osu',
-            }
+            mode
         ]
     },
     {
         name: 'scores',
         description: 'Shows the scores of a user on a beatmap.\n' + scoreListString,
-        usage: 'scores [user] [id] [-page/-p] [-mods] [-modx] [-exmod] [-reverse] [-(sort)] [-parse] [-?] [-(detailed)] [-grade] [-pp] [-score] [-acc] [-combo] [-miss] [-bpm]',
+        usage: 'scores [user] [id] [page] [mods] [modx] [exmod] [reverse] [sort] [parse] [query] [detailed] [-grade] [pp] [score] [acc] [combo] [miss] [bpm]',
+        category: 'osu_scores',
         examples: [
             {
                 text: 'PREFIXMSGscores saberstrike',
@@ -1561,6 +1488,7 @@ const osucmds: bottypes.commandInfo[] = [
                     type: 'integer/map link',
                     required: false,
                     description: 'The map ID to search for',
+                    format: mapformat,
                     defaultValue: 'the most recent map in the guild',
                 },
             ])
@@ -1568,7 +1496,8 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'scorestats',
         description: 'Shows the stats of a user\'s scores.',
-        usage: 'scorestats [user] [-(type)] [-(mode)] [all]',
+        usage: 'scorestats [user] [type] [mode] [all]',
+        category: 'osu_scores',
         examples: [
             {
                 text: 'PREFIXMSGscorestats @SaberStrike',
@@ -1589,14 +1518,7 @@ const osucmds: bottypes.commandInfo[] = [
                 description: 'The type of scores to use',
                 options: ['best', 'firsts', 'recent', 'pinned'],
                 defaultValue: 'best',
-            },
-            {
-                name: 'details',
-                type: 'boolean',
-                required: false,
-                description: 'Sends two txt files with every mapper and mod combination calculated',
-                options: ['true', 'false'],
-                defaultValue: 'false',
+                format: ['-foo',],
             },
             {
                 name: 'all',
@@ -1604,6 +1526,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'Shows all statistics. May cause the command to lag as it needs to download all maps associated with each score.',
                 options: ['true', 'false'],
+                format: ['-all',],
                 defaultValue: 'false',
             }
         ]
@@ -1611,7 +1534,8 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'simulate',
         description: 'Simulates a score on a beatmap.',
-        usage: 'simulate [id] +[(mods)]  [-acc] [-combo] [-n300] [-n100] [-n50] [-miss] [-bpm] [-speed] [-cs] [-ar] [-od] [-hp]',
+        usage: 'simulate [id] +[mods]  [acc] [combo] [n300] [n100] [n50] [miss] [bpm] [speed] [cs] [ar] [od] [hp]',
+        category: 'osu_scores',
         examples: [
             {
                 text: 'PREFIXMSGsimulate +HDHR misses=0 acc=97.86',
@@ -1626,6 +1550,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The beatmap id to simulate the score on',
                 defaultValue: 'The most recent map in the guild',
+                format: mapformat,
             },
             {
                 name: 'mods',
@@ -1633,6 +1558,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: `The mods to simulate the score with. ${mods}`,
                 defaultValue: 'none',
+                format: ['+foo',],
             },
             {
                 name: 'accuracy',
@@ -1640,6 +1566,7 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The accuracy to simulate the score with',
                 options: ['0-100'],
+                format: ['-acc foo', '-accuracy foo', '-% foo'],
                 defaultValue: '100',
             },
             {
@@ -1647,6 +1574,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: false,
                 description: 'The maximum combo to simulate the score with',
+                format: ['-combo foo', '-x foo', '-maxcombo foo'],
                 defaultValue: 'map max combo',
             },
             {
@@ -1654,6 +1582,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: false,
                 description: 'The number of hit 300s to simulate the score with',
+                format: ['-n300 foo', '-300s foo'],
                 defaultValue: 'calculated from accuracy',
             },
             {
@@ -1661,6 +1590,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: false,
                 description: 'The number of hit 100s to simulate the score with',
+                format: ['-n100 foo', '-100s foo'],
                 defaultValue: 'calculated from accuracy',
             },
             {
@@ -1668,6 +1598,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: false,
                 description: 'The number of hit 50s to simulate the score with',
+                format: ['-n50 foo', '-50s foo'],
                 defaultValue: 'calculated from accuracy',
             },
             {
@@ -1675,6 +1606,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: false,
                 description: 'The number of misses to simulate the score with',
+                format: ['-miss foo', '-misses foo', '-n0 foo', '-0s foo'],
                 defaultValue: '0',
             },
             {
@@ -1682,6 +1614,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'float',
                 required: false,
                 description: 'The bpm to simulate the score with',
+                format: ['-bpm foo',],
                 defaultValue: 'map bpm',
             },
             {
@@ -1689,6 +1622,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'float',
                 required: false,
                 description: 'The speed multiplier to simulate the score with',
+                format: ['-speed foo',],
                 defaultValue: '1 (or mod)',
             },
             {
@@ -1696,6 +1630,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'float',
                 required: false,
                 description: 'The circle size to simulate the score with',
+                format: ['-cs foo',],
                 defaultValue: 'Map CS',
             },
             {
@@ -1703,6 +1638,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'float',
                 required: false,
                 description: 'The approach to simulate the score with',
+                format: ['-ar foo',],
                 defaultValue: 'Map AR',
             },
             {
@@ -1710,6 +1646,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'float',
                 required: false,
                 description: 'The overall difficulty to simulate the score with',
+                format: ['-od foo',],
                 defaultValue: 'Map OD',
             },
             {
@@ -1717,6 +1654,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'float',
                 required: false,
                 description: 'The hp/drain to simulate the score with',
+                format: ['-hp foo',],
                 defaultValue: 'Map HP',
             },
         ]
@@ -1725,6 +1663,7 @@ const osucmds: bottypes.commandInfo[] = [
         name: 'trackadd',
         description: 'Adds a user to the tracklist. Only works in the guild\'s set tracking channel.',
         usage: 'trackadd <user>',
+        category: 'osu_track',
         examples: [
             {
                 text: 'PREFIXMSGtrackadd 15222484',
@@ -1743,6 +1682,7 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'trackchannel',
         description: 'Sets the channel to send tracklist updates to.',
+        category: 'osu_track',
         usage: 'trackchannel <channel>',
         examples: [
             {
@@ -1761,6 +1701,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'channel mention',
                 required: true,
                 description: 'The channel to send tracklist updates to',
+                format: ['foo',],
                 defaultValue: 'N/A',
             }
         ]
@@ -1768,12 +1709,14 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'tracklist',
         description: 'Displays a list of the currently tracked users in the server.',
+        category: 'osu_track',
         usage: 'tracklist',
         aliases: ['tl'],
     },
     {
         name: 'trackremove',
         description: 'Removes a user from the tracklist. Only works in the guild\'s set tracking channel.',
+        category: 'osu_track',
         usage: 'trackremove <user>',
         examples: [
             {
@@ -1793,7 +1736,8 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'userbeatmaps',
         description: 'Shows a user\'s beatmaps. (favourites/ranked/pending/graveyard/loved)',
-        usage: 'userbeatmaps [user] [-(type)] [-reverse] [-page/-p] [-parse] [-?]',
+        category: 'osu_map',
+        usage: 'userbeatmaps [user] [type] [reverse] [page] [parse] [query]',
         examples: [
             {
                 text: 'PREFIXMSGubm sotarks -p 4 -ranked',
@@ -1814,7 +1758,8 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'The type of beatmaps to show',
-                options: ['Favourites', 'Ranked', 'Pending', 'Graveyard', 'Loved'],
+                options: ['favourites', 'ranked', 'pending', 'graveyard', 'loved', 'most_played'],
+                format: ['-foo',],
                 defaultValue: 'Favourites',
             },
             {
@@ -1823,21 +1768,17 @@ const osucmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'Whether to sort the beatmaps in reverse',
                 options: ['true', 'false'],
+                format: ['-rev', '-reverse'],
                 defaultValue: 'false',
             },
-            {
-                name: 'page',
-                type: 'integer',
-                required: false,
-                description: 'The page of beatmaps to show',
-                defaultValue: '1',
-            },
+            page,
             {
                 name: 'sort',
                 type: 'string',
                 required: false,
                 description: 'The way to sort the beatmaps',
                 options: ['Title', 'Artist', 'Difficulty', 'Status', 'Fails', 'Plays', 'Date Added', 'Favourites', 'BPM', 'CS', 'AR', 'OD', 'HP', 'Length'],
+                format: ['sort:foo',],
                 defaultValue: 'Date Added',
             },
             {
@@ -1845,6 +1786,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: false,
                 description: 'Parses the beatmap with the given index',
+                format: ['-parse foo',],
                 defaultValue: '1',
             },
             {
@@ -1852,6 +1794,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: false,
                 description: 'Filters the beatmaps by the given string',
+                format: ['-foo',],
                 defaultValue: 'N/A',
             },
         ]
@@ -1859,6 +1802,7 @@ const osucmds: bottypes.commandInfo[] = [
     {
         name: 'whatif',
         description: 'Estimates user stats if they gain a certain amount of raw pp.',
+        category: 'osu_other',
         usage: 'whatif [user] <pp>',
         examples: [
             {
@@ -1878,6 +1822,7 @@ const osucmds: bottypes.commandInfo[] = [
                 type: 'float',
                 required: true,
                 description: 'The amount of raw pp to gain',
+                format: ['foo',],
                 defaultValue: '0',
             },
         ]
@@ -1888,6 +1833,7 @@ const othercmds: bottypes.commandInfo[] = [
     {
         name: '8ball',
         description: 'Returns a yes/no/maybe answer to a question.',
+        category: 'misc',
         usage: '8ball ',
         examples: [
             {
@@ -1900,12 +1846,14 @@ const othercmds: bottypes.commandInfo[] = [
     {
         name: 'coin',
         description: 'Flips a coin.',
+        category: 'misc',
         usage: 'coin',
         aliases: ['coinflip', 'flip'],
     },
     {
         name: 'gif',
         description: 'Sends a gif.',
+        category: 'misc',
         usage: '<type> [target]',
         examples: [
             {
@@ -1921,6 +1869,7 @@ const othercmds: bottypes.commandInfo[] = [
                 required: true,
                 description: 'The type of gif to send',
                 options: ['hug', 'kiss', 'lick', 'pet', 'punch', 'slap'],
+                format: [],
                 defaultValue: 'N/A',
             },
             {
@@ -1928,6 +1877,7 @@ const othercmds: bottypes.commandInfo[] = [
                 type: 'user mention',
                 required: true,
                 description: 'The user to target',
+                format: ['<@foo>',],
                 defaultValue: 'N/A',
             }
         ]
@@ -1935,12 +1885,14 @@ const othercmds: bottypes.commandInfo[] = [
     {
         name: 'inspire',
         description: 'Sends a randomly generated inspirational quote.',
+        category: 'misc',
         usage: 'inspire',
         aliases: ['insp'],
     },
     {
         name: 'janken',
         description: 'Plays janken with the bot. (aka paper scissors rock or rock paper scissors or whatever weird order it\'s in).',
+        category: 'misc',
         usage: 'janken',
         aliases: ['paperscissorsrock', 'rockpaperscissors', 'rps', 'psr'],
         args: [
@@ -1950,6 +1902,7 @@ const othercmds: bottypes.commandInfo[] = [
                 required: true,
                 description: 'Paper, scissors or rock.',
                 options: ['rock', 'paper', 'scissors', 'グー', 'チョキ', 'パー'],
+                format: ['foo',],
                 defaultValue: 'N/A',
             }
         ],
@@ -1957,6 +1910,7 @@ const othercmds: bottypes.commandInfo[] = [
     {
         name: 'poll',
         description: 'Creates a poll.',
+        category: 'misc',
         usage: 'poll <question>',
         examples: [
             {
@@ -1975,6 +1929,7 @@ const othercmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: true,
                 description: 'The question/title of the poll',
+                format: ['foo',],
                 defaultValue: 'N/A',
             },
             {
@@ -1983,6 +1938,7 @@ const othercmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The options for the poll',
                 options: ['format: option1+option2+option3...'],
+                format: ['foo+bar+baz...',],
                 defaultValue: 'yes+no',
             }
         ]
@@ -1990,6 +1946,7 @@ const othercmds: bottypes.commandInfo[] = [
     {
         name: 'roll',
         description: 'Rolls a random number.',
+        category: 'misc',
         usage: 'roll [max] [min]',
         examples: [
             {
@@ -2008,6 +1965,7 @@ const othercmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: false,
                 description: 'The maximum number to roll',
+                format: ['foo',],
                 defaultValue: '100',
             },
             {
@@ -2015,6 +1973,7 @@ const othercmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: false,
                 description: 'The minimum number to roll',
+                format: ['bar',],
                 defaultValue: '1',
             }
         ]
@@ -2022,6 +1981,7 @@ const othercmds: bottypes.commandInfo[] = [
     {
         name: 'say',
         description: 'Sends a message.',
+        category: 'misc',
         usage: 'say <message>',
         examples: [
             {
@@ -2036,6 +1996,7 @@ const othercmds: bottypes.commandInfo[] = [
                 type: 'string',
                 required: true,
                 description: 'The message to send',
+                format: ['foo',],
                 defaultValue: 'N/A',
             },
             {
@@ -2043,6 +2004,7 @@ const othercmds: bottypes.commandInfo[] = [
                 type: 'channel',
                 required: false,
                 description: 'The channel to send the message in',
+                format: ['bar',],
                 defaultValue: 'current channel',
             }
         ]
@@ -2053,6 +2015,7 @@ const admincmds: bottypes.commandInfo[] = [
     {
         name: 'checkperms',
         description: 'Checks the permissions of the user.',
+        category: 'admin',
         usage: 'checkperms [user]',
         examples: [
             {
@@ -2069,6 +2032,7 @@ const admincmds: bottypes.commandInfo[] = [
         name: 'userinfo',
         description: 'Returns information about a user.',
         usage: 'userinfo [user]',
+        category: 'admin',
         examples: [
             {
                 text: 'PREFIXMSGuser @SSoB',
@@ -2088,6 +2052,7 @@ const admincmds: bottypes.commandInfo[] = [
         name: 'avatar',
         description: 'Gets the avatar of a user.',
         usage: 'avatar [user]',
+        category: 'admin',
         examples: [
             {
                 text: 'PREFIXMSGavatar @SSoB',
@@ -2107,6 +2072,7 @@ const admincmds: bottypes.commandInfo[] = [
         name: 'clear',
         description: 'Clears cached data within the bot',
         usage: 'clear <arg>',
+        category: 'admin',
         examples: [],
         aliases: [],
         args: [
@@ -2116,6 +2082,7 @@ const admincmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'the types of files to clear (read the options section)',
                 options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
+                format: ['foo',],
                 defaultValue: 'temporary files only',
             }
         ]
@@ -2123,6 +2090,7 @@ const admincmds: bottypes.commandInfo[] = [
     {
         name: 'debug',
         description: 'Runs a debugging command.',
+        category: 'admin',
         usage: 'debug <type> [arg]',
         examples: [
             {
@@ -2174,6 +2142,7 @@ const admincmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The type of debug to perform',
                 options: ['commandfile', 'commandfiletype', 'servers', 'channels', 'users', 'forcetrack', 'curcmdid', 'logs', 'clear', 'maps', 'ls', 'memory'],
+                format: ['foo',],
                 defaultValue: 'list options',
             }, {
                 name: 'arg',
@@ -2181,6 +2150,7 @@ const admincmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'commandfile -> the id of the command to search for\ncommandfiletype -> the name of the command to search\nlogs -> the ID of the guild to send logs from',
                 options: ['normal', 'all (only cmd data)', 'trueall', 'map', 'users', 'previous', 'pmaps', 'pscores', 'pusers', 'errors', 'graph'],
+                format: ['bar',],
                 defaultValue: 'commandfile -> latest command\ncommandfiletype -> list options\nlogs -> current server',
             }
         ]
@@ -2189,6 +2159,7 @@ const admincmds: bottypes.commandInfo[] = [
         name: 'find',
         description: 'Finds details of a user/guild/channel/role/emoji/sticker.',
         usage: 'find <type> <ID>',
+        category: 'admin',
         examples: [
             {
                 text: 'PREFIXMSGfind user 777125560869978132',
@@ -2203,6 +2174,7 @@ const admincmds: bottypes.commandInfo[] = [
                 required: true,
                 description: 'The type of info to fetch',
                 options: ['user', 'guild', 'channel', 'role', 'emoji', 'sticker'],
+                format: ['foo',],
                 defaultValue: 'N/A',
             },
             {
@@ -2210,6 +2182,7 @@ const admincmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: true,
                 description: 'The ID to fetch',
+                format: ['bar',],
                 defaultValue: 'N/A',
             }
         ]
@@ -2218,6 +2191,7 @@ const admincmds: bottypes.commandInfo[] = [
         name: 'leaveguild',
         description: 'Makes the bot leave a guild.',
         usage: 'leaveguild [guild]',
+        category: 'admin',
         examples: [
             {
                 text: 'PREFIXMSGleaveguild 1234567890',
@@ -2231,6 +2205,7 @@ const admincmds: bottypes.commandInfo[] = [
                 type: 'integer',
                 required: false,
                 description: 'The id of the guild to leave',
+                format: ['foo',],
                 defaultValue: 'the guild the command was sent in',
             }
         ]
@@ -2238,7 +2213,8 @@ const admincmds: bottypes.commandInfo[] = [
     {
         name: 'prefix',
         description: 'Set\'s the prefix of the current server.',
-        usage: 'prefix <prefix>',
+        usage: 'prefix [prefix]',
+        category: 'admin',
         examples: [
             {
                 text: 'PREFIXMSGprefix !',
@@ -2250,8 +2226,9 @@ const admincmds: bottypes.commandInfo[] = [
             {
                 name: 'prefix',
                 type: 'string',
-                required: true,
+                required: false,
                 description: 'The prefix to set',
+                format: ['foo',],
                 defaultValue: 'N/A',
             }
         ]
@@ -2259,7 +2236,8 @@ const admincmds: bottypes.commandInfo[] = [
     {
         name: 'purge',
         description: 'Deletes a specified amount of messages from the current channel.',
-        usage: 'purge [count] [user] [-method]',
+        usage: 'purge [count] [user] [method]',
+        category: 'admin',
         examples: [
             {
                 text: 'PREFIXMSGpurge 5 12345689',
@@ -2282,6 +2260,7 @@ const admincmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The amount of messages to delete',
                 options: ['0-100'],
+                format: ['foo',],
                 defaultValue: '5',
             },
             {
@@ -2289,6 +2268,7 @@ const admincmds: bottypes.commandInfo[] = [
                 type: 'string/user mention',
                 required: false,
                 description: 'The user\'s messages to delete. Deletes messages from any user if unspecified',
+                format: ['bar',],
                 defaultValue: 'N/A',
             },
             {
@@ -2297,6 +2277,7 @@ const admincmds: bottypes.commandInfo[] = [
                 required: false,
                 description: 'The method to delete messages. Fetch is slower, but can delete messages older than 14 days. Bulk cannot be used if user is specified.',
                 options: ['bulk', 'fetch'],
+                format: ['-foo',],
                 defaultValue: 'bulk',
             }
         ]
@@ -2305,6 +2286,7 @@ const admincmds: bottypes.commandInfo[] = [
         name: 'servers',
         description: 'Shows the servers the bot is in.',
         usage: 'servers',
+        category: 'admin',
         aliases: [],
     }
 ];
