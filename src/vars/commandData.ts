@@ -214,7 +214,7 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
 ];
 
 
-const cmds: bottypes.commandInfo[] = [
+export const cmds: bottypes.commandInfo[] = [
     {
         name: 'changelog',
         description: 'Displays the changes for the current version or version requested.',
@@ -595,9 +595,7 @@ operators: *, /, +, -, (, )
             }
         ]
     },
-];
-
-const osucmds: bottypes.commandInfo[] = [
+    
     {
         name: 'badges',
         description: 'Display\'s the user\'s badges.',
@@ -1826,10 +1824,8 @@ const osucmds: bottypes.commandInfo[] = [
                 defaultValue: '0',
             },
         ]
-    }
-];
+    },
 
-const othercmds: bottypes.commandInfo[] = [
     {
         name: '8ball',
         description: 'Returns a yes/no/maybe answer to a question.',
@@ -2009,9 +2005,7 @@ const othercmds: bottypes.commandInfo[] = [
             }
         ]
     },
-];
 
-const admincmds: bottypes.commandInfo[] = [
     {
         name: 'checkperms',
         description: 'Checks the permissions of the user.',
@@ -2288,10 +2282,13 @@ const admincmds: bottypes.commandInfo[] = [
         usage: 'servers',
         category: 'admin',
         aliases: [],
-    }
+    },
 ];
 
-const buttons: {
+
+
+
+export const buttons: {
     name: string,
     description: string,
     emoji: string;
@@ -2363,57 +2360,3 @@ const buttons: {
         }
 
     ];
-
-export { admincmds, buttons, cmds, osucmds, othercmds };
-
-export function getCommand(input: string) {
-    let category: string;
-    let list: bottypes.commandInfo[];
-    let command: bottypes.commandInfo;
-
-    if (input.startsWith('category')) {
-        switch (input) {
-            case 'gen': default:
-                list = cmds;
-                category = 'General';
-                break;
-            case 'osu':
-                list = osucmds;
-                category = 'osu!';
-                break;
-            case 'misc':
-                list = othercmds;
-                category = 'Other';
-                break;
-            case 'admin':
-                list = admincmds;
-                category = 'Admin';
-                break;
-        }
-    } else {
-        const predicate = (x: bottypes.commandInfo) =>
-            x.name == input.toLowerCase() ||
-            x.aliases.some(y => y == input.toLowerCase());
-        if (cmds.findIndex(predicate)) {
-            command = cmds.find(predicate);
-            category = 'General';
-        }
-        if (osucmds.findIndex(predicate)) {
-            command = osucmds.find(predicate);
-            category = 'osu!';
-        }
-        if (othercmds.findIndex(predicate)) {
-            command = othercmds.find(predicate);
-            category = 'Other';
-        }
-        if (admincmds.findIndex(predicate)) {
-            command = admincmds.find(predicate);
-            category = 'Admin';
-        }
-    }
-    return {
-        category,
-        command,
-        list,
-    };
-}

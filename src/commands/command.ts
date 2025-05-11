@@ -15,78 +15,96 @@ export class Command {
         editAsMsg?: boolean,
     };
     protected args: { [id: string]: any; };
-    setArgs(input: bottypes.commandInput) {
-        switch (input.type) {
+    protected input: bottypes.commandInput;
+    constructor() {
+        this.ctn = {
+            content: undefined,
+            embeds: [],
+            files: [],
+            components: [],
+            ephemeral: false,
+            react: undefined,
+            edit: undefined,
+            editAsMsg: undefined,
+        };
+    }
+    setInput(input: bottypes.commandInput) {
+        this.input = input;
+    }
+    setArgs() {
+        switch (this.input.type) {
             case 'message':
-                this.setArgsMsg(input);
+                this.setArgsMsg();
                 break;
             case 'interaction':
-                this.setArgsInteract(input);
+                this.setArgsInteract();
                 break;
             case 'button':
-                this.setArgsBtn(input);
+                this.setArgsBtn();
                 break;
             case 'link':
-                this.setArgsLink(input);
+                this.setArgsLink();
                 break;
         }
     }
-    setArgsMsg(input: bottypes.commandInput) {
-        this.commanduser = input.message.author;
+    async setArgsMsg() {
+        this.commanduser = this.input.message.author;
     }
-    setArgsInteract(input: bottypes.commandInput) {
-        let interaction = input.interaction as Discord.ChatInputCommandInteraction;
+    async setArgsInteract() {
+        let interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
         this.commanduser = interaction?.member?.user ?? interaction?.user;
     }
-    setArgsBtn(input: bottypes.commandInput) {
-        if (!input.message.embeds[0]) return;
-        let interaction = (input.interaction as Discord.ButtonInteraction);
-        this.commanduser = interaction?.member?.user ?? input.interaction?.user;
-        const temp = helper.tools.commands.getButtonArgs(input.id);
+    async setArgsBtn() {
+        if (!this.input.message.embeds[0]) return;
+        let interaction = (this.input.interaction as Discord.ButtonInteraction);
+        this.commanduser = interaction?.member?.user ?? this.input.interaction?.user;
+        const temp = helper.tools.commands.getButtonArgs(this.input.id);
         if (temp.error) {
             interaction.followUp({
                 content: helper.vars.errors.paramFileMissing,
                 flags: Discord.MessageFlags.Ephemeral,
                 allowedMentions: { repliedUser: false }
             });
-            helper.tools.commands.disableAllButtons(input.message);
+            helper.tools.commands.disableAllButtons(this.input.message);
             return;
         }
     }
-    setArgsLink(input: bottypes.commandInput) {
-        this.commanduser = input.message.author;
-        const messagenohttp = input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
+    async setArgsLink() {
+        this.commanduser = this.input.message.author;
+        const messagenohttp = this.input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
     }
-    logInput(input: bottypes.commandInput) {
-        const keys = Object.entries(this.args);
-
-        helper.tools.log.commandOptions(
-            keys.map(x => {
+    logInput(skipKeys: boolean = false) {
+        let keys = [];
+        if (!skipKeys) {
+            keys = Object.entries(this.args).map(x => {
                 return {
                     name: helper.tools.formatter.toCapital(x[0]),
                     value: x[1]
                 };
-            }),
-            input.id,
+            });
+        }
+        helper.tools.log.commandOptions(
+            keys,
+            this.input.id,
             this.name,
-            input.type,
+            this.input.type,
             this.commanduser,
-            input.message,
-            input.interaction,
+            this.input.message,
+            this.input.interaction,
         );
     }
-    execute(input: bottypes.commandInput) {
-        this.setArgs(input);
+    execute() {
+        this.setArgs();
         // do stuff
         // send msg
     }
-    send(input: bottypes.commandInput) {
+    send() {
         helper.tools.commands.sendMessage({
-            type: input.type,
-            message: input.message,
-            interaction: input.interaction,
+            type: this.input.type,
+            message: this.input.message,
+            interaction: this.input.interaction,
             args: this.ctn,
-        }, input.canReply);
+        }, this.input.canReply);
     }
 }
 
@@ -100,37 +118,37 @@ class TEMPLATE extends Command {
             xyzxyz: ''
         };
     }
-    setArgsMsg(input: bottypes.commandInput) {
-        this.commanduser = input.message.author;
+    async setArgsMsg() {
+        this.commanduser = this.input.message.author;
     }
-    setArgsInteract(input: bottypes.commandInput) {
-        const interaction = input.interaction as Discord.ChatInputCommandInteraction;
+    async setArgsInteract() {
+        const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
         this.commanduser = interaction?.member?.user ?? interaction?.user;
     }
-    setArgsBtn(input: bottypes.commandInput) {
-        if (!input.message.embeds[0]) return;
-        const interaction = (input.interaction as Discord.ButtonInteraction);
-        this.commanduser = interaction?.member?.user ?? input.interaction?.user;
-        const temp = helper.tools.commands.getButtonArgs(input.id);
+    async setArgsBtn() {
+        if (!this.input.message.embeds[0]) return;
+        const interaction = (this.input.interaction as Discord.ButtonInteraction);
+        this.commanduser = interaction?.member?.user ?? this.input.interaction?.user;
+        const temp = helper.tools.commands.getButtonArgs(this.input.id);
         if (temp.error) {
             interaction.followUp({
                 content: helper.vars.errors.paramFileMissing,
                 flags: Discord.MessageFlags.Ephemeral,
                 allowedMentions: { repliedUser: false }
             });
-            helper.tools.commands.disableAllButtons(input.message);
+            helper.tools.commands.disableAllButtons(this.input.message);
             return;
         }
     }
-    setArgsLink(input: bottypes.commandInput) {
-        this.commanduser = input.message.author;
-        const messagenohttp = input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
+    async setArgsLink() {
+        this.commanduser = this.input.message.author;
+        const messagenohttp = this.input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
     }
-    async execute(input: bottypes.commandInput) {
-        this.setArgs(input);
-        this.logInput(input);
+    async execute() {
+        this.setArgs();
+        this.logInput();
         // do stuff
-        
-        this.send(input);
+
+        this.send();
     }
 }

@@ -1316,11 +1316,16 @@ export function disableAllButtons(msg: Discord.Message) {
     });
 }
 
-export function getCommand(query: string) {
-    helper.vars.commandData;
+export function getCommand(query: string): bottypes.commandInfo {
+    return helper.vars.commandData.cmds.find(
+        x => x.aliases.concat([x.name]).includes(query)
+    );
+
+
 }
 
-export function getCommands(query?: string) {
-    helper.vars.commandData;
-    
+export function getCommands(query?: string): bottypes.commandInfo[] {
+    return helper.vars.commandData.cmds.filter(
+        x => x.category.includes(query)
+    ) ?? helper.vars.commandData.cmds;
 }
