@@ -93,6 +93,7 @@ export class Command {
             this.input.interaction,
         );
     }
+    getOverrides() { }
     execute() {
         this.setArgs();
         // do stuff

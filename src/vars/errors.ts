@@ -72,7 +72,7 @@ export const uErr = {
             recent_ms: '[ID] has no recent [MODE] scores',
             first: 'Could not find the [ID]\'s #1 scores',
             first_ms: '[ID] has no #1 scores',
-            map: 'Could not find the [ID]\'s scores on beatmap [MID]',
+            map: 'Could not find [ID]\'s scores on beatmap [MID]',
             map_ms: '[ID] has no scores on beatmap [MID]',
         },
         performance: {
