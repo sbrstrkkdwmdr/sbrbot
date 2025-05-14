@@ -31,8 +31,6 @@ export class Changelog extends Command {
         };
     }
     async setArgsMsg() {
-        this.commanduser = this.input.message.author;
-
         const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, this.input.args, true, 'number', false, true);
         if (pageArgFinder.found) {
             this.args.page = pageArgFinder.output;
@@ -43,7 +41,6 @@ export class Changelog extends Command {
     }
     async setArgsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.commanduser = interaction?.member?.user ?? interaction?.user;
 
         this.args.version = interaction.options.getString('version');
     }
@@ -95,7 +92,7 @@ export class Changelog extends Command {
         }
     }
     async execute() {
-        this.setArgs();
+        await this.setArgs();
         this.logInput();
         const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('changelog', this.commanduser, this.input.id);
         const buttons = new Discord.ActionRowBuilder();
@@ -347,7 +344,7 @@ export class Help extends Command {
 
     }
     async execute() {
-        this.setArgs();
+        await this.setArgs();
         this.logInput();
         // do stuff
         if (this.args.rdm == true) {
@@ -613,7 +610,7 @@ export class Info extends Command {
         this.commanduser = interaction?.member?.user ?? interaction?.user;
     }
     async execute() {
-        this.setArgs();
+        await this.setArgs();
         this.logInput(true);
         // do stuff
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
@@ -767,7 +764,7 @@ export class Invite extends Command {
         super();
     }
     async execute() {
-        this.setArgs();
+        await this.setArgs();
         this.logInput(true);
         // do stuff
         this.ctn.content = helper.vars.versions.linkInvite;
@@ -780,7 +777,7 @@ export class Ping extends Command {
         super();
     }
     async execute() {
-        this.setArgs();
+        await this.setArgs();
         this.logInput(true);
         // do stuff
         const trueping = `${helper.tools.formatter.toCapital(this.input.type)} latency: ${Math.abs((this.input.message ?? this.input.interaction).createdAt.getTime() - new Date().getTime())}ms`;
@@ -891,7 +888,7 @@ export class Remind extends Command {
 
     }
     async execute() {
-        this.setArgs();
+        await this.setArgs();
         this.logInput();
         // do stuff
 
@@ -950,7 +947,7 @@ export class Stats extends Command {
         super();
     }
     async execute() {
-        this.setArgs();
+        await this.setArgs();
         this.logInput(true);
         // do stuff
         const trueping = (this.input.message ?? this.input.interaction).createdAt.getTime() - new Date().getTime() + 'ms';

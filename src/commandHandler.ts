@@ -385,126 +385,127 @@ function commandSelect(cmd: string, args: string[]) {
         // }
         //     break;
         // // osu (scores)
-        // case 'firsts': case 'firstplaceranks': case 'fpr': case 'fp': case '#1s': case 'first': case '#1': case '1s':
-        //     command = new helper.commands.osu.scores.firsts;
-        //     break;
+        case 'firsts': case 'firstplaceranks': case 'fpr': case 'fp': case '#1s': case 'first': case '#1': case '1s':
+            command = new helper.commands.osu.scores.Firsts();
+            break;
         // case 'leaderboard': case 'maplb': case 'mapleaderboard': case 'ml':
         //     command = new helper.commands.osu.scores.maplb;
         //     break;
-        // case 'nochokes': case 'nc': {
-        //     overrides = {
-        //         miss: true
-        //     };
-        // }
-        // case 'osutop': case 'top': case 't': case 'ot': case 'toposu': case 'topo':
-        //     command = new helper.commands.osu.scores.osutop;
-        //     break;
-        // case 'taikotop': case 'toptaiko': case 'tt': case 'topt':
-        //     {
-        //         overrides = {
-        //             mode: 'taiko'
-        //         };
-        //         command = new helper.commands.osu.scores.osutop;
-        //     }
-        //     break;
-        // case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tctb': case 'tf': case 'topf': case 'topc':
-        //     {
-        //         overrides = {
-        //             mode: 'fruits'
-        //         };
-        //         command = new helper.commands.osu.scores.osutop;
-        //     }
-        //     break;
-        // case 'maniatop': case 'topmania': case 'tm': case 'topm':
-        //     {
-        //         overrides = {
-        //             mode: 'mania'
-        //         };
-        //         command = new helper.commands.osu.scores.osutop;
-        //     }
-        //     break;
-        // case 'pinned':
-        //     command = new helper.commands.osu.scores.pinned;
-        //     break;
-        // case 'recent': case 'rs': case 'recentscore': case 'r':
-        //     command = new helper.commands.osu.scores.recent;
-        //     break;
-        // case 'recenttaiko': case 'rt': {
-        //     overrides = {
-        //         mode: 'taiko'
-        //     };
-        //     command = new helper.commands.osu.scores.recent;
-        // }
-        //     break;
-        // case 'recentfruits': case 'rf': case 'rctb': {
-        //     overrides = {
-        //         mode: 'fruits'
-        //     };
-        //     command = new helper.commands.osu.scores.recent;
-        // }
-        //     break;
-        // case 'recentmania': case 'rm': {
-        //     overrides = {
-        //         mode: 'mania'
-        //     };
-        //     command = new helper.commands.osu.scores.recent;
-        // }
-        //     break;
-        // case 'recentbest': case 'rsbest': case 'rb': {
-        //     overrides = {
-        //         type: 'list',
-        //         sort: 'pp'
-        //     };
-        //     command = new helper.commands.osu.scores.recent;
-        // }
-        //     break;
-        // case 'recentlist': case 'rl': case 'rslist': {
-        //     overrides = {
-        //         type: 'list',
-        //         sort: 'recent'
-        //     };
-        //     command = new helper.commands.osu.scores.recent;
-        // }
-        //     break;
-        // case 'recentlisttaiko': case 'rlt': {
-        //     overrides = {
-        //         type: 'list',
-        //         mode: 'taiko',
-        //         sort: 'recent'
-        //     };
-        //     command = new helper.commands.osu.scores.recent;
-        // }
-        //     break;
-        // case 'recentlistfruits': case 'rlf': case 'rlctb': case 'rlc': {
-        //     overrides = {
-        //         type: 'list',
-        //         mode: 'fruits',
-        //         sort: 'recent'
-        //     };
-        //     command = new helper.commands.osu.scores.recent;
-        // }
-        //     break;
-        // case 'recentlistmania': case 'rlm': {
-        //     overrides = {
-        //         type: 'list',
-        //         mode: 'mania',
-        //         sort: 'recent'
-        //     };
-        //     command = new helper.commands.osu.scores.recent;
-        // }
-        //     break;
-        // case 'scoreparse': case 'score': case 'sp':
-        //     command = new helper.commands.osu.scores.scoreparse;
-        //     break;
-        // case 'scores': case 'c':
-        //     command = new helper.commands.osu.scores.scores;
-        //     break;
+        case 'nochokes': case 'nc': {
+            overrides = {
+                miss: true
+            };
+        }
+        case 'osutop': case 'top': case 't': case 'ot': case 'toposu': case 'topo':
+            command = new helper.commands.osu.scores.OsuTop();
+            break;
+        case 'taikotop': case 'toptaiko': case 'tt': case 'topt':
+            {
+                overrides = {
+                    mode: 'taiko'
+                };
+                command = new helper.commands.osu.scores.OsuTop();
+            }
+            break;
+        case 'ctbtop': case 'fruitstop': case 'catchtop': case 'topctb': case 'topfruits': case 'topcatch': case 'tctb': case 'tf': case 'topf': case 'topc':
+            {
+                overrides = {
+                    mode: 'fruits'
+                };
+                command = new helper.commands.osu.scores.OsuTop();
+            }
+            break;
+        case 'maniatop': case 'topmania': case 'tm': case 'topm':
+            {
+                overrides = {
+                    mode: 'mania'
+                };
+                command = new helper.commands.osu.scores.OsuTop();
+            }
+            break;
+        case 'pinned':
+            command = new helper.commands.osu.scores.Pinned();
+            break;
+        case 'recent': case 'rs': case 'recentscore': case 'r':
+            command = new helper.commands.osu.scores.Recent();
+            break;
+        case 'recenttaiko': case 'rt': {
+            overrides = {
+                mode: 'taiko'
+            };
+            command = new helper.commands.osu.scores.Recent();
+        }
+            break;
+        case 'recentfruits': case 'rf': case 'rctb': {
+            overrides = {
+                mode: 'fruits'
+            };
+            command = new helper.commands.osu.scores.Recent();
+        }
+            break;
+        case 'recentmania': case 'rm': {
+            overrides = {
+                mode: 'mania'
+            };
+            command = new helper.commands.osu.scores.Recent();
+        }
+            break;
+        case 'recentbest': case 'rsbest': case 'rb': {
+            overrides = {
+                
+                sort: 'pp'
+            };
+            command = new helper.commands.osu.scores.RecentList();
+        }
+            break;
+        case 'recentlist': case 'rl': case 'rslist': {
+            overrides = {
+                
+                sort: 'recent'
+            };
+            command = new helper.commands.osu.scores.RecentList();
+        }
+            break;
+        case 'recentlisttaiko': case 'rlt': {
+            overrides = {
+                
+                mode: 'taiko',
+                sort: 'recent'
+            };
+            command = new helper.commands.osu.scores.RecentList();
+        }
+            break;
+        case 'recentlistfruits': case 'rlf': case 'rlctb': case 'rlc': {
+            overrides = {
+                
+                mode: 'fruits',
+                sort: 'recent'
+            };
+            command = new helper.commands.osu.scores.RecentList();
+        }
+            break;
+        case 'recentlistmania': case 'rlm': {
+            overrides = {
+                
+                mode: 'mania',
+                sort: 'recent'
+            };
+            command = new helper.commands.osu.scores.RecentList();
+        }
+            break;
+        case 'scoreparse': case 'score': case 'sp':
+            command = new helper.commands.osu.scores.ScoreParse();
+            break;
+        case 'scores': case 'c': case 'mapscores':
+            command = new helper.commands.osu.scores.MapScores();
+            break;
         // case 'scorestats': case 'ss':
         //     command = new helper.commands.osu.scores.scorestats;
         //     break;
         // case 'simplay': case 'simulate': case 'sim':
         //     command = new helper.commands.osu.scores.simulate;
         //     break;
+
         // // osu (track)
         // case 'trackadd': case 'track': case 'ta':
         //     command = new helper.commands.osu.track.add;

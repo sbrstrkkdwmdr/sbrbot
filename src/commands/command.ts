@@ -31,19 +31,23 @@ export class Command {
     setInput(input: bottypes.commandInput) {
         this.input = input;
     }
-    setArgs() {
+    async setArgs() {
         switch (this.input.type) {
             case 'message':
-                this.setArgsMsg();
+                this.commanduser = this.input.message.author;
+                await this.setArgsMsg();
                 break;
             case 'interaction':
-                this.setArgsInteract();
+                this.commanduser = this.input.interaction?.member?.user ?? this.input.interaction?.user;
+                await this.setArgsInteract();
                 break;
             case 'button':
-                this.setArgsBtn();
+                this.commanduser = this.input.interaction?.member?.user ?? this.input.interaction?.user;
+                await this.setArgsBtn();
                 break;
             case 'link':
-                this.setArgsLink();
+                this.commanduser = this.input.message.author;
+                await this.setArgsLink();
                 break;
         }
     }
@@ -94,8 +98,8 @@ export class Command {
         );
     }
     getOverrides() { }
-    execute() {
-        this.setArgs();
+    async execute() {
+        await this.setArgs();
         // do stuff
         // send msg
     }
@@ -120,16 +124,13 @@ class TEMPLATE extends Command {
         };
     }
     async setArgsMsg() {
-        this.commanduser = this.input.message.author;
     }
     async setArgsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.commanduser = interaction?.member?.user ?? interaction?.user;
     }
     async setArgsBtn() {
         if (!this.input.message.embeds[0]) return;
         const interaction = (this.input.interaction as Discord.ButtonInteraction);
-        this.commanduser = interaction?.member?.user ?? this.input.interaction?.user;
         const temp = helper.tools.commands.getButtonArgs(this.input.id);
         if (temp.error) {
             interaction.followUp({
@@ -142,11 +143,10 @@ class TEMPLATE extends Command {
         }
     }
     async setArgsLink() {
-        this.commanduser = this.input.message.author;
         const messagenohttp = this.input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
     }
     async execute() {
-        this.setArgs();
+        await this.setArgs();
         this.logInput();
         // do stuff
 
