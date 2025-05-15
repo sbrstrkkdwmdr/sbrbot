@@ -1,6 +1,11 @@
 import * as Discord from 'discord.js';
+import * as osumodcalc from 'osumodcalculator';
+import * as rosu from 'rosu-pp-js';
 import * as helper from '../helper.js';
 import * as bottypes from '../types/bot.js';
+import * as apitypes from '../types/osuapi.js';
+import * as tooltypes from '../types/tools.js';
+
 export class Command {
     protected name: string;
     protected commanduser: Discord.User | Discord.APIUser;
@@ -27,6 +32,7 @@ export class Command {
             edit: undefined,
             editAsMsg: undefined,
         };
+        this.ctn.files = ['']
     }
     setInput(input: bottypes.commandInput) {
         this.input = input;
@@ -110,6 +116,72 @@ export class Command {
             interaction: this.input.interaction,
             args: this.ctn,
         }, this.input.canReply);
+    }
+}
+
+// gasp capitalised o
+export class OsuCommand extends Command {
+    async getProfile(user: string, mode: apitypes.GameMode) {
+        let osudataReq: tooltypes.apiReturn<apitypes.User>;
+
+        if (helper.tools.data.findFile(user, 'osudata', helper.tools.other.modeValidator(mode)) &&
+            !('error' in helper.tools.data.findFile(user, 'osudata', helper.tools.other.modeValidator(mode))) &&
+            this.input.buttonType != 'Refresh'
+        ) {
+            osudataReq = helper.tools.data.findFile(user, 'osudata', helper.tools.other.modeValidator(mode));
+        } else {
+            osudataReq = await helper.tools.api.getUser(user, mode, []);
+        }
+
+        const osudata: apitypes.User = osudataReq.apiData;
+        if (osudataReq?.error) {
+            const err = helper.vars.errors.uErr.osu.profile.user.replace('[ID]', user);
+            await helper.tools.commands.errorAndAbort(this.input, this.name, true, err, false);
+            throw new Error(err);
+
+        }
+        helper.tools.data.debug(osudataReq, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'osuData');
+
+        if (osudata?.hasOwnProperty('error') || !osudata.id) {
+            const err = helper.vars.errors.noUser(user);
+            await helper.tools.commands.errorAndAbort(this.input, this.name, true, err, true);
+            throw new Error(err);
+        }
+
+        helper.tools.data.debug(osudataReq, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'osuData');
+
+        helper.tools.data.userStatsCache([osudata], helper.tools.other.modeValidator(mode), 'User');
+
+        helper.tools.data.storeFile(osudataReq, osudata.id, 'osudata', helper.tools.other.modeValidator(mode));
+        helper.tools.data.storeFile(osudataReq, osudata.username, 'osudata', helper.tools.other.modeValidator(mode));
+
+        return osudata;
+    }
+    async getMap(mapid: string | number) {
+        let mapdataReq: tooltypes.apiReturn<apitypes.Beatmap>;
+        if (helper.tools.data.findFile(mapid, 'mapdata') &&
+            !('error' in helper.tools.data.findFile(mapid, 'mapdata')) &&
+            this.input.buttonType != 'Refresh') {
+            mapdataReq = helper.tools.data.findFile(mapid, 'mapdata');
+        } else {
+            mapdataReq = await helper.tools.api.getMap(mapid);
+        }
+
+        const mapdata = mapdataReq.apiData;
+        if (mapdataReq?.error) {
+            const err = helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid + '');
+            await helper.tools.commands.errorAndAbort(this.input, this.name, true, err, false);
+            throw new Error(err);
+        }
+        if (mapdata?.hasOwnProperty('error')) {
+            const err = helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid + '');
+            await helper.tools.commands.errorAndAbort(this.input, this.name, true, err, true);
+            throw new Error(err);
+        }
+
+        helper.tools.data.storeFile(mapdataReq, mapid, 'mapdata');
+
+        return mapdata;
     }
 }
 

@@ -311,86 +311,86 @@ function commandSelect(cmd: string, args: string[]) {
         //     break;
 
         // // osu (maps)
-        // case 'ppcalc': case 'mapcalc': case 'mapperf': case 'maperf': case 'mappp': {
-        //     overrides = {
-        //         type: 'ppcalc'
-        //     };
-        // }
-        // case 'map': case 'm':
-        //     command = new helper.commands.osu.maps.map;
-        //     break;
-        // case 'maprandom': case 'f2': case 'maprand': case 'randommap': case 'randmap':
-        //     command = new helper.commands.osu.maps.randomMap;
-        //     break;
-        // case 'recommendmap': case 'recmap': case 'maprec': case 'mapsuggest': case 'suggestmap': case 'maprecommend':
-        //     command = new helper.commands.osu.maps.recMap;
-        //     break;
-        // case 'userbeatmaps': case 'ub': case 'userb': case 'ubm': case 'um': case 'usermaps':
-        //     command = new helper.commands.osu.maps.userBeatmaps;
-        //     break;
-        // case 'ranked': {
-        //     overrides = {
-        //         ex: 'ranked'
-        //     };
-        //     command = new helper.commands.osu.maps.userBeatmaps;
-        // }
-        //     break;
-        // case 'favourite': case 'favourites': {
-        //     overrides = {
-        //         ex: 'favourite'
-        //     };
-        //     command = new helper.commands.osu.maps.userBeatmaps;
-        // }
-        //     break;
-        // case 'graveyard': case 'unranked': {
-        //     overrides = {
-        //         ex: 'graveyard'
-        //     };
-        //     command = new helper.commands.osu.maps.userBeatmaps;
-        // }
-        //     break;
-        // case 'loved': {
-        //     overrides = {
-        //         ex: 'loved'
-        //     };
-        //     command = new helper.commands.osu.maps.userBeatmaps;
-        // }
-        //     break;
-        // case 'most_played': case 'mostplayed': case 'mp': {
-        //     overrides = {
-        //         ex: 'most_played'
-        //     };
-        //     command = new helper.commands.osu.maps.userBeatmaps;
-        // }
-        //     break;
-        // case 'pending': case 'wip': {
-        //     overrides = {
-        //         ex: 'pending'
-        //     };
-        //     command = new helper.commands.osu.maps.userBeatmaps;
-        // }
-        //     break;
-        // case 'nominated': case 'bn': {
-        //     overrides = {
-        //         ex: 'nominated'
-        //     };
-        //     command = new helper.commands.osu.maps.userBeatmaps;
-        // }
-        //     break;
-        // case 'guest': case 'gd': {
-        //     overrides = {
-        //         ex: 'guest'
-        //     };
-        //     command = new helper.commands.osu.maps.userBeatmaps;
-        // }
-        //     break;
+        case 'ppcalc': case 'mapcalc': case 'mapperf': case 'maperf': case 'mappp': {
+            overrides = {
+                type: 'ppcalc'
+            };
+        }
+        case 'map': case 'm':
+            command = new helper.commands.osu.maps.Map();
+            break;
+        case 'maprandom': case 'f2': case 'maprand': case 'randommap': case 'randmap':
+            command = new helper.commands.osu.maps.RandomMap();
+            break;
+        case 'recommendmap': case 'recmap': case 'maprec': case 'mapsuggest': case 'suggestmap': case 'maprecommend':
+            command = new helper.commands.osu.maps.RecommendMap();
+            break;
+        case 'userbeatmaps': case 'ub': case 'userb': case 'ubm': case 'um': case 'usermaps':
+            command = new helper.commands.osu.maps.UserBeatmaps();
+            break;
+        case 'ranked': {
+            overrides = {
+                ex: 'ranked'
+            };
+            command = new helper.commands.osu.maps.UserBeatmaps();
+        }
+            break;
+        case 'favourite': case 'favourites': {
+            overrides = {
+                ex: 'favourite'
+            };
+            command = new helper.commands.osu.maps.UserBeatmaps();
+        }
+            break;
+        case 'graveyard': case 'unranked': {
+            overrides = {
+                ex: 'graveyard'
+            };
+            command = new helper.commands.osu.maps.UserBeatmaps();
+        }
+            break;
+        case 'loved': {
+            overrides = {
+                ex: 'loved'
+            };
+            command = new helper.commands.osu.maps.UserBeatmaps();
+        }
+            break;
+        case 'most_played': case 'mostplayed': case 'mp': {
+            overrides = {
+                ex: 'most_played'
+            };
+            command = new helper.commands.osu.maps.UserBeatmaps();
+        }
+            break;
+        case 'pending': case 'wip': {
+            overrides = {
+                ex: 'pending'
+            };
+            command = new helper.commands.osu.maps.UserBeatmaps();
+        }
+            break;
+        case 'nominated': case 'bn': {
+            overrides = {
+                ex: 'nominated'
+            };
+            command = new helper.commands.osu.maps.UserBeatmaps();
+        }
+            break;
+        case 'guest': case 'gd': {
+            overrides = {
+                ex: 'guest'
+            };
+            command = new helper.commands.osu.maps.UserBeatmaps();
+        }
+            break;
         // // osu (scores)
         case 'firsts': case 'firstplaceranks': case 'fpr': case 'fp': case '#1s': case 'first': case '#1': case '1s':
             command = new helper.commands.osu.scores.Firsts();
             break;
-        // case 'leaderboard': case 'maplb': case 'mapleaderboard': case 'ml':
-        //     command = new helper.commands.osu.scores.maplb;
-        //     break;
+        case 'leaderboard': case 'maplb': case 'mapleaderboard': case 'ml':
+            command = new helper.commands.osu.scores.MapLeaderboard();
+            break;
         case 'nochokes': case 'nc': {
             overrides = {
                 miss: true
@@ -452,7 +452,7 @@ function commandSelect(cmd: string, args: string[]) {
             break;
         case 'recentbest': case 'rsbest': case 'rb': {
             overrides = {
-                
+
                 sort: 'pp'
             };
             command = new helper.commands.osu.scores.RecentList();
@@ -460,7 +460,7 @@ function commandSelect(cmd: string, args: string[]) {
             break;
         case 'recentlist': case 'rl': case 'rslist': {
             overrides = {
-                
+
                 sort: 'recent'
             };
             command = new helper.commands.osu.scores.RecentList();
@@ -468,7 +468,7 @@ function commandSelect(cmd: string, args: string[]) {
             break;
         case 'recentlisttaiko': case 'rlt': {
             overrides = {
-                
+
                 mode: 'taiko',
                 sort: 'recent'
             };
@@ -477,7 +477,7 @@ function commandSelect(cmd: string, args: string[]) {
             break;
         case 'recentlistfruits': case 'rlf': case 'rlctb': case 'rlc': {
             overrides = {
-                
+
                 mode: 'fruits',
                 sort: 'recent'
             };
@@ -486,7 +486,7 @@ function commandSelect(cmd: string, args: string[]) {
             break;
         case 'recentlistmania': case 'rlm': {
             overrides = {
-                
+
                 mode: 'mania',
                 sort: 'recent'
             };
@@ -499,12 +499,12 @@ function commandSelect(cmd: string, args: string[]) {
         case 'scores': case 'c': case 'mapscores':
             command = new helper.commands.osu.scores.MapScores();
             break;
-        // case 'scorestats': case 'ss':
-        //     command = new helper.commands.osu.scores.scorestats;
-        //     break;
-        // case 'simplay': case 'simulate': case 'sim':
-        //     command = new helper.commands.osu.scores.simulate;
-        //     break;
+        case 'scorestats': case 'ss':
+            command = new helper.commands.osu.scores.ScoreStats();
+            break;
+        case 'simplay': case 'simulate': case 'sim':
+            command = new helper.commands.osu.scores.Simulate();
+            break;
 
         // // osu (track)
         // case 'trackadd': case 'track': case 'ta':

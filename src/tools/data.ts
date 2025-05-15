@@ -1,5 +1,6 @@
 // database and caching
 import fs from 'fs';
+import * as moment from 'moment';
 import * as rosu from 'rosu-pp-js';
 import Sequelize from 'sequelize';
 import * as stats from 'simple-statistics';
@@ -289,13 +290,15 @@ export function findFile(id: string | number, name: string, mode?: apitypes.Game
 
 export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) {
     try {
-        const init = JSON.parse(fs.readFileSync(`${helper.vars.path.cache}/previous/${type}${serverId}.json`, 'utf-8')) as {
-            id: string | false,
-            apiData: apitypes.Score,
-            mods: string,
-            default: boolean,
-            mode: apitypes.GameMode;
-        };
+        const init = JSON.parse(
+            fs.readFileSync(`${helper.vars.path.cache}/previous/${type}${serverId}.json`, 'utf-8')) as {
+                id: string | false,
+                apiData: apitypes.Score,
+                mods: string,
+                default: boolean,
+                mode: apitypes.GameMode,
+                last_access: string,
+            };
         return init;
     } catch (error) {
         const data: {
@@ -303,13 +306,15 @@ export function getPreviousId(type: 'map' | 'user' | 'score', serverId: string) 
             apiData: apitypes.Score,
             mods: string;
             default: boolean,
-            mode: apitypes.GameMode;
+            mode: apitypes.GameMode,
+            last_access: string,
         } = {
             id: false,
             apiData: null,
             mods: null,
             default: true,
-            mode: 'osu'
+            mode: 'osu',
+            last_access: moment.default.utc().format("YYYY-MM-DD HH:mm:ss.SSS")
         };
         fs.writeFileSync(`${helper.vars.path.cache}/previous/${type}${serverId}.json`, JSON.stringify(data, null, 2));
         return data;
@@ -326,6 +331,7 @@ export function writePreviousId(type: 'map' | 'user' | 'score', serverId: string
         data.mods = 'NM';
     }
     data['default'] = false;
+    data['last_access'] = moment.default.utc().format("YYYY-MM-DD HH:mm:ss.SSS");
 
     fs.writeFileSync(`${helper.vars.path.cache}/previous/${type}${serverId}.json`, JSON.stringify(data, null, 2));
     return;

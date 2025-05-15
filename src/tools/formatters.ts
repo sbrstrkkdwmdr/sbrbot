@@ -68,33 +68,21 @@ export async function scoreList(
         if (!score) break;
         // let convertedScore = CurrentToLegacyScore(score as apitypes.Score);
         const overrides = helper.tools.calculate.modOverrides(score.mods);
-        const perf = await helper.tools.performance.calcScore({
-            mapid: overrideMap?.id ?? score.beatmap_id,
-            mode: score.ruleset_id,
-            mods: score.mods.map(x => x.acronym).join(''),
-            accuracy: score.accuracy,
-            stats: score.statistics,
-            maxcombo: score.max_combo,
-            mapLastUpdated: new Date((overrideMap ?? score.beatmap).last_updated),
-            customAR: overrides.ar,
-            customHP: overrides.hp,
-            customCS: overrides.cs,
-            customOD: overrides.od,
-            clockRate: overrides.speed,
-        });
-        const fc = await helper.tools.performance.calcFullCombo({
-            mapid: (overrideMap ?? score.beatmap).id,
-            mode: score.ruleset_id,
-            mods: score.mods.map(x => x.acronym).join(''),
-            accuracy: score.accuracy,
-            stats: score.statistics,
-            mapLastUpdated: new Date((overrideMap ?? score.beatmap).last_updated),
-            customAR: overrides.ar,
-            customHP: overrides.hp,
-            customCS: overrides.cs,
-            customOD: overrides.od,
-            clockRate: overrides.speed,
-        });
+        const perfs = await helper.tools.performance.fullPerformance(
+            overrideMap?.id ?? score.beatmap_id,
+            score.ruleset_id,
+            score.mods.map(x => x.acronym).join(''),
+            score.accuracy,
+            overrides.speed,
+            score.statistics,
+            score.max_combo,
+            null,
+            new Date((overrideMap ?? score.beatmap).last_updated),
+            overrides.ar,
+            overrides.hp,
+            overrides.cs,
+            overrides.od,
+        );
         let info = `**#${(showOriginalIndex ? score.originalIndex : i) + 1}`;
         let modadjustments = '';
         if (score.mods.filter(x => x?.settings?.speed_change).length > 0) {
@@ -111,18 +99,18 @@ export async function scoreList(
                 info += `・[${score.beatmapset.title} [${(overrideMap ?? score.beatmap).version}]](https://osu.ppy.sh/${score.id ? `scores/${score.id}` : `b/${(overrideMap ?? score.beatmap).id}`})`;
                 break;
         }
-        let combo = `${score?.max_combo}/**${fc.difficulty.maxCombo}x**`;
-        if (score.max_combo == fc.difficulty.maxCombo || !score.max_combo) combo = `**${score.max_combo}x**`;
+        let combo = `${score?.max_combo}/**${perfs[1].difficulty.maxCombo}x**`;
+        if (score.max_combo == perfs[1].difficulty.maxCombo || !score.max_combo) combo = `**${score.max_combo}x**`;
         const tempScore = score as indexedScore<apitypes.Score>;
 
         info +=
             `** ${dateToDiscordFormat(new Date(tempScore.ended_at))}
 ${score.passed ? helper.vars.emojis.grades[score.rank] : helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[score.rank]} if pass)`} | \`${helper.tools.calculate.numberShorthand(helper.tools.other.getTotalScore(score))}\` | ${tempScore.mods.length > 0 && preset != 'single_map' ? ' **' + osumodcalc.OrderMods(tempScore.mods.map(x => x.acronym).join('')).string + modadjustments + '**' : ''}
 \`${returnHits(score.statistics, score.ruleset_id).short}\` | ${combo} | ${(score.accuracy * 100).toFixed(2)}% 
-${(score?.pp ?? perf.pp).toFixed(2)}pp`;
+${(score?.pp ?? perfs[0].pp).toFixed(2)}pp`;
 
         if (!score?.is_perfect_combo) {
-            info += ' (' + fc.pp.toFixed(2) + 'pp if FC)';
+            info += ' (' + perfs[1].pp.toFixed(2) + 'pp if FC)';
         }
         info += '\n\n';
         text += info;

@@ -527,7 +527,7 @@ export type params = {
     maxPage?: number,
     mode?: apitypes.GameMode,
     userId?: string,
-    mapId?: string,
+    mapId?: number,
     spotlight?: string,
     detailed?: number,
     filter?: string,
@@ -538,7 +538,7 @@ export type params = {
     country?: string, //ranking
     //scorelist AND ubm
     parse?: boolean,
-    parseId?: string,
+    parseId?: number,
     filterTitle?: string,
     //scorelist
     sortScore?: "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss",
