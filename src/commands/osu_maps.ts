@@ -873,7 +873,6 @@ export class Map extends OsuCommand {
                                 imgUrl: helper.tools.api.mapImages(this.map.beatmapset_id).full,
                                 blurImg: true,
                             });
-                        //@ts-expect-error attachment and builder overlap causes results in never
                         this.ctn.files.push(mapgraphInit.path);
                         mapgraph = mapgraphInit.filename;
                     } else {
@@ -1026,7 +1025,6 @@ export class Map extends OsuCommand {
                             label: 'Exits',
                             separateAxis: false,
                         }]);
-                        //@ts-expect-error attachment and builder overlap causes results in never
                         this.ctn.files.push(passInit.path);
 
                         const passurl = passInit.filename;

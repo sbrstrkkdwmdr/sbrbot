@@ -11,8 +11,8 @@ export class Command {
     protected commanduser: Discord.User | Discord.APIUser;
     protected ctn: {
         content?: string,
-        embeds?: Discord.EmbedBuilder[] | Discord.Embed[],
-        files?: string[] | Discord.AttachmentBuilder[] | Discord.Attachment[],
+        embeds?: (Discord.EmbedBuilder | Discord.Embed)[],
+        files?: (string | Discord.AttachmentBuilder | Discord.Attachment)[],
         components?: Discord.ActionRowBuilder<any>[],
         ephemeral?: boolean,
         react?: boolean,

@@ -3,7 +3,7 @@
 newest-oldest
 
 ## current
-- [ ] fix FileNotFound in map commands
+- [x] fix FileNotFound in map commands
 - [x] get command to work in DMs (atm. only message commands)
 - [x] interaction commands
 - [x] map PP values all the same

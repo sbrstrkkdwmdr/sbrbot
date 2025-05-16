@@ -11,8 +11,8 @@ export async function sendMessage(input: {
     interaction: Discord.ChatInputCommandInteraction<any> | Discord.ButtonInteraction<any>;
     args: {
         content?: string,
-        embeds?: Discord.EmbedBuilder[] | Discord.Embed[],
-        files?: string[] | Discord.AttachmentBuilder[] | Discord.Attachment[],
+        embeds?: (Discord.EmbedBuilder | Discord.Embed)[],
+        files?: (string | Discord.AttachmentBuilder | Discord.Attachment)[],
         components?: Discord.ActionRowBuilder<any>[],
         ephemeral?: boolean,
         react?: boolean,
