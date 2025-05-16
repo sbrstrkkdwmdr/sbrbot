@@ -1,4 +1,5 @@
 import * as Discord from 'discord.js';
+import moment from 'moment';
 import * as osumodcalc from 'osumodcalculator';
 import * as rosu from 'rosu-pp-js';
 import * as helper from '../helper.js';
@@ -109,7 +110,6 @@ export class Command {
         // send msg
     }
     send() {
-
         helper.tools.commands.sendMessage({
             type: this.input.type,
             message: this.input.message,
@@ -182,6 +182,24 @@ export class OsuCommand extends Command {
         helper.tools.data.storeFile(mapdataReq, mapid, 'mapdata');
 
         return mapdata;
+    }
+    getLatestMap() {
+        const tempMap = helper.tools.data.getPreviousId('map', this.input.message?.guildId ?? this.input.interaction?.guildId);
+        const tempScore = helper.tools.data.getPreviousId('map', this.input.message?.guildId ?? this.input.interaction?.guildId);
+        const tmt = moment(tempMap.last_access ?? '1975-01-01');
+        const tst = moment(tempScore.last_access ?? '1975-01-01');
+        if (tmt.isBefore(tst)) {
+            return {
+                mapid: tempMap.id,
+                mods: tempMap.mods,
+                mode: tempMap.mode,
+            };
+        }
+        return {
+            mapid: tempScore.apiData.beatmap_id,
+            mods: tempScore.mods,
+            mode: tempScore.mode,
+        };
     }
 }
 

@@ -49,7 +49,7 @@ Command Type: ${type}
 Date:         ${(new Date).toISOString()}
 Date (epoch): ${(new Date).getTime()}
 ID:           ${id}
-Requested by: ${user.username} (${user.id})
+Requested by: ${user?.username} (${user?.id})
 Guild ID:     ${message?.guildId ?? interaction?.guildId}
 Channel ID:   ${message?.channelId ?? interaction?.channelId}`;
     if (opts.length > 0) {

@@ -220,6 +220,7 @@ export class Map extends OsuCommand {
     async execute() {
         await this.setArgs();
         this.logInput();
+        this.getOverrides();
         // do stuff
         const buttons = new Discord.ActionRowBuilder();
         if (this.args.isppCalc) {
@@ -248,8 +249,8 @@ export class Map extends OsuCommand {
         }
 
         if (!this.args.mapid) {
-            const temp = helper.tools.data.getPreviousId('map', this.input.message?.guildId ?? this.input.interaction?.guildId);
-            this.args.mapid = temp.id;
+            const temp = this.getLatestMap();
+            this.args.mapid = temp.mapid;
             if (!this.args.mapmods || osumodcalc.OrderMods(this.args.mapmods).string.length == 0) {
                 this.args.mapmods = temp.mods;
             }
@@ -279,7 +280,6 @@ export class Map extends OsuCommand {
             }, this.input.canReply);
         }
 
-        let mapdataReq: tooltypes.apiReturn<apitypes.Beatmap>;
         let bmsdataReq: tooltypes.apiReturn<apitypes.Beatmapset>;
 
         if (this.args.maptitleq == null) {
@@ -1082,8 +1082,6 @@ export class Map extends OsuCommand {
                 this.ctn.embeds = embeds;
 
             }
-
-            helper.tools.data.storeFile(bmsdataReq, this.map.beatmapset_id, `bmsdata`);
         }
 
         helper.tools.data.writePreviousId('map', this.input.message?.guildId ?? this.input.interaction?.guildId,

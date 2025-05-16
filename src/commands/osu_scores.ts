@@ -2217,7 +2217,7 @@ export class Simulate extends OsuCommand {
         // do stuff
         if (!this.args.mapid) {
             try {
-                const temp = this.getLatestMap();
+                const temp = this.getLatestMap().mapid;
                 if (temp == false) {
                     helper.tools.commands.missingPrevID_map(this.input, this.name);
                     return;
@@ -2392,15 +2392,5 @@ export class Simulate extends OsuCommand {
         this.ctn.embeds = [scoreEmbed];
 
         this.send();
-    }
-    getLatestMap() {
-        const tempMap = helper.tools.data.getPreviousId('map', this.input.message?.guildId ?? this.input.interaction?.guildId);
-        const tempScore = helper.tools.data.getPreviousId('map', this.input.message?.guildId ?? this.input.interaction?.guildId);
-        const tmt = moment(tempMap.last_access ?? '1975-01-01');
-        const tst = moment(tempScore.last_access ?? '1975-01-01');
-        if (tmt.isBefore(tst)) {
-            return tempMap.id;
-        }
-        return tempScore.apiData.beatmap_id;
     }
 }
