@@ -1748,7 +1748,6 @@ export class UserBeatmaps extends OsuCommand {
         this.ctn.embeds = [mapList];
         this.ctn.components = [pgbuttons, buttons];
 
-
         this.send();
     }
     osudata: apitypes.User;

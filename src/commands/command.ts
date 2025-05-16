@@ -32,7 +32,6 @@ export class Command {
             edit: undefined,
             editAsMsg: undefined,
         };
-        this.ctn.files = ['']
     }
     setInput(input: bottypes.commandInput) {
         this.input = input;
@@ -110,6 +109,7 @@ export class Command {
         // send msg
     }
     send() {
+
         helper.tools.commands.sendMessage({
             type: this.input.type,
             message: this.input.message,
