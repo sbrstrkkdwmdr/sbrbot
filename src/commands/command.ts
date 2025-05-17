@@ -209,6 +209,7 @@ class TEMPLATE extends Command {
     };
     constructor() {
         super();
+        this.name = 'TEMPLATE'
         this.args = {
             xyzxyz: ''
         };
