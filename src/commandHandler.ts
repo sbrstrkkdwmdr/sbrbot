@@ -270,47 +270,47 @@ function commandSelect(cmd: string, args: string[]) {
             break;
 
         // osu (profiles)
-        // case 'badges':
-        //     command = new helper.commands.osu.profiles.badges;
-        //     break;
-        // case 'bws': case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':
-        //     command = new helper.commands.osu.profiles.bws;
-        //     break;
-        // case 'lb':
-        //     command = new helper.commands.osu.profiles.lb;
-        //     break;
-        // case 'osu': case 'profile': case 'o': case 'user':
-        //     command = new helper.commands.osu.profiles.osu;
-        //     break;
-        // case 'taiko': case 'drums': {
-        //     overrides = {
-        //         mode: 'taiko'
-        //     };
-        //     command = new helper.commands.osu.profiles.osu;
-        // }
-        //     break;
-        // case 'fruits': case 'ctb': case 'catch': {
-        //     overrides = {
-        //         mode: 'fruits'
-        //     };
-        //     command = new helper.commands.osu.profiles.osu;
-        // }
-        //     break;
-        // case 'mania': {
-        //     overrides = {
-        //         mode: 'mania'
-        //     };
-        //     command = new helper.commands.osu.profiles.osu;
-        // }
-        //     break;
-        // case 'ranking': case 'rankings':
-        //     command = new helper.commands.osu.profiles.ranking;
-        //     break;
-        // case 'recentactivity': case 'recentact': case 'rsact':
-        //     command = new helper.commands.osu.profiles.recent_activity;
-        //     break;
+        case 'badges':
+            command = new helper.commands.osu.profiles.Badges();
+            break;
+        case 'bws': case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':
+            command = new helper.commands.osu.profiles.BadgeWeightSeed();
+            break;
+        case 'lb':
+            command = new helper.commands.osu.profiles.Leaderboard();
+            break;
+        case 'osu': case 'profile': case 'o': case 'user':
+            command = new helper.commands.osu.profiles.Profile();
+            break;
+        case 'taiko': case 'drums': {
+            overrides = {
+                mode: 'taiko'
+            };
+            command = new helper.commands.osu.profiles.Profile();
+        }
+            break;
+        case 'fruits': case 'ctb': case 'catch': {
+            overrides = {
+                mode: 'fruits'
+            };
+            command = new helper.commands.osu.profiles.Profile();
+        }
+            break;
+        case 'mania': {
+            overrides = {
+                mode: 'mania'
+            };
+            command = new helper.commands.osu.profiles.Profile();
+        }
+            break;
+        case 'ranking': case 'rankings':
+            command = new helper.commands.osu.profiles.Ranking();
+            break;
+        case 'recentactivity': case 'recentact': case 'rsact':
+            command = new helper.commands.osu.profiles.RecentActivity();
+            break;
 
-        // // osu (maps)
+        // osu (maps)
         case 'ppcalc': case 'mapcalc': case 'mapperf': case 'maperf': case 'mappp': {
             overrides = {
                 type: 'ppcalc'

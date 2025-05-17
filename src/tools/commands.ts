@@ -528,7 +528,7 @@ export type params = {
     mode?: apitypes.GameMode,
     userId?: string,
     mapId?: number,
-    spotlight?: string,
+    spotlight?: string | number,
     detailed?: number,
     filter?: string,
     list?: boolean, //recent
