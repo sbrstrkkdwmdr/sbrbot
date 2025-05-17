@@ -557,7 +557,7 @@ export class ScoreListCommand extends OsuCommand {
 
         //if user is not found in database, use discord username
         if (this.args.user == null) {
-            const cuser = helper.vars.client.users.cache.get(this.args.searchid);
+            const cuser = helper.vars.client.users.cache.get(this.commanduser.id);
             this.args.user = cuser.username;
         }
         this.args.mode = helper.tools.other.modeValidator(this.args.mode);
@@ -1323,7 +1323,7 @@ export class Recent extends SingleScoreCommand {
 
         //if user is not found in database, use discord username
         if (this.args.user == null) {
-            const cuser = helper.vars.client.users.cache.get(this.args.searchid);
+            const cuser = helper.vars.client.users.cache.get(this.commanduser.id);
             this.args.user = cuser.username;
         }
 
@@ -1827,7 +1827,7 @@ export class ScoreStats extends OsuCommand {
 
         //if user is not found in database, use discord username
         if (this.args.user == null) {
-            const cuser = helper.vars.client.users.cache.get(this.args.searchid);
+            const cuser = helper.vars.client.users.cache.get(this.commanduser.id);
             this.args.user = cuser.username;
         }
 

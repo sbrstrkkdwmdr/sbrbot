@@ -54,7 +54,7 @@ export class Badges extends OsuCommand {
 
         //if user is not found in database, use discord username
         if (this.args.user == null) {
-            const cuser = helper.vars.client.users.cache.get(this.args.searchid);
+            const cuser = helper.vars.client.users.cache.get(this.commanduser.id);
             this.args.user = cuser.username;
         }
 
@@ -170,7 +170,7 @@ export class BadgeWeightSeed extends OsuCommand {
 
         //if user is not found in database, use discord username
         if (this.args.user == null) {
-            const cuser = helper.vars.client.users.cache.get(this.args.searchid);
+            const cuser = helper.vars.client.users.cache.get(this.commanduser.id);
             this.args.user = cuser.username;
         }
 
@@ -547,7 +547,6 @@ export class Ranking extends OsuCommand {
         // do stuff
         this.args.mode = helper.tools.other.modeValidator(this.args.mode);
         const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('ranking', this.commanduser, this.input.id);
-        const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder();
 
         if (this.args.page < 2 || typeof this.args.page != 'number' || isNaN(this.args.page)) {
             this.args.page = 1;
@@ -712,8 +711,7 @@ export class Ranking extends OsuCommand {
         }
 
         this.ctn.embeds = [embed];
-        this.ctn.components = [pgbuttons, buttons];
-
+        this.ctn.components = [pgbuttons];
         this.send();
     }
 }
@@ -882,16 +880,16 @@ export class Profile extends OsuCommand {
         //if user is null, use searchid
         if (this.args.user == null) {
             const cuser = await helper.tools.data.searchUser(this.args.searchid, true);
-            this.args.user = cuser.username;
+            this.args.user = cuser?.username;
             if (this.args.mode == null) {
-                this.args.mode = cuser.gamemode;
+                this.args.mode = cuser?.gamemode;
             }
         }
 
         //if user is not found in database, use discord username
         if (this.args.user == null) {
-            const cuser = helper.vars.client.users.cache.get(this.args.searchid);
-            this.args.user = cuser.username;
+            const cuser = helper.vars.client.users.cache.get(this.commanduser.id);
+            this.args.user = cuser?.username;
         }
 
         this.args.mode = this.args.mode ? helper.tools.other.modeValidator(this.args.mode) : null;
@@ -1183,6 +1181,7 @@ export class RecentActivity extends OsuCommand {
         };
     }
     async setArgsMsg() {
+        this.args.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
         const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, this.input.args, true, 'number', false, true);
         if (pageArgFinder.found) {
             this.args.page = pageArgFinder.output;
@@ -1243,13 +1242,13 @@ export class RecentActivity extends OsuCommand {
         //if user is null, use searchid
         if (this.args.user == null) {
             const cuser = await helper.tools.data.searchUser(this.args.searchid, true);
-            this.args.user = cuser.username;
+            this.args.user = cuser?.username;
         }
 
         //if user is not found in database, use discord username
         if (this.args.user == null) {
-            const cuser = helper.vars.client.users.cache.get(this.args.searchid);
-            this.args.user = cuser.username;
+            const cuser = helper.vars.client.users.cache.get(this.commanduser.id);
+            this.args.user = cuser?.username;
         }
 
         if (this.args.page < 2 || typeof this.args.page != 'number') {
