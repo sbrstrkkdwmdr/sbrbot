@@ -971,6 +971,7 @@ ${helper.tools.formatter.dateToDiscordFormat(new Date(this.score.ended_at), 'F')
         }
 
         this.ctn.embeds = [embed];
+        return embed;
     }
     async getStrains(map: apitypes.Beatmap, score: apitypes.Score) {
         const strains = await helper.tools.performance.calcStrains({
@@ -996,6 +997,7 @@ ${helper.tools.formatter.dateToDiscordFormat(new Date(this.score.ended_at), 'F')
                 blurImg: true,
             });
         this.ctn.files = [strainsgraph.path];
+        return strainsgraph.filename + '.jpg';
     }
     getTryCount(scores: apitypes.Score[], mapid: number) {
         let trycount = 1;
@@ -1180,7 +1182,9 @@ export class ScoreParse extends SingleScoreCommand {
             return;
         }
 
-        await this.renderEmbed();
+        const e = await this.renderEmbed();
+        const s = await this.getStrains(this.map, this.score);
+        e.setImage(`attachment://${s}`);
 
         helper.tools.data.writePreviousId('score', this.input.message?.guildId ?? this.input.interaction?.guildId,
             {
@@ -1195,7 +1199,7 @@ export class ScoreParse extends SingleScoreCommand {
                 mods: this.score.mods.map(x => x.acronym).join()
             }
         );
-        this.getStrains(this.map, this.score);
+
         this.send();
     }
 
@@ -1429,8 +1433,23 @@ export class Recent extends SingleScoreCommand {
             return;
         }
 
-        await this.renderEmbed();
-        await this.getStrains(this.map, this.score);
+        const e = await this.renderEmbed();
+        const s = await this.getStrains(this.map, this.score);
+        e.setImage(`attachment://${s}`);
+
+        helper.tools.data.writePreviousId('score', this.input.message?.guildId ?? this.input.interaction?.guildId,
+            {
+                id: `${this.score.id}`,
+                apiData: this.score,
+                mods: this.score.mods.map(x => x.acronym).join()
+            });
+        helper.tools.data.writePreviousId('map', this.input.message?.guildId ?? this.input.interaction?.guildId,
+            {
+                id: `${this.map.id}`,
+                apiData: null,
+                mods: this.score.mods.map(x => x.acronym).join()
+            }
+        );
 
         this.ctn.edit = true;
 
@@ -1698,6 +1717,7 @@ export class MapLeaderboard extends OsuCommand {
     }
 }
 
+// TODO
 export class ReplayParse extends Command {
 
 }
@@ -2102,6 +2122,7 @@ export class Simulate extends OsuCommand {
     };
     constructor() {
         super();
+        this.name = 'Simulate';
         this.args = {
             mapid: null,
             mods: null,
