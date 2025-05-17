@@ -6,3 +6,4 @@ import * as apitypes from '../types/osuapi.js';
 import * as tooltypes from '../types/tools.js';
 import { Command } from './command.js';
 
+// compare, osuset, rankpp, saved, whatif
