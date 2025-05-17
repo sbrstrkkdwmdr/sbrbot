@@ -190,15 +190,15 @@ export class OsuCommand extends Command {
         const tst = moment(tempScore.last_access ?? '1975-01-01');
         if (tmt.isBefore(tst)) {
             return {
-                mapid: tempMap.id,
-                mods: tempMap.mods,
-                mode: tempMap.mode,
+                mapid: tempMap?.id,
+                mods: tempMap?.mods,
+                mode: tempMap?.mode,
             };
         }
         return {
-            mapid: tempScore.apiData.beatmap_id,
-            mods: tempScore.mods,
-            mode: tempScore.mode,
+            mapid: tempScore?.apiData?.beatmap_id,
+            mods: tempScore?.mods,
+            mode: tempScore?.mode,
         };
     }
 }
