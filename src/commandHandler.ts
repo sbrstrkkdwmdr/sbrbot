@@ -507,18 +507,18 @@ function commandSelect(cmd: string, args: string[]) {
             break;
 
         // // osu (track)
-        // case 'trackadd': case 'track': case 'ta':
-        //     command = new helper.commands.osu.track.add;
-        //     break;
-        // case 'trackremove': case 'trackrm': case 'tr': case 'untrack':
-        //     command = new helper.commands.osu.track.remove;
-        //     break;
-        // case 'trackchannel': case 'tc':
-        //     command = new helper.commands.osu.track.channel;
-        //     break;
-        // case 'tracklist': case 'tl':
-        //     command = new helper.commands.osu.track.list;
-        //     break;
+        case 'trackadd': case 'track': case 'ta':
+            command = new helper.commands.osu.track.TrackAdd();
+            break;
+        case 'trackremove': case 'trackrm': case 'tr': case 'untrack':
+            command = new helper.commands.osu.track.TrackRemove();
+            break;
+        case 'trackchannel': case 'tc':
+            command = new helper.commands.osu.track.TrackChannel();
+            break;
+        case 'tracklist': case 'tl':
+            command = new helper.commands.osu.track.TrackList();
+            break;
 
         // // osu (other)
         // case 'common': {
