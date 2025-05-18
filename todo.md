@@ -3,6 +3,13 @@
 newest-oldest
 
 ## current
+- [ ] test button and link arg handlers
+- [ ] test osu_other, osu_track, misc, admin
+- [ ] ensure all commands have `this.name` set
+- [ ] ensure all uses of `errorAndAbort` throw errors instead of returns
+- [ ] ensure all functions that use command name use `this.name` (debug, buttons etc.)
+- [ ] use `this.send` instead of `commands.sendMessage` when possible
+- [ ] change user == null to `validUser`
 - [x] fix FileNotFound in map commands
 - [x] get command to work in DMs (atm. only message commands)
 - [x] interaction commands

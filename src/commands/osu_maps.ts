@@ -5,7 +5,7 @@ import * as helper from '../helper.js';
 import * as bottypes from '../types/bot.js';
 import * as apitypes from '../types/osuapi.js';
 import * as tooltypes from '../types/tools.js';
-import { Command, OsuCommand } from './command.js';
+import { OsuCommand } from './command.js';
 
 export class Map extends OsuCommand {
     declare protected args: {
@@ -299,14 +299,14 @@ export class Map extends OsuCommand {
             const mapidtestReq = await helper.tools.api.getMapSearch(encodeURIComponent(this.args.maptitleq), ['s=any']);
             const mapidtest = mapidtestReq.apiData as apitypes.BeatmapsetSearch;
             if (mapidtestReq?.error) {
-                await helper.tools.commands.errorAndAbort(this.input, 'map', true, helper.vars.errors.uErr.osu.map.search, false);
+                await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.map.search, false);
                 return;
             }
-            helper.tools.data.debug(mapidtestReq, 'command', 'map', this.input.message?.guildId ?? this.input.interaction?.guildId, 'mapIdTestData');
+            helper.tools.data.debug(mapidtestReq, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'mapIdTestData');
             helper.tools.data.storeFile(mapidtestReq, this.args.maptitleq.replace(/[\W_]+/g, '').replaceAll(' ', '_'), 'mapQuerydata');
 
             if (mapidtest?.hasOwnProperty('error') && !mapidtest.hasOwnProperty('beatmapsets')) {
-                await helper.tools.commands.errorAndAbort(this.input, 'map', true, helper.vars.errors.uErr.osu.map.search, true);
+                await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.map.search, true);
                 return;
             }
 
@@ -633,7 +633,7 @@ export class Map extends OsuCommand {
                 } catch (error) {
                     totaldiff = useMapdata.difficulty_rating;
                 }
-                helper.tools.data.debug(ppComputed, 'command', 'map', this.input.message?.guildId ?? this.input.interaction?.guildId, 'ppCalc');
+                helper.tools.data.debug(ppComputed, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'ppCalc');
 
             } catch (error) {
                 helper.tools.log.stdout(error);
@@ -854,10 +854,10 @@ export class Map extends OsuCommand {
                         mapLastUpdated: new Date(useMapdata.last_updated),
                     });
                 try {
-                    helper.tools.data.debug(strains, 'command', 'map', this.input.message?.guildId ?? this.input.interaction?.guildId, 'strains');
+                    helper.tools.data.debug(strains, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'strains');
 
                 } catch (error) {
-                    helper.tools.data.debug({ error: error }, 'command', 'map', this.input.message?.guildId ?? this.input.interaction?.guildId, 'strains');
+                    helper.tools.data.debug({ error: error }, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'strains');
                 }
                 let mapgraph;
                 if (strains) {
@@ -1286,19 +1286,10 @@ export class RecommendMap extends OsuCommand {
         this.logInput();
         // do stuff
 
-        //if user is null, use searchid
-        if (this.args.user == null) {
-            const cuser = await helper.tools.data.searchUser(this.args.searchid, true);
-            this.args.user = cuser.username;
-            if (this.args.mode == null) {
-                this.args.mode = cuser.gamemode;
-            }
-        }
-
-        //if user is not found in database, use discord username
-        if (this.args.user == null) {
-            const cuser = helper.vars.client.users.cache.get(this.commanduser.id);
-            this.args.user = cuser.username;
+        {
+            const t = await this.validUser(this.args.user, this.args.searchid, this.args.mode);
+            this.args.user = t.user;
+            this.args.mode = t.mode;
         }
 
         if (this.args.maxRange < 0.5 || !this.args.maxRange) {
@@ -1548,16 +1539,9 @@ export class UserBeatmaps extends OsuCommand {
         }
         this.args.page--;
 
-        //if user is null, use searchid
-        if (this.args.user == null) {
-            const cuser = await helper.tools.data.searchUser(this.args.searchid, true);
-            this.args.user = cuser.username;
-        }
-
-        //if user is not found in database, use discord username
-        if (this.args.user == null) {
-            const cuser = helper.vars.client.users.cache.get(this.commanduser.id);
-            this.args.user = cuser.username;
+        {
+            const t = await this.validUser(this.args.user, this.args.searchid, this.args.mode);
+            this.args.user = t.user;
         }
         if (this.input.type == 'interaction') {
             await helper.tools.commands.sendMessage({
@@ -1577,7 +1561,7 @@ export class UserBeatmaps extends OsuCommand {
             return;
         }
 
-        const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('userbeatmaps', this.commanduser, this.input.id);
+        const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons(this.name, this.commanduser, this.input.id);
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
@@ -1596,11 +1580,11 @@ export class UserBeatmaps extends OsuCommand {
             const fdReq: tooltypes.apiReturn = await helper.tools.api.getUserMaps(osudata.id, args.filter, [`offset=${cinitnum}`]);
             const fd = fdReq.apiData;
             if (fdReq?.error) {
-                await helper.tools.commands.errorAndAbort(input, 'userbeatmaps', true, helper.vars.errors.uErr.osu.map.group_nf.replace('[TYPE]', args.filter), false);
+                await helper.tools.commands.errorAndAbort(input, this.name, true, helper.vars.errors.uErr.osu.map.group_nf.replace('[TYPE]', args.filter), false);
                 return;
             }
             if (fd?.hasOwnProperty('error')) {
-                await helper.tools.commands.errorAndAbort(input, 'userbeatmaps', true, helper.vars.errors.uErr.osu.map.group_nf.replace('[TYPE]', args.filter), true);
+                await helper.tools.commands.errorAndAbort(input, this.name, true, helper.vars.errors.uErr.osu.map.group_nf.replace('[TYPE]', args.filter), true);
                 return;
             }
             for (let i = 0; i < fd.length; i++) {
@@ -1621,7 +1605,7 @@ export class UserBeatmaps extends OsuCommand {
             this.args = await getScoreCount(0, this.input, this.args, this.osudata);
         }
 
-        helper.tools.data.debug(maplistdata, 'command', 'userbeatmaps', this.input.message?.guildId ?? this.input.interaction?.guildId, 'mapListData');
+        helper.tools.data.debug(maplistdata, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'mapListData');
         helper.tools.data.storeFile(maplistdata, this.osudata.id, 'maplistdata', null, this.args.filter);
 
         if (this.args.parseMap) {
@@ -1658,7 +1642,7 @@ export class UserBeatmaps extends OsuCommand {
                 commandAs: this.input.type
             };
             if (this.input.overrides.id == null) {
-                await helper.tools.commands.errorAndAbort(this.input, 'userbeatmaps', true, helper.vars.errors.uErr.osu.map.m_uk + `at index ${pid}`, true);
+                await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.map.m_uk + `at index ${pid}`, true);
                 return;
             }
             this.input.type = 'other';

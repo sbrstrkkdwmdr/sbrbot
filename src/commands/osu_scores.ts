@@ -9,7 +9,7 @@ import * as helper from '../helper.js';
 import * as bottypes from '../types/bot.js';
 import * as apitypes from '../types/osuapi.js';
 import * as tooltypes from '../types/tools.js';
-import { Command, OsuCommand } from './command.js';
+import { OsuCommand } from './command.js';
 
 export class ScoreListCommand extends OsuCommand {
     declare protected args: {
@@ -546,20 +546,12 @@ export class ScoreListCommand extends OsuCommand {
         this.getOverrides();
         this.logInput();
 
-        //if user is null, use searchid
-        if (this.args.user == null) {
-            const cuser = await helper.tools.data.searchUser(this.args.searchid, true);
-            this.args.user = cuser.username;
-            if (this.args.mode == null) {
-                this.args.mode = cuser.gamemode;
-            }
+        {
+            const t = await this.validUser(this.args.user, this.args.searchid, this.args.mode);
+            this.args.user = t.user;
+            this.args.mode = t.mode;
         }
 
-        //if user is not found in database, use discord username
-        if (this.args.user == null) {
-            const cuser = helper.vars.client.users.cache.get(this.commanduser.id);
-            this.args.user = cuser.username;
-        }
         this.args.mode = helper.tools.other.modeValidator(this.args.mode);
 
         if (this.type == 'map') {
@@ -1310,21 +1302,10 @@ export class Recent extends SingleScoreCommand {
 
         const buttons = new Discord.ActionRowBuilder();
 
-
-
-        //if user is null, use searchid
-        if (this.args.user == null) {
-            const cuser = await helper.tools.data.searchUser(this.args.searchid, true);
-            this.args.user = cuser.username;
-            if (this.args.mode == null) {
-                this.args.mode = cuser.gamemode;
-            }
-        }
-
-        //if user is not found in database, use discord username
-        if (this.args.user == null) {
-            const cuser = helper.vars.client.users.cache.get(this.commanduser.id);
-            this.args.user = cuser.username;
+        {
+            const t = await this.validUser(this.args.user, this.args.searchid, this.args.mode);
+            this.args.user = t.user;
+            this.args.mode = t.mode;
         }
 
         this.args.mode = helper.tools.other.modeValidator(this.args.mode);
@@ -1334,7 +1315,7 @@ export class Recent extends SingleScoreCommand {
         }
         this.args.page--;
 
-        const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('recent', this.commanduser, this.input.id);
+        const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons(this.name, this.commanduser, this.input.id);
 
         if (this.input.type == 'interaction') {
             await helper.tools.commands.sendMessage({
@@ -1718,7 +1699,7 @@ export class MapLeaderboard extends OsuCommand {
 }
 
 // TODO
-export class ReplayParse extends Command {
+export class ReplayParse extends OsuCommand {
 
 }
 
@@ -1816,21 +1797,12 @@ export class ScoreStats extends OsuCommand {
         this.logInput();
         // do stuff
 
-        //if user is null, use searchid
-        if (this.args.user == null) {
-            const cuser = await helper.tools.data.searchUser(this.args.searchid, true);
-            this.args.user = cuser.username;
-            if (this.args.mode == null) {
-                this.args.mode = cuser.gamemode;
-            }
+        {
+            const t = await this.validUser(this.args.user, this.args.searchid, this.args.mode);
+            this.args.user = t.user;
+            this.args.mode = t.mode;
         }
-
-        //if user is not found in database, use discord username
-        if (this.args.user == null) {
-            const cuser = helper.vars.client.users.cache.get(this.commanduser.id);
-            this.args.user = cuser.username;
-        }
-
+        
         this.args.mode = this.args.mode ? helper.tools.other.modeValidator(this.args.mode) : null;
 
         if (this.input.type == 'interaction') {
@@ -1867,16 +1839,16 @@ export class ScoreStats extends OsuCommand {
             let req: tooltypes.apiReturn<apitypes.Score[]>;
             switch (args.scoreTypes) {
                 case 'firsts':
-                    req = await helper.tools.api.getScoresBest(osudata.id, helper.tools.other.modeValidator(args.mode), [`offset=${cinitnum}`]);
+                    req = await helper.tools.api.getScoresFirst(osudata.id, helper.tools.other.modeValidator(args.mode), [`offset=${cinitnum}`]);
                     break;
                 case 'best':
                     req = await helper.tools.api.getScoresBest(osudata.id, helper.tools.other.modeValidator(args.mode), []);
                     break;
                 case 'recent':
-                    req = await helper.tools.api.getScoresBest(osudata.id, helper.tools.other.modeValidator(args.mode), []);
+                    req = await helper.tools.api.getScoresRecent(osudata.id, helper.tools.other.modeValidator(args.mode), []);
                     break;
                 case 'pinned':
-                    req = await helper.tools.api.getScoresBest(osudata.id, helper.tools.other.modeValidator(args.mode), []);
+                    req = await helper.tools.api.getScoresPinned(osudata.id, helper.tools.other.modeValidator(args.mode), []);
                     break;
             }
             const fd: apitypes.Score[] & apitypes.Error = req.apiData;

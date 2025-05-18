@@ -4,7 +4,7 @@ import * as helper from '../helper.js';
 import * as bottypes from '../types/bot.js';
 import * as apitypes from '../types/osuapi.js';
 import * as tooltypes from '../types/tools.js';
-import { Command, OsuCommand } from './command.js';
+import { OsuCommand } from './command.js';
 
 // add, remove, list, channel
 

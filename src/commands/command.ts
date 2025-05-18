@@ -121,6 +121,23 @@ export class Command {
 
 // gasp capitalised o
 export class OsuCommand extends Command {
+    // if no user, use DB or disc name
+    async validUser(user: string, searchid: string, mode: apitypes.GameMode) {
+        if (user == null) {
+            const cuser = await helper.tools.data.searchUser(searchid, true);
+            user = cuser.username;
+            if (mode == null) {
+                mode = cuser.gamemode;
+            }
+        }
+
+        if (user == null) {
+            const cuser = helper.vars.client.users.cache.get(searchid);
+            user = cuser.username;
+        }
+        return { user, mode };
+    }
+
     async getProfile(user: string, mode: apitypes.GameMode) {
         let osudataReq: tooltypes.apiReturn<apitypes.User>;
 
@@ -209,7 +226,7 @@ class TEMPLATE extends Command {
     };
     constructor() {
         super();
-        this.name = 'TEMPLATE'
+        this.name = 'TEMPLATE';
         this.args = {
             xyzxyz: ''
         };
