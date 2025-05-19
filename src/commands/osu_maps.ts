@@ -168,15 +168,9 @@ export class Map extends OsuCommand {
             this.args.mapid = mapTemp.map;
             this.args.forceMode = mapTemp.mode ?? this.args.forceMode;
             if (!(mapTemp.map || mapTemp.set)) {
-                await helper.tools.commands.sendMessage({
-                    type: this.input.type,
-                    message: this.input.message,
-                    interaction: this.input.interaction,
-                    args: {
-                        content: helper.vars.errors.uErr.osu.map.url,
-                        edit: true
-                    }
-                }, this.input.canReply);
+                this.voidcontent();
+                this.ctn.content = helper.vars.errors.uErr.osu.map.url;
+                await this.send();
                 return;
             }
             //get map id via mapset if not in the given URL
@@ -226,7 +220,7 @@ export class Map extends OsuCommand {
         if (this.args.isppCalc) {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`${helper.vars.versions.releaseDate}-Map-map-${this.commanduser.id}-${this.input.id}-${this.args.mapid}${this.args.mapmods && this.args.mapmods != 'NM' ? '+' + this.args.mapmods : ''}`)
+                    .setCustomId(`${helper.vars.versions.releaseDate}-Map-${this.name}-${this.commanduser.id}-${this.input.id}-${this.args.mapid}${this.args.mapmods && this.args.mapmods != 'NM' ? '+' + this.args.mapmods : ''}`)
                     .setStyle(helper.vars.buttons.type.current)
                     .setEmoji(helper.vars.buttons.label.extras.map)
             );
@@ -234,14 +228,14 @@ export class Map extends OsuCommand {
             if (this.args.detailed == 2) {
                 buttons.addComponents(
                     new Discord.ButtonBuilder()
-                        .setCustomId(`${helper.vars.versions.releaseDate}-DetailDisable-map-${this.commanduser.id}-${this.input.id}`)
+                        .setCustomId(`${helper.vars.versions.releaseDate}-DetailDisable-${this.name}-${this.commanduser.id}-${this.input.id}`)
                         .setStyle(helper.vars.buttons.type.current)
                         .setEmoji(helper.vars.buttons.label.main.detailLess)
                 );
             } else {
                 buttons.addComponents(
                     new Discord.ButtonBuilder()
-                        .setCustomId(`${helper.vars.versions.releaseDate}-DetailEnable-map-${this.commanduser.id}-${this.input.id}`)
+                        .setCustomId(`${helper.vars.versions.releaseDate}-DetailEnable-${this.name}-${this.commanduser.id}-${this.input.id}`)
                         .setStyle(helper.vars.buttons.type.current)
                         .setEmoji(helper.vars.buttons.label.main.detailMore)
                 );
@@ -270,14 +264,9 @@ export class Map extends OsuCommand {
             .setPlaceholder('Select a map');
 
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         if (this.args.maptitleq == null) {
@@ -314,16 +303,9 @@ export class Map extends OsuCommand {
             let mapidtest2;
 
             if (mapidtest.beatmapsets.length == 0) {
-                await helper.tools.commands.sendMessage({
-                    type: this.input.type,
-                    message: this.input.message,
-                    interaction: this.input.interaction,
-                    args: {
-                        content: helper.vars.errors.uErr.osu.map.search_nf.replace('[INPUT]', this.args.maptitleq),
-                        edit: true
-                    }
-                }, this.input.canReply);
-
+                this.voidcontent();
+                this.ctn.content = helper.vars.errors.uErr.osu.map.search_nf.replace('[INPUT]', this.args.maptitleq);
+                await this.send();
                 return;
             }
             try {
@@ -338,15 +320,9 @@ export class Map extends OsuCommand {
                 mapidtest2 = mapidtest.beatmapsets[0].beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating);
                 usemapidpls = matchedId ?? mapidtest2[0].id;
             } catch (error) {
-                await helper.tools.commands.sendMessage({
-                    type: this.input.type,
-                    message: this.input.message,
-                    interaction: this.input.interaction,
-                    args: {
-                        content: `Error - could not sort maps`,
-                        edit: true
-                    }
-                }, this.input.canReply);
+                this.voidcontent();
+                this.ctn.content = `Error - could not sort maps`;
+                await this.send();
                 return;
             }
 
@@ -987,14 +963,14 @@ export class Map extends OsuCommand {
                 buttons
                     .addComponents(
                         new Discord.ButtonBuilder()
-                            .setCustomId(`${helper.vars.versions.releaseDate}-User-map-any-${this.input.id}-${this.map.user_id}+${this.map.mode}`)
+                            .setCustomId(`${helper.vars.versions.releaseDate}-User-${this.name}-any-${this.input.id}-${this.map.user_id}+${this.map.mode}`)
                             .setStyle(helper.vars.buttons.type.current)
                             .setEmoji(helper.vars.buttons.label.extras.user),
                     );
 
                 buttons.addComponents(
                     new Discord.ButtonBuilder()
-                        .setCustomId(`${helper.vars.versions.releaseDate}-Leaderboard-map-${this.commanduser.id}-${this.input.id}`)
+                        .setCustomId(`${helper.vars.versions.releaseDate}-Leaderboard-${this.name}-${this.commanduser.id}-${this.input.id}`)
                         .setStyle(helper.vars.buttons.type.current)
                         .setEmoji(helper.vars.buttons.label.extras.leaderboard)
                 );
@@ -1544,14 +1520,9 @@ export class UserBeatmaps extends OsuCommand {
             this.args.user = t.user;
         }
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         try {
@@ -1565,7 +1536,7 @@ export class UserBeatmaps extends OsuCommand {
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`${helper.vars.versions.releaseDate}-User-userbeatmaps-any-${this.input.id}-${this.osudata.id}+${this.osudata.playmode}`)
+                    .setCustomId(`${helper.vars.versions.releaseDate}-User-${this.name}-any-${this.input.id}-${this.osudata.id}+${this.osudata.playmode}`)
                     .setStyle(helper.vars.buttons.type.current)
                     .setEmoji(helper.vars.buttons.label.extras.user),
             );

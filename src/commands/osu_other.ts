@@ -426,15 +426,9 @@ export class Set extends OsuCommand {
             const thing = helper.tools.other.modeValidatorAlt(this.args.mode);
             this.args.mode = thing.mode;
             if (thing.isincluded == false) {
-                await helper.tools.commands.sendMessage({
-                    type: this.input.type,
-                    message: this.input.message,
-                    interaction: this.input.interaction,
-                    args: {
-                        content: helper.vars.errors.uErr.osu.set.mode,
-                        edit: true
-                    }
-                }, this.input.canReply);
+                this.voidcontent();
+                this.ctn.content = helper.vars.errors.uErr.osu.set.mode;
+                await this.send()
                 return;
             }
         }

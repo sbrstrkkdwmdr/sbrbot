@@ -570,14 +570,9 @@ export class ScoreListCommand extends OsuCommand {
         this.buttons = new Discord.ActionRowBuilder();
 
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: `Loading...`,
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         if (this.args.page < 2 || typeof this.args.page != 'number' || isNaN(this.args.page)) {
@@ -1069,28 +1064,17 @@ export class ScoreParse extends SingleScoreCommand {
             if (temp?.apiData?.best_id && typeof temp?.apiData?.best_id === 'number') {
                 this.args.scoreid = temp?.apiData?.best_id;
             } else {
-                await helper.tools.commands.sendMessage({
-                    type: this.input.type,
-                    message: this.input.message,
-                    interaction: this.input.interaction,
-                    args: {
-                        content: helper.vars.errors.uErr.osu.score.ms,
-                        edit: true
-                    }
-                }, this.input.canReply);
+                this.voidcontent();
+                this.ctn.content = helper.vars.errors.uErr.osu.score.ms;
+                await this.send();
                 return;
             }
         }
 
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         let scoredataReq: tooltypes.apiReturn<apitypes.Score>;
@@ -1318,14 +1302,9 @@ export class Recent extends SingleScoreCommand {
         const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons(this.name, this.commanduser, this.input.id);
 
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         try {
@@ -1392,15 +1371,10 @@ export class Recent extends SingleScoreCommand {
             }
 
             if (this.input.buttonType == null) {
-                await helper.tools.commands.sendMessage({
-                    type: this.input.type,
-                    message: this.input.message,
-                    interaction: this.input.interaction,
-                    args: {
-                        content: err,
-                        edit: true
-                    }
-                }, this.input.canReply);
+                this.voidcontent();
+                this.ctn.content = err;
+                this.ctn.edit = true;
+                await this.send();
             }
             return;
         }
@@ -1544,14 +1518,9 @@ export class MapLeaderboard extends OsuCommand {
             return;
         }
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         let mapdata: apitypes.Beatmap;
@@ -1772,8 +1741,9 @@ export class ReplayParse extends SingleScoreCommand {
         }
         const mapdata: apitypes.Beatmap = req.apiData;
         if (req?.error) {
+            const err = helper.vars.errors.uErr.osu.map.ms_md5.replace('[ID]', mapid + '');
             await helper.tools.commands.errorAndAbort(this.input, 'replayparse', true, helper.vars.errors.uErr.osu.map.ms_md5.replace('[ID]', mapid + ''), false);
-            return;
+            throw new Error(err);
         }
         if (mapdata?.hasOwnProperty('error')) {
             const err = helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid + '');
@@ -1942,14 +1912,9 @@ export class ScoreStats extends OsuCommand {
         this.args.mode = this.args.mode ? helper.tools.other.modeValidator(this.args.mode) : null;
 
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: `Loading...`,
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         let osudata: apitypes.User;
@@ -2358,14 +2323,9 @@ export class Simulate extends OsuCommand {
         }
 
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: `Loading...`,
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         const tempscore = helper.tools.data.getPreviousId('score', this.input.message?.guildId ?? this.input.interaction?.guildId);

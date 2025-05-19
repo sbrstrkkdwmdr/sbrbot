@@ -23,6 +23,12 @@ export class Command {
     protected args: { [id: string]: any; };
     protected input: bottypes.commandInput;
     constructor() {
+        this.voidcontent();
+    }
+    setInput(input: bottypes.commandInput) {
+        this.input = input;
+    }
+    voidcontent() {
         this.ctn = {
             content: undefined,
             embeds: [],
@@ -33,9 +39,6 @@ export class Command {
             edit: undefined,
             editAsMsg: undefined,
         };
-    }
-    setInput(input: bottypes.commandInput) {
-        this.input = input;
     }
     async setArgs() {
         switch (this.input.type) {
@@ -90,8 +93,8 @@ export class Command {
         this.ctn.content = 'No execution method has been set';
         this.send();
     }
-    send() {
-        helper.tools.commands.sendMessage({
+    async send() {
+        await helper.tools.commands.sendMessage({
             type: this.input.type,
             message: this.input.message,
             interaction: this.input.interaction,

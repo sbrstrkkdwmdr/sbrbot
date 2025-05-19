@@ -7,7 +7,7 @@ export class _8Ball extends Command {
     declare protected args: {};
     constructor() {
         super();
-        this.name = 'TEMPLATE';
+        this.name = '8Ball';
     }
     async execute() {
         await this.setArgs();
@@ -38,7 +38,7 @@ export class CoinFlip extends Command {
     declare protected args: {};
     constructor() {
         super();
-        this.name = 'TEMPLATE';
+        this.name = 'CoinFlip';
     }
     async execute() {
         await this.setArgs();
@@ -66,7 +66,7 @@ export class Gif extends Command {
     };
     constructor() {
         super();
-        this.name = 'TEMPLATE';
+        this.name = 'Gif';
         this.args = {
             target: null,
             type: null,
@@ -162,7 +162,7 @@ export class Janken extends Command {
     };
     constructor() {
         super();
-        this.name = 'TEMPLATE';
+        this.name = 'Janken';
         this.args = {
             userchoice: ''
         };
@@ -180,14 +180,9 @@ export class Janken extends Command {
         // do stuff
         const real = helper.tools.game.jankenConvert(this.args.userchoice);
         if (real == 'INVALID') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: 'Please input a valid argument'
-                }
-            }, this.input.canReply);
+            this.voidcontent();
+            this.ctn.content = 'Please input a valid argument';
+            await this.send();
             return;
         }
 
@@ -247,7 +242,7 @@ export class Roll extends Command {
     };
     constructor() {
         super();
-        this.name = 'TEMPLATE';
+        this.name = 'Roll';
         this.args = {
             maxNum: 100,
             minNum: 0,

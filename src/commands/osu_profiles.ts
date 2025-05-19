@@ -52,14 +52,9 @@ export class Badges extends OsuCommand {
         }
 
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         let osudata: apitypes.User;
@@ -74,7 +69,7 @@ export class Badges extends OsuCommand {
         const cmdbuttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`${helper.vars.versions.releaseDate}-User-badges-any-${this.input.id}-${osudata.id}+${osudata.playmode}`)
+                    .setCustomId(`${helper.vars.versions.releaseDate}-User-${this.name}-any-${this.input.id}-${osudata.id}+${osudata.playmode}`)
                     .setStyle(helper.vars.buttons.type.current)
                     .setEmoji(helper.vars.buttons.label.extras.user),
             );
@@ -161,14 +156,9 @@ export class BadgeWeightSeed extends OsuCommand {
         }
 
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         let osudata: apitypes.User;
@@ -183,7 +173,7 @@ export class BadgeWeightSeed extends OsuCommand {
         const cmdbuttons = new Discord.ActionRowBuilder()
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`${helper.vars.versions.releaseDate}-User-badges-any-${this.input.id}-${osudata.id}+${osudata.playmode}`)
+                    .setCustomId(`${helper.vars.versions.releaseDate}-User-${this.name}-any-${this.input.id}-${osudata.id}+${osudata.playmode}`)
                     .setStyle(helper.vars.buttons.type.current)
                     .setEmoji(helper.vars.buttons.label.extras.user),
             );
@@ -302,14 +292,9 @@ export class Leaderboard extends OsuCommand {
         const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons(this.name, this.commanduser, this.input.id);
 
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         if (this.args.page < 2 || typeof this.args.page != 'number') {
@@ -543,15 +528,10 @@ export class Ranking extends OsuCommand {
         if (this.args.country != 'ALL') {
             // validate country
             if (!helper.tools.other.validCountryCodeA2(this.args.country)) {
-                await helper.tools.commands.sendMessage({
-                    type: this.input.type,
-                    message: this.input.message,
-                    interaction: this.input.interaction,
-                    args: {
-                        content: `Invalid country code. Must be a valid [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes) code.`,
-                        edit: true
-                    }
-                }, this.input.canReply);
+                this.voidcontent();
+                this.ctn.content = `Invalid country code. Must be a valid [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes) code.`;
+                this.ctn.edit = true;
+                await this.send();
                 return;
             }
             if (this.args.type == 'performance') {
@@ -593,15 +573,10 @@ export class Ranking extends OsuCommand {
             return;
         }
         if (rankingdata.ranking.length == 0) {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: `No data found`,
-                    edit: true
-                }
-            }, this.input.canReply);
+            this.voidcontent();
+            this.ctn.content = `No data found`;
+            this.ctn.edit = true;
+            await this.send();
             return;
         }
 
@@ -830,7 +805,7 @@ export class Profile extends OsuCommand {
         if (this.args.graphonly != true) {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`${helper.vars.versions.releaseDate}-Graph-osu-${this.commanduser.id}-${this.input.id}`)
+                    .setCustomId(`${helper.vars.versions.releaseDate}-Graph-${this.name}-${this.commanduser.id}-${this.input.id}`)
                     .setStyle(helper.vars.buttons.type.current)
                     .setEmoji(helper.vars.buttons.label.extras.graph),
             );
@@ -838,7 +813,7 @@ export class Profile extends OsuCommand {
                 case 1: {
                     buttons.addComponents(
                         new Discord.ButtonBuilder()
-                            .setCustomId(`${helper.vars.versions.releaseDate}-Detail2-osu-${this.commanduser.id}-${this.input.id}`)
+                            .setCustomId(`${helper.vars.versions.releaseDate}-Detail2-${this.name}-${this.commanduser.id}-${this.input.id}`)
                             .setStyle(helper.vars.buttons.type.current)
                             .setEmoji(helper.vars.buttons.label.main.detailMore),
                     );
@@ -847,7 +822,7 @@ export class Profile extends OsuCommand {
                 case 2: {
                     buttons.addComponents(
                         new Discord.ButtonBuilder()
-                            .setCustomId(`${helper.vars.versions.releaseDate}-Detail1-osu-${this.commanduser.id}-${this.input.id}`)
+                            .setCustomId(`${helper.vars.versions.releaseDate}-Detail1-${this.name}-${this.commanduser.id}-${this.input.id}`)
                             .setStyle(helper.vars.buttons.type.current)
                             .setEmoji(helper.vars.buttons.label.main.detailLess),
                     );
@@ -857,7 +832,7 @@ export class Profile extends OsuCommand {
         } else {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`${helper.vars.versions.releaseDate}-Detail1-osu-${this.commanduser.id}-${this.input.id}`)
+                    .setCustomId(`${helper.vars.versions.releaseDate}-Detail1-${this.name}-${this.commanduser.id}-${this.input.id}`)
                     .setStyle(helper.vars.buttons.type.current)
                     .setEmoji(helper.vars.buttons.label.extras.user),
             );
@@ -871,14 +846,9 @@ export class Profile extends OsuCommand {
 
         this.args.mode = this.args.mode ? helper.tools.other.modeValidator(this.args.mode) : null;
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         let osudata: apitypes.User;
@@ -1225,14 +1195,9 @@ export class RecentActivity extends OsuCommand {
         }
         this.args.page--;
         if (this.input.type == 'interaction') {
-            await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: 'Loading...'
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Loading...';
+            this.send();
+            this.voidcontent();
         }
 
         let osudataReq: tooltypes.apiReturn<apitypes.User>;
@@ -1273,7 +1238,7 @@ export class RecentActivity extends OsuCommand {
         buttons
             .addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`${helper.vars.versions.releaseDate}-User-recentactivity-any-${this.input.id}-${osudata.id}+${osudata.playmode}`)
+                    .setCustomId(`${helper.vars.versions.releaseDate}-User-${this.name}-any-${this.input.id}-${osudata.id}+${osudata.playmode}`)
                     .setStyle(helper.vars.buttons.type.current)
                     .setEmoji(helper.vars.buttons.label.extras.user),
             );

@@ -265,7 +265,7 @@ Total of ${changesList.filter(x => !x.includes('### ')).length} changes.${txt}
             buttons
                 .addComponents(
                     new Discord.ButtonBuilder()
-                        .setCustomId(`${helper.vars.versions.releaseDate}-Detail0-changelog-${this.commanduser.id}-${this.input.id}`)
+                        .setCustomId(`${helper.vars.versions.releaseDate}-Detail0-${this.name}-${this.commanduser.id}-${this.input.id}`)
                         .setStyle(helper.vars.buttons.type.current)
                         .setEmoji(helper.vars.buttons.label.main.detailLess),
                 );
@@ -273,7 +273,7 @@ Total of ${changesList.filter(x => !x.includes('### ')).length} changes.${txt}
             buttons
                 .addComponents(
                     new Discord.ButtonBuilder()
-                        .setCustomId(`${helper.vars.versions.releaseDate}-Detail1-changelog-${this.commanduser.id}-${this.input.id}`)
+                        .setCustomId(`${helper.vars.versions.releaseDate}-Detail1-${this.name}-${this.commanduser.id}-${this.input.id}`)
                         .setStyle(helper.vars.buttons.type.current)
                         .setEmoji(helper.vars.buttons.label.main.detailMore),
                 );
@@ -353,11 +353,11 @@ export class Help extends Command {
         const buttons = new Discord.ActionRowBuilder()
             .setComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`${helper.vars.versions.releaseDate}-Random-help-${this.commanduser.id}-${this.input.id}`)
+                    .setCustomId(`${helper.vars.versions.releaseDate}-Random-${this.name}-${this.commanduser.id}-${this.input.id}`)
                     .setStyle(helper.vars.buttons.type.current)
                     .setEmoji(helper.vars.buttons.label.extras.random),
                 new Discord.ButtonBuilder()
-                    .setCustomId(`${helper.vars.versions.releaseDate}-Detailed-help-${this.commanduser.id}-${this.input.id}`)
+                    .setCustomId(`${helper.vars.versions.releaseDate}-Detailed-${this.name}-${this.commanduser.id}-${this.input.id}`)
                     .setStyle(helper.vars.buttons.type.current)
                     .setEmoji(helper.vars.buttons.label.main.detailed)
             );
@@ -868,14 +868,9 @@ export class Remind extends Command {
             this.args.remindertxt = 'null';
         }
         if (this.args.list == false && !this.input.args[0].endsWith('d') && !this.input.args[0].endsWith('h') && !this.input.args[0].endsWith('m') && !this.input.args[0].endsWith('s') && !this.args.time.includes(':') && !this.args.time.includes('.')) {
-            return await helper.tools.commands.sendMessage({
-                type: this.input.type,
-                message: this.input.message,
-                interaction: this.input.interaction,
-                args: {
-                    content: 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`'
-                }
-            }, this.input.canReply);
+            this.ctn.content = 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`';
+            this.send();
+            return;
         }
 
     }
