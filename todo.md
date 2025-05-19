@@ -3,6 +3,7 @@
 newest-oldest
 
 ## current
+- [ ] reduce code complexity
 - [ ] test button and link arg handlers
 - [ ] test all commands
 - [ ] test osu_other, osu_track, misc, admin

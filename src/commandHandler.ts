@@ -521,157 +521,128 @@ function commandSelect(cmd: string, args: string[]) {
             break;
 
         // // osu (other)
-        // case 'common': {
-        //     overrides = {
-        //         type: 'top'
-        //     };
-        // }
-        // case 'compare':
-        //     command = new helper.commands.osu.other.compare;
-        //     break;
-        // case 'osuset': case 'setuser': case 'set':
-        //     command = new helper.commands.osu.other.osuset;
-        //     break;
-        // case 'setmode': {
-        //     overrides = {
-        //         type: 'mode'
-        //     };
-        //     command = new helper.commands.osu.other.osuset;
-        // }
-        //     break;
-        // case 'setskin': {
-        //     overrides = {
-        //         type: 'skin'
-        //     };
-        //     command = new helper.commands.osu.other.osuset;
-        // }
-        //     break;
-        // case 'settime': case 'settz': {
-        //     overrides = {
-        //         type: 'tz'
-        //     };
-        //     command = new helper.commands.osu.other.osuset;
-        // }
-        //     break;
-        // case 'setlocation': case 'setweather': {
-        //     overrides = {
-        //         type: 'location'
-        //     };
-        //     command = new helper.commands.osu.other.osuset;
-        // }
-        //     break;
-        // case 'pp': {
-        //     overrides = {
-        //         type: 'pp',
-        //     };
-        //     command = new helper.commands.osu.other.rankpp;
-        // }
-        //     break;
-        // case 'rank': {
-        //     overrides = {
-        //         type: 'rank',
-        //     };
-        //     command = new helper.commands.osu.other.rankpp;
-        // }
-        //     break;
-        // case 'saved':
-        //     command = new helper.commands.osu.other.saved;
-        //     break;
-        // case 'whatif': case 'wi':
-        //     command = new helper.commands.osu.other.whatif;
-        //     break;
+        case 'common': {
+            overrides = {
+                type: 'top'
+            };
+        }
+        case 'compare':
+            command = new helper.commands.osu.other.Compare();
+            break;
+        case 'osuset': case 'setuser': case 'set':
+            command = new helper.commands.osu.other.Set();
+            break;
+        case 'setmode': {
+            overrides = {
+                type: 'mode'
+            };
+            command = new helper.commands.osu.other.Set();
+        }
+            break;
+        case 'setskin': {
+            overrides = {
+                type: 'skin'
+            };
+            command = new helper.commands.osu.other.Set();
+        }
+            break;
+        case 'pp': {
+            overrides = {
+                type: 'pp',
+            };
+            command = new helper.commands.osu.other.RankPP();
+        }
+            break;
+        case 'rank': {
+            overrides = {
+                type: 'rank',
+            };
+            command = new helper.commands.osu.other.RankPP();
+        }
+            break;
+        case 'saved':
+            command = new helper.commands.osu.other.Saved();
+            break;
+        case 'whatif': case 'wi':
+            command = new helper.commands.osu.other.WhatIf();
+            break;
 
         // // admin
-        // case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
-        //     command = new helper.commands.admin.checkperms;
-        //     break;
-        // case 'crash':
-        //     command = new helper.commands.admin.crash;
-        //     break;
-        // case 'clear':
-        //     command = new helper.commands.admin.clear;
-        //     break;
-        // case 'debug':
-        //     command = new helper.commands.admin.debug;
-        //     break;
-        // case 'find': case 'get':
-        //     command = new helper.commands.admin.find;
-        //     break;
-        //     /* case 'user': */ case 'userinfo':
-        //     command = new helper.commands.admin.getUser;
-        //     break;
-        // case 'avatar': case 'av': case 'pfp':
-        //     command = new helper.commands.admin.getUserAv;
-        //     break;
-        // case 'leaveguild': case 'leave':
-        //     command = new helper.commands.admin.leaveguild;
-        //     break;
-        // case 'prefix':
-        //     command = new helper.commands.admin.prefix;
-        //     break;
-        // case 'purge':
-        //     command = new helper.commands.admin.purge;
-        //     break;
-        // case 'servers':
-        //     command = new helper.commands.admin.servers;
-        //     break;
+        case 'checkperms': case 'fetchperms': case 'checkpermissions': case 'permissions': case 'perms':
+            command = new helper.commands.admin.CheckPerms();
+            break;
+        case 'crash':
+            command = new helper.commands.admin.Crash();
+            break;
+        case 'clear':
+            command = new helper.commands.admin.Clear();
+            break;
+        case 'debug':
+            command = new helper.commands.admin.Debug();
+            break;
+        case 'find': case 'get':
+            command = new helper.commands.admin.Find();
+            break;
+        case 'leaveguild': case 'leave':
+            command = new helper.commands.admin.LeaveGuild();
+            break;
+        case 'prefix':
+            command = new helper.commands.admin.Prefix();
+            break;
+        case 'servers':
+            command = new helper.commands.admin.Servers();
+            break;
 
 
         // // misc
-        // case '8ball': case 'ask':
-        //     command = new helper.commands.fun._8ball;
-        //     break;
-        // case 'coin': case 'coinflip': case 'flip':
-        //     command = new helper.commands.fun.coin;
-        //     break;
-        // case 'hug':
-        //     overrides = {
-        //         ex: 'hug'
-        //     };
-        //     command = new helper.commands.fun.gif;
-        //     break;
-        // case 'kiss':
-        //     overrides = {
-        //         ex: 'kiss'
-        //     };
-        //     command = new helper.commands.fun.gif;
-        //     break;
-        // case 'lick':
-        //     overrides = {
-        //         ex: 'lick'
-        //     };
-        //     command = new helper.commands.fun.gif;
-        //     break;
-        // case 'pet':
-        //     overrides = {
-        //         ex: 'pet'
-        //     };
-        //     command = new helper.commands.fun.gif;
-        //     break;
-        // case 'punch':
-        //     overrides = {
-        //         ex: 'punch'
-        //     };
-        //     command = new helper.commands.fun.gif;
-        //     break;
-        // case 'slap':
-        //     overrides = {
-        //         ex: 'slap'
-        //     };
-        //     command = new helper.commands.fun.gif;
-        //     break;
-        // case 'inspire': case 'insp':
-        //     command = new helper.commands.fun.inspire;
-        //     break;
-        // case 'janken': case 'paperscissorsrock': case 'rockpaperscissors': case 'rps': case 'psr':
-        //     command = new helper.commands.fun.janken;
-        //     break;
-        // case 'poll': case 'vote':
-        //     command = new helper.commands.fun.poll;
-        //     break;
-        // case 'roll': case 'rng': case 'randomnumber': case 'randomnumbergenerator': case 'pickanumber': case 'pickanum':
-        //     command = new helper.commands.fun.roll;
-        //     break;
+        case '8ball': case 'ask':
+            command = new helper.commands.fun._8Ball();
+            break;
+        case 'coin': case 'coinflip': case 'flip':
+            command = new helper.commands.fun.CoinFlip();
+            break;
+        case 'hug':
+            overrides = {
+                ex: 'hug'
+            };
+            command = new helper.commands.fun.Gif();
+            break;
+        case 'kiss':
+            overrides = {
+                ex: 'kiss'
+            };
+            command = new helper.commands.fun.Gif();
+            break;
+        case 'lick':
+            overrides = {
+                ex: 'lick'
+            };
+            command = new helper.commands.fun.Gif();
+            break;
+        case 'pet':
+            overrides = {
+                ex: 'pet'
+            };
+            command = new helper.commands.fun.Gif();
+            break;
+        case 'punch':
+            overrides = {
+                ex: 'punch'
+            };
+            command = new helper.commands.fun.Gif();
+            break;
+        case 'slap':
+            overrides = {
+                ex: 'slap'
+            };
+            command = new helper.commands.fun.Gif();
+            break;
+        case 'janken': case 'paperscissorsrock': case 'rockpaperscissors': case 'rps': case 'psr':
+            command = new helper.commands.fun.Janken();
+            break;
+        case 'roll': case 'rng': case 'randomnumber': case 'randomnumbergenerator': case 'pickanumber': case 'pickanum':
+            command = new helper.commands.fun.Roll();
+            break;
         default:
             command = null;
             break;

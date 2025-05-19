@@ -4,6 +4,25 @@
 
 ## [WIP] - xxxx-xx-xx
 
+### Added
+- guildId parameter to LeaveGuild
+
+### Changed
+- changed all commands into using classes instead of really long functions for readability
+- split recent list and recent into separate commands
+
+### Removed
+- convert
+- country
+- math
+- time
+- weather
+- getuser (use find)
+- getuser avatar (use find)
+- purge
+- inspire
+- poll
+
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
 ## [4.1.5] - 2025-04-08
