@@ -1698,9 +1698,145 @@ export class MapLeaderboard extends OsuCommand {
     }
 }
 
-// TODO
-export class ReplayParse extends OsuCommand {
+export class ReplayParse extends SingleScoreCommand {
+    constructor() {
+        super();
+        this.name = 'ReplayParse';
+        this.args = {};
+    }
 
+    async execute() {
+        this.logInput();
+        // do stuff
+
+        const decoder = new osuparsers.ScoreDecoder();
+        const score = await decoder.decodeFromPath(`${helper.vars.path.files}/replays/${this.input.id}.osr`);
+        helper.tools.data.debug(score, 'fileparse', 'replay', this.input.message?.guildId ?? this.input.interaction?.guildId, 'replayData');
+        this.setScore(score);
+        try {
+            this.map = await this.getMap(score?.info?.beatmapHashMD5);
+        } catch (e) {
+            return;
+        }
+
+        if (this.map?.id) {
+            typeof this.map.id == 'number' ? helper.tools.data.writePreviousId('map', this.input.message?.guildId ?? this.input.interaction?.guildId,
+                {
+                    id: `${this.map.id}`,
+                    apiData: null,
+                    mods: osumodcalc.ModIntToString(score.info?.mods?.bitwise ?? 0)
+                }
+            ) : '';
+        }
+        this.mapset = this.map.beatmapset;
+
+        try {
+            this.osudata = await this.getProfile(score.info.username, osumodcalc.ModeIntToName(score.info.rulesetId));
+        } catch (e) {
+            return;
+        }
+        let userid: string | number;
+        try {
+            userid = this.osudata.id;
+        } catch (err) {
+            userid = 0;
+            return;
+        }
+
+
+        const chartInit = await helper.tools.other.graph(score.replay.lifeBar.map(x => helper.tools.calculate.secondsToTime(x.startTime / 1000)), score.replay.lifeBar.map(x => Math.floor(x.health * 100)), 'Health', {
+            fill: false,
+            startzero: true,
+            pointSize: 0,
+            gradient: true
+        });
+
+        const chartFile = new Discord.AttachmentBuilder(chartInit.path);
+
+        const e = await this.renderEmbed();
+        e.setImage(`attachment://${chartInit.filename}.jpg`);
+        this.ctn.files = [chartFile];
+        this.send();
+    }
+    /**
+     * mapid should be beatmapHash
+     */
+    async getMap(mapid: string | number) {
+        let req: tooltypes.apiReturn<apitypes.Beatmap>;
+        if (helper.tools.data.findFile(mapid, 'mapdata') &&
+            !('error' in helper.tools.data.findFile(mapid, 'mapdata')) &&
+            this.input.buttonType != 'Refresh') {
+            req = helper.tools.data.findFile(mapid, 'mapdata');
+        } else {
+            req = await helper.tools.api.getMapSha(mapid + '', []);
+        }
+        const mapdata: apitypes.Beatmap = req.apiData;
+        if (req?.error) {
+            await helper.tools.commands.errorAndAbort(this.input, 'replayparse', true, helper.vars.errors.uErr.osu.map.ms_md5.replace('[ID]', mapid + ''), false);
+            return;
+        }
+        if (mapdata?.hasOwnProperty('error')) {
+            const err = helper.vars.errors.uErr.osu.map.m.replace('[ID]', mapid + '');
+            await helper.tools.commands.errorAndAbort(this.input, this.name, true, err, true);
+            throw new Error(err);
+        }
+        helper.tools.data.debug(req, 'fileparse', 'replay', this.input.message?.guildId ?? this.input.interaction?.guildId, 'mapData');
+        helper.tools.data.storeFile(req, mapid, 'mapdata');
+        return mapdata;
+    }
+    setScore(score: osuclasses.Score) {
+        const tmods =
+            typeof score.info.rawMods == 'string' ? osumodcalc.OrderMods(score.info.rawMods) :
+                osumodcalc.OrderMods(osumodcalc.ModIntToString(score.info.rawMods));
+        const mods: apitypes.Mod[] = tmods.array.map(x => {
+            return { acronym: x };
+        });
+        this.score = {
+            accuracy: score.info.accuracy,
+            classic_total_score: score.info.totalScore,
+            ended_at: score.info.date.toISOString() as any,
+            has_replay: false,
+            id: score.info.id,
+            is_perfect_combo: score.info.perfect,
+            legacy_perfect: score.info.perfect,
+            legacy_score_id: score.info.id,
+            legacy_total_score: score.info.totalScore,
+            max_combo: score.info.maxCombo,
+            maximum_statistics: {
+                perfect: score.info.countGeki, // geki/300+
+                great: score.info.count300, // 300
+                good: score.info.countKatu, // katu/200
+                ok: score.info.count100, // 100
+                meh: score.info.count50, // 50
+                miss: score.info.countMiss, // miss
+                small_tick_miss: 0, // katu
+                small_tick_hit: 0, // count 50
+                legacy_combo_increase: 0, // max stats
+            },
+            mods,
+            passed: score.info.passed,
+            playlist_item_id: 0,
+            preserve: false,
+            processed: false,
+            rank: score.info.rank,
+            ruleset_id: score.info.rulesetId,
+            started_at: score.info.date.toISOString() as any,
+            statistics: {
+                perfect: score.info.countGeki, // geki/300+
+                great: score.info.count300, // 300
+                good: score.info.countKatu, // katu/200
+                ok: score.info.count100, // 100
+                meh: score.info.count50, // 50
+                miss: score.info.countMiss, // miss
+                small_tick_miss: 0, // katu
+                small_tick_hit: 0, // count 50
+                legacy_combo_increase: 0, // max stats
+            },
+            total_score: score.info.totalScore,
+            type: 'recent',
+            user_id: score.info.userId ?? 2,
+        };
+    }
 }
 
 type scoretypes = 'firsts' | 'best' | 'recent' | 'pinned';
@@ -1802,7 +1938,7 @@ export class ScoreStats extends OsuCommand {
             this.args.user = t.user;
             this.args.mode = t.mode;
         }
-        
+
         this.args.mode = this.args.mode ? helper.tools.other.modeValidator(this.args.mode) : null;
 
         if (this.input.type == 'interaction') {
