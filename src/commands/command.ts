@@ -58,30 +58,12 @@ export class Command {
         }
     }
     async setArgsMsg() {
-        this.commanduser = this.input.message.author;
     }
     async setArgsInteract() {
-        let interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.commanduser = interaction?.member?.user ?? interaction?.user;
     }
     async setArgsBtn() {
-        if (!this.input.message.embeds[0]) return;
-        let interaction = (this.input.interaction as Discord.ButtonInteraction);
-        this.commanduser = interaction?.member?.user ?? this.input.interaction?.user;
-        const temp = helper.tools.commands.getButtonArgs(this.input.id);
-        if (temp.error) {
-            interaction.followUp({
-                content: helper.vars.errors.paramFileMissing,
-                flags: Discord.MessageFlags.Ephemeral,
-                allowedMentions: { repliedUser: false }
-            });
-            helper.tools.commands.disableAllButtons(this.input.message);
-            return;
-        }
     }
     async setArgsLink() {
-        this.commanduser = this.input.message.author;
-        const messagenohttp = this.input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
     }
     logInput(skipKeys: boolean = false) {
         let keys = [];
@@ -105,9 +87,8 @@ export class Command {
     }
     getOverrides() { }
     async execute() {
-        await this.setArgs();
-        // do stuff
-        // send msg
+        this.ctn.content = 'No execution method has been set';
+        this.send();
     }
     send() {
         helper.tools.commands.sendMessage({
