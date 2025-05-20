@@ -7,6 +7,9 @@
 ### Added
 - guildId parameter to LeaveGuild
 
+### Fixed
+- calculate pp before sorting scores in scorelists
+
 ### Changed
 - changed all commands into using classes instead of really long functions for readability
 - split recent list and recent into separate commands

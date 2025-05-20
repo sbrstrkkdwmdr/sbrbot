@@ -47,7 +47,7 @@ export async function scoreList(
     preset?: 'map_leaderboard' | 'single_map',
     overrideMap?: apitypes.Beatmap
 ): Promise<formatterInfo> {
-    const newScores = filterScores(scores as apitypes.Score[], sort, filter, reverse, overrideMap);
+    const newScores = await filterScores(scores as apitypes.Score[], sort, filter, reverse, overrideMap);
     if (newScores.length == 0) {
         return {
             text: 'No scores were found (check the filter options)',
@@ -137,7 +137,7 @@ type indexedScore<T> = T & {
     originalIndex: number,
 };
 
-export function filterScores(
+export async function filterScores(
     scores: apitypes.Score[],
     sort: 'pp' | 'score' | 'recent' | 'acc' | 'combo' | 'miss' | 'rank',
     filter: {
@@ -158,7 +158,7 @@ export function filterScores(
     },
     reverse: boolean,
     overrideMap?: apitypes.Beatmap
-): indexedScore<apitypes.Score>[] {
+): Promise<indexedScore<apitypes.Score>[]> {
     let newScores = [] as indexedScore<apitypes.Score>[];
     for (let i = 0; i < scores.length; i++) {
         const newScore = { ...scores[i], ...{ originalIndex: i } };
@@ -244,8 +244,29 @@ export function filterScores(
         });
     }
     switch (sort) {
-        case 'pp':
+        case 'pp': {
+            const sc = [];
+            for (const score of newScores) {
+
+                if (!score.pp || isNaN(score.pp)) {
+                    const perf = await helper.tools.performance.calcScore({
+                        mapid: overrideMap?.id ?? score.beatmap_id,
+                        mode: score.ruleset_id,
+                        mods: score.mods.map(x => x.acronym).join(''),
+                        accuracy: score.accuracy,
+                        clockRate: helper.tools.performance.getModSpeed(score.mods),
+                        stats: score.statistics,
+                        maxcombo: score.max_combo,
+                        passedObjects: helper.tools.other.scoreTotalHits(score.statistics),
+                        mapLastUpdated: new Date(score.ended_at),
+                    });
+                    score.pp = perf.pp;
+                }
+                sc.push(score);
+            }
+            newScores = sc;
             newScores.sort((a, b) => b.pp - a.pp);
+        }
             break;
         case 'score':
             newScores.sort((a, b) => b.total_score - a.total_score);
