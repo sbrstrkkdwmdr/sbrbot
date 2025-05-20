@@ -306,7 +306,7 @@ export async function fullPerformance(
 ) {
     const perf = await calcScore({
         mods,
-        mode: 0,
+        mode,
         mapid,
         stats,
         accuracy,
@@ -321,7 +321,7 @@ export async function fullPerformance(
     });
     const fcperf = await calcFullCombo({
         mods,
-        mode: 0,
+        mode,
         mapid,
         stats,
         accuracy,
@@ -334,7 +334,7 @@ export async function fullPerformance(
     });
     const ssperf = await calcFullCombo({
         mods,
-        mode: 0,
+        mode,
         mapid,
         accuracy: 1,
         clockRate,
@@ -345,4 +345,14 @@ export async function fullPerformance(
         customHP,
     });
     return [perf, fcperf, ssperf];
+}
+
+export function getModSpeed(mods: apitypes.Mod[]) {
+    let rate = 1.0;
+    for (const mod of mods) {
+        if (mod?.settings?.speed_change) {
+            rate *= mod?.settings?.speed_change;
+        }
+    }
+    return rate;
 }
