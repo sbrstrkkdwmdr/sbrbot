@@ -390,7 +390,7 @@ export class ScoreListCommand extends OsuCommand {
                     req = await helper.tools.api.getScoresBest(this.osudata.id, this.args.mode, []);
                     break;
                 case 'recent':
-                    req = await helper.tools.api.getScoresRecent(this.osudata.id, this.args.mode, []);
+                    req = await helper.tools.api.getScoresRecent(this.osudata.id, this.args.mode, [`include_fails=1`]);
                     break;
                 case 'map': {
                     let mapReq: tooltypes.apiReturn<apitypes.Beatmap>;
@@ -506,6 +506,29 @@ export class ScoreListCommand extends OsuCommand {
             }, this.args.reverse, this.args.detailed, this.args.page, true,
             this.type == 'map' ? 'single_map' : undefined, map ?? undefined
         );
+
+        helper.tools.commands.storeButtonArgs(this.input.id + '', {
+            user: this.args.user,
+            searchid: this.args.searchid,
+            page: this.args.page,
+            mode: this.args.mode,
+            filterMapper: this.args.filteredMapper,
+            modsInclude: this.args.modsInclude,
+            modsExact: this.args.modsExact,
+            modsExclude: this.args.modsExclude,
+            filterTitle: this.args.filterTitle,
+            filterRank: this.args.filterRank,
+            filterPp: this.args.pp,
+            filterScore: this.args.score,
+            filterAcc: this.args.acc,
+            filterCombo: this.args.combo,
+            filterMiss: this.args.miss,
+            filterBpm: this.args.bpm,
+            sort: this.args.sort,
+            reverse: this.args.reverse,
+            ...{ maxPage: scoresFormat.maxPage }
+        });
+
         scoresEmbed.setFooter({
             text: `${scoresFormat.curPage}/${scoresFormat.maxPage} | ${this.args.mode ?? osumodcalc.ModeIntToName(this.scores?.[0]?.ruleset_id)}`
         });
@@ -560,13 +583,13 @@ export class ScoreListCommand extends OsuCommand {
                 this.args.mapid = temp.id;
             }
             if (this.args.mapid == false) {
-                helper.tools.commands.missingPrevID_map(this.input, 'scores');
+                helper.tools.commands.missingPrevID_map(this.input, this.name);
                 return;
             }
         }
 
 
-        this.pgbuttons = await helper.tools.commands.pageButtons('scores', this.commanduser, this.input.id);
+        this.pgbuttons = await helper.tools.commands.pageButtons(this.name, this.commanduser, this.input.id);
         this.buttons = new Discord.ActionRowBuilder();
 
         if (this.input.type == 'interaction') {
@@ -841,10 +864,10 @@ export class SingleScoreCommand extends OsuCommand {
                 this.score.max_combo,
                 failed.objectsHit,
                 new Date(this.score.beatmap.last_updated),
-                overrides.ar,
-                overrides.hp,
                 overrides.cs,
+                overrides.ar,
                 overrides.od,
+                overrides.hp,
             );
             rspp =
                 this.score.pp ?
@@ -1188,9 +1211,8 @@ export class Recent extends SingleScoreCommand {
         searchid: string;
         page: number;
         mode: apitypes.GameMode;
-        showFails: boolean;
+        showFails: number;
         filter: string;
-        filterRank: apitypes.Rank;
     };
     constructor() {
         super();
@@ -1201,9 +1223,8 @@ export class Recent extends SingleScoreCommand {
             searchid: undefined,
             page: 0,
             mode: null,
-            showFails: true,
+            showFails: 1,
             filter: null,
-            filterRank: null,
         };
     }
 
@@ -1211,7 +1232,7 @@ export class Recent extends SingleScoreCommand {
         this.args.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
         const passArgFinder = helper.tools.commands.matchArgMultiple(['-nf', '-nofail', '-pass', '-passes', 'passes=true'], this.input.args, false, null, false, false);
         if (passArgFinder.found) {
-            this.args.showFails = false;
+            this.args.showFails = 0;
             this.input.args = passArgFinder.args;
         }
         const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, this.input.args, true, 'number', false, true);
@@ -1329,7 +1350,7 @@ export class Recent extends SingleScoreCommand {
         ) {
             rsdataReq = helper.tools.data.findFile(this.input.id, 'rsdata');
         } else {
-            rsdataReq = await helper.tools.api.getScoresRecent(this.osudata.id, this.args.mode, [`include_fails=${+this.args.showFails}`]);
+            rsdataReq = await helper.tools.api.getScoresRecent(this.osudata.id, this.args.mode, [`include_fails=${this.args.showFails}`]);
         }
 
         this.scores = rsdataReq.apiData;
@@ -1405,6 +1426,15 @@ export class Recent extends SingleScoreCommand {
                 mods: this.score.mods.map(x => x.acronym).join()
             }
         );
+        helper.tools.commands.storeButtonArgs(this.input.id, {
+            user: this.args.user,
+            searchid: this.args.searchid,
+            page: this.args.page + 1,
+            maxPage: this.scores.length,
+            mode: this.args.mode,
+            fails: this.args.showFails,
+            filterTitle: this.args.filter,
+        });
 
         this.ctn.edit = true;
 
@@ -1680,7 +1710,7 @@ export class ReplayParse extends SingleScoreCommand {
 
         const decoder = new osuparsers.ScoreDecoder();
         const score = await decoder.decodeFromPath(`${helper.vars.path.files}/replays/${this.input.id}.osr`);
-        helper.tools.data.debug(score, 'fileparse', 'replay', this.input.message?.guildId ?? this.input.interaction?.guildId, 'replayData');
+        helper.tools.data.debug(score, 'fileparse', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'replayData');
         this.setScore(score);
         try {
             this.map = await this.getMap(score?.info?.beatmapHashMD5);
@@ -1750,7 +1780,7 @@ export class ReplayParse extends SingleScoreCommand {
             await helper.tools.commands.errorAndAbort(this.input, this.name, true, err, true);
             throw new Error(err);
         }
-        helper.tools.data.debug(req, 'fileparse', 'replay', this.input.message?.guildId ?? this.input.interaction?.guildId, 'mapData');
+        helper.tools.data.debug(req, 'fileparse', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'mapData');
         helper.tools.data.storeFile(req, mapid, 'mapdata');
         return mapdata;
     }
