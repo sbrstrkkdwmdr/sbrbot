@@ -532,7 +532,7 @@ export type params = {
     detailed?: number,
     filter?: string,
     list?: boolean, //recent
-    fails?: boolean, //recent
+    fails?: number, //recent
     nochokes?: boolean, //top
     rankingtype?: apitypes.RankingType, //ranking
     country?: string, //ranking
