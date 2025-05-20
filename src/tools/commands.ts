@@ -22,7 +22,6 @@ export async function sendMessage(input: {
 },
     canReply: boolean
 ) {
-
     if (input.args.files) {
         input.args.files = checkFileLimit(input.args.files);
     }

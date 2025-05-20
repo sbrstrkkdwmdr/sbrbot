@@ -803,8 +803,10 @@ export class WhatIf extends OsuCommand {
 
         let osutopdata: apitypes.Score[];
         try {
-            osutopdata = await this.getTopData(this.args.user, this.args.mode);
+            osutopdata = await this.getTopData(osudata.id, this.args.mode);
         } catch (e) {
+            this.ctn.content = 'There was an error trying to fetch top scores';
+            this.send();
             return;
         }
 
@@ -856,7 +858,7 @@ export class WhatIf extends OsuCommand {
         this.ctn.components = [buttons];
         this.send();
     }
-    async getTopData(user: string, mode: apitypes.GameMode) {
+    async getTopData(user: number, mode: apitypes.GameMode) {
         let req: tooltypes.apiReturn<apitypes.Score[]>;
         if (helper.tools.data.findFile(this.input.id, 'osutopdata') &&
             !('error' in helper.tools.data.findFile(this.input.id, 'osutopdata')) &&
@@ -868,7 +870,7 @@ export class WhatIf extends OsuCommand {
         }
 
         if (req?.error) {
-            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', user), false);
+            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', user+''), false);
             return;
         }
         const topdata: apitypes.Score[] & apitypes.Error = req.apiData;

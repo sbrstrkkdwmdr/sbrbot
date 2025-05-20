@@ -22,11 +22,8 @@ export async function onInteraction(interaction: Discord.Interaction) {
     if (!helper.tools.checks.botHasPerms(interaction, ['ReadMessageHistory'])) {
         canReply = false;
     }
-
     interaction = interaction as Discord.ButtonInteraction; //| Discord.SelectMenuInteraction
-
-    const obj = interaction;
-
+    
     //version-buttonType-baseCommand-userId-commandId-extraValue
     //buttonVer-button-command-specid-id-???
     const buttonsplit = interaction.customId.split('-');
@@ -166,7 +163,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
     if (buttonType == 'Leaderboard') {
         switch (cmd) {
             case 'map': {
-                const curEmbed = obj.message.embeds[0];
+                const curEmbed = interaction.message.embeds[0];
                 // #<mode>/id
                 overrides.id = curEmbed.url.split('#')[1].split('/')[1];
                 overrides.mode = curEmbed.url.split('#')[1].split('/')[0] as apitypes.GameMode;

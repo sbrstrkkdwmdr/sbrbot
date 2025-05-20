@@ -297,14 +297,16 @@ export class Crash extends Command {
     constructor() {
         super();
         this.name = 'Crash';
+        this.args = {};
     }
     async execute() {
+        await this.setArgs();
         this.logInput();
         // do stuff
         this.ctn.content = 'executing crash command...';
         this.send();
         setTimeout(() => {
-            helper.tools.log.stdout(`executed crash command by ${this.commanduser.id} - ${this.commanduser.username}`);
+            helper.tools.log.stdout(`executed crash command by ${this?.commanduser?.id} - ${this?.commanduser?.username}`);
             process.exit(1);
         }, 1000);
     }
@@ -769,15 +771,12 @@ External:   ${tomb(memdat.external)} MiB
 }
 
 export class Find extends Command {
-    declare protected args: {
-        xyzxyz: string;
-    };
+    declare protected args: {};
     constructor() {
         super();
         this.name = 'Find';
-        this.args = {
-            xyzxyz: ''
-        };
+        this.args = {};
+
     }
     async setArgsMsg() {
     }
@@ -825,9 +824,9 @@ export class LeaveGuild extends Command {
                 guild.leave();
             }
         }
-        if (helper.tools.checks.isAdmin(this.commanduser.id, this.args.guildId)) {
+        if (helper.tools.checks.isAdmin(this.commanduser.id, this.args.guildId) && !success) {
             allowed = true;
-            const guild = helper.vars.client.guilds.cache.get(this.input.message?.guildId);
+            const guild = helper.vars.client.guilds.cache.get(this.args.guildId);
             if (guild) {
                 success = true;
                 guild.leave();
@@ -884,15 +883,11 @@ export class Prefix extends Command {
 }
 
 export class Servers extends Command {
-    declare protected args: {
-        xyzxyz: string;
-    };
+    declare protected args: {};
     constructor() {
         super();
         this.name = 'Servers';
-        this.args = {
-            xyzxyz: ''
-        };
+        this.args = {};
     }
     async execute() {
         await this.setArgs();

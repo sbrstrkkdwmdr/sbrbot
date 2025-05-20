@@ -3,10 +3,14 @@
 newest-oldest
 
 ## current
+- [ ] fix button commands
 - [ ] reduce code complexity
 - [ ] test button and link arg handlers
 - [ ] test all commands
-- [ ] test osu_other, osu_track, misc, admin
+- [x] test admin cmds
+- [x] test misc cmds
+- [ ] test osu_track cmds
+- [x] test osu_other cmds
 - [x] ensure all commands have `this.name` set
 - [ ] ensure all uses of `errorAndAbort` throw errors instead of returns (when applicable)
 - [ ] ensure all functions that use command name use `this.name` (debug, buttons etc.)

@@ -8,6 +8,7 @@ export class _8Ball extends Command {
     constructor() {
         super();
         this.name = '8Ball';
+        this.args = {};
     }
     async execute() {
         await this.setArgs();
@@ -39,6 +40,7 @@ export class CoinFlip extends Command {
     constructor() {
         super();
         this.name = 'CoinFlip';
+        this.args = {};
     }
     async execute() {
         await this.setArgs();
@@ -47,7 +49,7 @@ export class CoinFlip extends Command {
 
         const arr = ['Heads', 'Tails'];
         const msg = arr[Math.floor(Math.random() * arr.length)];
-        const file = new Discord.AttachmentBuilder(`${helper.vars.path.precomp}/files/img/coin/${msg}.png`);
+        const file = new Discord.AttachmentBuilder(`${helper.vars.path.precomp}/files/coin/${msg}.png`);
         const embed = new Discord.EmbedBuilder()
             .setTitle(msg)
             .setImage(`attachment://${msg}.png`);

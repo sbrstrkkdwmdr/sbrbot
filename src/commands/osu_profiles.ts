@@ -797,8 +797,8 @@ export class Profile extends OsuCommand {
     }
     async execute() {
         await this.setArgs();
-        this.logInput();
         this.getOverrides();
+        this.logInput();
         // do stuff
 
         const buttons = new Discord.ActionRowBuilder();
@@ -903,7 +903,6 @@ export class Profile extends OsuCommand {
         const peakRank = osudata?.rank_highest?.rank ?
             `\n**Peak Rank**: #${helper.tools.calculate.separateNum(osudata.rank_highest.rank)} (<t:${new Date(osudata.rank_highest.updated_at).getTime() / 1000}:R>)` :
             '';
-
         const onlinestatus = osudata.is_online ?
             `**${helper.vars.emojis.onlinestatus.online} Online**` :
             (new Date(osudata.last_visit)).getTime() != 0 ?
@@ -948,7 +947,6 @@ export class Profile extends OsuCommand {
             .setTitle(`${osudata.username}'s ${this.args.mode ?? 'osu!'} profile`)
             .setURL(`https://osu.ppy.sh/users/${osudata.id}/${this.args.mode ?? ''}`)
             .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`);
-
         if (this.args.graphonly) {
             const graphembeds = await this.getGraphs(osudata);
             this.ctn.embeds = graphembeds;
@@ -1052,8 +1050,11 @@ export class Profile extends OsuCommand {
                 this.ctn.embeds = [osuEmbed];
             }
         }
+        console.log(this.input.interaction?.id);
         helper.tools.data.writePreviousId('user', this.input.message?.guildId ?? this.input.interaction?.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
+        console.log(this.input.interaction?.id);
         this.ctn.components = [buttons];
+        console.log(this.input.interaction?.id);
         this.send();
     }
 
