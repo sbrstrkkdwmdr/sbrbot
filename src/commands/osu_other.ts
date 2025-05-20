@@ -101,15 +101,13 @@ export class Compare extends OsuCommand {
         this.getOverrides();
         // do stuff
 
-        let embedTitle: string = 'w';
-        const usefields: Discord.EmbedField[] = [];
         let embedescription: string = null;
         if (this.args.page < 2 || typeof this.args.page != 'number' || isNaN(this.args.page)) {
             this.args.page = 1;
         }
         this.args.page--;
         let footer = '';
-        const embed = new Discord.EmbedBuilder();
+        let embed = new Discord.EmbedBuilder();
         try {
             if (this.args.second == null) {
                 if (this.args.secondsearchid) {
@@ -165,7 +163,7 @@ export class Compare extends OsuCommand {
                 }
                     break;
                 case 'top': {
-                    await this.plays(firstuser, seconduser, embed);
+                    embed = await this.plays(firstuser, seconduser, embed);
                 }
                     break;
 
@@ -190,8 +188,10 @@ export class Compare extends OsuCommand {
             });
         }
 
-        if (embedescription != null && embedescription.length > 0) { embed.setDescription(embedescription); }
-
+        if (embedescription != null && embedescription.length > 0) {
+            embed.setDescription(embedescription);
+        }
+        this.ctn.embeds = [embed];
         this.send();
     }
     async top(user: string, mode: apitypes.GameMode) {
@@ -258,8 +258,9 @@ export class Compare extends OsuCommand {
                     }
                 ]
             );
+        return embed;
     }
-    async getTopData(user: string, mode: apitypes.GameMode) {
+    async getTopData(user: number, mode: apitypes.GameMode) {
         let req: tooltypes.apiReturn<apitypes.Score[]>;
         if (helper.tools.data.findFile(this.input.id, 'osutopdata') &&
             !('error' in helper.tools.data.findFile(this.input.id, 'osutopdata')) &&
@@ -271,7 +272,7 @@ export class Compare extends OsuCommand {
         }
 
         if (req?.error) {
-            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', user), false);
+            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', user + ''), false);
             return;
         }
         const topdata: apitypes.Score[] & apitypes.Error = req.apiData;
@@ -288,9 +289,10 @@ export class Compare extends OsuCommand {
         let firsttopdata: apitypes.Score[];
         let secondtopdata: apitypes.Score[];
         try {
-            firsttopdata = await this.getTopData(this.args.first, this.args.mode);
-            secondtopdata = await this.getTopData(this.args.second, this.args.mode);
+            firsttopdata = await this.getTopData(firstuser.id, this.args.mode);
+            secondtopdata = await this.getTopData(seconduser.id, this.args.mode);
         } catch (e) {
+            embed.setDescription('There was an error fetching scores');
             return;
         }
 
@@ -309,12 +311,13 @@ export class Compare extends OsuCommand {
             if (!firstscore) break;
             const secondscore: apitypes.Score = secondtopdata.find(score => score.beatmap.id == firstscore.beatmap.id);
             if (secondscore == null) break;
-            const firstscorestr =
-                `\`${firstscore.pp.toFixed(2)}pp | ${(firstscore.accuracy * 100).toFixed(2)}% ${firstscore.mods.length > 0 ? '| +' + firstscore.mods.join('') : ''}`;//.padEnd(30, ' ').substring(0, 30)
-            const secondscorestr =
-                `${secondscore.pp.toFixed(2)}pp | ${(secondscore.accuracy * 100).toFixed(2)}% ${secondscore.mods.length > 0 ? '| +' + secondscore.mods.join('') : ''}\`\n`;//.padEnd(30, ' ').substring(0, 30)
+            const format = (score: apitypes.Score) =>
+                `\`${score.pp.toFixed(2)}pp | ${(score.accuracy * 100).toFixed(2)}% ${score.mods.length > 0 ? '| +' + score.mods.map(x => x.acronym).join('') : ''}`;
+            const firstscorestr = format(firstscore);
+            const secondscorestr = format(secondscore);
             arrscore.push(
-                `**[\`${firstscore.beatmapset.title} [${firstscore.beatmap.version}]\`](https://osu.ppy.sh/b/${firstscore.beatmap.id})**
+                `
+**[\`${firstscore.beatmapset.title} [${firstscore.beatmap.version}]\`](https://osu.ppy.sh/b/${firstscore.beatmap.id})**
 \`${firstuser.username.padEnd(30, ' ').substring(0, 30)} | ${seconduser.username.padEnd(30, ' ').substring(0, 30)}\`
 ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
             );
@@ -364,6 +367,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
                     inline: false
                 },
             ]);
+        return embed;
     }
 }
 
@@ -428,7 +432,7 @@ export class Set extends OsuCommand {
             if (thing.isincluded == false) {
                 this.voidcontent();
                 this.ctn.content = helper.vars.errors.uErr.osu.set.mode;
-                await this.send()
+                await this.send();
                 return;
             }
         }
