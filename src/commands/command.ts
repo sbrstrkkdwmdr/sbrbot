@@ -109,15 +109,15 @@ export class OsuCommand extends Command {
     async validUser(user: string, searchid: string, mode: apitypes.GameMode) {
         if (user == null) {
             const cuser = await helper.tools.data.searchUser(searchid, true);
-            user = cuser.username;
+            user = cuser?.username;
             if (mode == null) {
-                mode = cuser.gamemode;
+                mode = cuser?.gamemode;
             }
         }
 
         if (user == null) {
             const cuser = helper.vars.client.users.cache.get(searchid);
-            user = cuser.username;
+            user = cuser?.username;
         }
         return { user, mode };
     }
