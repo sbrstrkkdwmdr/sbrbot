@@ -596,6 +596,7 @@ export class ScoreListCommand extends OsuCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         if (this.args.page < 2 || typeof this.args.page != 'number' || isNaN(this.args.page)) {
@@ -1098,6 +1099,7 @@ export class ScoreParse extends SingleScoreCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         let scoredataReq: tooltypes.apiReturn<apitypes.Score>;
@@ -1326,6 +1328,7 @@ export class Recent extends SingleScoreCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         try {
@@ -1551,6 +1554,7 @@ export class MapLeaderboard extends OsuCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         let mapdata: apitypes.Beatmap;
@@ -1945,6 +1949,7 @@ export class ScoreStats extends OsuCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         let osudata: apitypes.User;
@@ -2356,6 +2361,7 @@ export class Simulate extends OsuCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         const tempscore = helper.tools.data.getPreviousId('score', this.input.message?.guildId ?? this.input.interaction?.guildId);

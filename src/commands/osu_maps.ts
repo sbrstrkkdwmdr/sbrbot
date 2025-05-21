@@ -267,6 +267,7 @@ export class Map extends OsuCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         if (this.args.maptitleq == null) {
@@ -1523,6 +1524,7 @@ export class UserBeatmaps extends OsuCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         try {

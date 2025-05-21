@@ -3,7 +3,7 @@
 newest-oldest
 
 ## current
-- [ ] fix button commands
+- [x] fix button commands
 - [ ] reduce code complexity
 - [ ] test button and link arg handlers
 - [ ] test all commands

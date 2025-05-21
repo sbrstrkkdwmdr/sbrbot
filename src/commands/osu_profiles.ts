@@ -55,6 +55,7 @@ export class Badges extends OsuCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         let osudata: apitypes.User;
@@ -159,6 +160,7 @@ export class BadgeWeightSeed extends OsuCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         let osudata: apitypes.User;
@@ -295,6 +297,7 @@ export class Leaderboard extends OsuCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         if (this.args.page < 2 || typeof this.args.page != 'number') {
@@ -849,6 +852,7 @@ export class Profile extends OsuCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         let osudata: apitypes.User;
@@ -1050,11 +1054,8 @@ export class Profile extends OsuCommand {
                 this.ctn.embeds = [osuEmbed];
             }
         }
-        console.log(this.input.interaction?.id);
         helper.tools.data.writePreviousId('user', this.input.message?.guildId ?? this.input.interaction?.guildId, { id: `${osudata.id}`, apiData: null, mods: null });
-        console.log(this.input.interaction?.id);
         this.ctn.components = [buttons];
-        console.log(this.input.interaction?.id);
         this.send();
     }
 
@@ -1199,6 +1200,7 @@ export class RecentActivity extends OsuCommand {
             this.ctn.content = 'Loading...';
             this.send();
             this.voidcontent();
+            this.ctn.edit = true;
         }
 
         let osudataReq: tooltypes.apiReturn<apitypes.User>;
