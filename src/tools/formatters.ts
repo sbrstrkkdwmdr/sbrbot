@@ -319,16 +319,15 @@ export function mapList(
         const topmap = mapset.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0];
 
         let info = `**#${i + 1}・[\`${mapset.artist} - ${mapset.title}\`](https://osu.ppy.sh/s/${mapset.id})**
-${helper.vars.emojis.rankedstatus[mapset.status]} | ${helper.vars.emojis.gamemodes[topmap.mode]}
-${helper.tools.calculate.secondsToTime(topmap.total_length)} | ${mapset.bpm}${helper.vars.emojis.mapobjs.bpm}
+${helper.vars.emojis.rankedstatus[mapset.status]} | ${helper.vars.emojis.gamemodes[topmap.mode]} | ${helper.tools.calculate.secondsToTime(topmap.total_length)} | ${mapset.bpm}${helper.vars.emojis.mapobjs.bpm}
 ${helper.tools.calculate.separateNum(mapset.play_count)} plays | ${helper.tools.calculate.separateNum(topmap.passcount)} passes | ${helper.tools.calculate.separateNum(mapset.favourite_count)} favourites
-Submitted <t:${new Date(mapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(mapset.last_updated).getTime() / 1000}:R>
-${topmap.status == 'ranked' ?
-                `Ranked <t:${Math.floor(new Date(mapset.ranked_date).getTime() / 1000)}:R>` : ''
-            }${topmap.status == 'approved' || topmap.status == 'qualified' ?
-                `Approved/Qualified <t:${Math.floor(new Date(mapset.ranked_date).getTime() / 1000)}:R>` : ''
-            }${topmap.status == 'loved' ?
-                `Loved <t:${Math.floor(new Date(mapset.ranked_date).getTime() / 1000)}:R>` : ''
+Submitted <t:${new Date(mapset.submitted_date).getTime() / 1000}:R> | ${topmap.status == 'ranked' ?
+                `Ranked <t:${Math.floor(new Date(mapset.ranked_date).getTime() / 1000)}:R>` :
+                topmap.status == 'approved' || topmap.status == 'qualified' ?
+                    `Approved/Qualified <t:${Math.floor(new Date(mapset.ranked_date).getTime() / 1000)}:R>` :
+                    topmap.status == 'loved' ?
+                        `Loved <t:${Math.floor(new Date(mapset.ranked_date).getTime() / 1000)}:R>` :
+                        `Last updated <t:${new Date(mapset.last_updated).getTime() / 1000}:R>`
             }`;
         info += '\n\n';
         text += info;
