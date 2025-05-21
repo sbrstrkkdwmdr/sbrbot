@@ -214,6 +214,7 @@ export class TrackList extends OsuCommand {
     constructor() {
         super();
         this.name = 'TrackList';
+        this.args = {};
     }
     async execute() {
         await this.setArgs();
