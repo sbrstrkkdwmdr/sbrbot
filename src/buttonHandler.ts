@@ -295,5 +295,10 @@ async function runCommand(interaction: Discord.ButtonInteraction, buttonType: bo
             buttonType
         });
         await command.execute();
+    } else {
+        interaction.reply({
+            content: 'There was an error trying to run this command',
+            flags: Discord.MessageFlags.Ephemeral
+        })
     }
 }

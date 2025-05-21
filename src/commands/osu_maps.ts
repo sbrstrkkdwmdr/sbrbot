@@ -27,6 +27,7 @@ export class Map extends OsuCommand {
     };
     constructor() {
         super();
+        this.name = 'Map';
         this.args = {
             mapid: undefined,
             mapmods: undefined,
@@ -1107,6 +1108,7 @@ export class RandomMap extends OsuCommand {
     };
     constructor() {
         super();
+        this.name = 'RandomMap';
         this.args = {
             mapType: null,
             useRandomRanked: false,
@@ -1215,6 +1217,7 @@ export class RecommendMap extends OsuCommand {
     };
     constructor() {
         super();
+        this.name = 'RecommendMap';
         this.args = {
             searchid: null,
             user: null,
@@ -1331,6 +1334,7 @@ export class UserBeatmaps extends OsuCommand {
     };
     constructor() {
         super();
+        this.name = 'UserBeatmaps';
         this.args = {
             filter: 'favourite',
             sort: 'dateadded',
