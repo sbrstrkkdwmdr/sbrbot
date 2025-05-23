@@ -23,7 +23,7 @@ export async function onInteraction(interaction: Discord.Interaction) {
         canReply = false;
     }
     interaction = interaction as Discord.ButtonInteraction; //| Discord.SelectMenuInteraction
-    
+
     //version-buttonType-baseCommand-userId-commandId-extraValue
     //buttonVer-button-command-specid-id-???
     const buttonsplit = interaction.customId.split('-');
@@ -275,6 +275,9 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
             command = new helper.commands.gen.Help();
             foundCommand = true;
             break;
+        default:
+            runFail(interaction);
+            return;
     }
     runCommand(interaction, buttonType, null, true);
 }
@@ -298,9 +301,17 @@ async function runCommand(interaction: Discord.ButtonInteraction, buttonType: bo
         });
         await command.execute();
     } else {
+        runFail(interaction);
+    }
+}
+
+function runFail(interaction: Discord.ButtonInteraction) {
+    try {
         interaction.reply({
             content: 'There was an error trying to run this command',
             flags: Discord.MessageFlags.Ephemeral
-        })
+        });
+    } catch (e) {
+
     }
 }

@@ -8,11 +8,10 @@ export class _8Ball extends Command {
     constructor() {
         super();
         this.name = '8Ball';
-        this.args = {};
     }
     async execute() {
         await this.setArgs();
-        this.logInput();
+        this.logInput(true);
         // do stuff
 
         const value = Math.floor(Math.random() * 4);
@@ -40,11 +39,10 @@ export class CoinFlip extends Command {
     constructor() {
         super();
         this.name = 'CoinFlip';
-        this.args = {};
     }
     async execute() {
         await this.setArgs();
-        this.logInput();
+        this.logInput(true);
         // do stuff
 
         const arr = ['Heads', 'Tails'];

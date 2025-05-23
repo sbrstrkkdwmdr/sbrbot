@@ -1705,11 +1705,10 @@ export class ReplayParse extends SingleScoreCommand {
     constructor() {
         super();
         this.name = 'ReplayParse';
-        this.args = {};
     }
 
     async execute() {
-        this.logInput();
+        this.logInput(true);
         // do stuff
 
         const decoder = new osuparsers.ScoreDecoder();

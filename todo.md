@@ -3,6 +3,7 @@
 newest-oldest
 
 ## current
+- [x] fix changelog (buttons switch commands, etc.)
 - [ ] fix commands re-sending api calls when switching pages
 - [x] fix button commands
 - [ ] reduce code complexity

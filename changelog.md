@@ -6,6 +6,10 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+### Fixed
+- general commands not having a name parameter set (broke buttons on changelog)
+- commands with no args crashing
+
 ## [5.0.0] - 2025-05-23
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/2382cd0e692c0f9243d26b08db8a159fce3c7468)</br>

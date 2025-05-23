@@ -22,6 +22,7 @@ export class Changelog extends Command {
     };
     constructor() {
         super();
+        this.name = 'Changelog'
         this.args = {
             version: null,
             useNum: null,
@@ -94,7 +95,7 @@ export class Changelog extends Command {
     async execute() {
         await this.setArgs();
         this.logInput();
-        const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('changelog', this.commanduser, this.input.id);
+        const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons(this.name, this.commanduser, this.input.id);
         const buttons = new Discord.ActionRowBuilder();
         //get version
         let found: string | number = null;
@@ -303,6 +304,7 @@ export class Help extends Command {
     };
     constructor() {
         super();
+        this.name = 'Help';
         this.args = {
             rdm: false,
             commandfound: false,
@@ -601,6 +603,7 @@ export class Info extends Command {
     declare protected args: {};
     constructor() {
         super();
+        this.name = 'Info';
     }
     async setArgsMsg() {
         this.commanduser = this.input.message.author;
@@ -762,6 +765,7 @@ export class Invite extends Command {
     declare protected args: {};
     constructor() {
         super();
+        this.name = 'Invite';
     }
     async execute() {
         await this.setArgs();
@@ -775,6 +779,7 @@ export class Ping extends Command {
     declare protected args: {};
     constructor() {
         super();
+        this.name = 'Ping';
     }
     async execute() {
         await this.setArgs();
@@ -848,6 +853,7 @@ export class Remind extends Command {
     };
     constructor() {
         super();
+        this.name = 'Remind';
         this.args = {
             time: '1s',
             remindertxt: 'no reminder set',
@@ -940,6 +946,7 @@ export class Stats extends Command {
     declare protected args: {};
     constructor() {
         super();
+        this.name = 'Stats';
     }
     async execute() {
         await this.setArgs();

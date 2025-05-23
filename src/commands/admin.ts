@@ -297,11 +297,10 @@ export class Crash extends Command {
     constructor() {
         super();
         this.name = 'Crash';
-        this.args = {};
     }
     async execute() {
         await this.setArgs();
-        this.logInput();
+        this.logInput(true);
         // do stuff
         this.ctn.content = 'executing crash command...';
         this.send();
@@ -775,7 +774,6 @@ export class Find extends Command {
     constructor() {
         super();
         this.name = 'Find';
-        this.args = {};
 
     }
     async setArgsMsg() {
@@ -786,7 +784,7 @@ export class Find extends Command {
 
     async execute() {
         await this.setArgs();
-        this.logInput();
+        this.logInput(true);
         // do stuff
 
         this.send();
@@ -887,11 +885,10 @@ export class Servers extends Command {
     constructor() {
         super();
         this.name = 'Servers';
-        this.args = {};
     }
     async execute() {
         await this.setArgs();
-        this.logInput();
+        this.logInput(true);
         // do stuff
 
         const servers = (helper.vars.client.guilds.cache.map(guild => ` **${guild.name}** => \`${guild.id}\` | <@${guild.ownerId}> \n`)).join('');

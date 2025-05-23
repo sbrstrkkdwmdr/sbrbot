@@ -214,11 +214,10 @@ export class TrackList extends OsuCommand {
     constructor() {
         super();
         this.name = 'TrackList';
-        this.args = {};
     }
     async execute() {
         await this.setArgs();
-        this.logInput();
+        this.logInput(true);
         // do stuff
         const users = await helper.vars.trackDb.findAll();
         const useridsarraylen = await helper.vars.trackDb.count();
