@@ -9,6 +9,7 @@
 ### Fixed
 - general commands not having a name parameter set (broke buttons on changelog)
 - commands with no args crashing
+- scorelist commands re-sending API calls when switching pages
 
 ## [5.0.0] - 2025-05-23
 

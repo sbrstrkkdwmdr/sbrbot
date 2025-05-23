@@ -364,10 +364,12 @@ export class ScoreListCommand extends OsuCommand {
                 fname = 'nochokesdata';
                 break;
             case 'recent':
-                fname = 'recentthis.score';
+                fname = 'recentscoresdata';
+                getid = this.input.id + ''
                 break;
             case 'map':
                 fname = 'mapscoresdata';
+                getid = this.input.id + ''
                 break;
             case 'firsts':
                 fname = 'firstsdata';
@@ -377,7 +379,13 @@ export class ScoreListCommand extends OsuCommand {
                 fname = 'pinneddata';
                 break;
         }
-        // scores = req.
+        if (this.type == 'map') {
+            try {
+                this.map = await this.getMap(+this.args.mapid);
+            } catch (e) {
+                return;
+            }
+        }
         if (helper.tools.data.findFile(getid, fname) &&
             this.input.type == 'button' &&
             !('error' in helper.tools.data.findFile(getid, fname)) &&
@@ -393,26 +401,6 @@ export class ScoreListCommand extends OsuCommand {
                     req = await helper.tools.api.getScoresRecent(this.osudata.id, this.args.mode, [`include_fails=1`]);
                     break;
                 case 'map': {
-                    let mapReq: tooltypes.apiReturn<apitypes.Beatmap>;
-                    if (helper.tools.data.findFile(this.args.mapid as string | number, 'map') &&
-                        !('error' in helper.tools.data.findFile(this.args.mapid as string | number, 'map')) &&
-                        this.input.buttonType != 'Refresh'
-                    ) {
-                        mapReq = helper.tools.data.findFile(this.args.mapid as string | number, 'map');
-                    } else {
-                        mapReq = await helper.tools.api.getMap(this.args.mapid as number, []);
-                    }
-                    if (mapReq?.error) {
-                        await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', this.args.mapid + ''), false);
-                        return;
-                    }
-                    helper.tools.data.debug(mapReq, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'map');
-                    this.map = mapReq.apiData;
-                    if (this.map?.hasOwnProperty('error')) {
-                        await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.map.m.replace('[ID]', this.args.mapid + ''), true);
-                        return;
-                    }
-
                     req = await helper.tools.api.getUserMapScores(this.osudata.id, this.args.mapid as number, []);
                 }
                     break;
@@ -436,12 +424,14 @@ export class ScoreListCommand extends OsuCommand {
                 req.apiData as apitypes.Score[];
 
         helper.tools.data.debug(req, 'command', this.type, this.input.message?.guildId ?? this.input.interaction?.guildId, this.type + 'data');
+        helper.tools.data.storeFile(req, getid, fname);
 
         if (tempscores?.hasOwnProperty('error') || !(tempscores[0]?.user?.username || tempscores[0]?.user_id)) {
             await commitError(this?.type, this.input, this.args);
         }
 
         this.scores = tempscores;
+
         async function commitError(type: string, input, args) {
             switch (type) {
                 case 'osutop': case 'nochokes':
