@@ -1270,6 +1270,7 @@ export function disableAllButtons(msg: Discord.Message) {
     let components: Discord.ActionRowBuilder<any>[] = [];
     for (const actionrow of msg.components) {
         let newActionRow = new Discord.ActionRowBuilder();
+        // @ts-expect-error TS2339: Property 'components' does not exist on type 'FileComponent'.
         for (let button of actionrow.components) {
             let newbutton: Discord.ButtonBuilder
                 | Discord.StringSelectMenuBuilder

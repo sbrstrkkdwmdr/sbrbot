@@ -101,7 +101,9 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
                 {
                     //interaction is converted to a base interaction first because button interaction and select menu interaction don't overlap
                     overrides.id = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
+                    // @ts-expect-error TS2339: Property 'components' does not exist on type 'TopLevelComponent'.
                     if (interaction?.message?.components[2]?.components[0]) {
+                        // @ts-expect-error TS2339: Property 'components' does not exist on type 'TopLevelComponent'.
                         overrides.overwriteModal = interaction.message.components[2].components[0] as any;
                     }
                 }
@@ -282,7 +284,7 @@ async function runCommand(interaction: Discord.ButtonInteraction, buttonType: bo
         await interaction.deferUpdate()
             .catch(error => { });
     }
-    if (foundCommand) {
+    if (foundCommand && command) {
         command.setInput({
             message: overrideType == "other" ? null : interaction.message,
             interaction,

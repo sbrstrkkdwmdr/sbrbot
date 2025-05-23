@@ -1,5 +1,4 @@
 import * as canvas from 'canvas';
-// @ts-expect-error thinks this file (other.ts) is commonjs so i cant import ecmascript bffr
 import * as chartjs from 'chart.js/auto';
 import Discord from 'discord.js';
 import fs from 'fs';
