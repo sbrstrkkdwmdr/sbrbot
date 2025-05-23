@@ -3,6 +3,7 @@
 newest-oldest
 
 ## current
+- [ ] fix commands re-sending api calls when switching pages
 - [x] fix button commands
 - [ ] reduce code complexity
 - [ ] test button and link arg handlers

@@ -4,39 +4,45 @@
 
 ## [WIP] - xxxx-xx-xx
 
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+
 ## [5.0.0] - 2025-05-23
 
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/2382cd0e692c0f9243d26b08db8a159fce3c7468)</br>
+
 ### Added
-- guildId parameter to LeaveGuild
+
+-   guildId parameter to LeaveGuild
 
 ### Fixed
-- calculate pp before sorting scores in scorelists
+
+-   calculate pp before sorting scores in scorelists
 
 ### Changed
-- changed all commands into using classes instead of really long functions for readability
-- split recent list and recent into separate commands
+
+-   changed all commands into using classes instead of really long functions for readability
+-   split recent list and recent into separate commands
 
 ### Removed
-- convert
-- country
-- math
-- time
-- weather
-- getuser (use find)
-- getuser avatar (use find)
-- purge
-- inspire
-- poll
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+-   convert
+-   country
+-   math
+-   time
+-   weather
+-   getuser (use find)
+-   getuser avatar (use find)
+-   purge
+-   inspire
+-   poll
 
 ## [4.1.5] - 2025-04-08
 
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/80443db36fefce732b076d3f8fe6448690d28d5a)</br>
+
 ### Added
 
-- user can be specified with `-u`
-
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/80443db36fefce732b076d3f8fe6448690d28d5a)</br>
+-   user can be specified with `-u`
 
 ### Changed
 
