@@ -186,10 +186,10 @@ export class OsuCommand extends Command {
     }
     getLatestMap() {
         const tempMap = helper.tools.data.getPreviousId('map', this.input.message?.guildId ?? this.input.interaction?.guildId);
-        const tempScore = helper.tools.data.getPreviousId('map', this.input.message?.guildId ?? this.input.interaction?.guildId);
+        const tempScore = helper.tools.data.getPreviousId('score', this.input.message?.guildId ?? this.input.interaction?.guildId);
         const tmt = moment(tempMap.last_access ?? '1975-01-01');
         const tst = moment(tempScore.last_access ?? '1975-01-01');
-        if (tmt.isBefore(tst)) {
+        if (tst.isBefore(tmt)) {
             return {
                 mapid: tempMap?.id,
                 mods: tempMap?.mods,

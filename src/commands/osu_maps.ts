@@ -256,7 +256,6 @@ export class Map extends OsuCommand {
             return;
         }
 
-
         const inputModalDiff = new Discord.StringSelectMenuBuilder()
             .setCustomId(`${helper.vars.versions.releaseDate}-Select-map-${this.commanduser.id}-${this.input.id}-diff`)
             .setPlaceholder('Select a difficulty');
