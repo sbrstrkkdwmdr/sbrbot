@@ -4,6 +4,8 @@
 
 ## [WIP] - xxxx-xx-xx
 
+## [5.0.0] - 2025-05-23
+
 ### Added
 - guildId parameter to LeaveGuild
 
