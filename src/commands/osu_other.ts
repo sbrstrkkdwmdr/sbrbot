@@ -835,11 +835,11 @@ export class WhatIf extends OsuCommand {
 
         const guessrank = await helper.tools.data.getRankPerformance('pp->rank', (total + bonus), `${helper.tools.other.modeValidator(this.args.mode)}`,);
 
-        let embed = new Discord.EmbedBuilder()
+        const embed = new Discord.EmbedBuilder()
             .setTitle(`What if ${osudata.username} gained ${this.args.pp}pp?`)
             .setColor(helper.vars.colours.embedColour.query.dec)
             .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`);
-        embed = helper.tools.formatter.userAuthor(osudata, embed);
+        helper.tools.formatter.userAuthor(osudata, embed);
         if (ppindex + 1 > 100) {
             embed.setDescription(
                 `A ${this.args.pp}pp score would be outside of their top 100 plays and be weighted at 0%.

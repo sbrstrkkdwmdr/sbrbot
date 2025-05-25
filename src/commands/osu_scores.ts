@@ -470,12 +470,12 @@ export class ScoreListCommand extends OsuCommand {
         }
     }
     protected async list(map?: apitypes.Beatmap) {
-        let scoresEmbed = new Discord.EmbedBuilder()
+        const scoresEmbed = new Discord.EmbedBuilder()
             .setColor(helper.vars.colours.embedColour.scorelist.dec)
             .setTitle(this.toName(map))
             .setThumbnail(`${this.osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`)
             .setURL(`https://osu.ppy.sh/users/${this.osudata.id}/${osumodcalc.ModeIntToName(this.scores?.[0]?.ruleset_id)}#top_ranks`);
-        scoresEmbed = helper.tools.formatter.userAuthor(this.osudata, scoresEmbed);
+        helper.tools.formatter.userAuthor(this.osudata, scoresEmbed);
 
         const scoresFormat = await helper.tools.formatter.scoreList(this.scores, this.args.sort,
             {
@@ -959,7 +959,7 @@ ${this.score.max_combo == mxcombo ? `**${this.score.max_combo}x**` : `${this.sco
                     .setDescription(`${this.score.mods.length > 0 ? '+' + osumodcalc.OrderMods(this.score.mods.map(x => x.acronym).join('').toUpperCase()).string + modadjustments + ' |' : ''} <t:${new Date(this.score.ended_at).getTime() / 1000}:R>
 ${(perfs[0].difficulty.stars ?? 0).toFixed(2)}⭐ | ${helper.vars.emojis.gamemodes[this.score.ruleset_id]}
 `);
-                embed = helper.tools.formatter.userAuthor(this.osudata, embed, this.args.overrideAuthor);
+                helper.tools.formatter.userAuthor(this.osudata, embed, this.args.overrideAuthor);
                 break;
             case 'recent':
                 embed.setTitle(`#${this.args.page + 1} most recent ${this.args.showFails == 1 ? 'play' : 'pass'} for ${this.score.user.username} | <t:${new Date(this.score.ended_at).getTime() / 1000}:R>`)
@@ -2014,10 +2014,10 @@ export class ScoreStats extends OsuCommand {
 
         // let useFiles: string[] = [];
 
-        let Embed: Discord.EmbedBuilder = new Discord.EmbedBuilder()
+        const Embed: Discord.EmbedBuilder = new Discord.EmbedBuilder()
             .setTitle(`Statistics for ${osudata.username}'s ${this.args.scoreTypes} scores`)
             .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`);
-        Embed = helper.tools.formatter.userAuthor(osudata, Embed);
+        helper.tools.formatter.userAuthor(osudata, Embed);
         if (scoresdata.length == 0) {
             Embed.setDescription('No scores found');
         } else {

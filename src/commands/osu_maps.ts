@@ -1672,15 +1672,11 @@ export class UserBeatmaps extends OsuCommand {
             })
             .setTitle(`${this.osudata.username}'s ${helper.tools.formatter.toCapital(this.args.filter)} Maps`)
             .setThumbnail(`${this.osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`)
-            .setAuthor({
-                name: `#${helper.tools.calculate.separateNum(this.osudata?.statistics?.global_rank)} | #${helper.tools.calculate.separateNum(this.osudata?.statistics?.country_rank)} ${this.osudata.country_code} | ${helper.tools.calculate.separateNum(this.osudata?.statistics?.pp)}pp`,
-                url: `https://osu.ppy.sh/users/${this.osudata.id}`,
-                iconURL: `${`https://osuhelper.vars.argflags.omkserver.nl/${this.osudata.country_code}.png`}`
-            })
             .setURL(`https://osu.ppy.sh/users/${this.osudata.id}/${this.osudata.playmode}#beatmaps`)
             .setColor(helper.vars.colours.embedColour.userlist.dec)
             .setDescription(this.args.reachedMaxCount ? 'Only the first 500 mapsets are shown\n\n' : '\n\n' + mapsarg.text);
-
+            helper.tools.formatter.userAuthor(this.osudata, mapList);
+            
         if (mapsarg.text.length == 0) {
             mapList.setDescription('No mapsets found');
             (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);

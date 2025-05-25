@@ -77,13 +77,13 @@ export class Badges extends OsuCommand {
 
         const badgecount = osudata?.badges?.length ?? 0;
 
-        let embed = new Discord.EmbedBuilder()
+        const embed = new Discord.EmbedBuilder()
             .setTitle(`${osudata.username}s Badges`)
             .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`)
             .setDescription(
                 'Current number of badges: ' + badgecount
             );
-        embed = helper.tools.formatter.userAuthor(osudata, embed);
+        helper.tools.formatter.userAuthor(osudata, embed);
 
         const fields: Discord.EmbedField[] = [];
 
@@ -182,7 +182,7 @@ export class BadgeWeightSeed extends OsuCommand {
 
         const badgecount = osudata?.badges?.length ?? 0;
 
-        let embed = new Discord.EmbedBuilder()
+        const embed = new Discord.EmbedBuilder()
             .setTitle(`Badge weighting for ${osudata.username}`)
             .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`)
             .setDescription(
@@ -205,7 +205,7 @@ export class BadgeWeightSeed extends OsuCommand {
                     inline: true
                 },
             ]);
-        embed = helper.tools.formatter.userAuthor(osudata, embed);
+        helper.tools.formatter.userAuthor(osudata, embed);
 
         this.ctn.embeds = [embed];
         this.ctn.components = [cmdbuttons];
@@ -1288,13 +1288,10 @@ export class RecentActivity extends OsuCommand {
         const curEmbed = new Discord.EmbedBuilder()
             .setTitle(`Recent Activity for ${osudata.username}`)
             .setURL(`https://osu.ppy.sh/users/${osudata.id}/${osudata.playmode}#recent`)
-            .setAuthor({
-                name: `#${helper.tools.calculate.separateNum(osudata?.statistics?.global_rank)} | #${helper.tools.calculate.separateNum(osudata?.statistics?.country_rank)} ${osudata.country_code} | ${helper.tools.calculate.separateNum(osudata?.statistics?.pp)}pp`,
-                url: `https://osu.ppy.sh/users/${osudata.id}`,
-                iconURL: `${`https://osuhelper.vars.argflags.omkserver.nl/${osudata.country_code}.png`}`
-            })
             .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`)
             .setDescription(`Page: ${this.args.page + 1}/${Math.ceil(rsactData.length / pageLength)}`);
+
+        helper.tools.formatter.userAuthor(osudata, curEmbed);
 
         let actText = '';
 
