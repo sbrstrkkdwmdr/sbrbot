@@ -348,6 +348,8 @@ export function debug(data: any, type: string, name: string, serverId: string, p
     try {
         fs.writeFileSync(`${helper.vars.path.cache}/debug/${type}/${name}/${pars}_${serverId}.json`, JSON.stringify(data, null, 2));
     } catch (error) {
+        console.log('Error writing debug file');
+        console.log(error);
     }
     return;
 }
@@ -456,81 +458,84 @@ export function recommendMap(baseRating: number, retrieve: 'closest' | 'random',
 
 
 export async function userStatsCache(user: apitypes.UserStatistics[] | apitypes.User[], mode: apitypes.GameMode, type: 'Stat' | 'User') {
-    await (async () => {
-        switch (type) {
-            case 'Stat': {
-                user = user as apitypes.UserStatistics[];
-                for (let i = 0; i < user.length; i++) {
-                    const curuser = user[i];
-                    if (!(curuser?.pp || !curuser?.global_rank)) {
-                        break;
-                    }
-                    let findname = await helper.vars.statsCache.findOne({
-                        where: {
-                            osuid: curuser.user.id
-                        }
-                    });
-                    if (findname as any == Promise<{ pending; }>) {
-                        findname = null;
-                    }
-                    if (typeof findname == 'undefined' || !findname) {
-                        await helper.vars.statsCache.create({
-                            osuid: curuser.user.id,
-                            country: curuser.user.country_code,
-                            [mode + 'pp']: curuser.pp,
-                            [mode + 'rank']: curuser.global_rank,
-                            [mode + 'acc']: curuser.hit_accuracy
-                        });
-                    } else {
-                        await helper.vars.statsCache.update({
-                            [mode + 'pp']: curuser.pp,
-                            [mode + 'rank']: curuser.global_rank,
-                            [mode + 'acc']: curuser.hit_accuracy
-                        },
-                            {
-                                where: { osuid: curuser.user.id }
-                            });
-                    }
+    switch (type) {
+        case 'Stat': {
+            user = user as apitypes.UserStatistics[];
+            for (let i = 0; i < user.length; i++) {
+                const curuser = user[i];
+                if (!(curuser?.pp || !curuser?.global_rank)) {
+                    break;
                 }
-            } break;
-            case 'User': {
-                user = user as apitypes.User[];
-                for (let i = 0; i < user.length; i++) {
-                    const curuser = user[i];
-                    if (!(curuser?.statistics?.pp || !curuser?.statistics?.global_rank)) {
-                        break;
+                let findname = await helper.vars.statsCache.findOne({
+                    where: {
+                        osuid: curuser.user.id
                     }
-                    let findname = await helper.vars.statsCache.findOne({
-                        where: {
-                            osuid: curuser.id
-                        }
+                });
+                if (findname as any == Promise<{ pending; }>) {
+                    findname = null;
+                }
+                if (typeof findname == 'undefined' || !findname) {
+                    await helper.vars.statsCache.create({
+                        osuid: curuser.user.id,
+                        country: curuser.user.country_code,
+                        [mode + 'pp']: curuser.pp,
+                        [mode + 'rank']: curuser.global_rank,
+                        [mode + 'acc']: curuser.hit_accuracy
                     });
-                    if (findname as any == Promise<{ pending; }>) {
-                        findname = null;
+                } else {
+                    await helper.vars.statsCache.update({
+                        [mode + 'pp']: curuser.pp,
+                        [mode + 'rank']: curuser.global_rank,
+                        [mode + 'acc']: curuser.hit_accuracy
+                    },
+                        {
+                            where: { osuid: curuser.user.id }
+                        });
+                }
+            }
+        } break;
+        case 'User': {
+            user = user as apitypes.User[];
+            for (let i = 0; i < user.length; i++) {
+                const curuser = user[i];
+                if (!(
+                    curuser.id || 
+                    curuser?.statistics?.pp || 
+                    curuser?.statistics?.global_rank || 
+                    curuser?.statistics?.hit_accuracy
+                    )) {
+                    continue;
+                }
+                let findname = await helper.vars.statsCache.findOne({
+                    where: {
+                        osuid: curuser.id
                     }
+                });
+                if (findname as any == Promise<{ pending; }>) {
+                    findname = null;
+                }
 
-                    if (typeof findname == 'undefined' || !findname) {
-                        await helper.vars.statsCache.create({
-                            osuid: `${curuser.id}`,
-                            country: `${curuser.country_code}`,
-                            [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
-                            [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
-                            [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
+                if (typeof findname == 'undefined' || !findname) {
+                    await helper.vars.statsCache.create({
+                        osuid: `${curuser.id}`,
+                        country: `${curuser.country_code}`,
+                        [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
+                        [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
+                        [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
+                    });
+                } else {
+                    await helper.vars.statsCache.update({
+                        [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
+                        [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
+                        [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
+                    },
+                        {
+                            where: { osuid: `${curuser.id}` }
                         });
-                    } else {
-                        await helper.vars.statsCache.update({
-                            [mode + 'pp']: `${curuser?.statistics?.pp ?? NaN}`,
-                            [mode + 'rank']: `${curuser?.statistics?.global_rank ?? NaN}`,
-                            [mode + 'acc']: `${curuser?.statistics?.hit_accuracy ?? NaN}`
-                        },
-                            {
-                                where: { osuid: `${curuser.id}` }
-                            });
-                    }
                 }
-            } break;
-        }
-    })();
+            }
+        } break;
+    }
     try {
         await userStatsCacheFix(mode);
     } catch (error) {

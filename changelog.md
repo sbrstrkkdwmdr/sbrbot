@@ -6,6 +6,9 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+### Fixed
+- missing checks in userStatsCache
+
 ## [5.0.1] - 2025-05-25
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/f952678c28d0558f95e0885232417aa3442c5409)</br>
