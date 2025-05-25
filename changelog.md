@@ -8,6 +8,9 @@
 
 ### Fixed
 - missing checks in userStatsCache
+- debug commandfiletype using old command names
+- recent activity having the wrong `this.name` value
+
 
 ## [5.0.1] - 2025-05-25
 

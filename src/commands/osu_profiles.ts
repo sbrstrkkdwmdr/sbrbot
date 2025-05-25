@@ -1122,7 +1122,7 @@ export class RecentActivity extends OsuCommand {
     };
     constructor() {
         super();
-        this.name = this.name;
+        this.name = 'RecentActivity';
         this.args = {
             user: null,
             searchid: null,
