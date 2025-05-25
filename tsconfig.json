@@ -18,6 +18,7 @@
     "exclude": [
         "setup.ts",
         "node_modules",
-        "test"
+        "test",
+        "src/commands/ignore/*"
     ]
 }

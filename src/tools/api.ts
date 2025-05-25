@@ -211,7 +211,7 @@ export async function getMapLeaderboardNonLegacy(id: number, mode: string, mods:
         extra
     }) as tooltypes.apiReturn<apitypes.BeatmapScores<apitypes.Score>>;
 }
-export async function getMap(id: number, extra?: string[]) {
+export async function getMap(id: number | string, extra?: string[]) {
     const url = baseUrl + 'beatmaps/' + id;
     return await apiGet({
         url,
@@ -225,7 +225,7 @@ export async function getMapSha(md5: string, extra: string[]) {
         extra
     }) as tooltypes.apiReturn<apitypes.Beatmap>;
 }
-export async function getMapset(id: number, extra: string[]) {
+export async function getMapset(id: string | number, extra: string[]) {
     const url = baseUrl + `beatmapsets/${id}`;
     return await apiGet({
         url,

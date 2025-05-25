@@ -11,8 +11,8 @@ export async function sendMessage(input: {
     interaction: Discord.ChatInputCommandInteraction<any> | Discord.ButtonInteraction<any>;
     args: {
         content?: string,
-        embeds?: Discord.EmbedBuilder[] | Discord.Embed[],
-        files?: string[] | Discord.AttachmentBuilder[] | Discord.Attachment[],
+        embeds?: (Discord.EmbedBuilder | Discord.Embed)[],
+        files?: (string | Discord.AttachmentBuilder | Discord.Attachment)[],
         components?: Discord.ActionRowBuilder<any>[],
         ephemeral?: boolean,
         react?: boolean,
@@ -22,7 +22,6 @@ export async function sendMessage(input: {
 },
     canReply: boolean
 ) {
-
     if (input.args.files) {
         input.args.files = checkFileLimit(input.args.files);
     }
@@ -305,7 +304,8 @@ export async function mapIdFromLink(url: string, callIfMapIdNull: boolean,) {
  * {username}
  * 
  */
-export function fetchUser(url: string) {
+export function fetchUser(args: string[]) {
+    let url = args.join(' ');
     if (url.includes(' ')) {
         const temp = url.split(' ');
         //get arg that has osu.ppy.sh
@@ -320,9 +320,11 @@ export function fetchUser(url: string) {
     const object: {
         id: string,
         mode: apitypes.GameMode,
+        args: string[];
     } = {
         id: null,
         mode: null,
+        args
     };
     /**
      * patterns:
@@ -331,8 +333,15 @@ export function fetchUser(url: string) {
      * osu.ppy.sh/users/{id}/{mode}
      * "{username}"
      * {username}
+     * -u
      */
+    const userArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.user, args, true, 'string', true, false);
     switch (true) {
+        case userArgFinder.found:
+            if (userArgFinder.found) {
+                object.id = userArgFinder.output;
+                object.args = userArgFinder.args;
+            }
         case url.includes('osu.ppy.sh'):
             switch (true) {
                 case url.includes('/u/'):
@@ -517,8 +526,8 @@ export type params = {
     maxPage?: number,
     mode?: apitypes.GameMode,
     userId?: string,
-    mapId?: string,
-    spotlight?: string,
+    mapId?: number,
+    spotlight?: string | number,
     detailed?: number,
     filter?: string,
     list?: boolean, //recent
@@ -528,7 +537,7 @@ export type params = {
     country?: string, //ranking
     //scorelist AND ubm
     parse?: boolean,
-    parseId?: string,
+    parseId?: number,
     filterTitle?: string,
     //scorelist
     sortScore?: "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss",
@@ -896,7 +905,7 @@ export async function parseArgs_scoreList_message(input: bottypes.commandInput) 
         modsInclude.includes(' ') ? modsInclude = modsInclude.split(' ')[0] : null;
         input.args = input.args.join(' ').replace('+', '').replace(modsInclude, '').split(' ');
     }
-    const usertemp = fetchUser(input.args.join(' '));
+    const usertemp = fetchUser(input.args);
     user = usertemp.id;
     if (usertemp.mode && !mode) {
         mode = usertemp.mode;
@@ -1261,6 +1270,7 @@ export function disableAllButtons(msg: Discord.Message) {
     let components: Discord.ActionRowBuilder<any>[] = [];
     for (const actionrow of msg.components) {
         let newActionRow = new Discord.ActionRowBuilder();
+        // @ts-expect-error TS2339: Property 'components' does not exist on type 'FileComponent'.
         for (let button of actionrow.components) {
             let newbutton: Discord.ButtonBuilder
                 | Discord.StringSelectMenuBuilder
@@ -1303,5 +1313,19 @@ export function disableAllButtons(msg: Discord.Message) {
     msg.edit({
         components,
         allowedMentions: { repliedUser: false }
-    })
+    });
+}
+
+export function getCommand(query: string): bottypes.commandInfo {
+    return helper.vars.commandData.cmds.find(
+        x => x.aliases.concat([x.name]).includes(query)
+    );
+
+
+}
+
+export function getCommands(query?: string): bottypes.commandInfo[] {
+    return helper.vars.commandData.cmds.filter(
+        x => x.category.includes(query)
+    ) ?? helper.vars.commandData.cmds;
 }

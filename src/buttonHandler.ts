@@ -1,11 +1,12 @@
 import * as Discord from 'discord.js';
 import * as osumodcalc from 'osumodcalculator';
+import { Command } from './commands/command.js';
 import * as helper from './helper.js';
 import * as bottypes from './types/bot.js';
 import * as apitypes from './types/osuapi.js';
 // message = interaction.message
 const buttonWarnedUsers = new Set();
-let command: bottypes.command;
+let command: Command;
 let foundCommand = true;
 let overrides: bottypes.overrides = {
     commandAs: 'button',
@@ -16,15 +17,12 @@ export async function onInteraction(interaction: Discord.Interaction) {
     if (interaction.applicationId != helper.vars.client.application.id) return;
     overrides = {
         commandAs: 'button',
-    }
+    };
     let canReply = true;
     if (!helper.tools.checks.botHasPerms(interaction, ['ReadMessageHistory'])) {
         canReply = false;
     }
-
     interaction = interaction as Discord.ButtonInteraction; //| Discord.SelectMenuInteraction
-
-    const obj = interaction;
 
     //version-buttonType-baseCommand-userId-commandId-extraValue
     //buttonVer-button-command-specid-id-???
@@ -103,7 +101,9 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
                 {
                     //interaction is converted to a base interaction first because button interaction and select menu interaction don't overlap
                     overrides.id = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
+                    // @ts-expect-error TS2339: Property 'components' does not exist on type 'TopLevelComponent'.
                     if (interaction?.message?.components[2]?.components[0]) {
+                        // @ts-expect-error TS2339: Property 'components' does not exist on type 'TopLevelComponent'.
                         overrides.overwriteModal = interaction.message.components[2].components[0] as any;
                     }
                 }
@@ -111,26 +111,6 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
             case 'help':
                 {
                     overrides.ex = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
-                }
-                break;
-            case 'time':
-                {
-                    const temp = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0].split('_');
-                    overrides.ex = temp[0]; //fetch tz
-                    if (interaction?.message?.components[0]?.components[0]) {
-                        overrides.overwriteModal = interaction.message.components[0].components[0] as any;
-                    }
-                    overrides.id = temp[1]; //displayed name
-                }
-                break;
-            case 'weather':
-                {
-                    overrides.ex = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
-                }
-                break;
-            case 'tropicalweather':
-                {
-                    overrides.id = ((interaction as Discord.BaseInteraction) as Discord.SelectMenuInteraction).values[0];
                 }
                 break;
         }
@@ -164,7 +144,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         overrides.commandAs = 'interaction';
         overrides.commanduser = interaction.member.user as Discord.User;
         mainId = helper.tools.commands.getCmdId();
-        command = helper.commands.osu.maps.map;
+        command = new helper.commands.osu.maps.Map();
         foundCommand = true;
         await runCommand(interaction, buttonType, 'other', false);
         return;
@@ -177,7 +157,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         overrides.commanduser = interaction.member.user as Discord.User;
 
         mainId = helper.tools.commands.getCmdId();
-        command = helper.commands.osu.profiles.osu;
+        command = new helper.commands.osu.profiles.Profile();
         foundCommand = true;
         await runCommand(interaction, buttonType, 'other', false);
         return;
@@ -185,7 +165,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
     if (buttonType == 'Leaderboard') {
         switch (cmd) {
             case 'map': {
-                const curEmbed = obj.message.embeds[0];
+                const curEmbed = interaction.message.embeds[0];
                 // #<mode>/id
                 overrides.id = curEmbed.url.split('#')[1].split('/')[1];
                 overrides.mode = curEmbed.url.split('#')[1].split('/')[0] as apitypes.GameMode;
@@ -196,7 +176,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
 
                 overrides.commanduser = interaction.member.user as Discord.User;
                 mainId = helper.tools.commands.getCmdId();
-                command = helper.commands.osu.scores.maplb;
+                command = new helper.commands.osu.scores.MapLeaderboard();
                 foundCommand = true;
                 await runCommand(interaction, buttonType, 'other', false);
                 return;
@@ -209,26 +189,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         overrides.user = buttonsplit[5].split('+')[1];
         overrides.commandAs = 'interaction';
         overrides.commanduser = interaction.member.user as Discord.User;
-        command = helper.commands.osu.scores.scores;
-        foundCommand = true;
-        await runCommand(interaction, buttonType, 'other', false);
-        return;
-    }
-
-    if (buttonType == 'Weather') {
-        overrides.id = buttonsplit[5];
-        overrides.commandAs = 'interaction';
-        overrides.commanduser = interaction.member.user as Discord.User;
-        command = helper.commands.gen.time;
-        foundCommand = true;
-        await runCommand(interaction, buttonType, 'other', false);
-        return;
-    }
-    if (buttonType == 'Time') {
-        overrides.ex = buttonsplit[5];
-        overrides.commandAs = 'interaction';
-        overrides.commanduser = interaction.member.user as Discord.User;
-        command = helper.commands.gen.weather;
+        command = new helper.commands.osu.scores.MapScores();
         foundCommand = true;
         await runCommand(interaction, buttonType, 'other', false);
         return;
@@ -237,87 +198,86 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
     const nopingcommands = ['scorestats'];
 
     switch (cmd) {
-        case 'changelog':
-            command = helper.commands.gen.changelog;
+        case 'Changelog':
+            command = new helper.commands.gen.Changelog();
             foundCommand = true;
             break;
-        case 'compare':
-            command = helper.commands.osu.other.compare;
+        case 'Compare':
+            command = new helper.commands.osu.other.Compare();
             foundCommand = true;
             break;
-        case 'firsts':
-            command = helper.commands.osu.scores.firsts;
+        case 'Firsts':
+            command = new helper.commands.osu.scores.Firsts();
             foundCommand = true;
             break;
-        case 'lb':
-            command = helper.commands.osu.profiles.lb;
+        case 'Leaderboard':
+            command = new helper.commands.osu.profiles.Leaderboard();
             foundCommand = true;
             break;
-        case 'map':
-            command = helper.commands.osu.maps.map;
+        case 'Map':
+            command = new helper.commands.osu.maps.Map();
             foundCommand = true;
             break;
-        case 'maplb':
-            command = helper.commands.osu.scores.maplb;
+        case 'MapLeaderboard':
+            command = new helper.commands.osu.scores.MapLeaderboard();
             foundCommand = true;
             break;
-        case 'nochokes':
+        case 'NoChokes':
             overrides.miss = true;
-            command = helper.commands.osu.scores.osutop;
+            command = new helper.commands.osu.scores.OsuTop();
             foundCommand = true;
             break;
-        case 'osu':
-            command = helper.commands.osu.profiles.osu;
+        case 'Profile':
+            command = new helper.commands.osu.profiles.Profile();
             foundCommand = true;
             break;
-        case 'osutop':
-            command = helper.commands.osu.scores.osutop;
+        case 'OsuTop':
+            command = new helper.commands.osu.scores.OsuTop();
             foundCommand = true;
             break;
-        case 'pinned':
-            command = helper.commands.osu.scores.pinned;
+        case 'Pinned':
+            command = new helper.commands.osu.scores.Pinned();
             foundCommand = true;
             break;
-        case 'ranking':
-            command = helper.commands.osu.profiles.ranking;
+        case 'Ranking':
+            command = new helper.commands.osu.profiles.Ranking();
             foundCommand = true;
             break;
-        case 'recent':
-            command = helper.commands.osu.scores.recent;
+        case 'Recent':
+            command = new helper.commands.osu.scores.Recent();
             foundCommand = true;
             break;
-        case 'recentactivity':
-            command = helper.commands.osu.profiles.recent_activity;
+        case 'RecentList':
+            command = new helper.commands.osu.scores.RecentList();
             foundCommand = true;
             break;
-        case 'scoreparse':
-            command = helper.commands.osu.scores.scoreparse;
+        case 'RecentActivity':
+            command = new helper.commands.osu.profiles.RecentActivity();
             foundCommand = true;
             break;
-        case 'scores':
-            command = helper.commands.osu.scores.scores;
+        case 'ScoreParse':
+            command = new helper.commands.osu.scores.ScoreParse();
             foundCommand = true;
             break;
-        case 'scorestats':
-            command = helper.commands.osu.scores.scorestats;
+        case 'MapScores':
+            command = new helper.commands.osu.scores.MapScores();
             foundCommand = true;
             break;
-        case 'userbeatmaps':
-            command = helper.commands.osu.maps.userBeatmaps;
+        case 'ScoreStats':
+            command = new helper.commands.osu.scores.ScoreStats();
             foundCommand = true;
             break;
-        case 'help':
-            command = helper.commands.gen.help;
+        case 'UserBeatmaps':
+            command = new helper.commands.osu.maps.UserBeatmaps();
             foundCommand = true;
             break;
-        case 'time':
-            command = helper.commands.gen.time;
+        case 'Help':
+            command = new helper.commands.gen.Help();
             foundCommand = true;
             break;
-        case 'weather':
-            command = helper.commands.gen.weather;
-            foundCommand = true;
-            break;
+        default:
+            runFail(interaction);
+            return;
     }
     runCommand(interaction, buttonType, null, true);
 }
@@ -327,8 +287,8 @@ async function runCommand(interaction: Discord.ButtonInteraction, buttonType: bo
         await interaction.deferUpdate()
             .catch(error => { });
     }
-    if (foundCommand) {
-        await command({
+    if (foundCommand && command) {
+        command.setInput({
             message: overrideType == "other" ? null : interaction.message,
             interaction,
             args: [],
@@ -339,5 +299,19 @@ async function runCommand(interaction: Discord.ButtonInteraction, buttonType: bo
             type: overrideType ?? "button",
             buttonType
         });
+        await command.execute();
+    } else {
+        runFail(interaction);
+    }
+}
+
+function runFail(interaction: Discord.ButtonInteraction) {
+    try {
+        interaction.reply({
+            content: 'There was an error trying to run this command',
+            flags: Discord.MessageFlags.Ephemeral
+        });
+    } catch (e) {
+
     }
 }

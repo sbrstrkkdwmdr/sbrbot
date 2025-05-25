@@ -285,3 +285,74 @@ export function template(mapdata: apitypes.Beatmap): rosu.PerformanceAttributes 
         state: null
     } as rosu.PerformanceAttributes;
 }
+
+/**
+ * calculates performance, FC and SS
+ */
+export async function fullPerformance(
+    mapid: number,
+    mode: rosu.GameMode,
+    mods: string,
+    accuracy: number,
+    clockRate?: number,
+    stats?: apitypes.ScoreStatistics,
+    maxcombo?: number,
+    passedObjects?: number,
+    mapLastUpdated?: Date,
+    customCS?: number,
+    customAR?: number,
+    customOD?: number,
+    customHP?: number,
+) {
+    const perf = await calcScore({
+        mods,
+        mode,
+        mapid,
+        stats,
+        accuracy,
+        maxcombo,
+        clockRate,
+        mapLastUpdated,
+        passedObjects,
+        customCS,
+        customAR,
+        customOD,
+        customHP,
+    });
+    const fcperf = await calcFullCombo({
+        mods,
+        mode,
+        mapid,
+        stats,
+        accuracy,
+        clockRate,
+        mapLastUpdated,
+        customCS,
+        customAR,
+        customOD,
+        customHP,
+    });
+    const ssperf = await calcFullCombo({
+        mods,
+        mode,
+        mapid,
+        accuracy: 1,
+        clockRate,
+        mapLastUpdated,
+        customCS,
+        customAR,
+        customOD,
+        customHP,
+    });
+    return [perf, fcperf, ssperf];
+}
+
+export function getModSpeed(mods: apitypes.Mod[]) {
+    let rate = 1.0;
+    for (const mod of mods) {
+        if (mod?.settings?.speed_change) {
+            rate *= mod?.settings?.speed_change;
+        }
+    }
+    return rate;
+}

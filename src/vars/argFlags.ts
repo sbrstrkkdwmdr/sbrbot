@@ -70,6 +70,10 @@ export const filterCreator = toFlag([
     'creator', 'mapper'
 ]);
 
+export const user = toFlag([
+    'u', 'user', 'uid'
+]);
+
 export function toFlag(args: string[]) {
     return args.map(x => `-${x}`);
 }

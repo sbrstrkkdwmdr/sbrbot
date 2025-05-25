@@ -1,15 +1,16 @@
 import * as Discord from 'discord.js';
 import fs from 'fs';
 import https from 'https';
+import { Command } from './commands/command.js';
 import * as helper from './helper.js';
 import * as bottypes from './types/bot.js';
 import * as tooltypes from './types/tools.js';
 
-let command: bottypes.command;
+let command: Command;
 const overrides: bottypes.overrides = {
 
 };
-let id:number;
+let id: number;
 export async function onMessage(message: Discord.Message) {
     if (!(message.content.startsWith('http') || message.content.includes('osu.') || message.attachments.size > 0)) {
         return;
@@ -50,14 +51,14 @@ export async function onMessage(message: Discord.Message) {
     const messagenohttp = message.content.replace('https://', '').replace('http://', '').replace('www.', '');
     if (messagenohttp.startsWith('osu.ppy.sh/b/') || messagenohttp.startsWith('osu.ppy.sh/beatmaps/') || messagenohttp.startsWith('osu.ppy.sh/beatmapsets/') || messagenohttp.startsWith('osu.ppy.sh/s/')) {
         id = helper.tools.commands.getCmdId();
-        command = helper.commands.osu.maps.map;
-        runCommand(message);
+        command = new helper.commands.osu.maps.Map();
+        await runCommand(message);
         return;
     }
     if (messagenohttp.startsWith('osu.ppy.sh/u/') || messagenohttp.startsWith('osu.ppy.sh/users/')) {
-        command = helper.commands.osu.profiles.osu;
+        command = new helper.commands.osu.profiles.Profile();
         id = helper.tools.commands.getCmdId();
-        runCommand(message);
+        await runCommand(message);
         return;
     }
     if (message.attachments.size > 0 && message.attachments.every(attachment => helper.tools.formatter.removeURLparams(attachment.url).endsWith('.osr'))) {
@@ -70,31 +71,20 @@ export async function onMessage(message: Discord.Message) {
         https.get(`${attachosr}`, function (response) {
             response.pipe(osrdlfile);
         });
-        setTimeout(() => {
-            command = helper.commands.osu.scores.replayparse;
-            runCommand(message);
+        setTimeout(async () => {
+            command = new helper.commands.osu.scores.ReplayParse();
+            await runCommand(message);
         }, 1500);
     }
     if (messagenohttp.startsWith('osu.ppy.sh/scores/')) {
         id = helper.tools.commands.getCmdId();
-        command = helper.commands.osu.scores.scoreparse;
-        runCommand(message);
+        command = new helper.commands.osu.scores.ScoreParse();
+        await runCommand(message);
     }
-    // if (message.attachments.size > 0 && message.attachments.every(attachment => func.removeURLparams(attachment.url).endsWith('.osu'))) {
-    //     const attachosu = message.attachments.first().url;
-    //     const osudlfile = fs.createWriteStream(`${helper.vars.path.files}/localmaps/${id}.osu`);
-    //     https.get(`${attachosu}`, function (response) {
-    //         response.pipe(osudlfile);
-    //     });
-    //     setTimeout(() => {
-    //         // command = helper.commands.osu.maps.maplocal;
-    //         // runCommand(message);
-    //     }, 1500);
-    // }
 }
 
-function runCommand(message: Discord.Message,) {
-    command({
+async function runCommand(message: Discord.Message,) {
+    command.setInput({
         message,
         interaction: null,
         args: [],
@@ -104,4 +94,5 @@ function runCommand(message: Discord.Message,) {
         canReply: true,
         type: "link",
     });
+    await command.execute();
 }

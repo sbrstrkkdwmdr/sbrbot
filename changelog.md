@@ -6,9 +6,52 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+## [5.0.1] - 2025-05-25
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/f952678c28d0558f95e0885232417aa3442c5409)</br>
+
+### Fixed
+- general commands not having a name parameter set (broke buttons on changelog)
+- commands with no args crashing
+- scorelist commands re-sending API calls when switching pages
+
+## [5.0.0] - 2025-05-23
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/2382cd0e692c0f9243d26b08db8a159fce3c7468)</br>
+
+### Added
+
+-   guildId parameter to LeaveGuild
+
+### Fixed
+
+-   calculate pp before sorting scores in scorelists
+
+### Changed
+
+-   changed all commands into using classes instead of really long functions for readability
+-   split recent list and recent into separate commands
+
+### Removed
+
+-   convert
+-   country
+-   math
+-   time
+-   weather
+-   getuser (use find)
+-   getuser avatar (use find)
+-   purge
+-   inspire
+-   poll
+
 ## [4.1.5] - 2025-04-08
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/80443db36fefce732b076d3f8fe6448690d28d5a)</br>
+
+### Added
+
+-   user can be specified with `-u`
 
 ### Changed
 

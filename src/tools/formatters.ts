@@ -47,7 +47,7 @@ export async function scoreList(
     preset?: 'map_leaderboard' | 'single_map',
     overrideMap?: apitypes.Beatmap
 ): Promise<formatterInfo> {
-    const newScores = filterScores(scores as apitypes.Score[], sort, filter, reverse, overrideMap);
+    const newScores = await filterScores(scores as apitypes.Score[], sort, filter, reverse, overrideMap);
     if (newScores.length == 0) {
         return {
             text: 'No scores were found (check the filter options)',
@@ -68,33 +68,21 @@ export async function scoreList(
         if (!score) break;
         // let convertedScore = CurrentToLegacyScore(score as apitypes.Score);
         const overrides = helper.tools.calculate.modOverrides(score.mods);
-        const perf = await helper.tools.performance.calcScore({
-            mapid: overrideMap?.id ?? score.beatmap_id,
-            mode: score.ruleset_id,
-            mods: score.mods.map(x => x.acronym).join(''),
-            accuracy: score.accuracy,
-            stats: score.statistics,
-            maxcombo: score.max_combo,
-            mapLastUpdated: new Date((overrideMap ?? score.beatmap).last_updated),
-            customAR: overrides.ar,
-            customHP: overrides.hp,
-            customCS: overrides.cs,
-            customOD: overrides.od,
-            clockRate: overrides.speed,
-        });
-        const fc = await helper.tools.performance.calcFullCombo({
-            mapid: (overrideMap ?? score.beatmap).id,
-            mode: score.ruleset_id,
-            mods: score.mods.map(x => x.acronym).join(''),
-            accuracy: score.accuracy,
-            stats: score.statistics,
-            mapLastUpdated: new Date((overrideMap ?? score.beatmap).last_updated),
-            customAR: overrides.ar,
-            customHP: overrides.hp,
-            customCS: overrides.cs,
-            customOD: overrides.od,
-            clockRate: overrides.speed,
-        });
+        const perfs = await helper.tools.performance.fullPerformance(
+            overrideMap?.id ?? score.beatmap_id,
+            score.ruleset_id,
+            score.mods.map(x => x.acronym).join(''),
+            score.accuracy,
+            overrides.speed,
+            score.statistics,
+            score.max_combo,
+            null,
+            new Date((overrideMap ?? score.beatmap).last_updated),
+            overrides.ar,
+            overrides.hp,
+            overrides.cs,
+            overrides.od,
+        );
         let info = `**#${(showOriginalIndex ? score.originalIndex : i) + 1}`;
         let modadjustments = '';
         if (score.mods.filter(x => x?.settings?.speed_change).length > 0) {
@@ -111,18 +99,18 @@ export async function scoreList(
                 info += `・[${score.beatmapset.title} [${(overrideMap ?? score.beatmap).version}]](https://osu.ppy.sh/${score.id ? `scores/${score.id}` : `b/${(overrideMap ?? score.beatmap).id}`})`;
                 break;
         }
-        let combo = `${score?.max_combo}/**${fc.difficulty.maxCombo}x**`;
-        if (score.max_combo == fc.difficulty.maxCombo || !score.max_combo) combo = `**${score.max_combo}x**`;
+        let combo = `${score?.max_combo}/**${perfs[1].difficulty.maxCombo}x**`;
+        if (score.max_combo == perfs[1].difficulty.maxCombo || !score.max_combo) combo = `**${score.max_combo}x**`;
         const tempScore = score as indexedScore<apitypes.Score>;
 
         info +=
             `** ${dateToDiscordFormat(new Date(tempScore.ended_at))}
 ${score.passed ? helper.vars.emojis.grades[score.rank] : helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[score.rank]} if pass)`} | \`${helper.tools.calculate.numberShorthand(helper.tools.other.getTotalScore(score))}\` | ${tempScore.mods.length > 0 && preset != 'single_map' ? ' **' + osumodcalc.OrderMods(tempScore.mods.map(x => x.acronym).join('')).string + modadjustments + '**' : ''}
 \`${returnHits(score.statistics, score.ruleset_id).short}\` | ${combo} | ${(score.accuracy * 100).toFixed(2)}% 
-${(score?.pp ?? perf.pp).toFixed(2)}pp`;
+${(score?.pp ?? perfs[0].pp).toFixed(2)}pp`;
 
         if (!score?.is_perfect_combo) {
-            info += ' (' + fc.pp.toFixed(2) + 'pp if FC)';
+            info += ' (' + perfs[1].pp.toFixed(2) + 'pp if FC)';
         }
         info += '\n\n';
         text += info;
@@ -149,7 +137,7 @@ type indexedScore<T> = T & {
     originalIndex: number,
 };
 
-export function filterScores(
+export async function filterScores(
     scores: apitypes.Score[],
     sort: 'pp' | 'score' | 'recent' | 'acc' | 'combo' | 'miss' | 'rank',
     filter: {
@@ -170,7 +158,7 @@ export function filterScores(
     },
     reverse: boolean,
     overrideMap?: apitypes.Beatmap
-): indexedScore<apitypes.Score>[] {
+): Promise<indexedScore<apitypes.Score>[]> {
     let newScores = [] as indexedScore<apitypes.Score>[];
     for (let i = 0; i < scores.length; i++) {
         const newScore = { ...scores[i], ...{ originalIndex: i } };
@@ -256,8 +244,29 @@ export function filterScores(
         });
     }
     switch (sort) {
-        case 'pp':
+        case 'pp': {
+            const sc = [];
+            for (const score of newScores) {
+
+                if (!score.pp || isNaN(score.pp)) {
+                    const perf = await helper.tools.performance.calcScore({
+                        mapid: overrideMap?.id ?? score.beatmap_id,
+                        mode: score.ruleset_id,
+                        mods: score.mods.map(x => x.acronym).join(''),
+                        accuracy: score.accuracy,
+                        clockRate: helper.tools.performance.getModSpeed(score.mods),
+                        stats: score.statistics,
+                        maxcombo: score.max_combo,
+                        passedObjects: helper.tools.other.scoreTotalHits(score.statistics),
+                        mapLastUpdated: new Date(score.ended_at),
+                    });
+                    score.pp = perf.pp;
+                }
+                sc.push(score);
+            }
+            newScores = sc;
             newScores.sort((a, b) => b.pp - a.pp);
+        }
             break;
         case 'score':
             newScores.sort((a, b) => b.total_score - a.total_score);
@@ -309,17 +318,16 @@ export function mapList(
         if (!mapset) break;
         const topmap = mapset.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating)[0];
 
-        let info = `**#${i + 1}・[\`${mapset.artist} - ${mapset.title}\`](https://osu.ppy.sh/s/${mapset.id})**
-${helper.vars.emojis.rankedstatus[mapset.status]} | ${helper.vars.emojis.gamemodes[topmap.mode]}
-${helper.tools.calculate.secondsToTime(topmap.total_length)} | ${mapset.bpm}${helper.vars.emojis.mapobjs.bpm}
+        let info = `**#${i + offset + 1}・[\`${mapset.artist} - ${mapset.title}\`](https://osu.ppy.sh/s/${mapset.id})**
+${helper.vars.emojis.rankedstatus[mapset.status]} | ${helper.vars.emojis.gamemodes[topmap.mode]} | ${helper.tools.calculate.secondsToTime(topmap.total_length)} | ${mapset.bpm}${helper.vars.emojis.mapobjs.bpm}
 ${helper.tools.calculate.separateNum(mapset.play_count)} plays | ${helper.tools.calculate.separateNum(topmap.passcount)} passes | ${helper.tools.calculate.separateNum(mapset.favourite_count)} favourites
-Submitted <t:${new Date(mapset.submitted_date).getTime() / 1000}:R> | Last updated <t:${new Date(mapset.last_updated).getTime() / 1000}:R>
-${topmap.status == 'ranked' ?
-                `Ranked <t:${Math.floor(new Date(mapset.ranked_date).getTime() / 1000)}:R>` : ''
-            }${topmap.status == 'approved' || topmap.status == 'qualified' ?
-                `Approved/Qualified <t:${Math.floor(new Date(mapset.ranked_date).getTime() / 1000)}:R>` : ''
-            }${topmap.status == 'loved' ?
-                `Loved <t:${Math.floor(new Date(mapset.ranked_date).getTime() / 1000)}:R>` : ''
+Submitted <t:${new Date(mapset.submitted_date).getTime() / 1000}:R> | ${topmap.status == 'ranked' ?
+                `Ranked <t:${Math.floor(new Date(mapset.ranked_date).getTime() / 1000)}:R>` :
+                topmap.status == 'approved' || topmap.status == 'qualified' ?
+                    `Approved/Qualified <t:${Math.floor(new Date(mapset.ranked_date).getTime() / 1000)}:R>` :
+                    topmap.status == 'loved' ?
+                        `Loved <t:${Math.floor(new Date(mapset.ranked_date).getTime() / 1000)}:R>` :
+                        `Last updated <t:${new Date(mapset.last_updated).getTime() / 1000}:R>`
             }`;
         info += '\n\n';
         text += info;
