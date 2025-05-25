@@ -11,6 +11,10 @@ export const versions: {
             releaseDate: 'xxxx-xx-xx'
         },
         {
+            name: '5.0.1',
+            releaseDate: '2025-05-25'
+        },
+        {
             name: '5.0.0',
             releaseDate: '2025-05-23'
         },
