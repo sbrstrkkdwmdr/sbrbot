@@ -252,84 +252,13 @@ export const cmds: bottypes.commandInfo[] = [
     },
     {
         name: 'convert',
-        description: 'Converts a number from one unit/base to another.',
-        usage: 'convert [from] [to] [number]',
+        description: ' [use this instead](https://sbrstrkkdwmdr.github.io/tools/convert)',
+        usage: 'convert',
         category: 'general',
         examples: [
-            {
-                text: 'PREFIXMSGconvert kilometre mi 10',
-                description: 'Converts 10 kilometres to miles'
-            },
-            {
-                text: 'PREFIXMSGconvert k c 273.15',
-                description: 'Converts 273.15 kelvin to celsius'
-            },
         ],
-        aliases: ['conv'],
-        args: [
-            {
-                name: 'from',
-                type: 'string',
-                required: true,
-                description: 'The unit to convert from',
-                format: ['foo', '-i foo', '-in foo', '-input foo'],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'to',
-                type: 'string',
-                required: true,
-                description: 'The unit to convert to. see [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/types.html#conv) for units',
-                options: ['help', 'SI units',],
-                format: ['foo', '-o foo', '-out foo', '-output foo'],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'number',
-                type: 'float',
-                required: true,
-                description: 'The number to convert',
-                format: ['foo'],
-                defaultValue: 'N/A',
-            }
-        ]
-    },
-    {
-        name: 'country',
-        description: 'Displays information for a given country.',
-        usage: '[-type] <search>',
         aliases: [],
-        category: 'general',
-        examples: [
-            {
-                text: 'PREFIXMSGcountry australia',
-                description: 'Shows information for Australia'
-            },
-            {
-                text: 'PREFIXMSGcountry -code DE',
-                description: 'Shows information for Germany'
-            },
-        ],
-
-        args: [
-            {
-                name: 'type',
-                type: 'string',
-                required: false,
-                description: 'What param to search with',
-                options: ['name', 'fullname', 'code', 'codes', 'demonym', 'capital', 'translation'],
-                format: ['-foo'],
-                defaultValue: 'name',
-            },
-            {
-                name: 'search',
-                type: 'string',
-                required: false,
-                description: 'The country to search for',
-                format: ['foo'],
-                defaultValue: 'N/A',
-            },
-        ]
+        args: []
     },
     {
         name: 'help',
@@ -395,75 +324,6 @@ export const cmds: bottypes.commandInfo[] = [
         usage: 'invite',
         aliases: [],
         category: 'general',
-    },
-    {
-        name: 'math',
-        description: 'Solves a math problem.',
-        usage: 'math <problem>',
-        aliases: [],
-        category: 'general',
-        examples: [
-            {
-                text: 'PREFIXMSGmath 2+2',
-                description: 'Solves 2+2'
-            },
-            {
-                text: '/math type:pythag num1:3 num2:4',
-                description: 'Solves the pythagorean theorem with a=3 and b=4'
-            },
-        ],
-
-        args: [
-            {
-                name: 'problem',
-                type: 'string',
-                required: 'true (if using message command)',
-                description: 'The math problem to solve',
-                options: [
-                    `Supports:
-integers (0-9), floats/decimals (.5, 1.34), negatives (-727), exponential notation (6.022e+23)
-operators: *, /, +, -, (, )
-`,
-                ],
-                format: ['foo'],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'type',
-                type: 'string',
-                required: 'true (if using slash command)',
-                description: 'The type of math problem',
-                options: [
-                    'square', 'square root',
-                    'factorial',
-                    'highest common factor', 'lowest common multiple',
-                    'approach rate +dt', 'approach rate +ht', 'approach rate(ms)',
-                    'circumference', 'area of a circle',
-                    'pythag',
-                    'conversion to significant figures',
-                    'od+dt', 'od+ht', 'od(ms)',
-                    'mod int to string'
-                ],
-                format: ['foo'],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'num1',
-                type: 'float',
-                required: 'true (if using slash command)',
-                description: 'The first number',
-                defaultValue: 'N/A',
-                format: ['foo'],
-            },
-            {
-                name: 'num2',
-                type: 'float',
-                required: 'true (sometimes)',
-                description: 'The second number',
-                format: ['foo'],
-                defaultValue: 'N/A',
-            }
-        ]
     },
     {
         name: 'ping',
@@ -535,67 +395,6 @@ operators: *, /, +, -, (, )
         category: 'general',
         aliases: [],
     },
-    {
-        name: 'time',
-        description: 'Shows the current time in a specific timezone.',
-        usage: 'time [timezone] [-showutc]',
-        category: 'general',
-        examples: [
-            {
-                text: 'PREFIXMSGtime',
-                description: 'Shows the user\'s current time. If unset, it displays GMT.'
-            },
-
-            {
-                text: 'PREFIXMSGtime AEST',
-                description: 'Shows the current time in AEST (UTC+10, Australian Eastern Standard Time)'
-            },
-        ],
-        aliases: ['tz'],
-        args: [
-            {
-                name: 'timezone',
-                type: 'string',
-                required: false,
-                description: 'The timezone to show the time in. See [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/src/consts/timezones.ts)',
-                format: ['(city), UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
-                defaultValue: 'UTC',
-            },
-            {
-                name: 'showutc',
-                type: 'boolean',
-                required: false,
-                description: 'Whether or not to show the UTC time on top of the requested timezone.',
-                format: ['-utc'],
-                defaultValue: '`false` if timezone has a value',
-            }
-        ]
-    },
-    {
-        name: 'weather',
-        description: 'Shows the weather for a specific region.',
-        usage: 'weather <region>',
-        category: 'general',
-        examples: [
-            {
-                text: 'PREFIXMSGweather auckland',
-                description: 'Returns the weather for Auckland, New Zealand'
-            },
-        ],
-        aliases: ['temperature', 'temp'],
-        args: [
-            {
-                name: 'region',
-                type: 'string',
-                required: false,
-                description: 'The region to search for',
-                options: ['Country, city, region'],
-                format: ['foo'],
-                defaultValue: 'UTC',
-            }
-        ]
-    },
-    
     {
         name: 'badges',
         description: 'Display\'s the user\'s badges.',
@@ -1879,13 +1678,6 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'inspire',
-        description: 'Sends a randomly generated inspirational quote.',
-        category: 'misc',
-        usage: 'inspire',
-        aliases: ['insp'],
-    },
-    {
         name: 'janken',
         description: 'Plays janken with the bot. (aka paper scissors rock or rock paper scissors or whatever weird order it\'s in).',
         category: 'misc',
@@ -1902,42 +1694,6 @@ operators: *, /, +, -, (, )
                 defaultValue: 'N/A',
             }
         ],
-    },
-    {
-        name: 'poll',
-        description: 'Creates a poll.',
-        category: 'misc',
-        usage: 'poll <question>',
-        examples: [
-            {
-                text: 'PREFIXMSGpoll djkfhgfbdkgbkfhdjgdkgd',
-                description: 'Creates a poll with the question "djkfhgfbdkgbkfhdjgdkgd"'
-            },
-            {
-                text: '/poll title:What is your favorite colour? options:red+green+blue',
-                description: 'Creates a poll with the question "What is your favorite colour?" and the options "red", "green", and "blue"'
-            }
-        ],
-        aliases: ['vote'],
-        args: [
-            {
-                name: 'question',
-                type: 'string',
-                required: true,
-                description: 'The question/title of the poll',
-                format: ['foo',],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'options',
-                type: 'string',
-                required: false,
-                description: 'The options for the poll',
-                options: ['format: option1+option2+option3...'],
-                format: ['foo+bar+baz...',],
-                defaultValue: 'yes+no',
-            }
-        ]
     },
     {
         name: 'roll',
@@ -2021,47 +1777,7 @@ operators: *, /, +, -, (, )
         args: [
             userAdmin,
         ]
-    },
-    {
-        name: 'userinfo',
-        description: 'Returns information about a user.',
-        usage: 'userinfo [user]',
-        category: 'admin',
-        examples: [
-            {
-                text: 'PREFIXMSGuser @SSoB',
-                description: 'Returns information about the user @SSoB'
-            },
-            {
-                text: '/userinfo user:SSoB',
-                description: 'Returns information about the user SSoB'
-            }
-        ],
-        aliases: ['userinfo'],
-        args: [
-            userAdmin,
-        ]
-    },
-    {
-        name: 'avatar',
-        description: 'Gets the avatar of a user.',
-        usage: 'avatar [user]',
-        category: 'admin',
-        examples: [
-            {
-                text: 'PREFIXMSGavatar @SSoB',
-                description: 'Gets information about the user @SSoB'
-            },
-            {
-                text: '/avatar user:SSoB',
-                description: 'Gets information about the user SSoB'
-            }
-        ],
-        aliases: ['av', 'pfp'],
-        args: [
-            userAdmin,
-        ]
-    },
+    },  
     {
         name: 'clear',
         description: 'Clears cached data within the bot',
@@ -2224,55 +1940,6 @@ operators: *, /, +, -, (, )
                 description: 'The prefix to set',
                 format: ['foo',],
                 defaultValue: 'N/A',
-            }
-        ]
-    },
-    {
-        name: 'purge',
-        description: 'Deletes a specified amount of messages from the current channel.',
-        usage: 'purge [count] [user] [method]',
-        category: 'admin',
-        examples: [
-            {
-                text: 'PREFIXMSGpurge 5 12345689',
-                description: 'Deletes 5 messages from the user with the ID 12345689'
-            },
-            {
-                text: 'PREFIXMSGpurge 5 @testsubject',
-                description: 'Deletes 5 messages from the user "testsubject"'
-            },
-            {
-                text: 'PREFIXMSGpurge 5 -fetch',
-                description: 'Deletes 5 messages using the fetch method'
-            },
-        ],
-        aliases: [],
-        args: [
-            {
-                name: 'count',
-                type: 'integer',
-                required: false,
-                description: 'The amount of messages to delete',
-                options: ['0-100'],
-                format: ['foo',],
-                defaultValue: '5',
-            },
-            {
-                name: 'user',
-                type: 'string/user mention',
-                required: false,
-                description: 'The user\'s messages to delete. Deletes messages from any user if unspecified',
-                format: ['bar',],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'method',
-                type: 'string',
-                required: false,
-                description: 'The method to delete messages. Fetch is slower, but can delete messages older than 14 days. Bulk cannot be used if user is specified.',
-                options: ['bulk', 'fetch'],
-                format: ['-foo',],
-                defaultValue: 'bulk',
             }
         ]
     },
