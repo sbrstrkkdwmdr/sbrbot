@@ -216,25 +216,25 @@ const scoreListCommandOptions: bottypes.commandInfoOption[] = [
 
 export const cmds: bottypes.commandInfo[] = [
     {
-        name: 'changelog',
+        name: 'Changelog',
         description: 'Displays the changes for the current version or version requested.',
         usage: 'changelog [version]',
         category: 'general',
         examples: [
             {
-                text: 'PREFIXMSGchangelog 0.4.0',
+                text: 'changelog 0.4.0',
                 description: 'Returns the changelog for version 0.4.0'
             },
             {
-                text: 'PREFIXMSGchangelog first',
+                text: 'changelog first',
                 description: 'Returns the changelog for the first version'
             },
             {
-                text: 'PREFIXMSGchangelog pending',
+                text: 'changelog pending',
                 description: 'Returns the changelog for the upcoming version'
             },
             {
-                text: 'PREFIXMSGversions',
+                text: 'versions',
                 description: 'Returns a list of all versions'
             },
         ],
@@ -251,110 +251,39 @@ export const cmds: bottypes.commandInfo[] = [
         ]
     },
     {
-        name: 'convert',
-        description: 'Converts a number from one unit/base to another.',
-        usage: 'convert [from] [to] [number]',
+        name: 'Convert',
+        description: ' [use this instead](https://sbrstrkkdwmdr.github.io/tools/convert)',
+        usage: 'convert',
         category: 'general',
         examples: [
-            {
-                text: 'PREFIXMSGconvert kilometre mi 10',
-                description: 'Converts 10 kilometres to miles'
-            },
-            {
-                text: 'PREFIXMSGconvert k c 273.15',
-                description: 'Converts 273.15 kelvin to celsius'
-            },
         ],
-        aliases: ['conv'],
-        args: [
-            {
-                name: 'from',
-                type: 'string',
-                required: true,
-                description: 'The unit to convert from',
-                format: ['foo', '-i foo', '-in foo', '-input foo'],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'to',
-                type: 'string',
-                required: true,
-                description: 'The unit to convert to. see [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/types.html#conv) for units',
-                options: ['help', 'SI units',],
-                format: ['foo', '-o foo', '-out foo', '-output foo'],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'number',
-                type: 'float',
-                required: true,
-                description: 'The number to convert',
-                format: ['foo'],
-                defaultValue: 'N/A',
-            }
-        ]
-    },
-    {
-        name: 'country',
-        description: 'Displays information for a given country.',
-        usage: '[-type] <search>',
         aliases: [],
-        category: 'general',
-        examples: [
-            {
-                text: 'PREFIXMSGcountry australia',
-                description: 'Shows information for Australia'
-            },
-            {
-                text: 'PREFIXMSGcountry -code DE',
-                description: 'Shows information for Germany'
-            },
-        ],
-
-        args: [
-            {
-                name: 'type',
-                type: 'string',
-                required: false,
-                description: 'What param to search with',
-                options: ['name', 'fullname', 'code', 'codes', 'demonym', 'capital', 'translation'],
-                format: ['-foo'],
-                defaultValue: 'name',
-            },
-            {
-                name: 'search',
-                type: 'string',
-                required: false,
-                description: 'The country to search for',
-                format: ['foo'],
-                defaultValue: 'N/A',
-            },
-        ]
+        args: []
     },
     {
-        name: 'help',
+        name: 'Help',
         description: 'Displays useful information about commands.',
         usage: 'help [command]',
         category: 'general',
         examples: [
             {
-                text: 'PREFIXMSGhelp',
+                text: 'help',
                 description: 'Shows the general help page'
             },
             {
-                text: 'PREFIXMSGhelp convert',
+                text: 'help convert',
                 description: 'Shows information about the convert command'
             },
             {
-                text: '/help recent',
+                text: 'help recent',
                 description: 'Shows information about the recent command'
             },
             {
-                text: 'PREFIXMSGhelp categoryosu',
+                text: 'help categoryosu',
                 description: 'Lists all commands in the osu category'
             },
             {
-                text: 'PREFIXMSGhelp list',
+                text: 'list',
                 description: 'Lists all available commands'
             }
         ],
@@ -372,7 +301,7 @@ export const cmds: bottypes.commandInfo[] = [
         ]
     },
     {
-        name: 'info',
+        name: 'Info',
         description: 'Shows information about the bot.',
         usage: 'info [arg]',
         aliases: ['i', '[arg]'],
@@ -390,110 +319,37 @@ export const cmds: bottypes.commandInfo[] = [
         ]
     },
     {
-        name: 'invite',
+        name: 'Invite',
         description: 'Sends the bot\'s public invite.',
         usage: 'invite',
         aliases: [],
         category: 'general',
     },
     {
-        name: 'math',
-        description: 'Solves a math problem.',
-        usage: 'math <problem>',
-        aliases: [],
-        category: 'general',
-        examples: [
-            {
-                text: 'PREFIXMSGmath 2+2',
-                description: 'Solves 2+2'
-            },
-            {
-                text: '/math type:pythag num1:3 num2:4',
-                description: 'Solves the pythagorean theorem with a=3 and b=4'
-            },
-        ],
-
-        args: [
-            {
-                name: 'problem',
-                type: 'string',
-                required: 'true (if using message command)',
-                description: 'The math problem to solve',
-                options: [
-                    `Supports:
-integers (0-9), floats/decimals (.5, 1.34), negatives (-727), exponential notation (6.022e+23)
-operators: *, /, +, -, (, )
-`,
-                ],
-                format: ['foo'],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'type',
-                type: 'string',
-                required: 'true (if using slash command)',
-                description: 'The type of math problem',
-                options: [
-                    'square', 'square root',
-                    'factorial',
-                    'highest common factor', 'lowest common multiple',
-                    'approach rate +dt', 'approach rate +ht', 'approach rate(ms)',
-                    'circumference', 'area of a circle',
-                    'pythag',
-                    'conversion to significant figures',
-                    'od+dt', 'od+ht', 'od(ms)',
-                    'mod int to string'
-                ],
-                format: ['foo'],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'num1',
-                type: 'float',
-                required: 'true (if using slash command)',
-                description: 'The first number',
-                defaultValue: 'N/A',
-                format: ['foo'],
-            },
-            {
-                name: 'num2',
-                type: 'float',
-                required: 'true (sometimes)',
-                description: 'The second number',
-                format: ['foo'],
-                defaultValue: 'N/A',
-            }
-        ]
-    },
-    {
-        name: 'ping',
+        name: 'Ping',
         description: 'Pings the bot and returns the latency.',
         usage: 'ping',
         aliases: [],
         category: 'general',
     },
     {
-        name: 'remind',
+        name: 'Remind',
         description: 'Sets a reminder. Leave all args blank or use the reminders alias to return a list of reminders',
         usage: 'remind [time] [reminder]',
         category: 'general',
         examples: [
             {
-                text: 'PREFIXMSGremind',
+                text: 'remind',
                 description: 'Returns a list of reminders.'
             },
             {
-                text: 'PREFIXMSGremind 1h30m30s reminder',
+                text: 'remind 1h30m30s reminder',
                 description: 'Sets a reminder for 1 hour, 30 minutes, and 30 seconds'
             },
             {
-                text: 'PREFIXMSGremind 2:05 fc',
+                text: 'remind 2:05 fc',
                 description: 'Sets a reminder for 2 minutes and 5 seconds'
             },
-            {
-                text: '/remind time:1h30m30s reminder:reminder sendinchannel:true',
-                description: 'Sets a reminder for 1 hour, 30 minutes, and 30 seconds and sends it in the channel'
-            }
         ],
         aliases: ['reminders', 'reminder'],
         args: [
@@ -529,81 +385,20 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'stats',
+        name: 'Stats',
         description: 'Shows the bot\'s statistics.',
         usage: 'stats',
         category: 'general',
         aliases: [],
     },
     {
-        name: 'time',
-        description: 'Shows the current time in a specific timezone.',
-        usage: 'time [timezone] [-showutc]',
-        category: 'general',
-        examples: [
-            {
-                text: 'PREFIXMSGtime',
-                description: 'Shows the user\'s current time. If unset, it displays GMT.'
-            },
-
-            {
-                text: 'PREFIXMSGtime AEST',
-                description: 'Shows the current time in AEST (UTC+10, Australian Eastern Standard Time)'
-            },
-        ],
-        aliases: ['tz'],
-        args: [
-            {
-                name: 'timezone',
-                type: 'string',
-                required: false,
-                description: 'The timezone to show the time in. See [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/src/consts/timezones.ts)',
-                format: ['(city), UTC(+/-)(hours), country name, country endonym, country ISO codes (eg AU), or abbreviations such as AEST, PST etc.'],
-                defaultValue: 'UTC',
-            },
-            {
-                name: 'showutc',
-                type: 'boolean',
-                required: false,
-                description: 'Whether or not to show the UTC time on top of the requested timezone.',
-                format: ['-utc'],
-                defaultValue: '`false` if timezone has a value',
-            }
-        ]
-    },
-    {
-        name: 'weather',
-        description: 'Shows the weather for a specific region.',
-        usage: 'weather <region>',
-        category: 'general',
-        examples: [
-            {
-                text: 'PREFIXMSGweather auckland',
-                description: 'Returns the weather for Auckland, New Zealand'
-            },
-        ],
-        aliases: ['temperature', 'temp'],
-        args: [
-            {
-                name: 'region',
-                type: 'string',
-                required: false,
-                description: 'The region to search for',
-                options: ['Country, city, region'],
-                format: ['foo'],
-                defaultValue: 'UTC',
-            }
-        ]
-    },
-    
-    {
-        name: 'badges',
+        name: 'Badges',
         description: 'Display\'s the user\'s badges.',
         usage: 'badges [user]',
         category: 'osu_profile',
         examples: [
             {
-                text: 'PREFIXMSGbadges cookiezi',
+                text: 'badges cookiezi',
                 description: 'Shows cookiezi\'s badges'
             }
         ],
@@ -613,51 +408,47 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'bws',
+        name: 'BadgeWeightSeed',
         description: 'Shows the badge weighted rank of a user.',
-        usage: 'bws [user]',
+        usage: 'badgeweightseed [user]',
         category: 'osu_profile',
         examples: [
             {
-                text: 'PREFIXMSGbws',
+                text: 'bws',
                 description: 'Shows your badge weighted rank'
             },
             {
-                text: 'PREFIXMSGbws peppy',
+                text: 'bws peppy',
                 description: 'Shows peppy\'s badge weighted rank'
             },
             {
-                text: 'PREFIXMSGbws DigitalHypno',
+                text: 'bws DigitalHypno',
                 description: 'Shows DigitalHypno\'s badge weighted rank'
             },
         ],
-        aliases: ['badgeweightsystem', 'badgeweight', 'badgeweigthseed', 'badgerank'],
+        aliases: ['bws', 'badgeweightsystem', 'badgeweight', 'badgeweigthseed', 'badgerank'],
         args: [
             user,
         ]
     },
     {
-        name: 'compare',
+        name: 'Compare',
         description: 'Compares two users\' osu! stats/top plays/scores.',
         usage: 'compare [first] [second]',
         category: 'osu_other',
         examples: [
             {
-                text: 'PREFIXMSGcompare SaberStrike',
+                text: 'compare SaberStrike',
                 description: 'Compares your stats to SaberStrike\'s'
             },
             {
-                text: 'PREFIXMSGcompare peppy SaberStrike',
+                text: 'compare peppy SaberStrike',
                 description: 'Compares peppy\'s and SaberStrike\'s stats'
             },
             {
-                text: 'PREFIXMSGcommon SaberStrike Soragaton',
+                text: 'common SaberStrike Soragaton',
                 description: 'Compares SaberStrike\'s and Soragaton\'s top plays'
             },
-            {
-                text: '/compare type:top first:SaberStrike second:Soragaton',
-                description: 'Compares SaberStrike\'s and Soragaton\'s top plays'
-            }
         ],
         aliases: ['common'],
         args: [
@@ -692,29 +483,29 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'firsts',
+        name: 'Firsts',
         description: 'Shows the #1 global scores of a user.\n' + scoreListString,
         usage: 'firsts ' + scoreListArgs,
         category: 'osu_scores',
         examples: [
             {
-                text: 'PREFIXMSGfirsts SaberStrike',
+                text: 'firsts SaberStrike',
                 description: 'Shows SaberStrike\'s #1 scores'
             },
             {
-                text: 'PREFIXMSGfirsts -p 3 ',
+                text: 'firsts -p 3 ',
                 description: 'Shows the 3rd page of your #1 scores'
             },
             {
-                text: 'PREFIXMSGfirsts -mania',
+                text: 'firsts -mania',
                 description: 'Shows your #1 mania scores'
             },
             {
-                text: '/firsts mods:HDHR sort:recent',
+                text: 'firsts +HDHR -recent',
                 description: 'Shows your #1 scores with HDHR sorted by recent'
             },
             {
-                text: 'PREFIXMSGfirsts -parse 3',
+                text: 'firsts -parse 3',
                 description: 'Returns your 3rd most recent first score'
             }
         ],
@@ -741,7 +532,7 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'map',
+        name: 'Map',
         description: 'Shows information about a beatmap.',
         usage: 'map [query] [id] +[mods] [detailed] [bpm] [speed] [cs] [ar] [od] [hp] [ppcalc] [bg]',
         category: 'osu_map',
@@ -754,11 +545,11 @@ operators: *, /, +, -, (, )
         ],
         examples: [
             {
-                text: 'PREFIXMSGmap "kimi no shiranai monogatari"',
+                text: 'map "kimi no shiranai monogatari"',
                 description: 'Returns the first result for "kimi no shiranai monogatari"'
             },
             {
-                text: 'PREFIXMSGmap 3013912 +HDHR',
+                text: 'map 3013912 +HDHR',
                 description: 'Returns the beatmap with the id 3013912 with HDHR'
             },
             {
@@ -878,21 +669,21 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'maplb',
+        name: 'MapLeaderboard',
         description: 'Shows the leaderboard of a map.',
-        usage: 'maplb [id] [page] [parse]',
-        category: 'osu_profile',
+        usage: 'mapleaderboard [id] [page] [parse]',
+        category: 'osu_scores',
         examples: [
             {
-                text: 'PREFIXMSGmaplb 32345',
+                text: 'maplb 32345',
                 description: 'Returns the leaderboard of the map with the id 32345'
             },
             {
-                text: '/maplb mods:HDHR',
+                text: 'maplb +HDHR',
                 description: 'Returns the leaderboard of the most recent map in the guild with HDHR'
             }
         ],
-        aliases: ['leaderboard', 'mapleaderboard', 'ml'],
+        aliases: ['leaderboard', 'maplb', 'ml'],
         args: [
             {
                 name: 'id',
@@ -922,21 +713,21 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'maprandom',
+        name: 'RandomMap',
         description: 'Returns the link to a random beatmap. Uses local storage so selection might be limited.',
-        usage: 'maprandom [type]',
+        usage: 'randommap [type]',
         category: 'osu_map',
         examples: [
             {
-                text: 'PREFIXMSGf2',
+                text: 'f2',
                 description: 'Returns a random beatmap'
             },
             {
-                text: 'PREFIXMSGmaprand -ranked',
+                text: 'maprand -ranked',
                 description: 'Returns a random ranked beatmap'
             }
         ],
-        aliases: ['f2', 'maprand', 'randommap', 'randmap'],
+        aliases: ['f2', 'maprand', 'maprandom', 'randmap'],
         args: [{
             name: 'Type',
             type: 'string',
@@ -948,17 +739,17 @@ operators: *, /, +, -, (, )
         }]
     },
     {
-        name: 'maprecommend',
+        name: 'RecommendMap',
         description: 'Recommends a random map based off of your recommended difficulty.',
-        usage: 'maprecommend [range] [user]',
+        usage: 'recommendmap [range] [user]',
         category: 'osu_map',
         examples: [
             {
-                text: 'PREFIXMSGmaprec -range 2 SaberStrike',
+                text: 'maprec -range 2 SaberStrike',
                 description: 'Recommends a random map for SaberStrike with a maximum star rating difference of 2'
             }
         ],
-        aliases: ['recmap', 'recommendmap', 'maprec', 'mapsuggest', 'suggestmap'],
+        aliases: ['recmap', 'maprecommend', 'maprec', 'mapsuggest', 'suggestmap'],
         args: [
             user, mode,
             {
@@ -982,29 +773,29 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'nochokes',
+        name: 'NoChokes',
         description: 'Shows the user\'s top plays if no scores had a miss.\n' + scoreListString,
         usage: 'nochokes ' + scoreListArgs,
         category: 'osu_scores',
         examples: [
             {
-                text: 'PREFIXMSGnochokes SaberStrike',
+                text: 'nochokes SaberStrike',
                 description: 'Returns SaberStrike\'s top plays without misses'
             },
             {
-                text: 'PREFIXMSGnc -p 3',
+                text: 'nc -p 3',
                 description: 'Returns the third page of your top plays without misses'
             },
             {
-                text: 'PREFIXMSGnochokes -mania',
+                text: 'nochokes -mania',
                 description: 'Returns your top mania plays without misses'
             },
             {
-                text: '/nochokes mods:HDHR sort:recent',
+                text: 'nochokes +HDHR -recent',
                 description: 'Returns your top plays with HDHR sorted by recent without misses'
             },
             {
-                text: 'PREFIXMSGnc -parse 2',
+                text: 'nc -parse 2',
                 description: 'Returns your 2nd no miss top play'
             }
         ],
@@ -1012,31 +803,31 @@ operators: *, /, +, -, (, )
         args: scoreListCommandOptions
     },
     {
-        name: 'osu',
+        name: 'Profile',
         description: 'Shows information about a user\'s osu! profile.',
-        usage: 'osu [user] [graph] [detailed] [mode]',
+        usage: 'profile [user] [graph] [detailed] [mode]',
         category: 'osu_profile',
         linkUsage: [
             'osu.ppy.sh/u/<user>',
             'osu.ppy.sh/users/<user>/[(mode)]',
         ],
-        aliases: ['o', 'profile', 'user', 'taiko', 'drums', 'fruits', 'ctb', 'catch', 'mania'],
+        aliases: ['osu', 'o', 'profile', 'user', 'taiko', 'drums', 'fruits', 'ctb', 'catch', 'mania'],
         examples: [
             {
-                text: 'PREFIXMSGosu SaberStrike',
+                text: 'profile SaberStrike',
                 description: 'Shows SaberStrike\'s osu! profile'
             },
             {
-                text: '/osu detailed:true mode:taiko',
+                text: 'profile -d -taiko',
                 description: 'Shows your taiko profile with extra details'
             },
             {
-                text: 'PREFIXMSGosu -graph',
+                text: 'osu -g',
                 description: 'Shows a graph of your osu! rank and playcount'
             },
             {
-                text: 'osu.ppy.sh/u/15222484/osu',
-                description: 'Shows SaberStrike\'s osu profile'
+                text: 'osu.ppy.sh/u/2',
+                description: 'Shows Peppy\'s osu profile'
             }
         ],
         args: [
@@ -1047,7 +838,7 @@ operators: *, /, +, -, (, )
                 required: false,
                 description: 'Whether to show detailed information about the user',
                 options: ['true', 'false'],
-                format: ['-detailed'],
+                format: ['-detailed', '-d'],
                 defaultValue: 'false',
             },
             {
@@ -1062,30 +853,30 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'osuset',
+        name: 'Set',
         description: 'Sets your osu! username/mode/skin or any setting.',
-        usage: 'osuset <username> [mode] [skin] [timezone] [location]',
+        usage: 'set <username> [mode] [skin] [timezone] [location]',
         category: 'osu_other',
         examples: [
             {
-                text: 'PREFIXMSGosuset SaberStrike',
+                text: 'osuset SaberStrike',
                 description: 'Sets your username to SaberStrike'
             },
             {
-                text: '/osuset username:SaberStrike mode:fruits skin:sbr v11',
-                description: 'Sets your username to SaberStrike, mode to fruits, and skin to sbr v11'
+                text: 'osuset SaberStrike -fruits -skin rafis',
+                description: 'Sets your username to SaberStrike, mode to fruits, and skin to rafis'
             },
             {
-                text: 'PREFIXMSGosuset SaberStrike -taiko -skin sbr v11',
-                description: 'Sets your username to SaberStrike, mode to taiko, and skin to sbr v11'
+                text: 'set SaberStrike -taiko -skin rafis',
+                description: 'Sets your username to SaberStrike, mode to taiko, and skin to rafis'
             },
             {
-                text: 'PREFIXMSGsetmode ctb',
+                text: 'setmode ctb',
                 description: 'Sets your mode to fruits (catch the beat)'
             },
             {
-                text: 'PREFIXMSGsetskin sbr v11',
-                description: 'Sets your skin to sbr v11'
+                text: 'setskin rafis',
+                description: 'Sets your skin to rafis'
             },
         ],
         aliases: ['setuser', 'set', 'setmode', 'setskin', 'settime', 'settz', 'setweather', 'setlocation'],
@@ -1126,37 +917,37 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'osutop',
+        name: 'OsuTop',
         description: 'Shows the top scores of a user.\n' + scoreListString,
         usage: 'osutop ' + scoreListArgs,
         category: 'osu_scores',
         examples: [
             {
-                text: 'PREFIXMSGosutop SaberStrike',
+                text: 'osutop SaberStrike',
                 description: 'Shows SaberStrike\'s top osu! scores'
             },
             {
-                text: 'PREFIXMSGosutop -p 3',
+                text: 'osutop -p 3',
                 description: 'Shows your top 3 pages of osu! scores'
             },
             {
-                text: 'PREFIXMSGosutop -mania',
+                text: 'osutop -mania',
                 description: 'Shows your top mania scores'
             },
             {
-                text: 'PREFIXMSGosutop -fruits -mods hdhr',
+                text: 'osutop -fruits -mods hdhr',
                 description: 'Shows your top fruits scores with HDHR'
             },
             {
-                text: '/osutop mods:HDHR sort:recent',
+                text: 'osutop +HDHR -recent',
                 description: 'Shows your top scores with HDHR sorted by recent'
             },
             {
-                text: 'PREFIXMSGtop -parse 3',
+                text: 'top -parse 3',
                 description: 'Returns your 3rd personal best score'
             },
             {
-                text: 'PREFIXMSGsotarks',
+                text: 'sotarks',
                 description: 'Returns your top plays mapped by sotarks'
             }
         ],
@@ -1169,25 +960,25 @@ operators: *, /, +, -, (, )
         args: scoreListCommandOptions
     },
     {
-        name: 'pinned',
+        name: 'Pinned',
         description: 'Shows the pinned scores of a user.\n' + scoreListString,
         usage: 'pinned ' + scoreListArgs,
         category: 'osu_scores',
         examples: [
             {
-                text: 'PREFIXMSGpinned SaberStrike',
+                text: 'pinned SaberStrike',
                 description: 'Shows SaberStrike\'s pinned scores'
             },
             {
-                text: 'PREFIXMSGpinned -p 3',
+                text: 'pinned -p 3',
                 description: 'Shows your pinned scores on page 3'
             },
             {
-                text: 'PREFIXMSGpinned -mania',
+                text: 'pinned -mania',
                 description: 'Shows your pinned mania scores'
             },
             {
-                text: '/pinned mods:HDHR sort:recent',
+                text: 'pinned +HDHR -recent',
                 description: 'Shows your pinned scores with HDHR sorted by recent'
 
             }
@@ -1196,17 +987,17 @@ operators: *, /, +, -, (, )
         args: scoreListCommandOptions
     },
     {
-        name: 'pp',
+        name: 'PP',
         description: 'Estimates the rank of a user from the pp given. If a value matches the database, that will be used instead of an estimation.',
         usage: 'pp <value> [mode]',
         category: 'osu_other',
         examples: [
             {
-                text: 'PREFIXMSGpp 100000',
+                text: 'pp 100000',
                 description: 'Estimates your rank with 100,000pp'
             },
             {
-                text: 'PREFIXMSGpp 2999 -fruits',
+                text: 'pp 2999 -fruits',
                 description: 'Estimates your ctb/fruits rank with 2,999pp'
             },
         ],
@@ -1224,17 +1015,17 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'rank',
+        name: 'Rank',
         description: 'Estimates the performance points of a user from the rank given. If a value matches the database, that will be used instead of an estimation.',
         usage: 'rank <value> [mode]',
         category: 'osu_other',
         examples: [
             {
-                text: 'PREFIXMSGrank 1',
+                text: 'rank 1',
                 description: 'Estimates your pp with rank 1'
             },
             {
-                text: 'PREFIXMSGrank 1 -taiko',
+                text: 'rank 1 -taiko',
                 description: 'Estimates your taiko pp with rank 1'
             },
         ],
@@ -1252,21 +1043,21 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'ranking',
+        name: 'Ranking',
         description: 'Displays the global leaderboards.',
         usage: 'ranking [country] [page] [mode] [parse]',
         category: 'osu_profile',
         examples: [
             {
-                text: 'PREFIXMSGranking',
+                text: 'ranking',
                 description: 'Shows the global leaderboards'
             },
             {
-                text: '/ranking country:us mode:taiko',
+                text: 'ranking -country us -taiko',
                 description: 'Shows the taiko leaderboards for the US'
             },
             {
-                text: '/ranking type:charts spotlight:227',
+                text: 'ranking -charts -spotlight 227',
                 description: 'Shows the leaderboards for the 227th spotlight'
             }
         ],
@@ -1309,88 +1100,87 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'recent',
-        description: 'Shows the recent score(s) of a user.\nThe following only applies to list mode:\n' + scoreListString,
-        usage: 'recent [user] [page] [list] [mode] [passes] [mapper] [mods] [modx] [exmod] [reverse] [sort] [query] [detailed] [grade] [pp] [score] [acc] [combo] [miss] [bpm]',
+        name: 'Recent',
+        description: 'Shows the recent score(s) of a user',
+        usage: 'recent [user] [page] [mode] [showfails] [filter]',
         category: 'osu_scores',
         examples: [
             {
-                text: 'PREFIXMSGrecent',
+                text: 'recent',
                 description: 'Shows your most recent score'
             },
             {
-                text: 'PREFIXMSGr SaberStrike',
+                text: 'r SaberStrike',
                 description: 'Shows the most recent score of SaberStrike'
             },
             {
-                text: 'PREFIXMSGrs -p 2 -list',
-                description: 'Shows the second page of a list of your recent scores'
-            },
-            {
-                text: 'PREFIXMSGrsbest',
-                description: 'Shows a list of your recent scores, sorted by pp'
-            },
-            {
-                text: 'PREFIXMSGrl -mania',
-                description: 'Shows a list of your recent mania scores'
-            },
-            {
-                text: 'PREFIXMSGrlm @SaberStrike',
-                description: 'Shows a list of SaberStrike\'s recent mania scores'
-            },
-            {
-                text: 'PREFIXMSGrt -p 2',
+                text: 'rt -p 2',
                 description: 'Shows your second most recent taiko score'
             },
-            {
-                text: 'PREFIXMSGrl -nf -? "Shinbatsu"',
-                description: 'Shows your recent scores with the map name/difficulty/artist/creator matching "shinbatsu", excluding fails'
-            }
         ],
         aliases: [
             'recentscore', 'rs', 'r',
             'recenttaiko', 'rt',
             'recentfruits', 'rf', 'rctb',
             'recentmania', 'rm',
+        ],
+        args: [
+            user,
+            page,
+            mode,
+            {
+                name: 'showfails',
+                type: 'boolean',
+                required: false,
+                description: 'Whether to show only scores that were passed. If false, all scores will be shown',
+                options: ['true', 'false'],
+                format: ['-passes', '-nf', '-nofail'],
+                defaultValue: 'true',
+            },
+            {
+                name: 'filter',
+                type: 'string',
+                required: false,
+                description: 'Filter scores by maps matching the given string',
+                format: ['-? "foo"'],
+                defaultValue: 'null',
+            },
+        ]
+    },
+    {
+        name: 'RecentList',
+        description: 'Shows the recent scores of a user.\n' + scoreListString,
+        usage: 'recentlist ' + scoreListArgs,
+        category: 'osu_scores',
+        examples: [
+            {
+                text: 'rsbest',
+                description: 'Shows a list of your recent scores, sorted by pp'
+            },
+            {
+                text: 'rl -mania',
+                description: 'Shows a list of your recent mania scores'
+            },
+            {
+                text: 'rlm @SaberStrike',
+                description: 'Shows a list of SaberStrike\'s recent mania scores'
+            },
+            {
+                text: 'rl -nf -? "Shinbatsu"',
+                description: 'Shows your recent scores with the map name/difficulty/artist/creator matching "shinbatsu", excluding fails'
+            }
+        ],
+        aliases: [
             'rb', 'recentbest', 'rsbest',
-            'rslist', 'recentlist', 'rl',
+            'rslist', 'rl',
             'recentlisttaiko', 'rlt',
             'recentlistfruits', 'rlf', 'rlctb', 'rlc',
             'recentlistmania', 'rlm',
         ],
-        args: scoreListCommandOptions.slice(0, 9).concat(
-            scoreListCommandOptions.slice(11))
-            .concat([
-                {
-                    name: 'list',
-                    type: 'boolean',
-                    required: false,
-                    description: 'Whether to show multiple scores. If false, only the most recent score will be shown',
-                    options: ['true', 'false'],
-                    format: ['-l', '-list'],
-                    defaultValue: 'false',
-                },
-                {
-                    name: 'passes',
-                    type: 'boolean',
-                    required: false,
-                    description: 'Whether to show only scores that were passed. If false, all scores will be shown',
-                    options: ['true', 'false'],
-                    format: ['-passes', '-nf', '-nofail'],
-                    defaultValue: 'true',
-                },
-                {
-                    name: 'query',
-                    type: 'string',
-                    required: false,
-                    description: 'Filter scores by maps matching the given string',
-                    format: ['-? "foo"'],
-                    defaultValue: 'null',
-                },
-            ])
+        args: scoreListCommandOptions
     },
     {
-        name: 'recentactivity',
+        name: 'RecentActivity',
         category: 'osu_profile',
         description: 'Displays the user\'s most recent activity.',
         usage: 'recentactivity [user] [page]',
@@ -1401,13 +1191,13 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'saved',
+        name: 'Saved',
         description: 'Shows a user\'s saved settings.',
         usage: 'saved [user]',
         category: 'osu_other',
         examples: [
             {
-                text: 'PREFIXMSGsaved @SaberStrike',
+                text: 'saved @SaberStrike',
                 description: 'Shows SaberStrike\'s saved settings'
             },
         ],
@@ -1417,7 +1207,7 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'scoreparse',
+        name: 'ScoreParse',
         description: 'Returns information about a score. Doesn\'t work with new score ID system.',
         usage: 'scoreparse <id> [mode]',
         linkUsage: [
@@ -1426,11 +1216,11 @@ operators: *, /, +, -, (, )
         category: 'osu_scores',
         examples: [
             {
-                text: 'PREFIXMSGscoreparse 1234567890',
+                text: 'scoreparse 1234567890',
                 description: 'Parses the osu! score with the id 1234567890'
             },
             {
-                text: 'PREFIXMSGscore 1234567890 mania',
+                text: 'score 1234567890 mania',
                 description: 'Parses the mania score with the id 1234567890'
             },
             {
@@ -1452,29 +1242,29 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'scores',
+        name: 'MapScores',
         description: 'Shows the scores of a user on a beatmap.\n' + scoreListString,
-        usage: 'scores [user] [id] [page] [mods] [modx] [exmod] [reverse] [sort] [parse] [query] [detailed] [-grade] [pp] [score] [acc] [combo] [miss] [bpm]',
+        usage: 'mapscores [user] [id] [page] [mods] [modx] [exmod] [reverse] [sort] [parse] [query] [detailed] [-grade] [pp] [score] [acc] [combo] [miss] [bpm]',
         category: 'osu_scores',
         examples: [
             {
-                text: 'PREFIXMSGscores saberstrike',
+                text: 'scores saberstrike',
                 description: 'Shows SaberStrike\'s scores on the most recent beatmap'
             },
             {
-                text: 'PREFIXMSGc',
+                text: 'c',
                 description: 'Shows your scores on the most recent beatmap'
             },
             {
-                text: 'PREFIXMSGc 4204',
+                text: 'c 4204',
                 description: 'Shows your scores on the beatmap with the id 4204'
             },
             {
-                text: 'PREFIXMSGscores -parse 5',
+                text: 'scores -parse 5',
                 description: 'Returns your fifth most recent score on the most recent beatmap'
             },
             {
-                text: 'PREFIXMSGc https://osu.ppy.sh/beatmapsets/3367#osu/21565',
+                text: 'c https://osu.ppy.sh/beatmapsets/3367#osu/21565',
                 description: 'Shows your scores on the beatmap with the id 21565'
             },
         ],
@@ -1492,17 +1282,17 @@ operators: *, /, +, -, (, )
             ])
     },
     {
-        name: 'scorestats',
+        name: 'ScoreStats',
         description: 'Shows the stats of a user\'s scores.',
         usage: 'scorestats [user] [type] [mode] [all]',
         category: 'osu_scores',
         examples: [
             {
-                text: 'PREFIXMSGscorestats @SaberStrike',
+                text: 'scorestats @SaberStrike',
                 description: 'Shows scorestats for SaberStrike\'s top plays'
             },
             {
-                text: 'PREFIXMSGscorestats mrekk -firsts',
+                text: 'scorestats mrekk -firsts',
                 description: 'Shows scorestats for mrekk\'s firsts'
             }
         ],
@@ -1530,13 +1320,13 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'simulate',
+        name: 'Simulate',
         description: 'Simulates a score on a beatmap.',
         usage: 'simulate [id] +[mods]  [acc] [combo] [n300] [n100] [n50] [miss] [bpm] [speed] [cs] [ar] [od] [hp]',
         category: 'osu_scores',
         examples: [
             {
-                text: 'PREFIXMSGsimulate +HDHR misses=0 acc=97.86',
+                text: 'simulate +HDHR misses=0 acc=97.86',
                 description: 'Simulates a score on the most recent beatmap with HDHR, 0 misses, and 97.86% accuracy'
             }
         ],
@@ -1658,17 +1448,17 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'trackadd',
+        name: 'TrackAdd',
         description: 'Adds a user to the tracklist. Only works in the guild\'s set tracking channel.',
         usage: 'trackadd <user>',
         category: 'osu_track',
         examples: [
             {
-                text: 'PREFIXMSGtrackadd 15222484',
+                text: 'trackadd 15222484',
                 description: 'Adds the user with the id 15222484 to the tracklist'
             },
             {
-                text: 'PREFIXMSGta SaberStrike',
+                text: 'ta SaberStrike',
                 description: 'Adds SaberStrike to the tracklist'
             }
         ],
@@ -1678,17 +1468,17 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'trackchannel',
+        name: 'TrackChannel',
         description: 'Sets the channel to send tracklist updates to.',
         category: 'osu_track',
         usage: 'trackchannel <channel>',
         examples: [
             {
-                text: 'PREFIXMSGtrackchannel #tracklist',
+                text: 'trackchannel #tracklist',
                 description: 'Sets the channel to send tracklist updates to #tracklist'
             },
             {
-                text: 'PREFIXMSGtrackchannel 123456789012345678',
+                text: 'trackchannel 123456789012345678',
                 description: 'Sets the channel to send tracklist updates to the channel with the id 123456789012345678'
             }
         ],
@@ -1705,24 +1495,24 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'tracklist',
+        name: 'TrackList',
         description: 'Displays a list of the currently tracked users in the server.',
         category: 'osu_track',
         usage: 'tracklist',
         aliases: ['tl'],
     },
     {
-        name: 'trackremove',
+        name: 'TrackRemove',
         description: 'Removes a user from the tracklist. Only works in the guild\'s set tracking channel.',
         category: 'osu_track',
         usage: 'trackremove <user>',
         examples: [
             {
-                text: 'PREFIXMSGtrackremove 15222484',
+                text: 'trackremove 15222484',
                 description: 'Removes the user with the id 15222484 from the tracklist'
             },
             {
-                text: 'PREFIXMSGtr SaberStrike',
+                text: 'tr SaberStrike',
                 description: 'Removes SaberStrike from the tracklist'
             }
         ],
@@ -1732,17 +1522,17 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'userbeatmaps',
+        name: 'UserBeatmaps',
         description: 'Shows a user\'s beatmaps. (favourites/ranked/pending/graveyard/loved)',
         category: 'osu_map',
         usage: 'userbeatmaps [user] [type] [reverse] [page] [parse] [query]',
         examples: [
             {
-                text: 'PREFIXMSGubm sotarks -p 4 -ranked',
+                text: 'ubm sotarks -p 4 -ranked',
                 description: 'Shows sotarks\'s ranked beatmaps on page 4'
             },
             {
-                text: '/userbeatmaps user:Mismagius type:Loved reverse:true page:2 sort:Title',
+                text: 'userbeatmaps Mismagius -loved -reverse -p 2 -title',
                 description: 'Shows Mismagius\'s loved beatmaps on page 2, sorted by title in reverse'
             }
         ],
@@ -1798,17 +1588,17 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'whatif',
+        name: 'WhatIf',
         description: 'Estimates user stats if they gain a certain amount of raw pp.',
         category: 'osu_other',
         usage: 'whatif [user] <pp>',
         examples: [
             {
-                text: 'PREFIXMSGwhatif 1000',
+                text: 'whatif 1000',
                 description: 'Shows the user\'s stats if they achieved a 1000pp score'
             },
             {
-                text: 'PREFIXMSGwhatif SaberStrike 300',
+                text: 'whatif SaberStrike 300',
                 description: 'Shows SaberStrike\'s stats if they achieved a 300pp score'
             }
         ],
@@ -1827,33 +1617,33 @@ operators: *, /, +, -, (, )
     },
 
     {
-        name: '8ball',
+        name: '8Ball',
         description: 'Returns a yes/no/maybe answer to a question.',
         category: 'misc',
         usage: '8ball ',
         examples: [
             {
-                text: 'PREFIXMSG8ball is this a good bot?',
+                text: '8ball is this a good bot?',
                 description: 'Returns a yes/no/maybe answer to the question'
             }
         ],
         aliases: ['ask'],
     },
     {
-        name: 'coin',
+        name: 'CoinFlip',
         description: 'Flips a coin.',
         category: 'misc',
-        usage: 'coin',
-        aliases: ['coinflip', 'flip'],
+        usage: 'coinflip',
+        aliases: ['coin', 'flip'],
     },
     {
-        name: 'gif',
+        name: 'Gif',
         description: 'Sends a gif.',
         category: 'misc',
         usage: '<type> [target]',
         examples: [
             {
-                text: '/slap @SaberStrike',
+                text: 'slap @SaberStrike',
                 description: 'Sends a random gif matching "slap"'
             }
         ],
@@ -1879,14 +1669,7 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'inspire',
-        description: 'Sends a randomly generated inspirational quote.',
-        category: 'misc',
-        usage: 'inspire',
-        aliases: ['insp'],
-    },
-    {
-        name: 'janken',
+        name: 'Janken',
         description: 'Plays janken with the bot. (aka paper scissors rock or rock paper scissors or whatever weird order it\'s in).',
         category: 'misc',
         usage: 'janken',
@@ -1904,53 +1687,17 @@ operators: *, /, +, -, (, )
         ],
     },
     {
-        name: 'poll',
-        description: 'Creates a poll.',
-        category: 'misc',
-        usage: 'poll <question>',
-        examples: [
-            {
-                text: 'PREFIXMSGpoll djkfhgfbdkgbkfhdjgdkgd',
-                description: 'Creates a poll with the question "djkfhgfbdkgbkfhdjgdkgd"'
-            },
-            {
-                text: '/poll title:What is your favorite colour? options:red+green+blue',
-                description: 'Creates a poll with the question "What is your favorite colour?" and the options "red", "green", and "blue"'
-            }
-        ],
-        aliases: ['vote'],
-        args: [
-            {
-                name: 'question',
-                type: 'string',
-                required: true,
-                description: 'The question/title of the poll',
-                format: ['foo',],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'options',
-                type: 'string',
-                required: false,
-                description: 'The options for the poll',
-                options: ['format: option1+option2+option3...'],
-                format: ['foo+bar+baz...',],
-                defaultValue: 'yes+no',
-            }
-        ]
-    },
-    {
-        name: 'roll',
+        name: 'Roll',
         description: 'Rolls a random number.',
         category: 'misc',
         usage: 'roll [max] [min]',
         examples: [
             {
-                text: 'PREFIXMSGroll',
+                text: 'roll',
                 description: 'Rolls a random number between 1 and 100'
             },
             {
-                text: 'PREFIXMSGroll 100 50',
+                text: 'roll 100 50',
                 description: 'Rolls a random number between 50 and 100'
             }
         ],
@@ -1975,45 +1722,13 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'say',
-        description: 'Sends a message.',
-        category: 'misc',
-        usage: 'say <message>',
-        examples: [
-            {
-                text: 'PREFIXMSGsay hello',
-                description: 'Says "hello" in the current channel'
-            },
-        ],
-        aliases: [],
-        args: [
-            {
-                name: 'message',
-                type: 'string',
-                required: true,
-                description: 'The message to send',
-                format: ['foo',],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'channel',
-                type: 'channel',
-                required: false,
-                description: 'The channel to send the message in',
-                format: ['bar',],
-                defaultValue: 'current channel',
-            }
-        ]
-    },
-
-    {
-        name: 'checkperms',
+        name: 'CheckPerms',
         description: 'Checks the permissions of the user.',
         category: 'admin',
         usage: 'checkperms [user]',
         examples: [
             {
-                text: 'PREFIXMSGcheckperms @SSoB',
+                text: 'checkperms @SSoB',
                 description: 'Checks the permissions of the user @SSoB'
             }
         ],
@@ -2023,47 +1738,7 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'userinfo',
-        description: 'Returns information about a user.',
-        usage: 'userinfo [user]',
-        category: 'admin',
-        examples: [
-            {
-                text: 'PREFIXMSGuser @SSoB',
-                description: 'Returns information about the user @SSoB'
-            },
-            {
-                text: '/userinfo user:SSoB',
-                description: 'Returns information about the user SSoB'
-            }
-        ],
-        aliases: ['userinfo'],
-        args: [
-            userAdmin,
-        ]
-    },
-    {
-        name: 'avatar',
-        description: 'Gets the avatar of a user.',
-        usage: 'avatar [user]',
-        category: 'admin',
-        examples: [
-            {
-                text: 'PREFIXMSGavatar @SSoB',
-                description: 'Gets information about the user @SSoB'
-            },
-            {
-                text: '/avatar user:SSoB',
-                description: 'Gets information about the user SSoB'
-            }
-        ],
-        aliases: ['av', 'pfp'],
-        args: [
-            userAdmin,
-        ]
-    },
-    {
-        name: 'clear',
+        name: 'Clear',
         description: 'Clears cached data within the bot',
         usage: 'clear <arg>',
         category: 'admin',
@@ -2082,49 +1757,49 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'debug',
+        name: 'Debug',
         description: 'Runs a debugging command.',
         category: 'admin',
         usage: 'debug <type> [arg]',
         examples: [
             {
-                text: 'PREFIXMSGdebug commandfile 1',
+                text: 'debug commandfile 1',
                 description: 'Returns all files associated with the command matching ID 1'
             },
             {
-                text: 'PREFIXMSGdebug commandfiletype map',
+                text: 'debug commandfiletype map',
                 description: 'Returns all files associated with the command "map"'
             },
             {
-                text: 'PREFIXMSGdebug servers',
+                text: 'debug servers',
                 description: 'Returns a list of all guilds the bot is in'
             },
             {
-                text: 'PREFIXMSGdebug channels',
+                text: 'debug channels',
                 description: 'Returns a list of all channels in the current guild'
             },
             {
-                text: 'PREFIXMSGdebug users',
+                text: 'debug users',
                 description: 'Returns a list of all members in the current guild'
             },
             {
-                text: 'PREFIXMSGdebug forcetrack',
+                text: 'debug forcetrack',
                 description: 'Forces the osu!track to run a cycle (takes a minute to complete)'
             },
             {
-                text: 'PREFIXMSGdebug curcmdid',
+                text: 'debug curcmdid',
                 description: 'Returns the current command\'s ID'
             },
             {
-                text: 'PREFIXMSGdebug logs',
+                text: 'debug logs',
                 description: 'Returns the logs associated with the current guild'
             },
             {
-                text: 'PREFIXMSGdebug clear all',
+                text: 'debug clear all',
                 description: 'Deletes all command-related files cached'
             },
             {
-                text: 'PREFIXMSGdebug maps name',
+                text: 'debug maps name',
                 description: 'Returns all maps stored in the cache, and lists them by name'
             },
         ],
@@ -2150,13 +1825,13 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'find',
+        name: 'Find',
         description: 'Finds details of a user/guild/channel/role/emoji/sticker.',
         usage: 'find <type> <ID>',
         category: 'admin',
         examples: [
             {
-                text: 'PREFIXMSGfind user 777125560869978132',
+                text: 'find user 777125560869978132',
                 description: 'Returns info for user with id 777125560869978132'
             }
         ],
@@ -2182,13 +1857,13 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'leaveguild',
+        name: 'LeaveGuild',
         description: 'Makes the bot leave a guild.',
         usage: 'leaveguild [guild]',
         category: 'admin',
         examples: [
             {
-                text: 'PREFIXMSGleaveguild 1234567890',
+                text: 'leaveguild 1234567890',
                 description: 'Makes the bot leave the guild with the id 1234567890'
             },
         ],
@@ -2205,13 +1880,13 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'prefix',
+        name: 'Prefix',
         description: 'Set\'s the prefix of the current server.',
         usage: 'prefix [prefix]',
         category: 'admin',
         examples: [
             {
-                text: 'PREFIXMSGprefix !',
+                text: 'prefix !',
                 description: 'Sets the prefix to "!"'
             }
         ],
@@ -2228,56 +1903,7 @@ operators: *, /, +, -, (, )
         ]
     },
     {
-        name: 'purge',
-        description: 'Deletes a specified amount of messages from the current channel.',
-        usage: 'purge [count] [user] [method]',
-        category: 'admin',
-        examples: [
-            {
-                text: 'PREFIXMSGpurge 5 12345689',
-                description: 'Deletes 5 messages from the user with the ID 12345689'
-            },
-            {
-                text: 'PREFIXMSGpurge 5 @testsubject',
-                description: 'Deletes 5 messages from the user "testsubject"'
-            },
-            {
-                text: 'PREFIXMSGpurge 5 -fetch',
-                description: 'Deletes 5 messages using the fetch method'
-            },
-        ],
-        aliases: [],
-        args: [
-            {
-                name: 'count',
-                type: 'integer',
-                required: false,
-                description: 'The amount of messages to delete',
-                options: ['0-100'],
-                format: ['foo',],
-                defaultValue: '5',
-            },
-            {
-                name: 'user',
-                type: 'string/user mention',
-                required: false,
-                description: 'The user\'s messages to delete. Deletes messages from any user if unspecified',
-                format: ['bar',],
-                defaultValue: 'N/A',
-            },
-            {
-                name: 'method',
-                type: 'string',
-                required: false,
-                description: 'The method to delete messages. Fetch is slower, but can delete messages older than 14 days. Bulk cannot be used if user is specified.',
-                options: ['bulk', 'fetch'],
-                format: ['-foo',],
-                defaultValue: 'bulk',
-            }
-        ]
-    },
-    {
-        name: 'servers',
+        name: 'Servers',
         description: 'Shows the servers the bot is in.',
         usage: 'servers',
         category: 'admin',

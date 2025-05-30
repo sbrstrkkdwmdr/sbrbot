@@ -224,7 +224,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
             break;
         case 'NoChokes':
             overrides.miss = true;
-            command = new helper.commands.osu.scores.OsuTop();
+            command = new helper.commands.osu.scores.NoChokes();
             foundCommand = true;
             break;
         case 'Profile':

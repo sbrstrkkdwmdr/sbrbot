@@ -405,27 +405,48 @@ export class Debug extends Command {
                         this.args.inputstr = temp[0];
                         tempId = temp[1];
                     }
-                    switch (this.args.inputstr) {
-                        case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':
-                            resString = 'bws';
+                    const cmdftypes = [
+                        'Badges',
+                        'BadgeWeightSeed',
+                        'Compare',
+                        'Firsts',
+                        'Map',
+                        'MapLeaderboard',
+                        'MapScores',
+                        'OsuTop',
+                        'Pinned',
+                        'Profile',
+                        'Ranking',
+                        'Recent',
+                        'RecentList',
+                        'RecentActivty',
+                        'ScoreParse',
+                        'ScoreStats',
+                        'Simulate',
+                        'UserBeatmaps',
+                        'WhatIf',
+                    ];
+                    switch (this.args.inputstr.toLowerCase()) {
+                        case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':case 'bws':
+                            resString = 'BadgeWeightSeed';
                             break;
                         case 'firstplaceranks': case 'fpr': case 'fp': case '#1s': case 'first': case '#1': case '1s':
-                            resString = 'firsts';
+                            resString = 'Firsts';
                             break;
                         case 'osc': case 'osustatscount':
                             resString = 'globals';
                             break;
                         case 'm':
-                            resString = 'map';
+                            resString = 'Map';
                             break;
                         case 'maplb': case 'mapleaderboard': case 'leaderboard':
-                            resString = 'maplb';
+                            resString = 'MapLeaderboard';
                             break;
-                        case 'profile': case 'o': case 'user':
+                        case 'profile': case 'o': case 'user': case 'osu':
                         case 'taiko': case 'drums':
                         case 'fruits': case 'ctb': case 'catch':
                         case 'mania':
-                            resString = 'osu';
+                            resString = 'Profile';
                             break;
                         case 'top': case 't': case 'ot': case 'toposu': case 'topo':
                         case 'taikotop': case 'toptaiko': case 'tt': case 'topt':
@@ -436,49 +457,44 @@ export class Debug extends Command {
                         case 'sotarksfruits': case 'fruitssotarks': case 'fruitsotarks': case 'sotarksfruit': case 'sotarkscatch': case 'catchsotarks':
                         case 'sotarksctb': case 'ctbsotarks': case 'fsotarks': case 'sotarksf': case 'csotarks': case 'sotarksc':
                         case 'sotarksmania': case 'maniasottarks': case 'sotarksm': case 'msotarks':
-                            resString = 'osutop';
+                            resString = 'OsuTop';
                             break;
                         case 'rs': case 'r':
+                        case 'recenttaiko': case 'rt':
+                        case 'recentfruits': case 'rf': case 'rctb':
+                        case 'recentmania': case 'rm':
+                            resString = 'Recent';
+                            break;
                         case 'rs best': case 'recent best':
                         case 'rsbest': case 'recentbest': case 'rb':
                         case 'recentlist': case 'rl':
                         case 'recentlisttaiko': case 'rlt':
                         case 'recentlistfruits': case 'rlf': case 'rlctb': case 'rlc':
                         case 'recentlistmania': case 'rlm':
-                        case 'recenttaiko': case 'rt':
-                        case 'recentfruits': case 'rf': case 'rctb':
-                        case 'recentmania': case 'rm':
-                            resString = 'recent';
-                            break;
+                            resString = 'RecentList';
                         case 'recentactivity': case 'recentact': case 'rsact':
-                            resString = 'recent_activity';
+                            resString = 'RecentActivty';
                             break;
                         case 'score': case 'sp':
-                            resString = 'scoreparse';
+                            resString = 'ScoreParse';
                             break;
-                        case 'c':
-                            resString = 'scores';
+                        case 'c': case 'scores':
+                            resString = 'MapScores';
                             break;
                         case 'ss':
-                            resString = 'scorestats';
+                            resString = 'ScoreStats';
                             break;
-                        case 'simulate': case 'sim':
-                            resString = 'simulate';
+                        case 'simulate': case 'sim': case 'simplay':
+                            resString = 'Simulate';
                             break;
                         case 'ub': case 'userb': case 'ubm': case 'um': case 'usermaps':
-                            resString = 'userbeatmaps';
+                            resString = 'UserBeatmaps';
                             break;
                         case 'wi':
-                            resString = 'whatif';
+                            resString = 'WhatIf';
                             break;
                         case 'mapfile': case 'mf':
                             resString = 'map (file)';
-                            break;
-                        case 'weather':
-                            resString = 'weather';
-                            break;
-                        case 'tropicalweather': case 'ts':
-                            resString = 'tropicalweather';
                             break;
                         default:
                             resString = this.args.inputstr;
@@ -515,7 +531,7 @@ export class Debug extends Command {
                             }
                             break;
                         default:
-                            this.ctn.content = `${this.args.inputstr && this.args.inputstr?.length > 0 ? `No files found for command "${this.args.inputstr}"\n` : ''}Valid options are: \`badges\`,\`bws\`,\`firsts\`,\`globals\`,\`map\`,\`maplb\`,\`osu\`,\`osutop\`,\`pinned\`,\`recent\`,\`recent_activity\`,\`scoreparse\`,\`scores\`,\`scorestats\`,\`simplay\`,\`userbeatmaps\`,\`whatif\`, \`weather\`, \`tropicalweather\``;
+                            this.ctn.content = `${this.args.inputstr && this.args.inputstr?.length > 0 ? `No files found for command "${this.args.inputstr}"\n` : ''}Valid options are: ${cmdftypes.map(x => '`' + x + '`').join(', ')}`;
                             break;
                     }
                 }

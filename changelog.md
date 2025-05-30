@@ -6,6 +6,16 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+## [5.0.2] - 2025-05-30
+
+[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/a54ba737303e009e515d56c0474e85af2bee1be5)</br>
+
+### Fixed
+- missing checks in userStatsCache
+- debug commandfiletype using old command names
+- recent activity having the wrong `this.name` value
+- remove unused commands from help 
+
 ## [5.0.1] - 2025-05-25
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/f952678c28d0558f95e0885232417aa3442c5409)</br>
