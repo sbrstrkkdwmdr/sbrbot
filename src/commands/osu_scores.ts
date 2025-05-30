@@ -365,11 +365,11 @@ export class ScoreListCommand extends OsuCommand {
                 break;
             case 'recent':
                 fname = 'recentscoresdata';
-                getid = this.input.id + ''
+                getid = this.input.id + '';
                 break;
             case 'map':
                 fname = 'mapscoresdata';
-                getid = this.input.id + ''
+                getid = this.input.id + '';
                 break;
             case 'firsts':
                 fname = 'firstsdata';
@@ -428,6 +428,34 @@ export class ScoreListCommand extends OsuCommand {
 
         if (tempscores?.hasOwnProperty('error') || !(tempscores[0]?.user?.username || tempscores[0]?.user_id)) {
             await commitError(this?.type, this.input, this.args);
+        }
+
+        if (this.type == 'nochokes') {
+            for (let i = 0; i < tempscores.length; i++) {
+                if (tempscores[i]?.statistics?.miss > 0) {
+                    const curscore = tempscores[i];
+                    curscore.statistics.great += curscore.statistics.miss;
+                    curscore.statistics.miss = 0;
+                    const mOver = helper.tools.calculate.modOverrides(curscore.mods);
+                    curscore.pp = (await helper.tools.performance.calcFullCombo({
+                        mapid: curscore.beatmap_id,
+                        mode: curscore.ruleset_id,
+                        mods: curscore.mods.map(x => x.acronym).join(''),
+                        accuracy: curscore.accuracy,
+                        clockRate: mOver.speed,
+                        stats: curscore.statistics,
+                        mapLastUpdated: new Date(),
+                        customCS: mOver.cs,
+                        customAR: mOver.ar,
+                        customOD: mOver.od,
+                        customHP: mOver.hp
+                    })).pp;
+                    curscore.is_perfect_combo = true;
+                    curscore.legacy_perfect = true;
+                    curscore.max_combo
+                    tempscores[i] = curscore;
+                }
+            }
         }
 
         this.scores = tempscores;

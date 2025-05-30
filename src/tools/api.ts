@@ -266,7 +266,7 @@ export async function dlMap(mapid: number | string, curCall: number, lastUpdated
     const mapFiles = fs.readdirSync(`${helper.vars.path.main}/files/maps`);
     let isFound = false;
     let mapDir = '';
-    if (mapFiles.some(x => x.includes(`${mapid}`)) == false) {
+    if (!mapFiles.some(x => x == mapid + '.osu') || !fs.existsSync(`${helper.vars.path.main}/files/maps/` + mapid + '.osu')) {
         const url = `https://osu.ppy.sh/osu/${mapid}`;
         const thispath = `${helper.vars.path.main}/files/maps/${mapid}.osu`;
         mapDir = thispath;
@@ -279,7 +279,7 @@ export async function dlMap(mapid: number | string, curCall: number, lastUpdated
         await new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve('w');
-            }, 1000);
+            }, 200);
         });
     } else {
         for (let i = 0; i < mapFiles.length; i++) {

@@ -395,7 +395,9 @@ function commandSelect(cmd: string, args: string[]) {
             overrides = {
                 miss: true
             };
+            command = new helper.commands.osu.scores.NoChokes();
         }
+            break;
         case 'osutop': case 'top': case 't': case 'ot': case 'toposu': case 'topo':
             command = new helper.commands.osu.scores.OsuTop();
             break;
@@ -423,7 +425,7 @@ function commandSelect(cmd: string, args: string[]) {
                 command = new helper.commands.osu.scores.OsuTop();
             }
             break;
-        case 'pinned':
+        case 'pinned': case 'pins':
             command = new helper.commands.osu.scores.Pinned();
             break;
         case 'recent': case 'rs': case 'recentscore': case 'r':
