@@ -434,12 +434,9 @@ export class ScoreListCommand extends OsuCommand {
             for (let i = 0; i < tempscores.length; i++) {
                 if (tempscores[i]?.statistics?.miss > 0) {
                     const curscore = tempscores[i];
-                    curscore.statistics.great += curscore.statistics.miss;
-                    curscore.statistics.miss = 0;
                     curscore.pp = null
                     curscore.is_perfect_combo = true;
                     curscore.legacy_perfect = true;
-                    curscore.max_combo
                     tempscores[i] = curscore;
                 }
             }
@@ -507,7 +504,8 @@ export class ScoreListCommand extends OsuCommand {
                 acc: this.args.acc,
                 combo: this.args.combo,
                 miss: this.args.miss,
-                bpm: this.args.bpm
+                bpm: this.args.bpm,
+                isnochoke: this.type == 'nochokes'
             }, this.args.reverse, this.args.detailed, this.args.page, true,
             this.type == 'map' ? 'single_map' : undefined, map ?? undefined
         );
@@ -696,6 +694,7 @@ export class NoChokes extends ScoreListCommand {
         super();
         this.type = 'nochokes';
         this.name = 'NoChokes';
+        this.args.sort = 'pp';
     }
 }
 
