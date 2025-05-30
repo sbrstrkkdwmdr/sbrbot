@@ -6,6 +6,9 @@
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
 
+### Fixed
+- undefined score country rank being visible
+
 ## [5.0.2] - 2025-05-30
 
 [commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/a54ba737303e009e515d56c0474e85af2bee1be5)</br>

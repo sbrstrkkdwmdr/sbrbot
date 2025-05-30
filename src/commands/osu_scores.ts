@@ -434,7 +434,7 @@ export class ScoreListCommand extends OsuCommand {
             for (let i = 0; i < tempscores.length; i++) {
                 if (tempscores[i]?.statistics?.miss > 0) {
                     const curscore = tempscores[i];
-                    curscore.pp = null
+                    curscore.pp = null;
                     curscore.is_perfect_combo = true;
                     curscore.legacy_perfect = true;
                     tempscores[i] = curscore;
@@ -934,8 +934,8 @@ export class SingleScoreCommand extends OsuCommand {
 
         let scorerank =
 
-            this?.score?.rank_global ? ` #${this.score.rank_global} global` : '' +
-                this?.score?.rank_country ? ` #${this.score.rank_country} ${this.osudata.country_code.toUpperCase()} :flag_${this.osudata.country_code.toLowerCase()}:` : ''
+            (this?.score?.rank_global ? ` #${this.score.rank_global} global` : '') +
+                (this?.score?.rank_country ? ` #${this.score.rank_country} ${this.osudata.country_code.toUpperCase()} :flag_${this.osudata.country_code.toLowerCase()}:` : '')
             ;
         if (scorerank != '') {
             scorerank = '| ' + scorerank;
