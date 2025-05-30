@@ -481,6 +481,8 @@ export async function userStatsCache(user: apitypes.UserStatistics[] | apitypes.
                         [mode + 'pp']: curuser.pp,
                         [mode + 'rank']: curuser.global_rank,
                         [mode + 'acc']: curuser.hit_accuracy
+                    }).catch(e => {
+                        console.log(e);
                     });
                 } else {
                     await helper.vars.statsCache.update({
@@ -490,6 +492,8 @@ export async function userStatsCache(user: apitypes.UserStatistics[] | apitypes.
                     },
                         {
                             where: { osuid: curuser.user.id }
+                        }).catch(e => {
+                            console.log(e);
                         });
                 }
             }
@@ -499,11 +503,11 @@ export async function userStatsCache(user: apitypes.UserStatistics[] | apitypes.
             for (let i = 0; i < user.length; i++) {
                 const curuser = user[i];
                 if (!(
-                    curuser.id || 
-                    curuser?.statistics?.pp || 
-                    curuser?.statistics?.global_rank || 
+                    curuser.id ||
+                    curuser?.statistics?.pp ||
+                    curuser?.statistics?.global_rank ||
                     curuser?.statistics?.hit_accuracy
-                    )) {
+                )) {
                     continue;
                 }
                 let findname = await helper.vars.statsCache.findOne({
@@ -539,6 +543,7 @@ export async function userStatsCache(user: apitypes.UserStatistics[] | apitypes.
     try {
         await userStatsCacheFix(mode);
     } catch (error) {
+
     }
 }
 
@@ -575,6 +580,8 @@ export async function userStatsCacheFix(mode: apitypes.GameMode) {
             [`${mode}acc`]: curuser.acc,
         }, {
             where: { osuid: curuser.uid }
+        }).catch(e => {
+            console.log(e);
         });
     }
 }
