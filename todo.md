@@ -3,19 +3,14 @@
 newest-oldest
 
 ## current
+- [ ] reduce code complexity
 - [x] fix changelog (buttons switch commands, etc.)
 - [x] fix commands re-sending api calls when switching pages
 - [x] fix button commands
-- [ ] reduce code complexity
-- [ ] test button and link arg handlers
-- [ ] test all commands
 - [x] test admin cmds
 - [x] test misc cmds
-- [ ] test osu_track cmds
 - [x] test osu_other cmds
 - [x] ensure all commands have `this.name` set
-- [ ] ensure all uses of `errorAndAbort` throw errors instead of returns (when applicable)
-- [ ] ensure all functions that use command name use `this.name` (debug, buttons etc.)
 - [x] use `this.send` instead of `commands.sendMessage` when possible
 - [x] change user == null to `validUser`
 - [x] fix FileNotFound in map commands
