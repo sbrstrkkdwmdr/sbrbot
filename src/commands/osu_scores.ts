@@ -472,6 +472,9 @@ export class ScoreListCommand extends OsuCommand {
             case 'nochokes':
                 return 'Best no-choke scores for ' + this.osudata.username;
             case 'recent':
+                if(this.args.sort == 'pp'){
+                    return 'Recent best scores for ' + this.osudata.username;
+                } 
                 return 'Recent scores for ' + this.osudata.username;
             case 'map':
                 return `\`${map?.beatmapset?.artist} - ${map?.beatmapset?.title} [${map?.version}]\``;

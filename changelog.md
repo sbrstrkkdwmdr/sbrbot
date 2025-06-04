@@ -8,6 +8,7 @@
 
 ### Fixed
 - undefined score country rank being visible
+- `recent best` now says recent best instead of just recent
 
 ## [5.0.2] - 2025-05-30
 
