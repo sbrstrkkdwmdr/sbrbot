@@ -93,9 +93,13 @@ export async function scoreList(
             case 'map_leaderboard':
                 info += `・[${score.user.username}](https://osu.ppy.sh/${score.id ? `scores/${score.id}` : `u/${score.user_id}`})`;
                 break;
-            case 'single_map':
-                info += `・[${osumodcalc.OrderMods(score.mods.map(x => x.acronym).join('')).string + modadjustments}](https://osu.ppy.sh/scores/${score.id})`;
-                break;
+            case 'single_map': {
+                let t = osumodcalc.OrderMods(score.mods.map(x => x.acronym).join('')).string + modadjustments;
+                if(t==''){
+                    t = 'NM'
+                }
+                info += `・[${t}](https://osu.ppy.sh/scores/${score.id})`;
+            } break;
             default:
                 info += `・[${score.beatmapset.title} [${(overrideMap ?? score.beatmap).version}]](https://osu.ppy.sh/${score.id ? `scores/${score.id}` : `b/${(overrideMap ?? score.beatmap).id}`})`;
                 break;
@@ -109,7 +113,7 @@ export async function scoreList(
 ${score.passed ? helper.vars.emojis.grades[score.rank] : helper.vars.emojis.grades.F + `(${helper.vars.emojis.grades[score.rank]} if pass)`} | \`${helper.tools.calculate.numberShorthand(helper.tools.other.getTotalScore(score))}\` | ${tempScore.mods.length > 0 && preset != 'single_map' ? ' **' + osumodcalc.OrderMods(tempScore.mods.map(x => x.acronym).join('')).string + modadjustments + '**' : ''} `;
         if (filter.isnochoke && score.statistics.miss > 0) {
             let rm = score.statistics.miss;
-            score.statistics.miss = 0
+            score.statistics.miss = 0;
             let na = osumodcalc.calcgrade(score.statistics.great, score.statistics.ok ?? 0, score.statistics.meh ?? 0, 0).accuracy;
             info +=
                 `| **Removed ${rm}❌**\n\`${returnHits(score.statistics, score.ruleset_id).short}\` | ${combo} | ${(score.accuracy * 100).toFixed(2)}% ->  **${na.toFixed(2)}%**`;
