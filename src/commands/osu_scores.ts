@@ -472,9 +472,9 @@ export class ScoreListCommand extends OsuCommand {
             case 'nochokes':
                 return 'Best no-choke scores for ' + this.osudata.username;
             case 'recent':
-                if(this.args.sort == 'pp'){
+                if (this.args.sort == 'pp') {
                     return 'Recent best scores for ' + this.osudata.username;
-                } 
+                }
                 return 'Recent scores for ' + this.osudata.username;
             case 'map':
                 return `\`${map?.beatmapset?.artist} - ${map?.beatmapset?.title} [${map?.version}]\``;
@@ -485,11 +485,23 @@ export class ScoreListCommand extends OsuCommand {
         }
     }
     protected async list(map?: apitypes.Beatmap) {
+        let seturl = '';
+        switch (this.type) {
+            case 'recent':
+                seturl = `https://osu.ppy.sh/users/${this.osudata.id}/${osumodcalc.ModeIntToName(this.scores?.[0]?.ruleset_id)}#historical`;
+                break;
+            case 'map':
+                seturl = `https://osu.ppy.sh/b/${this.map.id}`;
+                break;
+            default:
+                seturl = `https://osu.ppy.sh/users/${this.osudata.id}/${osumodcalc.ModeIntToName(this.scores?.[0]?.ruleset_id)}#top_ranks`;
+                break;
+        }
         const scoresEmbed = new Discord.EmbedBuilder()
             .setColor(helper.vars.colours.embedColour.scorelist.dec)
             .setTitle(this.toName(map))
             .setThumbnail(`${this.osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`)
-            .setURL(`https://osu.ppy.sh/users/${this.osudata.id}/${osumodcalc.ModeIntToName(this.scores?.[0]?.ruleset_id)}#top_ranks`);
+            .setURL(seturl);
         helper.tools.formatter.userAuthor(this.osudata, scoresEmbed);
 
         const scoresFormat = await helper.tools.formatter.scoreList(this.scores, this.args.sort,
@@ -938,7 +950,7 @@ export class SingleScoreCommand extends OsuCommand {
         let scorerank =
 
             (this?.score?.rank_global ? ` #${this.score.rank_global} global` : '') +
-                (this?.score?.rank_country ? ` #${this.score.rank_country} ${this.osudata.country_code.toUpperCase()} :flag_${this.osudata.country_code.toLowerCase()}:` : '')
+            (this?.score?.rank_country ? ` #${this.score.rank_country} ${this.osudata.country_code.toUpperCase()} :flag_${this.osudata.country_code.toLowerCase()}:` : '')
             ;
         if (scorerank != '') {
             scorerank = '| ' + scorerank;

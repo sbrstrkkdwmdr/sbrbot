@@ -10,6 +10,7 @@
 - undefined score country rank being visible
 - `recent best` now says recent best instead of just recent
 - NM scores not having a name in `mapscores`
+- fix scorelist URL links
 
 ## [5.0.2] - 2025-05-30
 
