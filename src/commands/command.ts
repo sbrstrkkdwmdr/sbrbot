@@ -8,7 +8,11 @@ import * as apitypes from '../types/osuapi.js';
 import * as tooltypes from '../types/tools.js';
 
 export class Command {
-    protected name: string;
+    #name: string;
+    protected set name(input: string) {
+        this.#name = helper.tools.formatter.toCapital(input);
+    }
+    protected get name() { return this.#name; }
     protected commanduser: Discord.User | Discord.APIUser;
     protected ctn: {
         content?: string,
