@@ -343,7 +343,12 @@ export class Help extends Command {
         if (this.input.buttonType == 'Detailed' && curembed.description.includes('Prefix is')) {
             this.args.command = 'list';
         }
-
+    }
+    getOverrides(): void {
+        if (!this.input.overrides) return;
+        if (this.input.overrides?.ex != null) {
+            this.args.command = this.input?.overrides?.ex + '';
+        }
     }
     async execute() {
         await this.setArgs();
