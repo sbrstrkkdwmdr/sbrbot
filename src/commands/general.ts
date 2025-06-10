@@ -352,6 +352,7 @@ export class Help extends Command {
     }
     async execute() {
         await this.setParams();
+        this.getOverrides();
         this.logInput();
         // do stuff
         if (this.params.rdm == true) {
@@ -382,35 +383,35 @@ export class Help extends Command {
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji('📜' as Discord.APIMessageComponentEmoji)
                     .setLabel('General')
-                    .setValue('CategoryMenu-gen'),
+                    .setValue('categorygen'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(helper.vars.emojis.gamemodes.standard as Discord.APIMessageComponentEmoji)
                     .setLabel('osu! (profiles)')
-                    .setValue('CategoryMenu-osu_profile'),
+                    .setValue('categoryosu_profile'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(helper.vars.emojis.gamemodes.standard as Discord.APIMessageComponentEmoji)
                     .setLabel('osu! (scores)')
-                    .setValue('CategoryMenu-osu_scores'),
+                    .setValue('categoryosu_scores'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(helper.vars.emojis.gamemodes.standard as Discord.APIMessageComponentEmoji)
                     .setLabel('osu! (maps)')
-                    .setValue('CategoryMenu-osu_map'),
+                    .setValue('categoryosu_map'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(helper.vars.emojis.gamemodes.standard as Discord.APIMessageComponentEmoji)
                     .setLabel('osu! (track)')
-                    .setValue('CategoryMenu-osu_track'),
+                    .setValue('categoryosu_track'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(helper.vars.emojis.gamemodes.standard as Discord.APIMessageComponentEmoji)
                     .setLabel('osu! (other)')
-                    .setValue('CategoryMenu-osu_other'),
+                    .setValue('categoryosu_other'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji('🤖' as Discord.APIMessageComponentEmoji)
                     .setLabel('Admin')
-                    .setValue('CategoryMenu-admin'),
+                    .setValue('categoryadmin'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji('❓' as Discord.APIMessageComponentEmoji)
                     .setLabel('Misc')
-                    .setValue('CategoryMenu-misc'),
+                    .setValue('categorymisc'),
             );
         this.ctn.components.push(
             new Discord.ActionRowBuilder()
@@ -590,7 +591,6 @@ export class Help extends Command {
         return helper.vars.commandData.cmds[fullyrando].name;
     }
     categorise(type: string) {
-        console.log(type);
         let desctxt = '';
         const cmds = helper.tools.commands.getCommands(type);
         for (let i = 0; i < cmds.length; i++) {
