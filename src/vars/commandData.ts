@@ -252,7 +252,7 @@ export const cmds: bottypes.commandInfo[] = [
     },
     {
         name: 'Convert',
-        description: ' [use this instead](https://sbrstrkkdwmdr.github.io/tools/convert)',
+        description: 'DEPRECATED. [use this instead](https://sbrstrkkdwmdr.github.io/tools/convert)',
         usage: 'convert',
         category: 'general',
         examples: [
@@ -513,7 +513,7 @@ export const cmds: bottypes.commandInfo[] = [
         args: scoreListCommandOptions
     },
     {
-        name: 'lb',
+        name: 'Leaderboard',
         description: 'Shows the osu! rankings of a server.',
         usage: 'lb [id] [mode]',
         category: 'osu_other',
