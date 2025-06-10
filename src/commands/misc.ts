@@ -4,13 +4,13 @@ import * as bottypes from '../types/bot.js';
 import { Command } from './command.js';
 
 export class _8Ball extends Command {
-    declare protected args: {};
+    declare protected params: {};
     constructor() {
         super();
         this.name = '8Ball';
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput(true);
         // do stuff
 
@@ -35,13 +35,13 @@ export class _8Ball extends Command {
 }
 
 export class CoinFlip extends Command {
-    declare protected args: {};
+    declare protected params: {};
     constructor() {
         super();
         this.name = 'CoinFlip';
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput(true);
         // do stuff
 
@@ -60,40 +60,40 @@ export class CoinFlip extends Command {
 }
 type giftype = 'slap' | 'punch' | 'kiss' | 'hug' | 'lick' | 'pet';
 export class Gif extends Command {
-    declare protected args: {
+    declare protected params: {
         target: Discord.User;
         type: giftype;
     };
     constructor() {
         super();
         this.name = 'Gif';
-        this.args = {
+        this.params = {
             target: null,
             type: null,
         };
     }
-    async setArgsMsg() {
-        this.args.target = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first() : this.input.message.author;
+    async setParamsMsg() {
+        this.params.target = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first() : this.input.message.author;
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.target = interaction.options.getUser('target');
+        this.params.target = interaction.options.getUser('target');
     }
     getOverrides(): void {
         if (!this.input.overrides) return;
         if (this.input?.overrides?.ex != null) {
-            this.args.type = this.input?.overrides?.ex as giftype;
+            this.params.type = this.input?.overrides?.ex as giftype;
         }
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
 
         let gifSelection = [helper.vars.defaults.images.any.url];
         let baseString = 'null';
-        const self = this.commanduser.id == this.args.target.id;
-        switch (this.args.type) {
+        const self = this.commanduser.id == this.params.target.id;
+        switch (this.params.type) {
             case 'hug': {
                 gifSelection = helper.vars.gif.hug;
                 baseString = self ?
@@ -138,7 +138,7 @@ export class Gif extends Command {
                 break;
         }
 
-        const gifSearch = await helper.tools.api.getGif(this.args.type);
+        const gifSearch = await helper.tools.api.getGif(this.params.type);
         if (gifSearch?.data?.results?.length > 1) {
             gifSelection = gifSearch?.data?.results?.map(x => x.media_formats.gif.url);
         }
@@ -148,7 +148,7 @@ export class Gif extends Command {
         }
 
         const embed = new Discord.EmbedBuilder()
-            .setTitle(baseString.replace('user', this.commanduser.username).replace('target', this.args.target.username))
+            .setTitle(baseString.replace('user', this.commanduser.username).replace('target', this.params.target.username))
             .setImage(gifSelection[Math.floor(Math.random() * gifSelection.length)]);
 
         this.ctn.embeds = [embed];
@@ -157,28 +157,28 @@ export class Gif extends Command {
 
 }
 export class Janken extends Command {
-    declare protected args: {
+    declare protected params: {
         userchoice: string;
     };
     constructor() {
         super();
         this.name = 'Janken';
-        this.args = {
+        this.params = {
             userchoice: ''
         };
     }
-    async setArgsMsg() {
-        this.args.userchoice = this.input.args[0];
+    async setParamsMsg() {
+        this.params.userchoice = this.input.args[0];
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.userchoice = interaction.options.getString('choice');
+        this.params.userchoice = interaction.options.getString('choice');
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
-        const real = helper.tools.game.jankenConvert(this.args.userchoice);
+        const real = helper.tools.game.jankenConvert(this.params.userchoice);
         if (real == 'INVALID') {
             this.voidcontent();
             this.ctn.content = 'Please input a valid argument';
@@ -236,45 +236,45 @@ export class Janken extends Command {
     }
 }
 export class Roll extends Command {
-    declare protected args: {
+    declare protected params: {
         maxNum: number;
         minNum: number;
     };
     constructor() {
         super();
         this.name = 'Roll';
-        this.args = {
+        this.params = {
             maxNum: 100,
             minNum: 0,
         };
     }
-    async setArgsMsg() {
-        this.args.maxNum = parseInt(this.input.args[0]);
-        this.args.minNum = parseInt(this.input.args[1]);
-        if (isNaN(this.args.maxNum) || !this.input.args[0]) {
-            this.args.maxNum = 100;
+    async setParamsMsg() {
+        this.params.maxNum = parseInt(this.input.args[0]);
+        this.params.minNum = parseInt(this.input.args[1]);
+        if (isNaN(this.params.maxNum) || !this.input.args[0]) {
+            this.params.maxNum = 100;
         }
-        if (isNaN(this.args.minNum) || !this.input.args[1]) {
-            this.args.minNum = 0;
+        if (isNaN(this.params.minNum) || !this.input.args[1]) {
+            this.params.minNum = 0;
         }
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.maxNum = interaction.options.getNumber('max') ?? this.args.maxNum;
-        this.args.minNum = interaction.options.getNumber('min') ?? this.args.minNum;
+        this.params.maxNum = interaction.options.getNumber('max') ?? this.params.maxNum;
+        this.params.minNum = interaction.options.getNumber('min') ?? this.params.minNum;
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
 
-        if (isNaN(this.args.maxNum)) {
-            this.args.maxNum = 100;
+        if (isNaN(this.params.maxNum)) {
+            this.params.maxNum = 100;
         }
-        if (isNaN(this.args.minNum)) {
-            this.args.minNum = 0;
+        if (isNaN(this.params.minNum)) {
+            this.params.minNum = 0;
         }
-        const eq = Math.floor(Math.random() * (this.args.maxNum - this.args.minNum)) + this.args.minNum;
+        const eq = Math.floor(Math.random() * (this.params.maxNum - this.params.minNum)) + this.params.minNum;
         this.ctn.content = eq + '';
         this.send();
     }

@@ -12,7 +12,7 @@ import * as tooltypes from '../types/tools.js';
 import { OsuCommand } from './command.js';
 
 export class ScoreListCommand extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         user: string;
         searchid: string;
         mode: apitypes.GameMode,
@@ -41,7 +41,7 @@ export class ScoreListCommand extends OsuCommand {
     protected type: 'osutop' | 'nochokes' | 'recent' | 'map' | 'firsts' | 'pinned';
     constructor() {
         super();
-        this.args = {
+        this.params = {
             user: null,
             searchid: null,
             page: 0,
@@ -68,186 +68,186 @@ export class ScoreListCommand extends OsuCommand {
             mapid: null,
         };
     }
-    async setArgsMsg() {
-        this.args.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
+    async setParamsMsg() {
+        this.params.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
         if (this.input.args.includes('-parse')) {
-            this.args.parseScore = true;
+            this.params.parseScore = true;
             const temp = helper.tools.commands.parseArg(this.input.args, '-parse', 'number', 1, null, true);
-            this.args.parseId = temp.value;
+            this.params.parseId = temp.value;
             this.input.args = temp.newArgs;
         }
 
         const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, this.input.args, true, 'number', false, true);
         if (pageArgFinder.found) {
-            this.args.page = pageArgFinder.output;
+            this.params.page = pageArgFinder.output;
             this.input.args = pageArgFinder.args;
         }
         const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, this.input.args, false, null, false, false);
         if (detailArgFinder.found) {
-            this.args.detailed = 2;
+            this.params.detailed = 2;
             this.input.args = detailArgFinder.args;
         }
         const lessDetailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.compress, this.input.args, false, null, false, false);
         if (lessDetailArgFinder.found) {
-            this.args.detailed = 0;
+            this.params.detailed = 0;
             this.input.args = lessDetailArgFinder.args;
         }
         {
             const temp = await helper.tools.commands.parseArgsMode(this.input);
             this.input.args = temp.args;
-            this.args.mode = temp.mode;
+            this.params.mode = temp.mode;
         }
         const reverseArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['rev', 'reverse',]), this.input.args, false, null, false, false);
         if (reverseArgFinder.found) {
-            this.args.reverse = true;
+            this.params.reverse = true;
             this.input.args = reverseArgFinder.args;
         }
         if (this.input.args.includes('-mods')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-mods', 'string', this.args.modsInclude, false);
-            this.args.modsInclude = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-mods', 'string', this.params.modsInclude, false);
+            this.params.modsInclude = temp.value;
             this.input.args = temp.newArgs;
         }
         const mxmodArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['mx', 'modx',]), this.input.args, true, 'string', false, false);
         if (mxmodArgFinder.found) {
-            this.args.modsExact = mxmodArgFinder.output;
+            this.params.modsExact = mxmodArgFinder.output;
             this.input.args = mxmodArgFinder.args;
         }
         if (this.input.args.includes('-exmod')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-exmod', 'string', this.args.modsExclude, false);
-            this.args.modsExclude = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-exmod', 'string', this.params.modsExclude, false);
+            this.params.modsExclude = temp.value;
             this.input.args = temp.newArgs;
         }
         if (this.input.args.includes('-me')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-me', 'string', this.args.modsExclude, false);
-            this.args.modsExclude = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-me', 'string', this.params.modsExclude, false);
+            this.params.modsExclude = temp.value;
             this.input.args = temp.newArgs;
         }
         const exmodArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['me', 'exmod',]), this.input.args, true, 'string', false, false);
         if (exmodArgFinder.found) {
-            this.args.modsExclude = exmodArgFinder.output;
+            this.params.modsExclude = exmodArgFinder.output;
             this.input.args = exmodArgFinder.args;
         }
 
         if (this.input.args.includes('-sort')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-sort', 'string', this.args.sort, false);
-            this.args.sort = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-sort', 'string', this.params.sort, false);
+            this.params.sort = temp.value;
             this.input.args = temp.newArgs;
         }
         const recentArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['r', 'recent',]), this.input.args, false, null, false, false);
         if (recentArgFinder.found) {
-            this.args.sort = 'recent';
+            this.params.sort = 'recent';
             this.input.args = recentArgFinder.args;
         }
         if (this.input.args.includes('-performance')) {
-            this.args.sort = 'pp';
+            this.params.sort = 'pp';
             this.input.args.splice(this.input.args.indexOf('-performance'), 1);
         }
         if (this.input.args.includes('-pp')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-pp', 'string', this.args.pp, false);
-            this.args.pp = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-pp', 'string', this.params.pp, false);
+            this.params.pp = temp.value;
             this.input.args = temp.newArgs;
         }
         if (this.input.args.includes('-score')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-score', 'string', this.args.score, false);
-            this.args.score = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-score', 'string', this.params.score, false);
+            this.params.score = temp.value;
             this.input.args = temp.newArgs;
         }
         if (this.input.args.includes('-acc')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-acc', 'string', this.args.acc, false);
-            this.args.acc = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-acc', 'string', this.params.acc, false);
+            this.params.acc = temp.value;
             this.input.args = temp.newArgs;
         }
         const filterComboArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['combo', 'maxcombo']), this.input.args, true, 'string', false, true);
         if (filterComboArgFinder.found) {
-            this.args.combo = filterComboArgFinder.output;
+            this.params.combo = filterComboArgFinder.output;
             this.input.args = filterComboArgFinder.args;
         }
         const filterMissArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['miss', 'misses']), this.input.args, true, 'string', false, true);
         if (filterMissArgFinder.found) {
-            this.args.miss = filterMissArgFinder.output;
+            this.params.miss = filterMissArgFinder.output;
             this.input.args = filterMissArgFinder.args;
         }
         const fcArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['fc', 'fullcombo',]), this.input.args, false, null, false, false);
         if (fcArgFinder.found) {
-            this.args.miss = '0';
+            this.params.miss = '0';
             this.input.args = fcArgFinder.args;
         }
         const filterRankArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['rank', 'grade', 'letter']), this.input.args, true, 'string', false, false);
         if (filterRankArgFinder.found) {
-            this.args.filterRank = filterRankArgFinder.output;
+            this.params.filterRank = filterRankArgFinder.output;
             this.input.args = filterRankArgFinder.args;
         }
         if (this.input.args.includes('-bpm')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-bpm', 'string', this.args.bpm, false);
-            this.args.bpm = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-bpm', 'string', this.params.bpm, false);
+            this.params.bpm = temp.value;
             this.input.args = temp.newArgs;
         }
 
         const titleArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.filterTitle, this.input.args, true, 'string', true, false);
         if (titleArgFinder.found) {
-            this.args.filterTitle = titleArgFinder.output;
+            this.params.filterTitle = titleArgFinder.output;
             this.input.args = titleArgFinder.args;
         }
         const mapperArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.filterCreator, this.input.args, true, 'string', true, false);
         if (mapperArgFinder.found) {
-            this.args.filteredMapper = mapperArgFinder.output;
+            this.params.filteredMapper = mapperArgFinder.output;
             this.input.args = mapperArgFinder.args;
         }
         const artistArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.filterArtist, this.input.args, true, 'string', true, false);
         if (artistArgFinder.found) {
-            this.args.filterArtist = artistArgFinder.output;
+            this.params.filterArtist = artistArgFinder.output;
             this.input.args = artistArgFinder.args;
         }
         const versionArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.filterVersion, this.input.args, true, 'string', true, false);
         if (versionArgFinder.found) {
-            this.args.filterDifficulty = versionArgFinder.output;
+            this.params.filterDifficulty = versionArgFinder.output;
             this.input.args = versionArgFinder.args;
         }
         this.input.args = helper.tools.commands.cleanArgs(this.input.args);
         if (this.input.args.join(' ').includes('+')) {
-            this.args.modsInclude = this.input.args.join(' ').split('+')[1];
-            this.args.modsInclude.includes(' ') ? this.args.modsInclude = this.args.modsInclude.split(' ')[0] : null;
-            this.input.args = this.input.args.join(' ').replace('+', '').replace(this.args.modsInclude, '').split(' ');
+            this.params.modsInclude = this.input.args.join(' ').split('+')[1];
+            this.params.modsInclude.includes(' ') ? this.params.modsInclude = this.params.modsInclude.split(' ')[0] : null;
+            this.input.args = this.input.args.join(' ').replace('+', '').replace(this.params.modsInclude, '').split(' ');
         }
 
-        await this.argsMsgExtra();
+        await this.paramsMsgExtra();
 
         const usertemp = helper.tools.commands.fetchUser(this.input.args);
-        this.args.user = usertemp.id;
-        if (usertemp.mode && !this.args.mode) {
-            this.args.mode = usertemp.mode;
+        this.params.user = usertemp.id;
+        if (usertemp.mode && !this.params.mode) {
+            this.params.mode = usertemp.mode;
         }
-        // if (!this.args.user || this.args.user.includes(this.args.searchid)) {
-        //     this.args.user = null;
+        // if (!this.params.user || this.params.user.includes(this.params.searchid)) {
+        //     this.params.user = null;
         // }
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         let interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
 
-        this.args.searchid = interaction?.member?.user?.id ?? interaction?.user.id;
-        this.args.user = interaction.options.getString('user') ?? undefined;
-        this.args.page = interaction.options.getInteger('page') ?? 0;
-        this.args.detailed = interaction.options.getBoolean('detailed') ? 1 : 0;
-        this.args.sort = interaction.options.getString('sort') as "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss";
-        this.args.reverse = interaction.options.getBoolean('reverse') ?? false;
-        this.args.mode = (interaction.options.getString('mode') ?? 'osu') as apitypes.GameMode;
-        this.args.filteredMapper = interaction.options.getString('mapper') ?? null;
-        this.args.filterTitle = interaction.options.getString('filter') ?? null;
-        this.args.parseId = interaction.options.getInteger('parse') ?? null;
-        this.args.parseScore = this.args.parseId != null ? true : false;
-        this.args.modsInclude = interaction.options.getString('mods') ?? null;
-        this.args.modsExact = interaction.options.getString('modsExact') ?? null;
-        this.args.modsExclude = interaction.options.getString('modsExclude') ?? null;
-        this.args.filterRank = interaction.options.getString('filterRank') ? osumodcalc.checkGrade(interaction.options.getString('filterRank')) : null;
-        this.args.pp = interaction.options.getString('pp') ?? null;
-        this.args.score = interaction.options.getString('score') ?? null;
-        this.args.acc = interaction.options.getString('acc') ?? null;
-        this.args.combo = interaction.options.getString('combo') ?? null;
-        this.args.miss = interaction.options.getString('miss') ?? null;
-        this.args.bpm = interaction.options.getString('bpm') ?? null;
-        await this.argsInteractExtra();
+        this.params.searchid = interaction?.member?.user?.id ?? interaction?.user.id;
+        this.params.user = interaction.options.getString('user') ?? undefined;
+        this.params.page = interaction.options.getInteger('page') ?? 0;
+        this.params.detailed = interaction.options.getBoolean('detailed') ? 1 : 0;
+        this.params.sort = interaction.options.getString('sort') as "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss";
+        this.params.reverse = interaction.options.getBoolean('reverse') ?? false;
+        this.params.mode = (interaction.options.getString('mode') ?? 'osu') as apitypes.GameMode;
+        this.params.filteredMapper = interaction.options.getString('mapper') ?? null;
+        this.params.filterTitle = interaction.options.getString('filter') ?? null;
+        this.params.parseId = interaction.options.getInteger('parse') ?? null;
+        this.params.parseScore = this.params.parseId != null ? true : false;
+        this.params.modsInclude = interaction.options.getString('mods') ?? null;
+        this.params.modsExact = interaction.options.getString('modsExact') ?? null;
+        this.params.modsExclude = interaction.options.getString('modsExclude') ?? null;
+        this.params.filterRank = interaction.options.getString('filterRank') ? osumodcalc.checkGrade(interaction.options.getString('filterRank')) : null;
+        this.params.pp = interaction.options.getString('pp') ?? null;
+        this.params.score = interaction.options.getString('score') ?? null;
+        this.params.acc = interaction.options.getString('acc') ?? null;
+        this.params.combo = interaction.options.getString('combo') ?? null;
+        this.params.miss = interaction.options.getString('miss') ?? null;
+        this.params.bpm = interaction.options.getString('bpm') ?? null;
+        await this.paramsInteractExtra();
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
         let interaction = (this.input.interaction as Discord.ButtonInteraction);
         if (!this.input.message.embeds[0]) return;
 
@@ -262,86 +262,86 @@ export class ScoreListCommand extends OsuCommand {
             return;
         }
 
-        this.args.user = temp?.user;
-        this.args.searchid = temp?.searchid;
-        this.args.page = temp?.page;
-        this.args.mode = temp?.mode;
-        this.args.filteredMapper = temp?.filterMapper;
-        this.args.modsInclude = temp?.modsInclude;
-        this.args.modsExact = temp?.modsExact;
-        this.args.modsExclude = temp?.modsExclude;
-        this.args.filterTitle = temp?.filterTitle;
-        this.args.filterRank = temp?.filterRank;
-        this.args.parseId = null;
-        this.args.parseScore = null;
-        this.args.pp = temp?.filterPp;
-        this.args.score = temp?.filterScore;
-        this.args.acc = temp?.filterAcc;
-        this.args.combo = temp?.filterCombo;
-        this.args.miss = temp?.filterMiss;
-        this.args.bpm = temp?.filterBpm;
-        this.args.sort = temp?.sort as any;
-        this.args.reverse = temp?.reverse;
+        this.params.user = temp?.user;
+        this.params.searchid = temp?.searchid;
+        this.params.page = temp?.page;
+        this.params.mode = temp?.mode;
+        this.params.filteredMapper = temp?.filterMapper;
+        this.params.modsInclude = temp?.modsInclude;
+        this.params.modsExact = temp?.modsExact;
+        this.params.modsExclude = temp?.modsExclude;
+        this.params.filterTitle = temp?.filterTitle;
+        this.params.filterRank = temp?.filterRank;
+        this.params.parseId = null;
+        this.params.parseScore = null;
+        this.params.pp = temp?.filterPp;
+        this.params.score = temp?.filterScore;
+        this.params.acc = temp?.filterAcc;
+        this.params.combo = temp?.filterCombo;
+        this.params.miss = temp?.filterMiss;
+        this.params.bpm = temp?.filterBpm;
+        this.params.sort = temp?.sort as any;
+        this.params.reverse = temp?.reverse;
 
         switch (this.input.buttonType) {
             case 'BigLeftArrow':
-                this.args.page = 1;
+                this.params.page = 1;
                 break;
             case 'LeftArrow':
-                this.args.page -= 1;
+                this.params.page -= 1;
                 break;
             case 'RightArrow':
-                this.args.page += 1;
+                this.params.page += 1;
                 break;
             case 'BigRightArrow':
-                this.args.page = temp?.page;
+                this.params.page = temp?.page;
                 break;
         }
 
         switch (this.input.buttonType) {
             case 'Detail0':
-                this.args.detailed = 0;
+                this.params.detailed = 0;
                 break;
             case 'Detail1':
-                this.args.detailed = 1;
+                this.params.detailed = 1;
                 break;
             case 'Detail2':
-                this.args.detailed = 2;
+                this.params.detailed = 2;
                 break;
             default:
                 if (this.input.message.embeds[0].footer.text.includes('LE')) {
-                    this.args.detailed = 2;
+                    this.params.detailed = 2;
                 }
                 if (this.input.message.embeds[0].footer.text.includes('LC')) {
-                    this.args.detailed = 0;
+                    this.params.detailed = 0;
                 }
                 break;
         }
-        await this.argsButtonsExtra();
+        await this.paramsButtonsExtra();
     }
-    argsMsgExtra() { };
-    argsInteractExtra() { };
-    argsButtonsExtra() { };
+    paramsMsgExtra() { };
+    paramsInteractExtra() { };
+    paramsButtonsExtra() { };
 
     getOverrides(): void {
         if (!this.input.overrides) return;
         if (this.input.overrides.page != null) {
-            this.args.page = this.input.overrides.page;
+            this.params.page = this.input.overrides.page;
         }
         if (this.input.overrides.sort != null) {
-            this.args.sort = this.input.overrides.sort as "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss";
+            this.params.sort = this.input.overrides.sort as "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss";
         }
         if (this.input.overrides.reverse != null) {
-            this.args.reverse = this.input.overrides.reverse;
+            this.params.reverse = this.input.overrides.reverse;
         }
         if (this.input.overrides.commandAs) {
             this.input.type = this.input.overrides.commandAs;
         }
         if (this.input.overrides.user) {
-            this.args.user = this.input.overrides.user;
+            this.params.user = this.input.overrides.user;
         }
         if (this.input.overrides.mode) {
-            this.args.mode = this.input.overrides.mode;
+            this.params.mode = this.input.overrides.mode;
         }
     }
 
@@ -381,7 +381,7 @@ export class ScoreListCommand extends OsuCommand {
         }
         if (this.type == 'map') {
             try {
-                this.map = await this.getMap(+this.args.mapid);
+                this.map = await this.getMap(+this.params.mapid);
             } catch (e) {
                 return;
             }
@@ -395,26 +395,26 @@ export class ScoreListCommand extends OsuCommand {
         } else {
             switch (this.type) {
                 case 'osutop': case 'nochokes':
-                    req = await helper.tools.api.getScoresBest(this.osudata.id, this.args.mode, []);
+                    req = await helper.tools.api.getScoresBest(this.osudata.id, this.params.mode, []);
                     break;
                 case 'recent':
-                    req = await helper.tools.api.getScoresRecent(this.osudata.id, this.args.mode, [`include_fails=1`]);
+                    req = await helper.tools.api.getScoresRecent(this.osudata.id, this.params.mode, [`include_fails=1`]);
                     break;
                 case 'map': {
-                    req = await helper.tools.api.getUserMapScores(this.osudata.id, this.args.mapid as number, []);
+                    req = await helper.tools.api.getUserMapScores(this.osudata.id, this.params.mapid as number, []);
                 }
                     break;
                 case 'firsts':
-                    req = await helper.tools.api.getScoresFirst(this.osudata.id, this.args.mode, []);
+                    req = await helper.tools.api.getScoresFirst(this.osudata.id, this.params.mode, []);
                     break;
                 case 'pinned':
-                    req = await helper.tools.api.getScoresPinned(this.osudata.id, this.args.mode, []);
+                    req = await helper.tools.api.getScoresPinned(this.osudata.id, this.params.mode, []);
                     break;
             }
         }
 
         if (req?.error) {
-            await commitError(this.type, this.input, this.args);
+            await commitError(this.type, this.input, this.params);
         }
 
         const tempscores: apitypes.Score[] & apitypes.Error =
@@ -427,7 +427,7 @@ export class ScoreListCommand extends OsuCommand {
         helper.tools.data.storeFile(req, getid, fname);
 
         if (tempscores?.hasOwnProperty('error') || !(tempscores[0]?.user?.username || tempscores[0]?.user_id)) {
-            await commitError(this?.type, this.input, this.args);
+            await commitError(this?.type, this.input, this.params);
         }
 
         if (this.type == 'nochokes') {
@@ -472,7 +472,7 @@ export class ScoreListCommand extends OsuCommand {
             case 'nochokes':
                 return 'Best no-choke scores for ' + this.osudata.username;
             case 'recent':
-                if (this.args.sort == 'pp') {
+                if (this.params.sort == 'pp') {
                     return 'Recent best scores for ' + this.osudata.username;
                 }
                 return 'Recent scores for ' + this.osudata.username;
@@ -504,51 +504,51 @@ export class ScoreListCommand extends OsuCommand {
             .setURL(seturl);
         helper.tools.formatter.userAuthor(this.osudata, scoresEmbed);
 
-        const scoresFormat = await helper.tools.formatter.scoreList(this.scores, this.args.sort,
+        const scoresFormat = await helper.tools.formatter.scoreList(this.scores, this.params.sort,
             {
-                mapper: this.args.filteredMapper,
-                modsInclude: this.args.modsInclude,
-                title: this.args.filterTitle,
-                artist: this.args.filterArtist,
-                version: this.args.filterDifficulty,
-                rank: this.args.filterRank,
-                modsExact: this.args.modsExact,
-                modsExclude: this.args.modsExclude,
-                pp: this.args.pp,
-                score: this.args.score,
-                acc: this.args.acc,
-                combo: this.args.combo,
-                miss: this.args.miss,
-                bpm: this.args.bpm,
+                mapper: this.params.filteredMapper,
+                modsInclude: this.params.modsInclude,
+                title: this.params.filterTitle,
+                artist: this.params.filterArtist,
+                version: this.params.filterDifficulty,
+                rank: this.params.filterRank,
+                modsExact: this.params.modsExact,
+                modsExclude: this.params.modsExclude,
+                pp: this.params.pp,
+                score: this.params.score,
+                acc: this.params.acc,
+                combo: this.params.combo,
+                miss: this.params.miss,
+                bpm: this.params.bpm,
                 isnochoke: this.type == 'nochokes'
-            }, this.args.reverse, this.args.detailed, this.args.page, true,
+            }, this.params.reverse, this.params.detailed, this.params.page, true,
             this.type == 'map' ? 'single_map' : undefined, map ?? undefined
         );
 
         helper.tools.commands.storeButtonArgs(this.input.id + '', {
-            user: this.args.user,
-            searchid: this.args.searchid,
-            page: this.args.page,
-            mode: this.args.mode,
-            filterMapper: this.args.filteredMapper,
-            modsInclude: this.args.modsInclude,
-            modsExact: this.args.modsExact,
-            modsExclude: this.args.modsExclude,
-            filterTitle: this.args.filterTitle,
-            filterRank: this.args.filterRank,
-            filterPp: this.args.pp,
-            filterScore: this.args.score,
-            filterAcc: this.args.acc,
-            filterCombo: this.args.combo,
-            filterMiss: this.args.miss,
-            filterBpm: this.args.bpm,
-            sort: this.args.sort,
-            reverse: this.args.reverse,
+            user: this.params.user,
+            searchid: this.params.searchid,
+            page: this.params.page,
+            mode: this.params.mode,
+            filterMapper: this.params.filteredMapper,
+            modsInclude: this.params.modsInclude,
+            modsExact: this.params.modsExact,
+            modsExclude: this.params.modsExclude,
+            filterTitle: this.params.filterTitle,
+            filterRank: this.params.filterRank,
+            filterPp: this.params.pp,
+            filterScore: this.params.score,
+            filterAcc: this.params.acc,
+            filterCombo: this.params.combo,
+            filterMiss: this.params.miss,
+            filterBpm: this.params.bpm,
+            sort: this.params.sort,
+            reverse: this.params.reverse,
             ...{ maxPage: scoresFormat.maxPage }
         });
 
         scoresEmbed.setFooter({
-            text: `${scoresFormat.curPage}/${scoresFormat.maxPage} | ${this.args.mode ?? osumodcalc.ModeIntToName(this.scores?.[0]?.ruleset_id)}`
+            text: `${scoresFormat.curPage}/${scoresFormat.maxPage} | ${this.params.mode ?? osumodcalc.ModeIntToName(this.scores?.[0]?.ruleset_id)}`
         });
         if (scoresFormat.text.includes('ERROR')) {
             scoresEmbed.setDescription('**ERROR**\nNo scores found');
@@ -583,24 +583,24 @@ export class ScoreListCommand extends OsuCommand {
     }
 
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.getOverrides();
         this.logInput();
 
         {
-            const t = await this.validUser(this.args.user, this.args.searchid, this.args.mode);
-            this.args.user = t.user;
-            this.args.mode = t.mode;
+            const t = await this.validUser(this.params.user, this.params.searchid, this.params.mode);
+            this.params.user = t.user;
+            this.params.mode = t.mode;
         }
 
-        this.args.mode = helper.tools.other.modeValidator(this.args.mode);
+        this.params.mode = helper.tools.other.modeValidator(this.params.mode);
 
         if (this.type == 'map') {
-            if (!this.args.mapid) {
+            if (!this.params.mapid) {
                 const temp = helper.tools.data.getPreviousId('map', this.input.message?.guildId ?? this.input.interaction?.guildId);
-                this.args.mapid = temp.id;
+                this.params.mapid = temp.id;
             }
-            if (this.args.mapid == false) {
+            if (this.params.mapid == false) {
                 helper.tools.commands.missingPrevID_map(this.input, this.name);
                 return;
             }
@@ -617,12 +617,12 @@ export class ScoreListCommand extends OsuCommand {
             this.ctn.edit = true;
         }
 
-        if (this.args.page < 2 || typeof this.args.page != 'number' || isNaN(this.args.page)) {
-            this.args.page = 1;
+        if (this.params.page < 2 || typeof this.params.page != 'number' || isNaN(this.params.page)) {
+            this.params.page = 1;
         }
 
         try {
-            const u = await this.getProfile(this.args.user, this.args.mode);
+            const u = await this.getProfile(this.params.user, this.params.mode);
             this.osudata = u;
         } catch (e) {
             return;
@@ -641,8 +641,8 @@ export class ScoreListCommand extends OsuCommand {
             return;
         }
 
-        if (this.args.parseScore) {
-            let pid = +(this.args.parseId) - 1;
+        if (this.params.parseScore) {
+            let pid = +(this.params.parseId) - 1;
             if (isNaN(pid) || pid < 0) {
                 pid = 0;
             }
@@ -657,17 +657,17 @@ export class ScoreListCommand extends OsuCommand {
             const user = this.osudata.username;
             switch (this.type) {
                 case 'osutop':
-                    this.input.overrides.ex = `${user}'s #${helper.tools.calculate.toOrdinal(pid + 1)} ${this.args.sort == 'pp' ? helper.tools.formatter.sortDescription(this.args.sort ?? 'pp', this.args.reverse) + ' ' : ''}top score`;
+                    this.input.overrides.ex = `${user}'s #${helper.tools.calculate.toOrdinal(pid + 1)} ${this.params.sort == 'pp' ? helper.tools.formatter.sortDescription(this.params.sort ?? 'pp', this.params.reverse) + ' ' : ''}top score`;
                     break;
                 case 'nochokes':
-                    this.input.overrides.ex = `${user}'s #${helper.tools.calculate.toOrdinal(pid + 1)} ${this.args.sort == 'pp' ? helper.tools.formatter.sortDescription(this.args.sort ?? 'pp', this.args.reverse) + ' ' : ''}no choke score`;
+                    this.input.overrides.ex = `${user}'s #${helper.tools.calculate.toOrdinal(pid + 1)} ${this.params.sort == 'pp' ? helper.tools.formatter.sortDescription(this.params.sort ?? 'pp', this.params.reverse) + ' ' : ''}no choke score`;
                     this.input.overrides.type = 'nochoke';
                     break;
                 case 'firsts':
-                    this.input.overrides.ex = `${user}'s ${helper.tools.calculate.toOrdinal(pid + 1)} ${this.args.sort == 'recent' ? helper.tools.formatter.sortDescription(this.args.sort ?? 'recent', this.args.reverse) + ' ' : ''}#1 score`;
+                    this.input.overrides.ex = `${user}'s ${helper.tools.calculate.toOrdinal(pid + 1)} ${this.params.sort == 'recent' ? helper.tools.formatter.sortDescription(this.params.sort ?? 'recent', this.params.reverse) + ' ' : ''}#1 score`;
                     break;
                 case 'pinned':
-                    this.input.overrides.ex = `${user}'s ${helper.tools.calculate.toOrdinal(pid + 1)} ${this.args.sort == 'recent' ? helper.tools.formatter.sortDescription(this.args.sort ?? 'recent', this.args.reverse) + ' ' : ''}pinned score`;
+                    this.input.overrides.ex = `${user}'s ${helper.tools.calculate.toOrdinal(pid + 1)} ${this.params.sort == 'recent' ? helper.tools.formatter.sortDescription(this.params.sort ?? 'recent', this.params.reverse) + ' ' : ''}pinned score`;
                     break;
             }
             if (this.input.overrides.id == null || typeof this.input.overrides.id == 'undefined') {
@@ -709,7 +709,7 @@ export class NoChokes extends ScoreListCommand {
         super();
         this.type = 'nochokes';
         this.name = 'NoChokes';
-        this.args.sort = 'pp';
+        this.params.sort = 'pp';
     }
 }
 
@@ -738,14 +738,14 @@ export class MapScores extends ScoreListCommand {
         this.name = 'MapScores';
     }
     async argsMsgExtra(): Promise<void> {
-        this.args.mapid = (await helper.tools.commands.mapIdFromLink(this.input.args.join(' '), true,)).map;
-        if (this.args.mapid != null) {
+        this.params.mapid = (await helper.tools.commands.mapIdFromLink(this.input.args.join(' '), true,)).map;
+        if (this.params.mapid != null) {
             this.input.args.splice(this.input.args.indexOf(this.input.args.find(arg => arg.includes('https://osu.ppy.sh/'))), 1);
         }
     }
     async argsInteractExtra(): Promise<void> {
         let interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.mapid = interaction.options.getNumber('id');
+        this.params.mapid = interaction.options.getNumber('id');
     }
     async argsButtonsExtra(): Promise<void> {
 
@@ -754,13 +754,13 @@ export class MapScores extends ScoreListCommand {
     getOverrides(): void {
         if (!this.input.overrides) return;
         if (this.input.overrides.page != null) {
-            this.args.page = this.input.overrides.page;
+            this.params.page = this.input.overrides.page;
         }
         if (this.input.overrides.sort != null) {
-            this.args.sort = this.input.overrides.sort as "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss";
+            this.params.sort = this.input.overrides.sort as "score" | "rank" | "pp" | "recent" | "acc" | "combo" | "miss";
         }
         if (this.input.overrides.reverse != null) {
-            this.args.reverse = this.input.overrides.reverse;
+            this.params.reverse = this.input.overrides.reverse;
         }
         if (this.input.overrides.commandAs) {
             this.input.type = this.input.overrides.commandAs;
@@ -770,10 +770,10 @@ export class MapScores extends ScoreListCommand {
             this.ctn.content = `Requested by <@${this.commanduser.id}>`;
         }
         if (this.input.overrides.user) {
-            this.args.user = this.input.overrides.user;
+            this.params.user = this.input.overrides.user;
         }
         if (this.input.overrides.id) {
-            this.args.mapid = this.input.overrides.id;
+            this.params.mapid = this.input.overrides.id;
         }
     }
 }
@@ -856,7 +856,7 @@ export class SingleScoreCommand extends OsuCommand {
             this.map.count_sliders,
             this.map.count_spinners,
         );
-        switch (this.args.detailed) {
+        switch (this.params.detailed) {
             default: {
                 hitlist = getHits.short;
             }
@@ -988,10 +988,10 @@ ${this.score.max_combo == mxcombo ? `**${this.score.max_combo}x**` : `${this.sco
                     .setDescription(`${this.score.mods.length > 0 ? '+' + osumodcalc.OrderMods(this.score.mods.map(x => x.acronym).join('').toUpperCase()).string + modadjustments + ' |' : ''} <t:${new Date(this.score.ended_at).getTime() / 1000}:R>
 ${(perfs[0].difficulty.stars ?? 0).toFixed(2)}⭐ | ${helper.vars.emojis.gamemodes[this.score.ruleset_id]}
 `);
-                helper.tools.formatter.userAuthor(this.osudata, embed, this.args.overrideAuthor);
+                helper.tools.formatter.userAuthor(this.osudata, embed, this.params.overrideAuthor);
                 break;
             case 'recent':
-                embed.setTitle(`#${this.args.page + 1} most recent ${this.args.showFails == 1 ? 'play' : 'pass'} for ${this.score.user.username} | <t:${new Date(this.score.ended_at).getTime() / 1000}:R>`)
+                embed.setTitle(`#${this.params.page + 1} most recent ${this.params.showFails == 1 ? 'play' : 'pass'} for ${this.score.user.username} | <t:${new Date(this.score.ended_at).getTime() / 1000}:R>`)
                     .setDescription(`[\`${fulltitle}\`](https://osu.ppy.sh/b/${this.map.id}) ${this.score.mods.length > 0 ? '+' + osumodcalc.OrderMods(this.score.mods.map(x => x.acronym).join('').toUpperCase()).string + modadjustments : ''} 
 ${(perfs[0].difficulty.stars ?? 0).toFixed(2)}⭐ | ${helper.vars.emojis.gamemodes[this.score.ruleset_id]}
 ${helper.tools.formatter.dateToDiscordFormat(new Date(this.score.ended_at), 'F')}
@@ -1031,7 +1031,7 @@ ${helper.tools.formatter.dateToDiscordFormat(new Date(this.score.ended_at), 'F')
     }
     getTryCount(scores: apitypes.Score[], mapid: number) {
         let trycount = 1;
-        for (let i = scores.length - 1; i > (this.args.page); i--) {
+        for (let i = scores.length - 1; i > (this.params.page); i--) {
             if (mapid == scores[i].beatmap.id) {
                 trycount++;
             }
@@ -1042,7 +1042,7 @@ ${helper.tools.formatter.dateToDiscordFormat(new Date(this.score.ended_at), 'F')
 
 export class ScoreParse extends SingleScoreCommand {
 
-    declare protected args: {
+    declare protected params: {
         mode: apitypes.GameMode;
         scoreid: number | string;
         nochoke: boolean;
@@ -1052,36 +1052,36 @@ export class ScoreParse extends SingleScoreCommand {
         super();
         this.name = 'ScoreParse';
         this.type = 'default';
-        this.args = {
+        this.params = {
             mode: null,
             scoreid: null,
             nochoke: false,
             overrideAuthor: null,
         };
     }
-    async setArgsMsg() {
-        this.args.mode = this.input.args[1] as apitypes.GameMode;
-        this.args.scoreid = this.input.args[0];
+    async setParamsMsg() {
+        this.params.mode = this.input.args[1] as apitypes.GameMode;
+        this.params.scoreid = this.input.args[0];
         if (this.input?.args[0]?.includes('https://')) {
             const temp = helper.tools.commands.scoreIdFromLink(this.input.args[0]);
-            this.args.mode = temp.mode;
-            this.args.scoreid = temp.id;
+            this.params.mode = temp.mode;
+            this.params.scoreid = temp.id;
         }
     }
-    async setArgsLink() {
+    async setParamsLink() {
         const messagenohttp = this.input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
         const temp = helper.tools.commands.scoreIdFromLink(messagenohttp);
-        this.args.mode = temp.mode;
-        this.args.scoreid = temp.id;
+        this.params.mode = temp.mode;
+        this.params.scoreid = temp.id;
     }
 
     getOverrides(): void {
         if (!this.input.overrides) return;
         if (this.input.overrides?.id != null) {
-            this.args.scoreid = this.input.overrides.id;
+            this.params.scoreid = this.input.overrides.id;
         }
         if (this.input.overrides?.mode != null) {
-            this.args.mode = this.input.overrides.mode;
+            this.params.mode = this.input.overrides.mode;
         }
         if (this.input.overrides?.commanduser != null) {
             this.commanduser = this.input.overrides.commanduser;
@@ -1090,22 +1090,22 @@ export class ScoreParse extends SingleScoreCommand {
             this.input.type = this.input.overrides.commandAs;
         }
         if (this.input.overrides?.ex != null) {
-            this.args.overrideAuthor = this.input.overrides.ex as string;
+            this.params.overrideAuthor = this.input.overrides.ex as string;
         }
         if (this.input.overrides?.type == 'nochoke') {
-            this.args.nochoke = true;
+            this.params.nochoke = true;
         }
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.getOverrides();
         this.logInput();
         // do stuff
 
-        if (!this.args.scoreid) {
+        if (!this.params.scoreid) {
             const temp = helper.tools.data.getPreviousId('score', this.input.message?.guildId ?? this.input.interaction?.guildId);
             if (temp?.apiData?.best_id && typeof temp?.apiData?.best_id === 'number') {
-                this.args.scoreid = temp?.apiData?.best_id;
+                this.params.scoreid = temp?.apiData?.best_id;
             } else {
                 this.voidcontent();
                 this.ctn.content = helper.vars.errors.uErr.osu.score.ms;
@@ -1123,33 +1123,33 @@ export class ScoreParse extends SingleScoreCommand {
 
         let scoredataReq: tooltypes.apiReturn<apitypes.Score>;
 
-        if (helper.tools.data.findFile(this.args.scoreid, 'scoredata') &&
-            !('error' in helper.tools.data.findFile(this.args.scoreid, 'scoredata')) &&
+        if (helper.tools.data.findFile(this.params.scoreid, 'scoredata') &&
+            !('error' in helper.tools.data.findFile(this.params.scoreid, 'scoredata')) &&
             this.input.buttonType != 'Refresh'
         ) {
-            scoredataReq = helper.tools.data.findFile(this.args.scoreid, 'scoredata');
+            scoredataReq = helper.tools.data.findFile(this.params.scoreid, 'scoredata');
         } else {
-            scoredataReq = await (this.args.mode ?
-                helper.tools.api.getScoreWithMode(this.args.scoreid, this.args.mode, []) :
-                helper.tools.api.getScore(this.args.scoreid, []));
+            scoredataReq = await (this.params.mode ?
+                helper.tools.api.getScoreWithMode(this.params.scoreid, this.params.mode, []) :
+                helper.tools.api.getScore(this.params.scoreid, []));
 
         }
 
         this.score = scoredataReq.apiData;
         if (scoredataReq?.error) {
             await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.score.nd
-                .replace('[SID]', this.args.scoreid.toString())
-                .replace('[MODE]', this.args.mode), false);
+                .replace('[SID]', this.params.scoreid.toString())
+                .replace('[MODE]', this.params.mode), false);
             return;
         }
 
         if (this.score?.hasOwnProperty('error')) {
             await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.score.nd
-                .replace('[SID]', this.args.scoreid.toString())
-                .replace('[MODE]', this.args.mode), true);
+                .replace('[SID]', this.params.scoreid.toString())
+                .replace('[MODE]', this.params.mode), true);
             return;
         }
-        helper.tools.data.storeFile(scoredataReq, this.args.scoreid, 'scoredata', helper.tools.other.modeValidator(this.score.ruleset_id));
+        helper.tools.data.storeFile(scoredataReq, this.params.scoreid, 'scoredata', helper.tools.other.modeValidator(this.score.ruleset_id));
 
         const buttons = new Discord.ActionRowBuilder()
             .addComponents(
@@ -1169,7 +1169,7 @@ export class ScoreParse extends SingleScoreCommand {
         try {
             this.score.rank.toUpperCase();
         } catch (error) {
-            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${this.args.mode}/${this.args.scoreid}`, true);
+            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.score.wrong + ` - osu.ppy.sh/scores/${this.params.mode}/${this.params.scoreid}`, true);
             return;
         }
         let mapdataReq: tooltypes.apiReturn<apitypes.Beatmap>;
@@ -1227,7 +1227,7 @@ export class ScoreParse extends SingleScoreCommand {
 }
 
 export class Recent extends SingleScoreCommand {
-    declare protected args: {
+    declare protected params: {
         user: string;
         searchid: string;
         page: number;
@@ -1239,7 +1239,7 @@ export class Recent extends SingleScoreCommand {
         super();
         this.name = 'Recent';
         this.type = 'recent';
-        this.args = {
+        this.params = {
             user: undefined,
             searchid: undefined,
             page: 0,
@@ -1249,49 +1249,49 @@ export class Recent extends SingleScoreCommand {
         };
     }
 
-    async setArgsMsg() {
-        this.args.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
+    async setParamsMsg() {
+        this.params.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
         const passArgFinder = helper.tools.commands.matchArgMultiple(['-nf', '-nofail', '-pass', '-passes', 'passes=true'], this.input.args, false, null, false, false);
         if (passArgFinder.found) {
-            this.args.showFails = 0;
+            this.params.showFails = 0;
             this.input.args = passArgFinder.args;
         }
         const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, this.input.args, true, 'number', false, true);
         if (pageArgFinder.found) {
-            this.args.page = pageArgFinder.output;
+            this.params.page = pageArgFinder.output;
             this.input.args = pageArgFinder.args;
         }
         const titleArgFinder = helper.tools.commands.matchArgMultiple(["-?"], this.input.args, true, 'string', true, false);
         if (titleArgFinder.found) {
-            this.args.filter = titleArgFinder.output;
+            this.params.filter = titleArgFinder.output;
             this.input.args = titleArgFinder.args;
         }
 
         {
             const temp = await helper.tools.commands.parseArgsMode(this.input);
             this.input.args = temp.args;
-            this.args.mode = temp.mode;
+            this.params.mode = temp.mode;
         }
 
         this.input.args = helper.tools.commands.cleanArgs(this.input.args);
 
         const usertemp = helper.tools.commands.fetchUser(this.input.args);
-        this.args.user = usertemp.id;
-        if (usertemp.mode && !this.args.mode) {
-            this.args.mode = usertemp.mode;
+        this.params.user = usertemp.id;
+        if (usertemp.mode && !this.params.mode) {
+            this.params.mode = usertemp.mode;
         }
-        if (!this.args.user || this.args.user.includes(this.args.searchid)) {
-            this.args.user = null;
+        if (!this.params.user || this.params.user.includes(this.params.searchid)) {
+            this.params.user = null;
         }
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.user = interaction.options.getString('user');
-        this.args.page = interaction.options.getNumber('page');
-        this.args.mode = interaction.options.getString('mode') as apitypes.GameMode;
-        this.args.filter = interaction.options.getString('filter');
+        this.params.user = interaction.options.getString('user');
+        this.params.page = interaction.options.getNumber('page');
+        this.params.mode = interaction.options.getString('mode') as apitypes.GameMode;
+        this.params.filter = interaction.options.getString('filter');
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
         if (!this.input.message.embeds[0]) return;
         const interaction = (this.input.interaction as Discord.ButtonInteraction);
         const temp = helper.tools.commands.getButtonArgs(this.input.id);
@@ -1304,24 +1304,24 @@ export class Recent extends SingleScoreCommand {
             helper.tools.commands.disableAllButtons(this.input.message);
             return;
         }
-        this.args.searchid = temp.searchid;
-        this.args.user = temp.user;
-        this.args.mode = temp.mode;
-        this.args.page = helper.tools.commands.buttonPage(temp.page, temp.maxPage, this.input.buttonType);
-        this.args.showFails = temp.fails;
-        this.args.filter = temp.filterTitle;
+        this.params.searchid = temp.searchid;
+        this.params.user = temp.user;
+        this.params.mode = temp.mode;
+        this.params.page = helper.tools.commands.buttonPage(temp.page, temp.maxPage, this.input.buttonType);
+        this.params.showFails = temp.fails;
+        this.params.filter = temp.filterTitle;
     }
     getOverrides(): void {
         if (!this.input.overrides) return;
         if (this.input.overrides.page != null) {
-            this.args.page = +(`${this.input.overrides.page}`);
+            this.params.page = +(`${this.input.overrides.page}`);
         }
         if (this.input.overrides.mode != null) {
-            this.args.mode = this.input.overrides.mode;
+            this.params.mode = this.input.overrides.mode;
         }
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.getOverrides();
         this.logInput();
         // do stuff
@@ -1329,17 +1329,17 @@ export class Recent extends SingleScoreCommand {
         const buttons = new Discord.ActionRowBuilder();
 
         {
-            const t = await this.validUser(this.args.user, this.args.searchid, this.args.mode);
-            this.args.user = t.user;
-            this.args.mode = t.mode;
+            const t = await this.validUser(this.params.user, this.params.searchid, this.params.mode);
+            this.params.user = t.user;
+            this.params.mode = t.mode;
         }
 
-        this.args.mode = helper.tools.other.modeValidator(this.args.mode);
+        this.params.mode = helper.tools.other.modeValidator(this.params.mode);
 
-        if (this.args.page < 2 || typeof this.args.page != 'number') {
-            this.args.page = 1;
+        if (this.params.page < 2 || typeof this.params.page != 'number') {
+            this.params.page = 1;
         }
-        this.args.page--;
+        this.params.page--;
 
         const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons(this.name, this.commanduser, this.input.id);
 
@@ -1351,7 +1351,7 @@ export class Recent extends SingleScoreCommand {
         }
 
         try {
-            const u = await this.getProfile(this.args.user, this.args.mode);
+            const u = await this.getProfile(this.params.user, this.params.mode);
             this.osudata = u;
         } catch (e) {
             return;
@@ -1372,45 +1372,45 @@ export class Recent extends SingleScoreCommand {
         ) {
             rsdataReq = helper.tools.data.findFile(this.input.id, 'rsdata');
         } else {
-            rsdataReq = await helper.tools.api.getScoresRecent(this.osudata.id, this.args.mode, [`include_fails=${this.args.showFails}`]);
+            rsdataReq = await helper.tools.api.getScoresRecent(this.osudata.id, this.params.mode, [`include_fails=${this.params.showFails}`]);
         }
 
         this.scores = rsdataReq.apiData;
         if (rsdataReq?.error) {
-            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.scores.recent.replace('[ID]', this.args.user), false);
+            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.scores.recent.replace('[ID]', this.params.user), false);
             return;
         }
         helper.tools.data.debug(rsdataReq, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'rsData');
         if (this.scores?.hasOwnProperty('error')) {
-            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.scores.recent.replace('[ID]', this.args.user), true);
+            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.scores.recent.replace('[ID]', this.params.user), true);
             return;
         }
 
         helper.tools.data.storeFile(rsdataReq, this.input.id, 'rsdata');
 
-        if (this.args.filter) {
-            this.scores = helper.tools.other.filterScoreQuery(this.scores, this.args.filter);
+        if (this.params.filter) {
+            this.scores = helper.tools.other.filterScoreQuery(this.scores, this.params.filter);
         }
 
         this.ctn.components = [pgbuttons, buttons];
 
-        this.args.page = this.scores[this.args.page] ? this.args.page : 0;
+        this.params.page = this.scores[this.params.page] ? this.params.page : 0;
 
         if (this.input.buttonType == 'BigRightArrow') {
-            this.args.page = this.scores.length - 1;
+            this.params.page = this.scores.length - 1;
         }
 
-        this.score = this.scores[this.args.page];
+        this.score = this.scores[this.params.page];
         if (!this.score || this.score == undefined || this.score == null) {
             let err = `${helper.vars.errors.uErr.osu.scores.recent_ms
-                .replace('[ID]', this.args.user)
-                .replace('[MODE]', helper.vars.emojis.gamemodes[helper.tools.other.modeValidator(this.args.mode)])
+                .replace('[ID]', this.params.user)
+                .replace('[MODE]', helper.vars.emojis.gamemodes[helper.tools.other.modeValidator(this.params.mode)])
                 }`;
-            if (this.args.filter) {
+            if (this.params.filter) {
                 err = `${helper.vars.errors.uErr.osu.scores.recent_ms
-                    .replace('[ID]', this.args.user)
-                    .replace('[MODE]', helper.vars.emojis.gamemodes[helper.tools.other.modeValidator(this.args.mode)])
-                    } matching \`${this.args.filter}\``;
+                    .replace('[ID]', this.params.user)
+                    .replace('[MODE]', helper.vars.emojis.gamemodes[helper.tools.other.modeValidator(this.params.mode)])
+                    } matching \`${this.params.filter}\``;
             }
 
             if (this.input.buttonType == null) {
@@ -1449,13 +1449,13 @@ export class Recent extends SingleScoreCommand {
             }
         );
         helper.tools.commands.storeButtonArgs(this.input.id, {
-            user: this.args.user,
-            searchid: this.args.searchid,
-            page: this.args.page + 1,
+            user: this.params.user,
+            searchid: this.params.searchid,
+            page: this.params.page + 1,
             maxPage: this.scores.length,
-            mode: this.args.mode,
-            fails: this.args.showFails,
-            filterTitle: this.args.filter,
+            mode: this.params.mode,
+            fails: this.params.showFails,
+            filterTitle: this.params.filter,
         });
 
         this.ctn.edit = true;
@@ -1466,7 +1466,7 @@ export class Recent extends SingleScoreCommand {
 }
 
 export class MapLeaderboard extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         mapid: number;
         mapmods: string;
         page: number;
@@ -1476,7 +1476,7 @@ export class MapLeaderboard extends OsuCommand {
     constructor() {
         super();
         this.name = 'MapLeaderboard';
-        this.args = {
+        this.params = {
             mapid: undefined,
             mapmods: undefined,
             page: undefined,
@@ -1484,41 +1484,41 @@ export class MapLeaderboard extends OsuCommand {
             parseScore: false,
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, this.input.args, true, 'number', false, true);
         if (pageArgFinder.found) {
-            this.args.page = pageArgFinder.output;
+            this.params.page = pageArgFinder.output;
             this.input.args = pageArgFinder.args;
         }
 
         if (this.input.args.includes('-parse')) {
-            this.args.parseScore = true;
+            this.params.parseScore = true;
             const temp = helper.tools.commands.parseArg(this.input.args, '-parse', 'number', 1, null, true);
-            this.args.parseId = temp.value;
+            this.params.parseId = temp.value;
             this.input.args = temp.newArgs;
         }
 
         if (this.input.args.join(' ').includes('+')) {
-            this.args.mapmods = this.input.args.join(' ').split('+')[1];
-            this.args.mapmods.includes(' ') ? this.args.mapmods = this.args.mapmods.split(' ')[0] : null;
-            this.input.args = this.input.args.join(' ').replace('+', '').replace(this.args.mapmods, '').split(' ');
+            this.params.mapmods = this.input.args.join(' ').split('+')[1];
+            this.params.mapmods.includes(' ') ? this.params.mapmods = this.params.mapmods.split(' ')[0] : null;
+            this.input.args = this.input.args.join(' ').replace('+', '').replace(this.params.mapmods, '').split(' ');
         }
         this.input.args = helper.tools.commands.cleanArgs(this.input.args);
 
-        this.args.mapid = (await helper.tools.commands.mapIdFromLink(this.input.args.join(' '), true)).map;
+        this.params.mapid = (await helper.tools.commands.mapIdFromLink(this.input.args.join(' '), true)).map;
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
         this.commanduser = interaction?.member?.user ?? interaction?.user;
-        this.args.mapid = interaction.options.getInteger('id');
-        this.args.page = interaction.options.getInteger('page');
-        this.args.mapmods = interaction.options.getString('mods');
-        this.args.parseId = interaction.options.getInteger('parse');
-        if (this.args.parseId != null) {
-            this.args.parseScore = true;
+        this.params.mapid = interaction.options.getInteger('id');
+        this.params.page = interaction.options.getInteger('page');
+        this.params.mapmods = interaction.options.getString('mods');
+        this.params.parseId = interaction.options.getInteger('parse');
+        if (this.params.parseId != null) {
+            this.params.parseScore = true;
         }
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
         if (!this.input.message.embeds[0]) return;
         const interaction = (this.input.interaction as Discord.ButtonInteraction);
         const temp = helper.tools.commands.getButtonArgs(this.input.id);
@@ -1531,20 +1531,20 @@ export class MapLeaderboard extends OsuCommand {
             helper.tools.commands.disableAllButtons(this.input.message);
             return;
         }
-        this.args.mapid = +temp.mapId;
-        this.args.mapmods = temp.modsInclude;
-        this.args.page = helper.tools.commands.buttonPage(temp.page, temp.maxPage, this.input.buttonType);
+        this.params.mapid = +temp.mapId;
+        this.params.mapmods = temp.modsInclude;
+        this.params.page = helper.tools.commands.buttonPage(temp.page, temp.maxPage, this.input.buttonType);
     }
     getOverrides(): void {
         if (!this.input.overrides) return;
         if (this.input.overrides.page != null) {
-            this.args.page = this.input.overrides.page;
+            this.params.page = this.input.overrides.page;
         }
         if (this.input.overrides.id) {
-            this.args.mapid = +this.input.overrides.id;
+            this.params.mapid = +this.input.overrides.id;
         }
         if (this.input.overrides.filterMods) {
-            this.args.mapmods = this.input.overrides.filterMods;
+            this.params.mapmods = this.input.overrides.filterMods;
         }
         if (this.input.overrides.commandAs) {
             this.input.type = this.input.overrides.commandAs;
@@ -1555,17 +1555,17 @@ export class MapLeaderboard extends OsuCommand {
         }
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
         const buttons = new Discord.ActionRowBuilder();
         const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons('maplb', this.commanduser, this.input.id);
 
-        if (!this.args.mapid) {
+        if (!this.params.mapid) {
             const temp = helper.tools.data.getPreviousId('map', this.input.message?.guildId ?? this.input.interaction?.guildId);
-            this.args.mapid = +temp?.id;
+            this.params.mapid = +temp?.id;
         }
-        if (this.args.mapid == 0) {
+        if (this.params.mapid == 0) {
             helper.tools.commands.missingPrevID_map(this.input, 'maplb');
             return;
         }
@@ -1579,7 +1579,7 @@ export class MapLeaderboard extends OsuCommand {
         let mapdata: apitypes.Beatmap;
 
         try {
-            const m = await this.getMap(this.args.mapid + '');
+            const m = await this.getMap(this.params.mapid + '');
             mapdata = m;
         } catch (e) {
             return;
@@ -1588,8 +1588,8 @@ export class MapLeaderboard extends OsuCommand {
         const fulltitle = `${mapdata.beatmapset.artist} - ${mapdata.beatmapset.title} [${mapdata.version}]`;
 
         let mods: string;
-        if (this.args.mapmods) {
-            mods = osumodcalc.OrderMods(this.args.mapmods).string + '';
+        if (this.params.mapmods) {
+            mods = osumodcalc.OrderMods(this.params.mapmods).string + '';
         }
         const lbEmbed = new Discord.EmbedBuilder();
 
@@ -1601,26 +1601,26 @@ export class MapLeaderboard extends OsuCommand {
         ) {
             lbdataReq = helper.tools.data.findFile(this.input.id, 'lbdata');
         } else {
-            lbdataReq = await helper.tools.api.getMapLeaderboardNonLegacy(this.args.mapid, mapdata.mode, mods, []);
+            lbdataReq = await helper.tools.api.getMapLeaderboardNonLegacy(this.params.mapid, mapdata.mode, mods, []);
         }
         const lbdataf: apitypes.BeatmapScores<apitypes.Score> = lbdataReq.apiData;
         if (lbdataReq?.error) {
-            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.map.lb.replace('[ID]', this.args.mapid + ''), false);
+            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.map.lb.replace('[ID]', this.params.mapid + ''), false);
             return;
         }
 
         helper.tools.data.debug(lbdataReq, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'lbDataF');
 
         if (lbdataf?.hasOwnProperty('error')) {
-            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.map.lb.replace('[ID]', this.args.mapid + ''), true);
+            await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.map.lb.replace('[ID]', this.params.mapid + ''), true);
             return;
         }
         helper.tools.data.storeFile(lbdataReq, this.input.id, 'lbdata');
 
         const lbdata = lbdataf.scores;
 
-        if (this.args.parseScore) {
-            let pid = +(this.args.parseId) - 1;
+        if (this.params.parseScore) {
+            let pid = +(this.params.parseId) - 1;
             if (isNaN(pid) || pid < 0) {
                 pid = 0;
             }
@@ -1647,7 +1647,7 @@ export class MapLeaderboard extends OsuCommand {
         lbEmbed
             .setColor(helper.vars.colours.embedColour.scorelist.dec)
             .setTitle(`Score leaderboard of \`${fulltitle}\``)
-            .setURL(`https://osu.ppy.sh/b/${this.args.mapid}`)
+            .setURL(`https://osu.ppy.sh/b/${this.params.mapid}`)
             .setThumbnail(helper.tools.api.mapImages(mapdata.beatmapset_id).list2x);
 
         let scoretxt: string;
@@ -1658,23 +1658,23 @@ export class MapLeaderboard extends OsuCommand {
             scoretxt = 'Error - map is unranked';
         }
 
-        if (this.args.page >= Math.ceil(lbdata.length / 5)) {
-            this.args.page = Math.ceil(lbdata.length / 5) - 1;
+        if (this.params.page >= Math.ceil(lbdata.length / 5)) {
+            this.params.page = Math.ceil(lbdata.length / 5) - 1;
         }
 
         helper.tools.data.debug(lbdataReq, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'lbData');
 
-        const scoresarg = await helper.tools.formatter.scoreList(lbdata, 'score', null, false, 1, this.args.page, true, 'map_leaderboard', mapdata);
+        const scoresarg = await helper.tools.formatter.scoreList(lbdata, 'score', null, false, 1, this.params.page, true, 'map_leaderboard', mapdata);
 
         helper.tools.commands.storeButtonArgs(this.input.id + '', {
-            mapId: this.args.mapid,
+            mapId: this.params.mapid,
             page: scoresarg.curPage,
             maxPage: scoresarg.maxPage,
             sortScore: 'score',
             reverse: false,
             mode: mapdata.mode,
-            parse: this.args.parseScore,
-            parseId: this.args.parseId,
+            parse: this.params.parseScore,
+            parseId: this.params.parseId,
         });
         if (scoresarg.text.includes('ERROR')) {
 
@@ -1701,14 +1701,14 @@ export class MapLeaderboard extends OsuCommand {
             {
                 id: `${mapdata.id}`,
                 apiData: null,
-                mods: this.args.mapmods
+                mods: this.params.mapmods
             }
         );
 
 
         buttons.addComponents(
             new Discord.ButtonBuilder()
-                .setCustomId(`${helper.vars.versions.releaseDate}-Map-${this.name}-any-${this.input.id}-${this.args.mapid}${this.args.mapmods && this.args.mapmods != 'NM' ? '+' + this.args.mapmods : ''}`)
+                .setCustomId(`${helper.vars.versions.releaseDate}-Map-${this.name}-any-${this.input.id}-${this.params.mapid}${this.params.mapmods && this.params.mapmods != 'NM' ? '+' + this.params.mapmods : ''}`)
                 .setStyle(helper.vars.buttons.type.current)
                 .setEmoji(helper.vars.buttons.label.extras.map)
         );
@@ -1865,7 +1865,7 @@ type scoretypes = 'firsts' | 'best' | 'recent' | 'pinned';
 
 export class ScoreStats extends OsuCommand {
 
-    declare protected args: {
+    declare protected params: {
         scoreTypes: scoretypes;
         user: string;
         searchid: string;
@@ -1876,7 +1876,7 @@ export class ScoreStats extends OsuCommand {
     constructor() {
         super();
         this.name = 'ScoreStats';
-        this.args = {
+        this.params = {
             scoreTypes: 'best',
             user: null,
             searchid: undefined,
@@ -1885,36 +1885,36 @@ export class ScoreStats extends OsuCommand {
             reachedMaxCount: false,
         };
     }
-    async setArgsMsg() {
-        this.args.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
+    async setParamsMsg() {
+        this.params.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
         {
             const temp = await helper.tools.commands.parseArgsMode(this.input);
             this.input.args = temp.args;
-            this.args.mode = temp.mode;
+            this.params.mode = temp.mode;
         }
         const firstArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['first', 'firsts', 'globals', 'global', 'f', 'g']), this.input.args, false, null, false, false);
         if (firstArgFinder.found) {
-            this.args.scoreTypes = 'firsts';
+            this.params.scoreTypes = 'firsts';
             this.input.args = firstArgFinder.args;
         }
         const topArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['osutop', 'top', 'best', 't', 'b']), this.input.args, false, null, false, false);
         if (topArgFinder.found) {
-            this.args.scoreTypes = 'best';
+            this.params.scoreTypes = 'best';
             this.input.args = topArgFinder.args;
         }
         const recentArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['r', 'recent', 'rs']), this.input.args, false, null, false, false);
         if (recentArgFinder.found) {
-            this.args.scoreTypes = 'recent';
+            this.params.scoreTypes = 'recent';
             this.input.args = recentArgFinder.args;
         }
         const pinnedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['pinned', 'pins', 'pin', 'p']), this.input.args, false, null, false, false);
         if (pinnedArgFinder.found) {
-            this.args.scoreTypes = 'pinned';
+            this.params.scoreTypes = 'pinned';
             this.input.args = pinnedArgFinder.args;
         }
         const allFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['all', 'd', 'a', 'detailed']), this.input.args, false, null, false, false);
         if (allFinder.found) {
-            this.args.all = true;
+            this.params.all = true;
             this.input.args = allFinder.args;
         }
 
@@ -1922,46 +1922,46 @@ export class ScoreStats extends OsuCommand {
 
         const usertemp = helper.tools.commands.fetchUser(this.input.args);
         this.input.args = usertemp.args;
-        this.args.user = usertemp.id;
-        if (usertemp.mode && !this.args.mode) {
-            this.args.mode = usertemp.mode;
+        this.params.user = usertemp.id;
+        if (usertemp.mode && !this.params.mode) {
+            this.params.mode = usertemp.mode;
         }
-        if (!this.args.user || this.args.user.includes(this.args.searchid)) {
-            this.args.user = null;
+        if (!this.params.user || this.params.user.includes(this.params.searchid)) {
+            this.params.user = null;
         }
 
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.searchid = this.commanduser.id;
-        interaction.options.getString('user') ? this.args.user = interaction.options.getString('user') : null;
-        interaction.options.getString('type') ? this.args.scoreTypes = interaction.options.getString('type') as scoretypes : null;
-        interaction.options.getString('mode') ? this.args.mode = interaction.options.getString('mode') as apitypes.GameMode : null;
-        interaction.options.getBoolean('all') ? this.args.all = interaction.options.getBoolean('all') : null;
+        this.params.searchid = this.commanduser.id;
+        interaction.options.getString('user') ? this.params.user = interaction.options.getString('user') : null;
+        interaction.options.getString('type') ? this.params.scoreTypes = interaction.options.getString('type') as scoretypes : null;
+        interaction.options.getString('mode') ? this.params.mode = interaction.options.getString('mode') as apitypes.GameMode : null;
+        interaction.options.getBoolean('all') ? this.params.all = interaction.options.getBoolean('all') : null;
 
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
         if (!this.input.message.embeds[0]) return;
         const interaction = (this.input.interaction as Discord.ButtonInteraction);
-        this.args.searchid = this.commanduser.id;
-        this.args.user = this.input.message.embeds[0].author.url.split('/users/')[1].split('/')[0];
-        this.args.mode = this.input.message.embeds[0].author.url.split('/users/')[1].split('/')[1] as apitypes.GameMode;
+        this.params.searchid = this.commanduser.id;
+        this.params.user = this.input.message.embeds[0].author.url.split('/users/')[1].split('/')[0];
+        this.params.mode = this.input.message.embeds[0].author.url.split('/users/')[1].split('/')[1] as apitypes.GameMode;
         //user's {type} scores
-        this.args.scoreTypes = this.input.message.embeds[0].title.split(' scores')[0].split(' ')[0].toLowerCase() as scoretypes;
+        this.params.scoreTypes = this.input.message.embeds[0].title.split(' scores')[0].split(' ')[0].toLowerCase() as scoretypes;
 
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
 
         {
-            const t = await this.validUser(this.args.user, this.args.searchid, this.args.mode);
-            this.args.user = t.user;
-            this.args.mode = t.mode;
+            const t = await this.validUser(this.params.user, this.params.searchid, this.params.mode);
+            this.params.user = t.user;
+            this.params.mode = t.mode;
         }
 
-        this.args.mode = this.args.mode ? helper.tools.other.modeValidator(this.args.mode) : null;
+        this.params.mode = this.params.mode ? helper.tools.other.modeValidator(this.params.mode) : null;
 
         if (this.input.type == 'interaction') {
             this.ctn.content = 'Loading...';
@@ -1973,7 +1973,7 @@ export class ScoreStats extends OsuCommand {
         let osudata: apitypes.User;
 
         try {
-            const u = await this.getProfile(this.args.user, this.args.mode);
+            const u = await this.getProfile(this.params.user, this.params.mode);
             osudata = u;
         } catch (e) {
             return;
@@ -1989,7 +1989,7 @@ export class ScoreStats extends OsuCommand {
 
         let scoresdata: apitypes.Score[] & apitypes.Error = [];
 
-        async function getScoreCount(cinitnum: number, args = this.args, input = this.input): Promise<boolean> {
+        async function getScoreCount(cinitnum: number, args = this.params, input = this.input): Promise<boolean> {
             let req: tooltypes.apiReturn<apitypes.Score[]>;
             switch (args.scoreTypes) {
                 case 'firsts':
@@ -2007,7 +2007,7 @@ export class ScoreStats extends OsuCommand {
             }
             const fd: apitypes.Score[] & apitypes.Error = req.apiData;
             if (req?.error) {
-                await helper.tools.commands.errorAndAbort(input, this.name, true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', this.args.user).replace('top', this.args.scoreTypes == 'best' ? 'top' : this.args.scoreTypes), false);
+                await helper.tools.commands.errorAndAbort(input, this.name, true, helper.vars.errors.uErr.osu.scores.best.replace('[ID]', this.params.user).replace('top', this.params.scoreTypes == 'best' ? 'top' : this.params.scoreTypes), false);
                 return;
             }
             if (fd?.hasOwnProperty('error')) {
@@ -2027,9 +2027,9 @@ export class ScoreStats extends OsuCommand {
         }
 
         const dataFilename =
-            this.args.scoreTypes == 'firsts' ?
+            this.params.scoreTypes == 'firsts' ?
                 'firstscoresdata' :
-                `${this.args.scoreTypes}scoresdata`;
+                `${this.params.scoreTypes}scoresdata`;
 
         if (helper.tools.data.findFile(osudata.id, dataFilename) &&
             !('error' in helper.tools.data.findFile(osudata.id, dataFilename)) &&
@@ -2037,20 +2037,20 @@ export class ScoreStats extends OsuCommand {
         ) {
             scoresdata = helper.tools.data.findFile(osudata.id, dataFilename);
         } else {
-            this.args.reachedMaxCount = await getScoreCount(0, this.args, this.input);
+            this.params.reachedMaxCount = await getScoreCount(0, this.params, this.input);
         }
         helper.tools.data.storeFile(scoresdata, osudata.id, dataFilename);
 
         // let useFiles: string[] = [];
 
         const Embed: Discord.EmbedBuilder = new Discord.EmbedBuilder()
-            .setTitle(`Statistics for ${osudata.username}'s ${this.args.scoreTypes} scores`)
+            .setTitle(`Statistics for ${osudata.username}'s ${this.params.scoreTypes} scores`)
             .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`);
         helper.tools.formatter.userAuthor(osudata, Embed);
         if (scoresdata.length == 0) {
             Embed.setDescription('No scores found');
         } else {
-            Embed.setDescription(`${helper.tools.calculate.separateNum(scoresdata.length)} scores found\n${this.args.reachedMaxCount ? 'Only first 100 scores are calculated' : ''}`);
+            Embed.setDescription(`${helper.tools.calculate.separateNum(scoresdata.length)} scores found\n${this.params.reachedMaxCount ? 'Only first 100 scores are calculated' : ''}`);
             const mappers = helper.tools.calculate.findMode(scoresdata.map(x => x.beatmapset.creator));
             const mods = helper.tools.calculate.findMode(scoresdata.map(x => {
                 return x.mods.length == 0 ?
@@ -2064,7 +2064,7 @@ export class ScoreStats extends OsuCommand {
             let totpp = '';
             let weighttotpp = '';
 
-            if (this.args.all) {
+            if (this.params.all) {
                 //do pp calc
                 const calculations: rosu.PerformanceAttributes[] = [];
                 for (const score of scoresdata) {
@@ -2202,7 +2202,7 @@ export class ScoreStats extends OsuCommand {
                     inline: true
                 },
                 ]);
-                if (this.args.all) {
+                if (this.params.all) {
                     Embed.addFields([
                         {
                             name: 'Total PP',
@@ -2230,7 +2230,7 @@ export class ScoreStats extends OsuCommand {
 
 export class Simulate extends OsuCommand {
 
-    declare protected args: {
+    declare protected params: {
         mapid: number;
         mods: string;
         acc: number;
@@ -2249,7 +2249,7 @@ export class Simulate extends OsuCommand {
     constructor() {
         super();
         this.name = 'Simulate';
-        this.args = {
+        this.params = {
             mapid: null,
             mods: null,
             acc: null,
@@ -2266,77 +2266,77 @@ export class Simulate extends OsuCommand {
             customHP: null,
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         const ctn = this.input.message.content;
         if (ctn.includes('-mods')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-mods', 'string', this.args.mods);
-            this.args.mods = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-mods', 'string', this.params.mods);
+            this.params.mods = temp.value;
             this.input.args = temp.newArgs;
         }
         const accArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['acc', 'accuracy', '%',]), this.input.args, true, 'number', false, false);
         if (accArgFinder.found) {
-            this.args.acc = accArgFinder.output;
+            this.params.acc = accArgFinder.output;
             this.input.args = accArgFinder.args;
         }
         const comboArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['x', 'combo', 'maxcombo',]), this.input.args, true, 'number', false, true);
         if (comboArgFinder.found) {
-            this.args.combo = comboArgFinder.output;
+            this.params.combo = comboArgFinder.output;
             this.input.args = comboArgFinder.args;
         }
         const n300ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n300', '300s',]), this.input.args, true, 'number', false, true);
         if (n300ArgFinder.found) {
-            this.args.n300 = n300ArgFinder.output;
+            this.params.n300 = n300ArgFinder.output;
             this.input.args = n300ArgFinder.args;
         }
         const n100ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n100', '100s',]), this.input.args, true, 'number', false, true);
         if (n100ArgFinder.found) {
-            this.args.n100 = n100ArgFinder.output;
+            this.params.n100 = n100ArgFinder.output;
             this.input.args = n100ArgFinder.args;
         }
         const n50ArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['n50', '50s',]), this.input.args, true, 'number', false, true);
         if (n50ArgFinder.found) {
-            this.args.n50 = n50ArgFinder.output;
+            this.params.n50 = n50ArgFinder.output;
             this.input.args = n50ArgFinder.args;
         }
         const nMissArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['miss', 'misses', 'n0', '0s',]), this.input.args, true, 'number', false, true);
         if (nMissArgFinder.found) {
-            this.args.nMiss = nMissArgFinder.output;
+            this.params.nMiss = nMissArgFinder.output;
             this.input.args = nMissArgFinder.args;
         }
         if (this.input.args.includes('-bpm')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-bpm', 'number', this.args.overrideBpm);
-            this.args.overrideBpm = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-bpm', 'number', this.params.overrideBpm);
+            this.params.overrideBpm = temp.value;
             this.input.args = temp.newArgs;
         }
         if (this.input.args.includes('-speed')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-speed', 'number', this.args.overrideSpeed);
-            this.args.overrideSpeed = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-speed', 'number', this.params.overrideSpeed);
+            this.params.overrideSpeed = temp.value;
             this.input.args = temp.newArgs;
         }
         if (this.input.args.includes('-cs')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-cs', 'number', this.args.customCS);
-            this.args.customCS = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-cs', 'number', this.params.customCS);
+            this.params.customCS = temp.value;
             this.input.args = temp.newArgs;
         }
         if (this.input.args.includes('-ar')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-ar', 'number', this.args.customAR);
-            this.args.customAR = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-ar', 'number', this.params.customAR);
+            this.params.customAR = temp.value;
             this.input.args = temp.newArgs;
         }
         if (this.input.args.includes('-od')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-od', 'number', this.args.customOD);
-            this.args.customOD = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-od', 'number', this.params.customOD);
+            this.params.customOD = temp.value;
             this.input.args = temp.newArgs;
         }
         if (this.input.args.includes('-hp')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-hp', 'number', this.args.customHP);
-            this.args.customHP = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-hp', 'number', this.params.customHP);
+            this.params.customHP = temp.value;
             this.input.args = temp.newArgs;
         }
         this.input.args = helper.tools.commands.cleanArgs(this.input.args);
 
         if (ctn.includes('+')) {
-            this.args.mods = ctn.split('+')[1].split(' ')[0];
+            this.params.mods = ctn.split('+')[1].split(' ')[0];
             let i = 0;
             for (; i < this.input.args.length; i++) {
                 if (this.input.args[i].includes('+')) {
@@ -2345,31 +2345,31 @@ export class Simulate extends OsuCommand {
             }
             this.input.args = this.input.args.slice(0, i).concat(this.input.args.slice(i + 1, this.input.args.length));
         }
-        this.args.mapid = (await helper.tools.commands.mapIdFromLink(this.input.args.join(' '), true)).map;
+        this.params.mapid = (await helper.tools.commands.mapIdFromLink(this.input.args.join(' '), true)).map;
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.mapid = interaction.options.getInteger('id');
-        this.args.mods = interaction.options.getString('mods');
-        this.args.acc = interaction.options.getNumber('accuracy');
-        this.args.combo = interaction.options.getInteger('combo');
-        this.args.n300 = interaction.options.getInteger('n300');
-        this.args.n100 = interaction.options.getInteger('n100');
-        this.args.n50 = interaction.options.getInteger('n50');
-        this.args.nMiss = interaction.options.getInteger('miss');
+        this.params.mapid = interaction.options.getInteger('id');
+        this.params.mods = interaction.options.getString('mods');
+        this.params.acc = interaction.options.getNumber('accuracy');
+        this.params.combo = interaction.options.getInteger('combo');
+        this.params.n300 = interaction.options.getInteger('n300');
+        this.params.n100 = interaction.options.getInteger('n100');
+        this.params.n50 = interaction.options.getInteger('n50');
+        this.params.nMiss = interaction.options.getInteger('miss');
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
-        if (!this.args.mapid) {
+        if (!this.params.mapid) {
             try {
                 const temp = this.getLatestMap().mapid;
                 if (temp == false) {
                     helper.tools.commands.missingPrevID_map(this.input, this.name);
                     return;
                 }
-                this.args.mapid = +temp;
+                this.params.mapid = +temp;
             } catch (e) {
                 return;
             }
@@ -2383,95 +2383,95 @@ export class Simulate extends OsuCommand {
         }
 
         const tempscore = helper.tools.data.getPreviousId('score', this.input.message?.guildId ?? this.input.interaction?.guildId);
-        if (tempscore?.apiData && tempscore?.apiData.beatmap.id == this.args.mapid) {
-            if (!this.args.n300 && !this.args.n100 && !this.args.n50 && !this.args.acc) {
-                this.args.n300 = tempscore.apiData.statistics.great;
-                this.args.n100 = tempscore.apiData.statistics.ok;
-                this.args.n50 = tempscore.apiData.statistics.meh;
-                this.args.acc = tempscore.apiData.accuracy * 100;
+        if (tempscore?.apiData && tempscore?.apiData.beatmap.id == this.params.mapid) {
+            if (!this.params.n300 && !this.params.n100 && !this.params.n50 && !this.params.acc) {
+                this.params.n300 = tempscore.apiData.statistics.great;
+                this.params.n100 = tempscore.apiData.statistics.ok;
+                this.params.n50 = tempscore.apiData.statistics.meh;
+                this.params.acc = tempscore.apiData.accuracy * 100;
             }
-            if (!this.args.nMiss) {
-                this.args.nMiss = tempscore.apiData.statistics.miss;
+            if (!this.params.nMiss) {
+                this.params.nMiss = tempscore.apiData.statistics.miss;
             }
-            if (!this.args.combo) {
-                this.args.combo = tempscore.apiData.max_combo;
+            if (!this.params.combo) {
+                this.params.combo = tempscore.apiData.max_combo;
             }
-            if (!this.args.mods) {
-                this.args.mods = tempscore.apiData.mods.map(x => x.acronym).join('');
+            if (!this.params.mods) {
+                this.params.mods = tempscore.apiData.mods.map(x => x.acronym).join('');
             }
         }
 
         let mapdata: apitypes.Beatmap;
         try {
-            const m = await this.getMap(this.args.mapid);
+            const m = await this.getMap(this.params.mapid);
             mapdata = m;
         } catch (e) {
             return;
         }
-        if (!this.args.mods) {
-            this.args.mods = 'NM';
+        if (!this.params.mods) {
+            this.params.mods = 'NM';
         }
-        if (!this.args.combo) {
-            this.args.combo = undefined;
-        }
-
-        if (this.args.overrideBpm && !this.args.overrideSpeed) {
-            this.args.overrideSpeed = this.args.overrideBpm / mapdata.bpm;
-        }
-        if (this.args.overrideSpeed && !this.args.overrideBpm) {
-            this.args.overrideBpm = this.args.overrideSpeed * mapdata.bpm;
+        if (!this.params.combo) {
+            this.params.combo = undefined;
         }
 
-        if (this.args.mods.includes('DT') || this.args.mods.includes('NC')) {
-            this.args.overrideSpeed *= 1.5;
-            this.args.overrideBpm *= 1.5;
+        if (this.params.overrideBpm && !this.params.overrideSpeed) {
+            this.params.overrideSpeed = this.params.overrideBpm / mapdata.bpm;
         }
-        if (this.args.mods.includes('HT')) {
-            this.args.overrideSpeed *= 0.75;
-            this.args.overrideBpm *= 1.5;
+        if (this.params.overrideSpeed && !this.params.overrideBpm) {
+            this.params.overrideBpm = this.params.overrideSpeed * mapdata.bpm;
+        }
+
+        if (this.params.mods.includes('DT') || this.params.mods.includes('NC')) {
+            this.params.overrideSpeed *= 1.5;
+            this.params.overrideBpm *= 1.5;
+        }
+        if (this.params.mods.includes('HT')) {
+            this.params.overrideSpeed *= 0.75;
+            this.params.overrideBpm *= 1.5;
         }
         const scorestat: apitypes.ScoreStatistics = {
-            great: this.args.n300,
-            ok: this.args.n100,
-            meh: this.args.n50,
-            miss: this.args.nMiss ?? 0,
+            great: this.params.n300,
+            ok: this.params.n100,
+            meh: this.params.n50,
+            miss: this.params.nMiss ?? 0,
         };
 
         const perfs = await helper.tools.performance.fullPerformance(
-            this.args.mapid,
+            this.params.mapid,
             0,
-            this.args.mods,
-            this.args.acc,
-            this.args.overrideSpeed,
+            this.params.mods,
+            this.params.acc,
+            this.params.overrideSpeed,
             scorestat,
-            this.args.combo,
+            this.params.combo,
             null,
             new Date(mapdata.last_updated),
-            this.args.customCS,
-            this.args.customAR,
-            this.args.customOD,
-            this.args.customHP,
+            this.params.customCS,
+            this.params.customAR,
+            this.params.customOD,
+            this.params.customHP,
         );
         helper.tools.data.debug(perfs, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'ppCalc');
 
-        let use300s = (this.args.n300 ?? 0);
-        const gotTot = use300s + (this.args.n100 ?? 0) + (this.args.n50 ?? 0) + (this.args.nMiss ?? 0);
+        let use300s = (this.params.n300 ?? 0);
+        const gotTot = use300s + (this.params.n100 ?? 0) + (this.params.n50 ?? 0) + (this.params.nMiss ?? 0);
         if (gotTot != mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) {
             use300s += (mapdata.count_circles + mapdata.count_sliders + mapdata.count_spinners) - use300s;
         }
 
         const useAcc = osumodcalc.calcgrade(
             use300s,
-            this.args.n100 ?? 0,
-            this.args.n50 ?? 0,
-            this.args.nMiss ?? 0
+            this.params.n100 ?? 0,
+            this.params.n50 ?? 0,
+            this.params.nMiss ?? 0
         );
 
         const mapPerf = await helper.tools.performance.calcMap({
-            mods: this.args.mods,
+            mods: this.params.mods,
             mode: 0,
-            mapid: this.args.mapid,
-            clockRate: this.args.overrideSpeed,
+            mapid: this.params.mapid,
+            clockRate: this.params.overrideSpeed,
             mapLastUpdated: new Date(mapdata.last_updated)
         });
 
@@ -2479,17 +2479,17 @@ export class Simulate extends OsuCommand {
         const mxCombo = perfs[0].difficulty.maxCombo;
         const scoreEmbed = new Discord.EmbedBuilder()
             .setTitle(`Simulated play on \n\`${title}\``)
-            .setURL(`https://osu.ppy.sh/b/${this.args.mapid}`)
+            .setURL(`https://osu.ppy.sh/b/${this.params.mapid}`)
             .setThumbnail(mapdata?.beatmapset_id ? `https://b.ppy.sh/thumb/${mapdata.beatmapset_id}l.jpg` : `https://osu.ppy.sh/images/layout/avatar-guest@2x.png`)
             .addFields([
                 {
                     name: 'Score Details',
                     value:
-                        `${(this.args.acc ?? useAcc?.accuracy)?.toFixed(2)}% | ${this.args.nMiss ?? 0}x misses
-    ${this.args.combo ?? mxCombo}x/**${mxCombo}**x
-    ${this.args.mods ?? 'No mods'}
-    \`${this.args.n300}/${this.args.n100}/${this.args.n50}/${this.args.nMiss}\`
-    Speed: ${this.args.overrideSpeed ?? 1}x @ ${this.args.overrideBpm ?? mapdata.bpm}BPM
+                        `${(this.params.acc ?? useAcc?.accuracy)?.toFixed(2)}% | ${this.params.nMiss ?? 0}x misses
+    ${this.params.combo ?? mxCombo}x/**${mxCombo}**x
+    ${this.params.mods ?? 'No mods'}
+    \`${this.params.n300}/${this.params.n100}/${this.params.n50}/${this.params.nMiss}\`
+    Speed: ${this.params.overrideSpeed ?? 1}x @ ${this.params.overrideBpm ?? mapdata.bpm}BPM
     `,
                     inline: false
                 },
@@ -2497,7 +2497,7 @@ export class Simulate extends OsuCommand {
                     name: 'Performance',
                     value:
                         `
-    ${perfs[0].pp?.toFixed(2)}pp | ${perfs[1].pp?.toFixed(2)}pp if ${(this.args.acc ?? useAcc?.accuracy)?.toFixed(2)}% FC
+    ${perfs[0].pp?.toFixed(2)}pp | ${perfs[1].pp?.toFixed(2)}pp if ${(this.params.acc ?? useAcc?.accuracy)?.toFixed(2)}% FC
     SS: ${mapPerf[0].pp?.toFixed(2)}
     99: ${mapPerf[1].pp?.toFixed(2)}
     98: ${mapPerf[2].pp?.toFixed(2)}

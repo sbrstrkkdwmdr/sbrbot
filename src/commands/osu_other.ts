@@ -10,7 +10,7 @@ import { OsuCommand } from './command.js';
 type compareType = 'profile' | 'top' | 'mapscore';
 
 export class Compare extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         type: compareType;
         first: string;
         second: string;
@@ -22,7 +22,7 @@ export class Compare extends OsuCommand {
     constructor() {
         super();
         this.name = 'Compare';
-        this.args = {
+        this.params = {
             type: 'profile',
             first: null,
             second: null,
@@ -33,43 +33,43 @@ export class Compare extends OsuCommand {
         };
     }
 
-    async setArgsMsg() {
+    async setParamsMsg() {
         {
             const temp = await helper.tools.commands.parseArgsMode(this.input);
             this.input.args = temp.args;
-            this.args.mode = temp.mode;
+            this.params.mode = temp.mode;
         }
         if (this.input.message.mentions.users.size > 1) {
-            this.args.firstsearchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
-            this.args.secondsearchid = this.input.message.mentions.users.size > 1 ? this.input.message.mentions.users.at(1).id : null;
+            this.params.firstsearchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
+            this.params.secondsearchid = this.input.message.mentions.users.size > 1 ? this.input.message.mentions.users.at(1).id : null;
         } else if (this.input.message.mentions.users.size == 1) {
-            this.args.firstsearchid = this.input.message.author.id;
-            this.args.secondsearchid = this.input.message.mentions.users.at(0).id;
+            this.params.firstsearchid = this.input.message.author.id;
+            this.params.secondsearchid = this.input.message.mentions.users.at(0).id;
         } else {
-            this.args.firstsearchid = this.input.message.author.id;
+            this.params.firstsearchid = this.input.message.author.id;
         }
         const parseUsers = helper.tools.commands.parseUsers(this.input.args.join(' '));
-        this.args.second = parseUsers[0];
+        this.params.second = parseUsers[0];
         if (parseUsers[1]) {
-            this.args.first = parseUsers[0];
-            this.args.second = parseUsers[1];
+            this.params.first = parseUsers[0];
+            this.params.second = parseUsers[1];
         }
-        this.args.first != null && this.args.first.includes(this.args.firstsearchid) ? this.args.first = null : null;
-        this.args.second != null && this.args.second.includes(this.args.secondsearchid) ? this.args.second = null : null;
+        this.params.first != null && this.params.first.includes(this.params.firstsearchid) ? this.params.first = null : null;
+        this.params.second != null && this.params.second.includes(this.params.secondsearchid) ? this.params.second = null : null;
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.type = (interaction.options.getString('type') ?? 'profile') as compareType;
-        this.args.first = interaction.options.getString('first');
-        this.args.second = interaction.options.getString('second');
-        this.args.firstsearchid = this.commanduser.id;
-        this.args.mode = (interaction.options.getString('mode') ?? 'osu') as apitypes.GameMode;
-        if (this.args.second == null && this.args.first != null) {
-            this.args.second = this.args.first;
-            this.args.first = null;
+        this.params.type = (interaction.options.getString('type') ?? 'profile') as compareType;
+        this.params.first = interaction.options.getString('first');
+        this.params.second = interaction.options.getString('second');
+        this.params.firstsearchid = this.commanduser.id;
+        this.params.mode = (interaction.options.getString('mode') ?? 'osu') as apitypes.GameMode;
+        if (this.params.second == null && this.params.first != null) {
+            this.params.second = this.params.first;
+            this.params.first = null;
         }
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
         if (!this.input.message.embeds[0]) return;
         const interaction = (this.input.interaction as Discord.ButtonInteraction);
         const temp = helper.tools.commands.getButtonArgs(this.input.id);
@@ -82,37 +82,37 @@ export class Compare extends OsuCommand {
             helper.tools.commands.disableAllButtons(this.input.message);
             return;
         }
-        this.args.type = temp.type as compareType;
-        this.args.page = helper.tools.commands.buttonPage(temp.page, temp.maxPage, this.input.buttonType);
-        this.args.first = temp.compareFirst;
-        this.args.second = temp.compareSecond;
-        this.args.firstsearchid = temp.searchIdFirst;
-        this.args.secondsearchid = temp.searchIdSecond;
+        this.params.type = temp.type as compareType;
+        this.params.page = helper.tools.commands.buttonPage(temp.page, temp.maxPage, this.input.buttonType);
+        this.params.first = temp.compareFirst;
+        this.params.second = temp.compareSecond;
+        this.params.firstsearchid = temp.searchIdFirst;
+        this.params.secondsearchid = temp.searchIdSecond;
     }
     getOverrides(): void {
         if (!this.input.overrides) return;
         if (this.input.overrides.type != null) {
-            this.args.type = this.input.overrides.type as any;
+            this.params.type = this.input.overrides.type as any;
         }
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         this.getOverrides();
         // do stuff
 
         let embedescription: string = null;
-        if (this.args.page < 2 || typeof this.args.page != 'number' || isNaN(this.args.page)) {
-            this.args.page = 1;
+        if (this.params.page < 2 || typeof this.params.page != 'number' || isNaN(this.params.page)) {
+            this.params.page = 1;
         }
-        this.args.page--;
+        this.params.page--;
         let footer = '';
         let embed = new Discord.EmbedBuilder();
         try {
-            if (this.args.second == null) {
-                if (this.args.secondsearchid) {
-                    const cuser = await helper.tools.data.searchUser(this.args.secondsearchid, true);
-                    this.args.second = cuser.username;
+            if (this.params.second == null) {
+                if (this.params.secondsearchid) {
+                    const cuser = await helper.tools.data.searchUser(this.params.secondsearchid, true);
+                    this.params.second = cuser.username;
                     if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
                         if (this.input.type != 'button') {
                             throw new Error('Second user not found');
@@ -123,15 +123,15 @@ export class Compare extends OsuCommand {
                     if (helper.tools.data.getPreviousId('user', `${this.input.message?.guildId ?? this.input.interaction?.guildId}`).id == false) {
                         throw new Error(`Could not find second user - ${helper.vars.errors.uErr.osu.profile.user_msp}`);
                     }
-                    this.args.second = helper.tools.data.getPreviousId('user', `${this.input.message?.guildId ?? this.input.interaction?.guildId}`).id as string;
+                    this.params.second = helper.tools.data.getPreviousId('user', `${this.input.message?.guildId ?? this.input.interaction?.guildId}`).id as string;
                 }
             }
-            if (this.args.first == null) {
-                if (this.args.firstsearchid) {
-                    const cuser = await helper.tools.data.searchUser(this.args.firstsearchid, true);
-                    this.args.first = cuser.username;
-                    if (this.args.mode == null) {
-                        this.args.mode = cuser.gamemode;
+            if (this.params.first == null) {
+                if (this.params.firstsearchid) {
+                    const cuser = await helper.tools.data.searchUser(this.params.firstsearchid, true);
+                    this.params.first = cuser.username;
+                    if (this.params.mode == null) {
+                        this.params.mode = cuser.gamemode;
                     }
                     if (cuser.error != null && (cuser.error.includes('no user') || cuser.error.includes('type'))) {
                         if (this.input.type != 'button') {
@@ -143,21 +143,21 @@ export class Compare extends OsuCommand {
                     throw new Error('first user not found');
                 }
             }
-            if (!this.args.first || this.args.first.length == 0 || this.args.first == '') {
+            if (!this.params.first || this.params.first.length == 0 || this.params.first == '') {
                 throw new Error('Could not find the first user');
             }
-            if (!this.args.second || this.args.second.length == 0 || this.args.second == '') {
+            if (!this.params.second || this.params.second.length == 0 || this.params.second == '') {
                 throw new Error('Could not find the second user');
             }
             let firstuser: apitypes.User;
             let seconduser: apitypes.User;
             try {
-                firstuser = await this.getProfile(this.args.first, this.args.mode);
-                seconduser = await this.getProfile(this.args.second, this.args.mode);
+                firstuser = await this.getProfile(this.params.first, this.params.mode);
+                seconduser = await this.getProfile(this.params.second, this.params.mode);
             } catch (e) {
                 return;
             }
-            switch (this.args.type) {
+            switch (this.params.type) {
                 case 'profile': {
                     this.profiles(firstuser, seconduser, embed);
                 }
@@ -289,8 +289,8 @@ export class Compare extends OsuCommand {
         let firsttopdata: apitypes.Score[];
         let secondtopdata: apitypes.Score[];
         try {
-            firsttopdata = await this.getTopData(firstuser.id, this.args.mode);
-            secondtopdata = await this.getTopData(seconduser.id, this.args.mode);
+            firsttopdata = await this.getTopData(firstuser.id, this.params.mode);
+            secondtopdata = await this.getTopData(seconduser.id, this.params.mode);
         } catch (e) {
             embed.setDescription('There was an error fetching scores');
             return;
@@ -307,7 +307,7 @@ export class Compare extends OsuCommand {
         const arrscore = [];
 
         for (let i = 0; i < filterfirst.length && i < 5; i++) {
-            const firstscore: apitypes.Score = filterfirst[i + (this.args.page * 5)];
+            const firstscore: apitypes.Score = filterfirst[i + (this.params.page * 5)];
             if (!firstscore) break;
             const secondscore: apitypes.Score = secondtopdata.find(score => score.beatmap.id == firstscore.beatmap.id);
             if (secondscore == null) break;
@@ -332,19 +332,19 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
         }
         helper.tools.commands.storeButtonArgs(this.input.id, {
             type: 'top',
-            page: this.args.page + 1,
+            page: this.params.page + 1,
             maxPage: Math.ceil(filterfirst.length / 5),
-            compareFirst: this.args.first,
-            compareSecond: this.args.second,
-            searchIdFirst: this.args.firstsearchid,
-            searchIdSecond: this.args.secondsearchid
+            compareFirst: this.params.first,
+            compareSecond: this.params.second,
+            searchIdFirst: this.params.firstsearchid,
+            searchIdSecond: this.params.secondsearchid
         });
         const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons(this.name, this.commanduser, this.input.id);
         this.ctn.components = [pgbuttons];
         embed.setTitle('Comparing Top Scores')
             .setDescription(`**[${firstuser.username}](https://osu.ppy.sh/users/${firstuser.id})** and **[${seconduser.username}](https://osu.ppy.sh/users/${seconduser.id})** have ${filterfirst.length} shared scores`)
             .setFields(fields)
-            .setFooter({ text: `${this.args.page + 1}/${Math.ceil(filterfirst.length / 5)}` });
+            .setFooter({ text: `${this.params.page + 1}/${Math.ceil(filterfirst.length / 5)}` });
         return embed;
 
     }
@@ -372,7 +372,7 @@ ${firstscorestr.substring(0, 30)} || ${secondscorestr.substring(0, 30)}`
 }
 
 export class Set extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         name: string;
         mode: apitypes.GameMode;
         skin: string;
@@ -381,54 +381,54 @@ export class Set extends OsuCommand {
     constructor() {
         super();
         this.name = 'Set';
-        this.args = {
+        this.params = {
             name: null,
             mode: 'osu',
             skin: null,
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         {
             const temp = await helper.tools.commands.parseArgsMode(this.input);
             this.input.args = temp.args;
-            this.args.mode = temp.mode;
+            this.params.mode = temp.mode;
         }
 
         if (this.input.args.includes('-skin')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-skin', 'string', this.args.skin, true);
-            this.args.skin = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-skin', 'string', this.params.skin, true);
+            this.params.skin = temp.value;
             this.input.args = temp.newArgs;
         }
 
-        this.args.name = this.input.args.join(' ');
+        this.params.name = this.input.args.join(' ');
 
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.name = interaction.options.getString('user');
-        this.args.mode = interaction.options.getString('mode') as apitypes.GameMode;
-        this.args.skin = interaction.options.getString('skin');
+        this.params.name = interaction.options.getString('user');
+        this.params.mode = interaction.options.getString('mode') as apitypes.GameMode;
+        this.params.skin = interaction.options.getString('skin');
     }
     getOverrides(): void {
         if (this.input.overrides.type != null) {
             switch (this.input.overrides.type) {
                 case 'mode':
-                    [this.args.mode, this.args.name] = [this.args.name as apitypes.GameMode, this.args.mode];
+                    [this.params.mode, this.params.name] = [this.params.name as apitypes.GameMode, this.params.mode];
                     break;
                 case 'skin':
-                    [this.args.skin, this.args.name] = [this.args.name, this.args.skin];
+                    [this.params.skin, this.params.name] = [this.params.name, this.params.skin];
             }
         }
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         this.getOverrides();
         this.ctn.content = 'null';
         // do stuff
-        if (this.args.mode) {
-            const thing = helper.tools.other.modeValidatorAlt(this.args.mode);
-            this.args.mode = thing.mode;
+        if (this.params.mode) {
+            const thing = helper.tools.other.modeValidatorAlt(this.params.mode);
+            this.params.mode = thing.mode;
             if (thing.isincluded == false) {
                 this.voidcontent();
                 this.ctn.content = helper.vars.errors.uErr.osu.set.mode;
@@ -448,35 +448,35 @@ export class Set extends OsuCommand {
         updateRows = {
             userid: this.commanduser.id,
         };
-        if (this.args.name != null) {
-            updateRows['osuname'] = this.args.name;
+        if (this.params.name != null) {
+            updateRows['osuname'] = this.params.name;
         }
-        if (this.args.mode != null) {
-            updateRows['mode'] = this.args.mode;
+        if (this.params.mode != null) {
+            updateRows['mode'] = this.params.mode;
         }
-        if (this.args.skin != null) {
-            updateRows['skin'] = this.args.skin;
+        if (this.params.skin != null) {
+            updateRows['skin'] = this.params.skin;
         }
         const findname: tooltypes.dbUser = await helper.vars.userdata.findOne({ where: { userid: this.commanduser.id } }) as any;
         if (findname == null) {
             try {
                 await helper.vars.userdata.create({
                     userid: this.commanduser.id,
-                    osuname: this.args.name ?? 'undefined',
-                    mode: this.args.mode ?? 'osu',
-                    skin: this.args.skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117',
+                    osuname: this.params.name ?? 'undefined',
+                    mode: this.params.mode ?? 'osu',
+                    skin: this.params.skin ?? 'Default - https://osu.ppy.sh/community/forums/topics/129191?n=117',
                     location: '',
                     timezone: '',
                 });
                 this.ctn.content = 'Added to database';
-                if (this.args.name) {
-                    this.ctn.content += `\nSet your username to \`${this.args.name}\``;
+                if (this.params.name) {
+                    this.ctn.content += `\nSet your username to \`${this.params.name}\``;
                 }
-                if (this.args.mode) {
-                    this.ctn.content += `\nSet your mode to \`${this.args.mode}\``;
+                if (this.params.mode) {
+                    this.ctn.content += `\nSet your mode to \`${this.params.mode}\``;
                 }
-                if (this.args.skin) {
-                    this.ctn.content += `\nSet your skin to \`${this.args.skin}\``;
+                if (this.params.skin) {
+                    this.ctn.content += `\nSet your skin to \`${this.params.skin}\``;
                 }
             } catch (error) {
                 this.ctn.content = 'There was an error trying to update your settings';
@@ -490,14 +490,14 @@ export class Set extends OsuCommand {
 
             if (affectedRows.length > 0 || affectedRows[0] > 0) {
                 this.ctn.content = 'Updated your settings:';
-                if (this.args.name) {
-                    this.ctn.content += `\nSet your username to \`${this.args.name}\``;
+                if (this.params.name) {
+                    this.ctn.content += `\nSet your username to \`${this.params.name}\``;
                 }
-                if (this.args.mode) {
-                    this.ctn.content += `\nSet your mode to \`${this.args.mode}\``;
+                if (this.params.mode) {
+                    this.ctn.content += `\nSet your mode to \`${this.params.mode}\``;
                 }
-                if (this.args.skin) {
-                    this.ctn.content += `\nSet your skin to \`${this.args.skin}\``;
+                if (this.params.skin) {
+                    this.ctn.content += `\nSet your skin to \`${this.params.skin}\``;
                 }
             } else {
                 this.ctn.content = 'There was an error trying to update your settings';
@@ -510,7 +510,7 @@ export class Set extends OsuCommand {
 }
 
 export class RankPP extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         value: number;
         mode: apitypes.GameMode;
         get: 'rank' | 'pp';
@@ -518,31 +518,31 @@ export class RankPP extends OsuCommand {
     constructor() {
         super();
         this.name = 'RankPP';
-        this.args = {
+        this.params = {
             value: 100,
             mode: 'osu',
             get: 'pp'
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         {
             const temp = await helper.tools.commands.parseArgsMode(this.input);
             this.input.args = temp.args;
-            this.args.mode = temp.mode;
+            this.params.mode = temp.mode;
         }
-        this.args.value = +(this.input.args[0] ?? 100);
+        this.params.value = +(this.input.args[0] ?? 100);
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.value = interaction.options.getInteger('value') ?? 100;
-        this.args.mode = interaction.options.getString('mode') as apitypes.GameMode ?? 'osu';
+        this.params.value = interaction.options.getInteger('value') ?? 100;
+        this.params.mode = interaction.options.getString('mode') as apitypes.GameMode ?? 'osu';
     }
     getOverrides(): void {
         if (!this.input.overrides) return;
-        this.args.get = this.input?.overrides?.type as 'pp' | 'rank' ?? 'pp';
+        this.params.get = this.input?.overrides?.type as 'pp' | 'rank' ?? 'pp';
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.getOverrides();
         this.logInput();
         // do stuff
@@ -556,20 +556,20 @@ export class RankPP extends OsuCommand {
             value: number;
             isEstimated: boolean;
         } = null;
-        switch (this.args.get) {
+        switch (this.params.get) {
             case 'pp': {
-                returnval = await helper.tools.data.getRankPerformance('pp->rank', this.args.value, this.args.mode);
+                returnval = await helper.tools.data.getRankPerformance('pp->rank', this.params.value, this.params.mode);
                 output = 'approx. rank #' + helper.tools.calculate.separateNum(Math.ceil(returnval.value));
                 Embed
-                    .setTitle(`Approximate rank for ${this.args.value}pp`);
+                    .setTitle(`Approximate rank for ${this.params.value}pp`);
             }
                 break;
             case 'rank': {
-                returnval = await helper.tools.data.getRankPerformance('rank->pp', this.args.value, this.args.mode);
+                returnval = await helper.tools.data.getRankPerformance('rank->pp', this.params.value, this.params.mode);
                 output = 'approx. ' + helper.tools.calculate.separateNum(returnval.value.toFixed(2)) + 'pp';
 
                 Embed
-                    .setTitle(`Approximate performance for rank #${this.args.value}`);
+                    .setTitle(`Approximate performance for rank #${this.params.value}`);
             }
                 break;
         };
@@ -577,7 +577,7 @@ export class RankPP extends OsuCommand {
         const dataSizetxt = await helper.vars.statsCache.count();
 
         Embed
-            .setDescription(`${output}\n${helper.vars.emojis.gamemodes[this.args.mode ?? 'osu']}\n${returnval.isEstimated ? `Estimated from ${dataSizetxt} entries.` : 'Based off matching / similar entry'}`);
+            .setDescription(`${output}\n${helper.vars.emojis.gamemodes[this.params.mode ?? 'osu']}\n${returnval.isEstimated ? `Estimated from ${dataSizetxt} entries.` : 'Based off matching / similar entry'}`);
 
         this.ctn.embeds = [Embed];
 
@@ -586,7 +586,7 @@ export class RankPP extends OsuCommand {
 }
 
 export class Saved extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         searchid: string;
         user: string;
     };
@@ -599,7 +599,7 @@ export class Saved extends OsuCommand {
     constructor() {
         super();
         this.name = 'Saved';
-        this.args = {
+        this.params = {
             searchid: null,
             user: null,
         };
@@ -609,11 +609,11 @@ export class Saved extends OsuCommand {
             skin: true,
         };
     }
-    async setArgsMsg() {
-        this.args.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
-        this.args.user = this.input.args.join(' ')?.replaceAll('"', '');
-        if (!this.input.args[0] || this.input.args[0].includes(this.args.searchid)) {
-            this.args.user = null;
+    async setParamsMsg() {
+        this.params.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
+        this.params.user = this.input.args.join(' ')?.replaceAll('"', '');
+        if (!this.input.args[0] || this.input.args[0].includes(this.params.searchid)) {
+            this.params.user = null;
         }
     }
     getOverrides(): void {
@@ -643,7 +643,7 @@ export class Saved extends OsuCommand {
         }
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
         let cuser: any = {
@@ -653,19 +653,19 @@ export class Saved extends OsuCommand {
         };
 
         let fr;
-        if (this.args.user == null) {
-            fr = helper.vars.client.users.cache.get(this.args.searchid)?.username ?? 'null';
+        if (this.params.user == null) {
+            fr = helper.vars.client.users.cache.get(this.params.searchid)?.username ?? 'null';
         }
 
         const Embed = new Discord.EmbedBuilder()
-            .setTitle(`${this.args.user != null ? this.args.user : fr}'s ${this.overrideTitle ?? 'saved settings'}`);
+            .setTitle(`${this.params.user != null ? this.params.user : fr}'s ${this.overrideTitle ?? 'saved settings'}`);
 
-        if (this.args.user == null) {
-            cuser = await helper.vars.userdata.findOne({ where: { userid: this.args.searchid } });
+        if (this.params.user == null) {
+            cuser = await helper.vars.userdata.findOne({ where: { userid: this.params.searchid } });
         } else {
             const allUsers: tooltypes.dbUser[] = await helper.vars.userdata.findAll() as any;
 
-            cuser = allUsers.filter(x => (`${x.osuname}`.trim().toLowerCase() == `${this.args.user}`.trim().toLowerCase()))[0];
+            cuser = allUsers.filter(x => (`${x.osuname}`.trim().toLowerCase() == `${this.params.user}`.trim().toLowerCase()))[0];
         }
 
         if (cuser) {
@@ -702,7 +702,7 @@ export class Saved extends OsuCommand {
 }
 
 export class WhatIf extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         user: string;
         searchid: string;
         pp: number;
@@ -711,86 +711,86 @@ export class WhatIf extends OsuCommand {
     constructor() {
         super();
         this.name = 'WhatIf';
-        this.args = {
+        this.params = {
             user: null,
             searchid: null,
             pp: null,
             mode: null,
         };
     }
-    async setArgsMsg() {
-        this.args.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
+    async setParamsMsg() {
+        this.params.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
         {
             const temp = await helper.tools.commands.parseArgsMode(this.input);
             this.input.args = temp.args;
-            this.args.mode = temp.mode;
+            this.params.mode = temp.mode;
         }
 
         this.input.args = helper.tools.commands.cleanArgs(this.input.args);
 
         if (!isNaN(+this.input.args[0])) {
-            this.args.pp = +this.input.args[0];
+            this.params.pp = +this.input.args[0];
         }
         this.input.args.forEach(x => {
             if (!isNaN(+x)) {
-                this.args.pp = +x;
+                this.params.pp = +x;
             }
         });
         for (const x of this.input.args) {
             if (!isNaN(+x)) {
-                this.args.pp = +x;
+                this.params.pp = +x;
                 break;
             }
         }
-        if (this.args.pp && !isNaN(this.args.pp)) {
-            this.input.args.splice(this.input.args.indexOf(this.args.pp + ''), 1);
+        if (this.params.pp && !isNaN(this.params.pp)) {
+            this.input.args.splice(this.input.args.indexOf(this.params.pp + ''), 1);
         }
 
         const usertemp = helper.tools.commands.fetchUser(this.input.args);
         this.input.args = usertemp.args;
-        this.args.user = usertemp.id;
-        if (usertemp.mode && !this.args.mode) {
-            this.args.mode = usertemp.mode;
+        this.params.user = usertemp.id;
+        if (usertemp.mode && !this.params.mode) {
+            this.params.mode = usertemp.mode;
         }
-        if (!this.args.user || this.args.user.includes(this.args.searchid)) {
-            this.args.user = null;
+        if (!this.params.user || this.params.user.includes(this.params.searchid)) {
+            this.params.user = null;
         }
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.searchid = this.commanduser.id;
-        this.args.user = interaction.options.getString('user');
-        this.args.mode = interaction.options.getString('mode') as apitypes.GameMode;
-        this.args.pp = interaction.options.getNumber('pp');
+        this.params.searchid = this.commanduser.id;
+        this.params.user = interaction.options.getString('user');
+        this.params.mode = interaction.options.getString('mode') as apitypes.GameMode;
+        this.params.pp = interaction.options.getNumber('pp');
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
         if (!this.input.message.embeds[0]) return;
         const interaction = (this.input.interaction as Discord.ButtonInteraction);
-        this.args.searchid = this.commanduser.id;
+        this.params.searchid = this.commanduser.id;
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
 
-        if (!this.args.pp || isNaN(this.args.pp) || this.args.pp > 10000) {
+        if (!this.params.pp || isNaN(this.params.pp) || this.params.pp > 10000) {
             this.input.message.reply("Please define a valid PP value to calculate");
         }
 
         {
-            const t = await this.validUser(this.args.user, this.args.searchid, this.args.mode);
-            this.args.user = t.user;
-            this.args.mode = t.mode;
+            const t = await this.validUser(this.params.user, this.params.searchid, this.params.mode);
+            this.params.user = t.user;
+            this.params.mode = t.mode;
         }
 
         let osudata: apitypes.User;
         try {
-            osudata = await this.getProfile(this.args.user, this.args.mode);
+            osudata = await this.getProfile(this.params.user, this.params.mode);
         } catch (e) {
             return;
         }
-        if (this.args.mode == null) {
-            this.args.mode = osudata.playmode;
+        if (this.params.mode == null) {
+            this.params.mode = osudata.playmode;
         }
 
         const buttons = new Discord.ActionRowBuilder()
@@ -803,7 +803,7 @@ export class WhatIf extends OsuCommand {
 
         let osutopdata: apitypes.Score[];
         try {
-            osutopdata = await this.getTopData(osudata.id, this.args.mode);
+            osutopdata = await this.getTopData(osudata.id, this.params.mode);
         } catch (e) {
             this.ctn.content = 'There was an error trying to fetch top scores';
             this.send();
@@ -811,9 +811,9 @@ export class WhatIf extends OsuCommand {
         }
 
         const pparr = osutopdata.slice().map(x => x.pp);
-        pparr.push(this.args.pp);
+        pparr.push(this.params.pp);
         pparr.sort((a, b) => b - a);
-        const ppindex = pparr.indexOf(this.args.pp);
+        const ppindex = pparr.indexOf(this.params.pp);
 
         const weight = helper.tools.calculate.findWeight(ppindex);
 
@@ -833,21 +833,21 @@ export class WhatIf extends OsuCommand {
 
         const bonus = osudata.statistics.pp - newBonus.reduce((a, b) => a + b, 0);
 
-        const guessrank = await helper.tools.data.getRankPerformance('pp->rank', (total + bonus), `${helper.tools.other.modeValidator(this.args.mode)}`,);
+        const guessrank = await helper.tools.data.getRankPerformance('pp->rank', (total + bonus), `${helper.tools.other.modeValidator(this.params.mode)}`,);
 
         const embed = new Discord.EmbedBuilder()
-            .setTitle(`What if ${osudata.username} gained ${this.args.pp}pp?`)
+            .setTitle(`What if ${osudata.username} gained ${this.params.pp}pp?`)
             .setColor(helper.vars.colours.embedColour.query.dec)
             .setThumbnail(`${osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`);
         helper.tools.formatter.userAuthor(osudata, embed);
         if (ppindex + 1 > 100) {
             embed.setDescription(
-                `A ${this.args.pp}pp score would be outside of their top 100 plays and be weighted at 0%.
+                `A ${this.params.pp}pp score would be outside of their top 100 plays and be weighted at 0%.
     Their total pp and rank would not change.
     `);
         } else {
             embed.setDescription(
-                `A ${this.args.pp}pp score would be their **${helper.tools.calculate.toOrdinal(ppindex + 1)}** top play and would be weighted at **${(weight * 100).toFixed(2)}%**.
+                `A ${this.params.pp}pp score would be their **${helper.tools.calculate.toOrdinal(ppindex + 1)}** top play and would be weighted at **${(weight * 100).toFixed(2)}%**.
     Their pp would change by **${Math.abs((total + bonus) - osudata.statistics.pp).toFixed(2)}pp** and their new total pp would be **${(total + bonus).toFixed(2)}pp**.
     Their new rank would be **${Math.round(guessrank.value)}** (+${Math.round(osudata?.statistics?.global_rank - guessrank.value)}).
     `

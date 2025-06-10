@@ -7,51 +7,51 @@ import * as tooltypes from '../types/tools.js';
 import { Command } from './command.js';
 
 export class CheckPerms extends Command {
-    declare protected args: {
+    declare protected params: {
         searchUser: Discord.User | Discord.APIUser;
     };
     constructor() {
         super();
         this.name = 'CheckPerms';
-        this.args = {
+        this.params = {
             searchUser: null,
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
 
         if (this.input.args[0]) {
             if (this.input.message.mentions.users.size > 0) {
-                this.args.searchUser = this.input.message.mentions.users.first();
+                this.params.searchUser = this.input.message.mentions.users.first();
             } else {
-                this.args.searchUser = helper.vars.client.users.cache.get(this.input.args.join(' '));
+                this.params.searchUser = helper.vars.client.users.cache.get(this.input.args.join(' '));
             }
         } else {
-            this.args.searchUser = this.commanduser;
+            this.params.searchUser = this.commanduser;
         }
 
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
-        if (this.args.searchUser == null || typeof this.args.searchUser == 'undefined') {
-            this.args.searchUser = this.commanduser;
+        if (this.params.searchUser == null || typeof this.params.searchUser == 'undefined') {
+            this.params.searchUser = this.commanduser;
         }
 
         if (!(helper.tools.checks.isAdmin(this.commanduser.id, this.input.message?.guildId) || helper.tools.checks.isOwner(this.commanduser.id))) {
-            this.args.searchUser = this.commanduser;
+            this.params.searchUser = this.commanduser;
         }
         const embed = new Discord.EmbedBuilder();
         try {
-            const userAsMember = this.input.message.guild.members.cache.get(this.args.searchUser.id);
+            const userAsMember = this.input.message.guild.members.cache.get(this.params.searchUser.id);
             //get perms
             const perms = userAsMember.permissions.toArray().join(' **|** ');
 
             embed
-                .setTitle(`${this.args.searchUser.username}'s Permissions`)
+                .setTitle(`${this.params.searchUser.username}'s Permissions`)
                 .setDescription(`**${perms}**`)
                 .setColor(helper.vars.colours.embedColour.admin.dec);
 
@@ -68,27 +68,27 @@ export class CheckPerms extends Command {
 }
 
 export class Clear extends Command {
-    declare protected args: {
+    declare protected params: {
         type: string;
     };
     constructor() {
         super();
         this.name = 'Clear';
-        this.args = {
+        this.params = {
             type: ''
         };
     }
-    async setArgsMsg() {
-        this.args.type = this.input?.args[0];
+    async setParamsMsg() {
+        this.params.type = this.input?.args[0];
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
         let embed = new Discord.EmbedBuilder()
             .setTitle('Clearing cache');
 
-        embed = this.clearCache(this.args.type, embed);
+        embed = this.clearCache(this.params.type, embed);
         this.ctn.embeds = [embed];
         this.send();
     }
@@ -293,13 +293,13 @@ export class Clear extends Command {
 }
 
 export class Crash extends Command {
-    declare protected args: {};
+    declare protected params: {};
     constructor() {
         super();
         this.name = 'Crash';
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput(true);
         // do stuff
         this.ctn.content = 'executing crash command...';
@@ -319,19 +319,19 @@ type debugtype =
     'ip' | 'tcp' | 'location' |
     'memory';
 export class Debug extends Command {
-    declare protected args: {
+    declare protected params: {
         type: debugtype;
         inputstr: string;
     };
     constructor() {
         super();
         this.name = 'Debug';
-        this.args = {
+        this.params = {
             type: null,
             inputstr: null,
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         if (!this.input.args[0]) {
             await helper.tools.commands.sendMessage({
                 type: this.input.type,
@@ -344,27 +344,27 @@ export class Debug extends Command {
             return;
 
         }
-        this.args.type = this.input.args?.[0] as debugtype;
+        this.params.type = this.input.args?.[0] as debugtype;
 
         this.input.args.shift();
-        this.args.inputstr = this.input.args?.join(' ');
+        this.params.inputstr = this.input.args?.join(' ');
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
     }
 
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
-        switch (this.args.type) {
+        switch (this.params.type) {
             //return api files for []
             case 'commandfile': {
                 let cmdidcur = `${(+this.input.id) - 1}`;
-                if (!this.args.inputstr || isNaN(+this.args.inputstr)) {
+                if (!this.params.inputstr || isNaN(+this.params.inputstr)) {
                     cmdidcur = fs.readFileSync(`${helper.vars.path.main}/id.txt`, 'utf-8');
                 } else {
-                    cmdidcur = this.args.inputstr;
+                    cmdidcur = this.params.inputstr;
                 }
                 const files = fs.readdirSync(`${helper.vars.path.cache}/commandData/`);
                 if (files.length < 1) {
@@ -389,7 +389,7 @@ export class Debug extends Command {
             case 'commandfiletype': {
                 this.ctn.content = 'txt';
             };
-                if (!this.args.inputstr) {
+                if (!this.params.inputstr) {
                     this.ctn.content = `No search query given`;
                 }
                 const files = fs.readdirSync(`${helper.vars.path.cache}/debug/command`);
@@ -400,9 +400,9 @@ export class Debug extends Command {
                     //convert to search term
                     let resString: string;
                     let tempId = null;
-                    if (this.args.inputstr.includes(' ')) {
-                        const temp = this.args.inputstr.split(' ');
-                        this.args.inputstr = temp[0];
+                    if (this.params.inputstr.includes(' ')) {
+                        const temp = this.params.inputstr.split(' ');
+                        this.params.inputstr = temp[0];
                         tempId = temp[1];
                     }
                     const cmdftypes = [
@@ -426,7 +426,7 @@ export class Debug extends Command {
                         'UserBeatmaps',
                         'WhatIf',
                     ];
-                    switch (this.args.inputstr.toLowerCase()) {
+                    switch (this.params.inputstr.toLowerCase()) {
                         case 'badgeweightsystem': case 'badgeweight': case 'badgeweightseed': case 'badgerank':case 'bws':
                             resString = 'BadgeWeightSeed';
                             break;
@@ -497,7 +497,7 @@ export class Debug extends Command {
                             resString = 'map (file)';
                             break;
                         default:
-                            resString = this.args.inputstr;
+                            resString = this.params.inputstr;
                             break;
                     }
                     switch (resString) {
@@ -531,7 +531,7 @@ export class Debug extends Command {
                             }
                             break;
                         default:
-                            this.ctn.content = `${this.args.inputstr && this.args.inputstr?.length > 0 ? `No files found for command "${this.args.inputstr}"\n` : ''}Valid options are: ${cmdftypes.map(x => '`' + x + '`').join(', ')}`;
+                            this.ctn.content = `${this.params.inputstr && this.params.inputstr?.length > 0 ? `No files found for command "${this.params.inputstr}"\n` : ''}Valid options are: ${cmdftypes.map(x => '`' + x + '`').join(', ')}`;
                             break;
                     }
                 }
@@ -560,10 +560,10 @@ Owner ID: ${guild.ownerId}
             //list all channels of server x
             case 'channels': {
                 let serverId: string;
-                if (!this.args.inputstr || isNaN(+this.args.inputstr)) {
+                if (!this.params.inputstr || isNaN(+this.params.inputstr)) {
                     serverId = this.input.message?.guildId;
                 } else {
-                    serverId = this.args.inputstr;
+                    serverId = this.params.inputstr;
                 }
                 const curServer = helper.vars.client.guilds.cache.get(serverId);
                 if (!curServer) {
@@ -594,10 +594,10 @@ Owner ID: ${guild.ownerId}
             //list all users of server x
             case 'users': {
                 let serverId: string;
-                if (!this.args.inputstr || isNaN(+this.args.inputstr)) {
+                if (!this.params.inputstr || isNaN(+this.params.inputstr)) {
                     serverId = this.input.message?.guildId;
                 } else {
-                    serverId = this.args.inputstr;
+                    serverId = this.params.inputstr;
                 }
                 const curServer = helper.vars.client.guilds.cache.get(serverId);
                 if (!curServer) {
@@ -631,10 +631,10 @@ Joined(EPOCH):  ${member.joinedTimestamp}
                 break;
             case 'maps': {
                 let type;
-                if (!this.args.inputstr) {
+                if (!this.params.inputstr) {
                     type = 'id';
                 } else {
-                    type = this.args.inputstr;
+                    type = this.params.inputstr;
                 }
                 const directory = `${helper.vars.path.cache}/commandData`;
                 const dirFiles = fs.readdirSync(directory);
@@ -679,10 +679,10 @@ Joined(EPOCH):  ${member.joinedTimestamp}
             //returns command logs for server
             case 'logs': {
                 let serverId: string;
-                if (!this.args.inputstr || isNaN(+this.args.inputstr)) {
+                if (!this.params.inputstr || isNaN(+this.params.inputstr)) {
                     serverId = this.input.message?.guildId;
                 } else {
-                    serverId = this.args.inputstr;
+                    serverId = this.params.inputstr;
                 }
                 const curServer = fs.existsSync(`${helper.vars.path.main}/logs/cmd/${serverId}.log`);
                 if (!curServer) {
@@ -752,15 +752,15 @@ External:   ${tomb(memdat.external)} MiB
         const sFiles = fs.readdirSync(`${inpath}`);
         const found = sFiles.find(x => x == find);
         const inFiles = fs.readdirSync(`${inpath}/${found}`);
-        this.ctn.content = `Files found for command \`${this.args.inputstr}\``;
+        this.ctn.content = `Files found for command \`${this.params.inputstr}\``;
         this.ctn.files = inFiles.map(x => `${inpath}/${found}/${x}`);
         if (!isNaN(+serverId)) {
             const tfiles = inFiles.map(x => `${inpath}/${found}/${x}`).filter(x => x.includes(serverId));
-            this.ctn.content = `Files found for command \`${this.args.inputstr}\`, matching server ID ${serverId}`;
+            this.ctn.content = `Files found for command \`${this.params.inputstr}\`, matching server ID ${serverId}`;
             this.ctn.files = tfiles;
             if (tfiles.length == 0) {
                 this.ctn.files = inFiles.map(x => `${inpath}/${found}/${x}`);
-                this.ctn.content = `Files found for command \`${this.args.inputstr}\`. None found matching ${serverId}`;
+                this.ctn.content = `Files found for command \`${this.params.inputstr}\`. None found matching ${serverId}`;
             }
         }
     }
@@ -786,20 +786,20 @@ External:   ${tomb(memdat.external)} MiB
 }
 
 export class Find extends Command {
-    declare protected args: {};
+    declare protected params: {};
     constructor() {
         super();
         this.name = 'Find';
 
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
     }
 
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput(true);
         // do stuff
 
@@ -807,40 +807,40 @@ export class Find extends Command {
     }
 }
 export class LeaveGuild extends Command {
-    declare protected args: {
+    declare protected params: {
         guildId: string;
     };
     constructor() {
         super();
         this.name = 'LeaveGuild';
-        this.args = {
+        this.params = {
             guildId: null
         };
     }
-    async setArgsMsg() {
-        this.args.guildId = this.input.args[0] ?? this.input.message?.guildId;
+    async setParamsMsg() {
+        this.params.guildId = this.input.args[0] ?? this.input.message?.guildId;
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
     }
 
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         let allowed = false;
         let success = false;
         // do stuff
         if (helper.tools.checks.isOwner(this.commanduser.id)) {
             allowed = true;
-            const guild = helper.vars.client.guilds.cache.get(this.args.guildId);
+            const guild = helper.vars.client.guilds.cache.get(this.params.guildId);
             if (guild) {
                 success = true;
                 guild.leave();
             }
         }
-        if (helper.tools.checks.isAdmin(this.commanduser.id, this.args.guildId) && !success) {
+        if (helper.tools.checks.isAdmin(this.commanduser.id, this.params.guildId) && !success) {
             allowed = true;
-            const guild = helper.vars.client.guilds.cache.get(this.args.guildId);
+            const guild = helper.vars.client.guilds.cache.get(this.params.guildId);
             if (guild) {
                 success = true;
                 guild.leave();
@@ -849,7 +849,7 @@ export class LeaveGuild extends Command {
         this.ctn.content =
             allowed ?
                 success ?
-                    `Successfully left guild \`${this.args.guildId}\`` :
+                    `Successfully left guild \`${this.params.guildId}\`` :
                     `Was unable to leave guild`
                 :
                 'You don\'t have permissions to use this command';
@@ -858,37 +858,37 @@ export class LeaveGuild extends Command {
 }
 
 export class Prefix extends Command {
-    declare protected args: {
+    declare protected params: {
         newPrefix: string;
     };
     constructor() {
         super();
         this.name = 'Prefix';
-        this.args = {
+        this.params = {
             newPrefix: null
         };
     }
-    async setArgsMsg() {
-        this.args.newPrefix = this.input.args.join(' ');
+    async setParamsMsg() {
+        this.params.newPrefix = this.input.args.join(' ');
     }
 
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
         const curGuildSettings = await helper.vars.guildSettings.findOne({ where: { guildid: this.input.message?.guildId } }) as any;
         if (curGuildSettings == null) {
             this.ctn.content = 'Error: Guild settings not found';
         } else {
-            if (typeof this.args.newPrefix != 'string' || this.args.newPrefix.length < 1 || !(helper.tools.checks.isAdmin(this.commanduser.id, this.input.message?.guildId,) || helper.tools.checks.isOwner(this.commanduser.id))) {
+            if (typeof this.params.newPrefix != 'string' || this.params.newPrefix.length < 1 || !(helper.tools.checks.isAdmin(this.commanduser.id, this.input.message?.guildId,) || helper.tools.checks.isOwner(this.commanduser.id))) {
                 this.ctn.content = `The current prefix is \`${curGuildSettings?.prefix}\``;
             } else {
                 curGuildSettings.update({
-                    prefix: this.args.newPrefix
+                    prefix: this.params.newPrefix
                 }, {
                     where: { guildid: this.input.message?.guildId }
                 });
-                this.ctn.content = `Prefix set to \`${this.args.newPrefix}\``;
+                this.ctn.content = `Prefix set to \`${this.params.newPrefix}\``;
             }
         }
 
@@ -897,13 +897,13 @@ export class Prefix extends Command {
 }
 
 export class Servers extends Command {
-    declare protected args: {};
+    declare protected params: {};
     constructor() {
         super();
         this.name = 'Servers';
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput(true);
         // do stuff
 

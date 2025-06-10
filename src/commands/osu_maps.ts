@@ -8,7 +8,7 @@ import * as tooltypes from '../types/tools.js';
 import { OsuCommand } from './command.js';
 
 export class Map extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         mapid;
         mapmods: string;
         maptitleq: string;
@@ -28,7 +28,7 @@ export class Map extends OsuCommand {
     constructor() {
         super();
         this.name = 'Map';
-        this.args = {
+        this.params = {
             mapid: undefined,
             mapmods: undefined,
             maptitleq: null,
@@ -46,92 +46,92 @@ export class Map extends OsuCommand {
             forceMode: 'osu',
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, this.input.args, false, null, false, false);
         if (detailArgFinder.found) {
-            this.args.detailed = 2;
+            this.params.detailed = 2;
             this.input.args = detailArgFinder.args;
         }
         if (this.input.args.includes('-bpm')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-bpm', 'number', this.args.overrideBpm);
-            this.args.overrideBpm = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-bpm', 'number', this.params.overrideBpm);
+            this.params.overrideBpm = temp.value;
             this.input.args = temp.newArgs;
         }
         if (this.input.args.includes('-speed')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-speed', 'number', this.args.overrideSpeed);
-            this.args.overrideSpeed = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-speed', 'number', this.params.overrideSpeed);
+            this.params.overrideSpeed = temp.value;
             this.input.args = temp.newArgs;
         }
 
         if (this.input.args.includes('-cs')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-cs', 'number', this.args.customCS);
-            this.args.customCS = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-cs', 'number', this.params.customCS);
+            this.params.customCS = temp.value;
             this.input.args = temp.newArgs;
         }
         if (this.input.args.includes('-ar')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-ar', 'number', this.args.customAR);
-            this.args.customAR = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-ar', 'number', this.params.customAR);
+            this.params.customAR = temp.value;
             this.input.args = temp.newArgs;
         }
         const customODArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['od', 'accuracy',]), this.input.args, true, 'number', false, false);
         if (customODArgFinder.found) {
-            this.args.customOD = customODArgFinder.output;
+            this.params.customOD = customODArgFinder.output;
             this.input.args = customODArgFinder.args;
         }
         const customHPArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['hp', 'drain', 'health']), this.input.args, true, 'number', false, false);
         if (customHPArgFinder.found) {
-            this.args.customHP = customHPArgFinder.output;
+            this.params.customHP = customHPArgFinder.output;
             this.input.args = customHPArgFinder.args;
         }
 
         if (this.input.args.includes('-?')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-?', 'string', this.args.maptitleq, true);
-            this.args.maptitleq = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-?', 'string', this.params.maptitleq, true);
+            this.params.maptitleq = temp.value;
             this.input.args = temp.newArgs;
         }
 
         if (this.input.args.join(' ').includes('"')) {
-            this.args.maptitleq = this.input.args.join(' ').substring(
+            this.params.maptitleq = this.input.args.join(' ').substring(
                 this.input.args.join(' ').indexOf('"') + 1,
                 this.input.args.join(' ').lastIndexOf('"')
             );
-            this.input.args = this.input.args.join(' ').replace(this.args.maptitleq, '').split(' ');
+            this.input.args = this.input.args.join(' ').replace(this.params.maptitleq, '').split(' ');
         }
         if (this.input.args.join(' ').includes('+')) {
-            this.args.mapmods = this.input.args.join(' ').split('+')[1];
-            this.args.mapmods.includes(' ') ? this.args.mapmods = this.args.mapmods.split(' ')[0] : null;
-            this.input.args = this.input.args.join(' ').replace('+', '').replace(this.args.mapmods, '').split(' ');
+            this.params.mapmods = this.input.args.join(' ').split('+')[1];
+            this.params.mapmods.includes(' ') ? this.params.mapmods = this.params.mapmods.split(' ')[0] : null;
+            this.input.args = this.input.args.join(' ').replace('+', '').replace(this.params.mapmods, '').split(' ');
         }
 
         if (this.input.args.includes('-bg')) {
-            this.args.showBg = true;
+            this.params.showBg = true;
         }
         const isppCalcArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['pp', 'calc', 'performance']), this.input.args, false, null, false, false);
         if (isppCalcArgFinder.found) {
-            this.args.isppCalc = true;
+            this.params.isppCalc = true;
             this.input.args = isppCalcArgFinder.args;
         }
 
         const modeTemp = await helper.tools.commands.parseArgsMode(this.input);
-        this.args.forceMode = modeTemp.mode;
+        this.params.forceMode = modeTemp.mode;
         this.input.args = modeTemp.args;
 
         this.input.args = helper.tools.commands.cleanArgs(this.input.args);
         const mapTemp = await helper.tools.commands.mapIdFromLink(this.input.args.join(' '), true);
-        this.args.mapid = mapTemp.map;
-        mapTemp.mode ? this.args.forceMode = mapTemp.mode : null;
+        this.params.mapid = mapTemp.map;
+        mapTemp.mode ? this.params.forceMode = mapTemp.mode : null;
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.mapid = interaction.options.getInteger('id');
-        this.args.mapmods = interaction.options.getString('mods');
-        this.args.detailed = interaction.options.getBoolean('detailed') ? 2 : 1;
-        this.args.maptitleq = interaction.options.getString('query');
-        interaction.options.getNumber('bpm') ? this.args.overrideBpm = interaction.options.getNumber('bpm') : null;
-        interaction.options.getNumber('speed') ? this.args.overrideSpeed = interaction.options.getNumber('speed') : null;
+        this.params.mapid = interaction.options.getInteger('id');
+        this.params.mapmods = interaction.options.getString('mods');
+        this.params.detailed = interaction.options.getBoolean('detailed') ? 2 : 1;
+        this.params.maptitleq = interaction.options.getString('query');
+        interaction.options.getNumber('bpm') ? this.params.overrideBpm = interaction.options.getNumber('bpm') : null;
+        interaction.options.getNumber('speed') ? this.params.overrideSpeed = interaction.options.getNumber('speed') : null;
 
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
         if (!this.input.message.embeds[0]) return;
         const interaction = (this.input.interaction as Discord.ButtonInteraction);
         const temp = helper.tools.commands.getButtonArgs(this.input.id);
@@ -144,30 +144,30 @@ export class Map extends OsuCommand {
             helper.tools.commands.disableAllButtons(this.input.message);
             return;
         }
-        this.args.mapid = temp.mapId;
-        this.args.forceMode = temp.mode;
-        this.args.mapmods = temp.modsInclude;
-        this.args.overrideBpm = temp.overrideBpm;
-        this.args.overrideSpeed = temp.overrideSpeed;
-        this.args.isppCalc = temp.ppCalc;
-        this.args.detailed = helper.tools.commands.buttonDetail(temp.detailed, this.input.buttonType);
+        this.params.mapid = temp.mapId;
+        this.params.forceMode = temp.mode;
+        this.params.mapmods = temp.modsInclude;
+        this.params.overrideBpm = temp.overrideBpm;
+        this.params.overrideSpeed = temp.overrideSpeed;
+        this.params.isppCalc = temp.ppCalc;
+        this.params.detailed = helper.tools.commands.buttonDetail(temp.detailed, this.input.buttonType);
     }
-    async setArgsLink() {
+    async setParamsLink() {
         const messagenohttp = this.input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
-        this.args.mapmods =
+        this.params.mapmods =
             this.input.message.content.includes('+') ?
                 messagenohttp.split('+')[1] : 'NM';
         if (this.input.args[0] && this.input.args[0].startsWith('query')) {
-            this.args.maptitleq = this.input.args[1];
+            this.params.maptitleq = this.input.args[1];
         } else if (messagenohttp.includes('q=')) {
-            this.args.maptitleq =
+            this.params.maptitleq =
                 messagenohttp.includes('&') ?
                     messagenohttp.split('q=')[1].split('&')[0] :
                     messagenohttp.split('q=')[1];
         } else {
             const mapTemp = await helper.tools.commands.mapIdFromLink(messagenohttp, true,);
-            this.args.mapid = mapTemp.map;
-            this.args.forceMode = mapTemp.mode ?? this.args.forceMode;
+            this.params.mapid = mapTemp.map;
+            this.params.forceMode = mapTemp.mode ?? this.params.forceMode;
             if (!(mapTemp.map || mapTemp.set)) {
                 this.voidcontent();
                 this.ctn.content = helper.vars.errors.uErr.osu.map.url;
@@ -176,11 +176,11 @@ export class Map extends OsuCommand {
             }
             //get map id via mapset if not in the given URL
             if (!mapTemp.map && mapTemp.set) {
-                this.args.mapid = this.mapset?.beatmaps[0]?.id;
+                this.params.mapid = this.mapset?.beatmaps[0]?.id;
                 try {
                     const bm = await this.getMapSet(this.map.beatmapset_id);
                     this.mapset = bm;
-                    this.args.mapid = bm.beatmaps[0].id;
+                    this.params.mapid = bm.beatmaps[0].id;
                 } catch (e) {
                     return;
                 }
@@ -190,10 +190,10 @@ export class Map extends OsuCommand {
     getOverrides(): void {
         if (!this.input.overrides) return;
         if (this.input.overrides?.overwriteModal != null) {
-            this.args.overwriteModal = this.input?.overrides?.overwriteModal ?? this.args.overwriteModal;
+            this.params.overwriteModal = this.input?.overrides?.overwriteModal ?? this.params.overwriteModal;
         }
         if (this.input.overrides?.id != null) {
-            this.args.mapid = this.input?.overrides?.id ?? this.args.mapid;
+            this.params.mapid = this.input?.overrides?.id ?? this.params.mapid;
         }
         if (this.input.overrides?.commanduser != null) {
             this.commanduser = this.input.overrides.commanduser;
@@ -203,30 +203,30 @@ export class Map extends OsuCommand {
             this.input.type = this.input.overrides.commandAs;
         }
         if (this.input.overrides?.filterMods != null) {
-            this.args.mapmods = this.input.overrides.filterMods;
+            this.params.mapmods = this.input.overrides.filterMods;
         }
         if (this.input.overrides?.ex != null) {
             this.ctn.content += this.input.overrides?.ex;
         }
         if (this.input.overrides?.type != null) {
-            this.args.isppCalc = true;
+            this.params.isppCalc = true;
         }
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         this.getOverrides();
         // do stuff
         const buttons = new Discord.ActionRowBuilder();
-        if (this.args.isppCalc) {
+        if (this.params.isppCalc) {
             buttons.addComponents(
                 new Discord.ButtonBuilder()
-                    .setCustomId(`${helper.vars.versions.releaseDate}-Map-${this.name}-${this.commanduser.id}-${this.input.id}-${this.args.mapid}${this.args.mapmods && this.args.mapmods != 'NM' ? '+' + this.args.mapmods : ''}`)
+                    .setCustomId(`${helper.vars.versions.releaseDate}-Map-${this.name}-${this.commanduser.id}-${this.input.id}-${this.params.mapid}${this.params.mapmods && this.params.mapmods != 'NM' ? '+' + this.params.mapmods : ''}`)
                     .setStyle(helper.vars.buttons.type.current)
                     .setEmoji(helper.vars.buttons.label.extras.map)
             );
         } else {
-            if (this.args.detailed == 2) {
+            if (this.params.detailed == 2) {
                 buttons.addComponents(
                     new Discord.ButtonBuilder()
                         .setCustomId(`${helper.vars.versions.releaseDate}-DetailDisable-${this.name}-${this.commanduser.id}-${this.input.id}`)
@@ -243,15 +243,15 @@ export class Map extends OsuCommand {
             }
         }
 
-        if (!this.args.mapid && !this.args.maptitleq) {
+        if (!this.params.mapid && !this.params.maptitleq) {
             const temp = this.getLatestMap();
-            this.args.mapid = temp.mapid;
-            if (!this.args.mapmods || osumodcalc.OrderMods(this.args.mapmods).string.length == 0) {
-                this.args.mapmods = temp.mods;
+            this.params.mapid = temp.mapid;
+            if (!this.params.mapmods || osumodcalc.OrderMods(this.params.mapmods).string.length == 0) {
+                this.params.mapmods = temp.mods;
             }
-            this.args.forceMode = temp.mode;
+            this.params.forceMode = temp.mode;
         }
-        if (this.args.mapid == false && !this.args.maptitleq) {
+        if (this.params.mapid == false && !this.params.maptitleq) {
             helper.tools.commands.missingPrevID_map(this.input, 'map');
             return;
         }
@@ -270,9 +270,9 @@ export class Map extends OsuCommand {
             this.ctn.edit = true;
         }
 
-        if (this.args.maptitleq == null) {
+        if (this.params.maptitleq == null) {
             try {
-                const m = await this.getMap(this.args.mapid);
+                const m = await this.getMap(this.params.mapid);
                 this.map = m;
             } catch (e) {
                 return;
@@ -285,15 +285,15 @@ export class Map extends OsuCommand {
                 return;
             }
         }
-        else if (this.args.maptitleq != null) {
-            const mapidtestReq = await helper.tools.api.getMapSearch(encodeURIComponent(this.args.maptitleq), ['s=any']);
+        else if (this.params.maptitleq != null) {
+            const mapidtestReq = await helper.tools.api.getMapSearch(encodeURIComponent(this.params.maptitleq), ['s=any']);
             const mapidtest = mapidtestReq.apiData as apitypes.BeatmapsetSearch;
             if (mapidtestReq?.error) {
                 await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.map.search, false);
                 return;
             }
             helper.tools.data.debug(mapidtestReq, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'mapIdTestData');
-            helper.tools.data.storeFile(mapidtestReq, this.args.maptitleq.replace(/[\W_]+/g, '').replaceAll(' ', '_'), 'mapQuerydata');
+            helper.tools.data.storeFile(mapidtestReq, this.params.maptitleq.replace(/[\W_]+/g, '').replaceAll(' ', '_'), 'mapQuerydata');
 
             if (mapidtest?.hasOwnProperty('error') && !mapidtest.hasOwnProperty('beatmapsets')) {
                 await helper.tools.commands.errorAndAbort(this.input, this.name, true, helper.vars.errors.uErr.osu.map.search, true);
@@ -305,7 +305,7 @@ export class Map extends OsuCommand {
 
             if (mapidtest.beatmapsets.length == 0) {
                 this.voidcontent();
-                this.ctn.content = helper.vars.errors.uErr.osu.map.search_nf.replace('[INPUT]', this.args.maptitleq);
+                this.ctn.content = helper.vars.errors.uErr.osu.map.search_nf.replace('[INPUT]', this.params.maptitleq);
                 await this.send();
                 return;
             }
@@ -313,7 +313,7 @@ export class Map extends OsuCommand {
                 let matchedId = null;
                 // first check if any diff name matches the search
                 for (let i = 0; i < mapidtest.beatmapsets[0].beatmaps.length; i++) {
-                    if (this.args.maptitleq.includes(mapidtest.beatmapsets[0].beatmaps[i].version)) {
+                    if (this.params.maptitleq.includes(mapidtest.beatmapsets[0].beatmaps[i].version)) {
                         matchedId = mapidtest.beatmapsets[0].beatmaps[i].id;
                     }
                 }
@@ -392,7 +392,7 @@ export class Map extends OsuCommand {
             }
         }
 
-        if (this.args.showBg) {
+        if (this.params.showBg) {
             const url = helper.tools.api.mapImages(this.map.beatmapset_id);
             const embed = new Discord.EmbedBuilder()
                 .setTitle('Beatmap images')
@@ -433,19 +433,19 @@ export class Map extends OsuCommand {
             this.ctn.edit = true;
         } else {
             //parsing maps
-            if (this.args.mapmods == null || this.args.mapmods == '') {
-                this.args.mapmods = 'NM';
+            if (this.params.mapmods == null || this.params.mapmods == '') {
+                this.params.mapmods = 'NM';
             }
             else {
-                this.args.mapmods = osumodcalc.modHandler(this.args.mapmods.toUpperCase(), this.map.mode).join();
+                this.params.mapmods = osumodcalc.modHandler(this.params.mapmods.toUpperCase(), this.map.mode).join();
             }
 
             //converts
             let useMapdata: apitypes.Beatmap = this.map;
             let successConvert: boolean = false;
-            if (this.args.forceMode && this.args.forceMode != this.map.mode && this.args.forceMode != 'osu') {
+            if (this.params.forceMode && this.params.forceMode != this.map.mode && this.params.forceMode != 'osu') {
                 for (const beatmap of this.mapset.converts) {
-                    if (beatmap.mode == this.args.forceMode && beatmap.id == this.map.id) {
+                    if (beatmap.mode == this.params.forceMode && beatmap.id == this.map.id) {
                         useMapdata = beatmap;
                         successConvert = true;
                         break;
@@ -466,48 +466,48 @@ export class Map extends OsuCommand {
                     break;
             }
 
-            if (this.args.customCS == 'current' || isNaN(+this.args.customCS)) {
-                this.args.customCS = useMapdata.cs;
+            if (this.params.customCS == 'current' || isNaN(+this.params.customCS)) {
+                this.params.customCS = useMapdata.cs;
             }
-            if (this.args.customAR == 'current' || isNaN(+this.args.customAR)) {
-                this.args.customAR = useMapdata.ar;
+            if (this.params.customAR == 'current' || isNaN(+this.params.customAR)) {
+                this.params.customAR = useMapdata.ar;
             }
-            if (this.args.customOD == 'current' || isNaN(+this.args.customOD)) {
-                this.args.customOD = useMapdata.accuracy;
+            if (this.params.customOD == 'current' || isNaN(+this.params.customOD)) {
+                this.params.customOD = useMapdata.accuracy;
             }
-            if (this.args.customHP == 'current' || isNaN(+this.args.customHP)) {
-                this.args.customHP = useMapdata.drain;
+            if (this.params.customHP == 'current' || isNaN(+this.params.customHP)) {
+                this.params.customHP = useMapdata.drain;
             }
 
             let hitlength = useMapdata.hit_length;
-            const oldOverrideSpeed = this.args.overrideSpeed;
+            const oldOverrideSpeed = this.params.overrideSpeed;
 
-            if (this.args.overrideBpm && !isNaN(this.args.overrideBpm) && (!this.args.overrideSpeed || isNaN(this.args.overrideSpeed) || this.args.overrideSpeed == 1) && this.args.overrideBpm != useMapdata.bpm) {
-                this.args.overrideSpeed = this.args.overrideBpm / useMapdata.bpm;
+            if (this.params.overrideBpm && !isNaN(this.params.overrideBpm) && (!this.params.overrideSpeed || isNaN(this.params.overrideSpeed) || this.params.overrideSpeed == 1) && this.params.overrideBpm != useMapdata.bpm) {
+                this.params.overrideSpeed = this.params.overrideBpm / useMapdata.bpm;
             }
-            if (this.args.overrideSpeed && !isNaN(this.args.overrideSpeed) && (!this.args.overrideBpm || isNaN(this.args.overrideBpm)) && this.args.overrideSpeed != 1) {
-                this.args.overrideBpm = useMapdata.bpm * this.args.overrideSpeed;
+            if (this.params.overrideSpeed && !isNaN(this.params.overrideSpeed) && (!this.params.overrideBpm || isNaN(this.params.overrideBpm)) && this.params.overrideSpeed != 1) {
+                this.params.overrideBpm = useMapdata.bpm * this.params.overrideSpeed;
             }
-            if (this.args.mapmods.includes('DT') || this.args.mapmods.includes('NC')) {
-                this.args.overrideSpeed *= 1.5;
-                this.args.overrideBpm *= 1.5;
+            if (this.params.mapmods.includes('DT') || this.params.mapmods.includes('NC')) {
+                this.params.overrideSpeed *= 1.5;
+                this.params.overrideBpm *= 1.5;
             }
-            if (this.args.mapmods.includes('HT')) {
-                this.args.overrideSpeed *= 0.75;
-                this.args.overrideBpm *= 0.75;
+            if (this.params.mapmods.includes('HT')) {
+                this.params.overrideSpeed *= 0.75;
+                this.params.overrideBpm *= 0.75;
             }
-            if (this.args.overrideSpeed) {
-                hitlength /= this.args.overrideSpeed;
+            if (this.params.overrideSpeed) {
+                hitlength /= this.params.overrideSpeed;
             }
 
             const inallvals = osumodcalc.calcValues(
-                +this.args.customCS,
-                +this.args.customAR,
-                +this.args.customOD,
-                +this.args.customHP,
-                this.args.overrideBpm ?? useMapdata.bpm,
+                +this.params.customCS,
+                +this.params.customAR,
+                +this.params.customOD,
+                +this.params.customHP,
+                this.params.overrideBpm ?? useMapdata.bpm,
                 hitlength,
-                this.args.mapmods
+                this.params.mapmods
             );
 
             const allvals = osumodcalc.calcValuesAlt(
@@ -526,14 +526,14 @@ export class Map extends OsuCommand {
             let totaldiff: string | number = useMapdata.difficulty_rating;
             try {
                 ppComputed = await helper.tools.performance.calcMap({
-                    mods: this.args.mapmods,
+                    mods: this.params.mapmods,
                     mode: useMapdata.mode_int,
                     mapid: useMapdata.id,
-                    clockRate: this.args.overrideSpeed,
-                    customCS: this.args.customCS,
-                    customAR: this.args.customAR,
-                    customOD: this.args.customOD,
-                    customHP: this.args.customHP,
+                    clockRate: this.params.overrideSpeed,
+                    customCS: this.params.customCS,
+                    customAR: this.params.customAR,
+                    customOD: this.params.customOD,
+                    customHP: this.params.customHP,
                     mapLastUpdated: new Date(useMapdata.last_updated)
                 });
                 pphd = await helper.tools.performance.calcFullCombo({
@@ -541,10 +541,10 @@ export class Map extends OsuCommand {
                     mods: 'HD',
                     mode: useMapdata.mode_int,
                     accuracy: 100,
-                    customCS: this.args.customCS,
-                    customAR: this.args.customAR,
-                    customOD: this.args.customOD,
-                    customHP: this.args.customHP,
+                    customCS: this.params.customCS,
+                    customAR: this.params.customAR,
+                    customOD: this.params.customOD,
+                    customHP: this.params.customHP,
                     mapLastUpdated: new Date(useMapdata.last_updated)
                 });
                 pphr = await helper.tools.performance.calcFullCombo({
@@ -552,10 +552,10 @@ export class Map extends OsuCommand {
                     mods: 'HR',
                     mode: useMapdata.mode_int,
                     accuracy: 100,
-                    customCS: this.args.customCS,
-                    customAR: this.args.customAR,
-                    customOD: this.args.customOD,
-                    customHP: this.args.customHP,
+                    customCS: this.params.customCS,
+                    customAR: this.params.customAR,
+                    customOD: this.params.customOD,
+                    customHP: this.params.customHP,
                     mapLastUpdated: new Date(useMapdata.last_updated)
                 });
                 ppdt = await helper.tools.performance.calcFullCombo({
@@ -563,10 +563,10 @@ export class Map extends OsuCommand {
                     mods: 'DT',
                     mode: useMapdata.mode_int,
                     accuracy: 100,
-                    customCS: this.args.customCS,
-                    customAR: this.args.customAR,
-                    customOD: this.args.customOD,
-                    customHP: this.args.customHP,
+                    customCS: this.params.customCS,
+                    customAR: this.params.customAR,
+                    customOD: this.params.customOD,
+                    customHP: this.params.customHP,
                     mapLastUpdated: new Date(useMapdata.last_updated)
                 });
                 pphdhr = await helper.tools.performance.calcFullCombo({
@@ -574,10 +574,10 @@ export class Map extends OsuCommand {
                     mods: 'HDHR',
                     mode: useMapdata.mode_int,
                     accuracy: 100,
-                    customCS: this.args.customCS,
-                    customAR: this.args.customAR,
-                    customOD: this.args.customOD,
-                    customHP: this.args.customHP,
+                    customCS: this.params.customCS,
+                    customAR: this.params.customAR,
+                    customOD: this.params.customOD,
+                    customHP: this.params.customHP,
                     mapLastUpdated: new Date(useMapdata.last_updated)
                 });
                 pphddt = await helper.tools.performance.calcFullCombo({
@@ -585,10 +585,10 @@ export class Map extends OsuCommand {
                     mods: 'HDDT',
                     mode: useMapdata.mode_int,
                     accuracy: 100,
-                    customCS: this.args.customCS,
-                    customAR: this.args.customAR,
-                    customOD: this.args.customOD,
-                    customHP: this.args.customHP,
+                    customCS: this.params.customCS,
+                    customAR: this.params.customAR,
+                    customOD: this.params.customOD,
+                    customHP: this.params.customHP,
                     mapLastUpdated: new Date(useMapdata.last_updated)
                 });
                 pphddthr = await helper.tools.performance.calcFullCombo({
@@ -596,10 +596,10 @@ export class Map extends OsuCommand {
                     mods: 'HDDTHR',
                     mode: useMapdata.mode_int,
                     accuracy: 100,
-                    customCS: this.args.customCS,
-                    customAR: this.args.customAR,
-                    customOD: this.args.customOD,
-                    customHP: this.args.customHP,
+                    customCS: this.params.customCS,
+                    customAR: this.params.customAR,
+                    customOD: this.params.customOD,
+                    customHP: this.params.customHP,
                     mapLastUpdated: new Date(useMapdata.last_updated)
                 });
                 ppissue = '';
@@ -615,7 +615,7 @@ export class Map extends OsuCommand {
             } catch (error) {
                 helper.tools.log.stdout(error);
                 ppissue = 'Error - pp could not be calculated';
-                const tstmods = this.args.mapmods.toUpperCase();
+                const tstmods = this.params.mapmods.toUpperCase();
 
                 if (tstmods.includes('EZ') || tstmods.includes('HR')) {
                     ppissue += '\nInvalid mod combinations: EZ + HR';
@@ -650,7 +650,7 @@ export class Map extends OsuCommand {
             const baseAR = allvals.ar != useMapdata.ar ? `${useMapdata.ar}=>${allvals.ar}` : allvals.ar;
             const baseOD = allvals.od != useMapdata.accuracy ? `${useMapdata.accuracy}=>${allvals.od}` : allvals.od;
             const baseHP = allvals.hp != useMapdata.drain ? `${useMapdata.drain}=>${allvals.hp}` : allvals.hp;
-            const baseBPM = useMapdata.bpm * (this.args.overrideSpeed ?? 1) != useMapdata.bpm ? `${useMapdata.bpm}=>${useMapdata.bpm * (this.args.overrideSpeed ?? 1)}` : useMapdata.bpm;
+            const baseBPM = useMapdata.bpm * (this.params.overrideSpeed ?? 1) != useMapdata.bpm ? `${useMapdata.bpm}=>${useMapdata.bpm * (this.params.overrideSpeed ?? 1)}` : useMapdata.bpm;
 
             let basicvals = `CS${baseCS}\n AR${baseAR}\n OD${baseOD}\n HP${baseHP}\n`;
 
@@ -664,15 +664,15 @@ export class Map extends OsuCommand {
                     title: false
                 }
             }, 1);
-            this.args.mapmods = this.args.mapmods.replace(',', '');
-            const maptitle: string = this.args.mapmods ? `\`${mapname} [${this.map.version}]\` +${this.args.mapmods}` : `\`${mapname} [${this.map.version}]\``;
+            this.params.mapmods = this.params.mapmods.replace(',', '');
+            const maptitle: string = this.params.mapmods ? `\`${mapname} [${this.map.version}]\` +${this.params.mapmods}` : `\`${mapname} [${this.map.version}]\``;
             const Embed = new Discord.EmbedBuilder()
                 .setURL(`https://osu.ppy.sh/beatmapsets/${this.map.beatmapset_id}#${useMapdata.mode}/${this.map.id}`)
                 .setThumbnail(helper.tools.api.mapImages(this.map.beatmapset_id).list2x)
                 .setTitle(maptitle);
             const embeds: Discord.EmbedBuilder[] = [];
             Embed.setColor(helper.tools.formatter.difficultyColour(+totaldiff).dec);
-            if (this.args.isppCalc) {
+            if (this.params.isppCalc) {
                 let extras = '';
 
                 switch (useMapdata.mode) {
@@ -816,7 +816,7 @@ export class Map extends OsuCommand {
             } else {
 
 
-                if (this.args.detailed == 2) {
+                if (this.params.detailed == 2) {
                     basicvals =
                         `CS${baseCS} (${allvals.details.csRadius?.toFixed(2)}r)
         AR${baseAR}  (${allvals.details.arMs?.toFixed(2)}ms)
@@ -827,7 +827,7 @@ export class Map extends OsuCommand {
                     {
                         mapid: this.map.id,
                         mode: useMapdata.mode_int,
-                        mods: this.args.mapmods,
+                        mods: this.params.mapmods,
                         mapLastUpdated: new Date(useMapdata.last_updated),
                     });
                 try {
@@ -854,7 +854,7 @@ export class Map extends OsuCommand {
                     mapgraph = null;
                 }
                 let detailedmapdata = '-';
-                if (this.args.detailed == 2) {
+                if (this.params.detailed == 2) {
                     switch (useMapdata.mode) {
                         case 'osu': {
                             detailedmapdata = `**SS**: ${ppComputed[0].pp?.toFixed(2)} | Aim: ${ppComputed[0].ppAim?.toFixed(2)} | Speed: ${ppComputed[0].ppSpeed?.toFixed(2)} | Acc: ${ppComputed[0].ppAccuracy?.toFixed(2)} \n ` +
@@ -928,7 +928,7 @@ export class Map extends OsuCommand {
                         {
                             name: 'PP',
                             value:
-                                this.args.detailed != 2 ?
+                                this.params.detailed != 2 ?
                                     `SS: ${ppComputed[0].pp?.toFixed(2)} \n ` +
                                     `99: ${ppComputed[1].pp?.toFixed(2)} \n ` +
                                     `98: ${ppComputed[2].pp?.toFixed(2)} \n ` +
@@ -938,7 +938,7 @@ export class Map extends OsuCommand {
                                     `${ppissue}` :
                                     detailedmapdata
                             ,
-                            inline: this.args.detailed != 2
+                            inline: this.params.detailed != 2
                         },
                         {
                             name: 'DOWNLOAD',
@@ -949,7 +949,7 @@ export class Map extends OsuCommand {
                         {
                             name: 'MAP DETAILS',
                             value: `${statusimg} | ${mapimg} | ${ppComputed[0].difficulty.maxCombo ?? this.map.max_combo}x combo \n ` +
-                                `${this.args.detailed == 2 ?
+                                `${this.params.detailed == 2 ?
                                     exMapDetails
                                     : ''}`
 
@@ -981,7 +981,7 @@ export class Map extends OsuCommand {
                 }
                 Embed.setColor(helper.tools.formatter.difficultyColour(+totaldiff).dec);
 
-                if (this.args.detailed == 2) {
+                if (this.params.detailed == 2) {
                     const failval = useMapdata.failtimes.fail;
                     const exitval = useMapdata.failtimes.exit;
                     const numofval = [];
@@ -1011,14 +1011,14 @@ export class Map extends OsuCommand {
             }
 
             helper.tools.commands.storeButtonArgs(this.input.id, {
-                mapId: this.args.mapid,
-                mode: this.args.forceMode,
-                modsInclude: this.args.mapmods,
-                overrideBpm: this.args.overrideBpm,
-                overrideSpeed: this.args.overrideSpeed,
-                ppCalc: this.args.isppCalc,
-                detailed: this.args.detailed,
-                filterTitle: this.args.maptitleq,
+                mapId: this.params.mapid,
+                mode: this.params.forceMode,
+                modsInclude: this.params.mapmods,
+                overrideBpm: this.params.overrideBpm,
+                overrideSpeed: this.params.overrideSpeed,
+                ppCalc: this.params.isppCalc,
+                detailed: this.params.detailed,
+                filterTitle: this.params.maptitleq,
             });
 
             embeds.push(Embed);
@@ -1027,16 +1027,16 @@ export class Map extends OsuCommand {
                 {
                     id: `${this.map.id}`,
                     apiData: null,
-                    mods: this.args.mapmods,
-                    mode: this.args.forceMode
+                    mods: this.params.mapmods,
+                    mode: this.params.forceMode
                 }
             );
 
             this.ctn.components.push(buttons);
 
             let frmod = inputModalSearch;
-            if (this.args.overwriteModal != null) {
-                frmod = this.args.overwriteModal as Discord.StringSelectMenuBuilder;
+            if (this.params.overwriteModal != null) {
+                frmod = this.params.overwriteModal as Discord.StringSelectMenuBuilder;
             }
 
             if (!(inputModalDiff.options.length < 1)) {
@@ -1047,11 +1047,11 @@ export class Map extends OsuCommand {
                 this.ctn.components.push(new Discord.ActionRowBuilder()
                     .addComponents(frmod));
             }
-            if (this.args.overwriteModal) {
+            if (this.params.overwriteModal) {
 
                 this.ctn.components.push(new Discord.ActionRowBuilder()
                     //@ts-expect-error anycomponentbuilder has properties missing in stringselectmenu  
-                    .addComponents(this.args.overwriteModal));
+                    .addComponents(this.params.overwriteModal));
             }
 
             this.ctn.embeds = embeds;
@@ -1063,7 +1063,7 @@ export class Map extends OsuCommand {
                 id: `${this.map.id}`,
                 apiData: null,
                 mods: null,
-                mode: this.args.forceMode
+                mode: this.params.forceMode
             }
         );
         this.send();
@@ -1101,82 +1101,82 @@ export class Map extends OsuCommand {
 type mapType = 'Ranked' | 'Loved' | 'Approved' | 'Qualified' | 'Pending' | 'WIP' | 'Graveyard';
 
 export class RandomMap extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         mapType: mapType;
         useRandomRanked: boolean;
     };
     constructor() {
         super();
         this.name = 'RandomMap';
-        this.args = {
+        this.params = {
             mapType: null,
             useRandomRanked: false,
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         if (this.input.args.includes('-leaderboard')) {
-            this.args.useRandomRanked = true;
+            this.params.useRandomRanked = true;
             this.input.args.splice(this.input.args.indexOf('-leaderboard'), 1);
         }
         if (this.input.args.includes('-lb')) {
-            this.args.useRandomRanked = true;
+            this.params.useRandomRanked = true;
             this.input.args.splice(this.input.args.indexOf('-lb'), 1);
         }
         const mapTypeRankedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapRanked, this.input.args, false, null, false, false);
         if (mapTypeRankedArgFinder.found) {
-            this.args.mapType = 'Ranked';
+            this.params.mapType = 'Ranked';
             this.input.args = mapTypeRankedArgFinder.args;
         }
         const mapTypeLovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapLove, this.input.args, false, null, false, false);
         if (mapTypeLovedArgFinder.found) {
-            this.args.mapType = 'Loved';
+            this.params.mapType = 'Loved';
             this.input.args = mapTypeLovedArgFinder.args;
         }
         const mapTypeApprovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapApprove, this.input.args, false, null, false, false);
         if (mapTypeApprovedArgFinder.found) {
-            this.args.mapType = 'Approved';
+            this.params.mapType = 'Approved';
             this.input.args = mapTypeApprovedArgFinder.args;
         }
         const mapTypeQualifiedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapQualified, this.input.args, false, null, false, false);
         if (mapTypeQualifiedArgFinder.found) {
-            this.args.mapType = 'Qualified';
+            this.params.mapType = 'Qualified';
             this.input.args = mapTypeQualifiedArgFinder.args;
         }
         const mapTypePendArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapPending, this.input.args, false, null, false, false);
         if (mapTypePendArgFinder.found) {
-            this.args.mapType = 'Pending';
+            this.params.mapType = 'Pending';
             this.input.args = mapTypePendArgFinder.args;
         }
         const mapTypeWipArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapWip, this.input.args, false, null, false, false);
         if (mapTypeWipArgFinder.found) {
-            this.args.mapType = 'WIP';
+            this.params.mapType = 'WIP';
             this.input.args = mapTypeWipArgFinder.args;
         }
         const mapTypeGraveyardArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGraveyard, this.input.args, false, null, false, false);
         if (mapTypeGraveyardArgFinder.found) {
-            this.args.mapType = 'Graveyard';
+            this.params.mapType = 'Graveyard';
             this.input.args = mapTypeGraveyardArgFinder.args;
         }
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
     }
-    async setArgsLink() {
+    async setParamsLink() {
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
 
         let txt = '';
 
-        if (this.args.useRandomRanked) {
+        if (this.params.useRandomRanked) {
             const arr: ('Ranked' | 'Loved' | 'Approved')[] = ['Ranked', 'Loved', 'Approved'];
-            this.args.mapType = arr[Math.floor(Math.random() * arr.length)];
+            this.params.mapType = arr[Math.floor(Math.random() * arr.length)];
         }
 
-        const randomMap = helper.tools.data.randomMap(this.args.mapType);
+        const randomMap = helper.tools.data.randomMap(this.params.mapType);
         if (randomMap.err != null) {
             txt = randomMap.err;
         } else {
@@ -1207,7 +1207,7 @@ export class RandomMap extends OsuCommand {
 }
 
 export class RecommendMap extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         searchid: string;
         user: string;
         maxRange: number;
@@ -1217,7 +1217,7 @@ export class RecommendMap extends OsuCommand {
     constructor() {
         super();
         this.name = 'RecommendMap';
-        this.args = {
+        this.params = {
             searchid: null,
             user: null,
             maxRange: 1,
@@ -1225,69 +1225,69 @@ export class RecommendMap extends OsuCommand {
             mode: null,
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         const usetypeRandomArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.toFlag(['r', 'random', 'f2', 'rdm', 'range', 'diff']), this.input.args, true, 'number', false, false);
         if (usetypeRandomArgFinder.found) {
-            this.args.maxRange = usetypeRandomArgFinder.output;
-            this.args.useType = 'random';
+            this.params.maxRange = usetypeRandomArgFinder.output;
+            this.params.useType = 'random';
             this.input.args = usetypeRandomArgFinder.args;
         }
         if (this.input.args.includes('-closest')) {
-            this.args.useType = 'closest';
+            this.params.useType = 'closest';
             this.input.args = this.input.args.splice(this.input.args.indexOf('-closest'), 1);
 
         }
         {
             const temp = await helper.tools.commands.parseArgsMode(this.input);
             this.input.args = temp.args;
-            this.args.mode = temp.mode;
+            this.params.mode = temp.mode;
         }
 
         this.input.args = helper.tools.commands.cleanArgs(this.input.args);
-        this.args.user = this.input.args.join(' ')?.replaceAll('"', '');
-        if (!this.input.args[0] || this.input.args[0].includes(this.args.searchid)) {
-            this.args.user = null;
+        this.params.user = this.input.args.join(' ')?.replaceAll('"', '');
+        if (!this.input.args[0] || this.input.args[0].includes(this.params.searchid)) {
+            this.params.user = null;
         }
-        this.args.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
+        this.params.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.searchid = interaction?.member?.user.id ?? interaction?.user.id;
+        this.params.searchid = interaction?.member?.user.id ?? interaction?.user.id;
 
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
         if (!this.input.message.embeds[0]) return;
         const interaction = (this.input.interaction as Discord.ButtonInteraction);
-        this.args.searchid = interaction?.member?.user.id ?? interaction?.user.id;
+        this.params.searchid = interaction?.member?.user.id ?? interaction?.user.id;
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
 
         {
-            const t = await this.validUser(this.args.user, this.args.searchid, this.args.mode);
-            this.args.user = t.user;
-            this.args.mode = t.mode;
+            const t = await this.validUser(this.params.user, this.params.searchid, this.params.mode);
+            this.params.user = t.user;
+            this.params.mode = t.mode;
         }
 
-        if (this.args.maxRange < 0.5 || !this.args.maxRange) {
-            this.args.maxRange = 0.5;
+        if (this.params.maxRange < 0.5 || !this.params.maxRange) {
+            this.params.maxRange = 0.5;
         }
 
         let osudata: apitypes.User;
 
         try {
-            const t = await this.getProfile(this.args.user, this.args.mode);
+            const t = await this.getProfile(this.params.user, this.params.mode);
             osudata = t;
         } catch (e) {
             return;
         }
 
-        const randomMap = helper.tools.data.recommendMap(+(osumodcalc.recdiff(osudata.statistics.pp)).toFixed(2), this.args.useType, this.args.mode, this.args.maxRange ?? 1);
+        const randomMap = helper.tools.data.recommendMap(+(osumodcalc.recdiff(osudata.statistics.pp)).toFixed(2), this.params.useType, this.params.mode, this.params.maxRange ?? 1);
         const exTxt =
-            this.args.useType == 'closest' ? '' :
-                `Random map within ${this.args.maxRange}⭐ of ${(osumodcalc.recdiff(osudata.statistics.pp))?.toFixed(2)}
+            this.params.useType == 'closest' ? '' :
+                `Random map within ${this.params.maxRange}⭐ of ${(osumodcalc.recdiff(osudata.statistics.pp))?.toFixed(2)}
     Pool of ${randomMap.poolSize}
     `;
 
@@ -1317,7 +1317,7 @@ export class RecommendMap extends OsuCommand {
 }
 
 export class UserBeatmaps extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         filter: bottypes.ubmFilter;
         sort: bottypes.ubmSort;
         reverse: boolean;
@@ -1334,7 +1334,7 @@ export class UserBeatmaps extends OsuCommand {
     constructor() {
         super();
         this.name = 'UserBeatmaps';
-        this.args = {
+        this.params = {
             filter: 'favourite',
             sort: 'dateadded',
             reverse: false,
@@ -1349,78 +1349,78 @@ export class UserBeatmaps extends OsuCommand {
             detailed: 1,
         };
     }
-    async setArgsMsg() {
-        this.args.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
+    async setParamsMsg() {
+        this.params.searchid = this.input.message.mentions.users.size > 0 ? this.input.message.mentions.users.first().id : this.input.message.author.id;
         const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, this.input.args, true, 'number', false, true);
         if (pageArgFinder.found) {
-            this.args.page = pageArgFinder.output;
+            this.params.page = pageArgFinder.output;
             this.input.args = pageArgFinder.args;
         }
 
         const detailArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.details, this.input.args, false, null, false, false);
         if (detailArgFinder.found) {
-            this.args.detailed = 2;
+            this.params.detailed = 2;
             this.input.args = detailArgFinder.args;
         }
         const filterRankArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapRanked, this.input.args, false, null, false, false);
         if (filterRankArgFinder.found) {
-            this.args.filter = 'ranked';
+            this.params.filter = 'ranked';
             this.input.args = filterRankArgFinder.args;
         }
         const filterFavouritesArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapFavourite, this.input.args, false, null, false, false);
         if (filterFavouritesArgFinder.found) {
-            this.args.filter = 'favourite';
+            this.params.filter = 'favourite';
             this.input.args = filterFavouritesArgFinder.args;
         }
         const filterGraveyardArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGraveyard, this.input.args, false, null, false, false);
         if (filterGraveyardArgFinder.found) {
-            this.args.filter = 'graveyard';
+            this.params.filter = 'graveyard';
             this.input.args = filterGraveyardArgFinder.args;
         }
         const filterLovedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapLove, this.input.args, false, null, false, false);
         if (filterLovedArgFinder.found) {
-            this.args.filter = 'loved';
+            this.params.filter = 'loved';
             this.input.args = filterLovedArgFinder.args;
         }
         const filterPendingArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapPending, this.input.args, false, null, false, false);
         if (filterPendingArgFinder.found) {
-            this.args.filter = 'pending';
+            this.params.filter = 'pending';
             this.input.args = filterPendingArgFinder.args;
         }
         const filterNominatedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapNominated, this.input.args, false, null, false, false);
         if (filterNominatedArgFinder.found) {
-            this.args.filter = 'nominated';
+            this.params.filter = 'nominated';
             this.input.args = filterNominatedArgFinder.args;
         }
         const filterGuestArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapGuest, this.input.args, false, null, false, false);
         if (filterGuestArgFinder.found) {
-            this.args.filter = 'guest';
+            this.params.filter = 'guest';
             this.input.args = filterGuestArgFinder.args;
         }
         const filterMostPlayedArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.mapMostPlayed, this.input.args, false, null, false, false);
         if (filterMostPlayedArgFinder.found) {
-            this.args.filter = 'most_played';
+            this.params.filter = 'most_played';
             this.input.args = filterMostPlayedArgFinder.args;
         }
         const reverseArgFinder = helper.tools.commands.matchArgMultiple(['-reverse', '-rev'], this.input.args, false, null, false, false);
         if (reverseArgFinder.found) {
-            this.args.reverse = true;
+            this.params.reverse = true;
             this.input.args = reverseArgFinder.args;
         }
         if (this.input.args.includes('-reverse')) {
-            this.args.reverse = true;
+            this.params.reverse = true;
             this.input.args.splice(this.input.args.indexOf('-reverse'), 1);
         }
         if (this.input.args.includes('-parse')) {
-            this.args.parseMap = true;
+            this.params.parseMap = true;
             const temp = helper.tools.commands.parseArg(this.input.args, '-parse', 'number', 1, null, true);
-            this.args.parseId = temp.value;
+            this.params.parseId = temp.value;
             this.input.args = temp.newArgs;
         }
 
         if (this.input.args.includes('-?')) {
-            const temp = helper.tools.commands.parseArg(this.input.args, '-?', 'string', this.args.filterTitle, true);
-            this.args.filterTitle = temp.value;
+            const temp = helper.tools.commands.parseArg(this.input.args, '-?', 'string', this.params.filterTitle, true);
+            this.params.filterTitle = temp.value;
             this.input.args = temp.newArgs;
         }
 
@@ -1428,29 +1428,29 @@ export class UserBeatmaps extends OsuCommand {
 
         const usertemp = helper.tools.commands.fetchUser(this.input.args);
         this.input.args = usertemp.args;
-        this.args.user = usertemp.id;
-        if (!this.args.user || this.args.user.includes(this.args.searchid)) {
-            this.args.user = null;
+        this.params.user = usertemp.id;
+        if (!this.params.user || this.params.user.includes(this.params.searchid)) {
+            this.params.user = null;
         }
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
 
-        this.args.searchid = this.commanduser.id;
+        this.params.searchid = this.commanduser.id;
 
-        this.args.user = interaction.options.getString('user') ?? null;
-        this.args.filter = (interaction.options.getString('type') ?? 'favourite') as bottypes.ubmFilter;
-        this.args.sort = (interaction.options.getString('sort') ?? 'dateadded') as bottypes.ubmSort;
-        this.args.reverse = interaction.options.getBoolean('reverse') ?? false;
-        this.args.filterTitle = interaction.options.getString('filter');
+        this.params.user = interaction.options.getString('user') ?? null;
+        this.params.filter = (interaction.options.getString('type') ?? 'favourite') as bottypes.ubmFilter;
+        this.params.sort = (interaction.options.getString('sort') ?? 'dateadded') as bottypes.ubmSort;
+        this.params.reverse = interaction.options.getBoolean('reverse') ?? false;
+        this.params.filterTitle = interaction.options.getString('filter');
 
-        this.args.parseId = interaction.options.getInteger('parse');
-        if (this.args.parseId != null) {
-            this.args.parseMap = true;
+        this.params.parseId = interaction.options.getInteger('parse');
+        if (this.params.parseId != null) {
+            this.params.parseMap = true;
         }
 
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
         if (!this.input.message.embeds[0]) return;
         const interaction = (this.input.interaction as Discord.ButtonInteraction);
         const temp = helper.tools.commands.getButtonArgs(this.input.id);
@@ -1463,65 +1463,65 @@ export class UserBeatmaps extends OsuCommand {
             helper.tools.commands.disableAllButtons(this.input.message);
             return;
         }
-        this.args.searchid = temp.searchid;
-        this.args.user = temp.user;
-        this.args.filter = temp.mapType;
-        this.args.sort = temp.sortMap;
-        this.args.reverse = temp.reverse;
-        this.args.page = helper.tools.commands.buttonPage(temp.page, temp.maxPage, this.input.buttonType);
-        this.args.parseMap = temp.parse;
-        this.args.parseId = temp.parseId;
-        this.args.filterTitle = temp.filterTitle;
+        this.params.searchid = temp.searchid;
+        this.params.user = temp.user;
+        this.params.filter = temp.mapType;
+        this.params.sort = temp.sortMap;
+        this.params.reverse = temp.reverse;
+        this.params.page = helper.tools.commands.buttonPage(temp.page, temp.maxPage, this.input.buttonType);
+        this.params.parseMap = temp.parse;
+        this.params.parseId = temp.parseId;
+        this.params.filterTitle = temp.filterTitle;
         // mode = temp.mode;
-        this.args.detailed = helper.tools.commands.buttonDetail(temp.detailed, this.input.buttonType);
+        this.params.detailed = helper.tools.commands.buttonDetail(temp.detailed, this.input.buttonType);
 
     }
     getOverrides(): void {
         if (!this.input.overrides) return;
         if (this.input.overrides.page) {
-            this.args.page = this.input.overrides.page;
+            this.params.page = this.input.overrides.page;
         }
         if (this.input.overrides.ex) {
             switch (this.input.overrides.ex) {
                 case 'ranked':
-                    this.args.filter = 'ranked';
+                    this.params.filter = 'ranked';
                     break;
                 case 'favourite':
-                    this.args.filter = 'favourite';
+                    this.params.filter = 'favourite';
                     break;
                 case 'graveyard':
-                    this.args.filter = 'graveyard';
+                    this.params.filter = 'graveyard';
                     break;
                 case 'loved':
-                    this.args.filter = 'loved';
+                    this.params.filter = 'loved';
                     break;
                 case 'pending':
-                    this.args.filter = 'pending';
+                    this.params.filter = 'pending';
                     break;
                 case 'nominated':
-                    this.args.filter = 'nominated';
+                    this.params.filter = 'nominated';
                     break;
                 case 'guest':
-                    this.args.filter = 'guest';
+                    this.params.filter = 'guest';
                     break;
                 case 'most_played':
-                    this.args.filter = 'most_played';
+                    this.params.filter = 'most_played';
                     break;
             }
         }
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
-        if (this.args.page < 2 || typeof this.args.page != 'number' || isNaN(this.args.page)) {
-            this.args.page = 1;
+        if (this.params.page < 2 || typeof this.params.page != 'number' || isNaN(this.params.page)) {
+            this.params.page = 1;
         }
-        this.args.page--;
+        this.params.page--;
 
         {
-            const t = await this.validUser(this.args.user, this.args.searchid, this.args.mode);
-            this.args.user = t.user;
+            const t = await this.validUser(this.params.user, this.params.searchid, this.params.mode);
+            this.params.user = t.user;
         }
         if (this.input.type == 'interaction') {
             this.ctn.content = 'Loading...';
@@ -1531,7 +1531,7 @@ export class UserBeatmaps extends OsuCommand {
         }
 
         try {
-            const u = await this.getProfile(this.args.user, this.args.mode);
+            const u = await this.getProfile(this.params.user, this.params.mode);
             this.osudata = u;
         } catch (e) {
             return;
@@ -1572,37 +1572,37 @@ export class UserBeatmaps extends OsuCommand {
             }
             return args;
         }
-        if (helper.tools.data.findFile(this.osudata.id, 'maplistdata', null, this.args.filter) &&
-            !('error' in helper.tools.data.findFile(this.osudata.id, 'maplistdata', null, this.args.filter)) &&
+        if (helper.tools.data.findFile(this.osudata.id, 'maplistdata', null, this.params.filter) &&
+            !('error' in helper.tools.data.findFile(this.osudata.id, 'maplistdata', null, this.params.filter)) &&
             this.input.buttonType != 'Refresh'
         ) {
-            maplistdata = helper.tools.data.findFile(this.osudata.id, 'maplistdata', null, this.args.filter);
+            maplistdata = helper.tools.data.findFile(this.osudata.id, 'maplistdata', null, this.params.filter);
         } else {
-            this.args = await getScoreCount(0, this.input, this.args, this.osudata);
+            this.params = await getScoreCount(0, this.input, this.params, this.osudata);
         }
 
         helper.tools.data.debug(maplistdata, 'command', this.name, this.input.message?.guildId ?? this.input.interaction?.guildId, 'mapListData');
-        helper.tools.data.storeFile(maplistdata, this.osudata.id, 'maplistdata', null, this.args.filter);
+        helper.tools.data.storeFile(maplistdata, this.osudata.id, 'maplistdata', null, this.params.filter);
 
-        if (this.args.parseMap) {
-            if (this.args.filterTitle) {
-                switch (this.args.filter) {
+        if (this.params.parseMap) {
+            if (this.params.filterTitle) {
+                switch (this.params.filter) {
                     case 'most_played':
                         maplistdata = helper.tools.formatter.filterMapPlays(maplistdata as apitypes.BeatmapPlayCountArr,
-                            this.args.sort as any, {
-                            title: this.args.filterTitle
-                        }, this.args.reverse);
+                            this.params.sort as any, {
+                            title: this.params.filterTitle
+                        }, this.params.reverse);
                         break;
                     default:
                         maplistdata = helper.tools.formatter.filterMaps(maplistdata as apitypes.Beatmapset[],
-                            this.args.sort as any, {
-                            title: this.args.filterTitle
-                        }, this.args.reverse);
+                            this.params.sort as any, {
+                            title: this.params.filterTitle
+                        }, this.params.reverse);
                         break;
                 }
 
             }
-            let pid = this.args.parseId - 1;
+            let pid = this.params.parseId - 1;
             if (pid < 0) {
                 pid = 0;
             }
@@ -1611,7 +1611,7 @@ export class UserBeatmaps extends OsuCommand {
             }
             this.input.overrides = {
                 id:
-                    this.args.filter == 'most_played' ?
+                    this.params.filter == 'most_played' ?
                         (maplistdata as apitypes.BeatmapPlayCountArr)[pid]?.beatmap_id :
                         (maplistdata as apitypes.Beatmapset[])[pid]?.beatmaps[0]?.id,
                 commanduser: this.commanduser,
@@ -1627,8 +1627,8 @@ export class UserBeatmaps extends OsuCommand {
             await cmd.execute();
             return;
         }
-        if (this.args.page >= Math.ceil(maplistdata.length / 5)) {
-            this.args.page = Math.ceil(maplistdata.length / 5) - 1;
+        if (this.params.page >= Math.ceil(maplistdata.length / 5)) {
+            this.params.page = Math.ceil(maplistdata.length / 5) - 1;
         }
         let mapsarg: {
             text: string;
@@ -1636,45 +1636,45 @@ export class UserBeatmaps extends OsuCommand {
             maxPage: number;
         };
 
-        switch (this.args.filter) {
+        switch (this.params.filter) {
             case 'most_played':
                 mapsarg = helper.tools.formatter.mapPlaysList(maplistdata as apitypes.BeatmapPlayCountArr,
-                    this.args.sort as any, {
-                    title: this.args.filterTitle
+                    this.params.sort as any, {
+                    title: this.params.filterTitle
                 },
-                    this.args.reverse, this.args.page);
+                    this.params.reverse, this.params.page);
                 break;
             default:
                 mapsarg = helper.tools.formatter.mapList(maplistdata as apitypes.Beatmapset[],
-                    this.args.sort as any, {
-                    title: this.args.filterTitle
+                    this.params.sort as any, {
+                    title: this.params.filterTitle
                 },
-                    this.args.reverse, this.args.page);
+                    this.params.reverse, this.params.page);
                 break;
         }
 
         helper.tools.commands.storeButtonArgs(this.input.id, {
-            searchid: this.args.searchid,
-            user: this.args.user,
-            mapType: this.args.filter,
-            sortMap: this.args.sort,
-            reverse: this.args.reverse,
-            page: this.args.page + 1,
+            searchid: this.params.searchid,
+            user: this.params.user,
+            mapType: this.params.filter,
+            sortMap: this.params.sort,
+            reverse: this.params.reverse,
+            page: this.params.page + 1,
             maxPage: mapsarg.maxPage,
-            parse: this.args.parseMap,
-            parseId: this.args.parseId,
-            filterTitle: this.args.filterTitle,
-            detailed: this.args.detailed
+            parse: this.params.parseMap,
+            parseId: this.params.parseId,
+            filterTitle: this.params.filterTitle,
+            detailed: this.params.detailed
         });
         const mapList = new Discord.EmbedBuilder()
             .setFooter({
                 text: `${mapsarg.curPage}/${mapsarg.maxPage}`
             })
-            .setTitle(`${this.osudata.username}'s ${helper.tools.formatter.toCapital(this.args.filter)} Maps`)
+            .setTitle(`${this.osudata.username}'s ${helper.tools.formatter.toCapital(this.params.filter)} Maps`)
             .setThumbnail(`${this.osudata?.avatar_url ?? helper.vars.defaults.images.any.url}`)
             .setURL(`https://osu.ppy.sh/users/${this.osudata.id}/${this.osudata.playmode}#beatmaps`)
             .setColor(helper.vars.colours.embedColour.userlist.dec)
-            .setDescription(this.args.reachedMaxCount ? 'Only the first 500 mapsets are shown\n\n' : '\n\n' + mapsarg.text);
+            .setDescription(this.params.reachedMaxCount ? 'Only the first 500 mapsets are shown\n\n' : '\n\n' + mapsarg.text);
             helper.tools.formatter.userAuthor(this.osudata, mapList);
             
         if (mapsarg.text.length == 0) {
