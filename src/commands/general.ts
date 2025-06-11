@@ -13,7 +13,7 @@ import pkgjson from '../../package.json';
 import { Command } from './command.js';
 
 export class Changelog extends Command {
-    declare protected args: {
+    declare protected params: {
         version: string;
         useNum: number;
         isList: boolean;
@@ -23,7 +23,7 @@ export class Changelog extends Command {
     constructor() {
         super();
         this.name = 'Changelog'
-        this.args = {
+        this.params = {
             version: null,
             useNum: null,
             isList: false,
@@ -31,21 +31,21 @@ export class Changelog extends Command {
             foundBool: false,
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         const pageArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.pages, this.input.args, true, 'number', false, true);
         if (pageArgFinder.found) {
-            this.args.page = pageArgFinder.output;
+            this.params.page = pageArgFinder.output;
             this.input.args = pageArgFinder.args;
         }
-        this.args.version = this.input.args[0] ?? null;
+        this.params.version = this.input.args[0] ?? null;
 
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
 
-        this.args.version = interaction.options.getString('version');
+        this.params.version = interaction.options.getString('version');
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
         if (!this.input.message.embeds[0]) return;
         const interaction = (this.input.interaction as Discord.ButtonInteraction);
         this.commanduser = interaction?.member?.user ?? this.input.interaction?.user;
@@ -55,122 +55,122 @@ export class Changelog extends Command {
         ) - 1;
         switch (this.input.buttonType) {
             case 'BigLeftArrow':
-                this.args.useNum = 0;
-                this.args.foundBool = true;
+                this.params.useNum = 0;
+                this.params.foundBool = true;
                 break;
             case 'LeftArrow':
-                this.args.useNum = curpage - 1;
-                this.args.foundBool = true;
+                this.params.useNum = curpage - 1;
+                this.params.foundBool = true;
                 break;
             case 'RightArrow':
-                this.args.useNum = curpage + 1;
-                this.args.foundBool = true;
+                this.params.useNum = curpage + 1;
+                this.params.foundBool = true;
                 break;
             case 'BigRightArrow':
-                this.args.useNum = parseInt(
+                this.params.useNum = parseInt(
                     this.input.message.embeds[0].footer.text.split('/')[1]
                 ) - 1;
-                this.args.foundBool = true;
+                this.params.foundBool = true;
                 break;
             default:
-                this.args.useNum = curpage;
+                this.params.useNum = curpage;
                 break;
         }
         if (this.input.message.embeds[0].title.toLowerCase().includes('all versions')) {
-            this.args.version = 'versions';
-            this.args.isList = true;
+            this.params.version = 'versions';
+            this.params.isList = true;
         }
 
         switch (this.input.buttonType) {
             case 'Detail0':
-                this.args.isList = false;
-                this.args.version = null;
+                this.params.isList = false;
+                this.params.version = null;
                 break;
             case 'Detail1':
-                this.args.isList = true;
-                this.args.version = 'versions';
+                this.params.isList = true;
+                this.params.version = 'versions';
                 break;
         }
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         const pgbuttons: Discord.ActionRowBuilder = await helper.tools.commands.pageButtons(this.name, this.commanduser, this.input.id);
         const buttons = new Discord.ActionRowBuilder();
         //get version
         let found: string | number = null;
-        if (this.args.version) {
+        if (this.params.version) {
             //search for version
-            if (this.args.version?.includes('.')) {
+            if (this.params.version?.includes('.')) {
                 found = helper.vars.versions.versions.findIndex(x =>
-                    this.args.version.trim() === `${x.name}`.trim() || this.args.version.includes(`${x.releaseDate}`) || this.args.version.includes(`${x.releaseDate}`)
-                    || (`${x.releaseDate}`).includes(this.args.version) || `${x.releaseDate}`.includes(this.args.version)
+                    this.params.version.trim() === `${x.name}`.trim() || this.params.version.includes(`${x.releaseDate}`) || this.params.version.includes(`${x.releaseDate}`)
+                    || (`${x.releaseDate}`).includes(this.params.version) || `${x.releaseDate}`.includes(this.params.version)
                 );
-                this.args.foundBool = true;
+                this.params.foundBool = true;
                 if (found == -1) {
                     found = null;
                 }
             } else {
-                switch (this.args.version.toLowerCase()) {
+                switch (this.params.version.toLowerCase()) {
                     case 'wip': case 'pending': case 'next':
                         found = 0;
-                        this.args.useNum = 0;
-                        this.args.foundBool = true;
+                        this.params.useNum = 0;
+                        this.params.foundBool = true;
                         break;
                     case 'first': case 'original':
                         found = helper.vars.versions.versions.length - 1;
-                        this.args.useNum = helper.vars.versions.versions.length - 1;
-                        this.args.foundBool = true;
+                        this.params.useNum = helper.vars.versions.versions.length - 1;
+                        this.params.foundBool = true;
                         break;
                     case 'second':
                         found = helper.vars.versions.versions.length - 2;
-                        this.args.useNum = helper.vars.versions.versions.length - 2;
-                        this.args.foundBool = true;
+                        this.params.useNum = helper.vars.versions.versions.length - 2;
+                        this.params.foundBool = true;
                         break;
                     case 'third':
                         found = helper.vars.versions.versions.length - 3;
-                        this.args.useNum = helper.vars.versions.versions.length - 3;
-                        this.args.foundBool = true;
+                        this.params.useNum = helper.vars.versions.versions.length - 3;
+                        this.params.foundBool = true;
                         break;
                     case 'latest':
                         found = 1;
-                        this.args.useNum = 1;
-                        this.args.foundBool = true;
+                        this.params.useNum = 1;
+                        this.params.foundBool = true;
                         break;
                     case 'versions': case 'list': case 'all':
-                        this.args.foundBool = true;
+                        this.params.foundBool = true;
                     default:
                         found = 'string';
                         break;
                 }
             }
         }
-        if (((!this.args.foundBool && found != 'string') || (this.args.page && found == 'string')) && !this.input.buttonType) {
-            this.args.useNum = this.args.page ? this.args.page - 1 : null;
+        if (((!this.params.foundBool && found != 'string') || (this.params.page && found == 'string')) && !this.input.buttonType) {
+            this.params.useNum = this.params.page ? this.params.page - 1 : null;
         }
-        if (this.args.useNum < 1 && !this.args.foundBool) {
-            this.args.useNum = found && !isNaN(+found) ?
+        if (this.params.useNum < 1 && !this.params.foundBool) {
+            this.params.useNum = found && !isNaN(+found) ?
                 +found :
                 typeof found === 'string' ?
                     0 : 1;
         }
-        if (!this.args.useNum && found) {
-            this.args.useNum = +found;
+        if (!this.params.useNum && found) {
+            this.params.useNum = +found;
         }
         const Embed = new Discord.EmbedBuilder();
         const exceeded = 'Exceeded character limit. Please click [here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/changelog.md) to view the changelog.';
-        if (isNaN(this.args.useNum) || !this.args.useNum) this.args.useNum = 0;
+        if (isNaN(this.params.useNum) || !this.params.useNum) this.params.useNum = 0;
         if (typeof found == 'string') {
-            this.args.isList = true;
+            this.params.isList = true;
             // let txt = '' helper.vars.versions.versions.map(x => `\`${(x.name).padEnd(10)} (${x.releaseDate})\``).join('\n');
             const doc = fs.readFileSync(`${helper.vars.path.main}/cache/changelog.md`, 'utf-8');
             let txt = '\`VERSION      |    DATE    | CHANGES\`\n';
             const list = doc.split('## [');
             list.shift();
-            if (this.args.useNum + 1 >= Math.ceil(helper.vars.versions.versions.length / 10)) {
-                this.args.useNum = Math.ceil(helper.vars.versions.versions.length / 10) - 1;
+            if (this.params.useNum + 1 >= Math.ceil(helper.vars.versions.versions.length / 10)) {
+                this.params.useNum = Math.ceil(helper.vars.versions.versions.length / 10) - 1;
             }
-            const pageOffset = this.args.useNum * 10;
+            const pageOffset = this.params.useNum * 10;
             for (let i = 0; pageOffset + i < helper.vars.versions.versions.length && i < 10; i++) {
                 const sumVer = helper.vars.versions.versions[pageOffset + i];
                 const useVer = list[pageOffset + i];
@@ -184,9 +184,9 @@ export class Changelog extends Command {
             Embed.setTitle('All Versions')
                 .setDescription(txt)
                 .setFooter({
-                    text: `${this.args.useNum + 1}/${Math.ceil(helper.vars.versions.versions.length / 10)}`
+                    text: `${this.params.useNum + 1}/${Math.ceil(helper.vars.versions.versions.length / 10)}`
                 });
-            this.args.foundBool ? null : Embed.setAuthor({ name: `\nThere was an error trying to find version \`${this.args.version}\`` });
+            this.params.foundBool ? null : Embed.setAuthor({ name: `\nThere was an error trying to find version \`${this.params.version}\`` });
         } else {
             const document = /* useGit ? */
                 fs.readFileSync(`${helper.vars.path.main}/cache/changelog.md`, 'utf-8');
@@ -194,11 +194,11 @@ export class Changelog extends Command {
                         fs.readFileSync(`${precomphelper.vars.path.main}/changelog.txt`, 'utf-8'); */
             const list = document.split('## [');
             list.shift();
-            if (this.args.useNum >= list.length) {
-                this.args.useNum = list.length - 1;
+            if (this.params.useNum >= list.length) {
+                this.params.useNum = list.length - 1;
             }
-            const cur = list[this.args.useNum] as string;
-            const verdata = helper.vars.versions.versions[this.args.useNum];
+            const cur = list[this.params.useNum] as string;
+            const verdata = helper.vars.versions.versions[this.params.useNum];
             const commit = cur.split('[commit](')[1].split(')')[0];
             const commitURL = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:[0-9]{1,5})?(\/[^\s]*)?$/g.test(commit) ?
                 commit :
@@ -258,11 +258,11 @@ Released ${verdata.releaseDate}
 Total of ${changesList.filter(x => !x.includes('### ')).length} changes.${txt}
 `)
                 .setFooter({
-                    text: `${this.args.useNum + 1}/${helper.vars.versions.versions.length}`
+                    text: `${this.params.useNum + 1}/${helper.vars.versions.versions.length}`
                 });
         }
 
-        if (this.args.isList) {
+        if (this.params.isList) {
             buttons
                 .addComponents(
                     new Discord.ButtonBuilder()
@@ -280,11 +280,11 @@ Total of ${changesList.filter(x => !x.includes('### ')).length} changes.${txt}
                 );
         }
 
-        if (this.args.useNum == 0) {
+        if (this.params.useNum == 0) {
             (pgbuttons.components as Discord.ButtonBuilder[])[0].setDisabled(true);
             (pgbuttons.components as Discord.ButtonBuilder[])[1].setDisabled(true);
         }
-        if ((this.args.useNum + 1 >= helper.vars.versions.versions.length && !this.args.isList) || (this.args.useNum + 1 >= Math.ceil(helper.vars.versions.versions.length / 10) && this.args.isList)) {
+        if ((this.params.useNum + 1 >= helper.vars.versions.versions.length && !this.params.isList) || (this.params.useNum + 1 >= Math.ceil(helper.vars.versions.versions.length / 10) && this.params.isList)) {
             (pgbuttons.components as Discord.ButtonBuilder[])[3].setDisabled(true);
             (pgbuttons.components as Discord.ButtonBuilder[])[4].setDisabled(true);
         }
@@ -296,7 +296,7 @@ Total of ${changesList.filter(x => !x.includes('### ')).length} changes.${txt}
 
 }
 export class Help extends Command {
-    declare protected args: {
+    declare protected params: {
         rdm: boolean;
         commandfound: boolean;
         commandCategory: string;
@@ -305,52 +305,58 @@ export class Help extends Command {
     constructor() {
         super();
         this.name = 'Help';
-        this.args = {
+        this.params = {
             rdm: false,
             commandfound: false,
             commandCategory: 'default',
             command: undefined,
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         this.commanduser = this.input.message.author;
-        this.args.command = this.input.args[0];
+        this.params.command = this.input.args[0];
         if (!this.input.args[0]) {
-            this.args.command = null;
+            this.params.command = null;
         }
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
         this.commanduser = interaction?.member?.user ?? interaction?.user;
-        this.args.command = interaction.options.getString('command');
+        this.params.command = interaction.options.getString('command');
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
         if (!this.input.message.embeds[0]) return;
         const interaction = (this.input.interaction as Discord.ButtonInteraction);
         this.commanduser = interaction?.member?.user ?? this.input.interaction?.user;
         if (this.input.buttonType == 'Random') {
-            this.args.rdm = true;
+            this.params.rdm = true;
         }
         switch (this.input.buttonType) {
             case 'Random':
-                this.args.rdm = true;
+                this.params.rdm = true;
                 break;
             case 'Detailed':
-                this.args.command = null;
+                this.params.command = null;
                 break;
         }
         const curembed: Discord.Embed = this.input.message.embeds[0];
         if (this.input.buttonType == 'Detailed' && curembed.description.includes('Prefix is')) {
-            this.args.command = 'list';
+            this.params.command = 'list';
         }
-
+    }
+    getOverrides(): void {
+        if (!this.input.overrides) return;
+        if (this.input.overrides?.ex != null) {
+            this.params.command = this.input?.overrides?.ex + '';
+        }
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
+        this.getOverrides();
         this.logInput();
         // do stuff
-        if (this.args.rdm == true) {
-            this.args.command = this.rdmp('cmds');
+        if (this.params.rdm == true) {
+            this.params.command = this.rdmp('cmds');
         }
         const buttons = new Discord.ActionRowBuilder()
             .setComponents(
@@ -377,46 +383,46 @@ export class Help extends Command {
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji('📜' as Discord.APIMessageComponentEmoji)
                     .setLabel('General')
-                    .setValue('CategoryMenu-gen'),
+                    .setValue('categorygen'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(helper.vars.emojis.gamemodes.standard as Discord.APIMessageComponentEmoji)
                     .setLabel('osu! (profiles)')
-                    .setValue('CategoryMenu-osu_profile'),
+                    .setValue('categoryosu_profile'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(helper.vars.emojis.gamemodes.standard as Discord.APIMessageComponentEmoji)
                     .setLabel('osu! (scores)')
-                    .setValue('CategoryMenu-osu_scores'),
+                    .setValue('categoryosu_scores'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(helper.vars.emojis.gamemodes.standard as Discord.APIMessageComponentEmoji)
                     .setLabel('osu! (maps)')
-                    .setValue('CategoryMenu-osu_map'),
+                    .setValue('categoryosu_map'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(helper.vars.emojis.gamemodes.standard as Discord.APIMessageComponentEmoji)
                     .setLabel('osu! (track)')
-                    .setValue('CategoryMenu-osu_track'),
+                    .setValue('categoryosu_track'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji(helper.vars.emojis.gamemodes.standard as Discord.APIMessageComponentEmoji)
                     .setLabel('osu! (other)')
-                    .setValue('CategoryMenu-osu_other'),
+                    .setValue('categoryosu_other'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji('🤖' as Discord.APIMessageComponentEmoji)
                     .setLabel('Admin')
-                    .setValue('CategoryMenu-admin'),
+                    .setValue('categoryadmin'),
                 new Discord.StringSelectMenuOptionBuilder()
                     .setEmoji('❓' as Discord.APIMessageComponentEmoji)
                     .setLabel('Misc')
-                    .setValue('CategoryMenu-misc'),
+                    .setValue('categorymisc'),
             );
         this.ctn.components.push(
             new Discord.ActionRowBuilder()
                 .setComponents(selectCategoryMenu)
         );
-        let curpick: bottypes.commandInfo[] = helper.tools.commands.getCommands(this.args.commandCategory);
+        let curpick: bottypes.commandInfo[] = helper.tools.commands.getCommands(this.params.commandCategory);
 
         if (curpick.length == 0) {
             curpick = helper.tools.commands.getCommands('general');
         }
-        if (this.args.commandfound == true) {
+        if (this.params.commandfound == true) {
             for (let i = 0; i < curpick.length && i < 25; i++) {
                 inputMenu.addOptions(
                     new Discord.StringSelectMenuOptionBuilder()
@@ -476,7 +482,7 @@ export class Help extends Command {
      *  make into smaller separate functions
      * */
     getemb() {
-        if (this.args.command == 'list') {
+        if (this.params.command == 'list') {
             const commandlist: {
                 category: string;
                 cmds: string[];
@@ -511,14 +517,14 @@ export class Help extends Command {
                     text: 'Website: https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
                 });
             this.ctn.embeds = [clembed];
-            this.args.commandCategory = 'default';
-        } else if (this.args.command != null) {
-            const fetchcmd = this.args.command;
+            this.params.commandCategory = 'default';
+        } else if (this.params.command != null) {
+            const fetchcmd = this.params.command;
             const commandInfo = new Discord.EmbedBuilder()
                 .setColor(helper.vars.colours.embedColour.info.dec);
-            if (this.args.command.includes('button')) {
-                this.args.commandfound = false;
-                this.args.commandCategory = 'default';
+            if (this.params.command.includes('button')) {
+                this.params.commandfound = false;
+                this.params.commandCategory = 'default';
                 let desc = 'List of all buttons available';
                 let buttonstxt = '\n';
                 for (let i = 0; i < helper.vars.commandData.buttons.length; i++) {
@@ -530,13 +536,13 @@ export class Help extends Command {
                     .setDescription(desc);
             } else if (helper.tools.commands.getCommand(fetchcmd)) {
                 const res = helper.tools.commands.getCommand(fetchcmd);
-                this.args.commandfound = true;
-                this.args.commandCategory = res.category;
+                this.params.commandfound = true;
+                this.params.commandCategory = res.category;
                 this.commandEmb(res, commandInfo);
-            } else if (this.args.command.toLowerCase().includes('category')) {
-                let sp = this.args.command.toLowerCase().split('category')[1];
+            } else if (this.params.command.toLowerCase().includes('category')) {
+                let sp = this.params.command.toLowerCase().split('category')[1];
                 if (sp == 'all') {
-                    this.args.command = 'list';
+                    this.params.command = 'list';
                     this.getemb();
                 } else {
                     let c = this.categorise(sp);
@@ -544,16 +550,16 @@ export class Help extends Command {
                         commandInfo
                             .setTitle(helper.tools.formatter.toCapital(sp) + " Commands")
                             .setDescription(c);
-                        this.args.commandCategory = sp;
+                        this.params.commandCategory = sp;
                     } else {
-                        this.args.command = null;
+                        this.params.command = null;
                         this.getemb();
                         return;
                     }
                 }
             }
             else {
-                this.args.command = null;
+                this.params.command = null;
                 this.getemb();
                 return;
             }
@@ -577,7 +583,7 @@ export class Help extends Command {
                 .setFooter({
                     text: 'Website: https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands | Github: https://github.com/sbrstrkkdwmdr/sbrbot/tree/ts'
                 })];
-            this.args.commandCategory = 'default';
+            this.params.commandCategory = 'default';
         }
     }
     rdmp(w: string) {
@@ -585,13 +591,12 @@ export class Help extends Command {
         return helper.vars.commandData.cmds[fullyrando].name;
     }
     categorise(type: string) {
-        console.log(type);
         let desctxt = '';
         const cmds = helper.tools.commands.getCommands(type);
         for (let i = 0; i < cmds.length; i++) {
             desctxt += `\n\`${cmds[i].name}\`: ${cmds[i].description.split('.')[0]}`;
         }
-        this.args.commandfound = true;
+        this.params.commandfound = true;
         if (desctxt.length > 4000) {
             desctxt = desctxt.slice(0, 3900);
             desctxt += "\n\nThe text has reached maximum length. See [here](https://sbrstrkkdwmdr.github.io/projects/ssob_docs/commands) for the rest of the commands";
@@ -600,20 +605,20 @@ export class Help extends Command {
     }
 }
 export class Info extends Command {
-    declare protected args: {};
+    declare protected params: {};
     constructor() {
         super();
         this.name = 'Info';
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         this.commanduser = this.input.message.author;
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
         this.commanduser = interaction?.member?.user ?? interaction?.user;
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput(true);
         // do stuff
         const buttons: Discord.ActionRowBuilder = new Discord.ActionRowBuilder()
@@ -762,13 +767,13 @@ Bot Version: ${data.version}
     }
 }
 export class Invite extends Command {
-    declare protected args: {};
+    declare protected params: {};
     constructor() {
         super();
         this.name = 'Invite';
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput(true);
         // do stuff
         this.ctn.content = helper.vars.versions.linkInvite;
@@ -776,13 +781,13 @@ export class Invite extends Command {
     }
 }
 export class Ping extends Command {
-    declare protected args: {};
+    declare protected params: {};
     constructor() {
         super();
         this.name = 'Ping';
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput(true);
         // do stuff
         const trueping = `${helper.tools.formatter.toCapital(this.input.type)} latency: ${Math.abs((this.input.message ?? this.input.interaction).createdAt.getTime() - new Date().getTime())}ms`;
@@ -845,7 +850,7 @@ export class Ping extends Command {
     }
 }
 export class Remind extends Command {
-    declare protected args: {
+    declare protected params: {
         time: string;
         remindertxt: string;
         sendtochannel: boolean;
@@ -854,51 +859,51 @@ export class Remind extends Command {
     constructor() {
         super();
         this.name = 'Remind';
-        this.args = {
+        this.params = {
             time: '1s',
             remindertxt: 'no reminder set',
             sendtochannel: false,
             list: false
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         this.commanduser = this.input.message.author;
-        this.args.time = this.input.args[0];
-        this.args.remindertxt = this.input.args.join(' ').replaceAll(this.input.args[0], '');
-        this.args.sendtochannel = false;
+        this.params.time = this.input.args[0];
+        this.params.remindertxt = this.input.args.join(' ').replaceAll(this.input.args[0], '');
+        this.params.sendtochannel = false;
 
         if (!this.input.args[0] || this.input.args[0].includes('remind')) {
-            this.args.list = true;
+            this.params.list = true;
         }
         if (!this.input.args[1]) {
-            this.args.remindertxt = 'null';
+            this.params.remindertxt = 'null';
         }
-        if (this.args.list == false && !this.input.args[0].endsWith('d') && !this.input.args[0].endsWith('h') && !this.input.args[0].endsWith('m') && !this.input.args[0].endsWith('s') && !this.args.time.includes(':') && !this.args.time.includes('.')) {
+        if (this.params.list == false && !this.input.args[0].endsWith('d') && !this.input.args[0].endsWith('h') && !this.input.args[0].endsWith('m') && !this.input.args[0].endsWith('s') && !this.params.time.includes(':') && !this.params.time.includes('.')) {
             this.ctn.content = 'Incorrect time format: please use `?d?h?m?s` or `hh:mm:ss`';
             this.send();
             return;
         }
 
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
         this.commanduser = interaction?.member?.user ?? interaction?.user;
-        this.args.time = interaction.options.getString('time');
-        this.args.remindertxt = interaction.options.getString('reminder');
-        this.args.sendtochannel = interaction.options.getBoolean('sendinchannel');
+        this.params.time = interaction.options.getString('time');
+        this.params.remindertxt = interaction.options.getString('reminder');
+        this.params.sendtochannel = interaction.options.getBoolean('sendinchannel');
 
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
 
         const reminder = new Discord.EmbedBuilder()
             .setColor(helper.vars.colours.embedColour.info.dec)
-            .setTitle(this.args.list ? 'REMINDERS' : 'REMINDER')
-            .setDescription(`${this.args.remindertxt}`);
+            .setTitle(this.params.list ? 'REMINDERS' : 'REMINDER')
+            .setDescription(`${this.params.remindertxt}`);
 
-        if (this.args.list) {
+        if (this.params.list) {
             const useReminders = helper.vars.reminders.filter(x => `${x.userID}` === `${this.commanduser.id}`);
             reminder.setDescription(useReminders.length > 0 ?
                 useReminders.map(x => `Reminder sending <t:${x.time}:R>: ${x.text}`).join('\n').slice(0, 2000)
@@ -906,9 +911,9 @@ export class Remind extends Command {
             );
             this.ctn.embeds = [reminder];
         } else {
-            const absTime = Math.floor(((new Date().getTime()) + helper.tools.calculate.timeToMs(this.args.time)) / 1000);
+            const absTime = Math.floor(((new Date().getTime()) + helper.tools.calculate.timeToMs(this.params.time)) / 1000);
             this.ctn.content = `Sending reminder <t:${absTime}:R> (<t:${absTime}:f>)`;
-            this.sendremind(reminder, this.args.time, this.args.sendtochannel, this.args.remindertxt, absTime);
+            this.sendremind(reminder, this.params.time, this.params.sendtochannel, this.params.remindertxt, absTime);
         }
         this.send();
     }
@@ -943,13 +948,13 @@ export class Remind extends Command {
     }
 }
 export class Stats extends Command {
-    declare protected args: {};
+    declare protected params: {};
     constructor() {
         super();
         this.name = 'Stats';
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput(true);
         // do stuff
         const trueping = (this.input.message ?? this.input.interaction).createdAt.getTime() - new Date().getTime() + 'ms';

@@ -14,11 +14,7 @@
 | osu!api                     | [osu! api v2](https://osu.ppy.sh/docs/index.html?javascript#introduction)           |
 | Api caller                  | [Axios](https://github.com/axios/axios)                                             |
 | osu object handler          | [osu-parsers](https://www.npmjs.com/package/osu-parsers)                            |
-| Weather API                 | [open-meteo](https://open-meteo.com)                                                |
-| Country API                 | [REST Countries](https://restcountries.com/)                                        |
 | Time handler                | [Moment.js](https://momentjs.com/)                                                  |
-| Timezone handler            | [Luxon](https://moment.github.io/luxon/#/)                                          |
-| Timezone list               | [see here](https://github.com/sbrstrkkdwmdr/sbrbot/blob/main/src/vars/timezones.ts) |
 
 ## Artwork
 

@@ -8,7 +8,11 @@ import * as apitypes from '../types/osuapi.js';
 import * as tooltypes from '../types/tools.js';
 
 export class Command {
-    protected name: string;
+    #name: string;
+    protected set name(input: string) {
+        this.#name = input[0] == input[0].toUpperCase() ? input : helper.tools.formatter.toCapital(input);
+    }
+    protected get name() { return this.#name; }
     protected commanduser: Discord.User | Discord.APIUser;
     protected ctn: {
         content?: string,
@@ -20,7 +24,7 @@ export class Command {
         edit?: boolean,
         editAsMsg?: boolean,
     };
-    protected args: { [id: string]: any; };
+    protected params: { [id: string]: any; };
     protected input: bottypes.commandInput;
     constructor() {
         this.voidcontent();
@@ -40,38 +44,38 @@ export class Command {
             editAsMsg: undefined,
         };
     }
-    async setArgs() {
+    async setParams() {
         switch (this.input.type) {
             case 'message':
                 this.commanduser = this.input.message.author;
-                await this.setArgsMsg();
+                await this.setParamsMsg();
                 break;
             case 'interaction':
                 this.commanduser = this.input.interaction?.member?.user ?? this.input.interaction?.user;
-                await this.setArgsInteract();
+                await this.setParamsInteract();
                 break;
             case 'button':
                 this.commanduser = this.input.interaction?.member?.user ?? this.input.interaction?.user;
-                await this.setArgsBtn();
+                await this.setParamsBtn();
                 break;
             case 'link':
                 this.commanduser = this.input.message.author;
-                await this.setArgsLink();
+                await this.setParamsLink();
                 break;
         }
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
     }
-    async setArgsLink() {
+    async setParamsLink() {
     }
     logInput(skipKeys: boolean = false) {
         let keys = [];
         if (!skipKeys) {
-            keys = Object.entries(this.args).map(x => {
+            keys = Object.entries(this.params).map(x => {
                 return {
                     name: helper.tools.formatter.toCapital(x[0]),
                     value: x[1]
@@ -205,22 +209,22 @@ export class OsuCommand extends Command {
 }
 
 class TEMPLATE extends Command {
-    declare protected args: {
+    declare protected params: {
         xyzxyz: string;
     };
     constructor() {
         super();
         this.name = 'TEMPLATE';
-        this.args = {
+        this.params = {
             xyzxyz: ''
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
     }
-    async setArgsBtn() {
+    async setParamsBtn() {
         if (!this.input.message.embeds[0]) return;
         const interaction = (this.input.interaction as Discord.ButtonInteraction);
         const temp = helper.tools.commands.getButtonArgs(this.input.id);
@@ -234,11 +238,11 @@ class TEMPLATE extends Command {
             return;
         }
     }
-    async setArgsLink() {
+    async setParamsLink() {
         const messagenohttp = this.input.message.content.replace('https://', '').replace('http://', '').replace('www.', '');
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
 

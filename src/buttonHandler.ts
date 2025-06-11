@@ -8,14 +8,11 @@ import * as apitypes from './types/osuapi.js';
 const buttonWarnedUsers = new Set();
 let command: Command;
 let foundCommand = true;
-let overrides: bottypes.overrides = {
-    commandAs: 'button',
-};
 let mainId: number;
 export async function onInteraction(interaction: Discord.Interaction) {
     if (!(interaction.type == Discord.InteractionType.MessageComponent || interaction.type == Discord.InteractionType.ModalSubmit)) return;
     if (interaction.applicationId != helper.vars.client.application.id) return;
-    overrides = {
+    let overrides: bottypes.overrides = {
         commandAs: 'button',
     };
     let canReply = true;
@@ -71,11 +68,13 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         .setDescription('Feature not yet implemented/supported');
 
     const PageOnlyCommands = [
-        'firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'recentactivity', 'scores', 'userbeatmaps',
-        'changelog',
-        'ytsearch',
+        'Firsts', 'MapLeaderboard', 'NoChokes', 'OsuTop', 'Pinned', 'Ranking', 'Recent', 'RecentList', 'RecentActivity', 'MapScores', 'UserBeatmaps',
+        'Changelog',
     ];
-    const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores'];
+    const ScoreSortCommands = [
+        'Firsts', 'MapLeaderboard', 'NoChokes', 'OsuTop', 'Pinned', 'RecentList', 'MapScores', 
+
+    ];
     if (buttonType == 'Search' && PageOnlyCommands.includes(cmd)) {
         const menu = new Discord.ModalBuilder()
             .setTitle('Page')
@@ -146,7 +145,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         mainId = helper.tools.commands.getCmdId();
         command = new helper.commands.osu.maps.Map();
         foundCommand = true;
-        await runCommand(interaction, buttonType, 'other', false);
+        await runCommand(interaction, buttonType, overrides, 'other', false);
         return;
     }
 
@@ -159,7 +158,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         mainId = helper.tools.commands.getCmdId();
         command = new helper.commands.osu.profiles.Profile();
         foundCommand = true;
-        await runCommand(interaction, buttonType, 'other', false);
+        await runCommand(interaction, buttonType, overrides, 'other', false);
         return;
     }
     if (buttonType == 'Leaderboard') {
@@ -178,7 +177,7 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
                 mainId = helper.tools.commands.getCmdId();
                 command = new helper.commands.osu.scores.MapLeaderboard();
                 foundCommand = true;
-                await runCommand(interaction, buttonType, 'other', false);
+                await runCommand(interaction, buttonType, overrides, 'other', false);
                 return;
             }
         }
@@ -191,87 +190,87 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         overrides.commanduser = interaction.member.user as Discord.User;
         command = new helper.commands.osu.scores.MapScores();
         foundCommand = true;
-        await runCommand(interaction, buttonType, 'other', false);
+        await runCommand(interaction, buttonType, overrides, 'other', false);
         return;
     }
 
     const nopingcommands = ['scorestats'];
 
-    switch (cmd) {
-        case 'Changelog':
+    switch (cmd.toLowerCase()) {
+        case 'changelog':
             command = new helper.commands.gen.Changelog();
             foundCommand = true;
             break;
-        case 'Compare':
+        case 'compare':
             command = new helper.commands.osu.other.Compare();
             foundCommand = true;
             break;
-        case 'Firsts':
+        case 'firsts':
             command = new helper.commands.osu.scores.Firsts();
             foundCommand = true;
             break;
-        case 'Leaderboard':
+        case 'leaderboard':
             command = new helper.commands.osu.profiles.Leaderboard();
             foundCommand = true;
             break;
-        case 'Map':
+        case 'map':
             command = new helper.commands.osu.maps.Map();
             foundCommand = true;
             break;
-        case 'MapLeaderboard':
+        case 'mapleaderboard':
             command = new helper.commands.osu.scores.MapLeaderboard();
             foundCommand = true;
             break;
-        case 'NoChokes':
+        case 'nochokes':
             overrides.miss = true;
             command = new helper.commands.osu.scores.NoChokes();
             foundCommand = true;
             break;
-        case 'Profile':
+        case 'profile':
             command = new helper.commands.osu.profiles.Profile();
             foundCommand = true;
             break;
-        case 'OsuTop':
+        case 'osutop':
             command = new helper.commands.osu.scores.OsuTop();
             foundCommand = true;
             break;
-        case 'Pinned':
+        case 'pinned':
             command = new helper.commands.osu.scores.Pinned();
             foundCommand = true;
             break;
-        case 'Ranking':
+        case 'ranking':
             command = new helper.commands.osu.profiles.Ranking();
             foundCommand = true;
             break;
-        case 'Recent':
+        case 'recent':
             command = new helper.commands.osu.scores.Recent();
             foundCommand = true;
             break;
-        case 'RecentList':
+        case 'recentlist':
             command = new helper.commands.osu.scores.RecentList();
             foundCommand = true;
             break;
-        case 'RecentActivity':
+        case 'recentactivity':
             command = new helper.commands.osu.profiles.RecentActivity();
             foundCommand = true;
             break;
-        case 'ScoreParse':
+        case 'scoreparse':
             command = new helper.commands.osu.scores.ScoreParse();
             foundCommand = true;
             break;
-        case 'MapScores':
+        case 'mapscores':
             command = new helper.commands.osu.scores.MapScores();
             foundCommand = true;
             break;
-        case 'ScoreStats':
+        case 'scorestats':
             command = new helper.commands.osu.scores.ScoreStats();
             foundCommand = true;
             break;
-        case 'UserBeatmaps':
+        case 'userbeatmaps':
             command = new helper.commands.osu.maps.UserBeatmaps();
             foundCommand = true;
             break;
-        case 'Help':
+        case 'help':
             command = new helper.commands.gen.Help();
             foundCommand = true;
             break;
@@ -279,10 +278,10 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
             runFail(interaction);
             return;
     }
-    runCommand(interaction, buttonType, null, true);
+    runCommand(interaction, buttonType, overrides, null, true);
 }
 
-async function runCommand(interaction: Discord.ButtonInteraction, buttonType: bottypes.buttonType, overrideType?: "message" | "button" | "interaction" | "link" | "other", defer?: boolean) {
+async function runCommand(interaction: Discord.ButtonInteraction, buttonType: bottypes.buttonType, overrides: bottypes.overrides, overrideType?: "message" | "button" | "interaction" | "link" | "other", defer?: boolean) {
     if (defer) {
         await interaction.deferUpdate()
             .catch(error => { });

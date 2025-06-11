@@ -9,41 +9,41 @@ import { OsuCommand } from './command.js';
 // add, remove, list, channel
 
 export class TrackAR extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         user: string;
         mode: apitypes.GameMode;
     };
     type: 'add' | 'remove';
     constructor() {
         super();
-        this.args = {
+        this.params = {
             user: undefined,
             mode: 'osu'
         };
     }
-    async setArgsMsg() {
+    async setParamsMsg() {
         {
             const temp = await helper.tools.commands.parseArgsMode(this.input);
             this.input.args = temp.args;
-            this.args.mode = temp.mode;
+            this.params.mode = temp.mode;
         }
         const userArgFinder = helper.tools.commands.matchArgMultiple(helper.vars.argflags.user, this.input.args, true, 'string', true, false);
         if (userArgFinder.found) {
-            this.args.user = userArgFinder.output;
+            this.params.user = userArgFinder.output;
             this.input.args = userArgFinder.args;
         }
-        this.args.user = this.args.user ?? this.input.args[0];
+        this.params.user = this.params.user ?? this.input.args[0];
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.user = interaction.options.getString('user');
+        this.params.user = interaction.options.getString('user');
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
 
-        if (this.args.user == null || !this.args.user || this.args.user.length < 1) {
+        if (this.params.user == null || !this.params.user || this.params.user.length < 1) {
             await helper.tools.commands.sendMessage({
                 type: this.input.type,
                 message: this.input.message,
@@ -86,7 +86,7 @@ export class TrackAR extends OsuCommand {
         let osudata: apitypes.User;
 
         try {
-            const t = await this.getProfile(this.args.user, this.args.mode);
+            const t = await this.getProfile(this.params.user, this.params.mode);
             osudata = t;
         } catch (e) {
             return;
@@ -98,7 +98,7 @@ export class TrackAR extends OsuCommand {
             userid: osudata.id,
             action: this.type,
             guildId: this.input.message?.guildId ?? this.input.interaction?.guildId,
-            mode: this.args.mode
+            mode: this.params.mode
         });
         this.send();
     }
@@ -116,7 +116,7 @@ export class TrackAdd extends TrackAR {
     constructor() {
         super();
         this.name = 'TrackAdd';
-        this.args = {
+        this.params = {
             user: undefined,
             mode: 'osu'
         };
@@ -128,7 +128,7 @@ export class TrackRemove extends TrackAR {
     constructor() {
         super();
         this.name = 'TrackRemove';
-        this.args = {
+        this.params = {
             user: undefined,
             mode: 'osu'
         };
@@ -137,32 +137,32 @@ export class TrackRemove extends TrackAR {
 }
 
 export class TrackChannel extends OsuCommand {
-    declare protected args: {
+    declare protected params: {
         channelId: string;
     };
     constructor() {
         super();
         this.name = 'TrackChannel';
-        this.args = {
+        this.params = {
             channelId: null
         };
     }
-    async setArgsMsg() {
-        this.args.channelId = this.input.args[0];
+    async setParamsMsg() {
+        this.params.channelId = this.input.args[0];
         if (this.input.message.content.includes('<#')) {
-            this.args.channelId = this.input.message.content.split('<#')[1].split('>')[0];
+            this.params.channelId = this.input.message.content.split('<#')[1].split('>')[0];
         }
     }
-    async setArgsInteract() {
+    async setParamsInteract() {
         const interaction = this.input.interaction as Discord.ChatInputCommandInteraction;
-        this.args.channelId = (interaction.options.getChannel('channel')).id;
+        this.params.channelId = (interaction.options.getChannel('channel')).id;
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput();
         // do stuff
         const guildsetting = await helper.vars.guildSettings.findOne({ where: { guildid: this.input.message?.guildId ?? this.input.interaction?.guildId } });
-        if (!this.args.channelId) {
+        if (!this.params.channelId) {
             if (!guildsetting.dataValues.trackChannel) {
                 await helper.tools.commands.sendMessage({
                     type: this.input.type,
@@ -186,7 +186,7 @@ export class TrackChannel extends OsuCommand {
             }, this.input.canReply);
             return;
         }
-        if (!this.args.channelId || isNaN(+this.args.channelId) || !helper.vars.client.channels.cache.get(this.args.channelId)) {
+        if (!this.params.channelId || isNaN(+this.params.channelId) || !helper.vars.client.channels.cache.get(this.params.channelId)) {
             await helper.tools.commands.sendMessage({
                 type: this.input.type,
                 message: this.input.message,
@@ -199,24 +199,24 @@ export class TrackChannel extends OsuCommand {
             return;
         }
         await guildsetting.update({
-            trackChannel: this.args.channelId
+            trackChannel: this.params.channelId
         }, {
             where: { guildid: this.input.message?.guildId ?? this.input.interaction?.guildId }
         });
-        this.ctn.content = `Tracking channel set to <#${this.args.channelId}>`;
+        this.ctn.content = `Tracking channel set to <#${this.params.channelId}>`;
         this.send();
     }
 }
 
 export class TrackList extends OsuCommand {
-    declare protected args: {};
+    declare protected params: {};
 
     constructor() {
         super();
         this.name = 'TrackList';
     }
     async execute() {
-        await this.setArgs();
+        await this.setParams();
         this.logInput(true);
         // do stuff
         const users = await helper.vars.trackDb.findAll();
