@@ -68,11 +68,13 @@ Command version: ${findcommand ? `${findcommand.releaseDate} (${findcommand.name
         .setDescription('Feature not yet implemented/supported');
 
     const PageOnlyCommands = [
-        'firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'ranking', 'recent', 'recentactivity', 'scores', 'userbeatmaps',
-        'changelog',
-        'ytsearch',
+        'Firsts', 'MapLeaderboard', 'NoChokes', 'OsuTop', 'Pinned', 'Ranking', 'Recent', 'RecentList', 'RecentActivity', 'MapScores', 'UserBeatmaps',
+        'Changelog',
     ];
-    const ScoreSortCommands = ['firsts', 'maplb', 'nochokes', 'osutop', 'pinned', 'scores'];
+    const ScoreSortCommands = [
+        'Firsts', 'MapLeaderboard', 'NoChokes', 'OsuTop', 'Pinned', 'RecentList', 'MapScores', 
+
+    ];
     if (buttonType == 'Search' && PageOnlyCommands.includes(cmd)) {
         const menu = new Discord.ModalBuilder()
             .setTitle('Page')

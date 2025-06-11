@@ -10,7 +10,7 @@ import * as tooltypes from '../types/tools.js';
 export class Command {
     #name: string;
     protected set name(input: string) {
-        this.#name = helper.tools.formatter.toCapital(input);
+        this.#name = input[0] == input[0].toUpperCase() ? input : helper.tools.formatter.toCapital(input);
     }
     protected get name() { return this.#name; }
     protected commanduser: Discord.User | Discord.APIUser;
