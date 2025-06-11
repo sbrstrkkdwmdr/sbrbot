@@ -8,7 +8,7 @@
 
 ## [5.1.0] - 2025-06-12
 
-[commit](https://github.com/sbrstrkkdwmdr/ssob)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/226cbb61fa59efaaf93b58b027082f7a6fa57aed)</br>
 
 ### Fixed
 - undefined score country rank being visible
