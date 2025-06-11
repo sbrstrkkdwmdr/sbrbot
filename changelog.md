@@ -4,7 +4,11 @@
 
 ## [WIP] - xxxx-xx-xx
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob)</br>
+
+## [5.1.0] - 2025-06-12
+
+[commit](https://github.com/sbrstrkkdwmdr/ssob)</br>
 
 ### Fixed
 - undefined score country rank being visible
@@ -20,7 +24,7 @@
 
 ## [5.0.2] - 2025-05-30
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/a54ba737303e009e515d56c0474e85af2bee1be5)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/a54ba737303e009e515d56c0474e85af2bee1be5)</br>
 
 ### Fixed
 - missing checks in userStatsCache
@@ -30,7 +34,7 @@
 
 ## [5.0.1] - 2025-05-25
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/f952678c28d0558f95e0885232417aa3442c5409)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/f952678c28d0558f95e0885232417aa3442c5409)</br>
 
 ### Fixed
 - general commands not having a name parameter set (broke buttons on changelog)
@@ -39,7 +43,7 @@
 
 ## [5.0.0] - 2025-05-23
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/2382cd0e692c0f9243d26b08db8a159fce3c7468)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/2382cd0e692c0f9243d26b08db8a159fce3c7468)</br>
 
 ### Added
 
@@ -69,7 +73,7 @@
 
 ## [4.1.5] - 2025-04-08
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/80443db36fefce732b076d3f8fe6448690d28d5a)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/80443db36fefce732b076d3f8fe6448690d28d5a)</br>
 
 ### Added
 
@@ -88,7 +92,7 @@
 
 ## [4.1.4] - 2025-03-29
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/b1dfdebedf21d46011275dfe4054d96d3cf0d690)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/b1dfdebedf21d46011275dfe4054d96d3cf0d690)</br>
 
 ### Fixed
 
@@ -97,7 +101,7 @@
 
 ## [4.1.3] - 2025-02-26
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/48f9f59b5bde081561762dca4b2d17922852ed63)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/48f9f59b5bde081561762dca4b2d17922852ed63)</br>
 
 ### Fixed
 
@@ -111,7 +115,7 @@
 
 ## [4.1.2] - 2025-02-11
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/bb26b635628a8aadde42b67c7e9f3f4194bcfc96)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/bb26b635628a8aadde42b67c7e9f3f4194bcfc96)</br>
 
 ### Changed
 
@@ -120,7 +124,7 @@
 
 ## [4.1.1] - 2025-02-05
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/46f27e7c52a9b0cac5bc17178c102995b91c2ac2)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/46f27e7c52a9b0cac5bc17178c102995b91c2ac2)</br>
 
 ### Fixed
 
@@ -128,7 +132,7 @@
 
 ## [4.1.0] - 2025-01-17
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/3b5948921a8e94dd79dd36d0bcc108808aea5e1c)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/3b5948921a8e94dd79dd36d0bcc108808aea5e1c)</br>
 
 ### Fixed
 
@@ -150,7 +154,7 @@
 
 ## [4.0.8] - 2025-01-10
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/18e4ee1a4f58745e43168ec03f951448d00b6dbf)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/18e4ee1a4f58745e43168ec03f951448d00b6dbf)</br>
 
 ### Fixed
 
@@ -166,7 +170,7 @@
 
 ## [4.0.7] - 2025-01-03
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/19716d92696061df63639769fbdd49ce61041670)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/19716d92696061df63639769fbdd49ce61041670)</br>
 
 ### Fixed
 
@@ -180,7 +184,7 @@
 
 ## [4.0.6] - 2024-12-27
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/f15046246426210ab38207662c489c986f2bbd3a)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/f15046246426210ab38207662c489c986f2bbd3a)</br>
 
 ### Fixed
 
@@ -201,7 +205,7 @@
 
 ## [4.0.5] - 2024-12-18
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/5c36d8cd93b03d25a0b2a537506ede93f8e43057)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/5c36d8cd93b03d25a0b2a537506ede93f8e43057)</br>
 
 ### Fixed
 
@@ -212,7 +216,7 @@
 
 ## [4.0.4] - 2024-12-15
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/5dfe5e2351609e9dec92b8c871fa1a7ccfc5c071)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/5dfe5e2351609e9dec92b8c871fa1a7ccfc5c071)</br>
 
 ### Fixed
 
@@ -233,7 +237,7 @@
 
 ## [4.0.3] - 2024-12-11
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/035d1305bdaf8a684ba74d57b2cca2f558191748)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/035d1305bdaf8a684ba74d57b2cca2f558191748)</br>
 
 ### Fixed
 
@@ -249,7 +253,7 @@
 
 ## [4.0.2] - 2024-12-05
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0b6b401a4fa95c9aa1fd6431499d2b21e79f2a90)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/0b6b401a4fa95c9aa1fd6431499d2b21e79f2a90)</br>
 
 ### Fixed
 
@@ -271,7 +275,7 @@
 
 ## [4.0.1] - 2024-12-01
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/350b5cabe974df940d68623dd51131f855e423b6)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/350b5cabe974df940d68623dd51131f855e423b6)</br>
 
 ### Fixed
 
@@ -296,7 +300,7 @@
 
 ## [4.0.0] - 2024-11-27
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/da0affdb8c0b3c2513e41dccd28a052f90d50686)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/da0affdb8c0b3c2513e41dccd28a052f90d50686)</br>
 
 ### BREAKING
 
@@ -322,7 +326,7 @@
 
 ## [3.19.6] - 2024-10-28
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/1bcddd6319f260ebfb699e8b1c0102373e9c4cbf)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/1bcddd6319f260ebfb699e8b1c0102373e9c4cbf)</br>
 
 ### Added
 
@@ -335,7 +339,7 @@
 
 ## [3.19.5] - 2024-10-08
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/e9c26176beba53303cd26d3f7b43ae9f00c646da)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/e9c26176beba53303cd26d3f7b43ae9f00c646da)</br>
 
 ### Fixed
 
@@ -352,7 +356,7 @@
 
 ## [3.19.4] - 2024-09-28
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/e3820a0eb58b40d7a52792298d8aaa34f57a50a2)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/e3820a0eb58b40d7a52792298d8aaa34f57a50a2)</br>
 
 ### Fixed
 
@@ -366,7 +370,7 @@
 
 ## [3.19.3] - 2024-08-21
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0b4f8ae52e2c0990de01b9a23d4df30e9dbbcc30)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/0b4f8ae52e2c0990de01b9a23d4df30e9dbbcc30)</br>
 
 ### Fixed
 
@@ -394,7 +398,7 @@
 
 ## [3.19.2] - 2024-08-19
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/7860058fdabb12d9c046a78343bd9ecff6f2d617)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/7860058fdabb12d9c046a78343bd9ecff6f2d617)</br>
 
 ### Fixed
 
@@ -402,7 +406,7 @@
 
 ## [3.19.1] - 2024-08-19
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0249671851d3a48131075710074f35aaacf0690d)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/0249671851d3a48131075710074f35aaacf0690d)</br>
 
 ### Fixed
 
@@ -416,7 +420,7 @@
 
 ## [3.19.0] - 2024-08-16
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/363969c0304e3d38a01007645370fc80896c6ea3)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/363969c0304e3d38a01007645370fc80896c6ea3)</br>
 
 ### Fixed
 
@@ -440,7 +444,7 @@
 
 ## [3.18.1] - 2024-07-28
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/34288027dd65236a6309cded8aae8d536ee1bf16)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/34288027dd65236a6309cded8aae8d536ee1bf16)</br>
 
 ### Fixed
 
@@ -460,7 +464,7 @@
 
 ## [3.18.0] - 2024-07-21
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/aede1ee3ca4a486312fd351b4d7c672a689d2188)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/aede1ee3ca4a486312fd351b4d7c672a689d2188)</br>
 
 ### Fixed
 
@@ -478,7 +482,7 @@
 
 ## [3.17.4] - 2024-07-11
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/43660f5aaaf3259f51358f5ec8c66ed660a02518)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/43660f5aaaf3259f51358f5ec8c66ed660a02518)</br>
 
 ### Fixed
 
@@ -487,7 +491,7 @@
 
 ## [3.17.3] - 2024-07-05
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/5e93fcae5bd2dcce7c9f402d79c340f125175160)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/5e93fcae5bd2dcce7c9f402d79c340f125175160)</br>
 
 ### Fixed
 
@@ -495,7 +499,7 @@
 
 ## [3.17.2] - 2024-07-02
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/1c7edae974fff318ad702ee4258813e2c66c6ef1)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/1c7edae974fff318ad702ee4258813e2c66c6ef1)</br>
 
 ### Fixed
 
@@ -514,7 +518,7 @@
 
 ## [3.16.0] - 2024-06-20
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/6680d39562d5ed3f1eb4ca8a5f28a53a9932928a)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/6680d39562d5ed3f1eb4ca8a5f28a53a9932928a)</br>
 
 ### Fixed
 
@@ -540,7 +544,7 @@
 
 ## [3.15.0] - 2024-05-14
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/5ea2d7269873fbb2ffbf090516962db88d15134c)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/5ea2d7269873fbb2ffbf090516962db88d15134c)</br>
 
 ### Fixed
 
@@ -570,7 +574,7 @@
 
 ## [3.14.2] - 2024-04-29
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/1c9333b5988d583962ccac7c8a6f46767ffb0a90)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/1c9333b5988d583962ccac7c8a6f46767ffb0a90)</br>
 
 ### Fixed
 
@@ -579,7 +583,7 @@
 
 ## [3.14.0] - 2024-04-16
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/ef9d81fac2404042c0d28b416c82ecb556ce8b0e)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/ef9d81fac2404042c0d28b416c82ecb556ce8b0e)</br>
 
 ### Changed
 
@@ -596,7 +600,7 @@
 
 ## [3.13.0] - 2024-03-05
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/823051a77e12a6061cdcac95a0cfbf9e765c9c69)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/823051a77e12a6061cdcac95a0cfbf9e765c9c69)</br>
 
 ### Fixed
 
@@ -632,7 +636,7 @@
 
 ## [3.12.0] - 2024-02-12
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/8840263edd97c37103ec3c92d02371b0ffb1ed4a)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/8840263edd97c37103ec3c92d02371b0ffb1ed4a)</br>
 
 ### Fixed
 
@@ -657,7 +661,7 @@
 
 ## [3.11.0] - 2024-01-30
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/1765f7dd0416a56e498bf8a90c4ac3f4264c7503)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/1765f7dd0416a56e498bf8a90c4ac3f4264c7503)</br>
 
 ### Fixed
 
@@ -679,7 +683,7 @@
 
 ## [3.10.0] - 2024-01-23
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/637359f840fcfed8dc5bfb1b0316a1237052cb5c)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/637359f840fcfed8dc5bfb1b0316a1237052cb5c)</br>
 
 ### Fixed
 
@@ -701,7 +705,7 @@
 
 ## [3.9.0] - 2023-12-25
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/db4e489c7fdcd9b91c8b11e871b73fea3b3960bb)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/db4e489c7fdcd9b91c8b11e871b73fea3b3960bb)</br>
 
 ### Fixed
 
@@ -736,7 +740,7 @@
 
 ## [3.8.0] - 2023-11-20
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/9494021cc189924cea0be7e9528795720cda663a)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/9494021cc189924cea0be7e9528795720cda663a)</br>
 
 ### Fixed
 
@@ -775,7 +779,7 @@
 
 ## [3.7.0] - 2023-11-06
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/83a9adc44875c48e16f1c1b8a34680c7e76db9f0)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/83a9adc44875c48e16f1c1b8a34680c7e76db9f0)</br>
 
 ### Fixed
 
@@ -803,7 +807,7 @@
 
 ## [3.6.2] - 2023-10-26
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/6a1cb29237822513fe2b234b755639b9a317ae4e)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/6a1cb29237822513fe2b234b755639b9a317ae4e)</br>
 
 ### Fixed
 
@@ -812,7 +816,7 @@
 
 ## [3.6.0] - 2023-10-26
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/e38de7573df02eb6f38a70ff8ea7a81089ae88ad)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/e38de7573df02eb6f38a70ff8ea7a81089ae88ad)</br>
 
 ### Fixed
 
@@ -847,7 +851,7 @@
 
 ## [3.5.7] - 2023-10-12
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/af0906ee036b8a140884fa77ab0db78889a46823)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/af0906ee036b8a140884fa77ab0db78889a46823)</br>
 
 ### Fixed
 
@@ -867,7 +871,7 @@
 
 ## [3.5.0] - 2023-10-09
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/0fb571588c6253e7ebc03f03bda1441f367142c3)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/0fb571588c6253e7ebc03f03bda1441f367142c3)</br>
 
 ### Fixed
 
@@ -901,7 +905,7 @@
 
 ## [3.4.0] - 2023-09-20
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/8f273ea03e3baed6388b033063364e30f9ce84f9)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/8f273ea03e3baed6388b033063364e30f9ce84f9)</br>
 
 ### Fixed
 
@@ -934,7 +938,7 @@
 
 ## [3.3.0] - 2023-09-03
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/40c3b6731e34f42cbff523a015904aa12e4232bd)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/40c3b6731e34f42cbff523a015904aa12e4232bd)</br>
 
 ### Fixed
 
@@ -978,7 +982,7 @@
 
 ## [3.2.0] - 2023-08-17
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/c4bca0407a8ff85ad7c078e0968d1bc345470e7c)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/c4bca0407a8ff85ad7c078e0968d1bc345470e7c)</br>
 
 ### Fixed
 
@@ -1007,7 +1011,7 @@
 
 ## [3.1.0] - 2023-08-05
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/bacac7be3a9b1511bbc9621f721ba30a01028409)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/bacac7be3a9b1511bbc9621f721ba30a01028409)</br>
 
 ### Fixed
 
@@ -1035,7 +1039,7 @@
 
 ## [3.0.0] - 2023-06-16
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/6cd863f64c6a006170e9a663b292dac40ad5fd1b)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/6cd863f64c6a006170e9a663b292dac40ad5fd1b)</br>
 
 ### Fixed
 
@@ -1081,7 +1085,7 @@
 
 ## [2.18.2] - 2023-04-10
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/c328732d575b4aae819ec07d35d5c0cf99de912a)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/c328732d575b4aae819ec07d35d5c0cf99de912a)</br>
 
 ### Fixed
 
@@ -1090,7 +1094,7 @@
 
 ## [2.18.0] - 2023-04-10
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/c328732d575b4aae819ec07d35d5c0cf99de912a)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/c328732d575b4aae819ec07d35d5c0cf99de912a)</br>
 
 ### Changed
 
@@ -1107,7 +1111,7 @@
 
 ## [2.17.0] - 2023-03-26
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/687aa84a0698b1a77ea78b3f5d4331a075b6d043)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/687aa84a0698b1a77ea78b3f5d4331a075b6d043)</br>
 
 ### Fixed
 
@@ -1126,7 +1130,7 @@
 
 ## [2.16.0] - 2023-03-24
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/ddf104c2d6954e726f9662ad2dc2220db561af12)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/ddf104c2d6954e726f9662ad2dc2220db561af12)</br>
 
 ### Fixed
 
@@ -1143,7 +1147,7 @@
 
 ## [2.15.0] - 2023-03-12
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/3fc799cc5c28c4d6c88e7d6a8e1bdb750df0504c)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/3fc799cc5c28c4d6c88e7d6a8e1bdb750df0504c)</br>
 
 ### Fixed
 
@@ -1163,7 +1167,7 @@
 
 ## [2.14.0] - 2023-02-26
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/d9151bbb43245b46b0a16047ebc125c2a1b8a23f)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/d9151bbb43245b46b0a16047ebc125c2a1b8a23f)</br>
 
 ### Fixed
 
@@ -1183,7 +1187,7 @@
 
 ## [2.13.0] - 2023-02-19
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/ad076f1511dc8fefad7369bb97b49f68101249fa)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/ad076f1511dc8fefad7369bb97b49f68101249fa)</br>
 
 ### Changed
 
@@ -1198,7 +1202,7 @@
 
 ## [2.12.0] - 2023-02-11
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/15801df248b24e2b6d68da8fa208abb79db784cd)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/15801df248b24e2b6d68da8fa208abb79db784cd)</br>
 
 ### Fixed
 
@@ -1220,7 +1224,7 @@
 
 ## [2.11.0] - 2023-02-05
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/15801df248b24e2b6d68da8fa208abb79db784cd)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/15801df248b24e2b6d68da8fa208abb79db784cd)</br>
 
 ### Fixed
 
@@ -1247,7 +1251,7 @@
 
 ## [2.10.0] - 2023-01-22
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/67de12ec87dc9a74c738069fb4efd0d0842c8221)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/67de12ec87dc9a74c738069fb4efd0d0842c8221)</br>
 
 ### Fixed
 
@@ -1271,7 +1275,7 @@
 
 ## [2.9.0] - 2023-01-12
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/ec60a52823a7720a8c9e3e6efbc9bb81e2b4a1e3)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/ec60a52823a7720a8c9e3e6efbc9bb81e2b4a1e3)</br>
 
 ### Fixed
 
@@ -1291,7 +1295,7 @@
 
 ## [2.8.0] - 2023-01-04
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/1fe82480c9bb288321264c4d33b0d9b8dc570fb4)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/1fe82480c9bb288321264c4d33b0d9b8dc570fb4)</br>
 
 ### Fixed
 
@@ -1319,7 +1323,7 @@
 
 ## [2.7.0] - 2022-12-28
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/33b1f2679676931914cbd0ab0b4f58276712fe7b)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/33b1f2679676931914cbd0ab0b4f58276712fe7b)</br>
 
 ### Fixed
 
@@ -1342,7 +1346,7 @@
 
 ## [2.6.0] - 2022-12-22
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/e413f9b949dc824897a279735a61f44bc412840c)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/e413f9b949dc824897a279735a61f44bc412840c)</br>
 
 ### Fixed
 
@@ -1365,7 +1369,7 @@
 
 ## [2.5.0] - 2022-12-16
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/5f57e70d361d3ced78e2fd900e29d2ef08f0ae37)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/5f57e70d361d3ced78e2fd900e29d2ef08f0ae37)</br>
 
 ### Fixed
 
@@ -1387,7 +1391,7 @@
 
 ## [2.4.1] - 2022-12-13
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/9b2d8f945091bd9c798e367ecb662a369664497a)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/9b2d8f945091bd9c798e367ecb662a369664497a)</br>
 
 ### Fixed
 
@@ -1399,7 +1403,7 @@
 
 ## [2.4.0] - 2022-12-10
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/d7f4856f3fa92458ecb5a5e448d0bcabf973dc22)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/d7f4856f3fa92458ecb5a5e448d0bcabf973dc22)</br>
 
 ### Fixed
 
@@ -1416,7 +1420,7 @@
 
 ## [2.3.0] - 2022-12-06
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/3293ee645ab4bf4cb5cd3debd950334b5c5fd74b)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/3293ee645ab4bf4cb5cd3debd950334b5c5fd74b)</br>
 
 ### Fixed
 
@@ -1437,7 +1441,7 @@
 
 ## [2.2.0] - 2022-12-03
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/9854e19840ef21abb1653be5c4b0e4535627a174)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/9854e19840ef21abb1653be5c4b0e4535627a174)</br>
 
 ### Fixed
 
@@ -1461,7 +1465,7 @@
 
 ## [2.1.0] - 2022-09-14 --- 2022-11-07 --- 2022-12-01
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/16c5c46a499dd6541ac027857ab9634be54383e4)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/16c5c46a499dd6541ac027857ab9634be54383e4)</br>
 
 ### Fixed
 
@@ -1498,7 +1502,7 @@
 
 ## [1.2.0] - 2022-09-03
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/c9eed60322ae19a7b0e040997d29b5e2fa4d7ca0)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/c9eed60322ae19a7b0e040997d29b5e2fa4d7ca0)</br>
 
 ### Info
 
@@ -1506,7 +1510,7 @@ undocumented
 
 ## [1.1.0] - YYYY-MM-DD
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/c9eed60322ae19a7b0e040997d29b5e2fa4d7ca0)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/c9eed60322ae19a7b0e040997d29b5e2fa4d7ca0)</br>
 
 ### Info
 
@@ -1514,7 +1518,7 @@ undocumented
 
 ## [1.0.0] - 2022-06-09
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/c3566227ccecb19e93935a5be65f1c63dc7a0949)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/c3566227ccecb19e93935a5be65f1c63dc7a0949)</br>
 
 ### Changed
 
@@ -1523,7 +1527,7 @@ undocumented
 
 ## [beta-1.0.0] - 2022-03-11
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/10bf389f91247ae4070e2f5be3eb013ba2e80337)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/10bf389f91247ae4070e2f5be3eb013ba2e80337)</br>
 
 ### Changed
 
@@ -1536,16 +1540,16 @@ undocumented
 
 ## [alpha-1.2.0] - 2021-12-29
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/34d53fbac325157b63093a4bae5c514bc60f64b1)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/34d53fbac325157b63093a4bae5c514bc60f64b1)</br>
 
 ### Info
 
 no recorded changes </br>
-old version preserved [here](https://github.com/sbrstrkkdwmdr/sbrbot/tree/discordjs-v12)
+old version preserved [here](https://github.com/sbrstrkkdwmdr/ssob/tree/discordjs-v12)
 
 ## [alpha-1.1.0] - 2021-11-04
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/de46d2dc56986e59f1a33f189f232d185327c9a0)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/de46d2dc56986e59f1a33f189f232d185327c9a0)</br>
 
 ### Info
 
@@ -1554,7 +1558,7 @@ running on discord.js v12.x.x</br>
 
 ## [alpha-1.0.0] - 2021-08-07
 
-[commit](https://github.com/sbrstrkkdwmdr/sbrbot/commit/7005504084d13a619e43b9781d27a8fa1470bf13)</br>
+[commit](https://github.com/sbrstrkkdwmdr/ssob/commit/7005504084d13a619e43b9781d27a8fa1470bf13)</br>
 
 ### Info
 
